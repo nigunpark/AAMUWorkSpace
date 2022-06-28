@@ -1,7 +1,8 @@
 .WholeMap{
-  /* background-image: url("/public/images/door.jpg"); */
+  /* background-image: url("/public/images/bg1.png"); */
   background: rgba(0, 0, 0, 0.8);
-
+  /* background-repeat: no-repeat; */
+  /* background-size: cover; */
   overflow: hidden;
    height: 100vh;
 }

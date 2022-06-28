@@ -241,6 +241,13 @@ function PickedLocation({ local }) {
                 setTimeVal(e.target.value);
               }
             }}
+            onBlur={(e) => {
+              if (e.target.value !== 0) {
+                if (timeVal > e.target.value) dispatch(timeSetter(-1));
+                else dispatch(timeSetter(1));
+                setTimeVal(e.target.value);
+              }
+            }}
           />
           <span style={{ fontSize: "13px" }}>시간</span>
           <input
@@ -261,6 +268,13 @@ function PickedLocation({ local }) {
                 if (minVal > e.target.value)
                   dispatch(minSetter(e.target.value - minVal));
                 else dispatch(minSetter(e.target.value - minVal));
+                setMinVal(e.target.value);
+              }
+            }}
+            onBlur={(e) => {
+              if (e.target.value !== 0) {
+                if (minVal > e.target.value) dispatch(minSetter(-1));
+                else if (minVal < e.target.value) dispatch(minSetter(1));
                 setMinVal(e.target.value);
               }
             }}

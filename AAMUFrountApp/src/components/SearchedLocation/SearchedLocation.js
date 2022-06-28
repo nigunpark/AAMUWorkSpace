@@ -21,9 +21,6 @@ import {
 } from "../../redux/store.js";
 const SearchedLocation = ({ local }) => {
   const [locaInfoModal, setLocaInfoModal] = useState(false);
-  let arrForJangso = useSelector((state) => {
-    return state.arrForJangso;
-  });
   //redux test중...
   let dispatch = useDispatch();
   let localNameRef = useRef();
@@ -33,7 +30,7 @@ const SearchedLocation = ({ local }) => {
       ref={localContainer}
       className="SearchedLocation"
       onClick={() => {
-        //redux 변경 함수
+        //지도에 마커찍어줄 redux 변경 함수
         dispatch(changeLnfM(localNameRef.current.textContent));
       }}>
       {locaInfoModal && (

@@ -46,8 +46,8 @@
   gap: 1rem;
   justify-content: center;
   position: absolute;
-  top: 90px;
-  right: 320px;
+  top: 85px;
+  right: 310px;
   width: 240px;
   height: 60px;
   z-index: 10;
@@ -66,3 +66,107 @@
   box-shadow: var(--shadow);
   cursor: pointer;
 }
+
+.kmap__left-btn__container{
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  gap: 1rem;
+  top: 85px;
+  left: 310px;
+  z-index: 10;
+ height: auto;
+}
+
+.kmap__left-btn__container div{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: var(--cardColor);
+  border-radius: 5px;
+  font-size: 13px;
+  font-weight: bold;
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  width: 110px;
+  height: 60px;
+}
+
+.kmap__transportation{
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.kmap__transportation div:not(:first-child){
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.kmap__transportation span{
+  font-size: 12px;
+}
+
+.kmap__transportation div:not(:first-child) .kmap__left-icon {
+font-size: 20px;
+}
+
+.slide-in-left-public_transport {
+  transition: .5s;
+	animation: slide-in-left-transport 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+}
+.slide-in-left-or {
+  transition: .5s;
+	animation: slide-in-left-or 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+  animation-delay: .2s;
+}
+.slide-in-left-personal {
+  transition: .5s;
+	animation: slide-in-left-personal 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+  animation-delay: .3s;
+}
+
+.pickedTransport{
+  transition: .4s;
+  color: var(--orange);
+  border: 1px solid var(--orange);
+}
+
+.transport__container{
+  /* display: flex; */
+  /* flex-direction: column; */
+}
+
+@keyframes slide-in-left-transport {
+  0% {
+    transform: translateX(-100px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+@keyframes slide-in-left-or {
+  0% {
+    transform: translateX(-70px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slide-in-left-personal {
+  0% {
+    transform: translateX(-50px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+

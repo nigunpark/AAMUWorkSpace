@@ -162,6 +162,18 @@ let saveDaysNPickedSuksoRedux = createSlice({
     },
   },
 });
+
+let pickedTransport = createSlice({
+  name: "pickedTransport",
+  initialState: "personal",
+  reducers: {
+    changePickedTransport(state, action) {
+      return action.payload;
+    },
+  },
+});
+export let { changePickedTransport } = pickedTransport.actions;
+
 export let {
   changeSaveDaysRedux,
   changeArrSaveDaysRedux,
@@ -182,5 +194,6 @@ export default configureStore({
     // rightToggle: rightToggle.reducer,
     saveDaysNPickedSuksoRedux: saveDaysNPickedSuksoRedux.reducer,
     showWhichModal: showWhichModal.reducer,
+    pickedTransport: pickedTransport.reducer,
   },
 });
