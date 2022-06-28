@@ -50,7 +50,7 @@
   right: 310px;
   width: 240px;
   height: 60px;
-  z-index: 10;
+  z-index: 999;
 
 }
 
@@ -74,7 +74,7 @@
   gap: 1rem;
   top: 85px;
   left: 310px;
-  z-index: 10;
+  z-index: 999;
  height: auto;
 }
 
@@ -136,6 +136,20 @@ font-size: 20px;
 .transport__container{
   /* display: flex; */
   /* flex-direction: column; */
+}
+
+.registerModal__typeof-container{
+  display: flex;
+  border: 1px solid red;
+}
+
+.registerModal__typeof-container span{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  border: 1px solid black;
+  flex: 1;
 }
 
 @keyframes slide-in-left-transport {
