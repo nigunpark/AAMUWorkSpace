@@ -1,0 +1,68 @@
+.iwContent__wrap{
+  width: 400px;
+  height: 200px;
+  padding: 20px;
+  position: relative;
+  overflow: auto;
+  /* border-radius: 10px; */
+}
+
+.iwContent__info{
+  position: absolute;
+  width: 90%;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  /* border: 1px solid red; */
+
+}
+.iwContent__desc{
+  display: flex;
+  flex-direction:column ;
+  gap: 2px;
+
+}
+
+.iwContent__title{
+  background:var(--yellow);
+  color: white;
+  border-radius:5px;
+  padding: 2px;
+  padding-left:5px ;
+}
+
+.iwContent__ellipsis,
+.iwContent__link{
+  font-size: 13px;
+}
+
+#id{
+  position: relative;
+}
+
+.kmap__right-btn__container{
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  position: absolute;
+  top: 90px;
+  right: 320px;
+  width: 240px;
+  height: 60px;
+  z-index: 10;
+
+}
+
+.kmap__right-btn__container div{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: var(--cardColor);
+  border-radius: 5px;
+  flex: 1;
+  font-size: 13px;
+  font-weight: bold;
+  box-shadow: var(--shadow);
+  cursor: pointer;
+}

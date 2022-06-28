@@ -1,0 +1,41 @@
+.PopularLocation__li{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position:relative;
+  margin-bottom:2px;
+  background:#2b2d36;
+  padding:10px 0;
+  color:#aaabaf;
+}
+
+.PopularLocation__li:hover{
+  color:#fff;
+  background:#d24545;
+  cursor: pointer;
+}
+
+
+
+.PopularLocation__li div:first-child{
+  font-size: 20px;
+  padding: 0 15px;
+  /* border: 1px solid white; */
+  display: flex;
+  gap: 20px;
+}
+
+.PopularLocation__li div:last-child{
+  padding: 0 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+.fa-sort-up{
+  color: red;
+}
+
+.PopularLocation__rank{
+  font-weight:bold;
+}

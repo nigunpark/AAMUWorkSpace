@@ -1,0 +1,36 @@
+.dateRangePicker__container{
+  display: flex;
+  position: absolute;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  box-shadow:var(--shadow) ;
+  background: white;
+  z-index: 1000;
+  left: -30px;
+}
+.dateRangePicker__btn-container{
+  display: flex;
+  margin-left: auto;
+}
+.dateRangePicker__closeBtn,
+.dateRangePicker__acceptBtn{
+  padding: 5px 10px;
+  border-radius: 5px;
+  box-shadow:0px 2px 5px rgba(26, 26, 26, 0.2);
+  border: 1px solid var(--orange);
+  margin-left:auto ;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 15px;
+}
+
+.dateRangePicker__closeBtn:hover,
+.dateRangePicker__acceptBtn:hover{
+  border: white 1px solid;
+  background:var(--mainColor) ;
+  color: white;
+  box-shadow: var(--shadow);
+}

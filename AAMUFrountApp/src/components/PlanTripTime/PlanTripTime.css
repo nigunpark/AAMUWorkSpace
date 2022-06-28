@@ -1,0 +1,77 @@
+.planTripTime__container{
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  gap: 4px;
+  /* border: 1px solid red; */
+  font-size: 13px;
+  padding: 10px;
+  
+}
+
+.planTripTime__title{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: .5rem;
+  cursor: pointer;
+  padding: 5px 10px;
+background-color: var(--orange);
+border-radius:5px ;
+  color: white;
+  transition: .1s;
+}
+
+.planTripTime__title:hover{
+  box-shadow: var(--shadow);
+}
+
+.planTripTime__modal{
+  display: flex;
+  flex-direction: column;
+  height: 0;
+  overflow: hidden;
+  transition: 1s;
+  /* transform: ; */
+}
+
+.pttm_open{
+  height: auto;
+  overflow: visible;
+  /* transition: all 1s ease-in; */
+}
+
+.setTime__container{
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 5px 10px;
+  gap: 1rem;
+  margin: 7px 0;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: .1s;
+}
+
+.setTime__container:hover{
+  box-shadow: var(--shadow);
+}
+
+
+.setTime__contiainer-day{
+  padding: 2px 5px;
+background-color: var(--skyblue);
+  border-radius: 5px;
+  color: white;
+  opacity: .5;
+
+}
+
+.setTime__container-timeNMin{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  gap: .5rem;
+  /* margin-left: auto; */
+}

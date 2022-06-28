@@ -1,0 +1,12 @@
+.MainPage{
+  width: 100%;
+  height: 100vh;
+  display: grid;
+  grid-template-columns: 300px auto 300px;
+  /* margin-top: 80px; */
+  overflow: hidden;
+}
+
+/* ::-webkit-scrollbar{
+  display: none;
+} */
