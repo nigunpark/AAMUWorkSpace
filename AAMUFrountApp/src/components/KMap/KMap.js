@@ -4,7 +4,13 @@ import { useSelector, useDispatch } from "react-redux/es/exports";
 import "./KMap.css";
 import { changeInfo, changePickedTransport } from "../../redux/store";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBus, faCar } from "@fortawesome/free-solid-svg-icons";
+import {
+  faBed,
+  faBus,
+  faCar,
+  faMapLocationDot,
+  faUtensils,
+} from "@fortawesome/free-solid-svg-icons";
 import {
   Container_LoRegi,
   Contents_LoRegi,
@@ -178,8 +184,6 @@ const KMap = ({ currPosition, setTitleName, setConWhichModal }) => {
             }}>
             장소등록
           </div>
-          <RegisterModal />
-          {appearRegisterModal ? <h1>asdf</h1> : null}
           <span className="kmap__transportation">
             <div
               onClick={() => {
@@ -227,18 +231,53 @@ const KMap = ({ currPosition, setTitleName, setConWhichModal }) => {
           <div>일정생성</div>
         </div>
       </div>
+      {appearRegisterModal ? (
+        <RegisterModal setAppearRegisterModal={setAppearRegisterModal} />
+      ) : null}
     </div>
   );
 };
 
-function RegisterModal() {
+function RegisterModal({ setAppearRegisterModal }) {
   return (
     <Container_LoRegi>
-      <Overlay_LoRegi />
+      <Overlay_LoRegi
+        onClick={() => {
+          setAppearRegisterModal(false);
+        }}
+      />
       <Contents_LoRegi>
-        <Close_LoRegi>X</Close_LoRegi>
-        <Title_LoRegi>제목</Title_LoRegi>
-        <Body_LoRegi>바디</Body_LoRegi>
+        <Close_LoRegi
+          onClick={() => {
+            setAppearRegisterModal(false);
+          }}>
+          X
+        </Close_LoRegi>
+        <Title_LoRegi>
+          장 소 등 록
+          <span style={{ fontSize: "13px", color: "grey" }}>
+            검색해도 나오지 않는 장소를 이곳에서 등록 후 다시 검색해보세요.
+          </span>
+          <span style={{ fontSize: "13px", color: "grey" }}>
+            추가하실 장소의 유형을 선택해주세요.
+          </span>
+        </Title_LoRegi>
+        <Body_LoRegi>
+          <div className="registerModal__typeof-container">
+            <span>
+              <FontAwesomeIcon icon={faMapLocationDot} />
+              장소
+            </span>
+            <span>
+              <FontAwesomeIcon icon={faUtensils} />
+              식당
+            </span>
+            <span>
+              <FontAwesomeIcon icon={faBed} />
+              숙소
+            </span>
+          </div>
+        </Body_LoRegi>
       </Contents_LoRegi>
     </Container_LoRegi>
   );
