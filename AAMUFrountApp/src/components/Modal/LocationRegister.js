@@ -13,7 +13,7 @@ const Container_LoRegi = styled.div`
   position: fixed;
   width: 100%;
   height: 100%;
-  z-index: 10000;
+  z-index: 1000;
   top: 0;
   left: 0;
   right: 0;
@@ -21,7 +21,6 @@ const Container_LoRegi = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 2px solid blue;
 `;
 
 const Overlay_LoRegi = styled.div`
@@ -38,24 +37,25 @@ const Contents_LoRegi = styled.div`
   margin: auto;
   border-radius: 10px;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
-  background: rgba(255, 255, 255, 0.8);
-  width: 855px;
-  height: 300px;
+  background: white;
+  width: 575px;
+  height: 425px;
   animation: ${modalAniLim} 0.6s ease forwards;
 `;
 
 const Title_LoRegi = styled.div`
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
   font-size: 1.5em;
   width: 100%;
+  margin-top: 30px;
+  margin-botttm: 15px;
   overflow: auto;
-  height: 10%;
-  border-radius: 10px;
-  color: white;
-  background: rgba(0, 0, 0, 0.8);
+  height: auto;
+  border: 1px solid blue;
   overflow: hidden;
+  gap: 1rem;
 `;
 
 const Img_LoRegi = styled.div`
@@ -83,11 +83,10 @@ const Close_LoRegi = styled.div`
 
 const Body_LoRegi = styled.div`
   position: absolute;
-  width: 55%;
-  height: 97%;
-  margin-left: 320px;
-  margin-top: 5px;
-  padding: 13px;
+  width: 100%;
+  height: auto%;
+
+  border: 2px solid green;
 `;
 
 export {
