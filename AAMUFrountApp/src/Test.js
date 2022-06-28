@@ -83,6 +83,7 @@ const Test = () => {
         onClick={() => test()}>
         axiosTest
       </button> */}
+      <div>우재바보</div>
     </div>
   );
 };
