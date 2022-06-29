@@ -40,6 +40,7 @@ function App() {
         <Route path="/test" element={<Test />}></Route>
       </Routes>
       ㅇㅅㅇ
+      ㅇㅅㅇ2
     </div>
   );
 }
