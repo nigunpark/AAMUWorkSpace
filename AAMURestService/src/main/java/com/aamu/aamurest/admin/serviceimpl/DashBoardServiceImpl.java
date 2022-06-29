@@ -1,5 +1,8 @@
 package com.aamu.aamurest.admin.serviceimpl;
 
-public class DashBoardServiceImpl {
+import org.springframework.stereotype.Service;
 
+@Service
+public class DashBoardServiceImpl {
+	
 }
