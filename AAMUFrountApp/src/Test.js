@@ -1,31 +1,30 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios"; // 액시오스
 import { useLocation } from "react-router-dom";
-const { naver } = window;
 
 const Test = () => {
-  const initializeNaverLogin = () => {
-    const naverLogin = new naver.LoginWithNaverId({
-      clientId: "amnFx3UOA94ulL_rvg9Y",
-      callbackUrl: "http://localhost:3000/WholeMap/naver",
-      isPopup: false, // popup 형식으로 띄울것인지 설정
-      loginButton: { color: "white", type: 1, height: "47" }, //버튼의 스타일, 타입, 크기를 지정
-    });
-    naverLogin.init();
-  };
+  // const initializeNaverLogin = () => {
+  //   const naverLogin = new naver.LoginWithNaverId({
+  //     clientId: "amnFx3UOA94ulL_rvg9Y",
+  //     callbackUrl: "http://localhost:3000/WholeMap/naver",
+  //     isPopup: false, // popup 형식으로 띄울것인지 설정
+  //     loginButton: { color: "white", type: 1, height: "47" }, //버튼의 스타일, 타입, 크기를 지정
+  //   });
+  //   naverLogin.init();
+  // };
 
-  const location = useLocation();
+  // const location = useLocation();
 
-  const getNaverToken = () => {
-    if (!location.hash) return;
-    const token = location.hash.split("=")[1].split("&")[0];
-    console.log(token);
-  };
+  // const getNaverToken = () => {
+  //   if (!location.hash) return;
+  //   const token = location.hash.split("=")[1].split("&")[0];
+  //   console.log(token);
+  // };
 
-  useEffect(() => {
-    initializeNaverLogin();
-    getNaverToken();
-  }, []);
+  // useEffect(() => {
+  //   initializeNaverLogin();
+  //   getNaverToken();
+  // }, []);
 
   // const [id, setId] = useState(0);
 
@@ -71,8 +70,7 @@ const Test = () => {
 
   return (
     <div>
-      <div id="naverIdLogin" /> {/* id 꼭 입력해주어야 함 */}
-      {/* test{id}
+      {/*     
       <button
         style={{ background: "green", cursor: "pointer" }}
         onClick={() => testAxios()}>
@@ -83,7 +81,6 @@ const Test = () => {
         onClick={() => test()}>
         axiosTest
       </button> */}
-      <div>우재바보</div>
     </div>
   );
 };
