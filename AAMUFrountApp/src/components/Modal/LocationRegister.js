@@ -9,7 +9,7 @@ to{
 }
 `;
 //LIM = LocalInfoModal
-const Container_LoRegi = styled.div`
+const ContainerLoRegi = styled.div`
   position: fixed;
   width: 100%;
   height: 100%;
@@ -23,14 +23,14 @@ const Container_LoRegi = styled.div`
   align-items: center;
 `;
 
-const Overlay_LoRegi = styled.div`
+const OverlayLoRegi = styled.div`
   position: absolute;
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.6);
 `;
 
-const Contents_LoRegi = styled.div`
+const ContentsLoRegi = styled.div`
   position: relative;
   top: 0px;
   padding: 0 auto;
@@ -43,22 +43,20 @@ const Contents_LoRegi = styled.div`
   animation: ${modalAniLim} 0.6s ease forwards;
 `;
 
-const Title_LoRegi = styled.div`
+const TitleLoRegi = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   font-size: 1.5em;
   width: 100%;
   margin-top: 30px;
-  margin-botttm: 15px;
   overflow: auto;
   height: auto;
-  border: 1px solid blue;
   overflow: hidden;
   gap: 1rem;
 `;
 
-const Img_LoRegi = styled.div`
+const ImgLoRegi = styled.div`
   position: absolute;
   width: 35%;
   height: 97%;
@@ -69,7 +67,7 @@ const Img_LoRegi = styled.div`
   border-radius: 10px;
 `;
 
-const Close_LoRegi = styled.div`
+const CloseLoRegi = styled.div`
   position: absolute;
   margin-right: 15px;
   color: gray;
@@ -81,20 +79,18 @@ const Close_LoRegi = styled.div`
   }
 `;
 
-const Body_LoRegi = styled.div`
+const BodyLoRegi = styled.div`
   position: absolute;
   width: 100%;
   height: auto%;
-
-  border: 2px solid green;
 `;
 
 export {
-  Container_LoRegi,
-  Contents_LoRegi,
-  Overlay_LoRegi,
-  Title_LoRegi,
-  Close_LoRegi,
-  Body_LoRegi,
-  Img_LoRegi,
+  ContainerLoRegi,
+  ContentsLoRegi,
+  OverlayLoRegi,
+  TitleLoRegi,
+  CloseLoRegi,
+  BodyLoRegi,
+  ImgLoRegi,
 };
