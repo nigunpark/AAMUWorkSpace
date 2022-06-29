@@ -39,7 +39,6 @@ function App() {
         <Route path="/login" element={<Login />}></Route>
         <Route path="/test" element={<Test />}></Route>
       </Routes>
-      ㅇㅅㅇ ㅇㅅㅇ2 ㅇㅅㅇ3 44444
     </div>
   );
 }
