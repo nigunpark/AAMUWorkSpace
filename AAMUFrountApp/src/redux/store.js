@@ -166,6 +166,25 @@ let pickedTransport = createSlice({
 });
 export let { changePickedTransport } = pickedTransport.actions;
 
+let timeSetObj = createSlice({
+  name: "timeSetObj",
+  initialState: [],
+  reducers: {
+    changeTimeSetObj(state, action) {
+      state = state.push(action.payload);
+    },
+    delTimeSetObj(state, action) {
+      state.splice(
+        state.findIndex((data) => {
+          return data.day === action.payload;
+        }),
+        1
+      );
+    },
+  },
+});
+export let { changeTimeSetObj, delTimeSetObj } = timeSetObj.actions;
+
 export default configureStore({
   reducer: {
     localNameForMarker: localNameForMarker.reducer,
@@ -179,5 +198,6 @@ export default configureStore({
     saveDaysNPickedSuksoRedux: saveDaysNPickedSuksoRedux.reducer,
     showWhichModal: showWhichModal.reducer,
     pickedTransport: pickedTransport.reducer,
+    timeSetObj: timeSetObj.reducer,
   },
 });
