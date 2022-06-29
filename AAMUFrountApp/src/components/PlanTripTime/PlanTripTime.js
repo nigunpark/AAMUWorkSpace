@@ -11,26 +11,26 @@ import Stack from "@mui/material/Stack";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
+import { useSelector, useDispatch } from "react-redux";
+import { changeTimeSetObj, delTimeSetObj } from "../../redux/store";
 const PlanTripTime = ({ saveDays, savePeriod }) => {
   const [period, setPeriod] = useState([]);
   const [appearTimeSet, setAppearTimeSet] = useState(false);
 
   let reff = useRef();
-
+  let reduxState = useSelector((state) => {
+    return state;
+  });
   useEffect(() => {
     let newArr = new Array(saveDays + 1).fill(0);
     setPeriod(newArr);
   }, [saveDays]);
-
   return (
     <>
       <div className="planTripTime__container">
         <div
           className="planTripTime__title"
           onClick={() => {
-            // setAppearTimeSet(!appearTimeSet);
-            // if (appearTimeSet) reff.current.style.height = "100%";
-            // else reff.current.style.height = 0;
             reff.current.classList.toggle("pttm_open");
           }}>
           <FontAwesomeIcon icon={faClock} />
@@ -54,7 +54,12 @@ const TimeSet = ({ index }) => {
   const [appear, setAppear] = useState(false);
   const [startTimeArray, setStartTimeArray] = useState(["오전", "--", "--"]);
   const [endTimeArray, setendTimeArray] = useState(["오후", "--", "--"]);
-
+  let reduxState = useSelector((state) => {
+    return state;
+  });
+  let dispatch = useDispatch();
+  useEffect(() => {}, []);
+  console.log("timeSetObj:", reduxState.timeSetObj);
   return (
     <>
       <div>
@@ -87,10 +92,15 @@ const TimeSet = ({ index }) => {
               showToolbar={true}
               label=""
               onChange={(newValue) => {
-                console.log("newValue", newValue);
-                getAmpmTmStart(newValue, setStartTimeArray);
+                getAmpmTmStart(
+                  newValue,
+                  setStartTimeArray,
+                  index,
+                  dispatch,
+                  reduxState
+                );
+
                 if (Date.parse(newValue) >= Date.parse(endTime)) {
-                  console.log("위");
                   setStartTime(newValue);
                   setEndTime(newValue);
                 } else setStartTime(newValue);
@@ -104,7 +114,6 @@ const TimeSet = ({ index }) => {
               onChange={(newValue) => {
                 getAmpmTmEnd(newValue, setendTimeArray);
                 if (Date.parse(newValue) - Date.parse(startTime) < 0) {
-                  console.log("if문안ㄴ");
                   setEndTime(startTime);
                 } else {
                   setEndTime(newValue);
@@ -118,7 +127,13 @@ const TimeSet = ({ index }) => {
   );
 };
 //getAm(오전)pm(오후)T(time)m(mins)
-function getAmpmTmStart(newValue, setStartTimeArray) {
+function getAmpmTmStart(
+  newValue,
+  setStartTimeArray,
+  index,
+  dispatch,
+  reduxState
+) {
   let array = [];
   //오전오후 가져오는 코드
   let localeString = newValue.toLocaleString();
@@ -127,7 +142,6 @@ function getAmpmTmStart(newValue, setStartTimeArray) {
     localeString.indexOf("오") + 2
   );
   array.push(ampm);
-  // console.log("localeString", localeString);
   //시간가져오는 코드
   let time = localeString
     .substring(localeString.indexOf(":") - 2, localeString.indexOf(":"))
@@ -141,6 +155,21 @@ function getAmpmTmStart(newValue, setStartTimeArray) {
   );
   array.push(min);
   setStartTimeArray(array);
+  if (
+    reduxState.timeSetObj.find((data) => {
+      return data.day === index;
+    }) !== undefined
+  ) {
+    dispatch(delTimeSetObj(index));
+  }
+  dispatch(
+    changeTimeSetObj({
+      day: index,
+      ampm: ampm,
+      time: time,
+      min: min,
+    })
+  );
 }
 
 function getAmpmTmEnd(newValue, setendTimeArray) {
@@ -152,7 +181,6 @@ function getAmpmTmEnd(newValue, setendTimeArray) {
     localeString.indexOf("오") + 2
   );
   array.push(ampm);
-  // console.log("localeString", localeString);
   //시간가져오는 코드
   let time = localeString
     .substring(localeString.indexOf(":") - 2, localeString.indexOf(":"))
