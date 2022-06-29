@@ -4,6 +4,8 @@ import { useSelector, useDispatch } from "react-redux/es/exports";
 import "./KMap.css";
 import { changeInfo, changePickedTransport } from "../../redux/store";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Box from "@mui/material/Box";
+import TextField from "@mui/material/TextField";
 import {
   faBed,
   faBus,
@@ -12,17 +14,28 @@ import {
   faUtensils,
 } from "@fortawesome/free-solid-svg-icons";
 import {
-  Container_LoRegi,
-  Contents_LoRegi,
-  Overlay_LoRegi,
-  Title_LoRegi,
-  Close_LoRegi,
-  Body_LoRegi,
-  Img_LoRegi,
+  ContainerLoRegi,
+  ContentsLoRegi,
+  OverlayLoRegi,
+  TitleLoRegi,
+  CloseLoRegi,
+  BodyLoRegi,
+  ImgLoRegi,
 } from "../Modal/LocationRegister.js";
+import {
+  DimmedAuSContainer,
+  AuSModal,
+  AusBtnContainer,
+  AuSBtn,
+} from "../Modal/AreUSurePlanModal.js";
 const { kakao } = window;
 
-const KMap = ({ currPosition, setTitleName, setConWhichModal }) => {
+const KMap = ({
+  currPosition,
+  setTitleName,
+  setConWhichModal,
+  setShowCratePlan,
+}) => {
   let [lat, setLat] = useState("");
   let [lng, setLng] = useState("");
   //searchedLacation클릭시 해당 장소이름으로 redux state변경하기 위함
@@ -45,6 +58,10 @@ const KMap = ({ currPosition, setTitleName, setConWhichModal }) => {
   //처음 지도 그리기
   let [showTransport, setShowTransport] = useState(false);
   let [appearRegisterModal, setAppearRegisterModal] = useState(false);
+  let [jangsoName, setJangsoName] = useState("");
+  let [showFillMes, setShowFillMes] = useState(false);
+  let [showAuSModal, setShowAuSModal] = useState(false);
+
   useEffect(() => {
     var mapContainer = document.getElementById("map"), // 지도를 표시할 div
       mapOption = {
@@ -228,32 +245,87 @@ const KMap = ({ currPosition, setTitleName, setConWhichModal }) => {
               </>
             ) : null}
           </span>
-          <div>일정생성</div>
+          <div
+            onClick={() => {
+              setShowAuSModal(true);
+              // setShowCratePlan(true);
+            }}>
+            일정생성
+          </div>
         </div>
       </div>
       {appearRegisterModal ? (
-        <RegisterModal setAppearRegisterModal={setAppearRegisterModal} />
+        <RegisterModal
+          setAppearRegisterModal={setAppearRegisterModal}
+          jangsoName={jangsoName}
+          setJangsoName={setJangsoName}
+          showFillMes={showFillMes}
+          setShowFillMes={setShowFillMes}
+        />
+      ) : null}
+      {showAuSModal ? (
+        <AreUSurePlan
+          setShowAuSModal={setShowAuSModal}
+          setShowCratePlan={setShowCratePlan}
+        />
       ) : null}
     </div>
   );
 };
 
-function RegisterModal({ setAppearRegisterModal }) {
+//일정등록 버튼 시 보이는 확인모달창
+function AreUSurePlan({ setShowAuSModal, setShowCratePlan }) {
   return (
-    <Container_LoRegi>
-      <Overlay_LoRegi
+    <>
+      <DimmedAuSContainer>
+        <AuSModal>
+          <h4>일정을 생성하시겠습니까?</h4>
+          <AusBtnContainer>
+            <AuSBtn
+              onClick={() => {
+                setShowCratePlan(true);
+                setShowAuSModal(false);
+              }}>
+              확인
+            </AuSBtn>
+            <AuSBtn
+              onClick={() => {
+                setShowAuSModal(false);
+              }}>
+              취소
+            </AuSBtn>
+          </AusBtnContainer>
+        </AuSModal>
+      </DimmedAuSContainer>
+    </>
+  );
+}
+
+//장소등록 버튼 시 보이는 모달창
+function RegisterModal({
+  setAppearRegisterModal,
+  jangsoName,
+  setJangsoName,
+  showFillMes,
+  setShowFillMes,
+}) {
+  return (
+    <ContainerLoRegi>
+      <OverlayLoRegi
         onClick={() => {
           setAppearRegisterModal(false);
+          setShowFillMes(false);
         }}
       />
-      <Contents_LoRegi>
-        <Close_LoRegi
+      <ContentsLoRegi>
+        <CloseLoRegi
           onClick={() => {
             setAppearRegisterModal(false);
+            setShowFillMes(false);
           }}>
           X
-        </Close_LoRegi>
-        <Title_LoRegi>
+        </CloseLoRegi>
+        <TitleLoRegi>
           장 소 등 록
           <span style={{ fontSize: "13px", color: "grey" }}>
             검색해도 나오지 않는 장소를 이곳에서 등록 후 다시 검색해보세요.
@@ -261,26 +333,98 @@ function RegisterModal({ setAppearRegisterModal }) {
           <span style={{ fontSize: "13px", color: "grey" }}>
             추가하실 장소의 유형을 선택해주세요.
           </span>
-        </Title_LoRegi>
-        <Body_LoRegi>
-          <div className="registerModal__typeof-container">
-            <span>
+        </TitleLoRegi>
+        <BodyLoRegi>
+          <div
+            className="registerModal__typeof-container"
+            onClick={(e) => {
+              threeBtnToggle(e);
+            }}>
+            <span className="registerModal__btn jangso">
               <FontAwesomeIcon icon={faMapLocationDot} />
               장소
             </span>
-            <span>
+            <span className="registerModal__btn restaurant">
               <FontAwesomeIcon icon={faUtensils} />
               식당
             </span>
-            <span>
+            <span className="registerModal__btn sukso">
               <FontAwesomeIcon icon={faBed} />
               숙소
             </span>
           </div>
-        </Body_LoRegi>
-      </Contents_LoRegi>
-    </Container_LoRegi>
+          <form className="registerModal__input-container">
+            <Box
+              component="form"
+              sx={{
+                "& > :not(style)": { mt: 3, mx: 1, width: "97%" },
+              }}
+              noValidate>
+              <TextField
+                label="장소이름"
+                variant="outlined"
+                color="warning"
+                value={jangsoName}
+                onInput={(e) => setJangsoName(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    if (e.target.value.length === 0) {
+                      setShowFillMes(true);
+                    } else if (e.target.value.length !== 0) {
+                      setShowFillMes(false);
+                      //밑에 서버로 비동기 검색보내기
+                    }
+                  } else {
+                    if (jangsoName.length !== 0) setShowFillMes(false);
+                  }
+                }}
+                required
+                fullWidth={true}
+              />
+            </Box>
+            <input type="hidden" />
+            {showFillMes ? (
+              <span className="fillInputMessage">검색할 장소를 입력하세요</span>
+            ) : null}
+            <button
+              className="registerModal__search-btn"
+              onClick={(e) => {
+                e.preventDefault();
+                if (jangsoName.length === 0) {
+                  setShowFillMes(true);
+                  //밑에 서버로 비동기 검색보내기
+                }
+              }}>
+              검 색
+            </button>
+          </form>
+        </BodyLoRegi>
+      </ContentsLoRegi>
+    </ContainerLoRegi>
   );
+}
+
+function threeBtnToggle(e) {
+  if (e.target.nodeName === "SPAN") {
+    if (e.target.classList.contains("jangso")) {
+      e.target.nextElementSibling.classList.remove("click__threebtnToggle");
+      e.target.nextElementSibling.nextElementSibling.classList.remove(
+        "click__threebtnToggle"
+      );
+      e.target.classList.add("click__threebtnToggle");
+    } else if (e.target.classList.contains("restaurant")) {
+      e.target.previousElementSibling.classList.remove("click__threebtnToggle");
+      e.target.nextElementSibling.classList.remove("click__threebtnToggle");
+      e.target.classList.add("click__threebtnToggle");
+    } else {
+      e.target.previousElementSibling.classList.remove("click__threebtnToggle");
+      e.target.previousElementSibling.previousElementSibling.classList.remove(
+        "click__threebtnToggle"
+      );
+      e.target.classList.add("click__threebtnToggle");
+    }
+  }
 }
 
 function whichTransport(e) {
