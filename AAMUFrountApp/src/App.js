@@ -9,6 +9,8 @@ import MainPage from "./pages/MainPage/MainPage";
 import Login from "./components/Login/Login";
 import Test from "./Test";
 
+import Forum from './pages/Forum/Forum';
+
 function App() {
   let location = useLocation();
   useEffect(() => {
@@ -31,16 +33,19 @@ function App() {
           <Route path="/" element={<Home />}></Route>
           <Route path="/WholeMap" element={<WholeMap />}></Route>
           <Route path="/mainPage/:currPosition" element={<MainPage />}></Route>
+
+          <Route path="/forum" element={<Forum />}/>
         </Route>
         <Route path="/login" element={<Login />}></Route>
         <Route path="/test" element={<Test />}></Route>
       </Routes>
+      ㅇㅅㅇ
     </div>
   );
 }
 
 function changeLocation(location, setWhereUrl) {
-  if (location.pathname.indexOf("mainPage") === 1) setWhereUrl(true);
+  if (location.pathname.indexOf("mainPage") === 1 || location.pathname.indexOf("forum") === 1) setWhereUrl(true);
   else setWhereUrl(false);
 }
 export default App;

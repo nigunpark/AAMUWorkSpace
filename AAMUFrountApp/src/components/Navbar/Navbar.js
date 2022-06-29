@@ -54,6 +54,14 @@ const Navbar = ({ scrollNav, whereUrl }) => {
                 others
               </Link>
             </li>
+            <li>
+              <Link
+                to="/forum"
+                className="nav-links"
+                onClick={closeMoblieMenu}>
+                forum
+              </Link>
+            </li>
           </ul>
           <div className="navbar-btn-container">
             <button

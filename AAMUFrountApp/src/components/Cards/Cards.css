@@ -18,7 +18,7 @@
 .card__items{
   display: flex;
   /* border: 2px solid red; */
-   padding-top: 70px;
+  padding-top: 70px;
   gap: 1rem;
 }
 
