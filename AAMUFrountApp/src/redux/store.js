@@ -126,21 +126,6 @@ let leftSideMinSetter = createSlice({
 });
 export let { minSetter, setInitForMin } = leftSideMinSetter.actions;
 
-//추천장소or추천숙소 선택시 버튼선택용
-// let rightToggle = createSlice({
-//   name: "rightToggle",
-//   initialState: null,
-//   reducer: {
-//     changeRightToggle(state, action) {
-//       return (
-//         state.classList.remove("rps__type-btn-picked"),
-//         action.payload.classList.add("rps__type-btn-picked")
-//       );
-//     },
-//   },
-// });
-// export let { changeRightToggle } = rightToggle.actions;
-
 let saveDaysNPickedSuksoRedux = createSlice({
   name: "saveDaysNPickedSuksoRedux",
   initialState: [],
@@ -162,6 +147,13 @@ let saveDaysNPickedSuksoRedux = createSlice({
     },
   },
 });
+export let {
+  changeSaveDaysRedux,
+  changeArrSaveDaysRedux,
+  addOneSaveDaysRedux,
+  delAllSaveDaysRedux,
+  delOneSaveDaysRedux,
+} = saveDaysNPickedSuksoRedux.actions;
 
 let pickedTransport = createSlice({
   name: "pickedTransport",
@@ -173,14 +165,6 @@ let pickedTransport = createSlice({
   },
 });
 export let { changePickedTransport } = pickedTransport.actions;
-
-export let {
-  changeSaveDaysRedux,
-  changeArrSaveDaysRedux,
-  addOneSaveDaysRedux,
-  delAllSaveDaysRedux,
-  delOneSaveDaysRedux,
-} = saveDaysNPickedSuksoRedux.actions;
 
 export default configureStore({
   reducer: {
