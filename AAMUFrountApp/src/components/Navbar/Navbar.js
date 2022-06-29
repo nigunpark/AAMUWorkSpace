@@ -40,10 +40,10 @@ const Navbar = ({ scrollNav, whereUrl }) => {
             </li>
             <li>
               <Link
-                to="/products"
+                to="/Insta"
                 className="nav-links"
                 onClick={closeMoblieMenu}>
-                Products
+                Insta
               </Link>
             </li>
             <li>

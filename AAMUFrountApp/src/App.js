@@ -8,6 +8,7 @@ import WholeMap from "./pages/WholeMap.js";
 import MainPage from "./pages/MainPage/MainPage";
 import Login from "./components/Login/Login";
 import Test from "./Test";
+import Main from "./components/Insta/Main";
 
 import Forum from "./pages/Forum/Forum";
 
@@ -38,6 +39,7 @@ function App() {
         </Route>
         <Route path="/login" element={<Login />}></Route>
         <Route path="/test" element={<Test />}></Route>
+        <Route path="/Insta" element={<Main />}></Route>
       </Routes>
     </div>
   );
