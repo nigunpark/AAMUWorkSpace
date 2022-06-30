@@ -10,12 +10,14 @@ import { faClock } from "@fortawesome/free-regular-svg-icons";
 import { useDispatch } from "react-redux";
 import {
   addArrInForJangso,
+  addMonthNDate,
   changeSaveDaysRedux,
   changeShowWhichModal,
   deleteAllPickJanso,
   deletePickJangso,
   delOneSaveDaysRedux,
   minSetter,
+  resetMonthNDate,
   setInitForMin,
   setInitForTime,
   timeSetter,
@@ -61,6 +63,7 @@ const LeftPlanSide = ({ currPosition }) => {
     }
   }, [reduxState.showWhichModal]);
   let dispatch = useDispatch();
+  console.log("timeSetObj:", reduxState.timeSetObj);
   return (
     <div className="LeftPlanSide">
       <div className="leftPlanSide__localNDay">
@@ -131,6 +134,20 @@ const ChangeDate = ({ period, appearCalendar, setAppearCalendar }) => {
   let edy = period.endDate.getFullYear();
   let edm = period.endDate.getMonth();
   let edd = period.endDate.getDate();
+  let reduxState = useSelector((state) => {
+    return state;
+  });
+  let dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(resetMonthNDate([]));
+    dispatch(
+      addMonthNDate({
+        month: sdm + 1,
+        date: sdd,
+      })
+    );
+  }, [period]);
+
   return (
     <div
       className="changeDate__container"
@@ -318,9 +335,20 @@ function SukSoMadal() {
 }
 
 function SukSoSubModal({ index, local }) {
+  let reduxState = useSelector((state) => {
+    return state;
+  });
   return (
     <div className="sukSoSubModal__container">
-      <div className="sukSoSubModal__dayBtn">DAY {index + 1}</div>
+      <div className="sukSoSubModal__dayBtn">
+        DAY {index + 1}
+        <span>
+          ({reduxState.monthNdate[0].month}.
+          {reduxState.monthNdate[0].date + index} ~{" "}
+          {reduxState.monthNdate[0].month}.
+          {reduxState.monthNdate[0].date + index + 1} )
+        </span>
+      </div>
       {local !== 0 ? (
         <PickedSukso local={local} />
       ) : (
