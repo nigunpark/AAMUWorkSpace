@@ -1,9 +1,10 @@
 import React from "react";
 import "./CreatePlan.css";
 import styled from "styled-components";
-import CreatePlanMap from "../KMap/CreatePlanMap.js";
+import CreatePlanMap from "./CreatePlanMap";
 import CreatePlanLeft from "./CreatePlanLeft.js";
-import KMap from "../KMap/KMap";
+import { faRectangleXmark } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const CreatePlan = ({ setShowCratePlan, showCreatePlan }) => {
   const DimmedContainer = styled.div`
@@ -22,7 +23,7 @@ const CreatePlan = ({ setShowCratePlan, showCreatePlan }) => {
     position: relative;
     background: white;
     width: 98%;
-    height: 95%;
+    height: 97%;
   `;
 
   const TitleBar = styled.div`
@@ -61,12 +62,11 @@ const CreatePlan = ({ setShowCratePlan, showCreatePlan }) => {
               onClick={() => {
                 setShowCratePlan(false);
               }}>
-              X
+              <FontAwesomeIcon icon={faRectangleXmark} />
             </CloseBtn>
           </TitleBar>
           <Contents>
             <CreatePlanLeft />
-            {/* <KMap /> */}
             <CreatePlanMap showCreatePlan={showCreatePlan} />
           </Contents>
         </Modal>
