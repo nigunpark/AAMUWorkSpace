@@ -1,6 +1,5 @@
 .main {
-    background-color: #fafafa;
-
+    background-color: #FAFAFA;
     
     nav {
         display: flex;
@@ -106,21 +105,35 @@
     }
 }
 .margin-value {
+<<<<<<< HEAD
     display: flex;
     flex-wrap: nowrap;
     position: relative;
     margin: 100px 180px;
+=======
+    display: grid;
+    grid-template-columns: auto 100px;
+    //flex-direction: row;
+    //flex-wrap: nowrap;
+    //position: relative;
+    margin: 68px 100px;
+>>>>>>> insta
     z-index: 2;
+    align-items: center; /* 수직 정렬 */
+    flex-direction: row; /* default: row */
+    justify-content: center;
 
    
 
 
     .feeds-setting {
-        width: 600px;
+        width: 500px;
         border: 1px solid #dbdbdb;
-        margin-right: 30px;
+        margin-right: 250px;
+        margin-top: 32px;
+        margin-bottom: 15px;
         background-color: #fff;
-        border-radius: 3px;
+        border-radius: 10px;
 
 
         .title-profile {
@@ -138,7 +151,8 @@
     
             .dot {
                 width: 18px;
-                margin-left: 490px;
+                margin-left: 330px;
+                cursor: pointer;
             }
     
             span {
@@ -160,6 +174,7 @@
         
         .location {
             margin-top: -25px;
+            margin-bottom: 10px;
             margin-left: 60px;
             font-size: 10px;
             color: #8e8e8e;
@@ -171,17 +186,25 @@
 
         }
 
+        .container{
+            height: 400px;
+        }
+        
         .main-image {
+            object-fit: cover;
             width: 100%;
+            height: 100%;
+            
         }
 
         .feeds-contents {
-            margin: 6px 13px;
+            margin: 0px 10px;
 
             .feeds-icons {
+                
                 display: flex;
-                flex-direction: row;
-                justify-content: space-between;
+                //flex-direction: row;
+                //justify-content: space-between;
                 align-items: center;
                 
 
@@ -190,8 +213,8 @@
                 }
                 
                 svg:not(:first-child){
-                    width: 23px;
-                    height: 23px;
+                    width: 25px;
+                    height: 25px;
                 }
                 
                 svg:not(:last-child){
@@ -204,8 +227,9 @@
                 }
                 
                 .save-icon {
-                    margin-left: 400px;
+                    margin-left: 350px;
                 }
+
             }
 
             .feeds-like {
@@ -296,15 +320,36 @@
         }
     }
     .heart{
-        width: 30px;
-        height: 30px;  
-        margin-left: 40px;
+        position: relative;
+        border-color: #000000;
+        color: #e6e6e6;
+        width: 25px;
+        height: 25px;  
+        cursor: pointer;
     }
-    .upload{
-        width: 40px;
-        height: 40px;  
-        margin-top: 5px;
+    div >.heart:active{
+        color: red;
+
     }
+   
+
+    .post-icon{
+        width: 22px;
+        height: 22px; 
+        margin-bottom: -3px; 
+        font-weight: 10px;
+        background-color: #ffffff;
+        border-radius: 5px;
+        border-style: none;
+        cursor: pointer;
+    }
+    div >.post-icon:active{
+        color:#ffffff;
+        background-color: #000000;
+
+    }
+
+   
     .main-right {
         display: flex;
         flex-direction: column;
@@ -329,7 +374,7 @@
 
         .search {
             margin-bottom: 15px;
-
+            
             >input {
 
                 /*
@@ -341,12 +386,14 @@
                 */
             
                 width: 270px;
-                height: 22px;
-                border: 1.7px solid #dbdbdb;
+                height: 28px;
+                border: 1.7px solid #EFEFEF;
                 border-radius: 2px;
                 text-align: center;
                 font-size: 14px;
                 font-weight: lighter;
+                border-radius: 5px;
+
             }
             
             >input:focus {
@@ -354,10 +401,11 @@
                 돋보기 구현 전
                 background-image: none;
                 */
-                width: 250px;
-                padding-left: 22px;
+                width: 270px;
+                padding-left: 28px;
                 color: #262626;
                 text-align: left;
+
             }
 
 
@@ -447,10 +495,11 @@
 
 
         .user {
+            margin-top: -10px;
             display: flex;
             flex-direction: row;
             align-items: center;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
             height: 80px;
 
             >img {
@@ -458,6 +507,7 @@
                 height: 50px;
                 border: 1px solid #e6e6e6;
                 border-radius: 50%;
+                cursor: pointer;
             }
     
             div {
@@ -467,35 +517,49 @@
             .user-id {
                 font-size: 15px;
                 font-weight: bold;
+                cursor: pointer;
             }
     
             .user-name {
                 font-size: 13px;
                 color: #8e8e8e;
                 margin-top: 3px;
+                cursor: pointer;
             }
         }
 
         
 
         .recommend {
-
+            background-color: rgba(255, 255, 255, 0);
+            margin-bottom: 15px;
+            width: 300px;
+            height: auto;
+            border-style: none;
             .recommend-title{
+                
                 display: flex;
                 flex-direction: row;
                 justify-content: space-between;
-                position: fixed;
-                width: 230px;
-                padding: 10px 15px;
+                //position: fixed;
+                width: 270px;
+                //padding: 10px 15px;
+                margin-bottom: 5px;
                 font-size: 14px;
                 font-weight: bold;
                 color: #262626;
-                background-color: #fff;
-                opacity: 0.9;
+                background-color: rgba(255, 255, 255, 0);
+                //opacity: 0.9;
+                
 
                 span:first-child {
                     font-size: 14px;
                     color: #8e8e8e;
+                }
+
+                span:last-child {
+                    cursor: pointer;
+                    font-size: 14px;
                 }
                 
             }
@@ -504,8 +568,8 @@
             .recommend-down {
                 display: flex;
                 flex-direction: column;
-                margin-top: 40px;
-                margin-bottom: 15px;
+               
+                //margin-bottom: 15px;
                 bottom: 40px;
 
                 .recommend-contents {
@@ -513,19 +577,25 @@
                     flex-direction: row;
                     align-items: center;
                     justify-content: flex-start;
-                    margin: 0 13px 5px;
+                    margin: 0px 3px 5px;
 
-                    &::after{
-                        content: "팔로우";
-                        margin-left: 33px;
+                    .follow{
+                        margin-left: 60px;
                         color: #0095F6;
                         font-size: 13px;
                         font-weight: bold;
+                        cursor: pointer;
+
+                        &:active{
+                            color: lightskyblue;
+                        }
+                        
                     }
 
                     >img{
                         width: 37px;
                         border-radius: 50%;
+                        cursor: pointer;
                     }
                     
                     p {
@@ -533,13 +603,14 @@
                     }
                     
                     .user-id {
-                        font-size: 15px;
+                        cursor: pointer;
+                        font-size: 13px;
                         font-weight: bold;
                     }
                     
                     .user-name {
                         margin-top: 3px;
-                        font-size: 13px;
+                        font-size: 10px;
                         color: #8e8e8e;
                     }
                     
@@ -552,8 +623,14 @@
            
         }
         .information{
-            color: gray;
-            font-size: smaller;
+            margin-bottom: 10px;
+            color: rgb(195, 193, 193);
+            font-size: 4px;
+        }
+        .information2{
+            
+            color: rgb(193, 191, 191);
+            font-size: 12px;
         }
        
     }
