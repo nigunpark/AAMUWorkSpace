@@ -82,28 +82,10 @@ cursor: pointer;
   color: black;
 }
 
-/* .sukbak{
-  position: relative;
-  display: inline-block; 
-  line-height: 30px; 
-  border: 1px solid red;
-}
+.pickedSukso__container slide-in-right{
+  box-shadow: var(--shadow);
 
-.sukbak::after{
-  position: absolute;
-  content: '';
-  display: block;
-  border-bottom: 3px solid black;
-  transition: width .3s linear;
-  left: auto;
-  right: auto;
-  width: 0;
 }
-.sukbak:hover::after{
-  width: 100%;
-  left: auto;
-  right: 0;
-} */
 
 
 .suksoModal__container,
@@ -186,6 +168,7 @@ cursor: pointer;
   justify-content: center;
   align-items: center;
   width: 100%;
+  padding: 2px 0;
 }
 
 .sukSoSubModal__dayBtn{
