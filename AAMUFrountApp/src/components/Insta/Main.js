@@ -7,14 +7,13 @@ import User from "./User.js";
 import Story from "./Story.js";
 import Imgup from "./Imgup.js";
 
-
 function Main() {
   return (
     <div className="main">
       <Nav></Nav>
-      {/* <div className="margin-top"> 
+      <div className="margin-top"> 
             <Story></Story>   
-          </div> */}
+          </div>
       <div className="margin-value">
         <FeedSetting />
         <div className="main-right">
