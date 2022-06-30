@@ -58,8 +58,7 @@ const TimeSet = ({ index }) => {
     return state;
   });
   let dispatch = useDispatch();
-  useEffect(() => {}, []);
-  console.log("timeSetObj:", reduxState.timeSetObj);
+
   return (
     <>
       <div>
