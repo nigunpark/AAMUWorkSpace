@@ -105,19 +105,12 @@
     }
 }
 .margin-value {
-<<<<<<< HEAD
-    display: flex;
     flex-wrap: nowrap;
     position: relative;
     margin: 100px 180px;
-=======
     display: grid;
     grid-template-columns: auto 100px;
-    //flex-direction: row;
     //flex-wrap: nowrap;
-    //position: relative;
-    margin: 68px 100px;
->>>>>>> insta
     z-index: 2;
     align-items: center; /* 수직 정렬 */
     flex-direction: row; /* default: row */
