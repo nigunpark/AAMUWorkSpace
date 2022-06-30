@@ -126,6 +126,7 @@ let leftSideMinSetter = createSlice({
 });
 export let { minSetter, setInitForMin } = leftSideMinSetter.actions;
 
+//여행기간과 추천숙소 넣는 배열
 let saveDaysNPickedSuksoRedux = createSlice({
   name: "saveDaysNPickedSuksoRedux",
   initialState: [],
@@ -155,6 +156,19 @@ export let {
   delOneSaveDaysRedux,
 } = saveDaysNPickedSuksoRedux.actions;
 
+//여행기간
+let tripPeriod = createSlice({
+  name: "tripPeriod",
+  initialState: [0],
+  reducers: {
+    changeTripPeriod(state, action) {
+      return new Array(action.payload).fill(0);
+    },
+  },
+});
+export let { changeTripPeriod } = tripPeriod.actions;
+
+//이동수단 선택 state
 let pickedTransport = createSlice({
   name: "pickedTransport",
   initialState: "personal",
@@ -166,12 +180,13 @@ let pickedTransport = createSlice({
 });
 export let { changePickedTransport } = pickedTransport.actions;
 
+//메인페이지 leftSide 여행시간 상세설정 시 시작시간들 넣는 배열
 let timeSetObj = createSlice({
   name: "timeSetObj",
   initialState: [],
   reducers: {
     changeTimeSetObj(state, action) {
-      state = state.push(action.payload);
+      state.push(action.payload);
     },
     delTimeSetObj(state, action) {
       state.splice(
@@ -184,6 +199,21 @@ let timeSetObj = createSlice({
   },
 });
 export let { changeTimeSetObj, delTimeSetObj } = timeSetObj.actions;
+
+//월과 일 저장
+let monthNdate = createSlice({
+  name: "monthNdate",
+  initialState: [],
+  reducers: {
+    addMonthNDate(state, action) {
+      state.push(action.payload);
+    },
+    resetMonthNDate(state, action) {
+      return action.payload;
+    },
+  },
+});
+export let { addMonthNDate, resetMonthNDate } = monthNdate.actions;
 
 export default configureStore({
   reducer: {
@@ -199,5 +229,7 @@ export default configureStore({
     showWhichModal: showWhichModal.reducer,
     pickedTransport: pickedTransport.reducer,
     timeSetObj: timeSetObj.reducer,
+    tripPeriod: tripPeriod.reducer,
+    monthNdate: monthNdate.reducer,
   },
 });
