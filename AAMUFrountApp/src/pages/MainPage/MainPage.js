@@ -5,14 +5,21 @@ import { useParams } from "react-router-dom";
 import LeftPlanSide from "../../components/LeftPlanSide/LeftPlanSide";
 import RightRecommandSide from "../../components/RightRecommandSide/RightRecommandSide";
 import CreatePlan from "../../components/CreatePlan/CreatePlan";
+import { useSelector, useDispatch } from "react-redux";
+import { delAllSaveDaysRedux, deleteAllPickJanso } from "../../redux/store";
 const MainPage = () => {
   const [titleName, setTitleName] = useState("");
   const [conWhichModal, setConWhichModal] = useState(false);
   let { currPosition } = useParams();
   const [showCreatePlan, setShowCratePlan] = useState(false);
+  let reduxState = useSelector((state) => {
+    return state;
+  });
+  let dispatch = useDispatch();
   useEffect(() => {
-    console.log("mainpage useEffect");
-  }, [CreatePlan]);
+    dispatch(deleteAllPickJanso([]));
+    dispatch(delAllSaveDaysRedux([]));
+  }, []);
   return (
     <div className="MainPage">
       <LeftPlanSide currPosition={currPosition} />
