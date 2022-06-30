@@ -11,9 +11,9 @@ function Main() {
     return (
       <div className="main">
         <Nav></Nav>
-          {/* <div className="margin-top"> 
+          <div className="margin-top"> 
             <Story></Story>   
-          </div> */}
+          </div>
           <div className="margin-value"> 
             <FeedSetting></FeedSetting>
             <div className="main-right">   
