@@ -75,7 +75,6 @@ font-weight: bold;
 .createPlanLeft__schedule__content-container{
   display: flex;
   flex-direction: column;
-  justify-content: center;
   width: 100%;
   height: 88vh;
   overflow: auto;
