@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import './Main.scss';
+// import './Main.scss';
 import { Routes, Route, Link } from 'react-router-dom';
 import Nav from './Nav.js';
 import FeedSetting from './FeedSetting.js';

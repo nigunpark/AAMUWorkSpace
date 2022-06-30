@@ -1,0 +1,17 @@
+{
+    "id" : "kim123",
+    "title" : "제주도 4박 5일 여행기",
+    "content" : "너무 좋았어요",
+    "mapurl" : "/public/images/imageMap.png",
+    "imgdata" : [
+        {
+            "url" : "/public/images/bg1.png"
+        },
+        {
+            "url" : "/public/images/bg2.png"
+        },
+        {
+            "url" : "/public/images/bg3.png"
+        }
+    ]
+}
