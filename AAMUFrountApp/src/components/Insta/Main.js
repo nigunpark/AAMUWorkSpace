@@ -7,6 +7,7 @@ import User from "./User.js";
 import Story from "./Story.js";
 import Imgup from "./Imgup.js";
 
+
 function Main() {
   return (
     <div className="main">
