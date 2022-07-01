@@ -35,6 +35,7 @@ public class AuthenticateController {
         Map map = new HashMap();
         map.put("member", member);
         map.put("token", token);
+        System.out.println(map.get("token"));
         return map;
     }
     

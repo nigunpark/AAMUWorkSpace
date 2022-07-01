@@ -1,4 +1,4 @@
-package com.aamu.aamurest.admin.service;
+package com.aamu.aamurest.user.service;
 
 import lombok.Getter;
 import lombok.Setter;

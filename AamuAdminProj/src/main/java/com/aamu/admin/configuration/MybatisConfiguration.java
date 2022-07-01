@@ -1,4 +1,4 @@
-package com.aamu.aamurest.configuration;
+package com.aamu.admin.configuration;
 
 import javax.sql.DataSource;
 
@@ -19,7 +19,7 @@ public class MybatisConfiguration {
 	public SqlSessionTemplate template() throws Exception {
 		SqlSessionFactoryBean sqlSessionFactory = new SqlSessionFactoryBean();
 		sqlSessionFactory.setDataSource(dataSource);
-		sqlSessionFactory.setConfigLocation(new ClassPathResource("aamu/mybatis/configuration.xml"));
+		sqlSessionFactory.setConfigLocation(new ClassPathResource("admin/mybatis/configuration.xml"));
 		return new SqlSessionTemplate(sqlSessionFactory.getObject());
 	}
 }
