@@ -15,15 +15,19 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import com.aamu.aamurest.user.service.AttractionDTO;
+import com.aamu.aamurest.user.service.MainService;
 import com.aamu.aamurest.user.service.api.Info;
 import com.aamu.aamurest.user.service.api.KakaoKey;
 import com.aamu.aamurest.user.service.api.Places;
 import com.aamu.aamurest.user.service.api.Places.Item;
 
 @RestController
-public class ApiBackupController {
+public class ApiController {
 	@Autowired
 	private RestTemplate restTemplate;
+	
+	@Autowired
+	private MainService service;
 	
 	@GetMapping("/places/backupinfo")
 	public List<AttractionDTO> info2(@RequestParam Map map) {
@@ -59,8 +63,8 @@ public class ApiBackupController {
 			dto.setMapy(item.getMapy());
 			dto.setTitle(item.getTitle());
 			dto.setContenttypeid(item.getContenttypeid());
-			dto.setImage(item.getFirstimage());
-			dto.setImage2(item.getFirstimage2());
+			dto.setBigImage(item.getFirstimage());
+			dto.setSmallImage(item.getFirstimage2());
 			dto.setSigungucode(item.getSigungucode());
 			uri = "http://api.visitkorea.or.kr/openapi/service/rest/KorService/detailIntro?"
 					+ "serviceKey=8188yaWHAsWQ+XOW7Vso3CoksQpmRokfZmqwlC79igNHaB97z49enrCL+OBTzvEOvnCYPLYVcP7qki6O7G76BQ=="
@@ -77,11 +81,11 @@ public class ApiBackupController {
 				break;
 			case "32":
 				dto.setTel(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getReservationlodging());
-				dto.setCheckintime(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getCheckintime());
-				dto.setCheckouttime(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getCheckouttime());
+				dto.setCheckin(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getCheckintime());
+				dto.setCheckout(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getCheckouttime());
 				dto.setUrl(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getReservationurl());
 				break;
-			default:
+			case "39":
 				
 				dto.setTel(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getReservationfood());
 				if(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getReservationfood()==null) {
@@ -90,6 +94,8 @@ public class ApiBackupController {
 				dto.setPlaytime(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getOpentimefood());
 				dto.setResttime(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getRestdatefood());
 				dto.setMenu(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getTreatmenu());
+				dto.setPark(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getParkingfood());
+				break;
 			}
 			
 		
@@ -149,6 +155,23 @@ public class ApiBackupController {
 			*/
 			
 			list.add(dto);
+			switch(contentTypeId) {
+			case "12":
+				service.placeInsert(dto);
+				service.infoInsert(dto);
+				break;
+			case "32":
+				service.placeInsert(dto);
+				service.hotelInsert(dto);
+				break;
+			case "default":
+				service.placeInsert(dto);
+				service.infoInsert(dto);
+				service.dinerInsert(dto);
+				break;
+			}
+			
+			
 		}
 		
 		return list;
