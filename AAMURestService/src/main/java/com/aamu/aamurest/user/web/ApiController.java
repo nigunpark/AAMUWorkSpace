@@ -153,7 +153,6 @@ public class ApiController {
 			dto.setReview(rDtoList);
 			}
 			*/
-			
 			list.add(dto);
 			switch(contentTypeId) {
 			case "12":

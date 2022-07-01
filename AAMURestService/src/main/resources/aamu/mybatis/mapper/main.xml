@@ -16,6 +16,4 @@
 		INSERT INTO dinerinfo VALUES(#{contentid},#{menu},#{park})
 	</insert>
 	
-	
-	
 </mapper>
