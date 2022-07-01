@@ -11,6 +11,8 @@ import Test from "./Test";
 import Main from "./components/Insta/Main";
 
 import Forum from "./pages/Forum/Forum";
+import Board from "./pages/Forum/Board2/Board";
+
 
 function App() {
   let location = useLocation();
@@ -34,12 +36,13 @@ function App() {
           <Route path="/" element={<Home />}></Route>
           <Route path="/WholeMap" element={<WholeMap />}></Route>
           <Route path="/mainPage/:currPosition" element={<MainPage />}></Route>
-
           <Route path="/forum" element={<Forum />} />
+          <Route path="/review" element={<Board/>}/>
         </Route>
         <Route path="/login" element={<Login />}></Route>
         <Route path="/test" element={<Test />}></Route>
         <Route path="/Insta" element={<Main />}></Route>
+        
       </Routes>
     </div>
   );
@@ -48,7 +51,8 @@ function App() {
 function changeLocation(location, setWhereUrl) {
   if (
     location.pathname.indexOf("mainPage") === 1 ||
-    location.pathname.indexOf("forum") === 1
+    location.pathname.indexOf("forum") === 1 ||
+    location.pathname.indexOf("review") === 1
   )
     setWhereUrl(true);
   else setWhereUrl(false);

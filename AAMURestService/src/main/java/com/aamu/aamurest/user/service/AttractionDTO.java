@@ -1,10 +1,12 @@
-package com.aamu.aamurest.admin.service;
+package com.aamu.aamurest.user.service;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
+@ToString
 public class AttractionDTO {
 	private int areacode;
 	private int sigungucode;
@@ -14,14 +16,15 @@ public class AttractionDTO {
 	private double mapy;
 	private String title;
 	private String addr;
-	private String image;
-	private String image2;
+	private String bigImage;
+	private String smallImage;
 	private String playtime;
 	private String tel;
 	private String resttime;
-	private String checkintime;
-	private String checkouttime;
+	private String checkin;
+	private String checkout;
 	private String url;
 	private String kakaokey;
 	private String menu;
+	private String park;
 }

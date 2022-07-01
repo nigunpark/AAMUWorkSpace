@@ -11,7 +11,7 @@
 	</resultMap>
 	
 	<select id="findByUsername" parameterType="String" resultMap="userDTOReult">
-		SELECT m.id as username,m.pwd as password,authority FROM member m JOIN AUTHORITY_SECURITY AU ON m.id=au.id WHERE m.id='${value}'
+		SELECT m.id as username,m.pwd as password,authority FROM users m JOIN AUTHORITY_SECURITY AU ON m.id=au.id WHERE m.id='${value}'
 	</select>
 	
 	<select id="userTotalCount" resultType="int">

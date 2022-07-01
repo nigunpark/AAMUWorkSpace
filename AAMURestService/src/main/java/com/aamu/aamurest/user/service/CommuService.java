@@ -1,5 +1,13 @@
 package com.aamu.aamurest.user.service;
 
-public interface CommuService {
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
+@Service
+public interface CommuService<T> {
+	//커뮤니티 목록
+	List<T> commuSelectList();
+	
 
 }

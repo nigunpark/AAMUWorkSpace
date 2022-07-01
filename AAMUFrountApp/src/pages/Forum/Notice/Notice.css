@@ -1,7 +1,9 @@
 .Notice{
-    padding: 4rem;
-    padding-top: 170px;
-    background: #fff;
+    /* padding: 4rem; */
+    /* padding-top: 170px; */
+    /* background: #fff; */
+    max-width: 500px;
+    width: 50%;
   }
 .swiper__title_Notice{
   text-align: left;
