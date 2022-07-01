@@ -7,15 +7,13 @@
 		INSERT INTO places VALUES(#{contentid},#{areacode},#{contenttypeid},#{sigungucode},#{title},#{addr},#{bigImage},#{smallImage},#{mapx},#{mapy},#{kakaokey},#{tel})
 	</insert>
 	<insert id="infoInsert" parameterType="attrDTO">
-		INSERT INTO placesinfo VALUES(#{contentid),#{resttime},#{playtime})
+		INSERT INTO placesinfo VALUES(#{contentid},#{resttime},#{playtime})
 	</insert>
 	<insert id="hotelInsert" parameterType="attrDTO">
-		INSERT INTO hotelinfo VALUES(#{contentid),#{checkin},#{checkout})
+		INSERT INTO hotelinfo VALUES(#{contentid},#{checkin},#{checkout})
 	</insert>
 	<insert id="dinerInsert" parameterType="attrDTO">
-		INSERT INTO dinerinfo VALUES(#{contentid),#{menu},#{park})
+		INSERT INTO dinerinfo VALUES(#{contentid},#{menu},#{park})
 	</insert>
-	
-	
 	
 </mapper>

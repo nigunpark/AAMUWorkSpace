@@ -29,7 +29,6 @@ public class MainDAO {
 	}
 
 	public int dinerInsert(AttractionDTO dto) {
-		// TODO Auto-generated method stub
 		return template.insert("dinerInsert",dto);
 	}
 
