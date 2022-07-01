@@ -58,14 +58,12 @@ const TitleLim = styled.div`
 `;
 
 const ImgLim = styled.div`
-  position: absolute;
+  position: relative;
   width: 35%;
   height: 97%;
-  background-image: url(/images/img-4.jpg);
-  background-size: cover;
-  background-repeat: no-repeat;
   margin: 5px;
   border-radius: 10px;
+  overflow: hidden;
 `;
 
 const CloseLim = styled.div`
@@ -84,8 +82,8 @@ const BodyLim = styled.div`
   position: absolute;
   width: 55%;
   height: 97%;
-  margin-left: 320px;
-  margin-top: 5px;
+  top: 3px;
+  right: 50px;
   padding: 13px;
 `;
 

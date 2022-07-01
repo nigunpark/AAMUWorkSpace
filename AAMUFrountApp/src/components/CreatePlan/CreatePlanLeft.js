@@ -1,24 +1,23 @@
 import {
   faClock,
   faEllipsisVertical,
-  faHeart,
   faLocationDot,
 } from "@fortawesome/free-solid-svg-icons";
-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./CreatePlanLeft.css";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import Stack from "@mui/material/Stack";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { TextField } from "@mui/material";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { corrTimeSetObj } from "../../redux/store";
 const CreatePlanLeft = () => {
   let reduxState = useSelector((state) => {
     return state;
   });
-  let [heart, setHeart] = useState(false);
+  let [selected, setSelected] = useState(false);
   return (
     <div className="createPlanLeft">
       <div className="createPlanLeft__days">
@@ -30,15 +29,16 @@ const CreatePlanLeft = () => {
           })}
         </div>
       </div>
-      <WholeSchedule heart={heart} setHeart={setHeart} />
+      <WholeSchedule selected={selected} setSelected={setSelected} />
     </div>
   );
 };
 
-function WholeSchedule({ heart, setHeart }) {
+function WholeSchedule({ selected, setSelected }) {
   let reduxState = useSelector((state) => {
     return state;
   });
+
   return (
     <div className="createPlanLeft__schedule">
       <div className="createPlanLeft__schedule-title">
@@ -52,26 +52,34 @@ function WholeSchedule({ heart, setHeart }) {
       </div>
       <div className="createPlanLeft__schedule__content-container">
         {reduxState.tripPeriod.map((val, index) => {
-          return <Content index={index} heart={heart} setHeart={setHeart} />;
+          return (
+            <Content
+              index={index}
+              selected={selected}
+              setSelected={setSelected}
+              key={index}
+            />
+          );
         })}
       </div>
     </div>
   );
 }
 
-function Content({ index, heart, setHeart }) {
+function Content({ index }) {
   let reduxState = useSelector((state) => {
     return state;
   });
+  let dispatch = useDispatch();
   let [showTimePicker, setShowTimePicker] = useState(false);
   return (
     <div className="createPlanLeft__schedule__content">
       <select className="createPlanLeft__schedule__select">
-        {reduxState.tripPeriod.map((val, index) => {
+        {reduxState.tripPeriod.map((val, i) => {
           return (
-            <option key={index}>
-              {index + 1}DAY {reduxState.monthNdate[0].month}월{" "}
-              {reduxState.monthNdate[0].date + index}일 수
+            <option key={i} selected={index + 1 === i + 1 ? true : false}>
+              {i + 1}DAY {reduxState.monthNdate[0].month}월{" "}
+              {reduxState.monthNdate[0].date + i}일 수
             </option>
           );
         })}
@@ -88,63 +96,34 @@ function Content({ index, heart, setHeart }) {
       <div style={{ marginBottom: "10px", fontSize: "13px" }}>
         <FontAwesomeIcon icon={faLocationDot} style={{ color: "var(--red)" }} />{" "}
         3장소
-        {heart ? (
-          <FontAwesomeIcon
-            icon={faHeart}
-            style={{ color: "red" }}
-            onClick={() => {
-              setHeart(!heart);
-            }}
-          />
-        ) : (
-          <i
-            class="fa-regular fa-heart"
-            onClick={() => {
-              setHeart(!heart);
-            }}
-          />
-        )}
       </div>
 
       <div className="createPlanLeft__schedule__time">
         <span style={{ fontSize: "13px" }}>시작</span>{" "}
-        {/* 메인페이지 leftSide에서 여행시작시간 설정 한 거 뿌려줌
-           설정하지 않았으면 기본적으로 오전10시로 설정*/}
-        {reduxState.timeSetObj.findIndex((obj) => {
-          return obj.day === index + 1;
-        }) !== -1 ? (
-          <span className="createPlanLeft__schedule__time-span">
-            <span>
-              {
-                reduxState.timeSetObj.find((obj) => {
-                  return obj.day === index + 1;
-                }).ampm
-              }
-            </span>{" "}
-            <span>
-              {
-                reduxState.timeSetObj.find((obj) => {
-                  return obj.day === index + 1;
-                }).time
-              }
-            </span>
-            {" : "}
-            <span>
-              {
-                reduxState.timeSetObj.find((obj) => {
-                  return obj.day === index + 1;
-                }).min
-              }
-            </span>
+        <span className="createPlanLeft__schedule__time-span">
+          <span>
+            {
+              reduxState.timeSetObj.find((obj) => {
+                return obj.day === index + 1;
+              }).ampm
+            }
+          </span>{" "}
+          <span>
+            {
+              reduxState.timeSetObj.find((obj) => {
+                return obj.day === index + 1;
+              }).time
+            }
           </span>
-        ) : (
-          <span className="createPlanLeft__schedule__time-span">
-            <span>오전</span>
-            <span>10</span>
-            <span>:</span>
-            <span>00</span>
+          {" : "}
+          <span>
+            {
+              reduxState.timeSetObj.find((obj) => {
+                return obj.day === index + 1;
+              }).min
+            }
           </span>
-        )}
+        </span>
         <FontAwesomeIcon
           icon={faClock}
           onClick={() => {
@@ -161,11 +140,16 @@ function Content({ index, heart, setHeart }) {
             <TimePicker
               className="timePicker"
               renderInput={(params) => <TextField {...params} />}
-              value={1}
+              value={
+                reduxState.timeSetObj.find((obj) => {
+                  return obj.day === index + 1;
+                }).fullDate
+              }
               showToolbar={true}
               label=""
               onChange={(newValue) => {
-                console.log(newValue);
+                let newObj = getAmpmTmStart(newValue, index);
+                dispatch(corrTimeSetObj(newObj));
               }}
             />
           </Stack>
@@ -184,6 +168,7 @@ function DetailSetting() {
       <div className="movingTime">
         <FontAwesomeIcon icon={faEllipsisVertical} />
         <div className="movingTime__time">
+          {/* 이동시간 받아서 뿌려주는 input */}
           <input type="number" style={{ width: "37px" }} />
           <span>분</span>
         </div>
@@ -218,4 +203,35 @@ function DetailSetting() {
     </div>
   );
 }
+
+function getAmpmTmStart(newValue, index) {
+  let array = [];
+  //오전오후 가져오는 코드
+  let localeString = newValue.toLocaleString();
+  let ampm = localeString.substring(
+    localeString.indexOf("오"),
+    localeString.indexOf("오") + 2
+  );
+  array.push(ampm);
+  //시간가져오는 코드
+  let time = localeString
+    .substring(localeString.indexOf(":") - 2, localeString.indexOf(":"))
+    .trim()
+    .padStart(2, 0);
+  array.push(time);
+  //분 가져오는 코드
+  let min = localeString.substring(
+    localeString.indexOf(":") + 1,
+    localeString.lastIndexOf(":")
+  );
+
+  return {
+    day: index + 1,
+    fullDate: newValue,
+    ampm: ampm,
+    time: time,
+    min: min,
+  };
+}
+
 export default CreatePlanLeft;
