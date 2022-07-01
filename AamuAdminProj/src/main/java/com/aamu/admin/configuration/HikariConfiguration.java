@@ -1,4 +1,4 @@
-package com.aamu.aamurest.configuration;
+package com.aamu.admin.configuration;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -9,7 +9,6 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
 @Configuration
-@PropertySource("classpath:aamu/resources/connect.properties")
 public class HikariConfiguration {
 
 	@Value("${driver}")
@@ -33,3 +32,4 @@ public class HikariConfiguration {
 		
 	}
 }
+

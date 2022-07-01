@@ -1,4 +1,4 @@
-package com.aamu.aamurest.admin.web;
+package com.aamu.aamurest.user.web;
 
 import java.util.List;
 import java.util.Map;
@@ -14,11 +14,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
-import com.aamu.aamurest.admin.service.AttractionDTO;
-import com.aamu.aamurest.admin.service.Info;
-import com.aamu.aamurest.admin.service.KakaoKey;
-import com.aamu.aamurest.admin.service.Places;
-import com.aamu.aamurest.admin.service.Places.Item;
+import com.aamu.aamurest.user.service.AttractionDTO;
+import com.aamu.aamurest.user.service.api.Info;
+import com.aamu.aamurest.user.service.api.KakaoKey;
+import com.aamu.aamurest.user.service.api.Places;
+import com.aamu.aamurest.user.service.api.Places.Item;
 
 @RestController
 public class ApiBackupController {
