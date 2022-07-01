@@ -19,6 +19,7 @@ import {
   deleteArrInJangso,
   timeSetter,
 } from "../../redux/store.js";
+
 const SearchedLocation = ({ local }) => {
   const [locaInfoModal, setLocaInfoModal] = useState(false);
   //redux test중...
@@ -33,20 +34,13 @@ const SearchedLocation = ({ local }) => {
         //지도에 마커찍어줄 redux 변경 함수
         dispatch(changeLnfM(localNameRef.current.textContent));
       }}>
-      {locaInfoModal && (
-        <LocalInfoModal
-          locaInfoModal={locaInfoModal}
-          setLocaInfoModal={setLocaInfoModal}
-          local={local}
-        />
-      )}
       <div className="searchedLocation__container">
         <div className="searchedLocation__img-container">
-          <img src="/images/img-8.jpg" />
+          <img src={local.image2} />
         </div>
         <div className="searchedLocation__info">
           <h4 className="searchedLocation__info__title" ref={localNameRef}>
-            {local}
+            {local.title}
           </h4>
           <div className="searchedLocation__info__content">
             <FontAwesomeIcon
@@ -73,6 +67,13 @@ const SearchedLocation = ({ local }) => {
           </div>
         </div>
       </div>
+      {locaInfoModal && (
+        <LocalInfoModal
+          locaInfoModal={locaInfoModal}
+          setLocaInfoModal={setLocaInfoModal}
+          local={local}
+        />
+      )}
     </div>
   );
 };
@@ -83,9 +84,18 @@ function LocalInfoModal({ locaInfoModal, setLocaInfoModal, local }) {
       <OverlayLim onClick={() => setLocaInfoModal(!locaInfoModal)} />
       <ContentsLim>
         <CloseLim onClick={() => setLocaInfoModal(!locaInfoModal)}>X</CloseLim>
-        <ImgLim></ImgLim>
+        <ImgLim>
+          <img
+            className="localInfoModal__img"
+            src={local.image}
+            alt="이미지"
+            onError={(e) => {
+              e.target.src = "/images/no-image.jpg";
+            }}
+          />
+        </ImgLim>
         <BodyLim>
-          <h4>{local}</h4>
+          <h4>{local.title}</h4>
           <div className="localInfo__container">
             <div className="localInfo">
               <ul className="localInfo-ul">
@@ -100,8 +110,8 @@ function LocalInfoModal({ locaInfoModal, setLocaInfoModal, local }) {
               <ul className="localInfo-ul">
                 <li>보기</li>
                 <li>www.naver.com</li>
-                <li>서울특별시 금천구 가산동</li>
-                <li>02-000-0000</li>
+                <li>{local.addr !== null ? local.addr : "-"}</li>
+                <li>{local.tel !== null ? local.tel : "-"}</li>
                 <li>-</li>
               </ul>
             </div>
@@ -110,7 +120,7 @@ function LocalInfoModal({ locaInfoModal, setLocaInfoModal, local }) {
         <div className="localInfo__snsBtn__container">
           <ul className="localInfo__snsBtn-ul">
             <a
-              href="https://www.instagram.com/explore/tags/동문재래시장/"
+              href={`https://www.instagram.com/explore/tags/${local.title}/`}
               target="_blank">
               <li>
                 <img
@@ -119,13 +129,15 @@ function LocalInfoModal({ locaInfoModal, setLocaInfoModal, local }) {
               </li>
             </a>
             <a
-              href="https://twitter.com/search?q=동문재래시장&src=typed_query"
+              href={`https://twitter.com/search?q=${local.title}&src=typed_query`}
               target="_blank">
               <li>
                 <img src={process.env.PUBLIC_URL + "/images/sns/twitter.png"} />
               </li>
             </a>
-            <a href="https://www.google.com/maps/place/영종도" target="_blank">
+            <a
+              href={`https://www.google.com/maps/place/${local.title}`}
+              target="_blank">
               <li>
                 <img
                   src={process.env.PUBLIC_URL + "/images/sns/googlemap.png"}
@@ -133,7 +145,7 @@ function LocalInfoModal({ locaInfoModal, setLocaInfoModal, local }) {
               </li>
             </a>
             <a
-              href="https://search.naver.com/search.naver?query=동문재래시장"
+              href={`https://search.naver.com/search.naver?query=${local.title}`}
               target="_blank">
               <li>
                 <img src={process.env.PUBLIC_URL + "/images/sns/naver.png"} />
