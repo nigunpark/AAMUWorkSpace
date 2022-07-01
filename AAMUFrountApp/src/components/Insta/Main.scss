@@ -1,13 +1,14 @@
 .main {
     background-color: #FAFAFA;
-    
+
     nav {
         display: flex;
         position: fixed;
         flex-direction: row;
         justify-content: space-between;
         align-items: center;
-        top: 0; left: 0;
+        top: 0;
+        left: 0;
         width: 100vw;
         height: 67px;
         background-color: #fff;
@@ -27,7 +28,7 @@
                 font-family: Lobster;
             }
         }
-       
+
 
         .icons {
             margin-right: 240px;
@@ -40,6 +41,7 @@
         }
     }
 }
+
 .margin-top {
     display: flex;
     flex-direction: row;
@@ -48,7 +50,7 @@
     margin: 100px 180px;
     z-index: 2;
 
- .story {
+    .story {
         height: 100px;
         //margin-bottom: 10px;
         border: 1px solid #dbdbdb;
@@ -81,29 +83,30 @@
                     border-radius: 100%;
                     background: radial-gradient(circle at bottom left, #F58529 20%, #C42D91);
                 }
-    
-                img{
+
+                img {
                     width: 36px;
                     height: 36px;
                     border: 2px solid #fff;
                     border-radius: 100%;
                 }
-    
+
                 p {
                     margin-left: 7px;
                 }
-    
+
                 .user-id {
                     font-size: 10px;
                     font-weight: bold;
                 }
             }
 
-            
+
         }
 
     }
 }
+
 .margin-value {
     flex-wrap: nowrap;
     position: relative;
@@ -112,11 +115,13 @@
     grid-template-columns: auto 100px;
     //flex-wrap: nowrap;
     z-index: 2;
-    align-items: center; /* 수직 정렬 */
-    flex-direction: row; /* default: row */
+    align-items: center;
+    /* 수직 정렬 */
+    flex-direction: row;
+    /* default: row */
     justify-content: center;
 
-   
+
 
 
     .feeds-setting {
@@ -141,30 +146,30 @@
                 border: 1px solid #dbdbdb;
                 border-radius: 50%;
             }
-    
+
             .dot {
                 width: 18px;
                 margin-left: 330px;
                 cursor: pointer;
             }
-    
+
             span {
                 margin-top: -20px;
                 font-size: 16px;
                 font-weight: bold;
                 margin-left: 10px;
 
-                &:hover{
-                    text-decoration:underline;
+                &:hover {
+                    text-decoration: underline;
                     cursor: pointer;
                 }
 
-           
-            } 
-            
-            
+
+            }
+
+
         }
-        
+
         .location {
             margin-top: -25px;
             margin-bottom: 10px;
@@ -172,45 +177,45 @@
             font-size: 10px;
             color: #8e8e8e;
 
-            &:hover{
-                text-decoration:underline;
+            &:hover {
+                text-decoration: underline;
                 cursor: pointer;
             }
 
         }
 
-        .container{
+        .container {
             height: 400px;
         }
-        
+
         .main-image {
             object-fit: cover;
             width: 100%;
             height: 100%;
-            
+
         }
 
         .feeds-contents {
             margin: 0px 10px;
 
             .feeds-icons {
-                
+
                 display: flex;
                 //flex-direction: row;
                 //justify-content: space-between;
                 align-items: center;
-                
+
 
                 svg {
                     cursor: pointer;
                 }
-                
-                svg:not(:first-child){
+
+                svg:not(:first-child) {
                     width: 25px;
                     height: 25px;
                 }
-                
-                svg:not(:last-child){
+
+                svg:not(:last-child) {
                     margin-right: 10px;
                 }
 
@@ -218,7 +223,7 @@
                     width: 27px;
                     height: 50px;
                 }
-                
+
                 .save-icon {
                     margin-left: 350px;
                 }
@@ -241,23 +246,23 @@
                     margin-left: 3px;
                     font-size: 14.5px;
                 }
-    
-                span .like-bold{
+
+                span .like-bold {
                     font-weight: bold;
                 }
             }
 
             .feeds-writing {
 
-                .comment-id{
+                .comment-id {
                     font-weight: bold;
                 }
 
-                span{
+                span {
                     font-size: 14.5px;
                 }
-                
-                span .comment-id{
+
+                span .comment-id {
                     font-weight: bold;
                 }
             }
@@ -270,12 +275,12 @@
                     border: 0.5px solid #dbdbdb;
                     border-radius: 50%;
                 }
-                
-                span{
+
+                span {
                     font-size: 14.5px;
                 }
             }
-            
+
             .time {
                 font-size: 12.5px;
                 color: #8e8e8e;
@@ -291,20 +296,20 @@
             width: 100%;
             height: 50px;
             margin-top: 5px;
-            border-top : 1px solid #dbdbdb;
+            border-top: 1px solid #dbdbdb;
 
-            .typing-comment{
+            .typing-comment {
                 width: 300px;
                 margin-left: 10px;
                 font-size: 14px;
             }
-    
+
             button {
                 margin-right: 10px;
-                color : #BFE0FD;
+                color: #BFE0FD;
                 font-size: 14px;
             }
-    
+
             button.active {
                 color: #0095f6;
                 font-weight: bold;
@@ -312,37 +317,40 @@
             }
         }
     }
-    .heart{
+
+    .heart {
         position: relative;
         border-color: #000000;
         color: #e6e6e6;
         width: 25px;
-        height: 25px;  
+        height: 25px;
         cursor: pointer;
     }
-    div >.heart:active{
+
+    div>.heart:active {
         color: red;
 
     }
-   
 
-    .post-icon{
+
+    .post-icon {
         width: 22px;
-        height: 22px; 
-        margin-bottom: -3px; 
+        height: 22px;
+        margin-bottom: -3px;
         font-weight: 10px;
         background-color: #ffffff;
         border-radius: 5px;
         border-style: none;
         cursor: pointer;
     }
-    div >.post-icon:active{
-        color:#ffffff;
+
+    div>.post-icon:active {
+        color: #ffffff;
         background-color: #000000;
 
     }
 
-   
+
     .main-right {
         display: flex;
         flex-direction: column;
@@ -354,9 +362,9 @@
         height: 500px;
         z-index: 1;
 
-        
 
-       
+
+
         .recommend {
             background-color: white;
             height: 200px;
@@ -367,7 +375,7 @@
 
         .search {
             margin-bottom: 15px;
-            
+
             >input {
 
                 /*
@@ -377,7 +385,7 @@
                 background-size: 15px;
                 background-repeat: no-repeat;
                 */
-            
+
                 width: 270px;
                 height: 28px;
                 border: 1.7px solid #EFEFEF;
@@ -388,7 +396,7 @@
                 border-radius: 5px;
 
             }
-            
+
             >input:focus {
                 /* 
                 돋보기 구현 전
@@ -408,7 +416,7 @@
                 left: 50%;
                 transform: translate(-50%);
                 background-color: #fff;
-                box-shadow: 0 0 5px 1px rgba(var(--jb7,0,0,0),.0975);
+                box-shadow: 0 0 5px 1px rgba(var(--jb7, 0, 0, 0), .0975);
                 border: 1px solid #fff;
                 border-radius: 5px;
                 z-index: 10;
@@ -416,7 +424,7 @@
 
             .search-engine {
                 position: relative;
-                width :340px;
+                width: 340px;
                 height: 380px;
                 background-color: #fff;
                 z-index: 9;
@@ -430,7 +438,7 @@
                     width: 16px;
                     height: 16px;
                     transform: rotate(45deg);
-                    box-shadow: 0 0 5px 1px rgba(var(--jb7,0,0,0),.0975);
+                    box-shadow: 0 0 5px 1px rgba(var(--jb7, 0, 0, 0), .0975);
                     background-color: #fff;
                     z-index: 8;
                 }
@@ -442,10 +450,11 @@
                     align-items: center;
                     margin-left: 10px;
 
-                    &:first-child{
+                    &:first-child {
                         padding-top: 10px;
                     }
-                    &:not(:first-child){
+
+                    &:not(:first-child) {
                         margin-top: 10px;
                     }
 
@@ -482,9 +491,9 @@
                     }
                 }
 
-                
+
             }
-    }
+        }
 
 
         .user {
@@ -502,17 +511,17 @@
                 border-radius: 50%;
                 cursor: pointer;
             }
-    
+
             div {
                 margin-left: 10px;
             }
-    
+
             .user-id {
                 font-size: 15px;
                 font-weight: bold;
                 cursor: pointer;
             }
-    
+
             .user-name {
                 font-size: 13px;
                 color: #8e8e8e;
@@ -521,7 +530,7 @@
             }
         }
 
-        
+
 
         .recommend {
             background-color: rgba(255, 255, 255, 0);
@@ -529,8 +538,9 @@
             width: 300px;
             height: auto;
             border-style: none;
-            .recommend-title{
-                
+
+            .recommend-title {
+
                 display: flex;
                 flex-direction: row;
                 justify-content: space-between;
@@ -543,7 +553,7 @@
                 color: #262626;
                 background-color: rgba(255, 255, 255, 0);
                 //opacity: 0.9;
-                
+
 
                 span:first-child {
                     font-size: 14px;
@@ -554,14 +564,14 @@
                     cursor: pointer;
                     font-size: 14px;
                 }
-                
+
             }
-            
+
 
             .recommend-down {
                 display: flex;
                 flex-direction: column;
-               
+
                 //margin-bottom: 15px;
                 bottom: 40px;
 
@@ -572,63 +582,65 @@
                     justify-content: flex-start;
                     margin: 0px 3px 5px;
 
-                    .follow{
+                    .follow {
                         margin-left: 60px;
                         color: #0095F6;
                         font-size: 13px;
                         font-weight: bold;
                         cursor: pointer;
 
-                        &:active{
+                        &:active {
                             color: lightskyblue;
                         }
-                        
+
                     }
 
-                    >img{
+                    >img {
                         width: 37px;
                         border-radius: 50%;
                         cursor: pointer;
                     }
-                    
+
                     p {
                         margin-left: 7px;
                     }
-                    
+
                     .user-id {
                         cursor: pointer;
                         font-size: 13px;
                         font-weight: bold;
                     }
-                    
+
                     .user-name {
                         margin-top: 3px;
                         font-size: 10px;
                         color: #8e8e8e;
                     }
-                    
-                    
+
+
                 }
-                
-    
+
+
             }
-            
-           
+
+
         }
-        .information{
+
+        .information {
             margin-bottom: 10px;
             color: rgb(195, 193, 193);
             font-size: 4px;
         }
-        .information2{
-            
+
+        .information2 {
+
             color: rgb(193, 191, 191);
             font-size: 12px;
         }
-       
+
     }
 
-    
+
 
 }
 
@@ -651,6 +663,6 @@
     display: inline-block;
 }
 
-.fas{
+.fas {
     color: #ED4956;
 }
