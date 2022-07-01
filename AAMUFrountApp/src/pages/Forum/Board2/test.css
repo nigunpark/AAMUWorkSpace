@@ -1,24 +1,24 @@
-.Cards_minCon{
+.test_Cards_minCon{
     /* background-image: url('/public/images/bg1.png') ; */
     background-size: cover;
     background-color: #f8f7ff; /* forum 배경 */
     
-    /* display: grid;
-    grid-template-columns: auto 200px; */
+    display: grid;
+    grid-template-columns: auto 400px;
 }
-.card__container_minCon{
+.test_card__container_minCon{
     background:rgba(255, 255, 255, 0.3) ;
     padding: 100px;
 }
 
-.card__wrapper_minCon{
+.test_card__wrapper_minCon{
     display: flex;
     flex-direction: column;
     align-items: flex-end;
     max-width: 1200px;
     margin: 0 auto;
 }
-.card__items_minCon{
+.test_card__items_minCon{
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     /* border: 2px solid red; */
@@ -26,12 +26,12 @@
     gap: 1rem;
 }
 
-.card__item_minCon{
+.test_card__item_minCon{
     display: flex;
     flex: 1;
 }
 
-.card__item__info_minCon{
+.test_card__item__info_minCon{
     display: flex;
     flex-direction: column;
     padding: 5px;
@@ -42,22 +42,22 @@
 
 }
 
-.card__item__img-container_minCon{
-    max-height: 20rem;
-    width: 100%;
-    overflow: hidden;
+.test_card__item__img-container_minCon{
+    /* max-height: 20rem;
+    width: 100%; */
+    /* overflow: hidden; */
 
 }
 
-.card__item__info_minCon:hover{
+.test_card__item__info_minCon:hover{
 
     transform: scale(1.07);
 }
-.card__item__img_minCon{
+.test_card__item__img_minCon{
     position: relative;
     border-radius: 0.5rem;
     object-fit: cover;
-    width: 100%;
+    /* width: 100%; */
     max-height: 30rem;
     border-radius: 1rem;
     transition: .3s;
@@ -65,40 +65,40 @@
 
 
 
-.card__title_minCon{
+.test_card__title_minCon{
     text-align: left;
     font-size: 50px;
     color: var(--darkOrange);
     text-shadow: 1px 1px 2px rgba(26, 26, 26, 0.3);;
     /* text-shadow: 0 0.5px 0.5px var(--gray) */
 }
-.card__desc_minCon{
+.test_card__desc_minCon{
     font-size: 20px;
     font-weight: bold;
     margin-top: 10px;
     letter-spacing: 4px;
 }
 
-.card__item__rating_minCon{
+.test_card__item__rating_minCon{
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-.idSpan_minCon{
+.test_idSpan_minCon{
     font-size: 12px;
 }
 
-.idSpan:hover_minCon{
+.test_idSpan:hover_minCon{
     font-weight: bold;
 }
 
-.content-btn-container{
+.test_content-btn-container{
     margin-right:2rem;
     display: flex;
     gap: 1rem;
 }
-.content-btn{
+.test_content-btn{
     height: 2rem;
     padding: 0 .5rem;
     border: 2px solid #d4a373;
@@ -108,14 +108,14 @@
     font-size: 20px;
     font-weight: bold;
 }
-.content-btn:hover{
+.test_content-btn:hover{
 background:var(--mainColor);
 color: white;
 border: none;
 transition: .2s;
 }
 
-.StickySide{
+.test_StickySide{
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -125,7 +125,7 @@ transition: .2s;
     overflow: auto;
 }
 
-.fly {
+.test_fly {
     position:absolute;
     left:50%;
     width:100px;
@@ -133,4 +133,16 @@ transition: .2s;
     height:500px;
     margin-left:520px;
     background-color:red;
+}
+
+.cat{
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+
+.mymap{
+    width: 500px;
+    height: 500px;
 }
