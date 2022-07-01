@@ -9,7 +9,7 @@ const ContentItem = ({ i }) => {
     return (
         <>
         <li className="card__item_minCon">
-            <Link to="/" className="card__item__link_minCon">
+            <Link to="/review" className="card__item__link_minCon">
             <figure className="card__item__info_minCon">
                 <div className="card__item__img-container_minCon">
                 <img
