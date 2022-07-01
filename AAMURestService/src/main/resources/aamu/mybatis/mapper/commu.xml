@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="aamu.mybatis.mapper.adminCommu">
+
+	<!-- 관리자 커뮤니티 게시글 -->
+	<select id="commuSelectList" resultType="commuDTO">
+		SELECT *.c , 댓글수
+		FROM community c JOIN commucomment cc ON c.id = cc.id
+		ORDER BY lno DESC
+	</select>
+	
+	
+</mapper>

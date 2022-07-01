@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="aamu.mybatis.mapper.adminCommu">
+
+	<!-- 관리자 커뮤니티 게시글 -->
+	<select id="commuSelectList" resultType="commuDTO">
+		SELECT *.c , 댓글수
+		FROM community c JOIN commucomment cc ON c.id = cc.id
+		ORDER BY lno DESC
+	</select>
+	
+	<select id="commuSelectOne" parameterType="String" resultType="commuDTO">
+		SELECT * FROM community WHERE lno=#{lno}
+	</select>
+	
+	<delete id="commuDelete" parameterType="String">
+		DELETE FROM community WEHRE lno=#{lno}
+	</delete>
+	
+	<!-- 관리자 커뮤니티 댓글 -->
+	<select id="commuComentSelectList" resultType="commuCommentDTO">
+		SELECT *.cc, c.title
+		FROM commucomment cc JOIN community c ON c.id = cc.id
+		ORDER BY cno DESC
+	</select>
+	
+</mapper>
