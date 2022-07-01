@@ -20,7 +20,7 @@ public class CommuController {
 	@Autowired
 	private CommuServiceImpl commuService;
 	
-	@GetMapping("/commuList")
+	@GetMapping("/commu/list")
 	public List<CommuDTO> commuSelectList(){
 		List<CommuDTO> list = commuService.commuSelectList();
 		return list;

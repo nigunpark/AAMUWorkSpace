@@ -7,8 +7,10 @@
 
 	<!-- 관리자 커뮤니티 게시글 -->
 	<select id="commuSelectList" resultType="commuDTO">
-		SELECT *.c , 댓글수
-		FROM community c JOIN commucomment cc ON c.id = cc.id
+		SELECT *.c , u.userprofile, cc.cno, cc.id, cc.reply, photo
+		FROM community c JOIN users u ON c.id = u.id
+		JOIN commucomment cc ON c.lno = cc.lno
+		JOIN commuphoto cp ON c.lno = cp.lno
 		ORDER BY lno DESC
 	</select>
 	
