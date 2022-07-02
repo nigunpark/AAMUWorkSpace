@@ -2,7 +2,11 @@ import "./KMap.css";
 import React, { useEffect, useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux/es/exports";
 import "./KMap.css";
-import { changeInfo, changePickedTransport } from "../../redux/store";
+import {
+  changeInfo,
+  changePickedTransport,
+  changeTimeSetObj,
+} from "../../redux/store";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
@@ -20,7 +24,6 @@ import {
   TitleLoRegi,
   CloseLoRegi,
   BodyLoRegi,
-  ImgLoRegi,
 } from "../Modal/LocationRegister.js";
 import {
   DimmedAuSContainer,
@@ -165,7 +168,6 @@ const KMap = ({
       infowindow.open(map, mainMarker);
     });
   }, [lat, lng, reduxState.localNameForMarker]);
-  // useEffect(() => {}, [showTransport, reduxState.pickedTransport]);
   return (
     <div>
       <div
@@ -275,6 +277,10 @@ const KMap = ({
 
 //일정등록 버튼 시 보이는 확인모달창
 function AreUSurePlan({ setShowAuSModal, setShowCratePlan }) {
+  let reduxState = useSelector((state) => {
+    return state;
+  });
+  let dispatch = useDispatch();
   return (
     <>
       <DimmedAuSContainer>
@@ -285,6 +291,24 @@ function AreUSurePlan({ setShowAuSModal, setShowCratePlan }) {
               onClick={() => {
                 setShowCratePlan(true);
                 setShowAuSModal(false);
+                reduxState.tripPeriod.map((day, index) => {
+                  if (
+                    reduxState.timeSetObj.find((obj) => {
+                      return obj.day === index + 1;
+                    }) === undefined
+                  ) {
+                    dispatch(
+                      changeTimeSetObj({
+                        day: index + 1,
+                        fullDate:
+                          "Sat Jan 01 2022 10:00:00 GMT+0900 (한국 표준시)",
+                        ampm: "오전",
+                        time: "10",
+                        min: "00",
+                      })
+                    );
+                  }
+                });
               }}>
               확인
             </AuSBtn>

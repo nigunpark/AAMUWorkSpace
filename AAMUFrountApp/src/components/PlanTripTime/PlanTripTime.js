@@ -15,12 +15,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { changeTimeSetObj, delTimeSetObj } from "../../redux/store";
 const PlanTripTime = ({ saveDays, savePeriod }) => {
   const [period, setPeriod] = useState([]);
-  const [appearTimeSet, setAppearTimeSet] = useState(false);
-
+  const [appearTimeSet] = useState(false);
   let reff = useRef();
-  let reduxState = useSelector((state) => {
-    return state;
-  });
   useEffect(() => {
     let newArr = new Array(saveDays + 1).fill(0);
     setPeriod(newArr);
@@ -50,7 +46,7 @@ const PlanTripTime = ({ saveDays, savePeriod }) => {
 //여행시간 상세설정하는 부분
 const TimeSet = ({ index }) => {
   const [startTime, setStartTime] = useState(new Date("2022-01-01 10:00"));
-  const [endTime, setEndTime] = useState(new Date("2020-01-01 10:00"));
+  const [endTime, setEndTime] = useState(new Date("2022-01-01 10:00"));
   const [appear, setAppear] = useState(false);
   const [startTimeArray, setStartTimeArray] = useState(["오전", "--", "--"]);
   const [endTimeArray, setendTimeArray] = useState(["오후", "--", "--"]);
@@ -164,6 +160,7 @@ function getAmpmTmStart(
   dispatch(
     changeTimeSetObj({
       day: index,
+      fullDate: newValue,
       ampm: ampm,
       time: time,
       min: min,

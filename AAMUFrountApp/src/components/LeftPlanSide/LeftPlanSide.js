@@ -63,7 +63,6 @@ const LeftPlanSide = ({ currPosition }) => {
     }
   }, [reduxState.showWhichModal]);
   let dispatch = useDispatch();
-  console.log("timeSetObj:", reduxState.timeSetObj);
   return (
     <div className="LeftPlanSide">
       <div className="leftPlanSide__localNDay">
@@ -134,9 +133,6 @@ const ChangeDate = ({ period, appearCalendar, setAppearCalendar }) => {
   let edy = period.endDate.getFullYear();
   let edm = period.endDate.getMonth();
   let edd = period.endDate.getDate();
-  let reduxState = useSelector((state) => {
-    return state;
-  });
   let dispatch = useDispatch();
   useEffect(() => {
     dispatch(resetMonthNDate([]));
@@ -214,7 +210,7 @@ function PickedLocation({ local }) {
     <div className="pickedLocation__container slide-in-right">
       <div className="pickedLocation__img-container">
         <img
-          src="/images/bg1.png"
+          src={local.image2}
           onError={(e) => {
             e.target.src = "/images/no-image.jpg";
           }}
@@ -222,7 +218,7 @@ function PickedLocation({ local }) {
       </div>
       <div className="pickedLocation__info-container">
         <div className="pickedLocation__info-title">
-          <h4>{local}</h4>
+          <h4>{local.title}</h4>
           <FontAwesomeIcon
             icon={faX}
             className="pickedLocation__info-title__closeBtn"
