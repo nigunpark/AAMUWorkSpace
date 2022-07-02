@@ -91,5 +91,39 @@ public Response response;
 		public String restdatefood;
 		public String smoking;
 		public String treatmenu;
+		
+		public int booktour;
+		public long createdtime;
+		public String homepage;
+		public long modifiedtime;
+		public String title;
+		
+		
+		public String bookingplace;
+		public String discountinfofestival;
+		public int eventenddate;
+		public String eventplace;
+		public int eventstartdate;
+		public String festivaltype;
+		public String placeinfo;
+		public String playtime;
+		public String program;
+		public String progresstype;
+		public String sponsor1;
+		public String sponsor1tel;
+		public String sponsor2;
+		public String subevent;
+		public String usetimefestival;
+		
+
+		public String chkbabycarriageleports;
+		public String chkcreditcardleports;
+		public String chkpetleports;
+		public String infocenterleports;
+		public String parkingfeeleports;
+		public String parkingleports;
+		public String restdateleports;
+		public String usefeeleports;
+		public String usetimeleports;
 	}
 }

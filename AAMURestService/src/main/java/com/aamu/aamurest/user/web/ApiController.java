@@ -40,17 +40,26 @@ public class ApiController {
 		String area = "1";
 		String contentTypeId = "12";
 		*/
-	
+		String currentTime = "20220702";
 		HttpEntity httpEntity = null;
 		HttpHeaders header = new HttpHeaders();
 		header.add("Authorization", "KakaoAK 1e277aee608e10b527bd0156907f4d64");
-		String uri = "http://api.visitkorea.or.kr/openapi/service/rest/KorService/areaBasedList?"
+		String uri;
+		
+		uri = "http://api.visitkorea.or.kr/openapi/service/rest/KorService/areaBasedList?"
 				+ "serviceKey=8188yaWHAsWQ+XOW7Vso3CoksQpmRokfZmqwlC79igNHaB97z49enrCL+OBTzvEOvnCYPLYVcP7qki6O7G76BQ==&"
 				+ "pageNo=1&numOfRows=5&"
 				+ "MobileApp=AppTest&MobileOS=ETC&arrange=B&"
 				+ "contentTypeId="+contentTypeId+"&"
 						+ "areaCode="+area+"&"
 								+ "listYN=Y";
+		if(contentTypeId.equals("15")) {
+			uri ="http://api.visitkorea.or.kr/openapi/service/rest/KorService/searchFestival?"
+					+ "serviceKey=8188yaWHAsWQ+XOW7Vso3CoksQpmRokfZmqwlC79igNHaB97z49enrCL+OBTzvEOvnCYPLYVcP7qki6O7G76BQ=="
+					+ "&numOfRows=10&pageNo=1&MobileOS=ETC"
+					+ "&MobileApp=AppTest&arrange=B&listYN=Y"
+					+ "&areaCode="+area+"&eventStartDate="+currentTime+"&_type=json";
+		}
 		ResponseEntity<Places> responseEntity = 
 				restTemplate.exchange(uri, HttpMethod.GET,
 				null,Places.class);
@@ -69,6 +78,11 @@ public class ApiController {
 			dto.setBigImage(item.getFirstimage());
 			dto.setSmallImage(item.getFirstimage2());
 			dto.setSigungucode(item.getSigungucode());
+			if(contentTypeId.equals("15")) {
+				dto.setTel(item.getTel());
+				dto.setEventStart(String.valueOf(item.getEventstartdate()));
+				dto.setEvaentEnd(String.valueOf(item.getEventenddate()));
+			}
 			uri = "http://api.visitkorea.or.kr/openapi/service/rest/KorService/detailIntro?"
 					+ "serviceKey=8188yaWHAsWQ+XOW7Vso3CoksQpmRokfZmqwlC79igNHaB97z49enrCL+OBTzvEOvnCYPLYVcP7qki6O7G76BQ=="
 					+ "&numOfRows=1&pageNo=1&MobileOS=ETC&MobileApp=AppTest&contentId="+item.getContentid()+"&contentTypeId="+item.getContenttypeid()+"&_type=json";
@@ -81,6 +95,10 @@ public class ApiController {
 				dto.setResttime(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getRestdate());
 				dto.setPlaytime(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getUsetime());
 				dto.setTel(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getInfocenter());
+				break;
+			case "15":
+				dto.setPlaytime(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getPlaytime());
+				dto.setCharge(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getUsetimefestival());
 				break;
 			case "32":
 				dto.setTel(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getReservationlodging());
@@ -100,7 +118,10 @@ public class ApiController {
 				dto.setPark(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getParkingfood());
 				break;
 			}
-			
+			String tel = dto.getTel();
+			if(tel.contains("<br />")) {
+				tel = tel.split("<br />")[0];
+			}
 		
 			String title = dto.getTitle();
 			httpEntity = new HttpEntity(header);
@@ -156,24 +177,41 @@ public class ApiController {
 			dto.setReview(rDtoList);
 			}
 			*/
+			uri = "http://api.visitkorea.or.kr/openapi/service/rest/KorService/detailCommon?"
+					+ "8188yaWHAsWQ+XOW7Vso3CoksQpmRokfZmqwlC79igNHaB97z49enrCL+OBTzvEOvnCYPLYVcP7qki6O7G76BQ=="
+					+ "&numOfRows=1&pageNo=1&MobileOS=ETC&MobileApp=AppTest"
+					+ "&contentId="+dto.getContentid()+"&defaultYN=Y";
+			
+			responseEntity2 = 
+					restTemplate.exchange(uri, HttpMethod.GET,
+							null,Info.class);
+			String url = responseEntity2.getBody().getResponse().getBody().getItems().getItem().getHomepage();
+			String editUrl = uri.split("\"")[1];
+			url = editUrl.split("\"")[0];
+			
+			dto.setUrl(url);
+			
 			list.add(dto);
+			/*
 			switch(contentTypeId) {
 			case "12":
 				service.placeInsert(dto);
 				service.infoInsert(dto);
 				break;
+			case "15":
+				break;
 			case "32":
 				service.placeInsert(dto);
 				service.hotelInsert(dto);
 				break;
-			case "default":
+			case "39":
 				service.placeInsert(dto);
 				service.infoInsert(dto);
 				service.dinerInsert(dto);
 				break;
 			}
-			
-			
+			*/
+			System.out.println(dto.getUrl());
 		}
 		
 		return list;
