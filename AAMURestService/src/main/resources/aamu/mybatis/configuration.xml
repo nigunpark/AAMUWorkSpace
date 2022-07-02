@@ -6,9 +6,11 @@
 	<typeAliases>
   		<typeAlias type="com.aamu.aamurest.aamuuser.AAMUUserDTO" alias="userDTO"/>
   		<typeAlias type="com.aamu.aamurest.user.service.AttractionDTO" alias="attrDTO"/>
+  		<typeAlias type="com.aamu.aamurest.user.service.CommuDTO" alias="commuDTO"/>
   	</typeAliases>
 	<mappers>
 		<mapper resource="aamu/mybatis/mapper/user.xml" />
 		<mapper resource="aamu/mybatis/mapper/main.xml" />
+		<mapper resource="aamu/mybatis/mapper/commu.xml" />
 	</mappers>
 </configuration>

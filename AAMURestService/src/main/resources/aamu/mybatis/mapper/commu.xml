@@ -7,12 +7,20 @@
 
 	<!-- 관리자 커뮤니티 게시글 -->
 	<select id="commuSelectList" resultType="commuDTO">
-		SELECT *.c , u.userprofile, cc.cno, cc.id, cc.reply, photo
-		FROM community c JOIN users u ON c.id = u.id
-		JOIN commucomment cc ON c.lno = cc.lno
-		JOIN commuphoto cp ON c.lno = cp.lno
-		ORDER BY lno DESC
+		SELECT c.* , u.userprofile, cc.cno, cc.id, cc.reply, photo, place
+		FROM community c, users u,commucomment cc, commuphoto cph, commuplace cpl
+		WHERE c.id = u.id
+		AND c.lno = cc.lno
+		AND c.lno = cph.lno
+		AND c.lno = cpl.lno
 	</select>
+	
+	<insert id="commuInsert" parameterType="Map">
+		INSERT INTO community
+		VALUES (SEQ_COM.NEXTVAL,#{id},#{title},#{content},DEFAULT,DEFAULT,DEFAULT)
+	</insert>
+	
+	
 	
 	
 </mapper>
