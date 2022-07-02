@@ -36,6 +36,7 @@ public Response response;
 	@Getter
 	@Setter
 	public static class Item{
+		//관광지
 		public String chkbabycarriage;
 		public String chkcreditcard;
 		public String chkpet;
@@ -50,7 +51,7 @@ public Response response;
 		public String restdate;
 		public String usetime;
 		
-		
+		//호텔
 		public int barbecue;
 		public int beauty;
 		public int benikia;
@@ -79,6 +80,7 @@ public Response response;
 		public int sports;
 		public String subfacility;
 		
+		//음식점
 		public String chkcreditcardfood;
 		public String discountinfofood;
 		public String firstmenu;
@@ -92,13 +94,14 @@ public Response response;
 		public String smoking;
 		public String treatmenu;
 		
+		//홈페이지정보
 		public int booktour;
 		public long createdtime;
 		public String homepage;
 		public long modifiedtime;
 		public String title;
 		
-		
+		//행사
 		public String bookingplace;
 		public String discountinfofestival;
 		public int eventenddate;
@@ -115,7 +118,7 @@ public Response response;
 		public String subevent;
 		public String usetimefestival;
 		
-
+		//레포츠
 		public String chkbabycarriageleports;
 		public String chkcreditcardleports;
 		public String chkpetleports;

@@ -56,7 +56,7 @@ public class ApiController {
 		if(contentTypeId.equals("15")) {
 			uri ="http://api.visitkorea.or.kr/openapi/service/rest/KorService/searchFestival?"
 					+ "serviceKey=8188yaWHAsWQ+XOW7Vso3CoksQpmRokfZmqwlC79igNHaB97z49enrCL+OBTzvEOvnCYPLYVcP7qki6O7G76BQ=="
-					+ "&numOfRows=10&pageNo=1&MobileOS=ETC"
+					+ "&numOfRows=5&pageNo=1&MobileOS=ETC"
 					+ "&MobileApp=AppTest&arrange=B&listYN=Y"
 					+ "&areaCode="+area+"&eventStartDate="+currentTime+"&_type=json";
 		}
@@ -122,7 +122,7 @@ public class ApiController {
 			if(tel.contains("<br />")) {
 				tel = tel.split("<br />")[0];
 			}
-		
+			dto.setTel(tel);
 			String title = dto.getTitle();
 			httpEntity = new HttpEntity(header);
 			if(title.contains("(")) {
@@ -177,20 +177,21 @@ public class ApiController {
 			dto.setReview(rDtoList);
 			}
 			*/
-			uri = "http://api.visitkorea.or.kr/openapi/service/rest/KorService/detailCommon?"
-					+ "8188yaWHAsWQ+XOW7Vso3CoksQpmRokfZmqwlC79igNHaB97z49enrCL+OBTzvEOvnCYPLYVcP7qki6O7G76BQ=="
-					+ "&numOfRows=1&pageNo=1&MobileOS=ETC&MobileApp=AppTest"
-					+ "&contentId="+dto.getContentid()+"&defaultYN=Y";
+			uri = "http://api.visitkorea.or.kr/openapi/service/rest/KorService/detailCommon?serviceKey=8188yaWHAsWQ+XOW7Vso3CoksQpmRokfZmqwlC79igNHaB97z49enrCL+OBTzvEOvnCYPLYVcP7qki6O7G76BQ==&numOfRows=10&pageNo=1&MobileOS=ETC&MobileApp=AppTest&contentId="+dto.getContentid()+"&defaultYN=Y&overviewYN=Y&_type=json";
 			
 			responseEntity2 = 
 					restTemplate.exchange(uri, HttpMethod.GET,
 							null,Info.class);
-			String url = responseEntity2.getBody().getResponse().getBody().getItems().getItem().getHomepage();
-			String editUrl = uri.split("\"")[1];
-			url = editUrl.split("\"")[0];
+			System.out.println(dto.getContentid());
 			
-			dto.setUrl(url);
-			
+			if(responseEntity2.getBody().getResponse().getBody()!=null) {
+				
+				String url = responseEntity2.getBody().getResponse().getBody().getItems().getItem().getHomepage();
+				
+				
+				System.out.println(url.split("\"")[1]);
+				dto.setUrl(url.split("\"")[1]);
+			}
 			list.add(dto);
 			/*
 			switch(contentTypeId) {
