@@ -73,15 +73,17 @@ const KMap = ({
   let [showAuSModal, setShowAuSModal] = useState(false);
 
   //-------------------------------------------------------------------------
+  var positions = [];
+
   useEffect(() => {
-    var positions = [];
     let coords = new kakao.maps.LatLng(
       stateForMapCenter[0],
       stateForMapCenter[1]
     );
     var mapContainer = document.getElementById("map"); // 지도를 표시할 div
     var mapOption = {
-      center: new kakao.maps.LatLng(stateForMapCenter[0], stateForMapCenter[1]), // 지도의 중심좌표
+      // center: new kakao.maps.LatLng(stateForMapCenter[0], stateForMapCenter[1]), // 지도의 중심좌표
+      center: new kakao.maps.LatLng(lat, lng), // 지도의 중심좌표
       level: 9, // 지도의 확대 레벨
     };
     // 지도를 생성합니다
@@ -100,6 +102,8 @@ const KMap = ({
         // 정상적으로 검색이 완료됐으면
         if (status === kakao.maps.services.Status.OK) {
           coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+          setLat(result[0].y);
+          setLng(result[0].x);
           let mainMarker = new kakao.maps.Marker({
             position: coords,
             clickable: true,
@@ -142,7 +146,7 @@ const KMap = ({
           kakao.maps.event.addListener(mainMarker, "click", function () {
             infowindow.open(map, mainMarker);
           });
-          map.panTo(coords);
+          map.setCenter(coords);
         }
       }
     );
@@ -171,11 +175,7 @@ const KMap = ({
         image: markerImage, // 마커 이미지
       });
     }
-  }, [
-    reduxState.arrForPickJangso,
-    reduxState.localNameForMarker,
-    stateForMapCenter,
-  ]);
+  }, [reduxState.localNameForMarker, stateForMapCenter, positions]);
 
   return (
     <div>
