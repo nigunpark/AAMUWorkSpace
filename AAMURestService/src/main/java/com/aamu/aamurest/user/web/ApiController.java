@@ -1,5 +1,8 @@
 package com.aamu.aamurest.user.web;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
@@ -36,27 +39,27 @@ public class ApiController {
 	public List<AttractionDTO> info2(@RequestParam Map map) {
 		String area = map.get("areacode").toString();
 		String contentTypeId = map.get("contenttypeid").toString();
-		/*
-		String area = "1";
-		String contentTypeId = "12";
-		*/
-		String currentTime = "20220702";
+
 		HttpEntity httpEntity = null;
 		HttpHeaders header = new HttpHeaders();
 		header.add("Authorization", "KakaoAK 1e277aee608e10b527bd0156907f4d64");
+		int affected=0;
 		String uri;
 		
 		uri = "http://api.visitkorea.or.kr/openapi/service/rest/KorService/areaBasedList?"
 				+ "serviceKey=8188yaWHAsWQ+XOW7Vso3CoksQpmRokfZmqwlC79igNHaB97z49enrCL+OBTzvEOvnCYPLYVcP7qki6O7G76BQ==&"
-				+ "pageNo=1&numOfRows=5&"
+				+ "pageNo=1&numOfRows=500&"
 				+ "MobileApp=AppTest&MobileOS=ETC&arrange=B&"
 				+ "contentTypeId="+contentTypeId+"&"
 						+ "areaCode="+area+"&"
 								+ "listYN=Y";
 		if(contentTypeId.equals("15")) {
+			Date current = new Date();
+			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
+			String currentTime = dateFormat.format(current);
 			uri ="http://api.visitkorea.or.kr/openapi/service/rest/KorService/searchFestival?"
 					+ "serviceKey=8188yaWHAsWQ+XOW7Vso3CoksQpmRokfZmqwlC79igNHaB97z49enrCL+OBTzvEOvnCYPLYVcP7qki6O7G76BQ=="
-					+ "&numOfRows=5&pageNo=1&MobileOS=ETC"
+					+ "&numOfRows=500&pageNo=1&MobileOS=ETC"
 					+ "&MobileApp=AppTest&arrange=B&listYN=Y"
 					+ "&areaCode="+area+"&eventStartDate="+currentTime+"&_type=json";
 		}
@@ -79,10 +82,16 @@ public class ApiController {
 			dto.setSmallImage(item.getFirstimage2());
 			dto.setSigungucode(item.getSigungucode());
 			if(contentTypeId.equals("15")) {
+				String start = String.valueOf(item.getEventstartdate());
+				String end = String.valueOf(item.getEventenddate());
+				start = start.substring(0, 4) +"-"+start.substring(4, 6)+"-"+start.substring(6,8);
+				end = end.substring(0, 4) +"-"+end.substring(4, 6)+"-"+end.substring(6,8);
+
 				dto.setTel(item.getTel());
-				dto.setEventStart(String.valueOf(item.getEventstartdate()));
-				dto.setEvaentEnd(String.valueOf(item.getEventenddate()));
+				dto.setEventstart(start);
+				dto.setEventend(end);
 			}
+			System.out.println(dto.getContentid());
 			uri = "http://api.visitkorea.or.kr/openapi/service/rest/KorService/detailIntro?"
 					+ "serviceKey=8188yaWHAsWQ+XOW7Vso3CoksQpmRokfZmqwlC79igNHaB97z49enrCL+OBTzvEOvnCYPLYVcP7qki6O7G76BQ=="
 					+ "&numOfRows=1&pageNo=1&MobileOS=ETC&MobileApp=AppTest&contentId="+item.getContentid()+"&contentTypeId="+item.getContenttypeid()+"&_type=json";
@@ -90,15 +99,25 @@ public class ApiController {
 			ResponseEntity<Info> responseEntity2 = 
 					restTemplate.exchange(uri, HttpMethod.GET,
 							null,Info.class);
+			String charge =null;
 			switch (contentTypeId) {
 			case "12":
 				dto.setResttime(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getRestdate());
 				dto.setPlaytime(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getUsetime());
 				dto.setTel(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getInfocenter());
+				dto.setPark(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getParking());
 				break;
 			case "15":
 				dto.setPlaytime(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getPlaytime());
 				dto.setCharge(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getUsetimefestival());
+				String eventTime = dto.getPlaytime();
+				charge = dto.getCharge();
+				if(eventTime!=null) {
+					if(eventTime.contains("<br>")) {
+						eventTime.replace("<br>", " ");
+						dto.setPlaytime(eventTime);
+					}
+				}
 				break;
 			case "32":
 				dto.setTel(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getReservationlodging());
@@ -117,24 +136,35 @@ public class ApiController {
 				dto.setMenu(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getTreatmenu());
 				dto.setPark(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getParkingfood());
 				break;
+			case "28":
+				dto.setTel(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getInfocenterleports());
+				dto.setPark(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getParkingleports());
+				dto.setPlaytime(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getUsetimeleports());
+				dto.setResttime(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getRestdateleports());
+				break;
 			}
 			String tel = dto.getTel();
-			if(tel.contains("<br />")) {
-				tel = tel.split("<br />")[0];
+			if(tel !=null) {
+				if(tel.contains("<br />")) {
+					tel = tel.split("<br />")[0];
+				}
 			}
 			dto.setTel(tel);
+			
 			String title = dto.getTitle();
 			httpEntity = new HttpEntity(header);
-			if(title.contains("(")) {
-				title = dto.getTitle().split("\\(")[0].trim();
+			if(title!=null) {
+				if(title.contains("(")) {
+					title = dto.getTitle().split("\\(")[0].trim();
+				}
+				else if(title.contains("[")) {
+					title = dto.getTitle().split("\\[")[0].trim();
+				}
+				else if(title.contains("{")) {
+					title = dto.getTitle().split("\\{")[0].trim();
+				}
 			}
-			else if(title.contains("[")) {
-				title = dto.getTitle().split("\\[")[0].trim();
-			}
-			else if(title.contains("{")) {
-				title = dto.getTitle().split("\\{")[0].trim();
-			}
-			
+				
 			String id=null;
 			
 			uri ="https://dapi.kakao.com/v2/local/search/keyword.json?"
@@ -182,39 +212,53 @@ public class ApiController {
 			responseEntity2 = 
 					restTemplate.exchange(uri, HttpMethod.GET,
 							null,Info.class);
-			System.out.println(dto.getContentid());
-			
 			if(responseEntity2.getBody().getResponse().getBody()!=null) {
 				
 				String url = responseEntity2.getBody().getResponse().getBody().getItems().getItem().getHomepage();
 				
+				if(url!=null) {
+					dto.setUrl(url.split("\"")[1]);
+					url = dto.getUrl();
+				}
+				if(charge!=null) {
+					if(charge.contains("<br>")) {
+						charge.replace("<br>", " ");
+						if(charge.length()>100) {
+							charge = url;
+						}
+						dto.setCharge(charge);
+					}
+				}
 				
-				System.out.println(url.split("\"")[1]);
-				dto.setUrl(url.split("\"")[1]);
 			}
 			list.add(dto);
-			/*
+			service.placeInsert(dto);
 			switch(contentTypeId) {
 			case "12":
-				service.placeInsert(dto);
+			case "28":
+				System.out.println(dto.getPlaytime());
 				service.infoInsert(dto);
 				break;
 			case "15":
+				service.eventInsert(dto);
 				break;
 			case "32":
-				service.placeInsert(dto);
 				service.hotelInsert(dto);
 				break;
 			case "39":
-				service.placeInsert(dto);
 				service.infoInsert(dto);
 				service.dinerInsert(dto);
 				break;
 			}
-			*/
-			System.out.println(dto.getUrl());
+			affected++;
+			
 		}
 		
+	
+		Map resultMap = new HashMap();
+		resultMap.put("result", affected+"행이 삽입 되었습니다");
+
+
 		return list;
 	}
 }

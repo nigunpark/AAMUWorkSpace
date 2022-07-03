@@ -31,5 +31,9 @@ public class MainServiceImpl implements MainService{
 		// TODO Auto-generated method stub
 		return dao.dinerInsert(dto);
 	}
+	@Override
+	public int eventInsert(AttractionDTO dto) {
+		return dao.eventInsert(dto);
+	}
 
 }

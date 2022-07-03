@@ -32,4 +32,10 @@ public class MainDAO {
 		return template.insert("dinerInsert",dto);
 	}
 
+	public int eventInsert(AttractionDTO dto) {
+		
+		return template.insert("eventInsert",dto);
+	}
+
+
 }

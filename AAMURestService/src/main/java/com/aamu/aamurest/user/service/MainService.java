@@ -8,4 +8,6 @@ public interface MainService{
 	int hotelInsert(AttractionDTO dto);
 
 	int dinerInsert(AttractionDTO dto);
+	
+	int eventInsert(AttractionDTO dto);
 }
