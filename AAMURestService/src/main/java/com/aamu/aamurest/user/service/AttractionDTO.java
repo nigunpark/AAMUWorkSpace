@@ -28,6 +28,6 @@ public class AttractionDTO {
 	private String menu;
 	private String park;
 	private String charge;
-	private String eventStart;
-	private String evaentEnd;
+	private String eventstart;
+	private String eventend;
 }
