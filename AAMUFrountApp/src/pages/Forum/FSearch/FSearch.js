@@ -16,7 +16,6 @@ const FSearch = () => {
               <FontAwesomeIcon icon={faMagnifyingGlass} className="FS_search__i" />
             </button>
           </form>
-          
       </div>
     </>
   )
