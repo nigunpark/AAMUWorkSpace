@@ -11,7 +11,7 @@ import {
   Contents,
   CloseBtn,
 } from "./CratePlanModal";
-const CreatePlan = ({ setShowCratePlan, showCreatePlan }) => {
+const CreatePlan = ({ setShowCratePlan, showCreatePlan, currPosition }) => {
   return (
     <div>
       <DimmedContainer>
@@ -21,13 +21,17 @@ const CreatePlan = ({ setShowCratePlan, showCreatePlan }) => {
             <CloseBtn
               onClick={() => {
                 setShowCratePlan(false);
-              }}>
+              }}
+            >
               <FontAwesomeIcon icon={faRectangleXmark} />
             </CloseBtn>
           </TitleBar>
           <Contents>
             <CreatePlanLeft />
-            <CreatePlanMap showCreatePlan={showCreatePlan} />
+            <CreatePlanMap
+              showCreatePlan={showCreatePlan}
+              currPosition={currPosition}
+            />
           </Contents>
         </Modal>
       </DimmedContainer>
