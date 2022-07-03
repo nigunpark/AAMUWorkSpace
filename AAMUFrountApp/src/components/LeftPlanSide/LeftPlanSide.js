@@ -43,10 +43,11 @@ const LeftPlanSide = ({ currPosition }) => {
   });
   let suksoRef = useRef();
   let jangsoRef = useRef();
+
   useEffect(() => {
     //WholeMapLocalData.js에서 현재클릭해서 들어온 지역명과 같은 지역명 찾기
     let findId = WholeMapLocalData.find((data) => {
-      return data.localName === (reduxState.localNameForMarker ?? currPosition);
+      return data.localName === currPosition;
     });
     //그리고 그 지역명으로 setting해주기
     //WholeMapLocalData에는 한정된지역만 있으므로 api로 전체 지역명을 받아서 비교하자
@@ -101,13 +102,15 @@ const LeftPlanSide = ({ currPosition }) => {
         <h3 style={{ textAlign: "center", margin: "1rem 0" }}>선택목록</h3>
         <div
           className="leftPlanSide__pickLocal__type__container"
-          onClick={toggleBtn}>
+          onClick={toggleBtn}
+        >
           <span
             className="leftPlanSide__pickLocal__type-btn sukbak"
             ref={suksoRef}
             onClick={() => {
               dispatch(changeShowWhichModal(true));
-            }}>
+            }}
+          >
             숙소
           </span>
           <span
@@ -115,7 +118,8 @@ const LeftPlanSide = ({ currPosition }) => {
             ref={jangsoRef}
             onClick={() => {
               dispatch(changeShowWhichModal(false));
-            }}>
+            }}
+          >
             장소
           </span>
         </div>
@@ -149,7 +153,8 @@ const ChangeDate = ({ period, appearCalendar, setAppearCalendar }) => {
       className="changeDate__container"
       onClick={() => {
         setAppearCalendar(!appearCalendar);
-      }}>{`${sdy}.${sdm + 1}.${sdd} ~ ${edy}.${edm + 1}.${edd}`}</div>
+      }}
+    >{`${sdy}.${sdm + 1}.${sdd} ~ ${edy}.${edm + 1}.${edd}`}</div>
   );
 };
 
@@ -181,7 +186,8 @@ function JangSoModal() {
           dispatch(deleteAllPickJanso([]));
           dispatch(setInitForTime(0));
           dispatch(setInitForMin(0));
-        }}>
+        }}
+      >
         장소전체삭제
       </div>
       {reduxState.arrForPickJangso.length !== 0 ? (
@@ -316,7 +322,8 @@ function SukSoMadal() {
           dispatch(
             changeSaveDaysRedux(reduxState.saveDaysNPickedSuksoRedux.length)
           );
-        }}>
+        }}
+      >
         숙소전체삭제
       </div>
       <div className="suksoModal__desc">
