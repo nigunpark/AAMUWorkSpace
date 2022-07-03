@@ -3,10 +3,11 @@ import { faHeart } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { red } from '@mui/material/colors'
 import React, { useState } from 'react'
-import Imgup from './Imgup.js'
+
 
 function User() {
     const [heart,setHeart] = useState(false);
+    const [follow,setFollowing] = useState(false);
     
   return (
     <div>
@@ -28,7 +29,7 @@ function User() {
                     </div>
                 </div>
                 <div className="search-squre"></div>
-            </div> */}
+  </div> */}
         </div>
         <div className="user">
             <img src="./img/bk.jpg" alt="사프" />
@@ -36,8 +37,8 @@ function User() {
                 <p className="user-id">0hyun0hyun</p>
                 <p className="user-name">김영현</p>
             </div>
-            <div >
-                {heart ?<FontAwesomeIcon icon={faHeart}onClick={()=>{setHeart(!heart)}} style={{color:'red'}} />:<i class="fa-regular fa-heart" onClick={()=>{setHeart(!heart)}}></i>}
+            <div className='heart'>
+                {heart ?<i class="fa-solid fa-heart fa-2x"onClick={()=>{setHeart(!heart)}} style={{color:'black'}} />:<i class="fa-regular fa-heart fa-2x"  onClick={()=>{setHeart(!heart)}}></i>}
             </div>
             <div>
                 <FontAwesomeIcon icon={faSquarePlus} className="post-icon" />
@@ -56,8 +57,8 @@ function User() {
                         <p className="user-id">psg</p>
                         <p className="user-name">0hyun0hyun님 외 2명이...</p>
                     </div>
-                    <div>
-                        <span className="follow">팔로우</span>
+                    <div className="follow">
+                        {follow ?  <span onClick={()=>{setFollowing(!follow)}}>팔로잉</span> : <span onClick={()=>{setFollowing(!follow)}}>팔로우</span>}
                     </div>
                 </div>
                 <div className="recommend-contents">
