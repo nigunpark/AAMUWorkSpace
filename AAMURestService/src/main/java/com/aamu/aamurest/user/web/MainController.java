@@ -29,9 +29,8 @@ public class MainController {
 		int countRoute = 0;
 		affected = service.plannerInsert(dto);
 		List<Route> routes = dto.getRoute();
-		SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
+		
 		for(Route route:routes) {
-			
 			service.RouteInsert(route);
 			countRoute++;
 		}

@@ -10,10 +10,11 @@ import lombok.Setter;
 @Setter
 public class PlannerDTO {
 	private String title;
-	private Date startTime;
+	private long startTime;
 	private int rbn;
 	private List<Route> route=null;
 	private String id;
+	private Date routeDate;
 	
 	@Getter
 	@Setter
