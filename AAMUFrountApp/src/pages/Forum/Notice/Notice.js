@@ -26,7 +26,7 @@ const Notice = () => {
                         modules={[Navigation, Pagination, Scrollbar, A11y, Autoplay]}
                         spaceBetween={50} //슬라이드 사이 여백
                         slidesPerView={1} //한 슬라이드에 보여줄 개수
-                        autoplay={{ delay: 3000 }}
+                        autoplay={{ delay: 4000 }}
                         loop={true}
                         // navigation={true}
                         pagination={{ clickable: true }}
@@ -36,7 +36,7 @@ const Notice = () => {
                             <NoticeItem
                             src="/images/img-9.jpg"
                             //text="Explore the hidden waterfall deep inside the Amazon Jungle"
-                            label="Adventure"
+                            // label="Adventure"
                             path="/"
                             />
                         </SwiperSlide>
@@ -44,7 +44,7 @@ const Notice = () => {
                             <NoticeItem
                             src="/images/img-2.jpg"
                             //text="Explore the hidden waterfall deep inside the Amazon Jungle"
-                            label="Adventure"
+                            // label="Adventure"
                             path="/"
                             />
                         </SwiperSlide>
@@ -52,7 +52,7 @@ const Notice = () => {
                             <NoticeItem
                             src="/images/img-3.jpg"
                             //text="Explore the hidden waterfall deep inside the Amazon Jungle"
-                            label="Adventure"
+                            // label="Adventure"
                             path="/"
                             />
                         </SwiperSlide>
@@ -60,7 +60,7 @@ const Notice = () => {
                             <NoticeItem
                             src="/images/img-4.jpg"
                             //text="Explore the hidden waterfall deep inside the Amazon Jungle"
-                            label="Adventure"
+                            // label="Adventure"
                             path="/"
                             />
                         </SwiperSlide>

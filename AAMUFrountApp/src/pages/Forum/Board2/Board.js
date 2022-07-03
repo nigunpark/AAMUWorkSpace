@@ -1,10 +1,11 @@
 import React from 'react';
-import Test from './test';
+import DetailContent from './DetailContent';
+import './board2.css'
 
 const Board = () => {
   return (
-    <div>
-        <Test/>
+    <div className='Board_MainPage'>
+        <DetailContent/>
     </div>
   )
 }
