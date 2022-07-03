@@ -42,7 +42,8 @@ const RightRecommandSide = ({ titleName, setTitleName, conWhichModal }) => {
             toggleBtn(e);
             setTitleName("숙소");
             dispatch(changeInfo("숙소"));
-          }}>
+          }}
+        >
           <FontAwesomeIcon
             icon={faBed}
             className="rightRecommandSide__span-i"
@@ -57,7 +58,8 @@ const RightRecommandSide = ({ titleName, setTitleName, conWhichModal }) => {
             toggleBtn(e);
             setTitleName("장소");
             dispatch(changeInfo("장소"));
-          }}>
+          }}
+        >
           <FontAwesomeIcon
             icon={faLocationDot}
             className="rightRecommandSide__span-i"
@@ -82,7 +84,6 @@ const RightRecommandSide = ({ titleName, setTitleName, conWhichModal }) => {
     </div>
   );
 };
-
 function RightSideTitle({ titleName }) {
   switch (titleName) {
     case "추천장소":
