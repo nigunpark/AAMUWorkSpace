@@ -5,6 +5,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -17,6 +19,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.filter.OncePerRequestFilter;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.jsonwebtoken.ExpiredJwtException;
 
@@ -34,21 +38,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
-		String requestTokenHeader = request.getHeader("Authorization");
-		for (Enumeration<?> e = request.getHeaders("access-control-request-headers"); e.hasMoreElements();) {
-			String nextHeaderName = (String) e.nextElement();
-		    String headerValue = request.getHeader(nextHeaderName);
-		    System.out.println(nextHeaderName + " : " + headerValue);
-		}
-		/*
-		for (Enumeration<?> e = request.getHeaderNames(); e.hasMoreElements();) {
-		    String nextHeaderName = (String) e.nextElement();
-		    String headerValue = request.getHeader(nextHeaderName);
-		    System.out.println(nextHeaderName + " : " + headerValue);
-		}
-		*/
-		
-		
+		String requestTokenHeader = request.getHeader("Authorization"); // Post 방식과 Put방식은 Authorization이 해더에 없음 
 		String username = null;
 		String jwtToken = null;
 		if(requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")) {

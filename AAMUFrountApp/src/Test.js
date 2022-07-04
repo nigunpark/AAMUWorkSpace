@@ -57,13 +57,13 @@ const Test = () => {
   function test() {
     axios
       .get("/aamurest/info/places", {
-        Headers:{
-            Authorization:`Bearer ${token}`
+        headers:{
+          Authorization:`Bearer ${token}`
         },
         params: {
           areacode: "1",
           contenttypeid: "12",
-        },
+        }
       })
       .then((resp) => {
         console.log("get성공");
