@@ -48,7 +48,6 @@ const Title = styled.div`
   justify-content: center;
   align-items: center;
   font-size: 1.5em;
-
   width: 100%;
   overflow: auto;
   height: 10%;
