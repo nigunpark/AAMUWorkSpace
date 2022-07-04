@@ -216,7 +216,7 @@ function PickedLocation({ local }) {
     <div className="pickedLocation__container slide-in-right">
       <div className="pickedLocation__img-container">
         <img
-          src={local.image2}
+          src={local.image2 ?? "/images/no-image.jpg"}
           onError={(e) => {
             e.target.src = "/images/no-image.jpg";
           }}
@@ -262,8 +262,9 @@ function PickedLocation({ local }) {
             }}
             onBlur={(e) => {
               if (e.target.value !== 0) {
-                if (timeVal > e.target.value) dispatch(timeSetter(-1));
-                else dispatch(timeSetter(1));
+                if (timeVal > e.target.value)
+                  dispatch(timeSetter(e.target.value - timeVal));
+                else dispatch(timeSetter(e.target.value - timeVal));
                 setTimeVal(e.target.value);
               }
             }}
@@ -292,8 +293,9 @@ function PickedLocation({ local }) {
             }}
             onBlur={(e) => {
               if (e.target.value !== 0) {
-                if (minVal > e.target.value) dispatch(minSetter(-1));
-                else if (minVal < e.target.value) dispatch(minSetter(1));
+                if (minVal > e.target.value)
+                  dispatch(minSetter(e.target.value - minVal));
+                else dispatch(minSetter(e.target.value - minVal));
                 setMinVal(e.target.value);
               }
             }}
@@ -375,7 +377,8 @@ function PickedSukso({ local }) {
     <div className="pickedSukso__container slide-in-right">
       <div className="pickedSukso__img-container">
         <img
-          src="/images/bg1.png"
+          src={local.smallImage ?? "/images/no-image.jpg"}
+          // src="/images/no-image.jpg"
           onError={(e) => {
             e.target.src = "/images/no-image.jpg";
           }}
@@ -383,7 +386,7 @@ function PickedSukso({ local }) {
       </div>
       <div className="pickedSukso__info-container">
         <div className="pickedSukso__info-title">
-          <h4>{local}</h4>
+          <h4>{local.title}</h4>
           <FontAwesomeIcon
             icon={faX}
             className="pickedSukso__info-title__closeBtn"
