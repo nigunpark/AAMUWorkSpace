@@ -114,7 +114,8 @@ function User() {
             </div>    
         </div>
         <div className="information">
-            <p> About ・ Help ・ Press ・ API ・ Jobs ・ Privacy ・ Terms ・ Locations ・ Language</p>        
+            <p> &nbsp;&nbsp;About ・ Help ・ Press ・ API ・ Jobs ・ Privacy </p>     
+            <p>   &nbsp;・ Terms ・ Locations ・ Language</p>   
         </div>
         <div className="information2">
             <p>ⓒ 2022 INSTAGRAM</p>
