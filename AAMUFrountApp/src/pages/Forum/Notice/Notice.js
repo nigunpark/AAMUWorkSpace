@@ -34,7 +34,7 @@ const Notice = () => {
                         >
                         <SwiperSlide>
                             <NoticeItem
-                            src="/images/img-9.jpg"
+                            src="/images/imageMap.png"
                             //text="Explore the hidden waterfall deep inside the Amazon Jungle"
                             // label="Adventure"
                             path="/"
