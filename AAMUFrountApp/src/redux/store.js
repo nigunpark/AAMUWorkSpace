@@ -39,7 +39,7 @@ let arrForJangso = createSlice({
       image2:
         "http://tong.visitkorea.or.kr/cms/resource/80/746580_image3_1.jpg",
       playtime:
-        "평일(화~금) 숲해설 10:30, 13:30, 15:30<br /><br />\n주말_ 자유관람<br />\n하절기 09:00~18:00<br />\n동절기 09:00~17:00<br /><br />\n주말_숲해설 <br />\n3월~11월 10:30, 14:00",
+        "평일(화~금) 숲해설 10:30, 13:30, 15:30 주말_ 자유관람 하절기 09:00~18:00동절기 09:00~17:00 주말_숲해설 3월~11월 10:30, 14:00",
       tel: "02-961-2522",
       resttime: "매주 월요일, 5월 1일 및 모든 법정 공휴일 (일요일 제외)",
       checkintime: null,
@@ -61,8 +61,8 @@ let arrForJangso = createSlice({
         "http://tong.visitkorea.or.kr/cms/resource/41/2023841_image2_1.jpg",
       image2:
         "http://tong.visitkorea.or.kr/cms/resource/41/2023841_image3_1.jpg",
-      playtime: "",
-      tel: "공원녹지과  02-2155-6870",
+      playtime: null,
+      tel: "02-2155-6870",
       resttime: null,
       checkintime: null,
       checkouttime: null,
@@ -84,7 +84,7 @@ let arrForJangso = createSlice({
       image2:
         "http://tong.visitkorea.or.kr/cms/resource/06/2512006_image3_1.jpg",
       playtime:
-        "* 허용시간 : 10:00 ~17:00(주중,토) / 일요일 : 골목길 쉬는 날<br />\n* 대상지역 : 북촌로 11길 일대 약 100m 구간",
+        "* 허용시간 : 10:00 ~17:00(주중,토) / 일요일 : 골목길 쉬는 날* 대상지역 : 북촌로 11길 일대 약 100m 구간",
       tel: "02-2148-4161",
       resttime: "(일요일) 골목길 쉬는 날",
       checkintime: null,
@@ -106,9 +106,8 @@ let arrForJangso = createSlice({
         "http://tong.visitkorea.or.kr/cms/resource/62/1946562_image2_1.jpg",
       image2:
         "http://tong.visitkorea.or.kr/cms/resource/62/1946562_image3_1.jpg",
-      playtime:
-        "2021년 (1월~별도 공지시)<br />\n- 09:00 ~ 18:00 (코로나19 단축운영)<br />\n※ 매주 월요일 정기휴관",
-      tel: "공연 02-2261-0500<br />\n교육/전시 02-2266-6928<br />\n전통혼례 02-2263-0854<br />\n대관/운영 02-2261-0513<br />\n전통체험 02-2266-6923",
+      playtime: " 09:00 ~ 18:00 (코로나19 단축운영) ※ 매주 월요일 정기휴관",
+      tel: "02-2261-0500",
       resttime: "월요일",
       checkintime: null,
       checkouttime: null,
@@ -184,7 +183,137 @@ export let { addPickJangso, deleteAllPickJanso, deletePickJangso } =
 //추천숙소
 let arrForSukso = createSlice({
   name: "arrForSukso",
-  initialState: ["하얏트", "그랜드조선", "트럼프", "뜨밤호텔", "낮져밤이호텔"],
+  initialState: [
+    {
+      areacode: 1,
+      sigungucode: 24,
+      contentid: 436076,
+      contenttypeid: 32,
+      mapx: 126.9830123373,
+      mapy: 37.5643879099,
+      title: "이비스 앰배서더 명동",
+      addr: "서울특별시 중구 남대문로 78",
+      bigImage: null,
+      smallImage: null,
+      playtime: null,
+      tel: "02-6272-1101",
+      resttime: null,
+      checkin: "14:00",
+      checkout: "12:00",
+      url: "https://ibis.ambatel.com/myeongdong",
+      kakaokey: "17361103",
+      menu: null,
+      park: null,
+      charge: null,
+      eventstart: null,
+      eventend: null,
+      eventTime: null,
+    },
+    {
+      areacode: 1,
+      sigungucode: 15,
+      contentid: 142790,
+      contenttypeid: 32,
+      mapx: 127.0330577212,
+      mapy: 37.4682610838,
+      title: "The-K호텔서울 (더케이호텔서울)",
+      addr: "서울특별시 서초구 바우뫼로12길 70",
+      bigImage:
+        "http://tong.visitkorea.or.kr/cms/resource/90/2014990_image2_1.jpg",
+      smallImage:
+        "http://tong.visitkorea.or.kr/cms/resource/90/2014990_image2_1.jpg",
+      playtime: null,
+      tel: "02-571-8100",
+      resttime: null,
+      checkin: "15:00",
+      checkout: "12:00",
+      url: "https://thek-hotel.co.kr",
+      kakaokey: "7941550",
+      menu: null,
+      park: null,
+      charge: null,
+      eventstart: null,
+      eventend: null,
+      eventTime: null,
+    },
+    {
+      areacode: 1,
+      sigungucode: 21,
+      contentid: 142733,
+      contenttypeid: 32,
+      mapx: 126.9974672756,
+      mapy: 37.5396549325,
+      title: "그랜드 하얏트 서울",
+      addr: "서울특별시 용산구 소월로 322",
+      bigImage: null,
+      smallImage: null,
+      playtime: null,
+      tel: "02-799-8888",
+      resttime: null,
+      checkin: "15:00",
+      checkout: "11:00",
+      url: "http://www.hyatt.com/ko-KR/hotel/south-korea/grand-hyatt-seoul/selrs",
+      kakaokey: "18661190",
+      menu: null,
+      park: null,
+      charge: null,
+      eventstart: null,
+      eventend: null,
+      eventTime: null,
+    },
+    {
+      areacode: 1,
+      sigungucode: 24,
+      contentid: 1045657,
+      contenttypeid: 32,
+      mapx: 127.0005250345,
+      mapy: 37.55012877,
+      title: "반얀트리 클럽 앤 스파 서울",
+      addr: "서울특별시 중구 장충단로 60",
+      bigImage:
+        "http://tong.visitkorea.or.kr/cms/resource/65/2719665_image2_1.jpg",
+      smallImage:
+        "http://tong.visitkorea.or.kr/cms/resource/65/2719665_image2_1.jpg",
+      playtime: null,
+      tel: "02-2250-8000",
+      resttime: null,
+      checkin: "15:00",
+      checkout: "12:00",
+      url: "http://www.banyantreeclub.com",
+      kakaokey: "18059533",
+      menu: null,
+      park: null,
+      charge: null,
+      eventstart: null,
+      eventend: null,
+      eventTime: null,
+    },
+    {
+      areacode: 1,
+      sigungucode: 6,
+      contentid: 142728,
+      contenttypeid: 32,
+      mapx: 127.1107898477,
+      mapy: 37.5552218298,
+      title: "그랜드 워커힐 서울",
+      addr: "서울특별시 광진구 워커힐로 177",
+      bigImage: null,
+      smallImage: null,
+      playtime: null,
+      tel: "02-2022-0000",
+      resttime: null,
+      checkin: "15:00",
+      checkout: "12:00",
+      url: "http://www.grandwalkerhillseoul.com",
+      kakaokey: "24008908",
+      menu: null,
+      park: null,
+      charge: null,
+      eventstart: null,
+      eventend: null,
+      eventTime: null,
+    },
+  ],
   reducers: {
     changeArrForSukso(state, action) {
       return action.payload;
@@ -317,6 +446,24 @@ let timeSetObj = createSlice({
 export let { changeTimeSetObj, delTimeSetObj, corrTimeSetObj } =
   timeSetObj.actions;
 
+//db에서 계산되서 받아온 이동시간이 저장되는 배열 state
+let movingTime = createSlice({
+  name: "movingTime",
+  initialState: [
+    { day: 1, start: 0, first: 10, second: 11, third: 12 },
+    { day: 2, start: 0, first: 13, second: 14, third: 15 },
+  ], // {day:1,start:0,first:10,second:35,third:22}...
+  reducers: {
+    addMovingTime(state, action) {
+      state.push(action.payload);
+    },
+    corrMovingTime(state, action) {
+      return;
+    },
+  },
+});
+export let { addMovingTime } = movingTime.actions;
+
 //월과 일 저장
 let monthNdate = createSlice({
   name: "monthNdate",
@@ -348,6 +495,7 @@ export default configureStore({
     timeSetObj: timeSetObj.reducer,
     tripPeriod: tripPeriod.reducer,
     monthNdate: monthNdate.reducer,
+    movingTime: movingTime.reducer,
   },
   //planTripTime.js 168번줄쯤의 fullDate를 위한 serializable무시
   middleware: (getDefaultMiddleware) =>
