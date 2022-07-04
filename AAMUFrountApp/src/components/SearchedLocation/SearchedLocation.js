@@ -10,7 +10,7 @@ import {
   BodyLim,
   ImgLim,
 } from "../Modal/localInfoModal.js";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 //redux에서 localNameForMarker(마커찍기위한 장소이름) 변경함수
 import {
   addPickJangso,
@@ -25,42 +25,45 @@ const SearchedLocation = ({ local }) => {
   let dispatch = useDispatch();
   let localContainer = useRef();
   return (
-    <div
-      ref={localContainer}
-      className="SearchedLocation"
-      onClick={() => {
-        //지도에 마커찍어줄 redux 변경 함수
-        dispatch(changeLnfM(local));
-      }}
-    >
-      <div className="searchedLocation__container">
-        <div className="searchedLocation__img-container">
-          <img src={local.image2} />
-        </div>
-        <div className="searchedLocation__info">
-          <h4 className="searchedLocation__info__title">{local.title}</h4>
-          <div className="searchedLocation__info__content">
-            <FontAwesomeIcon
-              icon={faCircleInfo}
-              className="searchedLocation__i"
-              onClick={() => {
-                setLocaInfoModal(true);
-              }}
-            />
-            <FontAwesomeIcon
-              icon={faPlus}
-              className="searchedLocation__i"
-              onClick={(e) => {
-                e.stopPropagation();
-                localContainer.current.classList.add(
-                  "searchedLocation__fadeOut"
-                );
-                dispatch(timeSetter(2));
-                dispatch(addPickJangso(local));
-                dispatch(deleteArrInJangso(local));
-                dispatch(changeShowWhichModal(false));
-              }}
-            />
+    <>
+      <div
+        className="SearchedLocation"
+        onClick={(e) => {
+          e.stopPropagation();
+          //지도에 마커찍어줄 redux 변경 함수
+          dispatch(changeLnfM(local));
+        }}
+      >
+        <div className="searchedLocation__container" ref={localContainer}>
+          <div className="searchedLocation__img-container">
+            <img src={local.image2} />
+          </div>
+          <div className="searchedLocation__info">
+            <h4 className="searchedLocation__info__title">{local.title}</h4>
+            <div className="searchedLocation__info__content">
+              <FontAwesomeIcon
+                icon={faCircleInfo}
+                className="searchedLocation__i"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setLocaInfoModal(true);
+                }}
+              />
+              <FontAwesomeIcon
+                icon={faPlus}
+                className="searchedLocation__i"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  localContainer.current.classList.add(
+                    "searchedLocation__fadeOut"
+                  );
+                  dispatch(timeSetter(2));
+                  dispatch(addPickJangso(local));
+                  dispatch(deleteArrInJangso(local));
+                  dispatch(changeShowWhichModal(false));
+                }}
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -69,13 +72,20 @@ const SearchedLocation = ({ local }) => {
           locaInfoModal={locaInfoModal}
           setLocaInfoModal={setLocaInfoModal}
           local={local}
+          localContainer={localContainer}
         />
       )}
-    </div>
+    </>
   );
 };
 
-function LocalInfoModal({ locaInfoModal, setLocaInfoModal, local }) {
+function LocalInfoModal({
+  locaInfoModal,
+  setLocaInfoModal,
+  local,
+  localContainer,
+}) {
+  let dispatch = useDispatch();
   return (
     <ContainerLim>
       <OverlayLim onClick={() => setLocaInfoModal(!locaInfoModal)} />
@@ -84,7 +94,7 @@ function LocalInfoModal({ locaInfoModal, setLocaInfoModal, local }) {
         <ImgLim>
           <img
             className="localInfoModal__img"
-            src={local.image}
+            src={local.image ?? "/images/no-image.jpg"}
             alt="이미지"
             onError={(e) => {
               e.target.src = "/images/no-image.jpg";
@@ -105,8 +115,8 @@ function LocalInfoModal({ locaInfoModal, setLocaInfoModal, local }) {
             </div>
             <div className="localInfo">
               <ul className="localInfo-ul">
-                <li>보기</li>
-                <li>www.naver.com</li>
+                <li>{local.playtime ?? "-"}</li>
+                <li>{local.url ?? "-"}</li>
                 <li>{local.addr !== null ? local.addr : "-"}</li>
                 <li>{local.tel !== null ? local.tel : "-"}</li>
                 <li>-</li>
@@ -156,7 +166,18 @@ function LocalInfoModal({ locaInfoModal, setLocaInfoModal, local }) {
         </div>
         <div className="localInfo-btn">
           <span>리뷰보기</span>
-          <span>목록에 추가</span>
+          <span
+            onClick={(e) => {
+              e.stopPropagation();
+              localContainer.current.classList.add("searchedLocation__fadeOut");
+              dispatch(timeSetter(2));
+              dispatch(addPickJangso(local));
+              dispatch(deleteArrInJangso(local));
+              setLocaInfoModal(false);
+            }}
+          >
+            목록에 추가
+          </span>
         </div>
       </ContentsLim>
     </ContainerLim>
