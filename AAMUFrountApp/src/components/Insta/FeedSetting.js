@@ -1,25 +1,28 @@
-import { faHeart } from '@fortawesome/free-regular-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { Height } from '@mui/icons-material';
-import React, { useCallback, useRef, useState } from 'react'
+import MyVerticallyCenteredModal from './MyVerticallyCenteredModal';
+import React, {  useState } from 'react'
+import Dotsvg from './Dotsvg';
+import { Button } from 'antd';
+
 
 function FeedSetting() {
     const [heart,setHeart] = useState(false);
     const [menu,setMenu] = useState(false);
+    const [modalShow, setModalShow] = useState(false);
+    
   return (
 <div>
-    <div className="feeds-setting">    
-    
-        <div>
+    <div className="feeds-setting">  
             <div className="title-profile">
                 <img src="./img/bk.jpg" alt="프사" />
                 <span>eyesmag</span>
-                <svg className="dot" fill="#262626" version="1.1" id="Capa_1" 
-                viewBox="0 0 426.667 426.667">
-                    <circle cx="42.667" cy="213.333" r="42.667"/>
-                    <circle cx="213.333" cy="213.333" r="42.667"/>
-                    <circle cx="384" cy="213.333" r="42.667"/>
-                </svg>
+                
+                <Button  variant="primary" onClick={() => setModalShow(!modalShow)}>
+                    <Dotsvg></Dotsvg>
+                </Button>
+                <MyVerticallyCenteredModal
+                    show={modalShow}
+                    onHide={() => setModalShow(false)}
+                />
             </div>
             <div className="location">
                 <p>어딘가에서</p>
@@ -65,11 +68,8 @@ function FeedSetting() {
                 <input type="text" className="typing-comment" placeholder="댓글 달기..."/>
                 <button className="comment-button" type="button">게시</button>
             </div>
-        </div>
     </div>       
     <div className="feeds-setting">    
-    
-        <div>
             <div className="title-profile">
                 <img src="./img/bk.jpg" alt="프사" />
                 <span>eyesmag</span>
@@ -131,7 +131,7 @@ function FeedSetting() {
         </div>
     </div>       
     
-    </div>
+   
   )
 }
 
