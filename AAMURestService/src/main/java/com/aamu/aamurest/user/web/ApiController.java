@@ -54,10 +54,9 @@ public class ApiController {
 		header.add("Authorization", "KakaoAK "+kakaokey);
 		int affected=0;
 		String uri;
-		System.out.println(apikey);
 		uri = "http://api.visitkorea.or.kr/openapi/service/rest/KorService/areaBasedList?"
 				+ "serviceKey="+apikey+"&"
-				+ "pageNo=2&numOfRows=323&"
+				+ "pageNo=1&numOfRows=1000&"
 				+ "MobileApp=AppTest&MobileOS=ETC&arrange=B&"
 				+ "contentTypeId="+contentTypeId+"&"
 						+ "areaCode="+area+"&"
@@ -263,25 +262,27 @@ public class ApiController {
 				
 			}
 			list.add(dto);
-
-			service.placeInsert(dto);
-			switch(contentTypeId) {
-			case "12":
-			case "28":
-				service.infoInsert(dto);
-				break;
-			case "15":
-				service.eventInsert(dto);
-				break;
-			case "32":
-				service.hotelInsert(dto);
-				break;
-			case "39":
-				service.infoInsert(dto);
-				service.dinerInsert(dto);
-				break;
-			}
+			if(dto.getAddr()!=null && dto.getTel().length()<=100) {
+				service.placeInsert(dto);
+				switch(contentTypeId) {
+				case "12":
+				case "28":
+					service.infoInsert(dto);
+					break;
+				case "15":
+					service.eventInsert(dto);
+					break;
+				case "32":
+					service.hotelInsert(dto);
+					break;
+				case "39":
+					service.infoInsert(dto);
+					service.dinerInsert(dto);
+					break;
+				}
+			
 			affected++;
+			}
 
 		}
 		

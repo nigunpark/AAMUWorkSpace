@@ -61,5 +61,30 @@ public class MainDAO {
 		return template.insert("routeInsert",route);
 	}
 
+	public List<RouteDTO> selectRouteList(int rbn) {
+		
+		return template.selectList("selectRouteList",rbn);
+	}
+
+	public List<AttractionDTO> selectAttrSigungu(Map map) {
+		
+		return template.selectList("selectAttrSigungu",map);
+	}
+
+	public List<AttractionDTO> selectEventSigungu(Map map) {
+		
+		return template.selectList("selectEventSigungu",map);
+	}
+
+	public List<AttractionDTO> selectHotelSigungu(Map map) {
+		
+		return template.selectList("selectHotelSigungu", map);
+	}
+
+	public List<AttractionDTO> selectDinerSigungu(Map map) {
+
+		return template.selectList("selectDinerSigungu", map);
+	}
+
 
 }
