@@ -15,16 +15,22 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 	@Autowired
 	private CommuDAO dao;
 	
-	//글 목록
+	//글 목록용
 	@Override
 	public List<CommuDTO> commuSelectList() {
 		return dao.commuSelectList();
 	}
 	
-	//댓글하나 뿌려줄거
+	//글 목록용_댓글하나 뿌려줄거
 	@Override
 	public CommuCommentDTO commuCommentSelectOne(String cno) {
 		return dao.commuCommentSelectOne(cno);
+	}
+	
+	//글 목록용_사진리스트
+	@Override
+	public List<String> commuSelectPhotoList(String cno) {
+		return dao.commuSelectPhotoList(cno);
 	}
 	
 	//글 생성

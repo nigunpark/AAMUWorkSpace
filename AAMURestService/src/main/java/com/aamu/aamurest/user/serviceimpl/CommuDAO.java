@@ -16,14 +16,19 @@ public class CommuDAO {
 	@Autowired
 	private SqlSessionTemplate template;
 	
-	//목록용
+	//글 목록용
 	public List<CommuDTO> commuSelectList(){
 		return template.selectList("commuSelectList");
 	}
 	
-	//댓글 하나 가져오는거
+	//글 목록용_댓글 하나 가져오는거
 	public CommuCommentDTO commuCommentSelectOne(String cno) {
 		return template.selectOne("commuCommentSelectOne",cno);
+	}
+	
+	//글 목록용_사진 리스트 가져오기
+	public List<String> commuSelectPhotoList(String cno){
+		return template.selectList("commuSelectPhotoList");
 	}
 	
 

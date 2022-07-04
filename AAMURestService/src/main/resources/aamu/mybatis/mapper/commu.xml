@@ -20,6 +20,11 @@
 		SELECT * FROM commucomment WHERE lno=#{lno} AND ROWNUM = 1
 	</select>
 	
+	<!-- 사진 -->
+	<select id="commuSelectPhotoList" parameterType="String" resultType="String">
+		SELECT photo FROM commuphoto WHERE lno=#{lno}
+	</select>
+	
 	<insert id="commuInsert" parameterType="Map" useGeneratedKeys="true" keyProperty="lno">
 		INSERT INTO community
 		VALUES (SEQ_COM.NEXTVAL,#{id},#{title},#{content},DEFAULT,DEFAULT,DEFAULT)

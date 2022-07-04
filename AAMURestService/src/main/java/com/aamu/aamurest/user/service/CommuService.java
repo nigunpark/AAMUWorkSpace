@@ -13,6 +13,8 @@ public interface CommuService<T> {
 	//comment 한개 가져오기
 	CommuCommentDTO commuCommentSelectOne(String cno);
 	
+	//사진
+	List<String> commuSelectPhotoList(String cno);
 
 	
 	//커뮤니티 글생성

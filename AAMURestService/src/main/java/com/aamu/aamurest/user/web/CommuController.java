@@ -35,7 +35,9 @@ public class CommuController {
 		//코맨트 dto 확장포문 -> 리스트하나씩 뽑아내서 
 		for(CommuDTO dto : list) {//글 하나씩 뽑아서 dto에 담기
 			dto.setCommuComment(commuService.commuCommentSelectOne(dto.getLno()));
+			dto.setPhoto(commuService.commuSelectPhotoList(dto.getLno()));
 		}
+		
 		return list;
 	}
 	

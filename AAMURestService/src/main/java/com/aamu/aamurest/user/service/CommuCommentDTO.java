@@ -18,6 +18,6 @@ public class CommuCommentDTO {
 	public String id;
 	public String lno;
 	public String reply;
-	public Date rdate;
-
+	public Date replydate;
+	//받은걸 여기에 넣기 각글마다 첫번째 댓글만 보여주기
 }
