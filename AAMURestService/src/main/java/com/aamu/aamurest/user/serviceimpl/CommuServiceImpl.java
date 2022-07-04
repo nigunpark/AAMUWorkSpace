@@ -38,16 +38,20 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 	public int commuInsert(Map map) {
 		//commu
 		int commuaffected=dao.commuInsert(map);
-		System.out.println(map);
 		//사진 
-		int photoAffected=dao.photoInsert(map);
+		int photoAffected=0;
+		List<Map> lists=(List<Map>)map.get("photos");
+		for(Map photo:lists) {
+			photo.put("lno", map.get("lno"));
+			photoAffected+=dao.photoInsert(photo);
+		}
 		//플레이스
 		if(map.get("place")!=null) { //플레이스가 넘어왔다
 			int placeAffected=dao.placeInsert(map); //insert 성공하면 1 
 			if(placeAffected ==0) return 0; //실패하면 0 반환
 		}
 		
-		if(commuaffected==1 && photoAffected==((List)map.get("photo")).size()) 
+		if(commuaffected==1 && photoAffected==((List)map.get("photos")).size()) 
 			return 1;
 		else
 			return 0;

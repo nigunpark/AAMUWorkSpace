@@ -33,6 +33,7 @@ public class CommuDAO {
 	
 	//글 저장용
 	public int commuInsert(Map map) {
+		System.out.println(map);
 		return template.insert("commuInsert",map);
 	}
 	
