@@ -58,7 +58,6 @@ const test = () => {
                         </div>
                         <span className="content_time">
                             2022-07-03
-                            
                         </span>
                         <div className="minContent">
                             <Link to='/'>

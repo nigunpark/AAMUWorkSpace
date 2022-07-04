@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { useState } from 'react'
 import ContentItem from './ContentItem';
 import './Content.css'
 import { Link, useNavigate } from 'react-router-dom';
 import FSearch from '../FSearch/FSearch';
+import styled from 'styled-components';
 
 const Content = () => {
     //let navigate = useNavigate();
@@ -29,12 +30,12 @@ const Content = () => {
                         return <ContentItem i={val} key={index} />;
                         })}
                     </ul>
-                    
                 </div>
                 
             </div>
         </div>
   )
 }
+
 
 export default Content
