@@ -1,5 +1,8 @@
 package com.aamu.aamurest.user.serviceimpl;
 
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -46,6 +49,11 @@ public class MainServiceImpl implements MainService{
 	public int RouteInsert(Route route) {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+	@Override
+	public List<AttractionDTO> selectPlacesList(Map map) {
+		
+		return dao.selectPlacesList(map);
 	}
 
 }

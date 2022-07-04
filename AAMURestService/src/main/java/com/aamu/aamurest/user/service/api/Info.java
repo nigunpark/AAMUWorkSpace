@@ -128,5 +128,6 @@ public Response response;
 		public String restdateleports;
 		public String usefeeleports;
 		public String usetimeleports;
+		public String scaleleports;
 	}
 }

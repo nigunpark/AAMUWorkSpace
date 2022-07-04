@@ -30,4 +30,5 @@ public class AttractionDTO {
 	private String charge;
 	private String eventstart;
 	private String eventend;
+	private String eventTime;
 }
