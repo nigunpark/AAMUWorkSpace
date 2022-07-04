@@ -44,7 +44,7 @@ const ContentItem = ({ i }) => {
             </div>
             
         </li>
-        {isOpen ? (
+        {isOpen == true ? (
             <DetailModal
             setIsOpen={setIsOpen}
             />

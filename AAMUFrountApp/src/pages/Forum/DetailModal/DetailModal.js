@@ -10,13 +10,13 @@ const DetailModal = ({setIsOpen}) => {
 
     const [value, setValue] = useState(2.5);
 
-    const modalRef = useRef(null);
+    //const modalRef = useRef(null);
 
     const handleClose = () => {
         setIsOpen(false);
     };
 
-    useOutSideClick(modalRef, handleClose);
+    //useOutSideClick(modalRef, handleClose);
 
     useEffect(() => {
         const $body = document.querySelector("body");
@@ -30,7 +30,7 @@ const DetailModal = ({setIsOpen}) => {
 // ref={modalRef}
   return (
     <DetailContainer >
-        <DetailOverlay >
+        <DetailOverlay>
             <DetailModalWrap>
 
                 <DetailTitle>
@@ -38,7 +38,9 @@ const DetailModal = ({setIsOpen}) => {
                     {/* <Button onClick={handleClose}>Close</Button> */}
                     <div className='detail-button'>
                         {/* DetailButton.scss */}
-                        <button className="learn-more_exit" type="button" onClick={handleClose}>exit</button>
+                        <button className="learn-more_exit" type="button" onClick={(e)=>{
+                             setIsOpen(false);                            
+                        }}>exit</button>
                     </div>
                 </DetailTitle>
 
@@ -46,10 +48,9 @@ const DetailModal = ({setIsOpen}) => {
                     {/* <img src='/images/imageMap.png' alt='smile'/> */}
 
                     <Notice/>
-
-                    <h1>
+                    <Textarea>
                         내용 들어갈 자리
-                    </h1>
+                    </Textarea>
                     <div>
                         <Rating
                             name="simple-controlled"
@@ -92,6 +93,20 @@ const DetailModal = ({setIsOpen}) => {
     </DetailContainer>
   )
 }
+const Textarea = styled.div`
+    position: relative;
+    width: 450px;
+    height: 350px;
+    overflow: auto;
+`
+// textarea{
+//     position: absolute;
+//     width: 100%;
+//     height: 100%;
+//     top: 0;
+//     left: 0;
+//     resize: none;
+// }
 
 const DetailContainer = styled.div`
     position: fixed;
