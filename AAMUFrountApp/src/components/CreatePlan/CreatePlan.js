@@ -27,7 +27,7 @@ const CreatePlan = ({ setShowCratePlan, showCreatePlan, currPosition }) => {
             </CloseBtn>
           </TitleBar>
           <Contents>
-            <CreatePlanLeft />
+            <CreatePlanLeft currPosition={currPosition} />
             <CreatePlanMap
               showCreatePlan={showCreatePlan}
               currPosition={currPosition}
