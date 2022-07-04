@@ -10,6 +10,11 @@ public interface CommuService<T> {
 	//커뮤니티 글목록
 	List<T> commuSelectList();
 	
+	//comment 한개 가져오기
+	CommuCommentDTO commuCommentSelectOne(String cno);
+	
+
+	
 	//커뮤니티 글생성
 	int commuInsert(Map map);
 

@@ -23,9 +23,7 @@ public class CommuDTO {
 	public String likecount;
 	public String rcount;
 	public String userprofile;
-	public String cno;
-	public String cid;
-	public String reply;
-	public List photo;
+	public CommuCommentDTO commuComment;
+	public List<String> photo;
 	public String place;
 }
