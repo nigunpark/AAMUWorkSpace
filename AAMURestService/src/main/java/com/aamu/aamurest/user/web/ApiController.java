@@ -8,6 +8,8 @@ import java.util.Map;
 import java.util.Vector;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -27,12 +29,19 @@ import com.aamu.aamurest.user.service.api.Places;
 import com.aamu.aamurest.user.service.api.Places.Item;
 
 @RestController
+@PropertySource("classpath:aamu/resources/api.properties")
 public class ApiController {
 	@Autowired
 	private RestTemplate restTemplate;
 	
 	@Autowired
 	private MainService service;
+	
+	@Value("${apikey}")
+	private String apikey;
+	
+	@Value("${kakaokey}")
+	private String kakaokey;
 	
 	@CrossOrigin
 	@PostMapping("/places/backupinfo")
@@ -42,13 +51,12 @@ public class ApiController {
 
 		HttpEntity httpEntity = null;
 		HttpHeaders header = new HttpHeaders();
-		header.add("Authorization", "KakaoAK 1e277aee608e10b527bd0156907f4d64");
+		header.add("Authorization", "KakaoAK "+kakaokey);
 		int affected=0;
 		String uri;
-		
 		uri = "http://api.visitkorea.or.kr/openapi/service/rest/KorService/areaBasedList?"
-				+ "serviceKey=8188yaWHAsWQ+XOW7Vso3CoksQpmRokfZmqwlC79igNHaB97z49enrCL+OBTzvEOvnCYPLYVcP7qki6O7G76BQ==&"
-				+ "pageNo=1&numOfRows=500&"
+				+ "serviceKey="+apikey+"&"
+				+ "pageNo=1&numOfRows=1000&"
 				+ "MobileApp=AppTest&MobileOS=ETC&arrange=B&"
 				+ "contentTypeId="+contentTypeId+"&"
 						+ "areaCode="+area+"&"
@@ -58,7 +66,7 @@ public class ApiController {
 			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
 			String currentTime = dateFormat.format(current);
 			uri ="http://api.visitkorea.or.kr/openapi/service/rest/KorService/searchFestival?"
-					+ "serviceKey=8188yaWHAsWQ+XOW7Vso3CoksQpmRokfZmqwlC79igNHaB97z49enrCL+OBTzvEOvnCYPLYVcP7qki6O7G76BQ=="
+					+ "serviceKey="+apikey
 					+ "&numOfRows=500&pageNo=1&MobileOS=ETC"
 					+ "&MobileApp=AppTest&arrange=B&listYN=Y"
 					+ "&areaCode="+area+"&eventStartDate="+currentTime+"&_type=json";
@@ -93,7 +101,7 @@ public class ApiController {
 			}
 			System.out.println(dto.getContentid());
 			uri = "http://api.visitkorea.or.kr/openapi/service/rest/KorService/detailIntro?"
-					+ "serviceKey=8188yaWHAsWQ+XOW7Vso3CoksQpmRokfZmqwlC79igNHaB97z49enrCL+OBTzvEOvnCYPLYVcP7qki6O7G76BQ=="
+					+ "serviceKey="+apikey
 					+ "&numOfRows=1&pageNo=1&MobileOS=ETC&MobileApp=AppTest&contentId="+item.getContentid()+"&contentTypeId="+item.getContenttypeid()+"&_type=json";
 			
 			ResponseEntity<Info> responseEntity2 = 
@@ -108,7 +116,7 @@ public class ApiController {
 				dto.setPark(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getParking());
 				break;
 			case "15":
-				dto.setPlaytime(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getPlaytime());
+				dto.setEventTime(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getPlaytime());
 				dto.setCharge(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getUsetimefestival());
 				String eventTime = dto.getPlaytime();
 				charge = dto.getCharge();
@@ -164,21 +172,22 @@ public class ApiController {
 					title = dto.getTitle().split("\\{")[0].trim();
 				}
 			}
-				
+			if(title.length()==0) {
+				title = dto.getTitle();
+			}
 			String id=null;
-			
 			uri ="https://dapi.kakao.com/v2/local/search/keyword.json?"
 					+ "y="+dto.getMapy()+"&x="+dto.getMapx()+"&radius=20000&query="+dto.getAddr();
 			
 			ResponseEntity<KakaoKey> responseEntity3 = 
 					restTemplate.exchange(uri, HttpMethod.GET,
 							httpEntity,KakaoKey.class);
-			
 			if(responseEntity3.getBody().getDocuments().size()==0) {
 				uri ="https://dapi.kakao.com/v2/local/search/keyword.json?"
 						+ "y="+dto.getMapy()+"&x="+dto.getMapx()+"&radius=20000&query="+title;
 				responseEntity3 = restTemplate.exchange(uri, HttpMethod.GET,
 								httpEntity,KakaoKey.class);
+				
 			}
 			
 			if(responseEntity3.getBody().getDocuments().size()!=0) {
@@ -207,7 +216,7 @@ public class ApiController {
 			dto.setReview(rDtoList);
 			}
 			*/
-			uri = "http://api.visitkorea.or.kr/openapi/service/rest/KorService/detailCommon?serviceKey=8188yaWHAsWQ+XOW7Vso3CoksQpmRokfZmqwlC79igNHaB97z49enrCL+OBTzvEOvnCYPLYVcP7qki6O7G76BQ==&numOfRows=10&pageNo=1&MobileOS=ETC&MobileApp=AppTest&contentId="+dto.getContentid()+"&defaultYN=Y&overviewYN=Y&_type=json";
+			uri = "http://api.visitkorea.or.kr/openapi/service/rest/KorService/detailCommon?serviceKey="+apikey+"&numOfRows=10&pageNo=1&MobileOS=ETC&MobileApp=AppTest&contentId="+dto.getContentid()+"&defaultYN=Y&overviewYN=Y&_type=json";
 			
 			responseEntity2 = 
 					restTemplate.exchange(uri, HttpMethod.GET,
@@ -215,16 +224,37 @@ public class ApiController {
 			if(responseEntity2.getBody().getResponse().getBody()!=null) {
 				
 				String url = responseEntity2.getBody().getResponse().getBody().getItems().getItem().getHomepage();
-				
+				String resultUrl =null;
 				if(url!=null) {
-					dto.setUrl(url.split("\"")[1]);
-					url = dto.getUrl();
+					if(url.contains("\"")) {
+						dto.setUrl(url.split("\"")[1]);
+						
+						resultUrl = dto.getUrl();
+						if(!resultUrl.contains("http")) {
+							if(resultUrl.contains("href=\"")) {
+								resultUrl = url.split("href=\"")[1];
+								dto.setUrl(resultUrl.split("\"")[0]);
+							}
+							else {
+								resultUrl = url.split("href=")[1];
+								dto.setUrl(resultUrl.split("\"")[0]);
+								
+							}
+							
+							resultUrl = dto.getUrl();
+						}
+					}
+					else {
+						resultUrl = url;
+						dto.setUrl(resultUrl);
+					}
+					
 				}
 				if(charge!=null) {
 					if(charge.contains("<br>")) {
 						charge.replace("<br>", " ");
 						if(charge.length()>100) {
-							charge = url;
+							charge = resultUrl;
 						}
 						dto.setCharge(charge);
 					}
@@ -232,26 +262,28 @@ public class ApiController {
 				
 			}
 			list.add(dto);
-			service.placeInsert(dto);
-			switch(contentTypeId) {
-			case "12":
-			case "28":
-				System.out.println(dto.getPlaytime());
-				service.infoInsert(dto);
-				break;
-			case "15":
-				service.eventInsert(dto);
-				break;
-			case "32":
-				service.hotelInsert(dto);
-				break;
-			case "39":
-				service.infoInsert(dto);
-				service.dinerInsert(dto);
-				break;
-			}
-			affected++;
+			if(dto.getAddr()!=null && dto.getTel().length()<=100) {
+				service.placeInsert(dto);
+				switch(contentTypeId) {
+				case "12":
+				case "28":
+					service.infoInsert(dto);
+					break;
+				case "15":
+					service.eventInsert(dto);
+					break;
+				case "32":
+					service.hotelInsert(dto);
+					break;
+				case "39":
+					service.infoInsert(dto);
+					service.dinerInsert(dto);
+					break;
+				}
 			
+			affected++;
+			}
+
 		}
 		
 	

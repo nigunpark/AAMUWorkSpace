@@ -3,6 +3,7 @@ package com.aamu.aamurest.jwt;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Enumeration;
 import java.util.List;
 
 import javax.servlet.FilterChain;
@@ -34,6 +35,19 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
 		String requestTokenHeader = request.getHeader("Authorization");
+		for (Enumeration<?> e = request.getHeaders("access-control-request-headers"); e.hasMoreElements();) {
+			String nextHeaderName = (String) e.nextElement();
+		    String headerValue = request.getHeader(nextHeaderName);
+		    System.out.println(nextHeaderName + " : " + headerValue);
+		}
+		/*
+		for (Enumeration<?> e = request.getHeaderNames(); e.hasMoreElements();) {
+		    String nextHeaderName = (String) e.nextElement();
+		    String headerValue = request.getHeader(nextHeaderName);
+		    System.out.println(nextHeaderName + " : " + headerValue);
+		}
+		*/
+		
 		
 		String username = null;
 		String jwtToken = null;

@@ -8,7 +8,7 @@ const NoticeItem = (props) => {
         <Link to={props.path} className="swiper__item__link_Notice">
           <figure
             className="swiper__item__pic-wrap_Notice"
-            // data-category={props.label}
+            data-category={props.label}
           >
             <img
               src={props.src}

@@ -83,7 +83,7 @@ align-items: center; */
   font-size: 12px;
   font-weight: 700;
   color: #fff;
-  background-color: #1f98f4;
+  /* background-color: #1f98f4; */ /* 라벨 색 */
   box-sizing: border-box;
 }
 

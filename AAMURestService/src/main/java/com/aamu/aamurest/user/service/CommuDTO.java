@@ -2,6 +2,7 @@ package com.aamu.aamurest.user.service;
 
 import java.sql.Date;
 import java.util.List;
+import java.util.Map;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,9 +24,7 @@ public class CommuDTO {
 	public String likecount;
 	public String rcount;
 	public String userprofile;
-	public String cno;
-	public String cid;
-	public String reply;
-	public List photo;
+	public CommuCommentDTO commuComment;
+	public List<Map> photo;
 	public String place;
 }

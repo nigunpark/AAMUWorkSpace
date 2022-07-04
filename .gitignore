@@ -551,4 +551,5 @@ fabric.properties
 
 # AAMUProject ignore File
 connect.properties
+api.properties
 *.mp4
