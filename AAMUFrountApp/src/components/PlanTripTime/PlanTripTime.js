@@ -28,9 +28,11 @@ const PlanTripTime = ({ saveDays, savePeriod }) => {
           className="planTripTime__title"
           onClick={() => {
             reff.current.classList.toggle("pttm_open");
-          }}>
+          }}
+        >
           <FontAwesomeIcon icon={faClock} />
-          <p>여행시간 상세설정(총 {(saveDays + 1) * 12}시간)</p>
+          <p>여행시간 상세설정</p>
+          {/* <p>여행시간 상세설정(총 {(saveDays + 1) * 12}시간)</p> */}
           <FontAwesomeIcon icon={appearTimeSet ? faAngleUp : faAngleDown} />
         </div>
         <div className="planTripTime__modal" ref={reff}>
@@ -62,7 +64,8 @@ const TimeSet = ({ index }) => {
           className="setTime__container"
           onClick={() => {
             setAppear(!appear);
-          }}>
+          }}
+        >
           <p className="setTime__contiainer-day">{index} Day</p>
           <div className="setTime__container-timeNMin">
             <p>
