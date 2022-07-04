@@ -1,6 +1,7 @@
 package com.aamu.aamurest.user.serviceimpl;
 
 import java.util.List;
+
 import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
@@ -8,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.aamu.aamurest.user.service.AttractionDTO;
+import com.aamu.aamurest.user.service.PlannerDTO;
+import com.aamu.aamurest.user.service.RouteDTO;
 
 @Repository
 public class MainDAO {
@@ -46,6 +49,16 @@ public class MainDAO {
 	public List<AttractionDTO> selectPlacesList(Map map) {
 		
 		return template.selectList("selectPlacesList", map);
+	}
+	////////////////////////////플래너용 dao
+	public int plannerInsert(PlannerDTO dto) {
+
+		return template.insert("plannerInsert",dto);
+	}
+
+	public int routeInsert(RouteDTO route) {
+		
+		return template.insert("routeInsert",route);
 	}
 
 

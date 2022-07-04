@@ -1,6 +1,7 @@
 package com.aamu.aamurest.user.serviceimpl;
 
 import java.util.List;
+
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +10,7 @@ import org.springframework.stereotype.Service;
 import com.aamu.aamurest.user.service.AttractionDTO;
 import com.aamu.aamurest.user.service.MainService;
 import com.aamu.aamurest.user.service.PlannerDTO;
-import com.aamu.aamurest.user.service.PlannerDTO.Route;
+import com.aamu.aamurest.user.service.RouteDTO;
 
 @Service
 public class MainServiceImpl implements MainService{
@@ -42,13 +43,13 @@ public class MainServiceImpl implements MainService{
 	}
 	@Override
 	public int plannerInsert(PlannerDTO dto) {
-		// TODO Auto-generated method stub
-		return 0;
+		
+		return dao.plannerInsert(dto);
 	}
 	@Override
-	public int RouteInsert(Route route) {
+	public int RouteInsert(RouteDTO route) {
 		// TODO Auto-generated method stub
-		return 0;
+		return dao.routeInsert(route);
 	}
 	@Override
 	public List<AttractionDTO> selectPlacesList(Map map) {
