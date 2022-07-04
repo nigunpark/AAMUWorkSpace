@@ -10,11 +10,11 @@ function User() {
     const [follow,setFollowing] = useState(false);
     
   return (
-    <div>
+    <div >
         <div className="search">
             <input type="text" className="search-bar" placeholder="검색" />
            
-            {/* <div className="search-all disappear">
+             {/* <div className="search-all disappear">
                 <div className="search-engine">
                     <div className="parent">
                     <div className="search-contents">
@@ -29,7 +29,7 @@ function User() {
                     </div>
                 </div>
                 <div className="search-squre"></div>
-  </div> */}
+  </div>  */}
         </div>
         <div className="user">
             <img src="./img/bk.jpg" alt="사프" />
@@ -58,7 +58,7 @@ function User() {
                         <p className="user-name">0hyun0hyun님 외 2명이...</p>
                     </div>
                     <div className="follow">
-                        {follow ?  <span onClick={()=>{setFollowing(!follow)}}>팔로잉</span> : <span onClick={()=>{setFollowing(!follow)}}>팔로우</span>}
+                        {follow ?  <span className='following' onClick={()=>{setFollowing(!follow)}}>팔로잉</span> : <span onClick={()=>{setFollowing(!follow)}}>팔로우</span>}
                     </div>
                 </div>
                 <div className="recommend-contents">
