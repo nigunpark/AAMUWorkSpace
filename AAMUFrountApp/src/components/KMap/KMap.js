@@ -71,30 +71,51 @@ const KMap = ({
   let [showFillMes, setShowFillMes] = useState(false);
   //일정생성 버튼 클릭시 확인모달창 state
   let [showAuSModal, setShowAuSModal] = useState(false);
+  //지도 레벨 state
+  let [mapLevel, setMapLevel] = useState(9);
 
   //-------------------------------------------------------------------------
-  var positions = [];
-
+  let pickedJangso = [];
+  let infowindow;
+  let map;
   useEffect(() => {
-    let coords = new kakao.maps.LatLng(
-      stateForMapCenter[0],
-      stateForMapCenter[1]
-    );
-    var mapContainer = document.getElementById("map"); // 지도를 표시할 div
-    var mapOption = {
-      // center: new kakao.maps.LatLng(stateForMapCenter[0], stateForMapCenter[1]), // 지도의 중심좌표
-      center: new kakao.maps.LatLng(lat, lng), // 지도의 중심좌표
-      level: 9, // 지도의 확대 레벨
+    let mapContainer = document.getElementById("map"); // 지도를 표시할 div
+    let mapOption = {
+      center: new kakao.maps.LatLng(stateForMapCenter[0], stateForMapCenter[1]), // 지도의 중심좌표
+      // center: new kakao.maps.LatLng(lat, lng), // 지도의 중심좌표
+      level: mapLevel, // 지도의 확대 레벨
     };
     // 지도를 생성합니다
-    var map = new kakao.maps.Map(mapContainer, mapOption);
+    map = new kakao.maps.Map(mapContainer, mapOption);
     //지도 최대레벨 제한
     map.setMaxLevel(9);
-    let mainMarker = new kakao.maps.Marker({
-      position: coords,
-      clickable: true, // 마커를 클릭했을 때 지도의 클릭 이벤트가 발생하지 않도록 설정합니다
+    //지도레벨이벤트
+    kakao.maps.event.addListener(map, "zoom_changed", function () {
+      // 지도의 현재 레벨을 얻어옵니다
+      let level = map.getLevel();
+      setMapLevel(level);
+      let center = map.getCenter();
+      let newCoords = new kakao.maps.LatLng(center.getLat(), center.getLng());
+      map.setCenter(newCoords);
     });
-    var geocoder = new kakao.maps.services.Geocoder();
+  }, []);
+
+  useEffect(() => {
+    let coords;
+    let mainMarker;
+    let mapContainer = document.getElementById("map"); // 지도를 표시할 div
+    let mapOption = {
+      // center: new kakao.maps.LatLng(stateForMapCenter[0], stateForMapCenter[1]), // 지도의 중심좌표
+      center: new kakao.maps.LatLng(stateForMapCenter[0], stateForMapCenter[1]), // 지도의 중심좌표
+      level: mapLevel, // 지도의 확대 레벨
+    };
+    // 지도를 생성합니다
+    map = new kakao.maps.Map(mapContainer, mapOption);
+    //지도 최대레벨 제한
+    map.setMaxLevel(9);
+    //지도레벨이벤트
+
+    let geocoder = new kakao.maps.services.Geocoder();
     // 주소로 좌표를 검색합니다
     geocoder.addressSearch(
       reduxState.localNameForMarker.addr ?? currPosition,
@@ -102,80 +123,85 @@ const KMap = ({
         // 정상적으로 검색이 완료됐으면
         if (status === kakao.maps.services.Status.OK) {
           coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-          setLat(result[0].y);
-          setLng(result[0].x);
-          let mainMarker = new kakao.maps.Marker({
+          mainMarker = new kakao.maps.Marker({
+            map: map,
             position: coords,
             clickable: true,
           });
-          // 마커가 지도 위에 표시되도록 설정합니다
-          mainMarker.setMap(map);
-          var iwContent =
-              '<div class="iwContent__wrap">' +
-              '    <div class="iwContent__info">' +
-              '        <div class="iwContent__title">' +
-              "            <h3>" +
-              (reduxState.localNameForMarker.title ?? currPosition) +
-              "</h3>" +
-              '            <div class="iwContent__close" onclick="closeOverlay()" title="닫기"></div>' +
-              "        </div>                                                                        " +
-              '         <div class="iwContent__body">' +
-              '            <div class="iwContent__desc">' +
-              '              <div class="iwContent__ellipsis">' +
-              (reduxState.localNameForMarker.addr ?? "") +
-              "</div>" +
-              '              <div class="iwContent__jibun iwContent__ellipsis">(우) 63309 (지번) 영평동 2181</div>' +
-              "<span class='iWContent__tel'>" +
-              (reduxState.localNameForMarker.tel ?? "") +
-              "</span>" +
-              '              <div><a href="https://place.map.kakao.com/' +
-              reduxState.localNameForMarker.kakaokey +
-              '" target="_blank" class="iwContent__link"><h4>상세보기</h4></a></div>' +
-              "            </div>" +
-              "        </div>" +
-              "    </div>    " +
-              "</div>", // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
-            iwPosition = new kakao.maps.LatLng(lat, lng), //인포윈도우 표시 위치입니다
-            iwRemoveable = true; // removeable 속성을 ture 로 설정하면 인포윈도우를 닫을 수 있는 x버튼이 표시됩니다
+          map.panTo(coords);
+        }
+        // 마커가 지도 위에 표시되도록 설정합니다
+        // mainMarker.setMap(map);
+        let iwContent =
+            '<div class="iwContent__wrap">' +
+            '    <div class="iwContent__info">' +
+            '        <div class="iwContent__title">' +
+            "            <h3>" +
+            (reduxState.localNameForMarker.title ?? currPosition) +
+            "</h3>" +
+            '            <div class="iwContent__close" onclick="closeOverlay()" title="닫기"></div>' +
+            "        </div>                                                                        " +
+            '         <div class="iwContent__body">' +
+            '            <div class="iwContent__desc">' +
+            '              <div class="iwContent__ellipsis">' +
+            (reduxState.localNameForMarker.addr ?? "") +
+            "</div>" +
+            '              <div class="iwContent__jibun iwContent__ellipsis">(우) 63309 (지번) 영평동 2181</div>' +
+            "<span class='iWContent__tel'>" +
+            (reduxState.localNameForMarker.tel ?? "") +
+            "</span>" +
+            '              <div style="display:flex"><a href="https://place.map.kakao.com/' +
+            reduxState.localNameForMarker.kakaokey +
+            '" target="_blank" class="iwContent__link"><span>상세보기</span></a>&nbsp<span class="iwContent__link" onclick="' +
+            roadview() +
+            '">로드뷰</span></div>' +
+            "            </div>" +
+            "        </div>" +
+            "    </div>    " +
+            "</div>", // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
+          iwPosition = new kakao.maps.LatLng(lat, lng), //인포윈도우 표시 위치입니다
+          iwRemoveable = true; // removeable 속성을 ture 로 설정하면 인포윈도우를 닫을 수 있는 x버튼이 표시됩니다
 
-          // 인포윈도우를 생성하고 지도에 표시합니다
-          var infowindow = new kakao.maps.InfoWindow({
-            content: iwContent,
-            removable: iwRemoveable,
+        // 인포윈도우를 생성하고 지도에 표시합니다
+        infowindow = new kakao.maps.InfoWindow({
+          content: iwContent,
+          removable: iwRemoveable,
+        });
+        kakao.maps.event.addListener(mainMarker, "click", function () {
+          infowindow.open(map, mainMarker);
+        });
+        map.panTo(coords);
+        // 마커를 표시할 위치와 title 객체 배열입니다
+        reduxState.arrForPickJangso.map((jangsoObj) => {
+          pickedJangso.push({
+            title: jangsoObj.title,
+            latlng: new kakao.maps.LatLng(jangsoObj.mapy, jangsoObj.mapx),
           });
-          kakao.maps.event.addListener(mainMarker, "click", function () {
-            infowindow.open(map, mainMarker);
+        });
+        // 마커 이미지의 이미지 주소입니다
+        let imageSrc =
+          "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
+        // <i class="fa-solid fa-hotel"></i>
+
+        for (let i = 0; i < pickedJangso.length; i++) {
+          // 마커 이미지의 이미지 크기 입니다
+          let imageSize = new kakao.maps.Size(24, 35);
+          // 마커 이미지를 생성합니다
+          let markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
+          // 마커를 생성합니다
+          let marker = new kakao.maps.Marker({
+            map: map, // 마커를 표시할 지도
+            position: pickedJangso[i].latlng, // 마커를 표시할 위치
+            title: pickedJangso[i].title, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
+            image: markerImage, // 마커 이미지
           });
-          map.setCenter(coords);
+          kakao.maps.event.addListener(marker, "click", function () {
+            infowindow.open(map, marker);
+          });
         }
       }
     );
-
-    // 마커를 표시할 위치와 title 객체 배열입니다
-    reduxState.arrForPickJangso.map((jangsoObj) => {
-      positions.push({
-        title: jangsoObj.title,
-        latlng: new kakao.maps.LatLng(jangsoObj.mapy, jangsoObj.mapx),
-      });
-    });
-    // 마커 이미지의 이미지 주소입니다
-    var imageSrc =
-      "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
-
-    for (var i = 0; i < positions.length; i++) {
-      // 마커 이미지의 이미지 크기 입니다
-      var imageSize = new kakao.maps.Size(24, 35);
-      // 마커 이미지를 생성합니다
-      var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
-      // 마커를 생성합니다
-      var marker = new kakao.maps.Marker({
-        map: map, // 마커를 표시할 지도
-        position: positions[i].latlng, // 마커를 표시할 위치
-        title: positions[i].title, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
-        image: markerImage, // 마커 이미지
-      });
-    }
-  }, [reduxState.localNameForMarker, stateForMapCenter, positions]);
+  }, [reduxState.localNameForMarker, pickedJangso]);
 
   return (
     <div>
@@ -187,6 +213,7 @@ const KMap = ({
         }}
       >
         <div id="map" style={{ width: "100%", height: "99vh" }}></div>
+        <div id="roadview" style={{ width: "100%", height: "99vh" }}></div>
         <div className="kmap__right-btn__container">
           <div
             onClick={() => {
@@ -485,6 +512,19 @@ function whichTransport(e) {
     );
     e.target.classList.add("pickedTransport");
   }
+}
+
+function roadview() {
+  var roadviewContainer = document.getElementById("roadview"); //로드뷰를 표시할 div
+  var roadview = new kakao.maps.Roadview(roadviewContainer); //로드뷰 객체
+  var roadviewClient = new kakao.maps.RoadviewClient(); //좌표로부터 로드뷰 파노ID를 가져올 로드뷰 helper객체
+
+  var position = new kakao.maps.LatLng(33.450701, 126.570667);
+
+  // 특정 위치의 좌표와 가까운 로드뷰의 panoId를 추출하여 로드뷰를 띄운다.
+  roadviewClient.getNearestPanoId(position, 50, function (panoId) {
+    roadview.setPanoId(panoId, position); //panoId와 중심좌표를 통해 로드뷰 실행
+  });
 }
 
 export default KMap;
