@@ -27,24 +27,23 @@ public class CommuDAO {
 	}
 	
 	//글 목록용_사진 리스트 가져오기
-	public List<String> commuSelectPhotoList(String cno){
-		return template.selectList("commuSelectPhotoList");
+	public List commuSelectPhotoList(String cno){
+		return template.selectList("commuSelectPhotoList",cno);
 	}
 	
-
 	//글 저장용
 	public int commuInsert(Map map) {
 		return template.insert("commuInsert",map);
 	}
 	
-	//photo 저장용
+	//글 저장용_photo 저장
 	public int photoInsert(Map map) {
-		return template.insert("photoInsert",map);
+		return template.insert("commuPhotoInsert",map);
 	}
 	
-	//장소 저장용
+	//글 저장용_장소 저장
 	public int placeInsert(Map map) {
-		return template.insert("placeInsert",map);
+		return template.insert("commuPlaceInsert",map);
 	}
 
 }

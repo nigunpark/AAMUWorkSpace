@@ -14,8 +14,7 @@ public interface CommuService<T> {
 	CommuCommentDTO commuCommentSelectOne(String cno);
 	
 	//사진
-	List<String> commuSelectPhotoList(String cno);
-
+	List commuSelectPhotoList(String cno);
 	
 	//커뮤니티 글생성
 	int commuInsert(Map map);

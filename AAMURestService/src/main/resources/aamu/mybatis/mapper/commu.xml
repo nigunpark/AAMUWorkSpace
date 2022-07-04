@@ -25,17 +25,20 @@
 		SELECT photo FROM commuphoto WHERE lno=#{lno}
 	</select>
 	
-	<insert id="commuInsert" parameterType="Map" useGeneratedKeys="true" keyProperty="lno">
+	<insert id="commuInsert" parameterType="Map">
 		INSERT INTO community
 		VALUES (SEQ_COM.NEXTVAL,#{id},#{title},#{content},DEFAULT,DEFAULT,DEFAULT)
+		<selectKey keyProperty="lno" resultType="int" order="AFTER">
+	    	SELECT SEQ_COM.CURRVAL FROM DUAL
+	    </selectKey>
 	</insert>
 	
-	<insert id="photoInsert" parameterType="Map" >
+	<insert id="commuPhotoInsert" parameterType="Map" >
 		INSERT INTO commuphoto
 		VALUES (#{lno},#{photo})
 	</insert>
 	
-	<insert id="placeInsert" parameterType="Map" useGeneratedKeys="true" keyProperty="lno">
+	<insert id="commuPlaceInsert" parameterType="Map" >
 		INSERT INTO commuplace
 		VALUES (#{lno},#{place})
 	</insert>

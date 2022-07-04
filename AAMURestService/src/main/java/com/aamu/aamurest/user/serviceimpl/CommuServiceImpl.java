@@ -29,7 +29,7 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 	
 	//글 목록용_사진리스트
 	@Override
-	public List<String> commuSelectPhotoList(String cno) {
+	public List commuSelectPhotoList(String cno) {
 		return dao.commuSelectPhotoList(cno);
 	}
 	
@@ -38,6 +38,7 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 	public int commuInsert(Map map) {
 		//commu
 		int commuaffected=dao.commuInsert(map);
+		System.out.println(map);
 		//사진 
 		int photoAffected=dao.photoInsert(map);
 		//플레이스
