@@ -1,6 +1,7 @@
 package com.aamu.aamurest.user.web;
 
 import java.text.SimpleDateFormat;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.aamu.aamurest.user.service.AttractionDTO;
 import com.aamu.aamurest.user.service.MainService;
 import com.aamu.aamurest.user.service.PlannerDTO;
-import com.aamu.aamurest.user.service.PlannerDTO.Route;
+import com.aamu.aamurest.user.service.RouteDTO;
 
 @RestController
 @CrossOrigin
@@ -32,9 +33,9 @@ public class MainController {
 		int affected = 0;
 		int countRoute = 0;
 		affected = service.plannerInsert(dto);
-		List<Route> routes = dto.getRoute();
+		List<RouteDTO> routes = dto.getRoute();
 		
-		for(Route route:routes) {
+		for(RouteDTO route:routes) {
 			service.RouteInsert(route);
 			countRoute++;
 		}

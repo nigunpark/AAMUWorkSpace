@@ -11,6 +11,8 @@
   		<typeAlias type="com.aamu.aamurest.user.service.AttractionDTO" alias="attrDTO"/>
   		<typeAlias type="com.aamu.aamurest.user.service.CommuDTO" alias="commuDTO"/>
   		<typeAlias type="com.aamu.aamurest.user.service.CommuCommentDTO" alias="commuCommentDTO"/>
+  		<typeAlias type="com.aamu.aamurest.user.service.PlannerDTO" alias="planDTO"/>
+  		<typeAlias type="com.aamu.aamurest.user.service.RouteDTO" alias="routeDTO"/>
   	</typeAliases>
 	<mappers>
 		<mapper resource="aamu/mybatis/mapper/user.xml" />
