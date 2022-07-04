@@ -29,22 +29,29 @@ const SearchedSukso = ({ local, index }) => {
   return (
     <div
       className="SearchedLocation"
-      onClick={() => {
+      onClick={(e) => {
+        e.stopPropagation();
         //redux 변경 함수
-        dispatch(changeLnfM(localNameRef.current.textContent));
-      }}>
+        dispatch(changeLnfM(local));
+      }}
+    >
       {locaInfoModal && (
         <LocalInfoModal
           locaInfoModal={locaInfoModal}
           setLocaInfoModal={setLocaInfoModal}
+          local={local}
         />
       )}
-      <div className="searchedLocation__container">
+      <div
+        className="searchedLocation__container"
+        onClick={() => {
+          //redux 변경 함수
+          dispatch(changeLnfM(local.addr));
+        }}
+      >
         <div className="searchedLocation__img-container">
           {reduxState.saveDaysNPickedSuksoRedux.map((state, index) => {
             if (state === local) {
-              console.log(reduxState.saveDaysNPickedSuksoRedux);
-              console.log(index);
               return (
                 <PickedSuksoBadge index={index} local={local} key={index} />
               );
@@ -55,11 +62,16 @@ const SearchedSukso = ({ local, index }) => {
             }
           })}
 
-          <img src="/images/img-8.jpg" />
+          <img
+            src={local.smallImage ?? "/images/no-image.jpg"}
+            onError={(e) => {
+              e.target.src = "/images/no-image.jpg";
+            }}
+          />
         </div>
         <div className="searchedLocation__info">
           <h4 className="searchedLocation__info__title" ref={localNameRef}>
-            {local}
+            {local.title}
           </h4>
           <div className="searchedLocation__info__content">
             <FontAwesomeIcon
@@ -83,7 +95,7 @@ const SearchedSukso = ({ local, index }) => {
   );
 };
 
-function LocalInfoModal({ locaInfoModal, setLocaInfoModal }) {
+function LocalInfoModal({ locaInfoModal, setLocaInfoModal, local }) {
   return (
     <ContainerLim>
       <OverlayLim onClick={() => setLocaInfoModal(!locaInfoModal)} />
@@ -91,7 +103,7 @@ function LocalInfoModal({ locaInfoModal, setLocaInfoModal }) {
         <CloseLim onClick={() => setLocaInfoModal(!locaInfoModal)}>X</CloseLim>
         <ImgLim></ImgLim>
         <BodyLim>
-          <h4>장소이름</h4>
+          <h4>{local.title}</h4>
           <div className="localInfo__container">
             <div className="localInfo">
               <ul className="localInfo-ul">
@@ -105,9 +117,9 @@ function LocalInfoModal({ locaInfoModal, setLocaInfoModal }) {
             <div className="localInfo">
               <ul className="localInfo-ul">
                 <li>보기</li>
-                <li>www.naver.com</li>
-                <li>서울특별시 금천구 가산동</li>
-                <li>02-000-0000</li>
+                <li>{local.url}</li>
+                <li>{local.addr}</li>
+                <li>{local.tel}</li>
                 <li>-</li>
               </ul>
             </div>
@@ -116,8 +128,9 @@ function LocalInfoModal({ locaInfoModal, setLocaInfoModal }) {
         <div className="localInfo__snsBtn__container">
           <ul className="localInfo__snsBtn-ul">
             <a
-              href="https://www.instagram.com/explore/tags/동문재래시장/"
-              target="_blank">
+              href={`https://www.instagram.com/explore/tags/${local.title}/`}
+              target="_blank"
+            >
               <li>
                 <img
                   src={process.env.PUBLIC_URL + "/images/sns/instagram.png"}
@@ -125,13 +138,17 @@ function LocalInfoModal({ locaInfoModal, setLocaInfoModal }) {
               </li>
             </a>
             <a
-              href="https://twitter.com/search?q=동문재래시장&src=typed_query"
-              target="_blank">
+              href={`https://twitter.com/search?q=${local.title}&src=typed_query`}
+              target="_blank"
+            >
               <li>
                 <img src={process.env.PUBLIC_URL + "/images/sns/twitter.png"} />
               </li>
             </a>
-            <a href="https://www.google.com/maps/place/영종도" target="_blank">
+            <a
+              href={`https://www.google.com/maps/place/${local.title}`}
+              target="_blank"
+            >
               <li>
                 <img
                   src={process.env.PUBLIC_URL + "/images/sns/googlemap.png"}
@@ -139,8 +156,9 @@ function LocalInfoModal({ locaInfoModal, setLocaInfoModal }) {
               </li>
             </a>
             <a
-              href="https://search.naver.com/search.naver?query=동문재래시장"
-              target="_blank">
+              href={`https://search.naver.com/search.naver?query=${local.title}`}
+              target="_blank"
+            >
               <li>
                 <img src={process.env.PUBLIC_URL + "/images/sns/naver.png"} />
               </li>
