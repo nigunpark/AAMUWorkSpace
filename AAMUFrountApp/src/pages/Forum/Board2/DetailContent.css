@@ -47,7 +47,9 @@
 
     /* 크기 지정 */
     width: 910px;
-    height: 450px;
+    height: 430px;
+
+    margin-bottom: 200px;
 }
 
 .minContent{
@@ -113,8 +115,9 @@
 .minCon_card__desc{
     font-size: 20px;
     font-weight: bold;
-    margin-top: 10px;
     letter-spacing: 4px;
+
+    padding-top: 50px;
 }
 
 .minCon_card__item__rating{
