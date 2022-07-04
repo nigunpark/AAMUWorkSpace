@@ -9,16 +9,18 @@ import Story from "./Story.js";
 function Main() {
   return (
     <div className="main">
-      {/* <Nav></Nav> */}
-      {/* <div className="margin-top"> 
-            <Story></Story>   
-          </div> */}
-      <div className="margin-value">
-        <FeedSetting></FeedSetting>
-        <div className="main-right">
-          <User></User>
+      <Nav></Nav>
+        {/* <div className="margin-top"> 
+          <Story></Story>   
+        </div> */}
+        <div className="margin-value"> 
+          <div className="main-left">
+            <FeedSetting></FeedSetting>
+          </div>
+          <div className='main-right'>
+            <User></User>   
+          </div>
         </div>
-      </div>
     </div>
   );
 }
