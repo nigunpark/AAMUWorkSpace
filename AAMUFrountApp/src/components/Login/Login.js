@@ -34,7 +34,8 @@ const Login = () => {
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-          }}>
+          }}
+        >
           <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
             <LockOutlinedIcon />
           </Avatar>
@@ -45,7 +46,8 @@ const Login = () => {
             component="form"
             onSubmit={handleSubmit}
             noValidate
-            sx={{ mt: 1 }}>
+            sx={{ mt: 1 }}
+          >
             <TextField
               margin="normal"
               required
@@ -71,10 +73,12 @@ const Login = () => {
               label="아이디 저장"
             />
             <Button
-              type="submit"
+              // type="submit"
               fullWidth
               variant="contained"
-              sx={{ mt: 3, mb: 2 }}>
+              sx={{ mt: 3, mb: 2 }}
+              onClick={loginPost}
+            >
               로그인
             </Button>
             <Grid container>
@@ -97,13 +101,32 @@ const Login = () => {
   );
 };
 
+function loginPost() {
+  axios
+    .post("http://192.168.0.19:8080/aamurest/authenticate", {
+      username: "ADMIN",
+      password: "1234",
+    })
+    .then((resp) => {
+      console.log(resp.data);
+      sessionStorage.setItem('token',resp.data.token)
+    })
+    .catch((error) => {
+      console.log(error);
+    })
+    .then(() => {
+      console.log("로그인요청실행됨");
+    });
+}
+
 function Copyright(props) {
   return (
     <Typography
       variant="body2"
       color="text.secondary"
       align="center"
-      {...props}>
+      {...props}
+    >
       {"Copyright © "}
       <Link color="inherit" href="https://localhost:3000/">
         AAMU
