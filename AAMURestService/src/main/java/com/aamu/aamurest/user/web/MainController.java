@@ -22,7 +22,7 @@ import com.aamu.aamurest.user.service.PlannerDTO;
 import com.aamu.aamurest.user.service.RouteDTO;
 
 @RestController
-@CrossOrigin
+@CrossOrigin("*")
 public class MainController {
 	
 	@Autowired
@@ -66,13 +66,64 @@ public class MainController {
 		
 		return map;
 	}
+	@GetMapping("planner/selectone")
+	public PlannerDTO selectPlannerOne(@RequestParam Map map) {
+		
+		PlannerDTO dto = new PlannerDTO();
+		List<RouteDTO> routes = new Vector<>();
+		int rbn = dto.getRbn();
+
+		routes = service.selectRouteList(rbn);
+		for(RouteDTO route :routes) {
+		}
+		
+		dto.setRoute(routes);
+		
+		return dto;
+	}
 	
 	@GetMapping("/info/places")
 	public List<AttractionDTO> attractionList(@RequestParam Map map){
 		
 		List<AttractionDTO> list = new Vector<>();
-		list = service.selectPlacesList(map);
+		
+		if(map.get("sigungucode")!=null) {
+			switch(map.get("contenttypeid").toString()) {
+			case "12":
+			case "28":
+				list = service.selectAttrSigungu(map);
+				break;
+			case "15":
+				list = service.selectEventSigungu(map);
+				break;
+			case "32":
+				list = service.selectHotelSigungu(map);
+				break;
+			case "39":
+				list = service.selectDinerSigungu(map);
+				break;
+			}
+		}
+		else {
+			
+			switch(map.get("contenttypeid").toString()) {
+			case "12":
+			case "28":
+				list = service.selectPlacesList(map);
+				break;
+			case "15":
+				list = service.selectEventList(map);
+				break;
+			case "32":
+				list = service.selectHotelList(map);
+				break;
+			case "39":
+				list = service.selectDinerList(map);
+				break;
+			}
+		}
 		
 		return list;
 	}
+
 }

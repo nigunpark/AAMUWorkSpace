@@ -20,7 +20,7 @@
 	</insert>
 	
 	<select id="selectPlacesList" parameterType="Map" resultType="attrDTO">
-		SELECT p.*,i.* FROM places p JOIN placesinfo i ON p.contentid=i.contentid WHERE p.areacode=#{areacode} AND p.contenttypeid=#{contenttypeid} AND <![CDATA[rownum<=20]]>
+		SELECT p.*,i.* FROM places p JOIN placesinfo i ON p.contentid=i.contentid WHERE p.areacode=#{areacode} AND p.contenttypeid=#{contenttypeid} AND <![CDATA[rownum<=100]]>
 	</select>
 	
 	<insert id="plannerInsert" parameterType="planDTO">
@@ -28,6 +28,23 @@
 	</insert>
 	
 	<insert id="routeInsert" parameterType="routeDTO">
-		INSERT INTO route VALUES(#{contentid}.#{day},#{starttime},#{atime},#{mtime})
+		INSERT INTO route VALUES(#{contentid},#{day},#{starttime},#{atime},#{mtime})
 	</insert>
+	
+	<select id="selectRouteList" parameterType="int" resultType="routeDTO">
+		SELECT * FROM route WHERE rbn=#{rbn}
+	</select>
+	
+	<select id="selectAttrSigungu" parameterType="Map" resultType="attrDTO">
+		SELECT p.*,i.* FROM places p JOIN placesinfo i ON p.contentid=i.contentid WHERE p.areacode=#{areacode} AND p.contenttypeid=#{contenttypeid} AND p.sigungucode=#{sigungucode} AND <![CDATA[rownum<=20]]>
+	</select>
+	<select id="selectEventSigungu" parameterType="Map" resultType="attrDTO">
+		SELECT p.*,i.* FROM places p JOIN eventinfo i ON p.contentid=i.contentid WHERE p.areacode=#{areacode} AND p.contenttypeid=#{contenttypeid} AND p.sigungucode=#{sigungucode} AND <![CDATA[rownum<=20]]>
+	</select>
+	<select id="selectHotelSigungu" parameterType="Map" resultType="attrDTO">
+		SELECT p.*,i.* FROM places p JOIN hotelinfo i ON p.contentid=i.contentid WHERE p.areacode=#{areacode} AND p.contenttypeid=#{contenttypeid} AND p.sigungucode=#{sigungucode} AND <![CDATA[rownum<=20]]>
+	</select>
+	<select id="selectDinerSigungu" parameterType="Map" resultType="attrDTO">
+		SELECT p.*,i.* FROM places p JOIN dinerinfo i ON p.contentid=i.contentid WHERE p.areacode=#{areacode} AND p.contenttypeid=#{contenttypeid} AND p.sigungucode=#{sigungucode} AND <![CDATA[rownum<=20]]>
+	</select>
 </mapper>

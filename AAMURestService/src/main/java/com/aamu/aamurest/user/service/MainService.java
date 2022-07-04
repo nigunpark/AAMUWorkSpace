@@ -20,5 +20,23 @@ public interface MainService{
 	
 	int RouteInsert(RouteDTO route);
 	
-	List<AttractionDTO> selectPlacesList(Map map); 
+	List<RouteDTO> selectRouteList(int rbn); 
+	
+	List<AttractionDTO> selectPlacesList(Map map);
+
+	List<AttractionDTO> selectAttrSigungu(Map map);
+
+	List<AttractionDTO> selectEventSigungu(Map map);
+
+	List<AttractionDTO> selectHotelSigungu(Map map);
+
+	List<AttractionDTO> selectDinerSigungu(Map map);
+
+	List<AttractionDTO> selectEventList(Map map);
+
+	List<AttractionDTO> selectHotelList(Map map);
+
+	List<AttractionDTO> selectDinerList(Map map);
+
+	
 }
