@@ -266,7 +266,6 @@ const KMap = ({
           <div
             onClick={() => {
               setShowAuSModal(true);
-              // setShowCratePlan(true);
             }}
           >
             일정생성
