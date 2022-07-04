@@ -27,4 +27,8 @@ public class AttractionDTO {
 	private String kakaokey;
 	private String menu;
 	private String park;
+	private String charge;
+	private String eventstart;
+	private String eventend;
+	private String eventTime;
 }

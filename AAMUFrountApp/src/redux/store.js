@@ -2,7 +2,7 @@ import { configureStore, createSlice } from "@reduxjs/toolkit";
 
 let localNameForMarker = createSlice({
   name: "localNameForMarker",
-  initialState: null,
+  initialState: "",
   reducers: {
     changeLnfM(state, action) {
       return action.payload;
@@ -13,7 +13,7 @@ export let { changeLnfM } = localNameForMarker.actions;
 
 let kindOfInfo = createSlice({
   name: "kindOfInfo",
-  initialState: "장소",
+  initialState: "추천장소",
   reducers: {
     changeInfo(state, action) {
       return action.payload;

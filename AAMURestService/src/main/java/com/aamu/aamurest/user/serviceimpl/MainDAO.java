@@ -1,5 +1,8 @@
 package com.aamu.aamurest.user.serviceimpl;
 
+import java.util.List;
+import java.util.Map;
+
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -12,6 +15,7 @@ public class MainDAO {
 	@Autowired
 	private SqlSessionTemplate template;
 	
+	//////////////////////////api insert 용 dao
 	public int placeInsert(AttractionDTO dto) {
 		
 		
@@ -31,5 +35,18 @@ public class MainDAO {
 	public int dinerInsert(AttractionDTO dto) {
 		return template.insert("dinerInsert",dto);
 	}
+
+	public int eventInsert(AttractionDTO dto) {
+		
+		return template.insert("eventInsert",dto);
+	}
+	
+	
+	//////////////////////////데이터 전송용 dao
+	public List<AttractionDTO> selectPlacesList(Map map) {
+		
+		return template.selectList("selectPlacesList", map);
+	}
+
 
 }

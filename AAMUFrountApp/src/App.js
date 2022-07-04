@@ -13,7 +13,6 @@ import Main from "./components/Insta/Main";
 import Forum from "./pages/Forum/Forum";
 import Board from "./pages/Forum/Board2/Board";
 
-
 function App() {
   let location = useLocation();
   useEffect(() => {
@@ -37,22 +36,21 @@ function App() {
           <Route path="/WholeMap" element={<WholeMap />}></Route>
           <Route path="/mainPage/:currPosition" element={<MainPage />}></Route>
           <Route path="/forum" element={<Forum />} />
-          <Route path="/review" element={<Board/>}/>
+          <Route path="/review" element={<Board />} />
+          <Route path="/Insta" element={<Main />}></Route>
         </Route>
         <Route path="/login" element={<Login />}></Route>
         <Route path="/test" element={<Test />}></Route>
-        <Route path="/Insta" element={<Main />}></Route>
-        
       </Routes>
     </div>
   );
 }
-
 function changeLocation(location, setWhereUrl) {
   if (
     location.pathname.indexOf("mainPage") === 1 ||
     location.pathname.indexOf("forum") === 1 ||
-    location.pathname.indexOf("review") === 1
+    location.pathname.indexOf("review") === 1 ||
+    location.pathname.indexOf("Insta") === 1
   )
     setWhereUrl(true);
   else setWhereUrl(false);

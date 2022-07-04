@@ -16,9 +16,9 @@ const NoticeItem = (props) => {
               className="swiper__item__img_Notice"
             />
           </figure>
-          <div className="swiper__item__info_Notice">
+          {/* <div className="swiper__item__info_Notice">
             <h5 className="swiper__item__text_Notice">{props.text}</h5>
-          </div>
+          </div> */}
         </Link>
       </li>
     </>

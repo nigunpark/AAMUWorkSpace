@@ -22,9 +22,7 @@ import {
 
 const SearchedLocation = ({ local }) => {
   const [locaInfoModal, setLocaInfoModal] = useState(false);
-  //redux test중...
   let dispatch = useDispatch();
-  let localNameRef = useRef();
   let localContainer = useRef();
   return (
     <div
@@ -32,16 +30,15 @@ const SearchedLocation = ({ local }) => {
       className="SearchedLocation"
       onClick={() => {
         //지도에 마커찍어줄 redux 변경 함수
-        dispatch(changeLnfM(localNameRef.current.textContent));
-      }}>
+        dispatch(changeLnfM(local));
+      }}
+    >
       <div className="searchedLocation__container">
         <div className="searchedLocation__img-container">
           <img src={local.image2} />
         </div>
         <div className="searchedLocation__info">
-          <h4 className="searchedLocation__info__title" ref={localNameRef}>
-            {local.title}
-          </h4>
+          <h4 className="searchedLocation__info__title">{local.title}</h4>
           <div className="searchedLocation__info__content">
             <FontAwesomeIcon
               icon={faCircleInfo}
@@ -121,7 +118,8 @@ function LocalInfoModal({ locaInfoModal, setLocaInfoModal, local }) {
           <ul className="localInfo__snsBtn-ul">
             <a
               href={`https://www.instagram.com/explore/tags/${local.title}/`}
-              target="_blank">
+              target="_blank"
+            >
               <li>
                 <img
                   src={process.env.PUBLIC_URL + "/images/sns/instagram.png"}
@@ -130,14 +128,16 @@ function LocalInfoModal({ locaInfoModal, setLocaInfoModal, local }) {
             </a>
             <a
               href={`https://twitter.com/search?q=${local.title}&src=typed_query`}
-              target="_blank">
+              target="_blank"
+            >
               <li>
                 <img src={process.env.PUBLIC_URL + "/images/sns/twitter.png"} />
               </li>
             </a>
             <a
               href={`https://www.google.com/maps/place/${local.title}`}
-              target="_blank">
+              target="_blank"
+            >
               <li>
                 <img
                   src={process.env.PUBLIC_URL + "/images/sns/googlemap.png"}
@@ -146,7 +146,8 @@ function LocalInfoModal({ locaInfoModal, setLocaInfoModal, local }) {
             </a>
             <a
               href={`https://search.naver.com/search.naver?query=${local.title}`}
-              target="_blank">
+              target="_blank"
+            >
               <li>
                 <img src={process.env.PUBLIC_URL + "/images/sns/naver.png"} />
               </li>

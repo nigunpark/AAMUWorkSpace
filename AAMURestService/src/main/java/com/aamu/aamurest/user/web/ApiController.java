@@ -1,10 +1,15 @@
 package com.aamu.aamurest.user.web;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -24,6 +29,7 @@ import com.aamu.aamurest.user.service.api.Places;
 import com.aamu.aamurest.user.service.api.Places.Item;
 
 @RestController
+@PropertySource("classpath:aamu/resources/api.properties")
 public class ApiController {
 	@Autowired
 	private RestTemplate restTemplate;
@@ -31,26 +37,41 @@ public class ApiController {
 	@Autowired
 	private MainService service;
 	
+	@Value("${apikey}")
+	private String apikey;
+	
+	@Value("${kakaokey}")
+	private String kakaokey;
+	
 	@CrossOrigin
 	@PostMapping("/places/backupinfo")
 	public List<AttractionDTO> info2(@RequestParam Map map) {
 		String area = map.get("areacode").toString();
 		String contentTypeId = map.get("contenttypeid").toString();
-		/*
-		String area = "1";
-		String contentTypeId = "12";
-		*/
-	
+
 		HttpEntity httpEntity = null;
 		HttpHeaders header = new HttpHeaders();
-		header.add("Authorization", "KakaoAK 1e277aee608e10b527bd0156907f4d64");
-		String uri = "http://api.visitkorea.or.kr/openapi/service/rest/KorService/areaBasedList?"
-				+ "serviceKey=8188yaWHAsWQ+XOW7Vso3CoksQpmRokfZmqwlC79igNHaB97z49enrCL+OBTzvEOvnCYPLYVcP7qki6O7G76BQ==&"
-				+ "pageNo=1&numOfRows=5&"
+		header.add("Authorization", "KakaoAK "+kakaokey);
+		int affected=0;
+		String uri;
+		System.out.println(apikey);
+		uri = "http://api.visitkorea.or.kr/openapi/service/rest/KorService/areaBasedList?"
+				+ "serviceKey="+apikey+"&"
+				+ "pageNo=2&numOfRows=323&"
 				+ "MobileApp=AppTest&MobileOS=ETC&arrange=B&"
 				+ "contentTypeId="+contentTypeId+"&"
 						+ "areaCode="+area+"&"
 								+ "listYN=Y";
+		if(contentTypeId.equals("15")) {
+			Date current = new Date();
+			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
+			String currentTime = dateFormat.format(current);
+			uri ="http://api.visitkorea.or.kr/openapi/service/rest/KorService/searchFestival?"
+					+ "serviceKey="+apikey
+					+ "&numOfRows=500&pageNo=1&MobileOS=ETC"
+					+ "&MobileApp=AppTest&arrange=B&listYN=Y"
+					+ "&areaCode="+area+"&eventStartDate="+currentTime+"&_type=json";
+		}
 		ResponseEntity<Places> responseEntity = 
 				restTemplate.exchange(uri, HttpMethod.GET,
 				null,Places.class);
@@ -69,18 +90,43 @@ public class ApiController {
 			dto.setBigImage(item.getFirstimage());
 			dto.setSmallImage(item.getFirstimage2());
 			dto.setSigungucode(item.getSigungucode());
+			if(contentTypeId.equals("15")) {
+				String start = String.valueOf(item.getEventstartdate());
+				String end = String.valueOf(item.getEventenddate());
+				start = start.substring(0, 4) +"-"+start.substring(4, 6)+"-"+start.substring(6,8);
+				end = end.substring(0, 4) +"-"+end.substring(4, 6)+"-"+end.substring(6,8);
+
+				dto.setTel(item.getTel());
+				dto.setEventstart(start);
+				dto.setEventend(end);
+			}
+			System.out.println(dto.getContentid());
 			uri = "http://api.visitkorea.or.kr/openapi/service/rest/KorService/detailIntro?"
-					+ "serviceKey=8188yaWHAsWQ+XOW7Vso3CoksQpmRokfZmqwlC79igNHaB97z49enrCL+OBTzvEOvnCYPLYVcP7qki6O7G76BQ=="
+					+ "serviceKey="+apikey
 					+ "&numOfRows=1&pageNo=1&MobileOS=ETC&MobileApp=AppTest&contentId="+item.getContentid()+"&contentTypeId="+item.getContenttypeid()+"&_type=json";
 			
 			ResponseEntity<Info> responseEntity2 = 
 					restTemplate.exchange(uri, HttpMethod.GET,
 							null,Info.class);
+			String charge =null;
 			switch (contentTypeId) {
 			case "12":
 				dto.setResttime(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getRestdate());
 				dto.setPlaytime(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getUsetime());
 				dto.setTel(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getInfocenter());
+				dto.setPark(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getParking());
+				break;
+			case "15":
+				dto.setEventTime(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getPlaytime());
+				dto.setCharge(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getUsetimefestival());
+				String eventTime = dto.getPlaytime();
+				charge = dto.getCharge();
+				if(eventTime!=null) {
+					if(eventTime.contains("<br>")) {
+						eventTime.replace("<br>", " ");
+						dto.setPlaytime(eventTime);
+					}
+				}
 				break;
 			case "32":
 				dto.setTel(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getReservationlodging());
@@ -99,35 +145,50 @@ public class ApiController {
 				dto.setMenu(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getTreatmenu());
 				dto.setPark(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getParkingfood());
 				break;
+			case "28":
+				dto.setTel(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getInfocenterleports());
+				dto.setPark(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getParkingleports());
+				dto.setPlaytime(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getUsetimeleports());
+				dto.setResttime(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getRestdateleports());
+				break;
 			}
+			String tel = dto.getTel();
+			if(tel !=null) {
+				if(tel.contains("<br />")) {
+					tel = tel.split("<br />")[0];
+				}
+			}
+			dto.setTel(tel);
 			
-		
 			String title = dto.getTitle();
 			httpEntity = new HttpEntity(header);
-			if(title.contains("(")) {
-				title = dto.getTitle().split("\\(")[0].trim();
+			if(title!=null) {
+				if(title.contains("(")) {
+					title = dto.getTitle().split("\\(")[0].trim();
+				}
+				else if(title.contains("[")) {
+					title = dto.getTitle().split("\\[")[0].trim();
+				}
+				else if(title.contains("{")) {
+					title = dto.getTitle().split("\\{")[0].trim();
+				}
 			}
-			else if(title.contains("[")) {
-				title = dto.getTitle().split("\\[")[0].trim();
+			if(title.length()==0) {
+				title = dto.getTitle();
 			}
-			else if(title.contains("{")) {
-				title = dto.getTitle().split("\\{")[0].trim();
-			}
-			
 			String id=null;
-			
 			uri ="https://dapi.kakao.com/v2/local/search/keyword.json?"
 					+ "y="+dto.getMapy()+"&x="+dto.getMapx()+"&radius=20000&query="+dto.getAddr();
 			
 			ResponseEntity<KakaoKey> responseEntity3 = 
 					restTemplate.exchange(uri, HttpMethod.GET,
 							httpEntity,KakaoKey.class);
-			
 			if(responseEntity3.getBody().getDocuments().size()==0) {
 				uri ="https://dapi.kakao.com/v2/local/search/keyword.json?"
 						+ "y="+dto.getMapy()+"&x="+dto.getMapx()+"&radius=20000&query="+title;
 				responseEntity3 = restTemplate.exchange(uri, HttpMethod.GET,
 								httpEntity,KakaoKey.class);
+				
 			}
 			
 			if(responseEntity3.getBody().getDocuments().size()!=0) {
@@ -156,26 +217,79 @@ public class ApiController {
 			dto.setReview(rDtoList);
 			}
 			*/
+			uri = "http://api.visitkorea.or.kr/openapi/service/rest/KorService/detailCommon?serviceKey="+apikey+"&numOfRows=10&pageNo=1&MobileOS=ETC&MobileApp=AppTest&contentId="+dto.getContentid()+"&defaultYN=Y&overviewYN=Y&_type=json";
+			
+			responseEntity2 = 
+					restTemplate.exchange(uri, HttpMethod.GET,
+							null,Info.class);
+			if(responseEntity2.getBody().getResponse().getBody()!=null) {
+				
+				String url = responseEntity2.getBody().getResponse().getBody().getItems().getItem().getHomepage();
+				String resultUrl =null;
+				if(url!=null) {
+					if(url.contains("\"")) {
+						dto.setUrl(url.split("\"")[1]);
+						
+						resultUrl = dto.getUrl();
+						if(!resultUrl.contains("http")) {
+							if(resultUrl.contains("href=\"")) {
+								resultUrl = url.split("href=\"")[1];
+								dto.setUrl(resultUrl.split("\"")[0]);
+							}
+							else {
+								resultUrl = url.split("href=")[1];
+								dto.setUrl(resultUrl.split("\"")[0]);
+								
+							}
+							
+							resultUrl = dto.getUrl();
+						}
+					}
+					else {
+						resultUrl = url;
+						dto.setUrl(resultUrl);
+					}
+					
+				}
+				if(charge!=null) {
+					if(charge.contains("<br>")) {
+						charge.replace("<br>", " ");
+						if(charge.length()>100) {
+							charge = resultUrl;
+						}
+						dto.setCharge(charge);
+					}
+				}
+				
+			}
 			list.add(dto);
+
+			service.placeInsert(dto);
 			switch(contentTypeId) {
 			case "12":
-				service.placeInsert(dto);
+			case "28":
 				service.infoInsert(dto);
 				break;
+			case "15":
+				service.eventInsert(dto);
+				break;
 			case "32":
-				service.placeInsert(dto);
 				service.hotelInsert(dto);
 				break;
-			case "default":
-				service.placeInsert(dto);
+			case "39":
 				service.infoInsert(dto);
 				service.dinerInsert(dto);
 				break;
 			}
-			
-			
+			affected++;
+
 		}
 		
+	
+		Map resultMap = new HashMap();
+		resultMap.put("result", affected+"행이 삽입 되었습니다");
+
+
 		return list;
 	}
 }

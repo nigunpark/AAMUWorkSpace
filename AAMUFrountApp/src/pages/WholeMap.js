@@ -14,6 +14,7 @@ import PopularLocation from "../components/PopularLocation/PopularLocation";
 import { Link } from "react-router-dom";
 import { changeLnfM } from "../redux/store";
 import { useSelector, useDispatch } from "react-redux";
+
 const WholeMap = () => {
   const [modalState, setModalState] = useState(false);
   const [localName, setLocalName] = useState("");
@@ -22,6 +23,7 @@ const WholeMap = () => {
     return state;
   });
   let dispatch = useDispatch();
+
   return (
     <div className="WholeMap">
       <div className="test__container">
@@ -67,7 +69,8 @@ const WholeMap = () => {
 };
 
 //모달창
-function Modal({ setModalState, localName, localId, reduxState }) {
+function Modal({ setModalState, localName, localId }) {
+  let dispatch = useDispatch();
   return (
     <Container>
       <Overlay
@@ -122,9 +125,11 @@ function WholeMapLocalName({
         setModalState(!modalState);
         setLocalId(data.id);
         dispatch(changeLnfM(data.localName));
-      }}>
+      }}
+    >
       {data.localName}
     </span>
   );
 }
+
 export default WholeMap;

@@ -57,5 +57,11 @@ public class Places {
 		public int sigungucode;
 		public String title;
 		public String zipcode;
+		
+
+		public int eventenddate;
+		public int eventstartdate;
+		public String tel;
+		
 	}
 }

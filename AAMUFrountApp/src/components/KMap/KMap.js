@@ -6,6 +6,7 @@ import {
   changeInfo,
   changePickedTransport,
   changeTimeSetObj,
+  clearLatLng,
 } from "../../redux/store";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Box from "@mui/material/Box";
@@ -38,6 +39,7 @@ const KMap = ({
   setTitleName,
   setConWhichModal,
   setShowCratePlan,
+  stateForMapCenter,
 }) => {
   let [lat, setLat] = useState("");
   let [lng, setLng] = useState("");
@@ -59,67 +61,103 @@ const KMap = ({
   //사용자의 현재 위치 얻기
   // navigator.geolocation.getCurrentPosition(onGeoOk, onGeoFail);
   //처음 지도 그리기
+
+  //이동수단 버튼클릭시 모달보이게하는 state
   let [showTransport, setShowTransport] = useState(false);
+  //장소등록 버튼클릭시 모달 보이게하는 state
   let [appearRegisterModal, setAppearRegisterModal] = useState(false);
   let [jangsoName, setJangsoName] = useState("");
+  //장소등록 모달에서 검색장소 입력안하고 엔터나 검색눌렀을 시 경고메세지 state
   let [showFillMes, setShowFillMes] = useState(false);
+  //일정생성 버튼 클릭시 확인모달창 state
   let [showAuSModal, setShowAuSModal] = useState(false);
 
-  useEffect(() => {
-    var mapContainer = document.getElementById("map"), // 지도를 표시할 div
-      mapOption = {
-        center: new kakao.maps.LatLng(lat, lng), // 지도의 중심좌표
-        level: 10, // 지도의 확대 레벨
-      };
+  //-------------------------------------------------------------------------
+  var positions = [];
 
-    var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+  useEffect(() => {
+    let coords = new kakao.maps.LatLng(
+      stateForMapCenter[0],
+      stateForMapCenter[1]
+    );
+    var mapContainer = document.getElementById("map"); // 지도를 표시할 div
+    var mapOption = {
+      // center: new kakao.maps.LatLng(stateForMapCenter[0], stateForMapCenter[1]), // 지도의 중심좌표
+      center: new kakao.maps.LatLng(lat, lng), // 지도의 중심좌표
+      level: 9, // 지도의 확대 레벨
+    };
+    // 지도를 생성합니다
+    var map = new kakao.maps.Map(mapContainer, mapOption);
+    //지도 최대레벨 제한
+    map.setMaxLevel(9);
+    let mainMarker = new kakao.maps.Marker({
+      position: coords,
+      clickable: true, // 마커를 클릭했을 때 지도의 클릭 이벤트가 발생하지 않도록 설정합니다
+    });
     var geocoder = new kakao.maps.services.Geocoder();
     // 주소로 좌표를 검색합니다
     geocoder.addressSearch(
-      reduxState.localNameForMarker ?? currPosition,
+      reduxState.localNameForMarker.addr ?? currPosition,
       (result, status) => {
         // 정상적으로 검색이 완료됐으면
-        if (1 == 1) {
-          var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+        if (status === kakao.maps.services.Status.OK) {
+          coords = new kakao.maps.LatLng(result[0].y, result[0].x);
           setLat(result[0].y);
           setLng(result[0].x);
-          // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
+          let mainMarker = new kakao.maps.Marker({
+            position: coords,
+            clickable: true,
+          });
+          // 마커가 지도 위에 표시되도록 설정합니다
+          mainMarker.setMap(map);
+          var iwContent =
+              '<div class="iwContent__wrap">' +
+              '    <div class="iwContent__info">' +
+              '        <div class="iwContent__title">' +
+              "            <h3>" +
+              (reduxState.localNameForMarker.title ?? currPosition) +
+              "</h3>" +
+              '            <div class="iwContent__close" onclick="closeOverlay()" title="닫기"></div>' +
+              "        </div>                                                                        " +
+              '         <div class="iwContent__body">' +
+              '            <div class="iwContent__desc">' +
+              '              <div class="iwContent__ellipsis">' +
+              (reduxState.localNameForMarker.addr ?? "") +
+              "</div>" +
+              '              <div class="iwContent__jibun iwContent__ellipsis">(우) 63309 (지번) 영평동 2181</div>' +
+              "<span class='iWContent__tel'>" +
+              (reduxState.localNameForMarker.tel ?? "") +
+              "</span>" +
+              '              <div><a href="https://place.map.kakao.com/' +
+              reduxState.localNameForMarker.kakaokey +
+              '" target="_blank" class="iwContent__link"><h4>상세보기</h4></a></div>' +
+              "            </div>" +
+              "        </div>" +
+              "    </div>    " +
+              "</div>", // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
+            iwPosition = new kakao.maps.LatLng(lat, lng), //인포윈도우 표시 위치입니다
+            iwRemoveable = true; // removeable 속성을 ture 로 설정하면 인포윈도우를 닫을 수 있는 x버튼이 표시됩니다
+
+          // 인포윈도우를 생성하고 지도에 표시합니다
+          var infowindow = new kakao.maps.InfoWindow({
+            content: iwContent,
+            removable: iwRemoveable,
+          });
+          kakao.maps.event.addListener(mainMarker, "click", function () {
+            infowindow.open(map, mainMarker);
+          });
           map.setCenter(coords);
         }
       }
     );
 
-    // 마커가 표시될 위치입니다
-    let markerPosition = new kakao.maps.LatLng(lat, lng);
-
-    // 마커를 생성합니다
-    let mainMarker = new kakao.maps.Marker({
-      position: markerPosition,
-    });
-
-    // 마커가 지도 위에 표시되도록 설정합니다
-    mainMarker.setMap(map);
-
     // 마커를 표시할 위치와 title 객체 배열입니다
-    var positions = [
-      {
-        title: "경복궁",
-        latlng: new kakao.maps.LatLng(37.5759040910202, 126.976842133821),
-      },
-      {
-        title: "창덕궁",
-        latlng: new kakao.maps.LatLng(37.5788697347103, 126.989710338876),
-      },
-      {
-        title: "남산타워",
-        latlng: new kakao.maps.LatLng(37.5489431139548, 126.989404159753),
-      },
-      {
-        title: "한옥마을",
-        latlng: new kakao.maps.LatLng(37.5595422700067, 126.994738735334),
-      },
-    ];
-
+    reduxState.arrForPickJangso.map((jangsoObj) => {
+      positions.push({
+        title: jangsoObj.title,
+        latlng: new kakao.maps.LatLng(jangsoObj.mapy, jangsoObj.mapx),
+      });
+    });
     // 마커 이미지의 이미지 주소입니다
     var imageSrc =
       "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
@@ -127,10 +165,8 @@ const KMap = ({
     for (var i = 0; i < positions.length; i++) {
       // 마커 이미지의 이미지 크기 입니다
       var imageSize = new kakao.maps.Size(24, 35);
-
       // 마커 이미지를 생성합니다
       var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
-
       // 마커를 생성합니다
       var marker = new kakao.maps.Marker({
         map: map, // 마커를 표시할 지도
@@ -139,35 +175,8 @@ const KMap = ({
         image: markerImage, // 마커 이미지
       });
     }
+  }, [reduxState.localNameForMarker, stateForMapCenter, positions]);
 
-    var iwContent =
-        '<div class="iwContent__wrap">' +
-        '    <div class="iwContent__info">' +
-        '        <div class="iwContent__title">' +
-        "            <h3>카카오 스페이스닷원</h3>" +
-        // '            <div class="iwContent__close" onclick="closeOverlay()" title="닫기"></div>' +
-        "        </div>                                                                        " +
-        '         <div class="iwContent__body">' +
-        '            <div class="iwContent__desc">' +
-        '              <div class="iwContent__ellipsis">제주특별자치도 제주시 첨단로 242</div>' +
-        '              <div class="iwContent__jibun iwContent__ellipsis">(우) 63309 (지번) 영평동 2181</div>' +
-        '              <div><a href="https://www.kakaocorp.com/main" target="_blank" class="iwContent__link">홈페이지</a></div>' +
-        "            </div>" +
-        "        </div>" +
-        "    </div>    " +
-        "</div>", // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
-      iwPosition = new kakao.maps.LatLng(lat, lng), //인포윈도우 표시 위치입니다
-      iwRemoveable = true; // removeable 속성을 ture 로 설정하면 인포윈도우를 닫을 수 있는 x버튼이 표시됩니다
-
-    // 인포윈도우를 생성하고 지도에 표시합니다
-    var infowindow = new kakao.maps.InfoWindow({
-      content: iwContent,
-      removable: iwRemoveable,
-    });
-    kakao.maps.event.addListener(mainMarker, "click", function () {
-      infowindow.open(map, mainMarker);
-    });
-  }, [lat, lng, reduxState.localNameForMarker]);
   return (
     <div>
       <div
@@ -175,7 +184,8 @@ const KMap = ({
           width: "100%",
           display: "inline-block",
           paddingTop: "75px",
-        }}>
+        }}
+      >
         <div id="map" style={{ width: "100%", height: "99vh" }}></div>
         <div className="kmap__right-btn__container">
           <div
@@ -183,7 +193,8 @@ const KMap = ({
               setTitleName("추천숙소");
               dispatch(changeInfo("추천숙소"));
               setConWhichModal(true);
-            }}>
+            }}
+          >
             추천숙소
           </div>
           <div
@@ -191,7 +202,8 @@ const KMap = ({
               setTitleName("추천장소");
               dispatch(changeInfo("추천장소"));
               setConWhichModal(false);
-            }}>
+            }}
+          >
             추천장소
           </div>
         </div>
@@ -200,14 +212,16 @@ const KMap = ({
           <div
             onClick={() => {
               setAppearRegisterModal(true);
-            }}>
+            }}
+          >
             장소등록
           </div>
           <span className="kmap__transportation">
             <div
               onClick={() => {
                 setShowTransport(!showTransport);
-              }}>
+              }}
+            >
               이동수단
             </div>
             {showTransport ? (
@@ -217,9 +231,9 @@ const KMap = ({
                   ref={publicRef}
                   onClick={(e) => {
                     dispatch(changePickedTransport("public"));
-                    console.log(reduxState.pickedTransport);
                     whichTransport(e);
-                  }}>
+                  }}
+                >
                   <FontAwesomeIcon
                     icon={faBus}
                     className="kmap__left-icon bus"
@@ -228,7 +242,8 @@ const KMap = ({
                 </div>
                 <span
                   style={{ fontSize: "15px", fontWeight: "bold" }}
-                  className="slide-in-left-or">
+                  className="slide-in-left-or"
+                >
                   OR
                 </span>
                 <div
@@ -237,7 +252,8 @@ const KMap = ({
                   onClick={(e) => {
                     dispatch(changePickedTransport("personal"));
                     whichTransport(e);
-                  }}>
+                  }}
+                >
                   <FontAwesomeIcon
                     icon={faCar}
                     className="kmap__left-icon car"
@@ -250,8 +266,8 @@ const KMap = ({
           <div
             onClick={() => {
               setShowAuSModal(true);
-              // setShowCratePlan(true);
-            }}>
+            }}
+          >
             일정생성
           </div>
         </div>
@@ -309,13 +325,15 @@ function AreUSurePlan({ setShowAuSModal, setShowCratePlan }) {
                     );
                   }
                 });
-              }}>
+              }}
+            >
               확인
             </AuSBtn>
             <AuSBtn
               onClick={() => {
                 setShowAuSModal(false);
-              }}>
+              }}
+            >
               취소
             </AuSBtn>
           </AusBtnContainer>
@@ -346,7 +364,8 @@ function RegisterModal({
           onClick={() => {
             setAppearRegisterModal(false);
             setShowFillMes(false);
-          }}>
+          }}
+        >
           X
         </CloseLoRegi>
         <TitleLoRegi>
@@ -363,7 +382,8 @@ function RegisterModal({
             className="registerModal__typeof-container"
             onClick={(e) => {
               threeBtnToggle(e);
-            }}>
+            }}
+          >
             <span className="registerModal__btn jangso">
               <FontAwesomeIcon icon={faMapLocationDot} />
               장소
@@ -383,7 +403,8 @@ function RegisterModal({
               sx={{
                 "& > :not(style)": { mt: 3, mx: 1, width: "97%" },
               }}
-              noValidate>
+              noValidate
+            >
               <TextField
                 label="장소이름"
                 variant="outlined"
@@ -419,7 +440,8 @@ function RegisterModal({
                   setShowFillMes(true);
                   //밑에 서버로 비동기 검색보내기
                 }
-              }}>
+              }}
+            >
               검 색
             </button>
           </form>
