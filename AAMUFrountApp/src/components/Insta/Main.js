@@ -6,20 +6,19 @@ import FeedSetting from "./FeedSetting.js";
 import User from "./User.js";
 import Story from "./Story.js";
 
-
 function Main() {
   return (
-      <div className="main">
-        <Nav></Nav>
-          {/* <div className="margin-top"> 
+    <div className="main">
+      {/* <Nav></Nav> */}
+      {/* <div className="margin-top"> 
             <Story></Story>   
           </div> */}
-          <div className="margin-value"> 
-            <FeedSetting></FeedSetting>
-            <div className="main-right">   
-                <User></User>                   
-            </div>
-          </div>
+      <div className="margin-value">
+        <FeedSetting></FeedSetting>
+        <div className="main-right">
+          <User></User>
+        </div>
+      </div>
     </div>
   );
 }
