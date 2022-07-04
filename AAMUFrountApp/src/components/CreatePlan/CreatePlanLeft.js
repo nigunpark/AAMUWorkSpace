@@ -13,7 +13,7 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { TextField } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { corrTimeSetObj } from "../../redux/store";
-const CreatePlanLeft = () => {
+const CreatePlanLeft = ({ currPosition }) => {
   let reduxState = useSelector((state) => {
     return state;
   });
@@ -29,12 +29,16 @@ const CreatePlanLeft = () => {
           })}
         </div>
       </div>
-      <WholeSchedule selected={selected} setSelected={setSelected} />
+      <WholeSchedule
+        selected={selected}
+        setSelected={setSelected}
+        currPosition={currPosition}
+      />
     </div>
   );
 };
 
-function WholeSchedule({ selected, setSelected }) {
+function WholeSchedule({ selected, setSelected, currPosition }) {
   let reduxState = useSelector((state) => {
     return state;
   });
@@ -43,7 +47,7 @@ function WholeSchedule({ selected, setSelected }) {
     <div className="createPlanLeft__schedule">
       <div className="createPlanLeft__schedule-title">
         <div>
-          대한민국 제주도 :{" "}
+          대한민국 {currPosition} :{" "}
           <span style={{ fontSize: "20px", color: "var(--orange)" }}>
             {reduxState.tripPeriod.length}
           </span>
@@ -77,7 +81,11 @@ function Content({ index }) {
       <select className="createPlanLeft__schedule__select">
         {reduxState.tripPeriod.map((val, i) => {
           return (
-            <option key={i} selected={index + 1 === i + 1 ? true : false}>
+            <option
+              key={i}
+              defaultValue=""
+              selected={index + 1 === i + 1 ? true : false}
+            >
               {i + 1}DAY {reduxState.monthNdate[0].month}월{" "}
               {reduxState.monthNdate[0].date + i}일 수
             </option>
@@ -90,7 +98,8 @@ function Content({ index }) {
           color: "grey",
           fontWeight: "bold",
           marginTop: "10px",
-        }}>
+        }}
+      >
         일차를 누르면 일정 전체가 변경이 가능합니다.
       </span>
       <div style={{ marginBottom: "10px", fontSize: "13px" }}>
@@ -135,7 +144,8 @@ function Content({ index }) {
       {showTimePicker ? (
         <LocalizationProvider
           dateAdapter={AdapterDateFns}
-          className="createPlanLeft__timePicker">
+          className="createPlanLeft__timePicker"
+        >
           <Stack sx={{ m: 1, p: 0 }}>
             <TimePicker
               className="timePicker"
@@ -155,21 +165,25 @@ function Content({ index }) {
           </Stack>
         </LocalizationProvider>
       ) : null}
-      <DetailSetting />
-      <DetailSetting />
-      <DetailSetting />
+
+      {reduxState.arrForPickJangso.map((local, i) => {
+        return <DetailSetting key={i} index={index} local={local} />;
+      })}
     </div>
   );
 }
 
-function DetailSetting() {
+function DetailSetting({ index, local }) {
+  let reduxState = useSelector((state) => {
+    return state;
+  });
   return (
     <div className="detailSetting__container">
       <div className="movingTime">
         <FontAwesomeIcon icon={faEllipsisVertical} />
         <div className="movingTime__time">
           {/* 이동시간 받아서 뿌려주는 input */}
-          <input type="number" style={{ width: "37px" }} />
+          <input type="number" style={{ width: "37px" }} defaultValue={5} />
           <span>분</span>
         </div>
       </div>
@@ -177,7 +191,7 @@ function DetailSetting() {
         <div className="detailLocation__img-container">
           <img
             className="detailLocation__img"
-            src="/images/img-5.jpg"
+            src={local.image2}
             alt="이미지"
             onError={(e) => {
               e.target.src = "/images/no-image.jpg";
@@ -187,10 +201,26 @@ function DetailSetting() {
         <div className="detailLocation__inform-container">
           <div className="detailLocation__part-top">
             <div>
-              <div>제주공항</div>
+              <div>{local.title}</div>
               <div>0시 0분</div>
             </div>
-            <div>전자시계</div>
+            <div className="detailLocation__clock">
+              <span>
+                {
+                  reduxState.timeSetObj.find((obj) => {
+                    return obj.day === index + 1;
+                  }).time
+                }
+                :
+                {
+                  reduxState.timeSetObj.find((obj) => {
+                    return obj.day === index + 1;
+                  }).min
+                }
+              </span>
+              <span>~</span>
+              <span>ddd</span>
+            </div>
           </div>
           <div className="detailLocation__part-bottom">
             <span>시간표</span>
