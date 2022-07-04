@@ -1,20 +1,24 @@
-.SearchedLocation{
-  width: 100%;
-  height: 100px;
-  transition: all .4s ease;
+.SearchedLocation {
+  width: 97%;
+  height: 80px;
+  transition: all 0.4s ease;
+  margin-bottom: 5px;
+  border-radius: 5px;
+  /* border: 1px solid red; */
 }
 
-.searchedLocation__container{
+.searchedLocation__container {
   display: flex;
   height: 80px;
-  box-shadow:var(--shadow);
+  box-shadow: var(--shadow);
+  border-radius: 5px;
 }
 
-.searchedLocation__container:hover{
- cursor: pointer;
+.searchedLocation__container:hover {
+  cursor: pointer;
 }
 
-.searchedLocation__info{
+.searchedLocation__info {
   display: flex;
   flex-direction: column;
   width: 70%;
@@ -22,40 +26,40 @@
   padding: 10px 5px;
 }
 
-.searchedLocation__info__content{
+.searchedLocation__info__content {
   display: flex;
   justify-content: flex-end;
   gap: 1rem;
 }
 
-.searchedLocation__info__content .searchedLocation__i:hover{
-cursor: pointer;
+.searchedLocation__info__content .searchedLocation__i:hover {
+  cursor: pointer;
 }
 
-.searchedLocation__info__content .searchedLocation__i:first-child{
+.searchedLocation__info__content .searchedLocation__i:first-child {
   color: rgba(0, 0, 0, 0.4);
 }
 
-.searchedLocation__fadeOut{
-  animation: slide-out-left 0.5s cubic-bezier(0.550, 0.085, 0.680, 0.530) forwards;
+.searchedLocation__fadeOut {
+  animation: slide-out-left 0.5s cubic-bezier(0.55, 0.085, 0.68, 0.53) forwards;
 }
 
-
-.searchedLocation__img-container{
+.searchedLocation__img-container {
   position: relative;
   width: 30%;
   height: 100%;
   overflow: hidden;
   margin-right: auto;
+  border-radius: 5px 0 0 5px;
 }
 
-.searchedLocation__img-container img{
+.searchedLocation__img-container img {
   max-width: 100%;
   height: 100%;
   display: block;
 }
 
-.localInfo__container{
+.localInfo__container {
   display: flex;
   justify-content: space-around;
   align-items: flex-start;
@@ -63,7 +67,7 @@ cursor: pointer;
   height: auto;
 }
 
-.localInfo{
+.localInfo {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -72,69 +76,68 @@ cursor: pointer;
   width: 100%;
 }
 
-.localInfo-ul{
+.localInfo-ul {
   display: flex;
   flex-direction: column;
-  gap:10px;
+  gap: 10px;
 }
 
-.localInfo-btn{
+.localInfo-btn {
   position: absolute;
   display: flex;
   gap: 10px;
-  bottom:15px;
-  right:35px;
-object-fit: cover;
+  bottom: 15px;
+  right: 35px;
+  object-fit: cover;
 }
 
-.localInfo-btn span{
+.localInfo-btn span {
   padding: 8px 25px;
   border: 2px solid var(--orange);
   border-radius: 5px;
 }
 
-.localInfo-btn span:hover{
+.localInfo-btn span:hover {
   background: var(--mainColor);
   border: white 2px solid;
   color: white;
   cursor: pointer;
 }
 
-.localInfo__snsBtn__container{
+.localInfo__snsBtn__container {
   position: absolute;
-  bottom:15px;
-  left:340px;
-
+  bottom: 15px;
+  left: 340px;
 }
 
-.localInfo__snsBtn-ul{
+.localInfo__snsBtn-ul {
   display: flex;
   justify-content: space-between;
   gap: 1rem;
 }
 
-.localInfo__snsBtn-ul li{
+.localInfo__snsBtn-ul li {
   position: relative;
   width: 30px;
   height: 30px;
 }
 
-.localInfo__snsBtn-ul li:hover{
+.localInfo__snsBtn-ul li:hover {
   transform: scale(1.1);
 }
 
-.localInfo__snsBtn-ul li img{
-position: absolute;
-width: 100%;
-height: 100%;
-border-radius: 15px;
+.localInfo__snsBtn-ul li img {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 15px;
 }
 
 .slide-in-left-searchedLocation {
-	animation: slide-in-left 0.4s cubic-bezier(0.250, 0.460, 0.450, 0.940) forwards;
+  animation: slide-in-left 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
 }
 
-.badge{
+.badge {
   position: absolute;
   padding: 1px;
   background: red;
@@ -144,7 +147,7 @@ border-radius: 15px;
   font-weight: bold;
 }
 
-.localInfoModal__img{
+.localInfoModal__img {
   position: absolute;
   width: 100%;
   height: 100%;
@@ -156,14 +159,14 @@ border-radius: 15px;
     opacity: 1;
   }
 
-  50%{
+  50% {
     transform: translateX(-500px);
     opacity: 0.5;
   }
-  75%{
+  75% {
     transform: translateX(-1000px);
   }
-  
+
   100% {
     transform: none;
   }
@@ -175,7 +178,7 @@ border-radius: 15px;
     opacity: 0;
   }
 
-  50%{
+  50% {
     transform: translateX(0);
     opacity: 1;
   }
