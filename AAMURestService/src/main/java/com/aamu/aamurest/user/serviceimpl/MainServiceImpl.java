@@ -83,8 +83,7 @@ public class MainServiceImpl implements MainService{
 	}
 	@Override
 	public List<AttractionDTO> selectEventList(Map map) {
-		// TODO Auto-generated method stub
-		return null;
+		return dao.selectEventList(map);
 	}
 	@Override
 	public List<AttractionDTO> selectHotelList(Map map) {
