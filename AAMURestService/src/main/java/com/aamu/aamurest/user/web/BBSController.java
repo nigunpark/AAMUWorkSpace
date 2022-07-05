@@ -49,7 +49,7 @@ public class BBSController {
  		String name = param.get("name"); 
     }
     
-	@PostMapping(value="/gram/edit", produces = "application/json;charset=UTF-8")
+	@PostMapping(value="/bbs/edit", produces = "application/json;charset=UTF-8")
 	public Map commuInsert(@RequestParam List<MultipartFile> multifiles, @RequestParam Map map, HttpServletRequest req) {
 		String path=req.getSession().getServletContext().getRealPath("/resources/upload");
 		
