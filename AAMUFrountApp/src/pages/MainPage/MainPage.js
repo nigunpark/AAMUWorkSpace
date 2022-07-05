@@ -9,19 +9,19 @@ import { useDispatch } from "react-redux";
 import {
   delAllSaveDaysRedux,
   deleteAllPickJanso,
-  clearLatLng,
-  setLatLng,
+  changeArrForJangso,
 } from "../../redux/store";
+import axios from "axios";
 const { kakao } = window;
+
 const MainPage = () => {
   const [titleName, setTitleName] = useState("");
   const [conWhichModal, setConWhichModal] = useState(false);
   let { currPosition } = useParams();
   const [showCreatePlan, setShowCratePlan] = useState(false);
-  const [stateForMapCenter, setStateForMapCenter] = useState([]);
   let dispatch = useDispatch();
   useEffect(() => {
-    getLatLng(currPosition, setStateForMapCenter, stateForMapCenter);
+    getCurrpositionLocal(currPosition, dispatch);
     dispatch(deleteAllPickJanso([]));
     dispatch(delAllSaveDaysRedux([]));
   }, []);
@@ -33,7 +33,6 @@ const MainPage = () => {
         setTitleName={setTitleName}
         setConWhichModal={setConWhichModal}
         setShowCratePlan={setShowCratePlan}
-        stateForMapCenter={stateForMapCenter}
       />
 
       <RightRecommandSide
@@ -51,18 +50,77 @@ const MainPage = () => {
     </div>
   );
 };
-const getLatLng = (currPosition, setStateForMapCenter, stateForMapCenter) => {
-  var geocoder = new kakao.maps.services.Geocoder();
-  // 주소로 좌표를 검색합니다
-  geocoder.addressSearch(currPosition, (result, status) => {
-    // 정상적으로 검색이 완료됐으면
-    if (status === kakao.maps.services.Status.OK) {
-      // var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-      let temp = [...stateForMapCenter];
-      temp.push(result[0].y);
-      temp.push(result[0].x);
-      setStateForMapCenter(temp);
-    }
-  });
-};
+
+function getCurrpositionLocal(currPosition, dispatch) {
+  let token = sessionStorage.getItem("token");
+  let areacode;
+  switch (currPosition) {
+    case "서울":
+      areacode = 1;
+      break;
+    case "인천":
+      areacode = 2;
+      break;
+    case "대전":
+      areacode = 3;
+      break;
+    case "대구":
+      areacode = 4;
+      break;
+    case "광주":
+      areacode = 5;
+      break;
+    case "부산":
+      areacode = 6;
+      break;
+    case "울산":
+      areacode = 7;
+      break;
+    case "세종":
+      areacode = 8;
+      break;
+    case "경기도":
+      areacode = 31;
+      break;
+    case "강원도":
+      areacode = 32;
+      break;
+    case "충청북도":
+      areacode = 33;
+      break;
+    case "충청남도":
+      areacode = 34;
+      break;
+    case "경상북도":
+      areacode = 35;
+      break;
+    case "경상남도":
+      areacode = 36;
+      break;
+    case "전라북도":
+      areacode = 37;
+      break;
+    case "전라남도":
+      areacode = 38;
+      break;
+    case "제주도":
+      areacode = 39;
+      break;
+  }
+  axios
+    .get("/aamurest/info/places", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      params: {
+        areacode: areacode,
+        contenttypeid: "12",
+      },
+    })
+    .then((resp) => {
+      dispatch(changeArrForJangso(resp.data));
+    })
+    .catch((error) => {});
+}
+
 export default MainPage;
