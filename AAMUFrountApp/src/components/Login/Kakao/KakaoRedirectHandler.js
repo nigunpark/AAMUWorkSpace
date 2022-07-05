@@ -3,12 +3,17 @@
 
 import React, { useEffect } from "react";
 import axios from 'axios';
+import { useNavigate } from "react-router-dom";
 
 const KakaoRedirectHandler = () => {
-  
+
+  const navigate = useNavigate();
+
   useEffect(()=> {
     let params = new URL(document.location.toString()).searchParams;
+
     console.log('params:', params);
+
     let code = params.get("code"); // 인가코드 받는 부분
     let grant_type = "authorization_code";
     let client_id = "cc80502fc1a7fe4caaa624af80993d73"; //REST API KEY
@@ -18,12 +23,16 @@ const KakaoRedirectHandler = () => {
             'Content-type': 'application/x-www-form-urlencoded;charset=utf-8'
         }
       }).then((res) => {
-      console.log(res)
+
+      sessionStorage.setItem('token', res.data._token);
+      console.log(res.data);
       // res에 포함된 토큰 받아서 원하는 로직을 하면된다.
-  })
+      navigate('/');
+  }).catch((error)=>{console.log(error)})
   }, []);
 
-  return <div>사실 이페이지는 크게 의미 없다. 첫화면으로 로직이 끝나면 이동시켜주면 된다.</div>;
+  // <div>사실 이페이지는 크게 의미 없다. 첫화면으로 로직이 끝나면 이동시켜주면 된다.</div>
+  //return navigate('/');
 };
 
 export default KakaoRedirectHandler;
