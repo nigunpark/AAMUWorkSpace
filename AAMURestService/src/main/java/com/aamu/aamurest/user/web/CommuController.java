@@ -48,7 +48,6 @@ public class CommuController {
 			dto.setCommuComment(commuService.commuCommentSelectOne(dto.getLno()));
 			dto.setPhoto(commuService.commuSelectPhotoList(dto.getLno()));
 		}
-		
 		return list;
 	}
 	
