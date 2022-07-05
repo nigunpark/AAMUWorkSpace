@@ -3,8 +3,8 @@ import axios from "axios"; // 액시오스
 import { useLocation } from "react-router-dom";
 
 const Test = () => {
-  let token=sessionStorage.getItem('token');
-  
+  let token = sessionStorage.getItem("token");
+
   // const initializeNaverLogin = () => {
   //   const naverLogin = new naver.LoginWithNaverId({
   //     clientId: "amnFx3UOA94ulL_rvg9Y",
@@ -41,7 +41,7 @@ const Test = () => {
 
   function testAxios() {
     axios
-      .get("http://192.168.0.19:8080/rest/info2?areacode=1&contenttypeid=12")
+      .post("http://192.168.0.19:8080/rest/info2?areacode=1&contenttypeid=12")
       .then((response) => {
         console.log(response.data);
       })
@@ -53,17 +53,17 @@ const Test = () => {
       });
   }
 
- 
+  //get,del은 두번째 header post,put은 세번째에
   function test() {
     axios
       .get("/aamurest/info/places", {
-        headers:{
-          Authorization:`Bearer ${token}`
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
         params: {
           areacode: "1",
           contenttypeid: "12",
-        }
+        },
       })
       .then((resp) => {
         console.log("get성공");
