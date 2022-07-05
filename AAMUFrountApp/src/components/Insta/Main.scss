@@ -167,10 +167,7 @@
                 cursor: pointer;
             }
 
-            .modal{
-                z-index: 2;
-                transform: scale(2);
-            }
+            
 
             span {
                 margin-top: -20px;
@@ -385,6 +382,8 @@
         .search {
             margin-top: 30px;
             margin-bottom: 15px;
+            position: relative;
+
 
             >input {
 
@@ -450,7 +449,7 @@
                     transform: rotate(45deg);
                     box-shadow: 0 0 5px 1px rgba(var(--jb7, 0, 0, 0), .0975);
                     background-color: #fff;
-                    z-index: 8;
+                    z-index: 8000;
                 }
 
 
@@ -484,6 +483,12 @@
                         border: 2px solid #fff;
                         border-radius: 100%;
                     }
+                    .likeimg{
+                        width: 60px;
+                        height: 60px;
+                        border: 2px solid #fff;
+                        border-radius: 100%;
+                    }
                     .heart {
                         position: relative;
                         border-color: #000000;
@@ -513,12 +518,20 @@
                         color: #8e8e8e;
                         margin-top: 3px;
                     }
+
+                    
                 }
 
 
             }
         }
-
+        .userName {
+            width: fit-content;
+            font-size: 16px;
+            color: #171717;
+            padding: 5px;
+        }
+        
 
         .user {
             margin-top: -10px;
@@ -561,7 +574,7 @@
         .recommend {
             background-color: rgba(255, 255, 255, 0);
             margin-bottom: 15px;
-            width: 300px;
+            width: 400px;
             height: auto;
             border-style: none;
 
@@ -696,9 +709,17 @@
 
 }
 
-
-
-
+    .menuButton{
+        
+        .modal-btn{
+            padding: 20px;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+            font-size: medium;
+            border-bottom: .5px solid rgb(220, 220, 220);
+        }
+    }
 
 
 
