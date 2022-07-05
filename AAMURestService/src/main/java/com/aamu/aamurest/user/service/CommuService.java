@@ -11,12 +11,18 @@ public interface CommuService<T> {
 	List<T> commuSelectList();
 	
 	//글 목록용_댓글 한개 가져오기
-	CommuCommentDTO commuCommentSelectOne(String cno);
+	CommuCommentDTO commuCommentSelectOne(String lno);
 	
 	//글 목록용_사진 가져오기
-	List commuSelectPhotoList(String cno);
+	List commuSelectPhotoList(String lno);
 	
-	//커뮤니티 글생성
+	//글 생성용
 	int commuInsert(Map map);
+	
+	//!!!!!!!!!!글 생성용_장소 뿌려주기
+	List commuPlaceList(Map map);
+	
+	//글 수정용
+	int commuUpdate(CommuDTO dto);
 
 }

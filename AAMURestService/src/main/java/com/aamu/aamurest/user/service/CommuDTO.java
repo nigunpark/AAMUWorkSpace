@@ -25,6 +25,6 @@ public class CommuDTO {
 	public String rcount;
 	public String userprofile;
 	public CommuCommentDTO commuComment;
-	public List<Map> photo;
+	public List<String> photo;
 	public String place;
 }

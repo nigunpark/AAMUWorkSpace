@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
@@ -38,7 +40,7 @@ public class CommuController {
 	@Autowired
 	private CommonsMultipartResolver multipartResolver;
 	
-	//목록용
+	//글 목록용
 	@GetMapping("/gram/selectList")
 	public List<CommuDTO> commuSelectList(){
 		//list=작성한 글들
@@ -50,20 +52,13 @@ public class CommuController {
 		}
 		
 		return list;
-	}
+	}////////////////commuSelectList
 	
-	/*
-	///글 목록용_댓글 하나 가져오는용
-	@GetMapping("/gram/comment/selectOne/{cno}")
-	public CommuCommentDTO commuCommentSelectOne(@PathVariable String cno) {
-		return commuService.commuCommentSelectOne(cno);
-	}
-	*/
 	
 	//글 생성용
-	@PostMapping(value="/gram/edit", produces = "application/json;charset=UTF-8")
+	@PostMapping(value="/gram/edit")
 	public Map commuInsert(@RequestParam List<MultipartFile> multifiles, @RequestParam Map map, HttpServletRequest req) {
-		//1]서버의 물리적 경로 얻기
+		//서버의 물리적 경로 얻기
 		String path=req.getSession().getServletContext().getRealPath("/resources/upload");
 		
 		try {
@@ -78,7 +73,33 @@ public class CommuController {
 		if(affected==1) resultMap.put("result", "true");
 		else resultMap.put("result", "false");
 		return resultMap;
+	}////////////////////////////commuInsert
+	
+	//!!!!!!!!!글 생성용_장소 뿌려주기
+	@GetMapping("/gram/place/selectList")
+	public List<String> commuPlaceList(@RequestParam Map map) {
+		System.out.println("map:"+map);
+		List<String> list=commuService.commuPlaceList(map);
+		System.out.println("list:"+list);
+		return list;
 	}
+	
+	//글 수정용
+	@PutMapping("/gram/edit/{lno}")
+	public CommuDTO commuUpdate(@PathVariable String lno, @RequestBody CommuDTO dto) {
+		dto.setTitle(lno);
+		dto.setContent(lno);
+		dto.setPlace(lno);
+		commuService.commuUpdate(dto);
+		
+		return dto;
+		
+	}
+	
+	
+	
+	
+	
 	
 	
 	

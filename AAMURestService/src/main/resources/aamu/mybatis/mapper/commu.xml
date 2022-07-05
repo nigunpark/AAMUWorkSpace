@@ -5,27 +5,22 @@
   
 <mapper namespace="aamu.mybatis.mapper.adminCommu">
 
-	<!-- 커뮤니티 게시글 목록용 -->
+	<!-- 글 목록용 -->
 	<select id="commuSelectList" resultType="commuDTO" >
-		SELECT c.* , u.userprofile, cc.cno, cc.id, cc.reply, photo, place
-		FROM community c, users u,commucomment cc, commuphoto cph, commuplace cpl
-		WHERE c.id = u.id
-		AND c.lno = cc.lno
-		AND c.lno = cph.lno
-		AND c.lno = cpl.lno
+		select * from community
 	</select>
 	
-	<!-- 커뮤니티 게시글 목록용_댓글 한개 뿌려주기 -->
+	<!-- 글 목록용_댓글 한개 뿌려주기 -->
 	<select id="commuCommentSelectOne" parameterType="String" resultType="commuCommentDTO" >
 		SELECT * FROM commucomment WHERE lno=#{lno} AND ROWNUM = 1
 	</select>
 	
-	<!-- 커뮤니티 게시글 목록용_사진 뿌려주기 -->
+	<!-- 글 목록용_사진 뿌려주기 -->
 	<select id="commuSelectPhotoList" parameterType="String" resultType="String">
 		SELECT photo FROM commuphoto WHERE lno=#{lno}
 	</select>
 	
-	<!-- 게시글 생성용 -->
+	<!-- 글 생성용 -->
 	<insert id="commuInsert" parameterType="Map">
 		INSERT INTO community
 		VALUES (SEQ_COM.NEXTVAL,#{id},#{title},#{content},DEFAULT,DEFAULT,DEFAULT)
@@ -34,18 +29,32 @@
 	    </selectKey>
 	</insert>
 	
-	<!-- 게시글 생성용_사진 저장 -->
+	<!-- 글 생성용_사진 저장 -->
 	<insert id="commuPhotoInsert" parameterType="Map" >
 		INSERT INTO commuphoto
 		VALUES (#{lno},#{photo})
 	</insert>
 	
-	<!-- 게시글 생성용_장소저장 -->
-	<insert id="commuPlaceInsert" parameterType="Map" >
+	<!-- 글 생성용_장소 저장 -->
+	<insert id="commuPlaceInsert" parameterType="String" >
 		INSERT INTO commuplace
 		VALUES (#{lno},#{place})
 	</insert>
 	
+	<!-- !!!!!!!글 생성용_장소 뿌려주기 -->
+	<select id="commuPlaceList" resultType="String" parameterType="Map">
+		SELECT title, addr, contentid FROM places WHERE title LIKE '%{searchWord}%' or addr LIKE '%{searchWord}%'
+	</select>
+	
+	<!-- 글 수정용 -->
+	<update id="commuUpdate" parameterType="CommuDTO">
+		UPDATE community SET title=#{title},content=#{content} WHERE lno=#{lno}
+	</update>
+	
+	<!-- 글 수정용_사진 수정 -->
+	<update id="commuPlaceUpdate" parameterType="CommuDTO">
+		UPDATE commuplace SET lno=#{lno},content=#{content} WHERE lno=#{lno}
+	</update>
 	
 	
 	

@@ -22,13 +22,13 @@ public class CommuDAO {
 	}
 	
 	//글 목록용_댓글 하나 가져오는거
-	public CommuCommentDTO commuCommentSelectOne(String cno) {
-		return template.selectOne("commuCommentSelectOne",cno);
+	public CommuCommentDTO commuCommentSelectOne(String lno) {
+		return template.selectOne("commuCommentSelectOne",lno);
 	}
 	
 	//글 목록용_사진 리스트 가져오기
-	public List commuSelectPhotoList(String cno){
-		return template.selectList("commuSelectPhotoList",cno);
+	public List commuSelectPhotoList(String lno){
+		return template.selectList("commuSelectPhotoList",lno);
 	}
 	
 	//글 저장용
@@ -45,6 +45,22 @@ public class CommuDAO {
 	//글 저장용_장소 저장
 	public int placeInsert(Map map) {
 		return template.insert("commuPlaceInsert",map);
+	}
+	
+	//!!!!!!!글 저장용_장소 뿌려주기
+	public List commuPlaceList(Map map) {
+		System.out.println("map 넘어왔니:"+map);
+		return template.selectList("commuPlaceList",map);
+	}
+	
+	//글 수정용
+	public int commuUpdate(CommuDTO dto) {
+		return template.update("commuUpdate",dto);
+	}
+	
+	//글 수정용-장소 수정
+	public int placeUpdate(CommuDTO dto) {
+		return template.update("commuPlaceUpdate",dto);
 	}
 
 }

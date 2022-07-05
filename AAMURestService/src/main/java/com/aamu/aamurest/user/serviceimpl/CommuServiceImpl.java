@@ -24,17 +24,17 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 	
 	//글 목록용_댓글하나 뿌려줄거
 	@Override
-	public CommuCommentDTO commuCommentSelectOne(String cno) {
-		return dao.commuCommentSelectOne(cno);
+	public CommuCommentDTO commuCommentSelectOne(String lno) {
+		return dao.commuCommentSelectOne(lno);
 	}
 	
 	//글 목록용_사진리스트
 	@Override
-	public List commuSelectPhotoList(String cno) {
-		return dao.commuSelectPhotoList(cno);
+	public List commuSelectPhotoList(String lno) {
+		return dao.commuSelectPhotoList(lno);
 	}
 	
-	//글 생성
+	//글 생성용
 	@Override
 	public int commuInsert(Map map) {
 		//commu
@@ -48,8 +48,8 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 			photomap.put("photo", photo);
 			photoAffected+=dao.photoInsert(photomap);
 		}
-		//플레이스
-		if(map.get("place")!=null) { //플레이스가 넘어왔다
+		//장소
+		if(map.get("place")!=null) { //장소가 넘어왔다
 			int placeAffected=dao.placeInsert(map); //insert 성공하면 1 
 			if(placeAffected ==0) return 0; //실패하면 0 반환
 		}
@@ -59,5 +59,19 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 		else
 			return 0;
 	}/////commuInsert
+	
+	//!!!!!!!!글 생성용_장소 뿌려주기
+	@Override
+	public List<String> commuPlaceList(Map map) {
+		map.put("searchWord",map.get("searchWord"));
+		return dao.commuPlaceList(map);
+	}
+
+	//글 수정용
+	@Override
+	public int commuUpdate(CommuDTO dto) {
+		return dao.commuUpdate(dto);
+		
+	}
 	
 }
