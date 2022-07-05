@@ -1,6 +1,5 @@
 package com.aamu.aamurest.user.web;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -13,13 +12,12 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
+
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import com.aamu.aamurest.user.service.CommuCommentDTO;
@@ -36,7 +34,10 @@ public class CommuController {
 	@Autowired
 	private CommuServiceImpl commuService;
 	
-	///글 목록용
+	@Autowired
+	private CommonsMultipartResolver multipartResolver;
+	
+	//목록용
 	@GetMapping("/gram/selectList")
 	public List<CommuDTO> commuSelectList(){
 		//list=작성한 글들
