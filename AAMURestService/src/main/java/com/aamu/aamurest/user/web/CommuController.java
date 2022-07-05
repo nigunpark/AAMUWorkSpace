@@ -40,25 +40,24 @@ public class CommuController {
 	@Autowired
 	private CommonsMultipartResolver multipartResolver;
 	
-	//±Û ¸ñ·Ï¿ë
+
 	@GetMapping("/gram/selectList")
 	public List<CommuDTO> commuSelectList(){
-		//list=ÀÛ¼ºÇÑ ±Ûµé
+		//list=å ìŒœì‡½ì˜™å ì™ì˜™ å ìŒœë“¸ì˜™
 		List<CommuDTO> list = commuService.commuSelectList();
-		//ÄÚ¸ÇÆ® dto È®ÀåÆ÷¹® -> ¸®½ºÆ®ÇÏ³ª¾¿ »Ì¾Æ³»¼­ 
-		for(CommuDTO dto : list) {//±Û ÇÏ³ª¾¿ »Ì¾Æ¼­ dto¿¡ ´ã±â
+		//å ìŒ˜ëªŒì˜™íŠ¸ dto í™•å ì™ì˜™å ì™ì˜™å ì™ì˜™ -> å ì™ì˜™å ì™ì˜™íŠ¸å ì‹¹ë†‚ì˜™å ì™ì˜™ å ì‹±ì•„ë†‚ì˜™å ì™ì˜™ 
+		for(CommuDTO dto : list) {//å ì™ì˜™ å ì‹¹ë†‚ì˜™å ì™ì˜™ å ì‹±ì•„ì‡½ì˜™ dtoå ì™ì˜™ å ì™ì˜™å ï¿½
 			dto.setCommuComment(commuService.commuCommentSelectOne(dto.getLno()));
 			dto.setPhoto(commuService.commuSelectPhotoList(dto.getLno()));
 		}
-		
 		return list;
 	}////////////////commuSelectList
 	
-	
-	//±Û »ı¼º¿ë
+
+	//ê¸€ ìƒì„±ìš©
 	@PostMapping(value="/gram/edit")
 	public Map commuInsert(@RequestParam List<MultipartFile> multifiles, @RequestParam Map map, HttpServletRequest req) {
-		//¼­¹öÀÇ ¹°¸®Àû °æ·Î ¾ò±â
+		//ì„œë²„ì˜ ë¬¼ë¦¬ì  ê²½ë¡œ ì–»ê¸°
 		String path=req.getSession().getServletContext().getRealPath("/resources/upload");
 		
 		try {
@@ -68,14 +67,14 @@ public class CommuController {
 		} catch (IllegalStateException | IOException e) {e.printStackTrace();}
 		
 		int affected=commuService.commuInsert(map);
-		//affected°¡ 1ÀÌ¸é ³Ñ¾î¿ÔÀ¸¸é result¶ó´Â Å°·Î true¹İÈ¯ ¾Æ´Ï¸é false¹İÈ¯
+		//affectedå ì™ì˜™ 1å ì‹±ëªŒì˜™ å ì‹¼ì–µì˜™å ì™ì˜™å ì™ì˜™å ï¿½ resultå ì™ì˜™å ï¿½ í‚¤å ì™ì˜™ trueå ì™ì˜™í™˜ å ì‹£ë‹ˆëªŒì˜™ falseå ì™ì˜™í™˜
 		Map resultMap = new HashMap();
 		if(affected==1) resultMap.put("result", "true");
 		else resultMap.put("result", "false");
 		return resultMap;
 	}////////////////////////////commuInsert
 	
-	//!!!!!!!!!±Û »ı¼º¿ë_Àå¼Ò »Ñ·ÁÁÖ±â
+	//!!!!!!!!!ê¸€ ìƒì„±ìš©_ì¥ì†Œ ë¿Œë ¤ì£¼ê¸°
 	@GetMapping("/gram/place/selectList")
 	public List<String> commuPlaceList(@RequestParam Map map) {
 		System.out.println("map:"+map);
@@ -84,7 +83,7 @@ public class CommuController {
 		return list;
 	}
 	
-	//±Û ¼öÁ¤¿ë
+	//ê¸€ ìˆ˜ì •ìš©
 	@PutMapping("/gram/edit/{lno}")
 	public CommuDTO commuUpdate(@PathVariable String lno, @RequestBody CommuDTO dto) {
 		dto.setTitle(lno);

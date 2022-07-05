@@ -13,20 +13,33 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import axios from "axios";
-import {KAKAO_AUTH_URL} from './Kakao/OAuth';
+import { useNavigate } from "react-router-dom";
+import { KAKAO_AUTH_URL } from "./Kakao/OAuth";
 
 const Login = () => {
+  let navigate = useNavigate();
+  const theme = createTheme();
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+    axios
+      .post("http://192.168.0.19:8080/aamurest/authenticate", {
+        username: data.get("email"),
+        password: data.get("password"),
+      })
+      .then((resp) => {
+        sessionStorage.setItem("token", resp.data.token);
+        navigate("/");
+      })
+      .catch((error) => {
+        console.log("error:", error);
+      })
+      .then(() => {
+        console.log("로그인 post요청함");
+      });
   };
-
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={theme} sx={{ marginTop: 8 }}>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
@@ -37,7 +50,7 @@ const Login = () => {
             alignItems: "center",
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+          <Avatar sx={{ m: 1, bgcolor: "warning.light" }}>
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
@@ -50,6 +63,7 @@ const Login = () => {
             sx={{ mt: 1 }}
           >
             <TextField
+              color="warning"
               margin="normal"
               required
               fullWidth
@@ -60,6 +74,7 @@ const Login = () => {
               autoFocus
             />
             <TextField
+              color="warning"
               margin="normal"
               required
               fullWidth
@@ -69,16 +84,16 @@ const Login = () => {
               id="password"
               autoComplete="current-password"
             />
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
+            {/* <FormControlLabel
+              control={<Checkbox value="remember" color="warning" />}
               label="아이디 저장"
-            />
+            /> */}
             <Button
-              // type="submit"
+              color="warning"
+              type="submit"
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
-              onClick={loginPost}
             >
               로그인
             </Button>
@@ -87,10 +102,10 @@ const Login = () => {
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
-              onClick={loginPost}
+              // onClick={loginPost}
               href={KAKAO_AUTH_URL}
             >
-              <img src='/images/kakaoLogin.png'/>
+              <img src="/images/kakaoLogin.png" />
             </Button>
             <Grid container>
               <Grid item xs>
@@ -112,24 +127,6 @@ const Login = () => {
   );
 };
 
-function loginPost() {
-  axios
-    .post("http://192.168.0.19:8080/aamurest/authenticate", {
-      username: "ADMIN",
-      password: "1234",
-    })
-    .then((resp) => {
-      console.log(resp.data);
-      sessionStorage.setItem('token',resp.data.token)
-    })
-    .catch((error) => {
-      console.log(error);
-    })
-    .then(() => {
-      console.log("로그인요청실행됨");
-    });
-}
-
 function Copyright(props) {
   return (
     <Typography
@@ -148,41 +145,4 @@ function Copyright(props) {
   );
 }
 
-// function loginTest() {
-//   axios
-//     .post("/api/aamurest/authenticate", {
-//       "username": "KIM",
-//       "password": "1234"
-//     })
-//     .then((resp) => {
-//       console.log("post 성공");
-//       console.log(resp.data);
-//       sessionStorage.setItem('token',resp.data.token)
-
-//     })
-//     .catch((error) => {
-//       console.log("error : ", error);
-//     })
-//     .then(() => {
-//       console.log("로그인요청됨");
-//     });
-// }
-// function helloTest() {
-//   axios
-//     .get("/api/aamurest/Hello", {headers: {"Authorization" : `Bearer ${sessionStorage.getItem('token')}`}
-//     })
-//     .then((resp) => {
-//       console.log("get 성공");
-//       console.log(resp.data);
-//       // sessionStorage.setItem('token',resp.data.token
-//     })
-//     .catch((error) => {
-//       console.log("error : ", error);
-//     })
-//     .then(() => {
-//       console.log("hello요청됨");
-//     });
-// }
-
-const theme = createTheme();
 export default Login;
