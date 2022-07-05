@@ -87,8 +87,18 @@ public class MainDAO {
 	}
 
 	public List<AttractionDTO> selectEventList(Map map) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		return template.selectList("selectEventList", map);
+	}
+
+	public List<AttractionDTO> selectHotelList(Map map) {
+
+		return template.selectList("selectHotelList", map);
+	}
+
+	public List<AttractionDTO> selectDinerList(Map map) {
+		
+		return template.selectList("selectDinerList", map);
 	}
 
 

@@ -261,8 +261,13 @@ public class ApiController {
 				}
 				
 			}
+			if(dto.getTel()!=null) {
+				if(dto.getTel().length()>100) {
+					dto.setTel("");
+				}
+			}
 			list.add(dto);
-			if(dto.getAddr()!=null && dto.getTel().length()<=100) {
+			if(dto.getAddr()!=null) {
 				service.placeInsert(dto);
 				switch(contentTypeId) {
 				case "12":
