@@ -5,6 +5,7 @@ import React, { useEffect } from "react";
 import axios from 'axios';
 
 const KakaoRedirectHandler = () => {
+  
   useEffect(()=> {
     let params = new URL(document.location.toString()).searchParams;
     console.log('params:', params);
