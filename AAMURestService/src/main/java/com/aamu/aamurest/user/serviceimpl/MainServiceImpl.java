@@ -39,6 +39,7 @@ public class MainServiceImpl implements MainService{
 	}
 	@Override
 	public int eventInsert(AttractionDTO dto) {
+		
 		return dao.eventInsert(dto);
 	}
 	@Override
@@ -83,18 +84,15 @@ public class MainServiceImpl implements MainService{
 	}
 	@Override
 	public List<AttractionDTO> selectEventList(Map map) {
-		// TODO Auto-generated method stub
-		return null;
+		return dao.selectEventList(map);
 	}
 	@Override
 	public List<AttractionDTO> selectHotelList(Map map) {
-		// TODO Auto-generated method stub
-		return null;
+		return dao.selectHotelList(map);
 	}
 	@Override
 	public List<AttractionDTO> selectDinerList(Map map) {
-		// TODO Auto-generated method stub
-		return null;
+		return dao.selectDinerList(map);
 	}
 
 

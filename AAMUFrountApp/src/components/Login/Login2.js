@@ -14,6 +14,7 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { KAKAO_AUTH_URL } from "./Kakao/OAuth";
 
 const Login = () => {
   let navigate = useNavigate();
@@ -95,6 +96,16 @@ const Login = () => {
               sx={{ mt: 3, mb: 2 }}
             >
               로그인
+            </Button>
+            <Button
+              // type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2 }}
+              onClick={loginPost}
+              href={KAKAO_AUTH_URL}
+            >
+              <img src="/images/kakaoLogin.png" />
             </Button>
             <Grid container>
               <Grid item xs>

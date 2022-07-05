@@ -1,6 +1,5 @@
 package com.aamu.aamurest.user.web;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -13,13 +12,14 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
+
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import com.aamu.aamurest.user.service.CommuCommentDTO;
 import com.aamu.aamurest.user.service.CommuDTO;
@@ -35,13 +35,16 @@ public class CommuController {
 	@Autowired
 	private CommuServiceImpl commuService;
 	
-	//¸ñ·Ï¿ë
+	@Autowired
+	private CommonsMultipartResolver multipartResolver;
+	
+	//ï¿½ï¿½Ï¿ï¿½
 	@GetMapping("/gram/selectList")
 	public List<CommuDTO> commuSelectList(){
-		//list=ÀÛ¼ºÇÑ ±Ûµé
+		//list=ï¿½Û¼ï¿½ï¿½ï¿½ ï¿½Ûµï¿½
 		List<CommuDTO> list = commuService.commuSelectList();
-		//ÄÚ¸ÇÆ® dto È®ÀåÆ÷¹® -> ¸®½ºÆ®ÇÏ³ª¾¿ »Ì¾Æ³»¼­ 
-		for(CommuDTO dto : list) {//±Û ÇÏ³ª¾¿ »Ì¾Æ¼­ dto¿¡ ´ã±â
+		//ï¿½Ú¸ï¿½Æ® dto È®ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ -> ï¿½ï¿½ï¿½ï¿½Æ®ï¿½Ï³ï¿½ï¿½ï¿½ ï¿½Ì¾Æ³ï¿½ï¿½ï¿½ 
+		for(CommuDTO dto : list) {//ï¿½ï¿½ ï¿½Ï³ï¿½ï¿½ï¿½ ï¿½Ì¾Æ¼ï¿½ dtoï¿½ï¿½ ï¿½ï¿½ï¿½
 			dto.setCommuComment(commuService.commuCommentSelectOne(dto.getLno()));
 			dto.setPhoto(commuService.commuSelectPhotoList(dto.getLno()));
 		}
@@ -49,25 +52,28 @@ public class CommuController {
 		return list;
 	}
 	
-	//´ñ±Û ÇÏ³ª °¡Á®¿À´Â¿ë
+	/*
+	///ï¿½ï¿½ ï¿½ï¿½Ï¿ï¿½_ï¿½ï¿½ï¿½ ï¿½Ï³ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â¿ï¿½
 	@GetMapping("/gram/comment/selectOne/{cno}")
 	public CommuCommentDTO commuCommentSelectOne(@PathVariable String cno) {
 		return commuService.commuCommentSelectOne(cno);
 	}
+	*/
 	
-	//±Û »ý¼º¿ë
-	@PostMapping("/gram/edit")
-	public Map commuInsert(@RequestPart Map map, @RequestPart List<MultipartFile> multifiles,HttpServletRequest req) {
-		//1]¼­¹öÀÇ ¹°¸®Àû °æ·Î ¾ò±â
+	//ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	@PostMapping(value="/gram/edit", produces = "application/json;charset=UTF-8")
+	public Map commuInsert(@RequestParam List<MultipartFile> multifiles, @RequestParam Map map, HttpServletRequest req) {
+		//1]ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
 		String path=req.getSession().getServletContext().getRealPath("/resources/upload");
 		
 		try {
 			List<String> uploads= FileUploadUtil.fileProcess(multifiles, path);
-			System.out.println(uploads);
+			System.out.println("uploads:"+uploads);
+			map.put("photolist", uploads);
 		} catch (IllegalStateException | IOException e) {e.printStackTrace();}
 		
 		int affected=commuService.commuInsert(map);
-		//affected°¡ 1ÀÌ¸é ³Ñ¾î¿ÔÀ¸¸é result¶ó´Â Å°·Î true¹ÝÈ¯ ¾Æ´Ï¸é false¹ÝÈ¯
+		//affectedï¿½ï¿½ 1ï¿½Ì¸ï¿½ ï¿½Ñ¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ resultï¿½ï¿½ï¿½ Å°ï¿½ï¿½ trueï¿½ï¿½È¯ ï¿½Æ´Ï¸ï¿½ falseï¿½ï¿½È¯
 		Map resultMap = new HashMap();
 		if(affected==1) resultMap.put("result", "true");
 		else resultMap.put("result", "false");

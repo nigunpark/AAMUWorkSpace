@@ -5,9 +5,7 @@
   
 <mapper namespace="aamu.mybatis.mapper.bbs">
 
-	<insert id="eventInsert" parameterType="Map" >
-		Insert Into bbs values(#{},)
-	</insert>
+
 	
 	
 	

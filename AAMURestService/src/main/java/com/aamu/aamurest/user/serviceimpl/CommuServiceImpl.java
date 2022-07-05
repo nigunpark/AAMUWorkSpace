@@ -1,5 +1,6 @@
 package com.aamu.aamurest.user.serviceimpl;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -40,10 +41,12 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 		int commuaffected=dao.commuInsert(map);
 		//사진 
 		int photoAffected=0;
-		List<Map> lists=(List<Map>)map.get("photos");
-		for(Map photo:lists) {
-			photo.put("lno", map.get("lno"));
-			photoAffected+=dao.photoInsert(photo);
+		List<String> lists= (List<String>) map.get("photolist");
+		for(String photo:lists) {
+			Map photomap = new HashMap();
+			photomap.put("lno", map.get("lno"));
+			photomap.put("photo", photo);
+			photoAffected+=dao.photoInsert(photomap);
 		}
 		//플레이스
 		if(map.get("place")!=null) { //플레이스가 넘어왔다
@@ -51,7 +54,7 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 			if(placeAffected ==0) return 0; //실패하면 0 반환
 		}
 		
-		if(commuaffected==1 && photoAffected==((List)map.get("photos")).size()) 
+		if(commuaffected==1 && photoAffected==((List)map.get("photolist")).size()) 
 			return 1;
 		else
 			return 0;
