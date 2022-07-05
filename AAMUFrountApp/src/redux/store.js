@@ -25,119 +25,7 @@ export let { changeInfo } = kindOfInfo.actions;
 //우측 추천장소 배열
 let arrForJangso = createSlice({
   name: "arrForJangso",
-  initialState: [
-    {
-      areacode: 1,
-      sigungucode: 11,
-      contentid: 126500,
-      contenttypeid: 12,
-      mapx: 127.0406812854,
-      mapy: 37.5924523515,
-      title: "홍릉수목원",
-      addr: "서울특별시 동대문구 회기로 57",
-      image: "http://tong.visitkorea.or.kr/cms/resource/80/746580_image2_1.jpg",
-      image2:
-        "http://tong.visitkorea.or.kr/cms/resource/80/746580_image3_1.jpg",
-      playtime:
-        "평일(화~금) 숲해설 10:30, 13:30, 15:30 주말_ 자유관람 하절기 09:00~18:00동절기 09:00~17:00 주말_숲해설 3월~11월 10:30, 14:00",
-      tel: "02-961-2522",
-      resttime: "매주 월요일, 5월 1일 및 모든 법정 공휴일 (일요일 제외)",
-      checkintime: null,
-      checkouttime: null,
-      url: null,
-      kakaokey: "443387508",
-      menu: null,
-    },
-    {
-      areacode: 1,
-      sigungucode: 15,
-      contentid: 125452,
-      contenttypeid: 12,
-      mapx: 127.0543676446,
-      mapy: 37.4416867721,
-      title: "청계산",
-      addr: "서울특별시 서초구 원터길",
-      image:
-        "http://tong.visitkorea.or.kr/cms/resource/41/2023841_image2_1.jpg",
-      image2:
-        "http://tong.visitkorea.or.kr/cms/resource/41/2023841_image3_1.jpg",
-      playtime: null,
-      tel: "02-2155-6870",
-      resttime: null,
-      checkintime: null,
-      checkouttime: null,
-      url: null,
-      kakaokey: "10847903",
-      menu: null,
-    },
-    {
-      areacode: 1,
-      sigungucode: 23,
-      contentid: 126537,
-      contenttypeid: 12,
-      mapx: 126.9864254967,
-      mapy: 37.5791612548,
-      title: "북촌한옥마을",
-      addr: "서울특별시 종로구 계동길 37",
-      image:
-        "http://tong.visitkorea.or.kr/cms/resource/06/2512006_image2_1.jpg",
-      image2:
-        "http://tong.visitkorea.or.kr/cms/resource/06/2512006_image3_1.jpg",
-      playtime:
-        "* 허용시간 : 10:00 ~17:00(주중,토) / 일요일 : 골목길 쉬는 날* 대상지역 : 북촌로 11길 일대 약 100m 구간",
-      tel: "02-2148-4161",
-      resttime: "(일요일) 골목길 쉬는 날",
-      checkintime: null,
-      checkouttime: null,
-      url: null,
-      kakaokey: "25027484",
-      menu: null,
-    },
-    {
-      areacode: 1,
-      sigungucode: 24,
-      contentid: 126747,
-      contenttypeid: 12,
-      mapx: 126.9940059289,
-      mapy: 37.5591248302,
-      title: "남산골한옥마을",
-      addr: "서울특별시 중구 퇴계로34길 28",
-      image:
-        "http://tong.visitkorea.or.kr/cms/resource/62/1946562_image2_1.jpg",
-      image2:
-        "http://tong.visitkorea.or.kr/cms/resource/62/1946562_image3_1.jpg",
-      playtime: " 09:00 ~ 18:00 (코로나19 단축운영) ※ 매주 월요일 정기휴관",
-      tel: "02-2261-0500",
-      resttime: "월요일",
-      checkintime: null,
-      checkouttime: null,
-      url: null,
-      kakaokey: "8246127",
-      menu: null,
-    },
-    {
-      areacode: 1,
-      sigungucode: 10,
-      contentid: 126481,
-      contenttypeid: 12,
-      mapx: 127.0184192271,
-      mapy: 37.6969870145,
-      title: "도봉산",
-      addr: "서울특별시 도봉구 도봉동",
-      image:
-        "http://tong.visitkorea.or.kr/cms/resource/65/1894465_image2_1.jpg",
-      image2:
-        "http://tong.visitkorea.or.kr/cms/resource/65/1894465_image3_1.jpg",
-      playtime: "",
-      tel: "02-954-2566",
-      resttime: "연중무휴",
-      checkintime: null,
-      checkouttime: null,
-      url: null,
-      kakaokey: "18580958",
-      menu: null,
-    },
-  ],
+  initialState: [],
   reducers: {
     changeArrForJangso(state, action) {
       return action.payload;
@@ -154,10 +42,23 @@ let arrForJangso = createSlice({
         1
       );
     },
+    addAtimeArrForJangso(state, action) {
+      state.atime = action.payload;
+    },
   },
 });
-export let { changeArrForJangso, addArrInForJangso, deleteArrInJangso } =
-  arrForJangso.actions;
+export let {
+  changeArrForJangso,
+  addArrInForJangso,
+  deleteArrInJangso,
+  addAtimeArrForJangso,
+} = arrForJangso.actions;
+
+//일정등록버튼 누르고 우재한테 받은 데이터를 저장하는 state
+let fromWooJaeData = createSlice({
+  name: "wooJaeData",
+  initialState: [],
+});
 
 //추천장소에서 선택한 장소를 넣는 배열
 let arrForPickJangso = createSlice({
@@ -183,144 +84,14 @@ export let { addPickJangso, deleteAllPickJanso, deletePickJangso } =
 //추천숙소
 let arrForSukso = createSlice({
   name: "arrForSukso",
-  initialState: [
-    {
-      areacode: 1,
-      sigungucode: 24,
-      contentid: 436076,
-      contenttypeid: 32,
-      mapx: 126.9830123373,
-      mapy: 37.5643879099,
-      title: "이비스 앰배서더 명동",
-      addr: "서울특별시 중구 남대문로 78",
-      bigImage: null,
-      smallImage: null,
-      playtime: null,
-      tel: "02-6272-1101",
-      resttime: null,
-      checkin: "14:00",
-      checkout: "12:00",
-      url: "https://ibis.ambatel.com/myeongdong",
-      kakaokey: "17361103",
-      menu: null,
-      park: null,
-      charge: null,
-      eventstart: null,
-      eventend: null,
-      eventTime: null,
-    },
-    {
-      areacode: 1,
-      sigungucode: 15,
-      contentid: 142790,
-      contenttypeid: 32,
-      mapx: 127.0330577212,
-      mapy: 37.4682610838,
-      title: "The-K호텔서울 (더케이호텔서울)",
-      addr: "서울특별시 서초구 바우뫼로12길 70",
-      bigImage:
-        "http://tong.visitkorea.or.kr/cms/resource/90/2014990_image2_1.jpg",
-      smallImage:
-        "http://tong.visitkorea.or.kr/cms/resource/90/2014990_image2_1.jpg",
-      playtime: null,
-      tel: "02-571-8100",
-      resttime: null,
-      checkin: "15:00",
-      checkout: "12:00",
-      url: "https://thek-hotel.co.kr",
-      kakaokey: "7941550",
-      menu: null,
-      park: null,
-      charge: null,
-      eventstart: null,
-      eventend: null,
-      eventTime: null,
-    },
-    {
-      areacode: 1,
-      sigungucode: 21,
-      contentid: 142733,
-      contenttypeid: 32,
-      mapx: 126.9974672756,
-      mapy: 37.5396549325,
-      title: "그랜드 하얏트 서울",
-      addr: "서울특별시 용산구 소월로 322",
-      bigImage: null,
-      smallImage: null,
-      playtime: null,
-      tel: "02-799-8888",
-      resttime: null,
-      checkin: "15:00",
-      checkout: "11:00",
-      url: "http://www.hyatt.com/ko-KR/hotel/south-korea/grand-hyatt-seoul/selrs",
-      kakaokey: "18661190",
-      menu: null,
-      park: null,
-      charge: null,
-      eventstart: null,
-      eventend: null,
-      eventTime: null,
-    },
-    {
-      areacode: 1,
-      sigungucode: 24,
-      contentid: 1045657,
-      contenttypeid: 32,
-      mapx: 127.0005250345,
-      mapy: 37.55012877,
-      title: "반얀트리 클럽 앤 스파 서울",
-      addr: "서울특별시 중구 장충단로 60",
-      bigImage:
-        "http://tong.visitkorea.or.kr/cms/resource/65/2719665_image2_1.jpg",
-      smallImage:
-        "http://tong.visitkorea.or.kr/cms/resource/65/2719665_image2_1.jpg",
-      playtime: null,
-      tel: "02-2250-8000",
-      resttime: null,
-      checkin: "15:00",
-      checkout: "12:00",
-      url: "http://www.banyantreeclub.com",
-      kakaokey: "18059533",
-      menu: null,
-      park: null,
-      charge: null,
-      eventstart: null,
-      eventend: null,
-      eventTime: null,
-    },
-    {
-      areacode: 1,
-      sigungucode: 6,
-      contentid: 142728,
-      contenttypeid: 32,
-      mapx: 127.1107898477,
-      mapy: 37.5552218298,
-      title: "그랜드 워커힐 서울",
-      addr: "서울특별시 광진구 워커힐로 177",
-      bigImage: null,
-      smallImage: null,
-      playtime: null,
-      tel: "02-2022-0000",
-      resttime: null,
-      checkin: "15:00",
-      checkout: "12:00",
-      url: "http://www.grandwalkerhillseoul.com",
-      kakaokey: "24008908",
-      menu: null,
-      park: null,
-      charge: null,
-      eventstart: null,
-      eventend: null,
-      eventTime: null,
-    },
-  ],
+  initialState: [],
   reducers: {
     changeArrForSukso(state, action) {
       return action.payload;
     },
   },
 });
-export let { changeArrForSukso } = arrForJangso.actions;
+export let { changeArrForSukso } = arrForSukso.actions;
 
 //숙소와 장소모달중 어떤 것을 보여줄지
 let showWhichModal = createSlice({
