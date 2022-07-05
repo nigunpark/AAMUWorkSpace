@@ -11,9 +11,10 @@ import {
   Body,
 } from "../components/Modal/Modal.js";
 import PopularLocation from "../components/PopularLocation/PopularLocation";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { changeLnfM } from "../redux/store";
 import { useSelector, useDispatch } from "react-redux";
+import axios from "axios";
 
 const WholeMap = () => {
   const [modalState, setModalState] = useState(false);
@@ -70,7 +71,6 @@ const WholeMap = () => {
 
 //모달창
 function Modal({ setModalState, localName, localId }) {
-  let dispatch = useDispatch();
   return (
     <Container>
       <Overlay
