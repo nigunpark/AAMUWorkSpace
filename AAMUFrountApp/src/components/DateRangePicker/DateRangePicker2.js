@@ -64,7 +64,8 @@ const DateRangePick = ({
             className="dateRangePicker__closeBtn"
             onClick={() => {
               setAppearCalendar(!appearCalendar);
-            }}>
+            }}
+          >
             닫기
           </div>
           <div
@@ -75,7 +76,8 @@ const DateRangePick = ({
               setAppearCalendar(!appearCalendar);
               dispatch(changeSaveDaysRedux(saveDays));
               dispatch(changeTripPeriod(saveDays + 1));
-            }}>
+            }}
+          >
             적용하기
           </div>
         </div>
