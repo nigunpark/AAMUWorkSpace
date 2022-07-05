@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import com.aamu.aamurest.user.service.CommuCommentDTO;
 import com.aamu.aamurest.user.service.CommuDTO;
@@ -35,7 +36,7 @@ public class CommuController {
 	@Autowired
 	private CommuServiceImpl commuService;
 	
-	//목록용
+	///글 목록용
 	@GetMapping("/gram/selectList")
 	public List<CommuDTO> commuSelectList(){
 		//list=작성한 글들
@@ -49,7 +50,7 @@ public class CommuController {
 		return list;
 	}
 	
-	//댓글 하나 가져오는용
+	///글 목록용_댓글 하나 가져오는용
 	@GetMapping("/gram/comment/selectOne/{cno}")
 	public CommuCommentDTO commuCommentSelectOne(@PathVariable String cno) {
 		return commuService.commuCommentSelectOne(cno);
