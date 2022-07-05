@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
@@ -51,21 +52,24 @@ public class CommuController {
 		return list;
 	}
 	
+	/*
 	///글 목록용_댓글 하나 가져오는용
 	@GetMapping("/gram/comment/selectOne/{cno}")
 	public CommuCommentDTO commuCommentSelectOne(@PathVariable String cno) {
 		return commuService.commuCommentSelectOne(cno);
 	}
+	*/
 	
 	//글 생성용
-	@PostMapping("/gram/edit")
-	public Map commuInsert(@RequestPart Map map, @RequestPart List<MultipartFile> multifiles,HttpServletRequest req) {
+	@PostMapping(value="/gram/edit", produces = "application/json;charset=UTF-8")
+	public Map commuInsert(@RequestParam List<MultipartFile> multifiles, @RequestParam Map map, HttpServletRequest req) {
 		//1]서버의 물리적 경로 얻기
 		String path=req.getSession().getServletContext().getRealPath("/resources/upload");
 		
 		try {
 			List<String> uploads= FileUploadUtil.fileProcess(multifiles, path);
-			System.out.println(uploads);
+			System.out.println("uploads:"+uploads);
+			map.put("photolist", uploads);
 		} catch (IllegalStateException | IOException e) {e.printStackTrace();}
 		
 		int affected=commuService.commuInsert(map);

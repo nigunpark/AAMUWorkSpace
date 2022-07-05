@@ -7,13 +7,13 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface CommuService<T> {
-	//커뮤니티 글목록
+	//글 목록용
 	List<T> commuSelectList();
 	
-	//comment 한개 가져오기
+	//글 목록용_댓글 한개 가져오기
 	CommuCommentDTO commuCommentSelectOne(String cno);
 	
-	//사진
+	//글 목록용_사진 가져오기
 	List commuSelectPhotoList(String cno);
 	
 	//커뮤니티 글생성
