@@ -24,6 +24,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import com.aamu.aamurest.user.service.CommuCommentDTO;
 import com.aamu.aamurest.user.service.CommuDTO;
 import com.aamu.aamurest.user.serviceimpl.CommuServiceImpl;
+import com.aamu.aamurest.util.FileUploadUtil;
 
 @RestController
 @CrossOrigin(origins="*")
@@ -56,21 +57,14 @@ public class CommuController {
 	
 	//글 생성용
 	@PostMapping("/gram/edit")
-	public Map commuInsert(@RequestPart Map map, @RequestPart MultipartHttpServletRequest mhsr) throws IllegalStateException, IOException {
-		//1]서버의 물리적 경로 얻기		
-		String path=mhsr.getSession().getServletContext().getRealPath("/resources/upload");
-		//1-1]MultipartHttpServletRequest객체의 getFile("파라미터명")메소드로 MultipartFile객체 얻기
-		List<MultipartFile> uploads= mhsr.getFiles("upload");
-		for(MultipartFile upload:uploads) {
-			//2]File객체 생성	
-			//2-1] 파일 중복시 이름 변경
-			String rename=FileUploadUtils.getNewFileName(path, upload.getOriginalFilename());
-			File dest = new File(path+File.separator+rename);
-			//3]업로드 처리
-			upload.transferTo(dest);
-			String photo = "192.168.0.5:8080/aamurest"+dest;
-		}
-		//localhost:
+	public Map commuInsert(@RequestPart Map map, @RequestPart List<MultipartFile> multifiles,HttpServletRequest req) {
+		//1]서버의 물리적 경로 얻기
+		String path=req.getSession().getServletContext().getRealPath("/resources/upload");
+		
+		try {
+			List<String> uploads= FileUploadUtil.fileProcess(multifiles, path);
+			System.out.println(uploads);
+		} catch (IllegalStateException | IOException e) {e.printStackTrace();}
 		
 		int affected=commuService.commuInsert(map);
 		//affected가 1이면 넘어왔으면 result라는 키로 true반환 아니면 false반환
