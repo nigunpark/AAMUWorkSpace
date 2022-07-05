@@ -13,10 +13,12 @@
   		<typeAlias type="com.aamu.aamurest.user.service.CommuCommentDTO" alias="commuCommentDTO"/>
   		<typeAlias type="com.aamu.aamurest.user.service.PlannerDTO" alias="planDTO"/>
   		<typeAlias type="com.aamu.aamurest.user.service.RouteDTO" alias="routeDTO"/>
+  		<typeAlias type="com.aamu.aamurest.user.service.ReviewDTO" alias="reviewDTO"/>
   	</typeAliases>
 	<mappers>
 		<mapper resource="aamu/mybatis/mapper/user.xml" />
 		<mapper resource="aamu/mybatis/mapper/main.xml" />
 		<mapper resource="aamu/mybatis/mapper/commu.xml" />
+		<mapper resource="aamu/mybatis/mapper/bbs.xml" />
 	</mappers>
 </configuration>
