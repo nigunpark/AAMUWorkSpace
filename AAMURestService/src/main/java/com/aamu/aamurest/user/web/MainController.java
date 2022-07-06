@@ -37,13 +37,11 @@ public class MainController {
 		affected = service.plannerInsert(dto);
 		List<RouteDTO> routes = dto.getRoute();
 		Map map = new HashMap();
-		
-		
+
 		for(RouteDTO route:routes) {
 			service.RouteInsert(route);
 			countRoute++;
 		}
-		
 		
 		return 0;
 	}
@@ -107,7 +105,7 @@ public class MainController {
 					dayTime = startTime.get(index);
 				}
 			}
-			
+
 		}
 		
 		return null;

@@ -56,4 +56,7 @@
 		UPDATE commuplace SET lno=#{lno},content=#{content} WHERE lno=#{lno}
 	</update>
 	
+	
+	
+	
 </mapper>

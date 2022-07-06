@@ -449,10 +449,18 @@
                 background-color: #fff;
                 z-index: 9;
                 overflow: auto;
-
-
                 
-
+                .search-squre {
+                    position: absolute;
+                    top: -7px;
+                    left: 175px;
+                    width: 16px;
+                    height: 16px;
+                    transform: rotate(45deg);
+                    box-shadow: 0 0 5px 1px rgba(var(--jb7, 0, 0, 0), .0975);
+                    background-color: #fff;
+                    z-index: 8000;
+                }
 
                 .search-contents {
                     display: flex;
