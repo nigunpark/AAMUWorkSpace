@@ -1,21 +1,35 @@
 import { faSquarePlus } from '@fortawesome/free-regular-svg-icons'
 import { faHeart } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { red } from '@mui/material/colors'
 import React, { useState } from 'react'
-import NotificationModal from './ModalGroup/NotificationModal';
-import SearchModal from './Search';
 
 
 function User() {
     const [heart,setHeart] = useState(false);
     const [follow,setFollowing] = useState(false);
-    const [search,setsearch] = useState(false);
     
   return (
     <div >
-        <div className="search" onClick={()=>{setsearch(!search)}}>
-            <input type="text" className="search-bar" placeholder="검색" />            
-            {search ? <SearchModal></SearchModal> : null}              
+        <div className="search">
+            <input type="text" className="search-bar" placeholder="검색" />
+           
+             {/* <div className="search-all disappear">
+                <div className="search-engine">
+                    <div className="parent">
+                    <div className="search-contents">
+                        <div className="gradient">
+                            <img src="img/jenny.jpeg" alt="스토리 프로필 사진" />
+                        </div>
+                        <div>
+                            <p className="user-id">jenny0305</p>
+                            <p className="user-name">hi im jenny💙</p>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                <div className="search-squre"></div>
+  </div>  */}
         </div>
         <div className="user">
             <img src="./img/bk.jpg" alt="사프" />
@@ -24,10 +38,7 @@ function User() {
                 <p className="user-name">김영현</p>
             </div>
             <div className='heart'>
-                {heart ?<i class="fa-solid fa-heart fa-2x"onClick={()=>{setHeart(!heart)}} style={{color:'black'}} >
-                <NotificationModal></NotificationModal></i>
-                :<i class="fa-regular fa-heart fa-2x"  onClick={()=>{setHeart(!heart)}}></i>}
-                {/* {heart ? <NotificationModal></NotificationModal>:null} */}
+                {heart ?<i class="fa-solid fa-heart fa-2x"onClick={()=>{setHeart(!heart)}} style={{color:'black'}} />:<i class="fa-regular fa-heart fa-2x"  onClick={()=>{setHeart(!heart)}}></i>}
             </div>
             <div>
                 <FontAwesomeIcon icon={faSquarePlus} className="post-icon" />

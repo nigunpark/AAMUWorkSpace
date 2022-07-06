@@ -7,8 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
-import javax.swing.event.ListSelectionEvent;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -31,21 +29,21 @@ public class MainController {
 	private MainService service;
 	
 	@PostMapping("planner/edit")
-	public int plannerInsert(PlannerDTO dto) {
+	public Map plannerInsert(PlannerDTO dto) {
 		int affected = 0;
 		int countRoute = 0;
 		affected = service.plannerInsert(dto);
 		List<RouteDTO> routes = dto.getRoute();
-		Map map = new HashMap();
-		
 		
 		for(RouteDTO route:routes) {
 			service.RouteInsert(route);
 			countRoute++;
 		}
 		
-		
-		return 0;
+		Map map = new HashMap();
+		map.put("planner",affected);
+		map.put("route",countRoute);
+		return map;
 	}
 	
 	@PutMapping("planner/edit")
@@ -67,50 +65,6 @@ public class MainController {
 		map.put("result",affected);
 		
 		return map;
-	}
-	@PostMapping("planner/data")
-	public PlannerDTO plannerData(PlannerDTO dto) {
-		
-		List<RouteDTO> list = dto.getRoute();
-		int day = list.get(0).getDay();
-		for(int i=0;i<list.size();i++) {
-			if(list.get(i).getContenttypeid()==32) {
-				if(day<list.get(i).getDay()) {
-					day=list.get(i).getDay();
-				}
-			}
-		}
-		List<Long> startTime=new Vector<>();
-
-		long oneDay = 24*1000*60*60;
-		int startDay=1;
-		int index=0;
-		
-		for(RouteDTO routeTime: list) {
-			
-			if(String.valueOf(routeTime.getStartTime())!=null) {
-				startTime.add(routeTime.getStartTime());
-			}
-		}
-		long dayTime = startTime.get(index);
-		for(RouteDTO route:list) {
-			
-			if(String.valueOf(route.getAtime())!=null) {
-				dayTime += route.getAtime()+route.getMtime();
-				route.setDay(startDay);
-				if(dayTime>oneDay) {
-					dayTime=0;
-					index++;
-					if(startDay<=day) {
-						startDay++;
-					}
-					dayTime = startTime.get(index);
-				}
-			}
-			
-		}
-		
-		return null;
 	}
 	@GetMapping("planner/selectone")
 	public PlannerDTO selectPlannerOne(@RequestParam Map map) {

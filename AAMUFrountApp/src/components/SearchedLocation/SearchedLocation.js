@@ -36,15 +36,10 @@ const SearchedLocation = ({ local }) => {
       >
         <div className="searchedLocation__container" ref={localContainer}>
           <div className="searchedLocation__img-container">
-            <img
-              src={local.smallImage ?? "/images/no-image.jpg"}
-              onError={(e) => {
-                e.target.src = "/images/no-image.jpg";
-              }}
-            />
+            <img src={local.image2} />
           </div>
           <div className="searchedLocation__info">
-            <h5 className="searchedLocation__info__title">{local.title}</h5>
+            <h4 className="searchedLocation__info__title">{local.title}</h4>
             <div className="searchedLocation__info__content">
               <FontAwesomeIcon
                 icon={faCircleInfo}

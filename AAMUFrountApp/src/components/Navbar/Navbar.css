@@ -1,17 +1,17 @@
-.navbar__fragment {
+.navbar__fragment{
   /* display: flex;
   flex-direction: column; */
   width: 100%;
   height: 100vh;
 }
-.navbar {
+.navbar{
   position: fixed;
   top: 0;
   width: 100%;
   height: auto;
   padding: 20px 25px;
   box-shadow: var(--shadow);
-  transition: 0.4s;
+  transition: .4s;
   z-index: 100;
   transform: translateY(-30px);
   animation: navFlooting 1s ease forwards;
@@ -20,91 +20,93 @@
 
 .scrollActive a,
 .scrollActive button,
-.scrollActive a h1 {
+.scrollActive a h1{
   color: black;
 }
 
-.scrollActive {
+.scrollActive{
   background: white;
   z-index: 10;
 }
 
-.whereUrlActive {
+.whereUrlActive{
   background: white;
   /* position: relative; */
 }
 
+
 .whereUrlActive a,
 .whereUrlActive button,
-.whereUrlActive a h1 {
+.whereUrlActive a h1{
   color: black;
 }
-.navbar-container {
+.navbar-container{
   display: flex;
   justify-content: space-between;
   align-items: center;
+
 }
 
-.navbar-logo {
+.navbar-logo{
   margin-left: 2rem;
 }
 
-.navbar-logo h1 {
-  color: white;
+.navbar-logo h1{
+color: white;
 }
 
-.navbar-btn-container {
-  margin-right: 2rem;
-  display: flex;
-  gap: 1rem;
+.navbar-btn-container{
+margin-right:2rem;
+display: flex;
+gap: 1rem;
 }
 
-.navbar-btn {
+.navbar-btn{
   height: 2rem;
   padding: 0 2rem;
   border: 1px solid var(--orange);
   background-color: transparent;
-  border-radius: 0.5rem;
+  border-radius: .5rem;
   color: white;
   font-size: 15px;
   font-weight: bold;
-  cursor: pointer;
 }
 
-.navbar-btn:hover {
-  background: var(--mainColor);
-  color: white;
-  border: none;
-  transition: 0.2s;
+.navbar-btn:hover{
+background:var(--mainColor);
+color: white;
+border: none;
+transition: .2s;
+
 }
-.nav-menu {
+.nav-menu{
   display: flex;
   justify-content: center;
   gap: 8rem;
-  margin-left: 4rem;
+  margin-left:4rem;
 }
 
-.nav-menu a:hover {
-  transition: 0.1s;
-  border-bottom: 4px solid var(--orange);
+.nav-menu a:hover{
+transition: .1s;
+border-bottom: 4px solid var(--orange);
 }
 
-.nav-links {
+.nav-links{
   font-size: 20px;
   color: white;
 }
 
-.navbar-menu-icon {
+.navbar-menu-icon{
   display: none;
 }
 
 @keyframes navFlooting {
-  from {
+  from{
     opacity: 0;
   }
-  to {
+  to{
     opacity: 1;
-    transform: none;
+    transform: none; 
   }
 }
 

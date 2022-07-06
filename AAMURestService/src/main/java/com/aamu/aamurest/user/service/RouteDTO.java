@@ -7,7 +7,6 @@ import lombok.Setter;
 @Setter
 public class RouteDTO {
 	private int contentid;
-	private int contenttypeid;
 	private long startTime;
 	private int day;
 	private long atime;

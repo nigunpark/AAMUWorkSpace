@@ -10,7 +10,6 @@ import { faClock } from "@fortawesome/free-regular-svg-icons";
 import { useDispatch } from "react-redux";
 import {
   addArrInForJangso,
-  addAtimeArrForJangso,
   addMonthNDate,
   changeSaveDaysRedux,
   changeShowWhichModal,
@@ -251,7 +250,6 @@ function PickedLocation({ local }) {
                 if (timeVal > e.target.value) dispatch(timeSetter(-1));
                 else dispatch(timeSetter(1));
                 setTimeVal(e.target.value);
-                dispatch(addAtimeArrForJangso(timeVal * 60 * 60 * 1000));
               }
             }}
             onKeyUp={(e) => {
@@ -260,7 +258,6 @@ function PickedLocation({ local }) {
                   dispatch(timeSetter(e.target.value - timeVal));
                 else dispatch(timeSetter(e.target.value - timeVal));
                 setTimeVal(e.target.value);
-                dispatch(addAtimeArrForJangso(timeVal * 60 * 60 * 1000));
               }
             }}
             onBlur={(e) => {
@@ -269,7 +266,6 @@ function PickedLocation({ local }) {
                   dispatch(timeSetter(e.target.value - timeVal));
                 else dispatch(timeSetter(e.target.value - timeVal));
                 setTimeVal(e.target.value);
-                dispatch(addAtimeArrForJangso(timeVal * 60 * 60 * 1000));
               }
             }}
           />
@@ -285,7 +281,6 @@ function PickedLocation({ local }) {
                 if (minVal > e.target.value) dispatch(minSetter(-1));
                 else if (minVal < e.target.value) dispatch(minSetter(1));
                 setMinVal(e.target.value);
-                dispatch(addAtimeArrForJangso(minVal * 60 * 1000));
               }
             }}
             onKeyUp={(e) => {
@@ -294,7 +289,6 @@ function PickedLocation({ local }) {
                   dispatch(minSetter(e.target.value - minVal));
                 else dispatch(minSetter(e.target.value - minVal));
                 setMinVal(e.target.value);
-                dispatch(addAtimeArrForJangso(minVal * 60 * 1000));
               }
             }}
             onBlur={(e) => {
@@ -303,7 +297,6 @@ function PickedLocation({ local }) {
                   dispatch(minSetter(e.target.value - minVal));
                 else dispatch(minSetter(e.target.value - minVal));
                 setMinVal(e.target.value);
-                dispatch(addAtimeArrForJangso(minVal * 60 * 1000));
               }
             }}
           />
