@@ -119,6 +119,7 @@ function getCurrpositionLocal(currPosition, dispatch) {
     })
     .then((resp) => {
       dispatch(changeArrForJangso(resp.data));
+      console.log(resp.data);
     })
     .catch((error) => {
       console.log(error);
