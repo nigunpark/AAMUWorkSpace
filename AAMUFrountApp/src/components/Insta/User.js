@@ -1,7 +1,5 @@
-import { faSquarePlus } from '@fortawesome/free-regular-svg-icons'
-import { faHeart } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import React, { useState } from 'react'
+import styled from 'styled-components'
+import React, { useState, useRef } from 'react'
 import WriteModal from './ModalGroup/WriteModal';
 import SearchModal from './ModalGroup/Search';
 import Notification from './ModalGroup/Notification';
@@ -10,14 +8,25 @@ import Notification from './ModalGroup/Notification';
 function User() {
     const [heart,setHeart] = useState(false);
     const [follow,setFollowing] = useState(false);
-    const [search,setsearch] = useState(false);
     const [square,setsquare] = useState(false);
+
+    const [menuBtnClick, setMenuBtnClick] = useState(false);
+    const outSection = useRef();
     
   return (
-    <div >
-        <div className="search" onClick={()=>{setsearch(!search)}}>
-            <input type="text" className="search-bar" placeholder="검색" />            
-            {search ? <SearchModal></SearchModal> : null}              
+    <div>        
+        <div  className="search">        
+            <div onClick={()=>{setMenuBtnClick(!menuBtnClick)}} className='entre'>
+                <input type="text" className="search-bar" placeholder="검색" />  
+                {menuBtnClick ? (
+                     <Container ref={outSection} onClick={(e)=>{
+                        if(outSection.current === e.target) {
+                            setMenuBtnClick(false)
+                        }
+                        }}>  
+                        <SearchModal/>
+                        </Container>):null}    
+            </div>  
         </div>
         <div className="user">
             <img src="./img/bk.jpg" alt="사프" />
@@ -33,12 +42,14 @@ function User() {
                 </div>
             </div>
             <div className="post-icon">
-            {square ?<i class="fa-solid fa-square-plus fa-2x" onClick={()=>{setsquare(!square)}} style={{color:'black'}} >
-                <WriteModal></WriteModal></i>
-                :<i class="fa-regular fa-square-plus fa-2x"  onClick={()=>{setsquare(!square)}}></i>}
-                
-                
+            {square ?<i class="fa-solid fa-square-plus fa-2x" onClick={()=>{setsquare(!square)}} style={{color:'black'}} />
+                :<i class="fa-regular fa-square-plus fa-2x"  onClick={()=>{setsquare(!square)}}/>}
+                 
             </div>
+            {square ?
+                <WriteModal></WriteModal>
+                :null}
+                
         </div>
         
         <div className="recommend">
@@ -119,6 +130,28 @@ function User() {
     </div> 
   )
 }
+
+const Container = styled.div`
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+`
+
+const Overlay = styled.div`
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: grid;
+`
 
 export default User
 
