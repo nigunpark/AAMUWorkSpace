@@ -16,30 +16,30 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 	@Autowired
 	private CommuDAO dao;
 	
-	//±Û ¸ñ·Ï¿ë
+	//ê¸€ ëª©ë¡ìš©
 	@Override
 	public List<CommuDTO> commuSelectList() {
 		return dao.commuSelectList();
 	}
 	
-	//±Û ¸ñ·Ï¿ë_´ñ±ÛÇÏ³ª »Ñ·ÁÁÙ°Å
+	//ê¸€ ëª©ë¡ìš©_ëŒ“ê¸€ í•˜ë‚˜ ë¿Œë ¤ì£¼ê¸°
 	@Override
 	public CommuCommentDTO commuCommentSelectOne(String lno) {
 		return dao.commuCommentSelectOne(lno);
 	}
 	
-	//±Û ¸ñ·Ï¿ë_»çÁø¸®½ºÆ®
+	//ê¸€ ëª©ë¡ìš©_ì‚¬ì§„ ë¿Œë ¤ì£¼ê¸°
 	@Override
 	public List commuSelectPhotoList(String lno) {
 		return dao.commuSelectPhotoList(lno);
 	}
 	
-	//±Û »ı¼º¿ë
+	//ê¸€ ìƒì„±ìš©
 	@Override
 	public int commuInsert(Map map) {
 		//commu
 		int commuaffected=dao.commuInsert(map);
-		//»çÁø 
+		//ì‚¬ì§„
 		int photoAffected=0;
 		List<String> lists= (List<String>) map.get("photolist");
 		for(String photo:lists) {
@@ -48,10 +48,10 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 			photomap.put("photo", photo);
 			photoAffected+=dao.photoInsert(photomap);
 		}
-		//Àå¼Ò
-		if(map.get("place")!=null) { //Àå¼Ò°¡ ³Ñ¾î¿Ô´Ù
-			int placeAffected=dao.placeInsert(map); //insert ¼º°øÇÏ¸é 1 
-			if(placeAffected ==0) return 0; //½ÇÆĞÇÏ¸é 0 ¹İÈ¯
+		//ì¥ì†Œ
+		if(map.get("place")!=null) {
+			int placeAffected=dao.placeInsert(map); 
+			if(placeAffected ==0) return 0; 
 		}
 		
 		if(commuaffected==1 && photoAffected==((List)map.get("photolist")).size()) 
@@ -60,14 +60,14 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 			return 0;
 	}/////commuInsert
 	
-	//!!!!!!!!±Û »ı¼º¿ë_Àå¼Ò »Ñ·ÁÁÖ±â
+	//!!!!!!!!!!ê¸€ ìƒì„±ìš©_ì¥ì†Œ ë¿Œë ¤ì£¼ê¸°
 	@Override
-	public List<String> commuPlaceList(Map map) {
+	public List<Map> commuPlaceList(Map map) {
 		map.put("searchWord",map.get("searchWord"));
 		return dao.commuPlaceList(map);
 	}
 
-	//±Û ¼öÁ¤¿ë
+	//ê¸€ ìˆ˜ì •ìš©
 	@Override
 	public int commuUpdate(CommuDTO dto) {
 		return dao.commuUpdate(dto);

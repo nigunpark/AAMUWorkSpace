@@ -16,49 +16,49 @@ public class CommuDAO {
 	@Autowired
 	private SqlSessionTemplate template;
 	
-	//±Û ¸ñ·Ï¿ë
+	//ê¸€ ëª©ë¡ìš©
 	public List<CommuDTO> commuSelectList(){
 		return template.selectList("commuSelectList");
 	}
 	
-	//±Û ¸ñ·Ï¿ë_´ñ±Û ÇÏ³ª °¡Á®¿À´Â°Å
+	//ê¸€ ëª©ë¡ìš©_ëŒ“ê¸€ í•˜ë‚˜ ë¿Œë ¤ì£¼ê¸°
 	public CommuCommentDTO commuCommentSelectOne(String lno) {
 		return template.selectOne("commuCommentSelectOne",lno);
 	}
 	
-	//±Û ¸ñ·Ï¿ë_»çÁø ¸®½ºÆ® °¡Á®¿À±â
+	//ê¸€ ëª©ë¡ìš©_ì‚¬ì§„ ë¿Œë ¤ì£¼ê¸°
 	public List commuSelectPhotoList(String lno){
 		return template.selectList("commuSelectPhotoList",lno);
 	}
 	
-	//±Û ÀúÀå¿ë
+	//ê¸€ ìƒì„±ìš©
 	public int commuInsert(Map map) {
 		System.out.println("map:"+map);
 		return template.insert("commuInsert",map);
 	}
 	
-	//±Û ÀúÀå¿ë_photo ÀúÀå
+	//ê¸€ ìƒì„±ìš©_ì‚¬ì§„ ì €ì¥
 	public int photoInsert(Map map) {
 		return template.insert("commuPhotoInsert",map);
 	}
 	
-	//±Û ÀúÀå¿ë_Àå¼Ò ÀúÀå
+	//ê¸€ ìƒì„±ìš©_ì¥ì†Œ ì €ì¥
 	public int placeInsert(Map map) {
 		return template.insert("commuPlaceInsert",map);
 	}
 	
-	//!!!!!!!±Û ÀúÀå¿ë_Àå¼Ò »Ñ·ÁÁÖ±â
+	//!!!!!!!!!!ê¸€ ìƒì„±ìš©_ì¥ì†Œ ë¿Œë ¤ì£¼ê¸°
 	public List commuPlaceList(Map map) {
-		System.out.println("map ³Ñ¾î¿Ô´Ï:"+map);
+		System.out.println("map:"+map);
 		return template.selectList("commuPlaceList",map);
 	}
 	
-	//±Û ¼öÁ¤¿ë
+	//ê¸€ ìˆ˜ì •ìš©
 	public int commuUpdate(CommuDTO dto) {
 		return template.update("commuUpdate",dto);
 	}
 	
-	//±Û ¼öÁ¤¿ë-Àå¼Ò ¼öÁ¤
+	//ê¸€ ìˆ˜ì •ìš©_ì¥ì†Œ ìˆ˜ì •
 	public int placeUpdate(CommuDTO dto) {
 		return template.update("commuPlaceUpdate",dto);
 	}

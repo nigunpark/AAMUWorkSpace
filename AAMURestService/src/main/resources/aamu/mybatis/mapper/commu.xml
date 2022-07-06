@@ -42,7 +42,7 @@
 	</insert>
 	
 	<!-- !!!!!!!글 생성용_장소 뿌려주기 -->
-	<select id="commuPlaceList" resultType="String" parameterType="Map">
+	<select id="commuPlaceList" resultType="Map" parameterType="Map">
 		SELECT title, addr, contentid FROM places WHERE title LIKE '%{searchWord}%' or addr LIKE '%{searchWord}%'
 	</select>
 	

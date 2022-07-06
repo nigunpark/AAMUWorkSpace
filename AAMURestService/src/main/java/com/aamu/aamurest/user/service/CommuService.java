@@ -7,22 +7,22 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface CommuService<T> {
-	//±Û ¸ñ·Ï¿ë
+	//ê¸€ ëª©ë¡ìš©
 	List<T> commuSelectList();
 	
-	//±Û ¸ñ·Ï¿ë_´ñ±Û ÇÑ°³ °¡Á®¿À±â
+	//ê¸€ ëª©ë¡ìš©_ëŒ“ê¸€ í•˜ë‚˜ ë¿Œë ¤ì£¼ê¸°
 	CommuCommentDTO commuCommentSelectOne(String lno);
 	
-	//±Û ¸ñ·Ï¿ë_»çÁø °¡Á®¿À±â
+	//ê¸€ ëª©ë¡ìš©_ì‚¬ì§„ ë¿Œë ¤ì£¼ê¸°
 	List commuSelectPhotoList(String lno);
 	
-	//±Û »ı¼º¿ë
+	//ê¸€ ìƒì„±ìš©
 	int commuInsert(Map map);
 	
-	//!!!!!!!!!!±Û »ı¼º¿ë_Àå¼Ò »Ñ·ÁÁÖ±â
-	List commuPlaceList(Map map);
+	//!!!!!!!!!!ê¸€ ìƒì„±ìš©_ì¥ì†Œ ë¿Œë ¤ì£¼ê¸°
+	List<Map> commuPlaceList(Map map);
 	
-	//±Û ¼öÁ¤¿ë
+	//ê¸€ ìˆ˜ì •ìš©
 	int commuUpdate(CommuDTO dto);
 
 }

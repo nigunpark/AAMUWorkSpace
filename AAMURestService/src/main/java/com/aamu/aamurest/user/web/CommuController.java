@@ -40,13 +40,13 @@ public class CommuController {
 	@Autowired
 	private CommonsMultipartResolver multipartResolver;
 	
-
+	//글 목록용
 	@GetMapping("/gram/selectList")
 	public List<CommuDTO> commuSelectList(){
-		//list=占쌜쇽옙占쏙옙 占쌜듸옙
+		//list=글 목록들 
 		List<CommuDTO> list = commuService.commuSelectList();
-		//占쌘몌옙트 dto 확占쏙옙占쏙옙占쏙옙 -> 占쏙옙占쏙옙트占싹놂옙占쏙옙 占싱아놂옙占쏙옙 
-		for(CommuDTO dto : list) {//占쏙옙 占싹놂옙占쏙옙 占싱아쇽옙 dto占쏙옙 占쏙옙占�
+		
+		for(CommuDTO dto : list) {//글 목록들 list에서 하나씩 꺼내서 dto에 담는다
 			dto.setCommuComment(commuService.commuCommentSelectOne(dto.getLno()));
 			dto.setPhoto(commuService.commuSelectPhotoList(dto.getLno()));
 		}
@@ -67,18 +67,18 @@ public class CommuController {
 		} catch (IllegalStateException | IOException e) {e.printStackTrace();}
 		
 		int affected=commuService.commuInsert(map);
-		//affected占쏙옙 1占싱몌옙 占싼억옙占쏙옙占쏙옙占� result占쏙옙占� 키占쏙옙 true占쏙옙환 占싣니몌옙 false占쏙옙환
+		//affected 1이면 저장 잘된거  
 		Map resultMap = new HashMap();
-		if(affected==1) resultMap.put("result", "true");
-		else resultMap.put("result", "false");
+		if(affected==1) resultMap.put("result", "true"); //1이면 true 반환
+		else resultMap.put("result", "false"); //0이면 false 반환
 		return resultMap;
 	}////////////////////////////commuInsert
 	
 	//!!!!!!!!!글 생성용_장소 뿌려주기
 	@GetMapping("/gram/place/selectList")
-	public List<String> commuPlaceList(@RequestParam Map map) {
+	public List<Map> commuPlaceList(@RequestParam Map map) {
 		System.out.println("map:"+map);
-		List<String> list=commuService.commuPlaceList(map);
+		List<Map> list=commuService.commuPlaceList(map);
 		System.out.println("list:"+list);
 		return list;
 	}
