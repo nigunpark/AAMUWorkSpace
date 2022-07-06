@@ -60,8 +60,9 @@ function changeLocation(location, setWhereUrl) {
     location.pathname.indexOf("mainPage") === 1 ||
     location.pathname.indexOf("forum") === 1 ||
     // location.pathname.indexOf("review") === 1 ||
-    location.pathname.indexOf("Insta") === 1 ||
-    location.pathname.indexOf("login") === 1
+    location.pathname.indexOf("login") === 1 ||
+    location.pathname.indexOf("myPage") === 1 ||
+    location.pathname.indexOf("Insta") === 1
   )
     setWhereUrl(true);
   else setWhereUrl(false);
