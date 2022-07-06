@@ -17,6 +17,8 @@ public class MainServiceImpl implements MainService{
 
 	@Autowired
 	private MainDAO dao;
+	
+///////////////////////////////////////////////////insert place impl
 	@Override
 	public int placeInsert(AttractionDTO dto) {
 		
@@ -52,6 +54,8 @@ public class MainServiceImpl implements MainService{
 		// TODO Auto-generated method stub
 		return dao.routeInsert(route);
 	}
+	
+///////////////////////////////////////////////////get place impl
 	@Override
 	public List<RouteDTO> selectRouteList(int rbn) {
 		
@@ -93,6 +97,30 @@ public class MainServiceImpl implements MainService{
 	@Override
 	public List<AttractionDTO> selectDinerList(Map map) {
 		return dao.selectDinerList(map);
+	}
+///////////////////////////////////////////////////search place impl
+	@Override
+	public List<AttractionDTO> searchPlace(Map map) {
+		// TODO Auto-generated method stub
+		return dao.searchPlace(map);
+	}
+
+	@Override
+	public List<AttractionDTO> searchUrl(Map map) {
+		
+		return dao.searchUrl(map);
+	}
+///////////////////////////////////////////////////update place impl
+	@Override
+	public int updateUrl(AttractionDTO dto) {
+		// TODO Auto-generated method stub
+		return dao.updateUrl(dto);
+	}
+	////////////////////////////////////selectone place
+	@Override
+	public AttractionDTO selectOnePlace(int contentid) {
+		
+		return dao.selectOnePlace(contentid);
 	}
 
 

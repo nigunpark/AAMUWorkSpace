@@ -558,6 +558,7 @@ function toWooJae(currPosition, reduxState) {
       atime: null,
     };
   });
+
   //사용자가 선택한 호텔을 우재한테 보내줄 data에 넣는 로직
   reduxState.saveDaysNPickedSuksoRedux.map((local, index) => {
     arr[
@@ -598,13 +599,12 @@ function toWooJae(currPosition, reduxState) {
       atime: obj.atime,
     });
   });
+  console.log("arr:", arr);
   axios
     .post(
       "/aamurest/planner/data",
       {
-        route: {
-          data: arr,
-        },
+        route: arr,
       },
       {
         headers: {

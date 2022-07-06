@@ -217,7 +217,7 @@ function PickedLocation({ local }) {
     <div className="pickedLocation__container slide-in-right">
       <div className="pickedLocation__img-container">
         <img
-          src={local.image2 ?? "/images/no-image.jpg"}
+          src={local.smallImage ?? "/images/no-image.jpg"}
           onError={(e) => {
             e.target.src = "/images/no-image.jpg";
           }}

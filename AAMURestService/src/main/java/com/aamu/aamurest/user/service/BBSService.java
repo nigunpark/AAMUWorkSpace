@@ -3,20 +3,11 @@ package com.aamu.aamurest.user.service;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.stereotype.Service;
+@Service
 public interface BBSService {
+	//글 목록용
+	List<BBSDTO> bbsSelectList();
 
-	static List<BBSDTO> BBSSelectList() {
-		
-		return null;
-	}
-
-	static int bbsInsert(Map map) {
-		return 0;
-	}
-
-	static List<Map> BBSSelectOne(String rbn) {
-		return null;
-	}
-	
 	
 }

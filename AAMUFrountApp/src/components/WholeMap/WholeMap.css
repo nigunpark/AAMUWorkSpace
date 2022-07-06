@@ -1,19 +1,20 @@
-.WholeMap{
+.WholeMap {
   /* background-image: url("/public/images/bg1.png"); */
   background: rgba(0, 0, 0, 0.8);
+  /* background: var(--mainColor); */
   /* background-repeat: no-repeat; */
   /* background-size: cover; */
   overflow: hidden;
-   height: 100vh;
+  height: 100vh;
 }
 
-.test__container{
+.test__container {
   width: 100%;
   display: flex;
   justify-content: center;
 }
 
-.wholeMap__img__container{
+.wholeMap__img__container {
   position: relative;
   display: flex;
   justify-content: center;
@@ -22,100 +23,100 @@
   animation: mapFlooting 1s ease forwards;
 }
 
-.wholeMap__img{
+.wholeMap__img {
   filter: drop-shadow(5px 5px 5px #000);
-  max-height:90% ;
+  max-height: 90%;
 }
-.seoul{
+.seoul {
   position: absolute;
   top: 240px;
   left: 215px;
 }
 
-.geonggi{
+.geonggi {
   position: absolute;
   top: 280px;
   left: 250px;
 }
 
-.incheon{
+.incheon {
   position: absolute;
   top: 220px;
   left: 150px;
 }
 
-.gangwon{
+.gangwon {
   position: absolute;
   top: 220px;
   left: 375px;
 }
 
-.chungbuk{
+.chungbuk {
   position: absolute;
   top: 358px;
   left: 300px;
 }
 
-.chungnam{
+.chungnam {
   position: absolute;
   top: 410px;
   left: 185px;
 }
 
-.daejeon{
+.daejeon {
   position: absolute;
   top: 440px;
   left: 271px;
 }
 
-.jeonbuk{
+.jeonbuk {
   position: absolute;
   top: 545px;
   left: 230px;
 }
 
-.jeonnam{
+.jeonnam {
   position: absolute;
- bottom: 280px;
+  bottom: 280px;
   left: 190px;
 }
 
-.gwangju{
+.gwangju {
   position: absolute;
- bottom: 327px;
+  bottom: 327px;
   left: 193px;
 }
-.gyeongbuk{
+.gyeongbuk {
   position: absolute;
   top: 445px;
- right: 155px;
+  right: 155px;
 }
 
-.daegu{
+.daegu {
   position: absolute;
   bottom: 440px;
   right: 195px;
 }
 
-.gyeongnam{
+.gyeongnam {
   position: absolute;
   bottom: 350px;
   right: 220px;
 }
 
-.ulsan{
+.ulsan {
   position: absolute;
   bottom: 390px;
   right: 110px;
 }
 
-.busan{
+.busan {
   position: absolute;
   bottom: 335px;
   right: 125px;
 }
 
-.jeju{
+.jeju {
   position: absolute;
   bottom: 100px;
   left: 150px;
@@ -125,69 +126,65 @@
   transform: scale(1.2);
 } */
 
-.local{
-  text-shadow: 1px 1px 1px rgba(0, 0 , 0, 0.5);
+.local {
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
   color: white;
   font-size: 20px;
   animation: flooting 1.5s ease-in-out both;
-  transition: .3s;
+  transition: 0.3s;
   will-change: transform;
   padding: 5px;
 }
 
-.local:hover{
+.local:hover {
   transform: scale(1.3);
   cursor: pointer;
 }
-.local__modal__span{
+.local__modal__span {
   color: var(--orange);
   font-weight: bold;
 }
-.local__modal__img{
+.local__modal__img {
   position: relative;
   background-size: cover;
   overflow: hidden;
-  
 }
 
-.local__modal__img img{
-width: 520px;
-height: 350px;
-transition: .5s;
-
+.local__modal__img img {
+  width: 520px;
+  height: 350px;
+  transition: 0.5s;
 }
 
-.local__modal__img img:hover{
+.local__modal__img img:hover {
   transform: scale(1.1);
 }
 
-.local__modal__ul{
+.local__modal__ul {
   padding: 10px 0;
   margin: 5px 0;
-  
+
   display: flex;
   flex-direction: column;
   gap: 3px;
 }
 
 @keyframes flooting {
-  from{
+  from {
     opacity: 0;
   }
 
-  to{
+  to {
     opacity: 1;
-    
   }
- }
+}
 
- @keyframes mapFlooting {
-  from{
+@keyframes mapFlooting {
+  from {
     opacity: 0;
   }
-  to{
+  to {
     opacity: 1;
-    transform: none; 
+    transform: none;
   }
- }
-
+}

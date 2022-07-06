@@ -99,7 +99,7 @@ function LocalInfoModal({
         <ImgLim>
           <img
             className="localInfoModal__img"
-            src={local.image ?? "/images/no-image.jpg"}
+            src={local.bigImage ?? "/images/no-image.jpg"}
             alt="이미지"
             onError={(e) => {
               e.target.src = "/images/no-image.jpg";

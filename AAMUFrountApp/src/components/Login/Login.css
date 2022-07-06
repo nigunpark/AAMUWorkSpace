@@ -18,11 +18,13 @@
 }
 .loginInput__container {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-evenly;
   align-items: center;
   border: 2px solid gray;
   border-radius: 5px;
   width: 100%;
+  transition: 0.4s;
+  will-change: auto;
 }
 
 .loginInput {
@@ -30,13 +32,85 @@
   line-height: 40px;
   font-size: 15px;
 }
+.focus {
+  border: 2px solid var(--orange);
+}
 
 .loginBtn {
   /* margin-top: 20px; */
-  border: 2px solid green;
+  border: 2px solid var(--skyblue);
   width: 100%;
   height: 40px;
   font-size: 20px;
   border-radius: 5px;
-  color: green;
+  color: var(--skyblue);
+  cursor: pointer;
+  transition: 0.4s;
+}
+
+.forgotPwd {
+  font-size: 12px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+.loginBtn:hover {
+  background-color: var(--skyblue);
+  color: white;
+}
+
+.socialLoginBtn__container {
+  /* border: 1px solid red; */
+  margin-top: 10px;
+  display: flex;
+  width: 100%;
+  gap: 5px;
+  justify-content: center;
+  align-items: center;
+}
+
+.socialLoginBtn {
+  flex: 1;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.socialLoginBtn:hover {
+  transform: scale(1.05);
+}
+
+.valid::placeholder {
+  color: red;
+}
+
+.validation {
+  animation: heartbeat 1s ease-in-out forwards;
+}
+
+.validMessage__container {
+  margin: 10px 0;
+  text-align: center;
+}
+
+.validMessage {
+  font-size: 12px;
+}
+
+@keyframes heartbeat {
+  0% {
+    transform: scale(1);
+  }
+  25% {
+    transform: scale(1.1);
+  }
+  50% {
+    transform: scale(1);
+  }
+  75% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+    transform: none;
+  }
 }

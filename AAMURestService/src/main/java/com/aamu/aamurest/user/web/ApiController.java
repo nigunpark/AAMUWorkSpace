@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
+import javax.swing.text.html.FormSubmitEvent.MethodType;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
@@ -17,6 +19,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
@@ -293,9 +297,30 @@ public class ApiController {
 		
 	
 		Map resultMap = new HashMap();
-		resultMap.put("result", affected+"ÇàÀÌ »ðÀÔ µÇ¾ú½À´Ï´Ù");
+		resultMap.put("result", affected+"ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ç¾ï¿½ï¿½ï¿½ï¿½Ï´ï¿½");
 
 
 		return list;
+	}
+
+	@PutMapping("/places/edit")
+	public List<AttractionDTO> search(@RequestBody Map map){
+		System.out.println(map.get("searchWord"));
+		List<AttractionDTO> lists =service.searchUrl(map);
+		
+		for(AttractionDTO dto: lists) {
+			if(!(dto.getUrl().contains("http"))) {
+				String uri = "http://api.visitkorea.or.kr/openapi/service/rest/KorService/detailCommon?serviceKey="+apikey+"&numOfRows=10&pageNo=1&MobileOS=ETC&MobileApp=AppTest&contentId="+dto.getContentid()+"&defaultYN=Y&overviewYN=Y&_type=json";
+				
+				ResponseEntity<Info> responseEntity = restTemplate.exchange(uri,HttpMethod.GET,null,Info.class);
+				
+				dto.setUrl(responseEntity.getBody().getResponse().getBody().getItems().getItem().getHomepage());
+				
+				service.updateUrl(dto);
+			}
+			
+		}
+		
+		return lists;
 	}
 }

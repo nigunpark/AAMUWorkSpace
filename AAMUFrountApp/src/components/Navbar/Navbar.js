@@ -7,7 +7,7 @@ const Navbar = ({ scrollNav, whereUrl }) => {
   const handleClick = () => setClick(!click);
   const closeMoblieMenu = () => setClick(false);
   let navigate = useNavigate();
-
+  let location = useLocation();
   return (
     <div className="navbar__fragment">
       <nav
@@ -61,7 +61,8 @@ const Navbar = ({ scrollNav, whereUrl }) => {
             </li>
           </ul>
           <div className="navbar-btn-container">
-            {sessionStorage.getItem("token") === null ? (
+            {sessionStorage.getItem("token") === null ||
+            location.pathname.indexOf("login") === -1 ? (
               <>
                 <button
                   className="navbar-btn"

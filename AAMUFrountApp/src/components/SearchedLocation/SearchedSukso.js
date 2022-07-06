@@ -101,7 +101,16 @@ function LocalInfoModal({ locaInfoModal, setLocaInfoModal, local }) {
       <OverlayLim onClick={() => setLocaInfoModal(!locaInfoModal)} />
       <ContentsLim>
         <CloseLim onClick={() => setLocaInfoModal(!locaInfoModal)}>X</CloseLim>
-        <ImgLim></ImgLim>
+        <ImgLim>
+          <img
+            className="localInfoModal__img"
+            src={local.bigImage ?? "/images/no-image.jpg"}
+            alt="이미지"
+            onError={(e) => {
+              e.target.src = "/images/no-image.jpg";
+            }}
+          />
+        </ImgLim>
         <BodyLim>
           <h4>{local.title}</h4>
           <div className="localInfo__container">
