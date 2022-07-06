@@ -14,7 +14,6 @@ import PopularLocation from "../components/PopularLocation/PopularLocation";
 import { Link, useNavigate } from "react-router-dom";
 import { changeLnfM } from "../redux/store";
 import { useSelector, useDispatch } from "react-redux";
-import axios from "axios";
 
 const WholeMap = () => {
   const [modalState, setModalState] = useState(false);
@@ -27,6 +26,7 @@ const WholeMap = () => {
 
   return (
     <div className="WholeMap">
+      {/* <video src="/images/video/video.mp4" muted loop autoPlay /> */}
       <div className="test__container">
         <div className="wholeMap__img__container">
           <img
