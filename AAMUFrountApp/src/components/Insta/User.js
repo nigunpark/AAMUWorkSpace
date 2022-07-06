@@ -1,3 +1,4 @@
+
 import { faSquarePlus } from "@fortawesome/free-regular-svg-icons";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -5,6 +6,7 @@ import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import NotificationModal from "./ModalGroup/NotificationModal";
 import SearchModal from "./Search";
+import WriteModal from "./ModalGroup/WriteModal"
 function User() {
   let modalRef = useRef();
   const [heart, setHeart] = useState(false);
@@ -39,6 +41,8 @@ function User() {
         <div>
           <p className="user-id">0hyun0hyun</p>
           <p className="user-name">김영현</p>
+
+
         </div>
         <div className="heart">
           {heart ? (
@@ -70,7 +74,7 @@ function User() {
               }}
               style={{ color: "black" }}
             >
-              {/* <WriteModal></WriteModal> */}
+               <WriteModal></WriteModal> 
             </i>
           ) : (
             <i
@@ -180,12 +184,26 @@ function User() {
 }
 
 const Container = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border: 1px solid red;
-  // z-index: 10;
-`;
-export default User;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+`
+
+const Overlay = styled.div`
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: grid;
+`
+
+export default User
+
