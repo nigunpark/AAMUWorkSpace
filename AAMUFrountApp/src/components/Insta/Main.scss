@@ -382,10 +382,13 @@
         .search {
             margin-top: 30px;
             margin-bottom: 15px;
-            position: relative;
+          
+            .entre{
+                
+            }
 
 
-            >input {
+            .search-bar {
 
                 /*
                 돋보기 구현 전
@@ -394,7 +397,7 @@
                 background-size: 15px;
                 background-repeat: no-repeat;
                 */
-
+                position: relative;
                 width: 270px;
                 height: 28px;
                 border: 1.7px solid #EFEFEF;
@@ -406,7 +409,7 @@
 
             }
 
-            >input:focus {
+            .search-bar:focus {
                 /* 
                 돋보기 구현 전
                 background-image: none;
@@ -421,14 +424,18 @@
 
             .search-all {
                 position: absolute;
-                top: 38px;
-                left: 43%;
+                margin: auto;
+                top: 140px;
+                right: 130px;
                 transform: translate(-50%);
                 background-color: #fff;
                 box-shadow: 0 0 5px 1px rgba(var(--jb7, 0, 0, 0), .0975);
                 border: 1px solid #fff;
                 border-radius: 5px;
-                z-index: 10;
+                // z-index: 10;
+
+                align-items: center;
+                justify-content: center;
             }
             .search-squre {
                 //position: absolute;
@@ -444,6 +451,7 @@
 
             .search-engine {
                 position: relative;
+                margin: auto;
                 width: 340px;
                 height: 380px;
                 background-color: #fff;
@@ -525,10 +533,16 @@
 
             }
         }
+        
         .notifi {
             margin-top: 15px;
             margin-bottom: 15px;
             position: relative;
+            cursor: pointer;
+
+            .heart:hover{
+                color: #adadad;
+            }
 
             .noti-all {
                 position: absolute;
@@ -604,12 +618,11 @@
                         color: #000000;
                         width: 15px;
                         height: 25px;
-                        cursor: pointer;
+                        
                 
-                        :hover{
-                            color: #adadad;
-                        }
+                        
                     }
+                    
                 
 
                     p {
