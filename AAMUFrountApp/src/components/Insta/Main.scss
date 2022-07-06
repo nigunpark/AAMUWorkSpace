@@ -158,11 +158,21 @@
           border-radius: 50%;
         }
 
+
         .dot {
           width: 18px;
           margin-left: 330px;
           cursor: pointer;
         }
+
+        // .search {
+        //     margin-top: 30px;
+        //     margin-bottom: 15px;
+          
+        //     .entre{
+                
+        //     }
+
 
         span {
           margin-top: -20px;
@@ -170,12 +180,16 @@
           font-weight: bold;
           margin-left: 10px;
 
+
           &:hover {
             text-decoration: underline;
             cursor: pointer;
           }
         }
       }
+
+            // .search-bar {
+
 
       .location {
         margin-top: -25px;

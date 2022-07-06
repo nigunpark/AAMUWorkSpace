@@ -1,9 +1,12 @@
+import { faPaperPlane, faTimesCircle } from '@fortawesome/free-regular-svg-icons';
+import { faImage } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 
 const Modal = ({setIsOpen}) => {
 
-    const [value, setValue] = useState(2.5);
+    const [attachment, setClearAttachment] = useState(false);
 
     const handleClose = () => {
         setIsOpen(false);
@@ -22,47 +25,49 @@ const Modal = ({setIsOpen}) => {
     <Container >
         <Overlay>
             <ModalWrap >
-                <Contents>
-                    <div className="recommend">                    
-                        <div className="recommend-down">
-                            <div className="recommend-contents">
-                                <img className='likeimg' src="./img/bk.jpg" alt="추사" />
-                                <div>
-                                    <p className="userName">0hyun0hyun님이 좋아요를 눌렀습니다</p>
-                                </div>
-                            </div>
-                            <div className="recommend-contents">
-                                <img src="./img/bk.jpg" alt="추사" />
-                                <div>
-                                    <p className="userName">0hyun0hyun님이 댓글을 달았습니다</p>
-                                </div>
-                            </div>
-                            <div className="recommend-contents">
-                                <img src="./img/bk.jpg" alt="추사" />
-                                <div>
-                                    <p className="userName">0hyun0hyun님이 좋아요를 눌렀습니다</p>
-                                </div>
-                            </div>
-                            <div className="recommend-contents">
-                                <img src="./img/bk.jpg" alt="추사" />
-                                <div>
-                                    <p className="userName">0hyun0hyun님이 댓글을 달았습니다</p>
-                                </div>
-                            </div>
-                            <div className="recommend-contents">
-                                <img src="./img/bk.jpg" alt="추사" />
-                                <div>
-                                    <p className="userName">0hyun0hyun님이 좋아요를 눌렀습니다</p>
-                                </div>
-                            </div>
-                            <div className="recommend-contents">
-                                <img src="./img/bk.jpg" alt="추사" />
-                                <div>
-                                    <p className="userName">0hyun0hyun님이 댓글을 달았습니다</p>
-                                </div>
-                            </div>
-                        </div>    
+                <Contents>    
+                <form className="form_rweets" >{/*onSubmit={onSubmit}*/}
+            <div className="preview_container">
+                <>
+                    <label className="rweet_file_btn" htmlFor="input-file">
+                        <FontAwesomeIcon icon={faImage} size="4x" />
+                    </label>
+                    <input
+                        type="file"
+                        id="input-file"
+                        accept="image/*"
+                        //onChange={onFileChange}
+                    />
+                </>
+                {attachment && (
+                    <div>
+                        <img
+                            className="real_preview"
+                            src={attachment}
+                            alt="attachment"
+                            width="235.6px"
+                            height="220px"
+                        />
+                        <button className="preview_cancel" onClick={setClearAttachment}>
+                            <FontAwesomeIcon icon={faTimesCircle} size="1x" />
+                        </button>
                     </div>
+                )}
+            </div>
+            <textarea
+                className="form_rweets_text"
+                //value={rweet}
+                //onChange={onChange}
+                placeholder="What's on your mind?"
+                maxLength={120}
+            ></textarea>
+            <div className="form_rweet_controller">
+                <label className="rweet_submit_btn" htmlFor="input-submit">
+                    <FontAwesomeIcon icon={faPaperPlane} size="2x" />
+                </label>
+                <input type="submit" id="input-submit" value="Rweet" />
+            </div>
+        </form>
                 </Contents>
             </ModalWrap>
         </Overlay>
@@ -89,11 +94,12 @@ const Overlay = styled.div`
     position: absolute;
     width: 100%;
     height: 100%;
-    //background-color: rgba(0, 0, 0, 0.6);
+    background-color: rgba(0, 0, 0, 0.6);
 `
 
 const ModalWrap = styled.div`
-    width: 500px;
+    width: fit-content;
+    overflow: hidden;
     height: fit-content;
     border-radius: 15px;
     background-color: #fff;
