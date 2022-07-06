@@ -70,9 +70,9 @@ const SearchedSukso = ({ local, index }) => {
           />
         </div>
         <div className="searchedLocation__info">
-          <h4 className="searchedLocation__info__title" ref={localNameRef}>
+          <h5 className="searchedLocation__info__title" ref={localNameRef}>
             {local.title}
-          </h4>
+          </h5>
           <div className="searchedLocation__info__content">
             <FontAwesomeIcon
               icon={faCircleInfo}

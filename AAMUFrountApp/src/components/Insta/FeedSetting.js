@@ -1,12 +1,12 @@
-import MyVerticallyCenteredModal from './MyVerticallyCenteredModal';
 import React, {  useState } from 'react'
 import Dotsvg from './Dotsvg';
 import { Button } from 'antd';
+import MenuModal from './ModalGroup/MenuModal';
 
 
 function FeedSetting() {
     const [heart,setHeart] = useState(false);
-    const [upload,setMenu] = useState(false);
+    const [notification,notNoti] = useState(false);
     const [modalShow, setModalShow] = useState(false);
     
   return (
@@ -15,13 +15,11 @@ function FeedSetting() {
             <div className="title-profile">
                 <img src="./img/bk.jpg" alt="프사" />
                 <span>eyesmag</span>                
-                <Button  variant="primary" onClick={() => setModalShow(!modalShow)}>
+                <Button onClick={() => setModalShow(!modalShow)}>
                     <Dotsvg></Dotsvg>
-                </Button>
-                <MyVerticallyCenteredModal
-                    show={modalShow}
-                    onHide={() => setModalShow(false)}
-                />
+                    {modalShow ? <MenuModal></MenuModal> : null}
+                </Button>               
+               
             </div>
             <div className="location">
                 <p>어딘가에서</p>
@@ -32,8 +30,8 @@ function FeedSetting() {
             <div className="feeds-contents">
                 <div className="feeds-icons">
                     <div className='heart-icon'>
-                        {heart ?<i class="fa-solid fa-heart fa-2x"onClick={()=>{setHeart(!heart)}} style={{color:'red'}} />
-                        :<i class="fa-regular fa-heart fa-2x"  onClick={()=>{setHeart(!heart)}}></i>}
+                        {heart ?<i class="fa-solid fa-heart fa-2x"onClick={()=>{setHeart(true)}} style={{color:'red'}} />
+                        :<i class="fa-regular fa-heart fa-2x"  onClick={()=>{setHeart(false)}}></i>}
                     </div>
                     <svg className="talk-icon" fill="#262626" viewBox="0 0 512 512" >
                         <path d="M256,0C114.848,0,0,114.848,0,256c0,49.216,13.792,96.48,39.936,137.216L1.152,490.048

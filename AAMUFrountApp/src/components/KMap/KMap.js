@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux/es/exports";
 import "./KMap.css";
 import {
+  changeArrForSukso,
   changeInfo,
   changePickedTransport,
   changeTimeSetObj,
@@ -32,6 +33,7 @@ import {
   AusBtnContainer,
   AuSBtn,
 } from "../Modal/AreUSurePlanModal.js";
+import axios from "axios";
 const { kakao } = window;
 
 const KMap = ({
@@ -39,7 +41,6 @@ const KMap = ({
   setTitleName,
   setConWhichModal,
   setShowCratePlan,
-  stateForMapCenter,
 }) => {
   let [lat, setLat] = useState("");
   let [lng, setLng] = useState("");
@@ -50,6 +51,7 @@ const KMap = ({
   let dispatch = useDispatch();
   let publicRef = useRef();
   let personalRef = useRef();
+  let container = useRef();
   //위치정보 얻음을 성공했을 시
   // function onGeoOk(position) {
   // lat = position.coords.latitude;
@@ -72,49 +74,56 @@ const KMap = ({
   //일정생성 버튼 클릭시 확인모달창 state
   let [showAuSModal, setShowAuSModal] = useState(false);
   //지도 레벨 state
-  let [mapLevel, setMapLevel] = useState(9);
-
+  const [mapLevel, setMapLevel] = useState(9);
+  const [kMap, setKMap] = useState(null);
+  const [markers, setMarkers] = useState([1]);
   //-------------------------------------------------------------------------
   let pickedJangso = [];
-  let infowindow;
-  let map;
   useEffect(() => {
-    let mapContainer = document.getElementById("map"); // 지도를 표시할 div
-    let mapOption = {
-      center: new kakao.maps.LatLng(stateForMapCenter[0], stateForMapCenter[1]), // 지도의 중심좌표
-      // center: new kakao.maps.LatLng(lat, lng), // 지도의 중심좌표
-      level: mapLevel, // 지도의 확대 레벨
+    const center = new kakao.maps.LatLng(lat, lng);
+    const options = {
+      center,
+      level: mapLevel,
     };
-    // 지도를 생성합니다
-    map = new kakao.maps.Map(mapContainer, mapOption);
+    const map = new kakao.maps.Map(container.current, options);
+    let geocoder = new kakao.maps.services.Geocoder();
+    // 주소로 좌표를 검색합니다
+    geocoder.addressSearch(currPosition, (result, status) => {
+      // 정상적으로 검색이 완료됐으면
+      if (status === kakao.maps.services.Status.OK) {
+        setLat(result[0].y);
+        setLng(result[0].x);
+      }
+    });
     //지도 최대레벨 제한
     map.setMaxLevel(9);
+    setKMap(map);
+  }, [container]);
+
+  //지도 줌인줌아웃시 지도레벨 setting state
+  useEffect(() => {
+    if (kMap === null) return;
     //지도레벨이벤트
-    kakao.maps.event.addListener(map, "zoom_changed", function () {
+    kakao.maps.event.addListener(kMap, "zoom_changed", function () {
       // 지도의 현재 레벨을 얻어옵니다
-      let level = map.getLevel();
+      let level = kMap.getLevel();
       setMapLevel(level);
-      let center = map.getCenter();
+      let center = kMap.getCenter();
       let newCoords = new kakao.maps.LatLng(center.getLat(), center.getLng());
-      map.setCenter(newCoords);
+      kMap.setCenter(newCoords);
     });
   }, []);
 
+  //주소변경시 해당위치로 맵의 중심옮김 & 인포윈도우생성
   useEffect(() => {
     let coords;
+    let infowindow;
     let mainMarker;
-    let mapContainer = document.getElementById("map"); // 지도를 표시할 div
-    let mapOption = {
-      // center: new kakao.maps.LatLng(stateForMapCenter[0], stateForMapCenter[1]), // 지도의 중심좌표
-      center: new kakao.maps.LatLng(stateForMapCenter[0], stateForMapCenter[1]), // 지도의 중심좌표
-      level: mapLevel, // 지도의 확대 레벨
-    };
-    // 지도를 생성합니다
-    map = new kakao.maps.Map(mapContainer, mapOption);
-    //지도 최대레벨 제한
-    map.setMaxLevel(9);
-    //지도레벨이벤트
-
+    if (kMap === null) return;
+    // setMarkers((markers) => {
+    //   console.log(markers);
+    //   // markers.forEach((marker) => marker.setMap(null));
+    // });
     let geocoder = new kakao.maps.services.Geocoder();
     // 주소로 좌표를 검색합니다
     geocoder.addressSearch(
@@ -123,15 +132,9 @@ const KMap = ({
         // 정상적으로 검색이 완료됐으면
         if (status === kakao.maps.services.Status.OK) {
           coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-          mainMarker = new kakao.maps.Marker({
-            map: map,
-            position: coords,
-            clickable: true,
-          });
-          map.panTo(coords);
+          kMap.panTo(coords);
         }
-        // 마커가 지도 위에 표시되도록 설정합니다
-        // mainMarker.setMap(map);
+
         let iwContent =
             '<div class="iwContent__wrap">' +
             '    <div class="iwContent__info">' +
@@ -159,7 +162,7 @@ const KMap = ({
             "        </div>" +
             "    </div>    " +
             "</div>", // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
-          iwPosition = new kakao.maps.LatLng(lat, lng), //인포윈도우 표시 위치입니다
+          // iwPosition = new kakao.maps.LatLng(lat, lng), //인포윈도우 표시 위치입니다
           iwRemoveable = true; // removeable 속성을 ture 로 설정하면 인포윈도우를 닫을 수 있는 x버튼이 표시됩니다
 
         // 인포윈도우를 생성하고 지도에 표시합니다
@@ -167,41 +170,49 @@ const KMap = ({
           content: iwContent,
           removable: iwRemoveable,
         });
+        mainMarker = new kakao.maps.Marker({
+          map: kMap,
+          position: coords,
+          clickable: true,
+        });
         kakao.maps.event.addListener(mainMarker, "click", function () {
-          infowindow.open(map, mainMarker);
+          infowindow.open(kMap, mainMarker);
         });
-        map.panTo(coords);
-        // 마커를 표시할 위치와 title 객체 배열입니다
-        reduxState.arrForPickJangso.map((jangsoObj) => {
-          pickedJangso.push({
-            title: jangsoObj.title,
-            latlng: new kakao.maps.LatLng(jangsoObj.mapy, jangsoObj.mapx),
-          });
-        });
-        // 마커 이미지의 이미지 주소입니다
-        let imageSrc =
-          "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
-        // <i class="fa-solid fa-hotel"></i>
-
-        for (let i = 0; i < pickedJangso.length; i++) {
-          // 마커 이미지의 이미지 크기 입니다
-          let imageSize = new kakao.maps.Size(24, 35);
-          // 마커 이미지를 생성합니다
-          let markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
-          // 마커를 생성합니다
-          let marker = new kakao.maps.Marker({
-            map: map, // 마커를 표시할 지도
-            position: pickedJangso[i].latlng, // 마커를 표시할 위치
-            title: pickedJangso[i].title, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
-            image: markerImage, // 마커 이미지
-          });
-          kakao.maps.event.addListener(marker, "click", function () {
-            infowindow.open(map, marker);
-          });
-        }
       }
     );
-  }, [reduxState.localNameForMarker, pickedJangso]);
+
+    // 마커를 표시할 위치와 title 객체 배열입니다
+    reduxState.arrForPickJangso.map((jangsoObj) => {
+      pickedJangso.push({
+        title: jangsoObj.title,
+        latlng: new kakao.maps.LatLng(jangsoObj.mapy, jangsoObj.mapx),
+      });
+    });
+    // 마커 이미지의 이미지 주소입니다
+    let imageSrc =
+      "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
+    // <i class="fa-solid fa-hotel"></i>
+
+    for (let i = 0; i < pickedJangso.length; i++) {
+      // 마커 이미지의 이미지 크기 입니다
+      let imageSize = new kakao.maps.Size(24, 35);
+      // 마커 이미지를 생성합니다
+      let markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
+      // 마커를 생성합니다
+      let marker = new kakao.maps.Marker({
+        // map: kMap, // 마커를 표시할 지도
+        position: pickedJangso[i].latlng, // 마커를 표시할 위치
+        title: pickedJangso[i].title, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
+        image: markerImage, // 마커 이미지
+      });
+
+      marker.setMap(kMap);
+    }
+  }, [
+    reduxState.localNameForMarker,
+    reduxState.arrForPickJangso,
+    pickedJangso,
+  ]);
 
   return (
     <div>
@@ -212,7 +223,11 @@ const KMap = ({
           paddingTop: "75px",
         }}
       >
-        <div id="map" style={{ width: "100%", height: "99vh" }}></div>
+        <div
+          id="map"
+          ref={container}
+          style={{ width: "100%", height: "99vh" }}
+        ></div>
         <div id="roadview" style={{ width: "100%", height: "99vh" }}></div>
         <div className="kmap__right-btn__container">
           <div
@@ -220,6 +235,7 @@ const KMap = ({
               setTitleName("추천숙소");
               dispatch(changeInfo("추천숙소"));
               setConWhichModal(true);
+              getCurrpositionHotel(currPosition, dispatch);
             }}
           >
             추천숙소
@@ -312,6 +328,7 @@ const KMap = ({
         <AreUSurePlan
           setShowAuSModal={setShowAuSModal}
           setShowCratePlan={setShowCratePlan}
+          currPosition={currPosition}
         />
       ) : null}
     </div>
@@ -319,7 +336,7 @@ const KMap = ({
 };
 
 //일정등록 버튼 시 보이는 확인모달창
-function AreUSurePlan({ setShowAuSModal, setShowCratePlan }) {
+function AreUSurePlan({ setShowAuSModal, setShowCratePlan, currPosition }) {
   let reduxState = useSelector((state) => {
     return state;
   });
@@ -346,12 +363,13 @@ function AreUSurePlan({ setShowAuSModal, setShowCratePlan }) {
                         fullDate:
                           "Sat Jan 01 2022 10:00:00 GMT+0900 (한국 표준시)",
                         ampm: "오전",
-                        time: "10",
-                        min: "00",
+                        time: 10,
+                        min: 0,
                       })
                     );
                   }
                 });
+                toWooJae(currPosition, reduxState);
               }}
             >
               확인
@@ -527,4 +545,156 @@ function roadview() {
   });
 }
 
+function toWooJae(currPosition, reduxState) {
+  let token = sessionStorage.getItem("token");
+  let arr;
+  //사용자가 선택한 여행일자만큼 obj를 만들고 day를 넣는 로직
+  arr = reduxState.tripPeriod.map((val, index) => {
+    return {
+      contenttypeid: null,
+      contentid: null,
+      starttime: null,
+      day: index + 1,
+      atime: null,
+    };
+  });
+  //사용자가 선택한 호텔을 우재한테 보내줄 data에 넣는 로직
+  reduxState.saveDaysNPickedSuksoRedux.map((local, index) => {
+    arr[
+      arr.findIndex((obj) => {
+        return obj.day === index + 1;
+      })
+    ].contenttypeid = local.contenttypeid;
+
+    arr[
+      arr.findIndex((obj) => {
+        return obj.day === index + 1;
+      })
+    ].contentid = local.contentid;
+  });
+
+  // //각각 일자의 시작시간넣는 로직
+  reduxState.timeSetObj.map((val, index) => {
+    let timeMilSec;
+    if (val.ampm === "오후") {
+      timeMilSec = (val.time + 12) * 60 * 60 * 1000 + val.min * 60 * 1000;
+    } else {
+      timeMilSec = val.time * 60 * 60 * 1000 + val.min * 60 * 1000;
+    }
+    arr[
+      arr.findIndex((obj) => {
+        return obj.day === val.day;
+      })
+    ].starttime = timeMilSec;
+  });
+
+  //여행지 머무는 시간 및 여행지 넣기
+  reduxState.arrForPickJangso.forEach((obj, index) => {
+    arr.push({
+      contenttypeid: obj.contenttypeid,
+      contentid: obj.contentid,
+      starttime: null,
+      day: null,
+      atime: obj.atime,
+    });
+  });
+  axios
+    .post(
+      "/aamurest/planner/data",
+      {
+        route: {
+          data: arr,
+        },
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    )
+    .then((resp) => {
+      console.log("성공!");
+      console.log(resp.data);
+    })
+    .catch((error) => {
+      console.log(error);
+    })
+    .then(() => {
+      console.log("get요청됨");
+    });
+}
+
+function getCurrpositionHotel(currPosition, dispatch) {
+  let token = sessionStorage.getItem("token");
+  let areacode;
+  switch (currPosition) {
+    case "서울":
+      areacode = 1;
+      break;
+    case "인천":
+      areacode = 2;
+      break;
+    case "대전":
+      areacode = 3;
+      break;
+    case "대구":
+      areacode = 4;
+      break;
+    case "광주":
+      areacode = 5;
+      break;
+    case "부산":
+      areacode = 6;
+      break;
+    case "울산":
+      areacode = 7;
+      break;
+    case "세종":
+      areacode = 8;
+      break;
+    case "경기도":
+      areacode = 31;
+      break;
+    case "강원도":
+      areacode = 32;
+      break;
+    case "충청북도":
+      areacode = 33;
+      break;
+    case "충청남도":
+      areacode = 34;
+      break;
+    case "경상북도":
+      areacode = 35;
+      break;
+    case "경상남도":
+      areacode = 36;
+      break;
+    case "전라북도":
+      areacode = 37;
+      break;
+    case "전라남도":
+      areacode = 38;
+      break;
+    case "제주도":
+      areacode = 39;
+      break;
+  }
+  axios
+    .get("/aamurest/info/places", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      params: {
+        areacode: areacode,
+        contenttypeid: "32",
+      },
+    })
+    .then((resp) => {
+      dispatch(changeArrForSukso(resp.data));
+    })
+    .catch((error) => {
+      console.log((error) => console.log("호텔가져오기 실패", error));
+    });
+}
 export default KMap;

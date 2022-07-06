@@ -2,16 +2,14 @@ import { faSquarePlus } from '@fortawesome/free-regular-svg-icons'
 import { faHeart } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React, { useState } from 'react'
-import WriteModal from './ModalGroup/WriteModal';
-import SearchModal from './ModalGroup/Search';
-import Notification from './ModalGroup/Notification';
+import NotificationModal from './ModalGroup/NotificationModal';
+import SearchModal from './Search';
 
 
 function User() {
     const [heart,setHeart] = useState(false);
     const [follow,setFollowing] = useState(false);
     const [search,setsearch] = useState(false);
-    const [square,setsquare] = useState(false);
     
   return (
     <div >
@@ -25,12 +23,11 @@ function User() {
                 <p className="user-id">0hyun0hyun</p>
                 <p className="user-name">김영현</p>
             </div>
-            <div className='notifi'>
-                <div className='heart'>
-                    {heart ?<i class="fa-solid fa-heart fa-2x" onClick={()=>{setHeart(!heart)}} style={{color:'black'}} ></i>
-                    :<i class="fa-regular fa-heart fa-2x" onClick={()=>{setHeart(!heart)}}></i>}
-                    {heart ? <Notification></Notification> : null}
-                </div>
+            <div className='heart'>
+                {heart ?<i class="fa-solid fa-heart fa-2x"onClick={()=>{setHeart(!heart)}} style={{color:'black'}} >
+                <NotificationModal></NotificationModal></i>
+                :<i class="fa-regular fa-heart fa-2x"  onClick={()=>{setHeart(!heart)}}></i>}
+                {/* {heart ? <NotificationModal></NotificationModal>:null} */}
             </div>
             <div className="post-icon">
             {square ?<i class="fa-solid fa-square-plus fa-2x" onClick={()=>{setsquare(!square)}} style={{color:'black'}} >

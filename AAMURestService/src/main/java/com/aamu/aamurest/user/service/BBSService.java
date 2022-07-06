@@ -13,7 +13,7 @@ public interface BBSService {
 	static int bbsInsert(Map map) {
 		return 0;
 	}
-    
+
 	static List<Map> BBSSelectOne(String rbn) {
 		return null;
 	}

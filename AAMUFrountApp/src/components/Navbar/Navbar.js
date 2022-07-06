@@ -17,7 +17,8 @@ const Navbar = ({ scrollNav, whereUrl }) => {
             : whereUrl
             ? "navbar whereUrlActive "
             : "navbar"
-        }>
+        }
+      >
         <div className="navbar-container">
           <div className="navbar-logo">
             <Link to="/">
@@ -34,15 +35,13 @@ const Navbar = ({ scrollNav, whereUrl }) => {
               <Link
                 to="/services"
                 className="nav-links"
-                onClick={closeMoblieMenu}>
+                onClick={closeMoblieMenu}
+              >
                 Services
               </Link>
             </li>
             <li>
-              <Link
-                to="/Insta"
-                className="nav-links"
-                onClick={closeMoblieMenu}>
+              <Link to="/Insta" className="nav-links" onClick={closeMoblieMenu}>
                 Insta
               </Link>
             </li>
@@ -50,28 +49,41 @@ const Navbar = ({ scrollNav, whereUrl }) => {
               <Link
                 to="/others"
                 className="nav-links"
-                onClick={closeMoblieMenu}>
+                onClick={closeMoblieMenu}
+              >
                 others
               </Link>
             </li>
             <li>
-              <Link
-                to="/forum"
-                className="nav-links"
-                onClick={closeMoblieMenu}>
+              <Link to="/forum" className="nav-links" onClick={closeMoblieMenu}>
                 forum
               </Link>
             </li>
           </ul>
           <div className="navbar-btn-container">
-            <button
-              className="navbar-btn"
-              onClick={() => {
-                navigate("/login");
-              }}>
-              로그인
-            </button>
-            <button className="navbar-btn">회원가입</button>
+            {sessionStorage.getItem("token") === null ? (
+              <>
+                <button
+                  className="navbar-btn"
+                  onClick={() => {
+                    navigate("/login");
+                  }}
+                >
+                  로그인
+                </button>
+                <button className="navbar-btn">회원가입</button>
+              </>
+            ) : (
+              <button
+                className="navbar-btn"
+                onClick={() => {
+                  sessionStorage.clear();
+                  navigate("/");
+                }}
+              >
+                로그아웃
+              </button>
+            )}
           </div>
           <div className="navbar-menu-icon" onClick={handleClick}>
             <i className={click ? "fas fa-times" : "fas fa-bars"} />
