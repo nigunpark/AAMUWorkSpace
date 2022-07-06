@@ -1,16 +1,22 @@
 import { faSquarePlus } from "@fortawesome/free-regular-svg-icons";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import styled from "styled-components";
 import NotificationModal from "./ModalGroup/NotificationModal";
 import SearchModal from "./Search";
-
 function User() {
+  let modalRef = useRef();
   const [heart, setHeart] = useState(false);
   const [follow, setFollowing] = useState(false);
   const [search, setsearch] = useState(false);
   const [square, setsquare] = useState(false);
 
+  function handleModal(e) {
+    e.stopPropagation();
+    if (e.target !== modalRef.current) setsearch(false);
+  }
+  window.addEventListener("click", handleModal);
   return (
     <div>
       <div
@@ -19,9 +25,15 @@ function User() {
           setsearch(!search);
         }}
       >
-        <input type="text" className="search-bar" placeholder="검색" />
+        <input
+          type="text"
+          className="search-bar"
+          placeholder="검색"
+          ref={modalRef}
+        />
         {search ? <SearchModal></SearchModal> : null}
       </div>
+
       <div className="user">
         <img src="./img/bk.jpg" alt="사프" />
         <div>
@@ -31,7 +43,7 @@ function User() {
         <div className="heart">
           {heart ? (
             <i
-              class="fa-solid fa-heart fa-2x"
+              className="fa-solid fa-heart fa-2x"
               onClick={() => {
                 setHeart(!heart);
               }}
@@ -52,13 +64,13 @@ function User() {
         <div className="post-icon">
           {square ? (
             <i
-              class="fa-solid fa-square-plus fa-2x"
+              className="fa-solid fa-square-plus fa-2x"
               onClick={() => {
                 setsquare(!square);
               }}
               style={{ color: "black" }}
             >
-              <WriteModal></WriteModal>
+              {/* <WriteModal></WriteModal> */}
             </i>
           ) : (
             <i
@@ -167,4 +179,13 @@ function User() {
   );
 }
 
+const Container = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 1px solid red;
+  // z-index: 10;
+`;
 export default User;
