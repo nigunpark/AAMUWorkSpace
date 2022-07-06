@@ -9,7 +9,7 @@ import MainPage from "./pages/MainPage/MainPage";
 import Login from "./components/Login/Login";
 import Test from "./Test";
 import Main from "./components/Insta/Main";
-
+import LoginTest from "./components/Login/LoginTest";
 import Forum from "./pages/Forum/Forum";
 import MyPage from "./pages/MyPage/MyPage";
 import Board from "./pages/Forum/Board2/Board";
@@ -43,11 +43,15 @@ function App() {
           <Route path="/Insta" element={<Main />}></Route>
         </Route>
         <Route path="/login" element={<Login />}></Route>
+        <Route path="/logintest" element={<LoginTest />}></Route>
         <Route path="/test" element={<Test />}></Route>
 
-        <Route path="/Detailmodal" element={<DetailModal/>}/>
-        <Route path="/myPage" element={<MyPage/>}/>
-        <Route path="/oauth/callback/kakao" element={<KakaoRedirectHandler/>}/>
+        <Route path="/Detailmodal" element={<DetailModal />} />
+        <Route path="/myPage" element={<MyPage />} />
+        <Route
+          path="/oauth/callback/kakao"
+          element={<KakaoRedirectHandler />}
+        />
       </Routes>
     </div>
   );
