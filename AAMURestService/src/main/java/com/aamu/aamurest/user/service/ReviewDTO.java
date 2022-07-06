@@ -8,7 +8,7 @@ import lombok.Setter;
 
 public class ReviewDTO {
 	private String id;
-	private String rate;
+	private double rate;
 	private String review;
 	private Date ratedate;
 	private int number;
