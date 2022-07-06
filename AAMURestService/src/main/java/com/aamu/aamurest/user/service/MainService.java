@@ -38,5 +38,13 @@ public interface MainService{
 
 	List<AttractionDTO> selectDinerList(Map map);
 
+	List<AttractionDTO> searchPlace(Map map);
+
+	List<AttractionDTO> searchUrl(Map map);
+
+	int updateUrl(AttractionDTO dto);
+
+	AttractionDTO selectOnePlace(int contentid);
+
 	
 }

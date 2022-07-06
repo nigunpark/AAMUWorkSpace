@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -67,48 +68,51 @@ public class MainController {
 		return map;
 	}
 	@PostMapping("planner/data")
-	public PlannerDTO plannerData(PlannerDTO dto) {
-		
+	public PlannerDTO plannerData(@RequestBody PlannerDTO dto) {
+		System.out.println(dto.getRoute());
 		List<RouteDTO> list = dto.getRoute();
-		int day = list.get(0).getDay();
-		for(int i=0;i<list.size();i++) {
-			if(list.get(i).getContenttypeid()==32) {
-				if(day<list.get(i).getDay()) {
-					day=list.get(i).getDay();
-				}
-			}
-		}
-		List<Long> startTime=new Vector<>();
+		int tripDay = list.get(0).getDay();
 
-		long oneDay = 24*1000*60*60;
-		int startDay=1;
-		int index=0;
-		
+		Map<Integer,List<RouteDTO>> map=new HashMap<>();
 		for(RouteDTO routeTime: list) {
 			
-			if(String.valueOf(routeTime.getStartTime())!=null) {
-				startTime.add(routeTime.getStartTime());
-			}
-		}
-		long dayTime = startTime.get(index);
-		for(RouteDTO route:list) {
-			
-			if(String.valueOf(route.getAtime())!=null) {
-				dayTime += route.getAtime()+route.getMtime();
-				route.setDay(startDay);
-				if(dayTime>oneDay) {
-					dayTime=0;
-					index++;
-					if(startDay<=day) {
-						startDay++;
-					}
-					dayTime = startTime.get(index);
+			if(routeTime.getDay()!=0) {
+				if(tripDay<routeTime.getDay()) {
+					tripDay =routeTime.getDay();
 				}
 			}
+		}////////////////////
 
-		}
+		System.out.println(list.size());
+		int result = (int)Math.ceil((((double)list.size()-tripDay)/tripDay));
+
+		int count = 0;
+		int day=1;
+		for(RouteDTO route:list) {
+				if(route.getDay()==0) {
+					if(result>count) {
+						System.out.println(count);
+						route.setDay(day);
+						count++;
+					}
+					else {
+						if(day<tripDay) {
+							count=0;
+							System.out.println("day"+day);
+							day++;
+							route.setDay(day);
+						}
+						count++;
+						
+					}
+				}
+				
+		}///////////////
 		
-		return null;
+			
+		PlannerDTO routeList = new PlannerDTO();
+		routeList.setRoute(list);
+		return routeList;
 	}
 	@GetMapping("planner/selectone")
 	public PlannerDTO selectPlannerOne(@RequestParam Map map) {
@@ -116,7 +120,7 @@ public class MainController {
 		PlannerDTO dto = new PlannerDTO();
 		List<RouteDTO> routes = new Vector<>();
 		int rbn = dto.getRbn();
-
+		
 		routes = service.selectRouteList(rbn);
 		for(RouteDTO route :routes) {
 		}
@@ -168,6 +172,14 @@ public class MainController {
 		}
 		
 		return list;
+	}
+	
+	@GetMapping("/info/search")
+	public List<AttractionDTO> search(@RequestParam Map map){
+		
+		List<AttractionDTO> lists =service.searchPlace(map);
+		
+		return lists;
 	}
 
 }
