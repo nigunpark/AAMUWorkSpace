@@ -18,7 +18,7 @@ public class MainDAO {
 	@Autowired
 	private SqlSessionTemplate template;
 	
-	//////////////////////////api insert ¿ë dao
+	//////////////////////////api insert dao
 	public int placeInsert(AttractionDTO dto) {
 		
 		
@@ -45,12 +45,12 @@ public class MainDAO {
 	}
 	
 	
-	//////////////////////////µ¥ÀÌÅÍ Àü¼Û¿ë dao
+	//////////////////////////get place dao
 	public List<AttractionDTO> selectPlacesList(Map map) {
 		
 		return template.selectList("selectPlacesList", map);
 	}
-	////////////////////////////ÇÃ·¡³Ê¿ë dao
+	////////////////////////////ï¿½Ã·ï¿½ï¿½Ê¿ï¿½ dao
 	public int plannerInsert(PlannerDTO dto) {
 
 		return template.insert("plannerInsert",dto);
@@ -99,6 +99,26 @@ public class MainDAO {
 	public List<AttractionDTO> selectDinerList(Map map) {
 		
 		return template.selectList("selectDinerList", map);
+	}
+
+	public List<AttractionDTO> searchPlace(Map map) {
+		
+		return template.selectList("searchPlace", map);
+	}
+	///////////////////////////////////////////////////serchdao
+	public List<AttractionDTO> searchUrl(Map map) {
+		
+		return template.selectList("searchUrl", map);
+	}
+
+	public int updateUrl(AttractionDTO dto) {
+		// TODO Auto-generated method stub
+		return template.update("updateUrl",dto);
+	}
+
+	public AttractionDTO selectOnePlace(int contentid) {
+		
+		return template.selectOne("selectOnePlace", contentid);
 	}
 
 

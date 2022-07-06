@@ -56,4 +56,21 @@
 	<select id="selectDinerSigungu" parameterType="Map" resultType="attrDTO">
 		SELECT p.*,i.* FROM places p JOIN dinerinfo i ON p.contentid=i.contentid WHERE p.areacode=#{areacode} AND p.contenttypeid=#{contenttypeid} AND p.sigungucode=#{sigungucode} AND <![CDATA[rownum<=20]]>
 	</select>
+	
+	
+	<select id="selectOnePlace" parameterType="int" resultType="attrDTO">
+		SELECT * FROM places WHERE contentid=#{contentid}
+	</select>
+	
+	<select id="searchPlace" parameterType="Map" resultType="attrDTO">
+		SELECT * FROM places WHERE title LIKE '%'||#{searchWord}||'%' or addr LIKE '%'||#{searchWord}||'%'
+	</select>
+	
+	<select id="searchUrl" parameterType="Map" resultType="attrDTO">
+		SELECT * FROM places WHERE url LIKE '%'||#{searchWord}||'%'
+	</select>
+	
+	<update id="updateUrl" parameterType="attrDTO">
+		UPDATE places SET url=#{url} WHERE contentid=#{contentid}
+	</update>
 </mapper>

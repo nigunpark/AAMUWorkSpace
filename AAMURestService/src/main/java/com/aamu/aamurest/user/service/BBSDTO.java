@@ -18,7 +18,5 @@ public class BBSDTO {
 	public String title;
 	public String content;
 	public String themeid;
-	public Date postdate;
-	public List<Map> photo;
-	public Double avgrate;
+	public List<String> photo;
 }
