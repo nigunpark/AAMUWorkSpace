@@ -1,9 +1,54 @@
 import React from 'react';
 import './MyPage.scss';
+import MyBox from './MyPageBox/MyBox';
 
 const MyPage = () => {
   return (
-    <div className='MyPage_con'>
+    // <div className='MyPage'>
+    //     <div className='MyPage_Container'>
+    //         <div className='MyPage_Wrapper'>
+    //             <div className='MyPage_Profile'>
+    //                 <img className='MyProfile_img' src='/images/profile.jpg'/>
+                    
+    //             </div>
+    //             <div>
+    //                 MyPage
+    //                 </div>
+    //         </div>
+    //     </div>
+    // </div>
+    // style={{ marginRight: "3px" }}
+
+
+    // <div className='app-container'>
+    //   <div className="app-header">
+    //     <div className="app-header-left">
+
+    //       <span className="app-icon"></span>
+    //       <p className="app-name">Portfolio</p>
+
+    //       <div className="search-wrapper">
+    //         <input className="search-input" type="text" placeholder="Search"/>
+    //         <svg 
+    //           xmlns="http://www.w3.org/2000/svg" 
+    //           width="20" height="20" fill="none" 
+    //           stroke="currentColor" 
+    //           stroke-linecap="round" 
+    //           stroke-linejoin="round" 
+    //           stroke-width="2" 
+    //           className="feather feather-search" 
+    //           viewBox="0 0 24 24">
+              
+    //           <defs></defs>
+    //           <circle cx="11" cy="11" r="8"></circle>
+    //           <path d="M21 21l-4.35-4.35"></path>
+    //         </svg>
+    //       </div>
+
+    //     </div>
+    //   </div>
+    // </div>
+
     <div className="app-container">
       <div className="app-header">
         <div className="app-header-left">
@@ -11,7 +56,7 @@ const MyPage = () => {
           <span className="app-icon"></span>
           <p className="app-name">Portfolio</p>
 
-          {/* <div className="search-wrapper">
+          <div className="search-wrapper">
             <input className="search-input" type="text" placeholder="Search"/>
             <svg 
               xmlns="http://www.w3.org/2000/svg" 
@@ -24,7 +69,7 @@ const MyPage = () => {
               <circle cx="11" cy="11" r="8"></circle>
               <path d="M21 21l-4.35-4.35"></path>
             </svg>
-          </div> */}
+          </div>
 
         </div>
 
@@ -41,7 +86,7 @@ const MyPage = () => {
             </svg>
           </button>
 
-          {/* <button className="add-btn" title="Add New Project">
+          <button className="add-btn" title="Add New Project">
             <svg 
               className="btn-icon" 
               xmlns="http://www.w3.org/2000/svg" 
@@ -53,7 +98,7 @@ const MyPage = () => {
               <line x1="12" y1="5" x2="12" y2="19" />
               <line x1="5" y1="12" x2="19" y2="12" />
             </svg>
-          </button> */}
+          </button>
 
           <button className="notification-btn">
             <svg
@@ -67,11 +112,11 @@ const MyPage = () => {
               <path d="M13.73 21a2 2 0 0 1-3.46 0" /></svg>
           </button>
 
-          <button className="profile-btn">{/* 프로필 */}
+          <button className="profile-btn">
             <img src="https://assets.codepen.io/3306515/IMG_2025.jpg" />
             <span>Aybüke C.</span>
-          </button> 
-          
+          </button>
+
         </div>
 
         <button className="messages-btn">
@@ -209,75 +254,14 @@ const MyPage = () => {
           </div>
 
           <div className="project-boxes jsGridView">
-
-            <div className="project-box-wrapper">
-              <div className="project-box"> {/*  style="background-color: #fee4cb;" */}
-                
-                <div className="project-box-header">
-                  <span>December 10, 2020</span>
-
-                  <div className="more-wrapper">
-                    <button className="project-btn-more">
-                      <svg 
-                      xmlns="http://www.w3.org/2000/svg" 
-                      width="24" height="24" 
-                      viewBox="0 0 24 24" fill="none" 
-                      stroke="currentColor" stroke-width="2" 
-                      stroke-linecap="round" stroke-linejoin="round"
-                      className="feather feather-more-vertical">
-                        <circle cx="12" cy="12" r="1" />
-                        <circle cx="12" cy="5" r="1" />
-                        <circle cx="12" cy="19" r="1" />
-                      </svg>
-                    </button>
-                  </div>
-                </div>
-
-                <div className="project-box-content-header">
-                  <p className="box-content-header">Web Designing</p>
-                  <p className="box-content-subheader">Prototyping</p>
-                </div>
-
-                <div className="box-progress-wrapper">
-                  <p className="box-progress-header">Progress</p>
-                  <div className="box-progress-bar">
-                    <span className="box-progress"></span>
-                    {/* 스팬 테그에 있던거  style="width: 60%; background-color: #ff942e" */}
-                  </div>
-                  <p className="box-progress-percentage">60%</p>
-                </div>
-
-                <div className="project-box-footer">
-                  <div className="participants">
-                  <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=2550&q=80" alt="participant"/>
-                  <img src="https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?ixid=MXwxMjA3fDB8MHxzZWFyY2h8MTB8fG1hbnxlbnwwfHwwfA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=900&q=60" alt="participant"/>
-                  
-                  <button className="add-participant">
-                    {/* 버튼 태그에 있던거  style="color: #ff942e;" */}
-                    <svg 
-                      xmlns="http://www.w3.org/2000/svg" 
-                      width="12" height="12" 
-                      viewBox="0 0 24 24" fill="none" 
-                      stroke="currentColor" stroke-width="3" 
-                      stroke-linecap="round" stroke-linejoin="round"
-                      className="feather feather-plus">
-                      <path d="M12 5v14M5 12h14" />
-                    </svg>
-                  </button>
-                </div>
-
-                <div className="days-left">
-                  {/*  style="color: #ff942e;" */}
-                  2 Days Left
-                </div>
-
-              </div>
-            </div>
-
+            <MyBox/>
+            <MyBox/>
+            <MyBox/>
+            <MyBox/>
           </div>
-
+          
+          
         </div>
-      </div>
 
       <div className="messages-section">
         <button className="messages-close">
@@ -335,11 +319,118 @@ const MyPage = () => {
             </div>
           </div>
 
+          <div className="message-box">
+            
+            <img src="https://images.unsplash.com/photo-1600486913747-55e5470d6f40?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=2550&q=80" alt="profile image"/>
+            
+            <div className="message-content">
+
+              <div className="message-header">
+                <div className="name">Mark</div>
+                
+                <div className="star-checkbox">
+                  <input type="checkbox" id="star-2"/>
+                  <label for="star-2">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg" 
+                      width="20" height="20" 
+                      viewBox="0 0 24 24" fill="none" 
+                      stroke="currentColor" stroke-width="2" 
+                      stroke-linecap="round" stroke-linejoin="round" 
+                      className="feather feather-star">
+                      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                    </svg>
+                  </label>
+                </div>
+              </div>
+
+              <p className="message-line">
+                Hey, can tell me about progress of project? I'm waiting for your response.
+              </p>
+
+              <p className="message-line time">
+                Dec, 12
+              </p>
+
+            </div>
+          </div>
+
+          <div className="message-box">
+            
+            <img src="https://images.unsplash.com/photo-1543965170-4c01a586684e?ixid=MXwxMjA3fDB8MHxzZWFyY2h8NDZ8fG1hbnxlbnwwfDB8MHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=900&q=60" alt="profile image"/>
+            
+            <div className="message-content">
+              <div className="message-header">
+                <div className="name">David</div>
+
+                <div className="star-checkbox">
+                  <input type="checkbox" id="star-3"/>
+                  <label for="star-3">
+                    <svg 
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="20" height="20" 
+                      viewBox="0 0 24 24" fill="none" 
+                      stroke="currentColor" stroke-width="2" 
+                      stroke-linecap="round" stroke-linejoin="round" 
+                      className="feather feather-star">
+                      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                    </svg>
+                  </label>
+                </div>
+
+              </div>
+
+              <p className="message-line">
+                Awesome! 🤩 I like it. We can schedule a meeting for the next one.
+              </p>
+
+              <p className="message-line time">
+                Dec, 12
+              </p>
+
+            </div>
+          </div>
+
+          <div className="message-box">
+            
+            <img src="https://images.unsplash.com/photo-1533993192821-2cce3a8267d1?ixid=MXwxMjA3fDB8MHxzZWFyY2h8MTl8fHdvbWFuJTIwbW9kZXJufGVufDB8fDB8&ixlib=rb-1.2.1&auto=format&fit=crop&w=900&q=60" alt="profile image"/>
+            
+            <div className="message-content">
+              <div className="message-header">
+                <div className="name">Jessica</div>
+                
+                <div className="star-checkbox">
+                  <input type="checkbox" id="star-4"/>
+                  <label for="star-4">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg" 
+                      width="20" height="20" 
+                      viewBox="0 0 24 24" fill="none"
+                      stroke="currentColor" stroke-width="2" 
+                      stroke-linecap="round" stroke-linejoin="round" 
+                      className="feather feather-star">
+                      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                    </svg>
+                  </label>
+                </div>
+
+              </div>
+
+              <p className="message-line">
+                I am really impressed! Can't wait to see the final result.
+              </p>
+
+              <p className="message-line time">
+                Dec, 11
+              </p>
+
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
-  </div>
+
   )
 }
 

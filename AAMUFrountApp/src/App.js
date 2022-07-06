@@ -41,6 +41,7 @@ function App() {
           <Route path="/forum" element={<Forum />} />
           {/* <Route path="/review" element={<Board />} /> */}
           <Route path="/Insta" element={<Main />}></Route>
+          
         </Route>
         <Route path="/login" element={<Login />}></Route>
         <Route path="/logintest" element={<LoginTest />}></Route>

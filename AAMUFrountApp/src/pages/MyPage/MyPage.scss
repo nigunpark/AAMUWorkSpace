@@ -508,7 +508,8 @@ button, a {
     flex-wrap: wrap;
     
     .project-box-wrapper {
-      width: 33.3%;
+        width: 33.3%;
+        
     }
   }
   
@@ -517,6 +518,7 @@ button, a {
       display: flex;
       border-radius: 10px;
       position: relative;
+      
         * {
         margin-right: 24px;
       }
