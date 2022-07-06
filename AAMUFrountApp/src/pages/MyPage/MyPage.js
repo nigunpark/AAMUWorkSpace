@@ -113,8 +113,8 @@ const MyPage = () => {
           </button>
 
           <button className="profile-btn">
-            <img src="https://assets.codepen.io/3306515/IMG_2025.jpg" />
-            <span>Aybüke C.</span>
+            <img src="/images/profile.jpg" />
+            <span>뚱이</span> {/* 프로필 */}
           </button>
 
         </div>
