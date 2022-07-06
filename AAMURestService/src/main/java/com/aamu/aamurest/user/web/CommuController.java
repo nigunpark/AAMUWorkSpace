@@ -62,19 +62,20 @@ public class CommuController {
 		
 		try {
 			List<String> uploads= FileUploadUtil.fileProcess(multifiles, path);
-			System.out.println("uploads:"+uploads);
+			System.out.println("(CommuController)uploads:"+uploads);
 			map.put("photolist", uploads);
 		} catch (IllegalStateException | IOException e) {e.printStackTrace();}
 		
 		int affected=commuService.commuInsert(map);
-		//affected 1이면 저장 잘된거  
+		//affected 1이면 저장 잘된거
+		System.out.println("(CommuController)affected:"+affected);
 		Map resultMap = new HashMap();
 		if(affected==1) resultMap.put("result", "true");
 		else resultMap.put("result", "false");
 		return resultMap;
 	}////////////////////////////commuInsert
 	
-	//!!!!!!!!!글 생성용_장소 뿌려주기
+	//글 생성용_장소 뿌려주기
 	@GetMapping("/gram/place/selectList")
 	public List<Map> commuPlaceList(@RequestParam Map map) {
 		System.out.println("map:"+map);
@@ -83,25 +84,14 @@ public class CommuController {
 		return list;
 	}
 	
-	//글 수정용
-	@PutMapping("/gram/edit/{lno}")
-	public CommuDTO commuUpdate(@PathVariable String lno, @RequestBody CommuDTO dto) {
-		dto.setTitle(lno);
-		dto.setContent(lno);
-		dto.setPlace(lno);
-		commuService.commuUpdate(dto);
-		
-		return dto;
-		
+	//글 하나 뿌려주는 용
+	@GetMapping("/gram/SelectOne/{lno}")
+	public CommuDTO commuSelectOne(@PathVariable String lno) {
+		return commuService.commuSelectOne(lno);
 	}
 	
 	
 	
 	
-	
-	
-	
-	
-		
 
 }

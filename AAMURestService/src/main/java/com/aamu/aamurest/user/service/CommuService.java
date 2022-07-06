@@ -19,10 +19,14 @@ public interface CommuService<T> {
 	//글 생성용
 	int commuInsert(Map map);
 	
-	//!!!!!!!!!!글 생성용_장소 뿌려주기
+	//글 생성용_장소 뿌려주기
 	List<Map> commuPlaceList(Map map);
 	
+	//글 하나 뿌려주는 용
+	CommuDTO commuSelectOne(String lno);
+	
+	/*
 	//글 수정용
 	int commuUpdate(CommuDTO dto);
-
+	*/
 }

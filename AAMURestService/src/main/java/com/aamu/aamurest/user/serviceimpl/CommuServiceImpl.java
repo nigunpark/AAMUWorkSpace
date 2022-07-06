@@ -42,14 +42,17 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 		//사진
 		int photoAffected=0;
 		List<String> lists= (List<String>) map.get("photolist");
+		System.out.println("(CommuServiceImpl)lists:"+lists);
 		for(String photo:lists) {
 			Map photomap = new HashMap();
 			photomap.put("lno", map.get("lno"));
 			photomap.put("photo", photo);
 			photoAffected+=dao.photoInsert(photomap);
+			System.out.println("(CommuServiceImpl)photoAffected:"+photoAffected);
 		}
 		//장소
-		if(map.get("place")!=null) {
+		System.out.println("(CommuServiceImpl)map.get(\"contentid\"):"+map.get("contentid"));
+		if(map.get("contentid")!=null) {
 			int placeAffected=dao.placeInsert(map); 
 			if(placeAffected ==0) return 0; 
 		}
@@ -60,18 +63,25 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 			return 0;
 	}/////commuInsert
 	
-	//!!!!!!!!!!글 생성용_장소 뿌려주기
+	//글 생성용_장소 뿌려주기
 	@Override
 	public List<Map> commuPlaceList(Map map) {
-		map.put("searchWord",map.get("searchWord"));
 		return dao.commuPlaceList(map);
+	}
+	
+	//글 하나 뿌려주는 용
+	@Override
+	public CommuDTO commuSelectOne(String lno) {
+		return dao.commuSelectOne(lno);
 	}
 
 	//글 수정용
+	/*
 	@Override
 	public int commuUpdate(CommuDTO dto) {
 		return dao.commuUpdate(dto);
 		
 	}
+	*/
 	
 }

@@ -18,7 +18,7 @@ import lombok.Setter;
 public class CommuDTO {
 	public String lno;
 	public String id;
-	public String title;
+	public String ctitle;
 	public String content;
 	public Date postdate;
 	public String likecount;
@@ -26,5 +26,6 @@ public class CommuDTO {
 	public String userprofile;
 	public CommuCommentDTO commuComment;
 	public List<String> photo;
-	public String place;
+	public String contentid;
+	public String title;
 }

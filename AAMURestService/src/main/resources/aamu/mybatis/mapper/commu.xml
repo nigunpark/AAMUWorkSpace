@@ -7,7 +7,7 @@
 
 	<!-- 글 목록용 -->
 	<select id="commuSelectList" resultType="commuDTO" >
-		select * from community
+		SELECT c.*,cp.contentid,p.title FROM community c JOIN commuplace cp ON c.lno=cp.lno JOIN places p ON cp.contentid=p.contentid
 	</select>
 	
 	<!-- 글 목록용_댓글 한개 뿌려주기 -->
@@ -36,23 +36,28 @@
 	</insert>
 	
 	<!-- 글 생성용_장소 저장 -->
-	<insert id="commuPlaceInsert" parameterType="String" >
+	<insert id="commuPlaceInsert" parameterType="Map" >
 		INSERT INTO commuplace
-		VALUES (#{lno},#{place})
+		VALUES (#{lno},#{contentid})
 	</insert>
 	
-	<!-- !!!!!!!글 생성용_장소 뿌려주기 -->
+	<!-- 글 생성용_장소 뿌려주기 -->
 	<select id="commuPlaceList" resultType="Map" parameterType="Map">
-		SELECT title, addr, contentid FROM places WHERE title LIKE '%{searchWord}%' or addr LIKE '%{searchWord}%'
+		SELECT contentid, title, addr FROM places WHERE title LIKE '%'||#{searchWord}||'%' or addr LIKE '%'||#{searchWord}||'%'
+	</select>
+	
+	<!-- !!!!!!!!!글 하나 뿌려주는 용-->
+	<select id="commuSelectOne" resultType="commuDTO" parameterType="String">
+		SELECT * FROM community WHERE lno=#{lno}
 	</select>
 	
 	<!-- 글 수정용 -->
-	<update id="commuUpdate" parameterType="CommuDTO">
+	<update id="commuUpdate" parameterType="commuDTO">
 		UPDATE community SET title=#{title},content=#{content} WHERE lno=#{lno}
 	</update>
 	
-	<!-- 글 수정용_사진 수정 -->
-	<update id="commuPlaceUpdate" parameterType="CommuDTO">
+	<!-- 글 수정용_장소 수정 -->
+	<update id="commuPlaceUpdate" parameterType="commuDTO">
 		UPDATE commuplace SET lno=#{lno},content=#{content} WHERE lno=#{lno}
 	</update>
 	
