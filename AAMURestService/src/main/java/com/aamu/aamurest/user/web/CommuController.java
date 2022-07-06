@@ -87,7 +87,23 @@ public class CommuController {
 	//글 하나 뿌려주는 용
 	@GetMapping("/gram/SelectOne/{lno}")
 	public CommuDTO commuSelectOne(@PathVariable String lno) {
-		return commuService.commuSelectOne(lno);
+		CommuDTO dto=commuService.commuSelectOne(lno);
+		//모든 댓글 가져오기
+		dto.setCommuCommentList(commuService.commuCommentList(lno));
+		//모든 사진 가져오기
+		dto.setPhoto(commuService.commuSelectPhotoList(lno));
+		return dto;
+	}
+	
+	//글 수정용
+	@PutMapping("gram/edit/{lno}")
+	public CommuDTO commuUpdate(@PathVariable String lno, @RequestParam CommuDTO dto) {
+		dto.setTitle(lno);
+		dto.setContent(lno);
+		dto.setContentid(lno);
+		int affected=commuService.commuUpdate(dto);
+		System.out.println(affected+"행이 수정됨");
+		return dto;
 	}
 	
 	

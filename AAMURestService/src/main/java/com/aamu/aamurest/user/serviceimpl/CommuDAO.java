@@ -64,13 +64,15 @@ public class CommuDAO {
 		return template.selectOne("commuSelectOne",lno);
 	}
 	
+	//글 하나 뿌려주는 용_모든 댓글 뿌려주기
+	public List<CommuCommentDTO> commuCommentList(String lno){
+		return template.selectList("commuCommentList",lno);
+	}
 	
-	
-	/*
-	//글 수정용_장소 수정
+	//글 수정용
 	public int placeUpdate(CommuDTO dto) {
 		return template.update("commuPlaceUpdate",dto);
 	}
-	*/
+	
 
 }

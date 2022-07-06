@@ -74,14 +74,18 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 	public CommuDTO commuSelectOne(String lno) {
 		return dao.commuSelectOne(lno);
 	}
+	
+	//글 하나 뿌려주는 용_모든 댓글 뿌려주기
+	@Override
+	public List<CommuCommentDTO> commuCommentList(String lno) {
+		return dao.commuCommentList(lno);
+	}
 
 	//글 수정용
-	/*
 	@Override
 	public int commuUpdate(CommuDTO dto) {
 		return dao.commuUpdate(dto);
-		
 	}
-	*/
+	
 	
 }

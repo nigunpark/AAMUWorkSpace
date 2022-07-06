@@ -46,20 +46,22 @@
 		SELECT contentid, title, addr FROM places WHERE title LIKE '%'||#{searchWord}||'%' or addr LIKE '%'||#{searchWord}||'%'
 	</select>
 	
-	<!-- !!!!!!!!!글 하나 뿌려주는 용-->
+	<!-- 글 하나 뿌려주는 용-->
 	<select id="commuSelectOne" resultType="commuDTO" parameterType="String">
-		SELECT * FROM community WHERE lno=#{lno}
+		SELECT c.*,cp.contentid,p.title FROM community c JOIN commuplace cp ON c.lno=cp.lno JOIN places p ON cp.contentid=p.contentid WHERE c.lno=#{lno}
+	</select>
+	
+	<!-- 글 하나 뿌려주는 용_모든 댓글 뿌려주기-->
+	<select id="commuCommentList" parameterType="String" resultType="commuCommentDTO" >
+		SELECT * FROM commucomment WHERE lno=#{lno}
 	</select>
 	
 	<!-- 글 수정용 -->
 	<update id="commuUpdate" parameterType="commuDTO">
-		UPDATE community SET title=#{title},content=#{content} WHERE lno=#{lno}
+		UPDATE community SET title=#{title},content=#{content},contentid=#{contentid} WHERE lno=#{lno}
 	</update>
 	
-	<!-- 글 수정용_장소 수정 -->
-	<update id="commuPlaceUpdate" parameterType="commuDTO">
-		UPDATE commuplace SET lno=#{lno},content=#{content} WHERE lno=#{lno}
-	</update>
+
 	
 	
 	

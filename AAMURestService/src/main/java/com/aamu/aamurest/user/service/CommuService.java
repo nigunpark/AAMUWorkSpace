@@ -25,8 +25,10 @@ public interface CommuService<T> {
 	//글 하나 뿌려주는 용
 	CommuDTO commuSelectOne(String lno);
 	
-	/*
+	//글 하나 뿌려주는 용_모든 댓글 뿌려주기
+	List<CommuCommentDTO> commuCommentList(String lno);
+	
 	//글 수정용
 	int commuUpdate(CommuDTO dto);
-	*/
+	
 }

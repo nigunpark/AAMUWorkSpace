@@ -25,6 +25,7 @@ public class CommuDTO {
 	public String rcount;
 	public String userprofile;
 	public CommuCommentDTO commuComment;
+	public List<CommuCommentDTO> commuCommentList;
 	public List<String> photo;
 	public String contentid;
 	public String title;
