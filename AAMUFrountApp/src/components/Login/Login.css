@@ -1,0 +1,42 @@
+.loginForm {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+.loginTitle__container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+.loginLockIcon {
+  border-radius: 50%;
+  padding: 10px;
+  background-color: var(--orange);
+  color: white;
+}
+.loginInput__container {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  border: 2px solid gray;
+  border-radius: 5px;
+  width: 100%;
+}
+
+.loginInput {
+  width: 90%;
+  line-height: 40px;
+  font-size: 15px;
+}
+
+.loginBtn {
+  /* margin-top: 20px; */
+  border: 2px solid green;
+  width: 100%;
+  height: 40px;
+  font-size: 20px;
+  border-radius: 5px;
+  color: green;
+}
