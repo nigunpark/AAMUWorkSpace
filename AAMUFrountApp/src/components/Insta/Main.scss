@@ -1,5 +1,5 @@
 .main {
-    background-color: #FAFAFA;
+    background-color: #ebebeb;
     display: grid;
     grid-template-columns: 200px auto 500px 200px;
     z-index: 2;
@@ -421,14 +421,25 @@
 
             .search-all {
                 position: absolute;
-                top: 65px;
-                left: 50%;
+                top: 38px;
+                left: 43%;
                 transform: translate(-50%);
                 background-color: #fff;
                 box-shadow: 0 0 5px 1px rgba(var(--jb7, 0, 0, 0), .0975);
                 border: 1px solid #fff;
                 border-radius: 5px;
                 z-index: 10;
+            }
+            .search-squre {
+                //position: absolute;
+                margin-top: -7px;
+                margin-left: 25px;
+                width: 16px;
+                height: 16px;
+                transform: rotate(45deg);
+                //box-shadow: 0 0 5px 1px rgba(var(--jb7, 0, 0, 0), .0975);
+                background-color: #fff;
+                z-index: 8000;
             }
 
             .search-engine {
@@ -438,8 +449,7 @@
                 background-color: #fff;
                 z-index: 9;
                 overflow: auto;
-
-
+                
                 .search-squre {
                     position: absolute;
                     top: -7px;
@@ -451,7 +461,6 @@
                     background-color: #fff;
                     z-index: 8000;
                 }
-
 
                 .search-contents {
                     display: flex;
@@ -495,7 +504,114 @@
                         color: #000000;
                         width: 15px;
                         height: 25px;
-                        margin-left: 10px;
+                        cursor: pointer;
+                
+                        :hover{
+                            color: #adadad;
+                        }
+                    }
+                
+
+                    p {
+                        margin-left: 9px;
+                    }
+
+                    .user-id {
+                        font-size: 16px;
+                        font-weight: bold;
+                    }
+
+                    .user-name {
+                        font-size: 14px;
+                        color: #8e8e8e;
+                        margin-top: 3px;
+                    }
+
+                    
+                }
+
+
+            }
+        }
+        .notifi {
+            margin-top: 15px;
+            margin-bottom: 15px;
+            position: relative;
+
+            .noti-all {
+                position: absolute;
+                top: 38px;
+                right: 235px;
+                transform: translate(-50%);
+                background-color: #fff;
+                
+                border: 1px solid #fff;
+                border-radius: 5px;
+                z-index: 10;
+            }
+            .search-squre {
+                position: absolute;
+                margin-top: -5px;
+                margin-left: 214px;
+                width: 16px;
+                height: 16px;
+                transform: rotate(45deg);
+                //box-shadow: 0 0 5px 1px rgba(var(--jb7, 0, 0, 0), .0975);
+                background-color: #fff;
+                z-index: 8000;
+            }
+
+            .search-engine {
+                position: absolute;
+                width: 340px;
+                height: 380px;
+                background-color: #fff;
+                box-shadow: 0 0 5px 1px rgba(var(--jb7, 0, 0, 0), .0975);
+                z-index: 9;
+                overflow: auto;
+
+                .search-contents {
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                    margin-left: 10px;
+
+                    &:first-child {
+                        padding-top: 10px;
+                    }
+
+                    &:not(:first-child) {
+                        margin-top: 10px;
+                    }
+
+                    .gradient {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        width: 52px;
+                        height: 52px;
+                        border-radius: 100%;
+                        background: radial-gradient(circle at bottom left, #F58529 20%, #C42D91);
+                    }
+
+                    img {
+                        width: 46px;
+                        height: 46px;
+                        border: 2px solid #fff;
+                        border-radius: 100%;
+                    }
+                    .likeimg{
+                        width: 60px;
+                        height: 60px;
+                        border: 2px solid #fff;
+                        border-radius: 100%;
+                    }
+                    .heart {
+                       
+                        border-color: #000000;
+                        color: #000000;
+                        width: 15px;
+                        height: 25px;
                         cursor: pointer;
                 
                         :hover{
@@ -687,23 +803,15 @@
         width: 30px;
         height: 30px;
         font-weight: 10px;
-        background-color: #ffffff;
         border-radius: 5px;
         border-style: none;
-        margin-left: 10px;
-        margin-top: 2px;
+        margin-top: -3px;
         
         cursor: pointer;
 
         :hover{
             color: #adadad;
         }
-    }
-
-    div>.post-icon:active {
-        color: #ffffff;
-        background-color: #000000;
-
     }
 
 

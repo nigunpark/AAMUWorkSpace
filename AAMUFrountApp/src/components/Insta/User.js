@@ -29,8 +29,12 @@ function User() {
                 :<i class="fa-regular fa-heart fa-2x"  onClick={()=>{setHeart(!heart)}}></i>}
                 {/* {heart ? <NotificationModal></NotificationModal>:null} */}
             </div>
-            <div>
-                <FontAwesomeIcon icon={faSquarePlus} className="post-icon" />
+            <div className="post-icon">
+            {square ?<i class="fa-solid fa-square-plus fa-2x" onClick={()=>{setsquare(!square)}} style={{color:'black'}} >
+                <WriteModal></WriteModal></i>
+                :<i class="fa-regular fa-square-plus fa-2x"  onClick={()=>{setsquare(!square)}}></i>}
+                
+                
             </div>
         </div>
         

@@ -32,7 +32,6 @@ function FeedSetting() {
                     <div className='heart-icon'>
                         {heart ?<i class="fa-solid fa-heart fa-2x"onClick={()=>{setHeart(true)}} style={{color:'red'}} />
                         :<i class="fa-regular fa-heart fa-2x"  onClick={()=>{setHeart(false)}}></i>}
-                        
                     </div>
                     <svg className="talk-icon" fill="#262626" viewBox="0 0 512 512" >
                         <path d="M256,0C114.848,0,0,114.848,0,256c0,49.216,13.792,96.48,39.936,137.216L1.152,490.048
