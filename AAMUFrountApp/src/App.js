@@ -11,7 +11,6 @@ import Test from "./Test";
 import Main from "./components/Insta/Main";
 
 import Forum from "./pages/Forum/Forum";
-import MyPage from "./pages/MyPage/MyPage";
 import Board from "./pages/Forum/Board2/Board";
 import DetailModal from "./pages/Forum/DetailModal/DetailModal";
 import KakaoRedirectHandler from "./components/Login/Kakao/KakaoRedirectHandler";
@@ -45,8 +44,7 @@ function App() {
         <Route path="/login" element={<Login />}></Route>
         <Route path="/test" element={<Test />}></Route>
 
-        <Route path="/Detailmodal" element={<DetailModal/>}/>
-        <Route path="/myPage" element={<MyPage/>}/>
+        <Route path="/Detailmodal" element={<DetailModal/>}></Route>
         <Route path="/oauth/callback/kakao" element={<KakaoRedirectHandler/>}/>
       </Routes>
     </div>

@@ -30,7 +30,7 @@ public class BBSController {
 	@Autowired
 	private BBSService bbsservice;
 	
-	/* ìž‘ì—… ì¤‘ 
+	/* ÀÛ¾÷Áß
 	@RequestMapping("")
 	public List<BBSDTO> BBSSelectList(){
 		List<BBSDTO> list = BBSService.BBSSelectList();
