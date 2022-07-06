@@ -41,9 +41,8 @@ function App() {
           <Route path="/forum" element={<Forum />} />
           {/* <Route path="/review" element={<Board />} /> */}
           <Route path="/Insta" element={<Main />}></Route>
+          <Route path="/login" element={<LoginTest />}></Route>
         </Route>
-        <Route path="/login" element={<Login />}></Route>
-        <Route path="/logintest" element={<LoginTest />}></Route>
         <Route path="/test" element={<Test />}></Route>
 
         <Route path="/Detailmodal" element={<DetailModal />} />
@@ -61,7 +60,8 @@ function changeLocation(location, setWhereUrl) {
     location.pathname.indexOf("mainPage") === 1 ||
     location.pathname.indexOf("forum") === 1 ||
     // location.pathname.indexOf("review") === 1 ||
-    location.pathname.indexOf("Insta") === 1
+    location.pathname.indexOf("Insta") === 1 ||
+    location.pathname.indexOf("login") === 1
   )
     setWhereUrl(true);
   else setWhereUrl(false);
