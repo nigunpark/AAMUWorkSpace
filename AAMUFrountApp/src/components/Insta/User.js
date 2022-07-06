@@ -1,14 +1,10 @@
-
-import { faSquarePlus } from "@fortawesome/free-regular-svg-icons";
-import { faHeart } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
-import NotificationModal from "./ModalGroup/NotificationModal";
+import NotificationModal from "./ModalGroup/Notification";
 import SearchModal from "./Search";
 import WriteModal from "./ModalGroup/WriteModal"
 function User() {
-  let modalRef = useRef();
+  const modalRef = useRef([]);
   const [heart, setHeart] = useState(false);
   const [follow, setFollowing] = useState(false);
   const [search, setsearch] = useState(false);
@@ -16,23 +12,15 @@ function User() {
 
   function handleModal(e) {
     e.stopPropagation();
-    if (e.target !== modalRef.current) setsearch(false);
+    if (e.target !== modalRef.current[0]) setsearch(false);
   }
   window.addEventListener("click", handleModal);
+
   return (
     <div>
-      <div
-        className="search"
-        onClick={() => {
-          setsearch(!search);
-        }}
-      >
-        <input
-          type="text"
-          className="search-bar"
-          placeholder="검색"
-          ref={modalRef}
-        />
+      <div className="search" onClick={() => { setsearch(!search); }} >
+        <input type="text" className="search-bar"  placeholder="검색" 
+          ref={el => (modalRef.current[0] = el)} />
         {search ? <SearchModal></SearchModal> : null}
       </div>
 
@@ -41,30 +29,19 @@ function User() {
         <div>
           <p className="user-id">0hyun0hyun</p>
           <p className="user-name">김영현</p>
-
-
         </div>
-        <div className="heart">
-          {heart ? (
-            <i
-              className="fa-solid fa-heart fa-2x"
-              onClick={() => {
-                setHeart(!heart);
-              }}
-              style={{ color: "black" }}
-            >
-              <NotificationModal></NotificationModal>
-            </i>
-          ) : (
-            <i
-              class="fa-regular fa-heart fa-2x"
-              onClick={() => {
-                setHeart(!heart);
-              }}
-            ></i>
-          )}
-          {/* {heart ? <NotificationModal></NotificationModal>:null} */}
+        
+        <div className="notifi" onClick={() => { setHeart(!heart); }}>
+          <div  className="heart" >
+            {heart ? (
+              <i  class=" fa-solid fa-heart fa-2x"  style={{ color: "black" }}></i>
+            ) : ( 
+            <i  class="fa-regular fa-heart fa-2x"  ></i>
+            )}  
+          </div>
+         {heart ? <NotificationModal></NotificationModal> : null}
         </div>
+
         <div className="post-icon">
           {square ? (
             <i
@@ -73,9 +50,7 @@ function User() {
                 setsquare(!square);
               }}
               style={{ color: "black" }}
-            >
-               <WriteModal></WriteModal> 
-            </i>
+            ></i>
           ) : (
             <i
               class="fa-regular fa-square-plus fa-2x"
@@ -85,6 +60,7 @@ function User() {
             ></i>
           )}
         </div>
+        {square ? <WriteModal></WriteModal> :null}
       </div>
 
       <div className="recommend">
