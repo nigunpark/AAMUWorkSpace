@@ -1,5 +1,6 @@
 package com.aamu.aamurest.user.serviceimpl;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -19,6 +20,12 @@ public class BBSServiceImpl implements BBSService{
 	@Override
 	public List<BBSDTO> bbsSelectList() {
 		return dao.bbsSelectList();
+	}
+	
+	//글 목록용_사진 뿌려주기
+	@Override
+	public List bbsSelectPhotoList(int rbn) {
+		return dao.bbsSelectPhotoList(rbn);
 	}
 
 
