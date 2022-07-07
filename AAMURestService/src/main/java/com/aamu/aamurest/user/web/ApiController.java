@@ -312,6 +312,7 @@ public class ApiController {
 			*/
 			String checkin = dto.getCheckin();
 			String checkout =dto.getCheckout();
+			System.out.println(checkin);
 			if(checkin!=null) {
 				if(checkin.contains("<br />")) {
 					checkin.replace("<br />", "\r\n");
@@ -323,6 +324,7 @@ public class ApiController {
 					checkin.replace("<br>", "\r\n");
 				}
 				dto.setCheckin(checkin);
+				
 			}
 			if(checkout!=null) {
 				if(checkout.contains("<br />")) {
