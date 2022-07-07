@@ -35,16 +35,15 @@ function App() {
     <div>
       <Routes>
         <Route element={<Navbar scrollNav={scrollNav} whereUrl={whereUrl} />}>
-          <Route path="/" element={<Home />}></Route>
-          <Route path="/WholeMap" element={<WholeMap />}></Route>
-          <Route path="/mainPage/:currPosition" element={<MainPage />}></Route>
+          <Route path="/" element={<Home />} />
+          <Route path="/WholeMap" element={<WholeMap />} />
+          <Route path="/mainPage/:currPosition" element={<MainPage />} />
           <Route path="/forum" element={<Forum />} />
           {/* <Route path="/review" element={<Board />} /> */}
-          <Route path="/Insta" element={<Main />}></Route>
-          <Route path="/login" element={<LoginTest />}></Route>
+          <Route path="/Insta" element={<Main />} />
         </Route>
-        <Route path="/test" element={<Test />}></Route>
-
+        <Route path="/login" element={<LoginTest />} />
+        <Route path="/test" element={<Test />} />
         <Route path="/Detailmodal" element={<DetailModal />} />
         <Route path="/myPage" element={<MyPage />} />
         <Route
