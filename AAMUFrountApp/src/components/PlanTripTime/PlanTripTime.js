@@ -147,10 +147,10 @@ function getAmpmTmStart(
     .padStart(2, 0);
   array.push(time);
   //분 가져오는 코드
-  let min = localeString.substring(
-    localeString.indexOf(":") + 1,
-    localeString.lastIndexOf(":")
-  );
+  let min = localeString
+    .substring(localeString.indexOf(":") + 1, localeString.lastIndexOf(":"))
+    .trim()
+    .padStart(2, 0);
   array.push(min);
   setStartTimeArray(array);
   if (
