@@ -42,11 +42,12 @@ function App() {
           {/* <Route path="/review" element={<Board />} /> */}
           <Route path="/Insta" element={<Main />}></Route>
           <Route path="/login" element={<LoginTest />}></Route>
+          <Route path="/myPage" element={<MyPage />} />
         </Route>
         <Route path="/test" element={<Test />}></Route>
 
         <Route path="/Detailmodal" element={<DetailModal />} />
-        <Route path="/myPage" element={<MyPage />} />
+        
         <Route
           path="/oauth/callback/kakao"
           element={<KakaoRedirectHandler />}
