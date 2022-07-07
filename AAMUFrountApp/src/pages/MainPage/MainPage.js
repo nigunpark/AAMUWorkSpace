@@ -12,13 +12,12 @@ import {
   changeArrForJangso,
 } from "../../redux/store";
 import axios from "axios";
-const { kakao } = window;
-
 const MainPage = () => {
-  const [titleName, setTitleName] = useState("");
+  const [titleName, setTitleName] = useState("추천장소");
   const [conWhichModal, setConWhichModal] = useState(false);
   let { currPosition } = useParams();
   const [showCreatePlan, setShowCratePlan] = useState(false);
+  const [fromWooJaeData, setFromWooJaeData] = useState([]);
   let dispatch = useDispatch();
   useEffect(() => {
     getCurrpositionLocal(currPosition, dispatch);
@@ -33,6 +32,7 @@ const MainPage = () => {
         setTitleName={setTitleName}
         setConWhichModal={setConWhichModal}
         setShowCratePlan={setShowCratePlan}
+        setFromWooJaeData={setFromWooJaeData}
       />
 
       <RightRecommandSide
@@ -45,6 +45,7 @@ const MainPage = () => {
           setShowCratePlan={setShowCratePlan}
           showCreatePlan={showCreatePlan}
           currPosition={currPosition}
+          fromWooJaeData={fromWooJaeData}
         />
       ) : null}
     </div>
@@ -119,7 +120,6 @@ function getCurrpositionLocal(currPosition, dispatch) {
     })
     .then((resp) => {
       dispatch(changeArrForJangso(resp.data));
-      console.log(resp.data);
     })
     .catch((error) => {
       console.log(error);
