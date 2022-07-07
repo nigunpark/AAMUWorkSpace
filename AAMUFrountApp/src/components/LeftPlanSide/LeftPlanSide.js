@@ -217,7 +217,7 @@ function PickedLocation({ local }) {
     <div className="pickedLocation__container slide-in-right">
       <div className="pickedLocation__img-container">
         <img
-          src={local.smallImage ?? "/images/no-image.jpg"}
+          src={local.smallimage ?? "/images/no-image.jpg"}
           onError={(e) => {
             e.target.src = "/images/no-image.jpg";
           }}
@@ -384,7 +384,7 @@ function PickedSukso({ local }) {
     <div className="pickedSukso__container slide-in-right">
       <div className="pickedSukso__img-container">
         <img
-          src={local.smallImage ?? "/images/no-image.jpg"}
+          src={local.smallimage ?? "/images/no-image.jpg"}
           // src="/images/no-image.jpg"
           onError={(e) => {
             e.target.src = "/images/no-image.jpg";

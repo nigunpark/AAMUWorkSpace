@@ -101,14 +101,14 @@ public class MainDAO {
 		return template.selectList("selectDinerList", map);
 	}
 
-	public List<AttractionDTO> searchPlace(Map map) {
+	public List<AttractionDTO> searchTwoPlace(Map map) {
 		
-		return template.selectList("searchPlace", map);
+		return template.selectList("searchTwoPlace", map);
 	}
 	///////////////////////////////////////////////////serchdao
-	public List<AttractionDTO> searchUrl(Map map) {
+	public List<AttractionDTO> searchOnePlace(Map map) {
 		
-		return template.selectList("searchUrl", map);
+		return template.selectList("searchOnePlace", map);
 	}
 
 	public int updateUrl(AttractionDTO dto) {
@@ -119,6 +119,11 @@ public class MainDAO {
 	public AttractionDTO selectOnePlace(int contentid) {
 		
 		return template.selectOne("selectOnePlace", contentid);
+	}
+
+	public int checkPlace(int contentid) {
+		
+		return template.selectOne("checkPlace", contentid);
 	}
 
 

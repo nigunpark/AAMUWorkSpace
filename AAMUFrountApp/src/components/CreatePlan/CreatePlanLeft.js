@@ -13,11 +13,11 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { TextField } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { corrTimeSetObj } from "../../redux/store";
-const CreatePlanLeft = ({ currPosition }) => {
+const CreatePlanLeft = ({ currPosition, fromWooJaeData }) => {
   let reduxState = useSelector((state) => {
     return state;
   });
-  let [selected, setSelected] = useState(false);
+
   return (
     <div className="createPlanLeft">
       <div className="createPlanLeft__days">
@@ -30,15 +30,14 @@ const CreatePlanLeft = ({ currPosition }) => {
         </div>
       </div>
       <WholeSchedule
-        selected={selected}
-        setSelected={setSelected}
         currPosition={currPosition}
+        fromWooJaeData={fromWooJaeData}
       />
     </div>
   );
 };
 
-function WholeSchedule({ selected, setSelected, currPosition }) {
+function WholeSchedule({ currPosition, fromWooJaeData }) {
   let reduxState = useSelector((state) => {
     return state;
   });
@@ -59,9 +58,8 @@ function WholeSchedule({ selected, setSelected, currPosition }) {
           return (
             <Content
               index={index}
-              selected={selected}
-              setSelected={setSelected}
               key={index}
+              fromWooJaeData={fromWooJaeData}
             />
           );
         })}
@@ -70,12 +68,13 @@ function WholeSchedule({ selected, setSelected, currPosition }) {
   );
 }
 
-function Content({ index }) {
+function Content({ index, fromWooJaeData }) {
   let reduxState = useSelector((state) => {
     return state;
   });
   let dispatch = useDispatch();
   let [showTimePicker, setShowTimePicker] = useState(false);
+  if (fromWooJaeData.length === 0) return;
   return (
     <div className="createPlanLeft__schedule__content">
       <select className="createPlanLeft__schedule__select">
@@ -106,7 +105,6 @@ function Content({ index }) {
         <FontAwesomeIcon icon={faLocationDot} style={{ color: "var(--red)" }} />{" "}
         3장소
       </div>
-
       <div className="createPlanLeft__schedule__time">
         <span style={{ fontSize: "13px" }}>시작</span>{" "}
         <span className="createPlanLeft__schedule__time-span">
@@ -118,19 +116,23 @@ function Content({ index }) {
             }
           </span>{" "}
           <span>
-            {
-              reduxState.timeSetObj.find((obj) => {
+            {reduxState.timeSetObj
+              .find((obj) => {
                 return obj.day === index + 1;
-              }).time
-            }
+              })
+              .time.toString()
+              .trim()
+              .padStart(2, "0")}
           </span>
           {" : "}
           <span>
-            {
-              reduxState.timeSetObj.find((obj) => {
+            {reduxState.timeSetObj
+              .find((obj) => {
                 return obj.day === index + 1;
-              }).min
-            }
+              })
+              .min.toString()
+              .trim()
+              .padStart(2, "0")}
           </span>
         </span>
         <FontAwesomeIcon
@@ -165,18 +167,19 @@ function Content({ index }) {
           </Stack>
         </LocalizationProvider>
       ) : null}
-
-      {reduxState.arrForPickJangso.map((local, i) => {
-        return <DetailSetting key={i} index={index} local={local} />;
+      {console.log("fromWooJaeData:", fromWooJaeData)}
+      {fromWooJaeData[index]["day" + (index + 1)].map((obj, i) => {
+        return <DetailSetting obj={obj} key={i} index={i} />;
       })}
     </div>
   );
 }
 
-function DetailSetting({ index, local }) {
+function DetailSetting({ obj, index }) {
   let reduxState = useSelector((state) => {
     return state;
   });
+  if (obj.dto === null) return;
   return (
     <div className="detailSetting__container">
       <div className="movingTime">
@@ -191,7 +194,8 @@ function DetailSetting({ index, local }) {
         <div className="detailLocation__img-container">
           <img
             className="detailLocation__img"
-            src={local.image2}
+            src={obj.dto.smallimage ?? "/images/no-image.jpg"}
+            // src={"/images/no-image.jpg"}
             alt="이미지"
             onError={(e) => {
               e.target.src = "/images/no-image.jpg";
@@ -201,22 +205,29 @@ function DetailSetting({ index, local }) {
         <div className="detailLocation__inform-container">
           <div className="detailLocation__part-top">
             <div>
-              <div>{local.title}</div>
-              <div>0시 0분</div>
+              <div>{obj.dto.title}</div>
+              <div>
+                {obj.atime / 1000 / 60 / 60 + "시간"}{" "}
+                {((obj.atime / 1000 / 60) % 60) + "분"}
+              </div>
             </div>
             <div className="detailLocation__clock">
               <span>
-                {
-                  reduxState.timeSetObj.find((obj) => {
+                {reduxState.timeSetObj
+                  .find((obj) => {
                     return obj.day === index + 1;
-                  }).time
-                }
+                  })
+                  .time.toString()
+                  .trim()
+                  .padStart(2, "0")}
                 :
-                {
-                  reduxState.timeSetObj.find((obj) => {
+                {reduxState.timeSetObj
+                  .find((obj) => {
                     return obj.day === index + 1;
-                  }).min
-                }
+                  })
+                  .min.toString()
+                  .trim()
+                  .padStart(2, "0")}
               </span>
               <span>~</span>
               <span>ddd</span>

@@ -11,7 +11,12 @@ import {
   Contents,
   CloseBtn,
 } from "./CratePlanModal";
-const CreatePlan = ({ setShowCratePlan, showCreatePlan, currPosition }) => {
+const CreatePlan = ({
+  setShowCratePlan,
+  showCreatePlan,
+  currPosition,
+  fromWooJaeData,
+}) => {
   return (
     <div>
       <DimmedContainer>
@@ -27,7 +32,10 @@ const CreatePlan = ({ setShowCratePlan, showCreatePlan, currPosition }) => {
             </CloseBtn>
           </TitleBar>
           <Contents>
-            <CreatePlanLeft currPosition={currPosition} />
+            <CreatePlanLeft
+              currPosition={currPosition}
+              fromWooJaeData={fromWooJaeData}
+            />
             <CreatePlanMap
               showCreatePlan={showCreatePlan}
               currPosition={currPosition}

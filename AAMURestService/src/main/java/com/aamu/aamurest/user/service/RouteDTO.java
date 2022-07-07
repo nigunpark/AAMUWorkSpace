@@ -11,6 +11,7 @@ public class RouteDTO {
 	private int contentid;
 	private int contenttypeid;
 	private long starttime;
+	private AttractionDTO dto;
 	private int day;
 	private long atime;
 	private long mtime;

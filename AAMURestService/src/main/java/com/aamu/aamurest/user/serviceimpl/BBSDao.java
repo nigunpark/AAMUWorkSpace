@@ -16,10 +16,21 @@ public class BBSDao {
 	@Autowired
 	private SqlSessionTemplate template;
 	
+	//글 목록
 	public List<BBSDTO> bbsSelectList(){
 		return template.selectList("bbsSelectList");
 	}
+	
+	//글 목록_사진 뿌려주기
+	public List bbsSelectPhotoList(int rbn) {
+		return template.selectList("bbsSelectPhotoList",rbn);
+	}
+	
 
+	
+	
+
+	
 
 	
 }

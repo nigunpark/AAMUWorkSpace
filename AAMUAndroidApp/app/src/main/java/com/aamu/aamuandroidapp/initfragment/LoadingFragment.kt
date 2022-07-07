@@ -47,7 +47,7 @@ class LoadingFragment : Fragment() {
             navController.navigate(R.id.action_loadingFragment_to_loginFragment)
         }
         //2초후에 스레드 실행하기
-        worker.schedule(runnable,15, TimeUnit.SECONDS);
+        worker.schedule(runnable,5, TimeUnit.SECONDS);
     }
 
     override fun onStop() {
