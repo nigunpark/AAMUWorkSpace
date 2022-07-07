@@ -44,7 +44,8 @@ public class MainController {
 			countRoute++;
 		}
 		
-		return 0;
+		
+		return affected;
 	}
 	
 	@PutMapping("planner/edit")
@@ -74,40 +75,55 @@ public class MainController {
 		int tripDay = list.get(0).getDay();
 
 		Map<Integer,List<RouteDTO>> map=new HashMap<>();
-		for(RouteDTO routeTime: list) {
-			
-			if(routeTime.getDay()!=0) {
-				if(tripDay<routeTime.getDay()) {
-					tripDay =routeTime.getDay();
+		for(RouteDTO route: list) {
+			int contentid = route.getContentid();
+			AttractionDTO placeInfo = service.selectOnePlace(contentid);
+			route.setDto(placeInfo);
+			if(route.getDay()!=0) {
+				if(tripDay<route.getDay()) {
+					tripDay =route.getDay();
 				}
 			}
 		}////////////////////
-
-		System.out.println(list.size());
-		int result = (int)Math.ceil((((double)list.size()-tripDay)/tripDay));
-
+		int result = (int)Math.ceil(((double)list.size()-tripDay)/tripDay);
 		int count = 0;
 		int day=1;
-		for(RouteDTO route:list) {
+		if(list.size()-tripDay*2==1) {
+			for(RouteDTO route:list) {
 				if(route.getDay()==0) {
 					if(result>count) {
-						System.out.println(count);
 						route.setDay(day);
 						count++;
 					}
 					else {
-						if(day<tripDay) {
-							count=0;
-							System.out.println("day"+day);
-							day++;
-							route.setDay(day);
-						}
-						count++;
-						
+						day++;
+						route.setDay(day);
 					}
 				}
-				
-		}///////////////
+			}////////////for
+		}////////////////if
+		
+		else {
+				for(RouteDTO route:list) {
+					if(route.getDay()==0) {
+						if(result>count) {
+							route.setDay(day);
+							count++;
+						}
+						else {
+							count=0;
+							day++;
+							route.setDay(day);
+							
+							count++;
+							
+						}//////////
+					}//////day=0
+			
+					
+			}///////////////for
+		}////////////////else
+		
 		
 			
 		PlannerDTO routeList = new PlannerDTO();
@@ -177,7 +193,7 @@ public class MainController {
 	@GetMapping("/info/search")
 	public List<AttractionDTO> search(@RequestParam Map map){
 		
-		List<AttractionDTO> lists =service.searchPlace(map);
+		List<AttractionDTO> lists =service.searchTwoPlace(map);
 		
 		return lists;
 	}

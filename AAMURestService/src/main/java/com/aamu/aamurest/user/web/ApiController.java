@@ -69,16 +69,12 @@ public class ApiController {
 			Date current = new Date();
 			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
 			String currentTime = dateFormat.format(current);
-			uri ="http://api.visitkorea.or.kr/openapi/service/rest/KorService/searchFestival?"
-					+ "serviceKey="+apikey
-					+ "&numOfRows=500&pageNo=1&MobileOS=ETC"
-					+ "&MobileApp=AppTest&arrange=B&listYN=Y"
-					+ "&areaCode="+area+"&eventStartDate="+currentTime+"&_type=json";
+			uri ="http://api.visitkorea.or.kr/openapi/service/rest/KorService/searchFestival?serviceKey="+apikey+"&numOfRows=500&pageNo=1&MobileOS=ETC&MobileApp=AppTest&arrange=B&listYN=Y&areaCode="+area+"&eventStartDate="+currentTime;
 		}
 		ResponseEntity<Places> responseEntity = 
 				restTemplate.exchange(uri, HttpMethod.GET,
 				null,Places.class);
-
+		
 		List<Item> items =responseEntity.getBody().getResponse().getBody().getItems().getItem();
 		List<AttractionDTO> list = new Vector<AttractionDTO>();
 		for(Item item : items) {
@@ -90,18 +86,19 @@ public class ApiController {
 			dto.setMapy(item.getMapy());
 			dto.setTitle(item.getTitle());
 			dto.setContenttypeid(item.getContenttypeid());
-			dto.setBigImage(item.getFirstimage());
-			dto.setSmallImage(item.getFirstimage2());
+			dto.setBigimage(item.getFirstimage());
+			dto.setSmallimage(item.getFirstimage2());
 			dto.setSigungucode(item.getSigungucode());
 			if(contentTypeId.equals("15")) {
 				String start = String.valueOf(item.getEventstartdate());
 				String end = String.valueOf(item.getEventenddate());
-				start = start.substring(0, 4) +"-"+start.substring(4, 6)+"-"+start.substring(6,8);
-				end = end.substring(0, 4) +"-"+end.substring(4, 6)+"-"+end.substring(6,8);
 
 				dto.setTel(item.getTel());
 				dto.setEventstart(start);
 				dto.setEventend(end);
+			}
+			if(service.checkPlace(dto.getContentid())==1) {
+				continue;
 			}
 			System.out.println(dto.getContentid());
 			uri = "http://api.visitkorea.or.kr/openapi/service/rest/KorService/detailIntro?"
@@ -120,16 +117,12 @@ public class ApiController {
 				dto.setPark(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getParking());
 				break;
 			case "15":
-				dto.setEventTime(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getPlaytime());
-				dto.setCharge(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getUsetimefestival());
-				String eventTime = dto.getPlaytime();
-				charge = dto.getCharge();
-				if(eventTime!=null) {
-					if(eventTime.contains("<br>")) {
-						eventTime.replace("<br>", " ");
-						dto.setPlaytime(eventTime);
-					}
+				if(dto.getTel()==null) {
+					
 				}
+				dto.setEventtime(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getPlaytime());
+				dto.setCharge(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getUsetimefestival());
+				charge = dto.getCharge();
 				break;
 			case "32":
 				dto.setTel(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getReservationlodging());
@@ -155,13 +148,7 @@ public class ApiController {
 				dto.setResttime(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getRestdateleports());
 				break;
 			}
-			String tel = dto.getTel();
-			if(tel !=null) {
-				if(tel.contains("<br />")) {
-					tel = tel.split("<br />")[0];
-				}
-			}
-			dto.setTel(tel);
+			
 			
 			String title = dto.getTitle();
 			httpEntity = new HttpEntity(header);
@@ -176,9 +163,6 @@ public class ApiController {
 					title = dto.getTitle().split("\\{")[0].trim();
 				}
 			}
-			if(title.length()==0) {
-				title = dto.getTitle();
-			}
 			String id=null;
 			uri ="https://dapi.kakao.com/v2/local/search/keyword.json?"
 					+ "y="+dto.getMapy()+"&x="+dto.getMapx()+"&radius=20000&query="+dto.getAddr();
@@ -186,7 +170,7 @@ public class ApiController {
 			ResponseEntity<KakaoKey> responseEntity3 = 
 					restTemplate.exchange(uri, HttpMethod.GET,
 							httpEntity,KakaoKey.class);
-			if(responseEntity3.getBody().getDocuments().size()==0) {
+			if(responseEntity3.getBody().getDocuments().size()==0 && title!=null) {
 				uri ="https://dapi.kakao.com/v2/local/search/keyword.json?"
 						+ "y="+dto.getMapy()+"&x="+dto.getMapx()+"&radius=20000&query="+title;
 				responseEntity3 = restTemplate.exchange(uri, HttpMethod.GET,
@@ -227,48 +211,10 @@ public class ApiController {
 							null,Info.class);
 			if(responseEntity2.getBody().getResponse().getBody()!=null) {
 				
-				String url = responseEntity2.getBody().getResponse().getBody().getItems().getItem().getHomepage();
-				String resultUrl =null;
-				if(url!=null) {
-					if(url.contains("\"")) {
-						dto.setUrl(url.split("\"")[1]);
-						
-						resultUrl = dto.getUrl();
-						if(!resultUrl.contains("http")) {
-							if(resultUrl.contains("href=\"")) {
-								resultUrl = url.split("href=\"")[1];
-								dto.setUrl(resultUrl.split("\"")[0]);
-							}
-							else {
-								resultUrl = url.split("href=")[1];
-								dto.setUrl(resultUrl.split("\"")[0]);
-								
-							}
-							
-							resultUrl = dto.getUrl();
-						}
-					}
-					else {
-						resultUrl = url;
-						dto.setUrl(resultUrl);
-					}
-					
-				}
-				if(charge!=null) {
-					if(charge.contains("<br>")) {
-						charge.replace("<br>", " ");
-						if(charge.length()>100) {
-							charge = resultUrl;
-						}
-						dto.setCharge(charge);
-					}
-				}
 				
-			}
-			if(dto.getTel()!=null) {
-				if(dto.getTel().length()>100) {
-					dto.setTel("");
-				}
+				dto.setUrl(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getHomepage());
+				
+				
 			}
 			list.add(dto);
 			if(dto.getAddr()!=null) {
@@ -297,7 +243,7 @@ public class ApiController {
 		
 	
 		Map resultMap = new HashMap();
-		resultMap.put("result", affected+"���� ���� �Ǿ����ϴ�");
+		resultMap.put("result", affected+"count success");
 
 
 		return list;
@@ -306,7 +252,7 @@ public class ApiController {
 	@PutMapping("/places/edit")
 	public List<AttractionDTO> search(@RequestBody Map map){
 		System.out.println(map.get("searchWord"));
-		List<AttractionDTO> lists =service.searchUrl(map);
+		List<AttractionDTO> lists =service.searchOnePlace(map);
 		
 		for(AttractionDTO dto: lists) {
 			if(!(dto.getUrl().contains("http"))) {
@@ -322,5 +268,78 @@ public class ApiController {
 		}
 		
 		return lists;
+	}
+	@PutMapping("/data/update")
+	public int searchAll(@RequestBody Map map){
+		int affected = 0; 
+		System.out.println(map.get("searchword"));
+		System.out.println(map.get("searchcolumn"));
+		List<AttractionDTO> lists =service.searchOnePlace(map);
+
+		
+		for(AttractionDTO dto: lists) {
+			
+			/*
+			String url = dto.getUrl();
+			String resultUrl =null;
+			if(url!=null) {
+				System.out.println(url);
+				if(url.contains("\"")) {
+					dto.setUrl(url.split("\"")[1]);
+					resultUrl = dto.getUrl();
+					if(!resultUrl.contains("http")) {
+						if(resultUrl.contains("href=\"")) {
+							resultUrl = url.split("href=\"")[1];
+							dto.setUrl(resultUrl.split("\"")[0]);
+						}
+						else {
+							resultUrl = url.split("href=")[1];
+							dto.setUrl(resultUrl.split("\"")[0]);
+							
+						}
+						
+						resultUrl = dto.getUrl();
+					}
+				}
+				else {
+					resultUrl = url;
+					dto.setUrl(resultUrl);
+				}
+				
+			}
+			service.updateOneData(dto);
+			affected++;
+			*/
+			String checkin = dto.getCheckin();
+			String checkout =dto.getCheckout();
+			if(checkin!=null) {
+				if(checkin.contains("<br />")) {
+					checkin.replace("<br />", "\r\n");
+				}
+				else if(checkin.contains("<br/>")){
+					checkin.replace("<br/>", "\r\n");
+				}
+				else if(checkin.contains("<br>")){
+					checkin.replace("<br>", "\r\n");
+				}
+				dto.setCheckin(checkin);
+			}
+			if(checkout!=null) {
+				if(checkout.contains("<br />")) {
+					checkout.replace("<br />", "\r\n");
+				}
+				else if(checkout.contains("<br/>")){
+					checkout.replace("<br/>", "\r\n");
+				}
+				else if(checkout.contains("<br>")){
+					checkout.replace("<br>", "\r\n");
+				}
+				dto.setCheckout(checkout);
+			}
+			service.updateUrl(dto);
+		}
+		
+		
+		return affected;
 	}
 }
