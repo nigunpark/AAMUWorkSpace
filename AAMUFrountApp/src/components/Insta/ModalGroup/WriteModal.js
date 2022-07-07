@@ -8,8 +8,14 @@ const Modal = ({setIsOpen}) => {
 
     const [attachment, setClearAttachment] = useState(false);
 
-    const handleClose = () => {
-        setIsOpen(false);
+    const [fileImage, setFileImage] = useState("");
+    const saveFileImage = (event) =>{
+      // @ts-ignore
+      setFileImage(URL.createObjectURL(event.target.files[0]));
+    };
+    const deleteFileImage = () =>{
+      URL.revokeObjectURL(fileImage);
+      setFileImage("");
     };
 
     useEffect(() => {
@@ -26,48 +32,69 @@ const Modal = ({setIsOpen}) => {
         <Overlay>
             <ModalWrap >
                 <Contents>    
-                <form className="form_rweets" >{/*onSubmit={onSubmit}*/}
-            <div className="preview_container">
-                <>
-                    <label className="rweet_file_btn" htmlFor="input-file">
-                        <FontAwesomeIcon icon={faImage} size="4x" />
-                    </label>
-                    <input
-                        type="file"
-                        id="input-file"
-                        accept="image/*"
-                        //onChange={onFileChange}
-                    />
-                </>
-                {attachment && (
-                    <div>
-                        <img
-                            className="real_preview"
-                            src={attachment}
-                            alt="attachment"
-                            width="235.6px"
-                            height="220px"
-                        />
-                        <button className="preview_cancel" onClick={setClearAttachment}>
-                            <FontAwesomeIcon icon={faTimesCircle} size="1x" />
-                        </button>
-                    </div>
-                )}
-            </div>
-            <textarea
-                className="form_rweets_text"
-                //value={rweet}
-                //onChange={onChange}
-                placeholder="What's on your mind?"
-                maxLength={120}
-            ></textarea>
-            <div className="form_rweet_controller">
-                <label className="rweet_submit_btn" htmlFor="input-submit">
-                    <FontAwesomeIcon icon={faPaperPlane} size="2x" />
-                </label>
-                <input type="submit" id="input-submit" value="Rweet" />
-            </div>
-        </form>
+                    <form className="form_rweets" >{/*onSubmit={onSubmit}*/}
+                        <div className="preview_container">
+                        <div style={{
+                            alignItems: "center",
+                            justifyContent: "center", }} >
+                            <input
+                                name="imggeUpload"
+                                type="file"
+                                accept="image/*"
+                                onChange={saveFileImage} />
+                            </div>
+                            <div>
+                                <h1>미리보기 이미지</h1>
+                            </div>
+                                <div>{fileImage && ( <img alt="sample" src={fileImage}
+                                                        style={{ margin: "auto" }} /> )}
+                                    <button style={{
+                                    width: "50px",
+                                    height: "30px",
+                                    cursor: "pointer", }}
+                                    onClick={() => deleteFileImage()} > 삭제 </button>
+                                </div>
+      
+                            <>
+                                <label className="rweet_file_btn" htmlFor="input-file">
+                                    <FontAwesomeIcon icon={faImage} size="4x" />
+                                </label>
+                                <input
+                                    type="file"
+                                    id="input-file"
+                                    accept="image/*"
+                                    //onChange={onFileChange}
+                                />
+                            </>
+                            {attachment && (
+                                <div>
+                                    <img
+                                        className="real_preview"
+                                        src={attachment}
+                                        alt="attachment"
+                                        width="235.6px"
+                                        height="220px"
+                                    />
+                                    <button className="preview_cancel" onClick={setClearAttachment}>
+                                        <FontAwesomeIcon icon={faTimesCircle} size="1x" />
+                                    </button>
+                                </div>
+                            )}
+                        </div>
+                        <textarea
+                            className="form_rweets_text"
+                            //value={rweet}
+                            //onChange={onChange}
+                            placeholder="What's on your mind?"
+                            maxLength={120}
+                        ></textarea>
+                        <div className="form_rweet_controller">
+                            <label className="rweet_submit_btn" htmlFor="input-submit">
+                                <FontAwesomeIcon icon={faPaperPlane} size="2x" />
+                            </label>
+                            <input type="submit" id="input-submit" value="Rweet" />
+                        </div>
+                    </form>
                 </Contents>
             </ModalWrap>
         </Overlay>
