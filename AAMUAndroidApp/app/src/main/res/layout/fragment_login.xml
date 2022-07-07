@@ -46,20 +46,20 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/textInputEmail"
-                style="@style/parent"
+                style="@style/textInputparent"
                 android:layout_marginTop="@dimen/loginViewsMargin">
 
                 <EditText
-                    android:id="@+id/editTextEmail"
+                    android:id="@+id/editTextId"
                     style="@style/modifiedEditText"
                     android:hint="@string/login_email_hint"
-                    android:inputType="textEmailAddress"
+                    android:inputType="text"
                     android:maxLines="1" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/textInputPassword"
-                style="@style/parent"
+                style="@style/textInputparent"
                 android:layout_marginTop="@dimen/loginViewsMargin">
 
                 <EditText
@@ -90,9 +90,9 @@
                 app:spinning_bar_width="4dp" />
 
             <TextView
+                android:id="@+id/regText"
                 style="@style/parent"
                 android:layout_marginTop="@dimen/loginViewsMargin"
-                android:onClick="onLoginClick"
                 android:text="New user? Register Now"
                 android:textAlignment="center"
                 android:textColor="@color/themeColor"
@@ -155,7 +155,6 @@
         android:id="@+id/bottmNav"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="47dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
