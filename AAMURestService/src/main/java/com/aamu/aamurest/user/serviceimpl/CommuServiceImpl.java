@@ -83,8 +83,14 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 
 	//글 수정용
 	@Override
-	public int commuUpdate(CommuDTO dto) {
-		return dao.commuUpdate(dto);
+	public int commuUpdate(Map map) {
+		return dao.commuUpdate(map);
+	}
+	
+	//글 수정용_commuplace 수정
+	@Override
+	public int commuPlaceUpdate(Map map) {
+		return dao.commuPlaceUpdate(map);
 	}
 	
 	

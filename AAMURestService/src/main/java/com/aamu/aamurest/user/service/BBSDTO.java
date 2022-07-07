@@ -1,9 +1,6 @@
 package com.aamu.aamurest.user.service;
 
-import java.util.Date;
 import java.util.List;
-import java.util.Map;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,5 +15,6 @@ public class BBSDTO {
 	public String title;
 	public String content;
 	public String themeid;
+	public double rateavg;
 	public List<String> photo;
 }

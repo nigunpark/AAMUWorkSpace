@@ -29,6 +29,9 @@ public interface CommuService<T> {
 	List<CommuCommentDTO> commuCommentList(String lno);
 	
 	//글 수정용
-	int commuUpdate(CommuDTO dto);
+	int commuUpdate(Map map);
+	
+	//글 수정용_commuplace 수정
+	int commuPlaceUpdate(Map map);
 	
 }

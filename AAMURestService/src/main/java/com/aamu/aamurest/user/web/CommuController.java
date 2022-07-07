@@ -70,8 +70,8 @@ public class CommuController {
 		//affected 1이면 저장 잘된거
 		System.out.println("(CommuController)affected:"+affected);
 		Map resultMap = new HashMap();
-		if(affected==1) resultMap.put("result", "true");
-		else resultMap.put("result", "false");
+		if(affected==1) resultMap.put("result", "insertSuccess");
+		else resultMap.put("result", "insertNotSuccess");
 		return resultMap;
 	}////////////////////////////commuInsert
 	
@@ -96,18 +96,19 @@ public class CommuController {
 	}
 	
 	//글 수정용
-	@PutMapping("gram/edit/{lno}")
-	public CommuDTO commuUpdate(@PathVariable String lno, @RequestParam CommuDTO dto) {
-		dto.setTitle(lno);
-		dto.setContent(lno);
-		dto.setContentid(lno);
-		int affected=commuService.commuUpdate(dto);
-		System.out.println(affected+"행이 수정됨");
-		return dto;
+	@PutMapping("gram/edit/{id}")
+	public Map commuUpdate(@PathVariable String id,@RequestParam Map map) {
+		System.out.println("(Commucontroller)map:"+map); //나옴
+		int commuUpdateAffected=commuService.commuUpdate(map);
+		System.out.println("(Commucontroller)commuUpdateAffected:"+commuUpdateAffected);
+		//commuplace에 contentid수정
+		int commuPlaceUpdateAffected=commuService.commuPlaceUpdate(map);
+		System.out.println("(Commucontroller)commuPlaceUpdateAffected:"+commuPlaceUpdateAffected);
+		Map resultMap = new HashMap();
+		if(commuUpdateAffected==1 && commuPlaceUpdateAffected==1) 
+			resultMap.put("result", "updateSuccess");
+		else resultMap.put("result", "updateNotSuccess");
+		return resultMap;
 	}
-	
-	
-	
-	
 
 }
