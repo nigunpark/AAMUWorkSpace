@@ -98,17 +98,17 @@ public class CommuController {
 	//글 수정용
 	@PutMapping("gram/edit/{id}")
 	public Map commuUpdate(@PathVariable String id,@RequestParam Map map) {
-		System.out.println("(Commucontroller)map:"+map); //나옴
 		int commuUpdateAffected=commuService.commuUpdate(map);
-		System.out.println("(Commucontroller)commuUpdateAffected:"+commuUpdateAffected);
 		//commuplace에 contentid수정
 		int commuPlaceUpdateAffected=commuService.commuPlaceUpdate(map);
-		System.out.println("(Commucontroller)commuPlaceUpdateAffected:"+commuPlaceUpdateAffected);
 		Map resultMap = new HashMap();
 		if(commuUpdateAffected==1 && commuPlaceUpdateAffected==1) 
 			resultMap.put("result", "updateSuccess");
 		else resultMap.put("result", "updateNotSuccess");
 		return resultMap;
 	}
+	
+	//글 좋아요
+	
 
 }
