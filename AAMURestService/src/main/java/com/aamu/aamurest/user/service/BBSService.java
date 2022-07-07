@@ -9,10 +9,10 @@ public interface BBSService {
 	//글 목록
 	List<BBSDTO> bbsSelectList();
 	
-	//글 생성
+	//글 가져오기
 	
 	//글 생성_사진
-
+	
 	//글 생성_수정
 	
 	//글 생성_삭제
