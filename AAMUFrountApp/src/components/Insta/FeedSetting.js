@@ -6,7 +6,6 @@ import MenuModal from './ModalGroup/MenuModal';
 
 function FeedSetting() {
     const [heart,setHeart] = useState(false);
-    const [notification,notNoti] = useState(false);
     const [modalShow, setModalShow] = useState(false);
     
   return (
@@ -17,9 +16,8 @@ function FeedSetting() {
                 <span>eyesmag</span>                
                 <Button onClick={() => setModalShow(!modalShow)}>
                     <Dotsvg></Dotsvg>
-                    {modalShow ? <MenuModal></MenuModal> : null}
-                </Button>               
-               
+                </Button>     
+                {modalShow ? <MenuModal></MenuModal> : null}
             </div>
             <div className="location">
                 <p>어딘가에서</p>

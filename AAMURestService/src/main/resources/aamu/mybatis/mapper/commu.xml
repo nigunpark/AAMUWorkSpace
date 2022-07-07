@@ -57,13 +57,14 @@
 	</select>
 	
 	<!-- 글 수정용 -->
-	<update id="commuUpdate" parameterType="commuDTO">
-		UPDATE community SET title=#{title},content=#{content},contentid=#{contentid} WHERE lno=#{lno}
+	<update id="commuUpdate" parameterType="Map">
+		UPDATE community SET ctitle=#{ctitle},content=#{content} WHERE lno=#{lno}
 	</update>
 	
-
-	
-	
+	<!-- 글 수정용_commuplace 수정 -->
+	<update id="commuPlaceUpdate" parameterType="Map">
+		UPDATE commuplace SET contentid=#{contentid} WHERE lno=#{lno}
+	</update>
 	
 	
 </mapper>

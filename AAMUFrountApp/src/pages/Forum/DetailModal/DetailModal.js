@@ -108,6 +108,8 @@ const Textarea = styled.div`
 //     resize: none;
 // }
 
+
+// position: fixed; 모달창 열리면 외부 스크롤바 안되게
 const DetailContainer = styled.div`
     position: fixed;
     width: 100%;

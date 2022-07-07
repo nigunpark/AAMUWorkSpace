@@ -10,6 +10,9 @@ android {
         enabled true
     }
 
+    buildFeatures {
+        dataBinding = true
+    }
     defaultConfig {
         applicationId "com.aamu.aamuandroidapp"
         minSdk 21
@@ -50,4 +53,13 @@ dependencies {
     // Kotlin
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
     implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
+
+    //meow-bottom-navigation
+    implementation 'com.etebarian:meow-bottom-navigation:1.2.0'
+
+    def lottieVersion = "3.4.0"
+    implementation "com.airbnb.android:lottie:$lottieVersion"
+
+    //animated button for login
+    implementation 'br.com.simplepass:loading-button-android:2.2.0'
 }

@@ -54,10 +54,6 @@ public class CommuDAO {
 		return template.selectList("commuPlaceList",map);
 	}
 	
-	//글 수정용
-	public int commuUpdate(CommuDTO dto) {
-		return template.update("commuUpdate",dto);
-	}
 
 	//글 하나 뿌려주는 용
 	public CommuDTO commuSelectOne(String lno) {
@@ -70,8 +66,14 @@ public class CommuDAO {
 	}
 	
 	//글 수정용
-	public int placeUpdate(CommuDTO dto) {
-		return template.update("commuPlaceUpdate",dto);
+	public int commuUpdate(Map map) {
+		return template.update("commuUpdate",map);
+	}
+	
+	//글 수정용_commuplace 수정
+	public int commuPlaceUpdate(Map map) {
+		System.out.println("(CommuDAO)map:"+map);
+		return template.update("commuPlaceUpdate",map);
 	}
 	
 

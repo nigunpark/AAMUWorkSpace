@@ -5,13 +5,12 @@ import styled from 'styled-components'
 const Notification = ({setIsOpen}) => {
 
     return (
-    
-        <div className="noti-all disappear">
-          <div className="search-squre"></div>
-            <div className="search-engine">
-                <div className="parent">
-                    <div className="search-contents">
-                    <div className="recommend">                    
+        <div className="notifi-all disappear">
+        <div className="search-squre"></div>
+          <div className="search-engine">
+              <div className="parent">
+              <div className="search-contents">
+              <div className="recommend">                    
                         <div className="recommend-down">
                             <div className="recommend-contents">
                                 <img className='likeimg' src="./img/bk.jpg" alt="추사" />
@@ -51,12 +50,10 @@ const Notification = ({setIsOpen}) => {
                             </div>
                         </div>    
                     </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-                         
-           
+              </div>
+              </div>
+          </div>
+      </div>
           )
         }
         
