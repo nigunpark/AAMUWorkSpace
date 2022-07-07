@@ -9,9 +9,9 @@ public interface BBSService {
 	//글 목록
 	List<BBSDTO> bbsSelectList();
 	
-	//글 가져오기
-	
-	//글 생성_사진
+	//글 목록_사진 뿌려주기
+	List bbsSelectPhotoList(int rbn);
+
 	
 	//글 생성_수정
 	
