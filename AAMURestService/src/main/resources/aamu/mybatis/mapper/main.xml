@@ -4,7 +4,7 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="aamu.mybatis.mapper.main">
 	<insert id="placeInsert" parameterType="attrDTO">
-		INSERT INTO places VALUES(#{contentid},#{areacode},#{contenttypeid},#{sigungucode},#{title},#{addr},#{bigImage},#{smallImage},#{mapx},#{mapy},#{kakaokey},#{tel},#{url})
+		INSERT INTO places VALUES(#{contentid},#{areacode},#{contenttypeid},#{sigungucode},#{title},#{addr},#{bigimage},#{smallimage},#{mapx},#{mapy},#{kakaokey},#{tel},#{url})
 	</insert>
 	<insert id="infoInsert" parameterType="attrDTO">
 		INSERT INTO placesinfo VALUES(#{contentid},#{resttime},#{playtime},#{park})
@@ -16,7 +16,7 @@
 		INSERT INTO dinerinfo VALUES(#{contentid},#{menu})
 	</insert>
 	<insert id="eventInsert" parameterType="attrDTO">
-		INSERT INTO eventinfo VALUES(#{contentid},TO_DATE(#{eventstart},'YYYY-MM-DD'),TO_DATE(#{eventend},'YYYY-MM-DD'),#{charge},#{playtime})
+		INSERT INTO eventinfo VALUES(#{contentid},TO_DATE(#{eventstart},'YYYY-MM-DD'),TO_DATE(#{eventend},'YYYY-MM-DD'),#{charge},#{eventtime})
 	</insert>
 	
 	<select id="selectPlacesList" parameterType="Map" resultType="attrDTO">
@@ -62,15 +62,19 @@
 		SELECT * FROM places WHERE contentid=#{contentid}
 	</select>
 	
-	<select id="searchPlace" parameterType="Map" resultType="attrDTO">
-		SELECT * FROM places WHERE title LIKE '%'||#{searchWord}||'%' or addr LIKE '%'||#{searchWord}||'%'
+	<select id="searchTwoPlace" parameterType="Map" resultType="attrDTO">
+		SELECT * FROM places WHERE ${searchcolumn} LIKE '%'||#{searchword}||'%' or #{searchcolumn2} LIKE '%'||#{searchword}||'%'
 	</select>
 	
-	<select id="searchUrl" parameterType="Map" resultType="attrDTO">
-		SELECT * FROM places WHERE url LIKE '%'||#{searchWord}||'%'
+	<select id="searchOnePlace" parameterType="Map" resultType="attrDTO">
+		SELECT * FROM hotelinfo WHERE ${searchcolumn} LIKE '%'||#{searchword}||'%'
 	</select>
 	
 	<update id="updateUrl" parameterType="attrDTO">
-		UPDATE places SET url=#{url} WHERE contentid=#{contentid}
+		UPDATE hotelinfo SET checkin=#{checkin} WHERE contentid=#{contentid}
 	</update>
+	
+	<select id="checkPlace" parameterType="int" resultType="int">
+		SELECT count(*) FROM places WHERE contentid=#{contentid}
+	</select>
 </mapper>
