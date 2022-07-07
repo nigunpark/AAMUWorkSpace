@@ -1,3 +1,4 @@
+import { red } from '@mui/material/colors';
 import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 
@@ -23,11 +24,10 @@ const Modal = ({setIsOpen}) => {
         <Overlay>
             <ModalWrap >
                 <Contents>
-                    <div className='menuButton'>
-                        <button type="button" className='modal-btn'>수정하기</button>
-                        <button type="button" className='modal-btn'>삭제하기</button>
-                        <button type="button" className='modal-btn'>취소하기</button>    
-                    </div>                
+                        <Button type="button" className='edit'>수정하기</Button>
+                        <Button type="button" className='delete'>삭제하기</Button>
+                        <Button type="button" className='cancel'>취소하기</Button>    
+                                  
                 </Contents>
             </ModalWrap>
         </Overlay>
@@ -36,6 +36,7 @@ const Modal = ({setIsOpen}) => {
 }
 
 const Container = styled.div`
+    cursor: default;
     position: fixed;
     width: 100%;
     height: 100%;
@@ -54,11 +55,12 @@ const Overlay = styled.div`
     position: absolute;
     width: 100%;
     height: 100%;
+    z-index:100;
     background-color: rgba(0, 0, 0, 0.6);
 `
 
 const ModalWrap = styled.div`
-    width: fit-content;
+    width: 400px;
     overflow: hidden;
     height: fit-content;
     border-radius: 15px;
@@ -75,21 +77,18 @@ const Contents = styled.div`
     flex-direction: column;
     width: 100%;
     height: 100%;
+    justify-content: center;
+    align-items: center;
     
-    h1{
-        font-size: 30px;
-        font-weight: 600;
-    }
-    img{
-        margin-top: 10px;
-        width: 100%;
-    }
-    input{
-        width: 100%;
-        margin-left: 10px;
-        font-size: 20px;
-    }
 `
-
+const Button = styled.div`
+    padding: 30px;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    text-align: center;
+    font-size: medium;
+    border-bottom: 0.5px solid rgb(220, 220, 220);
+`
 
 export default Modal
