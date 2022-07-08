@@ -71,7 +71,7 @@ const MyBox = ({setClickTab}) => {
                 </div> */}
 
                 <div className='detail-button'>
-                    <button className="learn-more" type="button" onClick={()=>{setClickTab(2)}}>공유하기</button>
+                    <button className="learn-more" type="button" onClick={()=>{setClickTab(10)}}>공유하기</button>
                 </div>
             </div>
         </div>
