@@ -33,13 +33,11 @@ public class CommuDAO {
 	
 	//글 생성용
 	public int commuInsert(Map map) {
-		System.out.println("(CommuDAO_commuInsert)map:"+map);
 		return template.insert("commuInsert",map);
 	}
 	
 	//글 생성용_사진 저장
 	public int photoInsert(Map map) {
-		System.out.println("(CommuDAO_photoInsert)map:"+map);
 		return template.insert("commuPhotoInsert",map);
 	}
 	
@@ -50,11 +48,9 @@ public class CommuDAO {
 	
 	//글 생성용_장소 뿌려주기
 	public List<Map> commuPlaceList(Map map) {
-		System.out.println("map:"+map);
 		return template.selectList("commuPlaceList",map);
 	}
 	
-
 	//글 하나 뿌려주는 용
 	public CommuDTO commuSelectOne(String lno) {
 		return template.selectOne("commuSelectOne",lno);
@@ -72,8 +68,12 @@ public class CommuDAO {
 	
 	//글 수정용_commuplace 수정
 	public int commuPlaceUpdate(Map map) {
-		System.out.println("(CommuDAO)map:"+map);
 		return template.update("commuPlaceUpdate",map);
+	}
+	
+	//글 좋아요_insert likeboard 테이블
+	public int commuLikeInsert(Map map) {
+		return template.insert("commuLikeInsert",map);
 	}
 	
 

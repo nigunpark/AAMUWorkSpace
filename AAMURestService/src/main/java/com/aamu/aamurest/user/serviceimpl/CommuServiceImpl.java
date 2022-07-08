@@ -93,5 +93,11 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 		return dao.commuPlaceUpdate(map);
 	}
 	
+	//글 좋아요_insert likeboard 테이블
+	@Override
+	public int commuLikeInsert(Map map) {
+		return dao.commuLikeInsert(map);
+	}
+	
 	
 }
