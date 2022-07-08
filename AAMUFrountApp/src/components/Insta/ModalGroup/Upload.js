@@ -1,12 +1,12 @@
-import { faPaperPlane, faTimesCircle } from '@fortawesome/free-regular-svg-icons';
-import { faImage } from '@fortawesome/free-solid-svg-icons';
+import { faImage, faTimesCircle } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
 const Modal = ({setIsOpen}) => {
 
-    const [attachment, setClearAttachment] = useState(false);
+    const [hide, setHide] = useState(false);
+   
 
     const [fileImage, setFileImage] = useState("");
     const saveFileImage = (event) =>{
@@ -28,65 +28,73 @@ const Modal = ({setIsOpen}) => {
     }, []);
 
   return (
-    <Container >
-        <Overlay>
-            <ModalWrap >
-                <Contents>   
-                  
-                    <button style={{
-                            width: "50px",
-                            height: "50px",
-                            cursor: "pointer",}}
-                            onClick={() => deleteFileImage()} > 삭제 </button> 
-                    <div style={{
-                      alignItems: "center",
-                      justifyContent: "center", }} >
-                      <input
-                          name="imggeUpload"
-                          type="file"
-                          accept="image/*"
-                          onChange={saveFileImage} />
-                    </div>
-                    <div  style={{ marginRight:"30px",width:"100%",height:"100%" }}>
-                      {fileImage && ( <img alt="sample" src={fileImage}
-                                            style={{ height:"100%",width:"100%" }} /> )}
-                    </div>
-                </Contents>
-            </ModalWrap>
-        </Overlay>
-    </Container>
+    <ModalWrap>
+        <Contents>   
+            {/* <button style={{
+                    width: "50px",
+                    height: "50px",
+                    cursor: "pointer",
+                    marginBottom:'-50px'}}
+                    onClick={() => deleteFileImage()} > 삭제 </button>  */}
+            <h2>새 글 작성하기</h2>
+            <div className="preview_container">
+                {hide ?( 
+                <>
+                <div 
+                    className='picfileframe' >
+                    <label 
+                    className="rweet_file_btn" 
+                    onClick={()=>{setHide(!hide)}}
+                    for="input-file"                
+                    >
+                        <FontAwesomeIcon icon={faImage} size="4x"/>
+                    </label>
+                    <input
+                        id="input-file"
+                        type="file"
+                        accept="image/*" 
+                        onChange={saveFileImage} />  
+                </div>
+                <div className='imageDiv'  
+                style={{marginRight:'30px',width:"100%",height:"100%" }}>
+                    {fileImage && ( <img alt="sample" src={fileImage}
+                                        style={{ height:"100%",width:"100%" }} /> )}
+                </div>  
+                </>
+                ):(
+<>
+                <div 
+                    className='picfileframe' >
+                    <label 
+                    className="rweet_file_btn" 
+                    onClick={()=>{setHide(!hide)}}
+                    for="input-file"                
+                    >
+                        <FontAwesomeIcon icon={faImage} size="4x"/>
+                    </label>
+                    <input
+                        id="input-file"
+                        type="file"
+                        accept="image/*" 
+                        onChange={saveFileImage} />  
+                </div>
+                </>
+                )}
+            </div>
+        </Contents>
+    </ModalWrap>
   )
 }
 
-const Container = styled.div`
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    z-index: 1000;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-`
-
-const Overlay = styled.div`
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.6);
-`
-
 const ModalWrap = styled.div`
-    width: 600px;
+    width: 30%;
     overflow: hidden;
-    height: 700px;
+    height: 65%;
     border-radius: 15px;
     background-color: #fff;
     position: absolute;
+    justify-content: center;
+    align-items: center;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
