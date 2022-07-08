@@ -1,6 +1,6 @@
 import React from 'react'
 
-const MyBox = (props) => {
+const MyBox = ({setClickTab}) => {
 
     function handleClick(){
         window.location.replace('/write')
@@ -71,7 +71,7 @@ const MyBox = (props) => {
                 </div> */}
 
                 <div className='detail-button'>
-                    <button className="learn-more" type="button" onClick={handleClick}>공유하기</button>
+                    <button className="learn-more" type="button" onClick={()=>{setClickTab(2)}}>공유하기</button>
                 </div>
             </div>
         </div>
