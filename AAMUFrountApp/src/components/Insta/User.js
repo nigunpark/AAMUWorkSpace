@@ -3,11 +3,11 @@ import styled from "styled-components";
 import NotificationModal from "./ModalGroup/Notification";
 import SearchModal from "./Search";
 import WriteModal from "./ModalGroup/Upload"
-import Modal from "./ModalGroup/Upload"
 
 function User() {
   const modalRef = useRef();
   const notimodalRef = useRef();
+  const outside = useRef();
   const [heart, setHeart] = useState(false);
   const [follow, setFollowing] = useState(false);
   const [search, setsearch] = useState(false);
@@ -17,6 +17,7 @@ function User() {
     e.stopPropagation();
     if (e.target !== modalRef.current) setsearch(false);
     if (e.target !== notimodalRef.current) setHeart(false);
+    // if (e.target !== uploadmodalRef.current) setsquare(false);
   }
   window.addEventListener("click", handleModal);
   
@@ -52,26 +53,38 @@ function User() {
           
           
         </div>
-        <div className="post-icon">
-       
-          {square ? (
+        {/* <div className="post-icon">
+        </div>  */}
+        {square ? (
+          <>
+          <div className="post-icon">
             <i
-              className="fa-solid fa-square-plus fa-2x"
+              className=" fa-solid fa-square-plus fa-2x"
               onClick={() => {
                 setsquare(!square);
               }}
               style={{ color: "black" }}
-            ></i>
+            >
+            </i></div>
+            <Container>
+              <Overlay
+              ref={outside} 
+              onClick={ (e) => { if(e.target == outside.current) setsquare(false) } }
+              >
+                <WriteModal onClick={ () => setsquare(false) }></WriteModal>
+              </Overlay>
+            </Container>
+          </>
           ) : (
+            <div className="post-icon">
             <i
-            className="fa-regular fa-square-plus fa-2x"
+            className=" fa-regular fa-square-plus fa-2x"
               onClick={() => {
                 setsquare(!square);
               }}
-            ></i>
-          )}
-        </div>
-        {square ? <WriteModal></WriteModal> :null}
+            ></i></div>
+          )}    
+        
       </div>
 
       <div className="recommend">
@@ -174,7 +187,7 @@ const Container = styled.div`
     position: fixed;
     width: 100%;
     height: 100%;
-    z-index: 10;
+    z-index: 1000;
     top: 0;
     left: 0;
     right: 0;
@@ -184,7 +197,13 @@ const Container = styled.div`
     justify-content: center;
     align-items: center;
 `
-
+const Overlay = styled.div`
+    position: absolute;
+    margin-right:30px;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+`
 
 export default User
 
