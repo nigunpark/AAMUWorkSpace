@@ -35,9 +35,9 @@ const DetailModal = ({setIsOpen}) => {
 
                 <DetailTitle>
                     <span>제목</span>
-                    {/* <Button onClick={handleClose}>Close</Button> */}
+                    {/* <Button onClick={handleClose}>Close</Button> 주석 */}
                     <div className='detail-button'>
-                        {/* DetailButton.scss */}
+                        {/* DetailButton.scss 주석 */}
                         <button className="learn-more_exit" type="button" onClick={(e)=>{
                              setIsOpen(false);                            
                         }}>exit</button>
@@ -45,7 +45,7 @@ const DetailModal = ({setIsOpen}) => {
                 </DetailTitle>
 
                 <DetailContents>
-                    {/* <img src='/images/imageMap.png' alt='smile'/> */}
+                    {/* <img src='/images/imageMap.png' alt='smile'/> 주석 */}
 
                     <Notice/>
                     <Textarea>
@@ -69,12 +69,13 @@ const DetailModal = ({setIsOpen}) => {
                     </Tag>
                     <input type="text" placeholder="리뷰 달기..."/>
                     <div className='detail-button'>
-                        {/* DetailButton.scss */}
+                        {/* DetailButton.scss 주석 */}
                         <button className="learn-more" type="button">게시</button>
                     </div>
                 </DetailContents>
-
-                {/* <DetailReview>
+                
+                {/* 주석
+                <DetailReview>
                     <div>
                         리뷰인듯 1. 달린 리뷰의 개수가 늘어나면 위 아래가 잘림
                                     모달창 스크롤 기능 혹은 안잘리게 하는거 찾아봐야함
@@ -86,18 +87,21 @@ const DetailModal = ({setIsOpen}) => {
                         <img src='/images/content-delete.png'/>
                     </button>
                     
-                </DetailReview> */}
+                </DetailReview>주석 */}
                 
             </DetailModalWrap>
         </DetailOverlay>
     </DetailContainer>
+
   )
 }
 const Textarea = styled.div`
     position: relative;
     width: 450px;
-    height: 350px;
+    height: 330px;
     overflow: auto;
+    box-shadow: 0 0 0 2px #e9ebec, 0 0 0 11px #fcfdfe;
+    // border: solid 1px black
 `
 // textarea{
 //     position: absolute;
@@ -140,6 +144,7 @@ const DetailModalWrap = styled.div`
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    box-shadow: 0 0 0 10px #e9ebec, 0 0 0 11px #fcfdfe;
     //border: solid 5px black;
 `
 
