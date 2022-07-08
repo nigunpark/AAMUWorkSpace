@@ -99,6 +99,12 @@
   display: none;
 }
 
+.userImg {
+  width: 100%;
+  height: auto;
+  border-radius: 50%;
+}
+
 @keyframes navFlooting {
   from {
     opacity: 0;

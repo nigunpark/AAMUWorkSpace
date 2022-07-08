@@ -16,8 +16,8 @@ public class AttractionDTO {
 	private double mapy;
 	private String title;
 	private String addr;
-	private String bigImage;
-	private String smallImage;
+	private String bigimage;
+	private String smallimage;
 	private String playtime;
 	private String tel;
 	private String resttime;
@@ -30,6 +30,7 @@ public class AttractionDTO {
 	private String charge;
 	private String eventstart;
 	private String eventend;
-	private String eventTime;
+	private String eventtime;
 	private long atime = 2*1000*60*60;
+	private String table;
 }

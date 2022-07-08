@@ -18,7 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import com.aamu.aamurest.user.service.BBSDTO;
-import com.aamu.aamurest.user.service.BBSService;
+import com.aamu.aamurest.user.service.CommuDTO;
+import com.aamu.aamurest.user.serviceimpl.BBSServiceImpl;
 
 @CrossOrigin(origins="*")
 @RestController
@@ -27,12 +28,16 @@ public class BBSController {
 	private RestTemplate restTemplate;
 	
 	@Autowired
-	private BBSService bbsservice;
+	private BBSServiceImpl bbsService;
 	
 	//글 목록용
 	@GetMapping("/bbs/SelectList")
 	public List<BBSDTO> bbsSelectList(){
-		return bbsservice.bbsSelectList();
+		List<BBSDTO> list = bbsService.bbsSelectList();
+		for(BBSDTO dto : list) {
+			dto.setPhoto(bbsService.bbsSelectPhotoList(dto.getRbn()));
+		}
+		return list;
 	}
 	
 	

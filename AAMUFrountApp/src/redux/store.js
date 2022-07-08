@@ -54,12 +54,6 @@ export let {
   addAtimeArrForJangso,
 } = arrForJangso.actions;
 
-//일정등록버튼 누르고 우재한테 받은 데이터를 저장하는 state
-let fromWooJaeData = createSlice({
-  name: "wooJaeData",
-  initialState: [],
-});
-
 //추천장소에서 선택한 장소를 넣는 배열
 let arrForPickJangso = createSlice({
   name: "arrForPickJangso",

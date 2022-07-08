@@ -36,7 +36,7 @@ public Response response;
 	@Getter
 	@Setter
 	public static class Item{
-		//°ü±¤Áö
+		//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		public String chkbabycarriage;
 		public String chkcreditcard;
 		public String chkpet;
@@ -51,7 +51,7 @@ public Response response;
 		public String restdate;
 		public String usetime;
 		
-		//È£ÅÚ
+		//È£ï¿½ï¿½
 		public int barbecue;
 		public int beauty;
 		public int benikia;
@@ -80,7 +80,7 @@ public Response response;
 		public int sports;
 		public String subfacility;
 		
-		//À½½ÄÁ¡
+		//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		public String chkcreditcardfood;
 		public String discountinfofood;
 		public String firstmenu;
@@ -94,14 +94,14 @@ public Response response;
 		public String smoking;
 		public String treatmenu;
 		
-		//È¨ÆäÀÌÁöÁ¤º¸
+		//È¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		public int booktour;
 		public long createdtime;
 		public String homepage;
 		public long modifiedtime;
 		public String title;
 		
-		//Çà»ç
+		//ï¿½ï¿½ï¿½
 		public String bookingplace;
 		public String discountinfofestival;
 		public int eventenddate;
@@ -115,10 +115,11 @@ public Response response;
 		public String sponsor1;
 		public String sponsor1tel;
 		public String sponsor2;
+		public String sponsor2tel;
 		public String subevent;
 		public String usetimefestival;
 		
-		//·¹Æ÷Ã÷
+		//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		public String chkbabycarriageleports;
 		public String chkcreditcardleports;
 		public String chkpetleports;

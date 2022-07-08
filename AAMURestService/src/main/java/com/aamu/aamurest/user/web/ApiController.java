@@ -60,7 +60,7 @@ public class ApiController {
 		String uri;
 		uri = "http://api.visitkorea.or.kr/openapi/service/rest/KorService/areaBasedList?"
 				+ "serviceKey="+apikey+"&"
-				+ "pageNo=1&numOfRows=1000&"
+				+ "pageNo=1&numOfRows=2000&"
 				+ "MobileApp=AppTest&MobileOS=ETC&arrange=B&"
 				+ "contentTypeId="+contentTypeId+"&"
 						+ "areaCode="+area+"&"
@@ -69,16 +69,12 @@ public class ApiController {
 			Date current = new Date();
 			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
 			String currentTime = dateFormat.format(current);
-			uri ="http://api.visitkorea.or.kr/openapi/service/rest/KorService/searchFestival?"
-					+ "serviceKey="+apikey
-					+ "&numOfRows=500&pageNo=1&MobileOS=ETC"
-					+ "&MobileApp=AppTest&arrange=B&listYN=Y"
-					+ "&areaCode="+area+"&eventStartDate="+currentTime+"&_type=json";
+			uri ="http://api.visitkorea.or.kr/openapi/service/rest/KorService/searchFestival?serviceKey="+apikey+"&numOfRows=500&pageNo=1&MobileOS=ETC&MobileApp=AppTest&arrange=B&listYN=Y&areaCode="+area+"&eventStartDate="+currentTime;
 		}
 		ResponseEntity<Places> responseEntity = 
 				restTemplate.exchange(uri, HttpMethod.GET,
 				null,Places.class);
-
+		
 		List<Item> items =responseEntity.getBody().getResponse().getBody().getItems().getItem();
 		List<AttractionDTO> list = new Vector<AttractionDTO>();
 		for(Item item : items) {
@@ -90,18 +86,19 @@ public class ApiController {
 			dto.setMapy(item.getMapy());
 			dto.setTitle(item.getTitle());
 			dto.setContenttypeid(item.getContenttypeid());
-			dto.setBigImage(item.getFirstimage());
-			dto.setSmallImage(item.getFirstimage2());
+			dto.setBigimage(item.getFirstimage());
+			dto.setSmallimage(item.getFirstimage2());
 			dto.setSigungucode(item.getSigungucode());
 			if(contentTypeId.equals("15")) {
 				String start = String.valueOf(item.getEventstartdate());
 				String end = String.valueOf(item.getEventenddate());
-				start = start.substring(0, 4) +"-"+start.substring(4, 6)+"-"+start.substring(6,8);
-				end = end.substring(0, 4) +"-"+end.substring(4, 6)+"-"+end.substring(6,8);
 
 				dto.setTel(item.getTel());
 				dto.setEventstart(start);
 				dto.setEventend(end);
+			}
+			if(service.checkPlace(dto.getContentid())==1) {
+				continue;
 			}
 			System.out.println(dto.getContentid());
 			uri = "http://api.visitkorea.or.kr/openapi/service/rest/KorService/detailIntro?"
@@ -111,7 +108,7 @@ public class ApiController {
 			ResponseEntity<Info> responseEntity2 = 
 					restTemplate.exchange(uri, HttpMethod.GET,
 							null,Info.class);
-			String charge =null;
+			
 			switch (contentTypeId) {
 			case "12":
 				dto.setResttime(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getRestdate());
@@ -120,16 +117,15 @@ public class ApiController {
 				dto.setPark(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getParking());
 				break;
 			case "15":
-				dto.setEventTime(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getPlaytime());
-				dto.setCharge(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getUsetimefestival());
-				String eventTime = dto.getPlaytime();
-				charge = dto.getCharge();
-				if(eventTime!=null) {
-					if(eventTime.contains("<br>")) {
-						eventTime.replace("<br>", " ");
-						dto.setPlaytime(eventTime);
+				if(dto.getTel()==null) {
+					dto.setTel(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getSponsor1tel());
+					if(dto.getTel()==null) {
+						dto.setTel(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getSponsor2tel());
 					}
 				}
+				dto.setEventtime(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getPlaytime());
+				dto.setCharge(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getUsetimefestival());
+
 				break;
 			case "32":
 				dto.setTel(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getReservationlodging());
@@ -155,13 +151,7 @@ public class ApiController {
 				dto.setResttime(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getRestdateleports());
 				break;
 			}
-			String tel = dto.getTel();
-			if(tel !=null) {
-				if(tel.contains("<br />")) {
-					tel = tel.split("<br />")[0];
-				}
-			}
-			dto.setTel(tel);
+			
 			
 			String title = dto.getTitle();
 			httpEntity = new HttpEntity(header);
@@ -175,22 +165,35 @@ public class ApiController {
 				else if(title.contains("{")) {
 					title = dto.getTitle().split("\\{")[0].trim();
 				}
-			}
-			if(title.length()==0) {
-				title = dto.getTitle();
+				if(title==null||!"".equals(title)) {
+					if(title.contains(")")) {
+						title = dto.getTitle().split("\\)")[1].trim();
+					}
+					else if(title.contains("]")) {
+						title = dto.getTitle().split("\\]")[1].trim();
+					}
+					else if(title.contains("}")) {
+						title = dto.getTitle().split("\\}")[1].trim();
+					}
+				}
 			}
 			String id=null;
+			
 			uri ="https://dapi.kakao.com/v2/local/search/keyword.json?"
 					+ "y="+dto.getMapy()+"&x="+dto.getMapx()+"&radius=20000&query="+dto.getAddr();
-			
+
 			ResponseEntity<KakaoKey> responseEntity3 = 
 					restTemplate.exchange(uri, HttpMethod.GET,
 							httpEntity,KakaoKey.class);
-			if(responseEntity3.getBody().getDocuments().size()==0) {
+
+			if(responseEntity3.getBody().getDocuments().size()==0 && title!=null && !"".equals(title)) {
+				System.out.println(title);
 				uri ="https://dapi.kakao.com/v2/local/search/keyword.json?"
 						+ "y="+dto.getMapy()+"&x="+dto.getMapx()+"&radius=20000&query="+title;
+
 				responseEntity3 = restTemplate.exchange(uri, HttpMethod.GET,
 								httpEntity,KakaoKey.class);
+				
 				
 			}
 			
@@ -227,66 +230,34 @@ public class ApiController {
 							null,Info.class);
 			if(responseEntity2.getBody().getResponse().getBody()!=null) {
 				
-				String url = responseEntity2.getBody().getResponse().getBody().getItems().getItem().getHomepage();
-				String resultUrl =null;
-				if(url!=null) {
-					if(url.contains("\"")) {
-						dto.setUrl(url.split("\"")[1]);
-						
-						resultUrl = dto.getUrl();
-						if(!resultUrl.contains("http")) {
-							if(resultUrl.contains("href=\"")) {
-								resultUrl = url.split("href=\"")[1];
-								dto.setUrl(resultUrl.split("\"")[0]);
-							}
-							else {
-								resultUrl = url.split("href=")[1];
-								dto.setUrl(resultUrl.split("\"")[0]);
-								
-							}
-							
-							resultUrl = dto.getUrl();
-						}
-					}
-					else {
-						resultUrl = url;
-						dto.setUrl(resultUrl);
-					}
-					
-				}
-				if(charge!=null) {
-					if(charge.contains("<br>")) {
-						charge.replace("<br>", " ");
-						if(charge.length()>100) {
-							charge = resultUrl;
-						}
-						dto.setCharge(charge);
-					}
-				}
+				
+				dto.setUrl(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getHomepage());
+				
 				
 			}
-			if(dto.getTel()!=null) {
-				if(dto.getTel().length()>100) {
-					dto.setTel("");
-				}
-			}
+			
 			list.add(dto);
 			if(dto.getAddr()!=null) {
+				dto.setTable("places");
 				service.placeInsert(dto);
 				switch(contentTypeId) {
 				case "12":
 				case "28":
-					service.infoInsert(dto);
+					dto.setTable("placesinfo");
 					break;
 				case "15":
-					service.eventInsert(dto);
+					dto.setTable("eventinfo");
+					service.placeInsert(dto);
 					break;
 				case "32":
-					service.hotelInsert(dto);
+					dto.setTable("hotelinfo");
+					service.placeInsert(dto);
 					break;
 				case "39":
-					service.infoInsert(dto);
-					service.dinerInsert(dto);
+					dto.setTable("placesinfo");
+					service.placeInsert(dto);
+					dto.setTable("dinerinfo");
+					service.placeInsert(dto);
 					break;
 				}
 			
@@ -297,7 +268,7 @@ public class ApiController {
 		
 	
 		Map resultMap = new HashMap();
-		resultMap.put("result", affected+"���� ���� �Ǿ����ϴ�");
+		resultMap.put("result", affected+"count success");
 
 
 		return list;
@@ -306,7 +277,7 @@ public class ApiController {
 	@PutMapping("/places/edit")
 	public List<AttractionDTO> search(@RequestBody Map map){
 		System.out.println(map.get("searchWord"));
-		List<AttractionDTO> lists =service.searchUrl(map);
+		List<AttractionDTO> lists =service.searchOnePlace(map);
 		
 		for(AttractionDTO dto: lists) {
 			if(!(dto.getUrl().contains("http"))) {
@@ -322,5 +293,38 @@ public class ApiController {
 		}
 		
 		return lists;
+	}
+	@PutMapping("/data/update")
+	public int searchAll(@RequestBody Map<String,String> map){
+		int affected = 0; ;
+		
+		List<AttractionDTO> lists =service.searchOnePlace(map);
+
+
+		for(AttractionDTO dto: lists) {
+			if(dto.getUrl()!=null) map.put("url", dto.getUrl());
+			
+			map.put("contentid",String.valueOf(dto.getContentid()));
+			if(dto.getTel()!=null) map.put("tel", dto.getTel());
+			
+			
+			if(dto.getContenttypeid()==12||dto.getContenttypeid()==28||dto.getContenttypeid()==39) {
+				if(dto.getPlaytime()!=null) map.put("playtime", dto.getPlaytime());
+				
+				if(dto.getResttime()!=null) map.put("resttime", dto.getResttime());
+				
+			}
+			else if(dto.getContenttypeid()==15) {
+				if(dto.getEventtime()!=null) map.put("eventtime", dto.getEventtime());
+				if(dto.getCharge()!=null) map.put("charge", dto.getCharge());
+			}
+			service.updatePlaces(map);
+			affected++;
+		}
+		if(map.get("searchcolumn2")!=null) {
+			
+		}
+		
+		return affected;
 	}
 }

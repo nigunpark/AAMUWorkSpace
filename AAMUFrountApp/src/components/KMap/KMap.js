@@ -41,6 +41,7 @@ const KMap = ({
   setTitleName,
   setConWhichModal,
   setShowCratePlan,
+  setFromWooJaeData,
 }) => {
   let [lat, setLat] = useState("");
   let [lng, setLng] = useState("");
@@ -309,6 +310,24 @@ const KMap = ({
           <div
             onClick={() => {
               setShowAuSModal(true);
+              reduxState.tripPeriod.map((day, index) => {
+                if (
+                  reduxState.timeSetObj.find((obj) => {
+                    return obj.day === index + 1;
+                  }) === undefined
+                ) {
+                  dispatch(
+                    changeTimeSetObj({
+                      day: index + 1,
+                      fullDate:
+                        "Sat Jan 01 2022 10:00:00 GMT+0900 (한국 표준시)",
+                      ampm: "오전",
+                      time: 10,
+                      min: 0,
+                    })
+                  );
+                }
+              });
             }}
           >
             일정생성
@@ -329,6 +348,7 @@ const KMap = ({
           setShowAuSModal={setShowAuSModal}
           setShowCratePlan={setShowCratePlan}
           currPosition={currPosition}
+          setFromWooJaeData={setFromWooJaeData}
         />
       ) : null}
     </div>
@@ -336,11 +356,15 @@ const KMap = ({
 };
 
 //일정등록 버튼 시 보이는 확인모달창
-function AreUSurePlan({ setShowAuSModal, setShowCratePlan, currPosition }) {
+function AreUSurePlan({
+  setShowAuSModal,
+  setShowCratePlan,
+  currPosition,
+  setFromWooJaeData,
+}) {
   let reduxState = useSelector((state) => {
     return state;
   });
-  let dispatch = useDispatch();
   return (
     <>
       <DimmedAuSContainer>
@@ -349,27 +373,9 @@ function AreUSurePlan({ setShowAuSModal, setShowCratePlan, currPosition }) {
           <AusBtnContainer>
             <AuSBtn
               onClick={() => {
-                setShowCratePlan(true);
+                toWooJae(currPosition, reduxState, setFromWooJaeData);
                 setShowAuSModal(false);
-                reduxState.tripPeriod.map((day, index) => {
-                  if (
-                    reduxState.timeSetObj.find((obj) => {
-                      return obj.day === index + 1;
-                    }) === undefined
-                  ) {
-                    dispatch(
-                      changeTimeSetObj({
-                        day: index + 1,
-                        fullDate:
-                          "Sat Jan 01 2022 10:00:00 GMT+0900 (한국 표준시)",
-                        ampm: "오전",
-                        time: 10,
-                        min: 0,
-                      })
-                    );
-                  }
-                });
-                toWooJae(currPosition, reduxState);
+                setShowCratePlan(true);
               }}
             >
               확인
@@ -545,7 +551,7 @@ function roadview() {
   });
 }
 
-function toWooJae(currPosition, reduxState) {
+async function toWooJae(currPosition, reduxState, setFromWooJaeData) {
   let token = sessionStorage.getItem("token");
   let arr;
   //사용자가 선택한 여행일자만큼 obj를 만들고 day를 넣는 로직
@@ -599,9 +605,9 @@ function toWooJae(currPosition, reduxState) {
       atime: obj.atime,
     });
   });
-  console.log("arr:", arr);
-  axios
-    .post(
+
+  try {
+    const resp = await axios.post(
       "/aamurest/planner/data",
       {
         route: arr,
@@ -611,17 +617,27 @@ function toWooJae(currPosition, reduxState) {
           Authorization: `Bearer ${token}`,
         },
       }
-    )
-    .then((resp) => {
-      console.log("성공!");
-      console.log(resp.data);
-    })
-    .catch((error) => {
-      console.log(error);
-    })
-    .then(() => {
-      console.log("get요청됨");
+    );
+    let settedData = manufacData(resp.data.route, reduxState);
+    // console.log("settedData:", settedData);
+    setFromWooJaeData(settedData);
+  } catch (error) {
+    console.log(error);
+  }
+}
+//일정생성버튼 눌렀을 시 우재한테 받은 데이터를 다시 가공하는 함수
+function manufacData(data, reduxState) {
+  return reduxState.tripPeriod.map((val, periodIndex) => {
+    let arr = data.filter((obj) => {
+      return obj.day === periodIndex + 1;
     });
+    arr.push(arr[0]);
+    // return { day: arr };
+    if (periodIndex === reduxState.tripPeriod.length - 1) {
+      arr.unshift(arr[reduxState.tripPeriod.length - 2]);
+    }
+    return { ["day" + (periodIndex + 1)]: arr };
+  });
 }
 
 function getCurrpositionHotel(currPosition, dispatch) {

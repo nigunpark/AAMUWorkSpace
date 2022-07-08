@@ -34,4 +34,7 @@ public interface CommuService<T> {
 	//글 수정용_commuplace 수정
 	int commuPlaceUpdate(Map map);
 	
+	//글 좋아요
+	int commuLikeInsert(Map map);
+	
 }

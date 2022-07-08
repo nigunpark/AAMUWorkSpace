@@ -63,7 +63,7 @@ const SearchedSukso = ({ local, index }) => {
           })}
 
           <img
-            src={local.smallImage ?? "/images/no-image.jpg"}
+            src={local.smallimage ?? "/images/no-image.jpg"}
             onError={(e) => {
               e.target.src = "/images/no-image.jpg";
             }}
@@ -104,7 +104,7 @@ function LocalInfoModal({ locaInfoModal, setLocaInfoModal, local }) {
         <ImgLim>
           <img
             className="localInfoModal__img"
-            src={local.bigImage ?? "/images/no-image.jpg"}
+            src={local.bigimage ?? "/images/no-image.jpg"}
             alt="이미지"
             onError={(e) => {
               e.target.src = "/images/no-image.jpg";

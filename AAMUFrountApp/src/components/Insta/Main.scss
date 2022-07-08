@@ -158,10 +158,17 @@
           border-radius: 50%;
         }
 
+        // .Dotsvg{
+        //   width: 20px;
+        //   margin-left:330px;
+        //   margin-top: -3;
+        //   background-color:  #000000;
+        // }
 
         .dot {
-          width: 18px;
           margin-left: 330px;
+          font-size: 10px;
+          margin-top: 5px;
           cursor: pointer;
         }
 
@@ -215,44 +222,26 @@
 
         .feeds-icons {
           display: flex;
-          //flex-direction: row;
-          //justify-content: space-between;
-          align-items: center;
+          cursor: pointer;
+          width: 30px;
+          height: 50px;
+          margin-top: 17px;
+          font-size: 15px;
 
-          svg {
-            cursor: pointer;
-          }
-
-          svg:not(:first-child) {
-            width: 25px;
-            height: 25px;
-          }
-
-          svg:not(:last-child) {
-            margin-right: 10px;
+          :hover {
+            color: #adadad;
           }
 
           .heart-icon {
-            width: 30px;
-            height: 50px;
-            margin-top: 17px;
-            margin-right: 13px;
-
-            :hover {
-              color: #adadad;
-            }
+           margin-right: 18px;
           }
 
           .talk-icon {
-            :hover {
-              fill: #adadad;
-            }
+            margin-right: 18px;
+            
           }
 
           .share-icon {
-            :hover {
-              fill: #adadad;
-            }
           }
         }
 
@@ -363,10 +352,9 @@
 
     .recommend {
       background-color: white;
-      height: 200px;
       border: 1px solid #dbdbdb;
       border-radius: 2px;
-      overflow: auto;
+      // overflow: auto;
     }
 
     .search {
@@ -409,7 +397,7 @@
       .search-all {
         position: absolute;
         top: 30px;
-        left: 170px;
+        left: 172px;
         transform: translate(-50%);
         background-color: #fff;
         box-shadow: 0 0 5px 1px rgba(var(--jb7, 0, 0, 0), 0.0975);
@@ -454,6 +442,7 @@
           flex-direction: row;
           align-items: center;
           margin-left: 10px;
+          height: 100%;
 
           &:first-child {
             padding-top: 10px;
@@ -497,9 +486,7 @@
             height: 25px;
             cursor: pointer;
 
-            :hover {
-              color: #adadad;
-            }
+            
           }
 
           p {
@@ -521,13 +508,18 @@
     }
     .notifi {
       margin-top: 15px;
-      margin-bottom: 15px;
-      
+      margin-bottom: 15px;      
       position: relative;
+      cursor: pointer;
+
+      :hover {
+        color: #adadad;
+      }
 
       .noti-all {
         position: absolute;
-        top: 38px;
+        margin-right: 30px;
+        top: 40px;
         right: 235px;
         transform: translate(-50%);
         background-color: #fff;
@@ -538,8 +530,8 @@
       }
       .search-squre {
         position: absolute;
-        margin-top: -5px;
-        margin-left: 214px;
+        margin-top: 2px;
+        margin-left: -1px;
         width: 16px;
         height: 16px;
         transform: rotate(45deg);
@@ -550,18 +542,26 @@
 
       .search-engine {
         position: absolute;
-        width: 340px;
+        border-radius: 7px;
+        top: 40px;
+        right: -150px;
+        width: 380px;
         height: 380px;
         background-color: #fff;
         box-shadow: 0 0 5px 1px rgba(var(--jb7, 0, 0, 0), 0.0975);
         z-index: 9;
         overflow: auto;
+        .parent{
+          height: 100%;
+        }
 
         .search-contents {
           display: flex;
           flex-direction: row;
           align-items: center;
-          margin-left: 10px;
+          margin-left: -20px;
+          height: 100%;
+          width: 100%;
 
           &:first-child {
             padding-top: 10px;
@@ -592,46 +592,33 @@
             border-radius: 100%;
           }
           .likeimg {
-            width: 60px;
-            height: 60px;
+            width: 50px;
+            height: 50px;
             border: 2px solid #fff;
             border-radius: 100%;
           }
-          // .heart {
-          //   border-color: #000000;
-          //   color: #000000;
-          //   width: 15px;
-          //   height: 25px;
-          //   cursor: pointer;
-
-          //   :hover {
-          //     color: #adadad;
-          //   }
-          // }
-
           p {
             margin-left: 9px;
           }
 
-          .user-id {
+          big{
             font-size: 16px;
             font-weight: bold;
           }
 
-          .user-name {
-            font-size: 14px;
-            color: #8e8e8e;
-            margin-top: 3px;
+          .userName {
+            width: 100%;
+            font-size: 15px;
+            font-family: nomal;
+            font-weight: normal;
+            color: #282828;
+            
           }
         }
+        
       }
     }
-    .userName {
-      width: fit-content;
-      font-size: 16px;
-      color: #171717;
-      padding: 5px;
-    }
+    
 
     .user {
       margin-top: -10px;
@@ -670,9 +657,9 @@
 
     .recommend {
       background-color: rgba(255, 255, 255, 0);
-      margin-bottom: 15px;
-      width: 400px;
-      height: auto;
+      margin-top: 5px;
+      width: 100%;
+      height: 100%;
       border-style: none;
 
       .recommend-title {
@@ -703,6 +690,7 @@
       .recommend-down {
         display: flex;
         flex-direction: column;
+        
 
         //margin-bottom: 15px;
         bottom: 40px;
@@ -712,7 +700,9 @@
           flex-direction: row;
           align-items: center;
           justify-content: flex-start;
-          margin: 0px 3px 5px;
+          margin: 0px 3px 15px;
+
+          cursor: pointer;
 
           .follow {
             margin-left: 60px;
@@ -783,16 +773,24 @@
   }
 }
 
-.menuButton {
-  .modal-btn {
-    padding: 20px;
-    width: 100%;
-    height: 100%;
-    cursor: pointer;
-    font-size: medium;
-    border-bottom: 0.5px solid rgb(220, 220, 220);
+
+
+  .edit {
+   color: red;
+ 
+   
   }
-}
+  .delete {
+    color: red;
+
+   
+  }
+  .cancel {
+    font-weight: normal;
+
+   
+  }
+
 
 .comment-writing {
   margin-left: 5px;

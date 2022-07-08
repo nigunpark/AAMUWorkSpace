@@ -98,17 +98,33 @@ public class CommuController {
 	//글 수정용
 	@PutMapping("gram/edit/{id}")
 	public Map commuUpdate(@PathVariable String id,@RequestParam Map map) {
-		System.out.println("(Commucontroller)map:"+map); //나옴
 		int commuUpdateAffected=commuService.commuUpdate(map);
-		System.out.println("(Commucontroller)commuUpdateAffected:"+commuUpdateAffected);
 		//commuplace에 contentid수정
 		int commuPlaceUpdateAffected=commuService.commuPlaceUpdate(map);
-		System.out.println("(Commucontroller)commuPlaceUpdateAffected:"+commuPlaceUpdateAffected);
 		Map resultMap = new HashMap();
 		if(commuUpdateAffected==1 && commuPlaceUpdateAffected==1) 
 			resultMap.put("result", "updateSuccess");
 		else resultMap.put("result", "updateNotSuccess");
 		return resultMap;
 	}
+	
+	//글 좋아요
+	//글의 likecount수를 뿌려줘야됨
+	//"like":"true" 넘어오면 좋아요 눌렀잖아 그럼 그 lno에 대한거 likeboard테이블에 insert 시켜주기
+	//community테이블에 likecount를 +1 update시켜주기
+	//update 성공하면 resultInsertLike true 반환
+	@GetMapping("/gram/like")
+	public Map commuLike(@RequestParam Map map) {
+		int commuLikeInsertAffected=commuService.commuLikeInsert(map);
+		Map resultMap = new HashMap();
+		if(commuLikeInsertAffected==1)
+			resultMap.put("result", "true");
+		else resultMap.put("result", "false");
+		return map;
+	}
+	
+	//글 좋아요 취소
+	//like테이블 delete 시켜주고
+	//해당 lno communituy테이블에 likecount-1 update시켜죽
 
 }

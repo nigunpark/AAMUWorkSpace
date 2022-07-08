@@ -6,9 +6,12 @@
 <mapper namespace="aamu.mybatis.mapper.bbs">
 	<!-- 글 목록용 -->
 	<select id="bbsSelectList" resultType="bbsDTO">
-		SELECT * FROM routebbs
+		select rbbs.*, r.* from routebbs rbbs JOIN routeboard rb ON rbbs.rbn = rb.rbn JOIN route r ON rb.rbn = r.rbn
 	</select>
-
+	<!-- 글 목록용_사진 뿌려주기 -->
+	<select id="bbsSelectPhotoList" parameterType="int" resultType="String">
+		SELECT photo FROM routebbsphoto WHERE rbn=#{rbn}
+	</select>
 	
 	
 	
