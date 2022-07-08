@@ -237,11 +237,13 @@
           }
 
           .talk-icon {
-            margin-right: 18px;
+            margin-right: 16px;
             
           }
 
           .share-icon {
+            font-size: 14px;
+            margin-top: 1px;
           }
         }
 
@@ -764,12 +766,32 @@
     border-radius: 5px;
     border-style: none;
     margin-top: -3px;
-
-    cursor: pointer;
-
-    :hover {
-      color: #adadad;
-    }
+  }
+  .post-icon :hover {
+    color: #adadad;
+  }
+  .imageDiv{
+    width: 100%;
+    height: 100%;
+  }
+  #input-file::-webkit-file-upload-button{
+    display: none;
+    // visibility: hidden;
+    overflow: hidden;
+  }
+  #input-file[type="file"] {  /* 파일 필드 숨기기 */
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip:rect(0,0,0,0);
+    border: 0;
+  }
+  .picfileframe{
+    width: 100%;
+    height: 100%;
   }
 }
 
