@@ -38,8 +38,8 @@ const ContentsLim = styled.div`
   border-radius: 10px;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
   background: rgba(255, 255, 255, 0.8);
-  width: 855px;
-  height: 300px;
+  width: 900px;
+  height: 370px;
   animation: ${modalAniLim} 0.6s ease forwards;
 `;
 
