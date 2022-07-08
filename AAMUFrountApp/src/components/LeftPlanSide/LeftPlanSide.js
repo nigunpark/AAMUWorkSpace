@@ -65,6 +65,7 @@ const LeftPlanSide = ({ currPosition }) => {
     }
   }, [reduxState.showWhichModal]);
   let dispatch = useDispatch();
+
   return (
     <div className="LeftPlanSide">
       <div className="leftPlanSide__localNDay">
@@ -319,7 +320,6 @@ function SukSoMadal() {
     return state;
   });
   let dispatch = useDispatch();
-
   return (
     <div className="suksoModal__container">
       <div className="suksoModal__counter__container">
@@ -350,15 +350,17 @@ function SukSoSubModal({ index, local }) {
   let reduxState = useSelector((state) => {
     return state;
   });
+
   return (
     <div className="sukSoSubModal__container">
       <div className="sukSoSubModal__dayBtn">
         DAY {index + 1}
         <span>
-          ({reduxState.monthNdate[0].month}.
+          {" "}
+          ({reduxState.monthNdate[0].month}.{" "}
           {reduxState.monthNdate[0].date + index} ~{" "}
-          {reduxState.monthNdate[0].month}.
-          {reduxState.monthNdate[0].date + index + 1} )
+          {reduxState.monthNdate[0].month}.{" "}
+          {reduxState.monthNdate[0].date + index + 1})
         </span>
       </div>
       {local !== 0 ? (
@@ -379,13 +381,14 @@ function SukSoSubModal({ index, local }) {
 
 function PickedSukso({ local }) {
   let dispatch = useDispatch();
-
+  let reduxState = useSelector((state) => {
+    return state;
+  });
   return (
     <div className="pickedSukso__container slide-in-right">
       <div className="pickedSukso__img-container">
         <img
           src={local.smallimage ?? "/images/no-image.jpg"}
-          // src="/images/no-image.jpg"
           onError={(e) => {
             e.target.src = "/images/no-image.jpg";
           }}
@@ -397,7 +400,8 @@ function PickedSukso({ local }) {
           <FontAwesomeIcon
             icon={faX}
             className="pickedSukso__info-title__closeBtn"
-            onClick={() => {
+            onClick={(e) => {
+              e.stopPropagation();
               dispatch(delOneSaveDaysRedux(local));
             }}
           />
