@@ -7,16 +7,14 @@ import styled from 'styled-components'
 const Modal = ({setIsOpen}) => {
 
     const [attachment, setClearAttachment] = useState(false);
+    const [rweet, setNewRweet] = useState([]);
 
-    const [fileImage, setFileImage] = useState("");
-    const saveFileImage = (event) =>{
-      // @ts-ignore
-      setFileImage(URL.createObjectURL(event.target.files[0]));
-    };
-    const deleteFileImage = () =>{
-      URL.revokeObjectURL(fileImage);
-      setFileImage("");
-    };
+    const onChange = (event) => {
+        const {
+          target: { value },
+        } = event;
+        setNewRweet(value);
+      };
 
     useEffect(() => {
         const $body = document.querySelector("body");
@@ -32,29 +30,8 @@ const Modal = ({setIsOpen}) => {
         <Overlay>
             <ModalWrap >
                 <Contents>    
-                    <form className="form_rweets" >{/*onSubmit={onSubmit}*/}
+                    <form className="form_rweets" >{/*onSubmit={onSubmit}// <form method="post" enctype="multipart/form-data">*/}
                         <div className="preview_container">
-                        <div style={{
-                            alignItems: "center",
-                            justifyContent: "center", }} >
-                            <input
-                                name="imggeUpload"
-                                type="file"
-                                accept="image/*"
-                                onChange={saveFileImage} />
-                            </div>
-                            <div>
-                                <h1>미리보기 이미지</h1>
-                            </div>
-                                <div>{fileImage && ( <img alt="sample" src={fileImage}
-                                                        style={{ margin: "auto" }} /> )}
-                                    <button style={{
-                                    width: "50px",
-                                    height: "30px",
-                                    cursor: "pointer", }}
-                                    onClick={() => deleteFileImage()} > 삭제 </button>
-                                </div>
-      
                             <>
                                 <label className="rweet_file_btn" htmlFor="input-file">
                                     <FontAwesomeIcon icon={faImage} size="4x" />
@@ -64,7 +41,7 @@ const Modal = ({setIsOpen}) => {
                                     id="input-file"
                                     accept="image/*"
                                     //onChange={onFileChange}
-                                />
+                                    />
                             </>
                             {attachment && (
                                 <div>
