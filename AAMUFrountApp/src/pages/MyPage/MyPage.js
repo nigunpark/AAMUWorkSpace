@@ -188,6 +188,7 @@ const MyPage = () => {
             </svg>
           </button>
         </div>
+        
         <div className="projects-section">
           <div className="projects-section-header">
             <p>MyPage</p>
@@ -202,8 +203,9 @@ const MyPage = () => {
             <TabContent clickTab={clickTab} />
           </div>
         </div>
+
         <div className="messages-section">
-          <button className="messages-close">
+          {/* <button className="messages-close">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="24"
@@ -220,11 +222,14 @@ const MyPage = () => {
               <line x1="15" y1="9" x2="9" y2="15" />
               <line x1="9" y1="9" x2="15" y2="15" />
             </svg>
-          </button>
+          </button> */}
           <div className="projects-section-header">
             <p>알림</p>
           </div>
           <div className="messages">
+            <MyMessageBar />
+            <MyMessageBar />
+            <MyMessageBar />
             <MyMessageBar />
             <MyMessageBar />
             <MyMessageBar />
