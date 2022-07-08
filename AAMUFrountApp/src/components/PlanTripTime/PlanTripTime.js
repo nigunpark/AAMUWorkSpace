@@ -124,7 +124,7 @@ const TimeSet = ({ index }) => {
     </>
   );
 };
-//getAm(오전)pm(오후)T(time)m(mins)
+// getAm(오전)pm(오후)T(time)m(mins)
 function getAmpmTmStart(
   newValue,
   setStartTimeArray,
