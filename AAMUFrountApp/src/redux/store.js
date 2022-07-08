@@ -147,7 +147,10 @@ let saveDaysNPickedSuksoRedux = createSlice({
       return action.payload;
     },
     delOneSaveDaysRedux(state, action) {
-      state = state.splice(state.indexOf(action.payload), 1, 0);
+      let index = state.findIndex((obj) => {
+        return obj.contentid === action.payload.contentid;
+      });
+      state.splice(index, 1, 0);
     },
   },
 });
