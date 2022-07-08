@@ -33,7 +33,7 @@ const MyPage = () => {
       three.current.classList.add("active");
       setting.current.classList.remove("active");
     }
-    else {
+    else if (clickTab === 3)  {
       home.current.classList.remove("active");
       two.current.classList.remove("active");
       three.current.classList.remove("active");
@@ -264,6 +264,9 @@ function TabContent({clickTab,setClickTab}) {
   }
   else if (clickTab === 3) {
     return <MyProfileBox />;
+  }
+  else if (clickTab === 10) {
+    return <div>Tab 10 내용입니다.</div>;
   }
 }
 
