@@ -115,8 +115,11 @@ public class CommuController {
 	//update 성공하면 resultInsertLike true 반환
 	@GetMapping("/gram/like")
 	public Map commuLike(@RequestParam Map map) {
-		commuService.commuLikeInsert(map);
-		
+		int commuLikeInsertAffected=commuService.commuLikeInsert(map);
+		Map resultMap = new HashMap();
+		if(commuLikeInsertAffected==1)
+			resultMap.put("result", "true");
+		else resultMap.put("result", "false");
 		return map;
 	}
 	
