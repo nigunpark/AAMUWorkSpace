@@ -6,28 +6,34 @@ import MyProfileBox from "./MyPageBox/MyProfileBox";
 import MyProfileTopLine from "./MyPageBox/MyProfileTopLine";
 import MyMessageBar from "./MyMessageBar/MyMessageBar";
 const MyPage = () => {
+
   let [clickTab, setClickTab] = useState(0);
+
   let home = useRef();
   let two = useRef();
   let three = useRef();
   let setting = useRef();
+
   useEffect(() => {
     if (clickTab === 0) {
       home.current.classList.add("active");
       two.current.classList.remove("active");
       three.current.classList.remove("active");
       setting.current.classList.remove("active");
-    } else if (clickTab === 1) {
+    }
+    else if (clickTab === 1) {
       home.current.classList.remove("active");
       two.current.classList.add("active");
       three.current.classList.remove("active");
       setting.current.classList.remove("active");
-    } else if (clickTab === 2) {
+    }
+    else if (clickTab === 2) {
       home.current.classList.remove("active");
       two.current.classList.remove("active");
       three.current.classList.add("active");
       setting.current.classList.remove("active");
-    } else {
+    }
+    else {
       home.current.classList.remove("active");
       two.current.classList.remove("active");
       three.current.classList.remove("active");
@@ -188,7 +194,7 @@ const MyPage = () => {
             </svg>
           </button>
         </div>
-        
+
         <div className="projects-section">
           <div className="projects-section-header">
             <p>MyPage</p>
@@ -240,16 +246,21 @@ const MyPage = () => {
   );
 };
 function TabContent(props) {
+
   let totalEdit = [1, 2, 3, 4];
+
   if (props.clickTab === 0) {
-    return totalEdit.map((totalEdit) => {
-      return <MyHomeBox />;
+    return totalEdit.map(() => {
+      return <MyHomeBox/>;
     });
-  } else if (props.clickTab === 1) {
+  }
+  else if (props.clickTab === 1) {
     return <div>Tab 2 내용입니다.</div>;
-  } else if (props.clickTab === 2) {
+  }
+  else if (props.clickTab === 2) {
     return <div>Tab 3 내용입니다.</div>;
-  } else if (props.clickTab === 3) {
+  }
+  else if (props.clickTab === 3) {
     return <MyProfileBox />;
   }
 }
@@ -264,11 +275,14 @@ function TabContent(props) {
 function TabTopLine(props) {
   if (props.clickTab === 0) {
     return <MyHomeTopLine />;
-  } else if (props.clickTab === 1) {
+  }
+  else if (props.clickTab === 1) {
     return <div>Tab 2 TopLine</div>;
-  } else if (props.clickTab === 2) {
+  }
+  else if (props.clickTab === 2) {
     return <div>Tab 3 TopLine</div>;
-  } else if (props.clickTab === 3) {
+  }
+  else if (props.clickTab === 3) {
     return <MyProfileTopLine />;
   }
 }
