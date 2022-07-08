@@ -206,7 +206,7 @@ const MyPage = () => {
           </div>
           <div className="project-boxes jsGridView">
             {/* <MyHomeBox/> */}
-            <TabContent clickTab={clickTab} />
+            <TabContent clickTab={clickTab} setClickTab={setClickTab}/>
           </div>
         </div>
 
@@ -245,22 +245,24 @@ const MyPage = () => {
     </div>
   );
 };
-function TabContent(props) {
+
+
+function TabContent({clickTab,setClickTab}) {
 
   let totalEdit = [1, 2, 3, 4];
 
-  if (props.clickTab === 0) {
+  if (clickTab === 0) {
     return totalEdit.map(() => {
-      return <MyHomeBox/>;
+      return <MyHomeBox  clickTab={clickTab} setClickTab={setClickTab}/>;
     });
   }
-  else if (props.clickTab === 1) {
+  else if (clickTab === 1) {
     return <div>Tab 2 내용입니다.</div>;
   }
-  else if (props.clickTab === 2) {
+  else if (clickTab === 2) {
     return <div>Tab 3 내용입니다.</div>;
   }
-  else if (props.clickTab === 3) {
+  else if (clickTab === 3) {
     return <MyProfileBox />;
   }
 }
