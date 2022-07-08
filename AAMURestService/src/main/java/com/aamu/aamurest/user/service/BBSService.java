@@ -11,14 +11,17 @@ public interface BBSService {
 	
 	//글 목록_사진 뿌려주기
 	List bbsSelectPhotoList(int rbn);
-
 	
 	//글 생성_수정
 	
 	//글 생성_삭제
 	
+	//글 생성일자
+	
 	//별점 등록
 	
 	//별점 평균
+	
+	//리뷰 
 	
 }

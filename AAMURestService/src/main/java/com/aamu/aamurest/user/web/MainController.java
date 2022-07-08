@@ -90,7 +90,7 @@ public class MainController {
 		int day=1;
 		if(list.size()-tripDay*2==1) {
 			for(RouteDTO route:list) {
-				route.setMtime(30*1000*60);
+				
 				if(route.getDay()==0) {
 					if(result>count) {
 						route.setDay(day);

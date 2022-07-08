@@ -18,8 +18,8 @@ public class BBSDTO {
 	public String themename;
 	public double rateavg;
 	public List<String> photo;
-	private int day;
+	private int day; //1일차, 2일차 등
 	private long starttime;
-	private long atime;
-	private long mtime;
+	private long atime; //머문시간
+	private long mtime; //이동시간
 }
