@@ -49,7 +49,7 @@
 	</select>
 	
 	<select id="searchTwoPlace" parameterType="Map" resultType="attrDTO">
-		SELECT * FROM ${searchtable} WHERE ${searchcolumn} LIKE '%'||#{searchword}||'%' or #{searchcolumn2} LIKE '%'||#{searchword}||'%'
+		SELECT * FROM ${searchtable} WHERE ${searchcolumn} LIKE '%'||#{searchword}||'%' or #{searchcolumn2} LIKE '%'||#{searchword2}||'%'
 	</select>
 	
 	<select id="searchOnePlace" parameterType="Map" resultType="attrDTO">

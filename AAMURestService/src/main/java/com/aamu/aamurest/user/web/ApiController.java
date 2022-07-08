@@ -321,7 +321,9 @@ public class ApiController {
 			service.updatePlaces(map);
 			affected++;
 		}
-		
+		if(map.get("searchcolumn2")!=null) {
+			
+		}
 		
 		return affected;
 	}

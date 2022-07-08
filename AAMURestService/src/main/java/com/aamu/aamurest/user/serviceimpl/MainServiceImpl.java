@@ -311,19 +311,8 @@ public class MainServiceImpl implements MainService{
 	////////////////////////////////////selectone place
 	@Override
 	public AttractionDTO selectOnePlace(int contentid) {
-		AttractionDTO dto = dao.selectOnePlace(contentid);
-		if(dto.getTitle()!=null) {
-			String title = dto.getTitle();
-			if(title.contains("유네스코")) {
-				title= title.split("\\[")[0].trim();
-				dto.setTitle(title);
-			}
-			if(title.contains("한국관광")) {
-				title= title.split("\\[")[0].trim();
-				dto.setTitle(title);
-			}
-		}
-		return dto;
+		
+		return dao.selectOnePlace(contentid);
 	}
 	@Override
 	public int checkPlace(int contentid) {
