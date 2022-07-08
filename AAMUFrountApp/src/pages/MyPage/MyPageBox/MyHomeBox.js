@@ -1,6 +1,11 @@
 import React from 'react'
 
-const MyBox = () => {
+const MyBox = (props) => {
+
+    function handleClick(){
+        window.location.replace('/write')
+    }
+
   return (
     <div className="project-box-wrapper">
         <div className="project-box"> {/*  style="background-color: #fee4cb;" */}
@@ -66,7 +71,7 @@ const MyBox = () => {
                 </div> */}
 
                 <div className='detail-button'>
-                    <button className="learn-more" type="button">공유하기</button>
+                    <button className="learn-more" type="button" onClick={handleClick}>공유하기</button>
                 </div>
             </div>
         </div>
