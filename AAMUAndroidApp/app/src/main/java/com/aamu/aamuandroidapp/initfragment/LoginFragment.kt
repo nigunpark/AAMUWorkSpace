@@ -1,15 +1,21 @@
 package com.aamu.aamuandroidapp.initfragment
 
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
+import androidx.activity.OnBackPressedDispatcher
+import androidx.activity.addCallback
 import androidx.navigation.NavController
+import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
 import com.aamu.aamuandroidapp.R
 import com.aamu.aamuandroidapp.databinding.FragmentLoginBinding
-import com.etebarian.meowbottomnavigation.MeowBottomNavigation
+import meow.bottomnavigation.MeowBottomNavigation
 
 class LoginFragment : Fragment() {
 
@@ -22,6 +28,7 @@ class LoginFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentLoginBinding.inflate(layoutInflater)
+
         return binding.root
     }
 
@@ -30,39 +37,27 @@ class LoginFragment : Fragment() {
 
         navController = Navigation.findNavController(view)
 
-        binding.bottmNav.apply {
-            add(
-                MeowBottomNavigation.Model(
-                    1,
-                    R.drawable.ic_home
-                )
-            )
-            add(
-                MeowBottomNavigation.Model(
-                    2,
-                    R.drawable.ic_explore
-                )
-            )
-            add(
-                MeowBottomNavigation.Model(
-                    3,
-                    R.drawable.ic_message
-                )
-            )
-            add(
-                MeowBottomNavigation.Model(
-                    4,
-                    R.drawable.ic_notification
-                )
-            )
-            add(
-                MeowBottomNavigation.Model(
-                    5,
-                    R.drawable.ic_account
-                )
-            )
+        binding.cirLoginButton.setOnClickListener{
+            navController.navigate(R.id.action_loginFragment_to_mainFragment)
+        }
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        callback.remove()
+    }
+
+    private var callback = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            if (!navController.popBackStack(R.id.loadingFragment,true)) {
+                activity?.finish()
+            }
         }
 
     }
-
 }

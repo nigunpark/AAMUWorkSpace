@@ -90,6 +90,7 @@ public class MainController {
 		int day=1;
 		if(list.size()-tripDay*2==1) {
 			for(RouteDTO route:list) {
+				
 				if(route.getDay()==0) {
 					if(result>count) {
 						route.setDay(day);
@@ -105,6 +106,7 @@ public class MainController {
 		
 		else {
 				for(RouteDTO route:list) {
+					route.setMtime(30*1000*60);
 					if(route.getDay()==0) {
 						if(result>count) {
 							route.setDay(day);
@@ -155,36 +157,38 @@ public class MainController {
 			switch(map.get("contenttypeid").toString()) {
 			case "12":
 			case "28":
-				list = service.selectAttrSigungu(map);
+				map.put("selecttable", "placesinfo");
 				break;
 			case "15":
-				list = service.selectEventSigungu(map);
+				map.put("selecttable", "eventinfo");
 				break;
 			case "32":
-				list = service.selectHotelSigungu(map);
+				map.put("selecttable", "hotelinfo");
 				break;
 			case "39":
-				list = service.selectDinerSigungu(map);
+				map.put("selecttable", "dinerinfo");
 				break;
 			}
+			list = service.selectAttrSigungu(map);
 		}
 		else {
 			
 			switch(map.get("contenttypeid").toString()) {
 			case "12":
 			case "28":
-				list = service.selectPlacesList(map);
+				map.put("selecttable", "placesinfo");
 				break;
 			case "15":
-				list = service.selectEventList(map);
+				map.put("selecttable", "eventinfo");
 				break;
 			case "32":
-				list = service.selectHotelList(map);
+				map.put("selecttable", "hotelinfo");
 				break;
 			case "39":
-				list = service.selectDinerList(map);
+				map.put("selecttable", "dinerinfo");
 				break;
 			}
+			list = service.selectPlacesList(map);
 		}
 		
 		return list;

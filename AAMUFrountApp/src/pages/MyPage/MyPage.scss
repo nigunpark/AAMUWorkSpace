@@ -281,7 +281,7 @@ button, a {
   border-radius: 32px;
   padding: 32px 32px 0 32px;
   overflow: hidden;
-  height: 100%;
+  // height: 100%;
   display: flex;
   flex-direction: column;
   margin-top: 50px;
@@ -310,7 +310,11 @@ button, a {
     }
     
     .time {
+      width: 20%;
       font-size: 20px;
+    }
+    input{
+      display: none;
     }
   }
 }

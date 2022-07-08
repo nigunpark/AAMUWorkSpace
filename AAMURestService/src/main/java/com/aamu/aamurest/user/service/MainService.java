@@ -8,14 +8,6 @@ import java.util.Map;
 public interface MainService{
 	int placeInsert(AttractionDTO dto);
 
-	int infoInsert(AttractionDTO dto);
-
-	int hotelInsert(AttractionDTO dto);
-
-	int dinerInsert(AttractionDTO dto);
-	
-	int eventInsert(AttractionDTO dto);
-	
 	int plannerInsert(PlannerDTO dto);
 	
 	int RouteInsert(RouteDTO route);
@@ -26,23 +18,13 @@ public interface MainService{
 
 	List<AttractionDTO> selectAttrSigungu(Map map);
 
-	List<AttractionDTO> selectEventSigungu(Map map);
-
-	List<AttractionDTO> selectHotelSigungu(Map map);
-
-	List<AttractionDTO> selectDinerSigungu(Map map);
-
-	List<AttractionDTO> selectEventList(Map map);
-
-	List<AttractionDTO> selectHotelList(Map map);
-
-	List<AttractionDTO> selectDinerList(Map map);
-
 	List<AttractionDTO> searchTwoPlace(Map map);
 
 	List<AttractionDTO> searchOnePlace(Map map);
-
+	
 	int updateUrl(AttractionDTO dto);
+	
+	int updatePlaces(Map map);
 
 	AttractionDTO selectOnePlace(int contentid);
 	
