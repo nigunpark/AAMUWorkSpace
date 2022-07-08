@@ -16,6 +16,7 @@ import {
   faBed,
   faBus,
   faCar,
+  faCircleXmark,
   faMapLocationDot,
   faUtensils,
 } from "@fortawesome/free-solid-svg-icons";
@@ -34,6 +35,9 @@ import {
   AuSBtn,
 } from "../Modal/AreUSurePlanModal.js";
 import axios from "axios";
+import { Alert, AlertTitle } from "@mui/material";
+import { ContainerInValid, OverlayInValid } from "../Modal/InVaildModal.js";
+
 const { kakao } = window;
 
 const KMap = ({
@@ -78,6 +82,7 @@ const KMap = ({
   const [mapLevel, setMapLevel] = useState(9);
   const [kMap, setKMap] = useState(null);
   const [markers, setMarkers] = useState([1]);
+  const [showAlert, setShowAlert] = useState(false);
   //-------------------------------------------------------------------------
   let pickedJangso = [];
   useEffect(() => {
@@ -97,7 +102,7 @@ const KMap = ({
       }
     });
     //지도 최대레벨 제한
-    map.setMaxLevel(9);
+    map.setMaxLevel(10);
     setKMap(map);
   }, [container]);
 
@@ -308,7 +313,20 @@ const KMap = ({
             ) : null}
           </span>
           <div
-            onClick={() => {
+            onClick={(e) => {
+              e.stopPropagation();
+              if (
+                reduxState.saveDaysNPickedSuksoRedux.filter((val) => {
+                  return val !== 0;
+                }).length !==
+                  reduxState.tripPeriod.length - 1 ||
+                reduxState.arrForPickJangso.length !==
+                  reduxState.tripPeriod.length
+              ) {
+                setShowAlert(true);
+
+                return;
+              }
               setShowAuSModal(true);
               reduxState.tripPeriod.map((day, index) => {
                 if (
@@ -350,6 +368,30 @@ const KMap = ({
           currPosition={currPosition}
           setFromWooJaeData={setFromWooJaeData}
         />
+      ) : null}
+      {showAlert ? (
+        <ContainerInValid>
+          <OverlayInValid
+            onClick={() => {
+              setShowAlert(false);
+            }}
+          />
+          <Alert
+            severity="warning"
+            className="alertBox"
+            style={{ zIndex: "1000", padding: "30px 100px", fontSize: "20px" }}
+          >
+            {/* <AlertTitle></AlertTitle> */}
+            <strong> 여행일자만큼 숙소와 여행지를 선택해주세요</strong>
+            <FontAwesomeIcon
+              icon={faCircleXmark}
+              className="alert_X"
+              onClick={() => {
+                setShowAlert(false);
+              }}
+            />
+          </Alert>
+        </ContainerInValid>
       ) : null}
     </div>
   );
@@ -619,7 +661,7 @@ async function toWooJae(currPosition, reduxState, setFromWooJaeData) {
       }
     );
     let settedData = manufacData(resp.data.route, reduxState);
-    // console.log("settedData:", settedData);
+    console.log("settedData:", settedData);
     setFromWooJaeData(settedData);
   } catch (error) {
     console.log(error);
@@ -627,14 +669,19 @@ async function toWooJae(currPosition, reduxState, setFromWooJaeData) {
 }
 //일정생성버튼 눌렀을 시 우재한테 받은 데이터를 다시 가공하는 함수
 function manufacData(data, reduxState) {
+  let temp;
   return reduxState.tripPeriod.map((val, periodIndex) => {
     let arr = data.filter((obj) => {
       return obj.day === periodIndex + 1;
     });
-    arr.push(arr[0]);
-    // return { day: arr };
+    if (periodIndex !== reduxState.tripPeriod.length - 1) arr.push(arr[0]);
+    if (periodIndex === reduxState.tripPeriod.length - 2) {
+      temp = arr[arr.length - 1];
+    }
     if (periodIndex === reduxState.tripPeriod.length - 1) {
-      arr.unshift(arr[reduxState.tripPeriod.length - 2]);
+      temp.starttime = arr[0].starttime;
+
+      arr.splice(0, 1, temp);
     }
     return { ["day" + (periodIndex + 1)]: arr };
   });
