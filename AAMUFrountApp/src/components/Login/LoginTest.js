@@ -55,6 +55,7 @@ const LoginTest = () => {
               <div className="loginInput__container">
                 <FontAwesomeIcon icon={faKey} />
                 <input
+                  type="password"
                   ref={pwdRef}
                   placeholder="비밀번호를 입력해주세요"
                   className="loginInput"
