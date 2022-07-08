@@ -54,125 +54,116 @@ public class MainServiceImpl implements MainService{
 		String tel = dto.getTel();
 		if(tel!=null) {
 			if(tel.contains("<br />")) {
-				tel.replace("<br />", "\r\n");
+				tel = tel.replace("<br />", "\r\n");
 			}
 			else if(tel.contains("<br/>")){
-				tel.replace("<br/>", "\r\n");
+				tel = tel.replace("<br/>", "\r\n");
 			}
 			else if(tel.contains("<br>")){
-				tel.replace("<br>", "\r\n");
+				tel = tel.replace("<br>", "\r\n");
 			}
 			dto.setTel(tel);
 			if(tel.length()>100) {
 				dto.setTel("");
 			}
 		}
+		////////////////////////////////////////////////////////////////////////////
+		if(dto.getContenttypeid()==12||dto.getContenttypeid()==28||dto.getContenttypeid()==39) {
+			String playtime = dto.getPlaytime();
+			String resttime = dto.getResttime();
+			if(playtime!=null) {
+				if(playtime.contains("<br />")) {
+					playtime = playtime.replace("<br />", "\r\n");
+				}
+				else if(playtime.contains("<br/>")){
+					playtime = playtime.replace("<br/>", "\r\n");
+				}
+				else if(playtime.contains("<br>")){
+					playtime = playtime.replace("<br>", "\r\n");
+				}
+				dto.setPlaytime(playtime);
+			}
+			if(resttime!=null) {
+				if(resttime.contains("<br />")) {
+					resttime = resttime.replace("<br />", "\r\n");
+				}
+				else if(resttime.contains("<br/>")){
+					resttime = resttime.replace("<br/>", "\r\n");
+				}
+				else if(resttime.contains("<br>")){
+					resttime.replace("<br>", "\r\n");
+				}
+				dto.setResttime(resttime);
+			}
+		}///////////////////////////////////////////////////////////////////////////////////
+		else if(dto.getContenttypeid()==32) {
+			String checkin = dto.getCheckin();
+			String checkout =dto.getCheckout();
+			if(checkin!=null) {
+				if(checkin.contains("<br />")) {
+					checkin = checkin.replace("<br />", "\r\n");
+				}
+				else if(checkin.contains("<br/>")){
+					checkin = checkin.replace("<br/>", "\r\n");
+				}
+				else if(checkin.contains("<br>")){
+					checkin = checkin.replace("<br>", "\r\n");
+				}
+				dto.setCheckin(checkin);
+			}
+			if(checkout!=null) {
+				if(checkout.contains("<br />")) {
+					checkout = checkout.replace("<br />", "\r\n");
+				}
+				else if(checkout.contains("<br/>")){
+					checkout = checkout.replace("<br/>", "\r\n");
+				}
+				else if(checkout.contains("<br>")){
+					checkout = checkout.replace("<br>", "\r\n");
+				}
+				dto.setCheckout(checkout);
+			}
+		}
+		////////////////////////////////////////////////////////////////////////////////////////
+		else if(dto.getContenttypeid()==15) {
+			String start = dto.getEventstart();
+			String end = dto.getEventend();
+			start = start.substring(0, 4) +"-"+start.substring(4, 6)+"-"+start.substring(6,8);
+			end = end.substring(0, 4) +"-"+end.substring(4, 6)+"-"+end.substring(6,8);
+			dto.setEventstart(start);
+			dto.setEventend(end);
+			String eventTime = dto.getEventtime();
+			if(eventTime!=null) {
+				if(eventTime.contains("<br>")) {
+					eventTime = eventTime.replace("<br>", "\r\n");
+				}
+				else if(eventTime.contains("<br />")) {
+					eventTime = eventTime.replace("<br />", "\r\n");
+				}
+				else if(eventTime.contains("<br/>")){
+					eventTime = eventTime.replace("<br/>", "\r\n");
+				}
+				dto.setEventtime(eventTime);
+			}
+			String charge = dto.getCharge();
+			if(charge!=null) {
+				if(charge.contains("<br>")) {
+					charge = charge.replace("<br>", "\r\n");
+					
+				}
+				else if(charge.contains("<br />")) {
+					charge = charge.replace("<br />", "\r\n");
+				}
+				else if(charge.contains("<br/>")){
+					charge = charge.replace("<br/>", "\r\n");
+				}
+				if(charge.length()>100) {
+					charge = dto.getUrl();
+				}
+				dto.setCharge(charge);
+			}
+		}//////////////////////////////////////////////////////////////////////
 		return dao.placeInsert(dto);
-	}
-	@Override
-	public int infoInsert(AttractionDTO dto) {
-		String playtime = dto.getPlaytime();
-		String resttime = dto.getResttime();
-		if(playtime!=null) {
-			if(playtime.contains("<br />")) {
-				playtime.replace("<br />", "\r\n");
-			}
-			else if(playtime.contains("<br/>")){
-				playtime.replace("<br/>", "\r\n");
-			}
-			else if(playtime.contains("<br>")){
-				playtime.replace("<br>", "\r\n");
-			}
-			dto.setPlaytime(playtime);
-		}
-		if(resttime!=null) {
-			if(resttime.contains("<br />")) {
-				resttime.replace("<br />", "\r\n");
-			}
-			else if(resttime.contains("<br/>")){
-				resttime.replace("<br/>", "\r\n");
-			}
-			else if(resttime.contains("<br>")){
-				resttime.replace("<br>", "\r\n");
-			}
-			dto.setResttime(resttime);
-		}
-		return dao.infoInsert(dto);
-	}
-	@Override
-	public int hotelInsert(AttractionDTO dto) {
-		String checkin = dto.getCheckin();
-		String checkout =dto.getCheckout();
-		if(checkin!=null) {
-			if(checkin.contains("<br />")) {
-				checkin.replace("<br />", "\r\n");
-			}
-			else if(checkin.contains("<br/>")){
-				checkin.replace("<br/>", "\r\n");
-			}
-			else if(checkin.contains("<br>")){
-				checkin.replace("<br>", "\r\n");
-			}
-			dto.setCheckin(checkin);
-		}
-		if(checkout!=null) {
-			if(checkout.contains("<br />")) {
-				checkout.replace("<br />", "\r\n");
-			}
-			else if(checkout.contains("<br/>")){
-				checkout.replace("<br/>", "\r\n");
-			}
-			else if(checkout.contains("<br>")){
-				checkout.replace("<br>", "\r\n");
-			}
-			dto.setCheckout(checkout);
-		}
-		return dao.hotelInsert(dto);
-	}
-	@Override
-	public int dinerInsert(AttractionDTO dto) {
-		
-		return dao.dinerInsert(dto);
-	}
-	@Override
-	public int eventInsert(AttractionDTO dto) {
-		String start = dto.getEventstart();
-		String end = dto.getEventend();
-		start = start.substring(0, 4) +"-"+start.substring(4, 6)+"-"+start.substring(6,8);
-		end = end.substring(0, 4) +"-"+end.substring(4, 6)+"-"+end.substring(6,8);
-		dto.setEventstart(start);
-		dto.setEventend(end);
-		String eventTime = dto.getEventtime();
-		if(eventTime!=null) {
-			if(eventTime.contains("<br>")) {
-				eventTime.replace("<br>", "\r\n");
-			}
-			else if(eventTime.contains("<br />")) {
-				eventTime.replace("<br />", "\r\n");
-			}
-			else if(eventTime.contains("<br/>")){
-				eventTime.replace("<br/>", "\r\n");
-			}
-			dto.setEventtime(eventTime);
-		}
-		String charge = dto.getCharge();
-		if(charge!=null) {
-			if(charge.contains("<br>")) {
-				charge.replace("<br>", "\r\n");
-				
-			}
-			else if(charge.contains("<br />")) {
-				charge.replace("<br />", "\r\n");
-			}
-			else if(charge.contains("<br/>")){
-				charge.replace("<br/>", "\r\n");
-			}
-			if(charge.length()>100) {
-				charge = dto.getUrl();
-			}
-			dto.setCharge(charge);
-		}
-		return dao.eventInsert(dto);
 	}
 	@Override
 	public int plannerInsert(PlannerDTO dto) {
@@ -201,33 +192,6 @@ public class MainServiceImpl implements MainService{
 		
 		return dao.selectAttrSigungu(map);
 	}
-	@Override
-	public List<AttractionDTO> selectEventSigungu(Map map) {
-		
-		return dao.selectEventSigungu(map);
-	}
-	@Override
-	public List<AttractionDTO> selectHotelSigungu(Map map) {
-		
-		return dao.selectHotelSigungu(map);
-	}
-	@Override
-	public List<AttractionDTO> selectDinerSigungu(Map map) {
-		
-		return dao.selectDinerSigungu(map);
-	}
-	@Override
-	public List<AttractionDTO> selectEventList(Map map) {
-		return dao.selectEventList(map);
-	}
-	@Override
-	public List<AttractionDTO> selectHotelList(Map map) {
-		return dao.selectHotelList(map);
-	}
-	@Override
-	public List<AttractionDTO> selectDinerList(Map map) {
-		return dao.selectDinerList(map);
-	}
 ///////////////////////////////////////////////////search place impl
 	@Override
 	public List<AttractionDTO> searchTwoPlace(Map map) {
@@ -242,20 +206,133 @@ public class MainServiceImpl implements MainService{
 	}
 ///////////////////////////////////////////////////update place impl
 	@Override
-	public int updateUrl(AttractionDTO dto) {
-		// TODO Auto-generated method stub
-		return dao.updateUrl(dto);
+	public int updatePlaces(Map map) {
+		String url = null;
+		if(map.get("url")!=null) url = map.get("url").toString();
+		String resultUrl =null;
+		if(url!=null) {
+			if(url.contains("\"")) {
+				map.put("url",url.split("\"")[1]);
+				resultUrl = map.get("url").toString();
+				if(!resultUrl.contains("http")) {
+					if(resultUrl.contains("href=\"")) {
+						resultUrl = url.split("href=\"")[1];
+						map.put("url",resultUrl.split("\"")[0]);
+					}
+					else {
+						resultUrl = url.split("href=")[1];
+						map.put("url",resultUrl.split("\"")[0]);
+						
+					}
+					
+					resultUrl = map.get("url").toString();
+				}
+			}
+			else {
+				resultUrl = url;
+				map.put("url",resultUrl);
+			}
+		}
+		String tel=null;
+		if(map.get("tel")!=null) tel = map.get("tel").toString();
+		if(tel!=null) {
+			if(tel.contains("<br />")) {
+				tel = tel.replace("<br />", "\r\n");
+			}
+			else if(tel.contains("<br/>")){
+				tel = tel.replace("<br/>", "\r\n");
+			}
+			else if(tel.contains("<br>")){
+				tel = tel.replace("<br>", "\r\n");
+			}
+			map.put("tel", tel);
+		}
+		if(map.get("playtime")!=null) {
+			String playtime = map.get("playtime").toString();
+			String resttime = map.get("resttime").toString();
+			if(playtime!=null) {
+				if(playtime.contains("<br />")) {
+					playtime = playtime.replace("<br />", "\r\n");
+				}
+				else if(playtime.contains("<br/>")){
+					playtime = playtime.replace("<br/>", "\r\n");
+				}
+				else if(playtime.contains("<br>")){
+					playtime = playtime.replace("<br>", "\r\n");
+				}
+				map.put("playtime", playtime);
+			}
+			if(resttime!=null) {
+				if(resttime.contains("<br />")) {
+					resttime = resttime.replace("<br />", "\r\n");
+				}
+				else if(resttime.contains("<br/>")){
+					resttime = resttime.replace("<br/>", "\r\n");
+				}
+				else if(resttime.contains("<br>")){
+					resttime.replace("<br>", "\r\n");
+				}
+				map.put("resttime", resttime);
+			}
+		}
+		if(map.get("eventtime")!=null) {
+			String eventtime = map.get("eventtime").toString();
+			String charge = map.get("charge").toString();
+			
+			if(eventtime!=null) {
+				if(eventtime.contains("<br>")) {
+					eventtime = eventtime.replace("<br>", "\r\n");
+				}
+				else if(eventtime.contains("<br />")) {
+					eventtime = eventtime.replace("<br />", "\r\n");
+				}
+				else if(eventtime.contains("<br/>")){
+					eventtime = eventtime.replace("<br/>", "\r\n");
+				}
+				map.put("eventtime", eventtime);
+			}
+			if(charge!=null) {
+				if(charge.contains("<br>")) {
+					charge = charge.replace("<br>", "\r\n");
+					
+				}
+				else if(charge.contains("<br />")) {
+					charge = charge.replace("<br />", "\r\n");
+				}
+				else if(charge.contains("<br/>")){
+					charge = charge.replace("<br/>", "\r\n");
+				}
+				map.put("charge", charge);
+			}
+		}
+		
+		return dao.updatePlaces(map);
 	}
 	////////////////////////////////////selectone place
 	@Override
 	public AttractionDTO selectOnePlace(int contentid) {
-		
-		return dao.selectOnePlace(contentid);
+		AttractionDTO dto = dao.selectOnePlace(contentid);
+		if(dto.getTitle()!=null) {
+			String title = dto.getTitle();
+			if(title.contains("유네스코")) {
+				title= title.split("\\[")[0].trim();
+				dto.setTitle(title);
+			}
+			if(title.contains("한국관광")) {
+				title= title.split("\\[")[0].trim();
+				dto.setTitle(title);
+			}
+		}
+		return dto;
 	}
 	@Override
 	public int checkPlace(int contentid) {
 		
 		return dao.checkPlace(contentid);
+	}
+	@Override
+	public int updateUrl(AttractionDTO dto) {
+		return dao.updateUrl(dto);
 	}
 
 

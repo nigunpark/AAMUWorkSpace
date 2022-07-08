@@ -24,33 +24,17 @@ public class MainDAO {
 		
 		return template.insert("placeInsert",dto);
 	}
-
-	public int infoInsert(AttractionDTO dto) {
-		
-		return template.insert("infoInsert",dto);
-	}
-
-	public int hotelInsert(AttractionDTO dto) {
-		
-		return template.insert("hotelInsert",dto);
-	}
-
-	public int dinerInsert(AttractionDTO dto) {
-		return template.insert("dinerInsert",dto);
-	}
-
-	public int eventInsert(AttractionDTO dto) {
-		
-		return template.insert("eventInsert",dto);
-	}
-	
 	
 	//////////////////////////get place dao
 	public List<AttractionDTO> selectPlacesList(Map map) {
 		
 		return template.selectList("selectPlacesList", map);
 	}
-	////////////////////////////�÷��ʿ� dao
+	public List<AttractionDTO> selectAttrSigungu(Map map) {
+		
+		return template.selectList("selectAttrSigungu",map);
+	}
+	////////////////////////////planner dao
 	public int plannerInsert(PlannerDTO dto) {
 
 		return template.insert("plannerInsert",dto);
@@ -66,41 +50,6 @@ public class MainDAO {
 		return template.selectList("selectRouteList",rbn);
 	}
 
-	public List<AttractionDTO> selectAttrSigungu(Map map) {
-		
-		return template.selectList("selectAttrSigungu",map);
-	}
-
-	public List<AttractionDTO> selectEventSigungu(Map map) {
-		
-		return template.selectList("selectEventSigungu",map);
-	}
-
-	public List<AttractionDTO> selectHotelSigungu(Map map) {
-		
-		return template.selectList("selectHotelSigungu", map);
-	}
-
-	public List<AttractionDTO> selectDinerSigungu(Map map) {
-
-		return template.selectList("selectDinerSigungu", map);
-	}
-
-	public List<AttractionDTO> selectEventList(Map map) {
-		
-		return template.selectList("selectEventList", map);
-	}
-
-	public List<AttractionDTO> selectHotelList(Map map) {
-
-		return template.selectList("selectHotelList", map);
-	}
-
-	public List<AttractionDTO> selectDinerList(Map map) {
-		
-		return template.selectList("selectDinerList", map);
-	}
-
 	public List<AttractionDTO> searchTwoPlace(Map map) {
 		
 		return template.selectList("searchTwoPlace", map);
@@ -111,10 +60,14 @@ public class MainDAO {
 		return template.selectList("searchOnePlace", map);
 	}
 
-	public int updateUrl(AttractionDTO dto) {
+	public int updatePlaces(Map map) {
 		// TODO Auto-generated method stub
-		return template.update("updateUrl",dto);
+		return template.update("updatePlaces",map);
 	}
+	public int updateUrl(AttractionDTO dto) {
+			
+			return template.update("updateUrl",dto);
+		}
 
 	public AttractionDTO selectOnePlace(int contentid) {
 		
@@ -125,6 +78,8 @@ public class MainDAO {
 		
 		return template.selectOne("checkPlace", contentid);
 	}
+
+	
 
 
 }
