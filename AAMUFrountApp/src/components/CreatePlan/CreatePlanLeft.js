@@ -1,10 +1,11 @@
 import {
+  faCalendar,
   faClock,
   faEllipsisVertical,
   faLocationDot,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./CreatePlanLeft.css";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import Stack from "@mui/material/Stack";
@@ -74,7 +75,9 @@ function Content({ index, fromWooJaeData }) {
   });
   let dispatch = useDispatch();
   let [showTimePicker, setShowTimePicker] = useState(false);
+  let accumTime = 0;
   if (fromWooJaeData.length === 0) return;
+  console.log("fromWooJaeData:", fromWooJaeData);
   return (
     <div className="createPlanLeft__schedule__content">
       <select className="createPlanLeft__schedule__select">
@@ -103,7 +106,7 @@ function Content({ index, fromWooJaeData }) {
       </span>
       <div style={{ marginBottom: "10px", fontSize: "13px" }}>
         <FontAwesomeIcon icon={faLocationDot} style={{ color: "var(--red)" }} />{" "}
-        3장소
+        {fromWooJaeData[index]["day" + (index + 1)].length}장소
       </div>
       <div className="createPlanLeft__schedule__time">
         <span style={{ fontSize: "13px" }}>시작</span>{" "}
@@ -167,26 +170,40 @@ function Content({ index, fromWooJaeData }) {
           </Stack>
         </LocalizationProvider>
       ) : null}
-      {console.log("fromWooJaeData:", fromWooJaeData)}
       {fromWooJaeData[index]["day" + (index + 1)].map((obj, i) => {
-        return <DetailSetting obj={obj} key={i} index={i} />;
+        return (
+          <DetailSetting obj={obj} key={i} index={i} accumTime={accumTime} />
+        );
       })}
     </div>
   );
 }
 
-function DetailSetting({ obj, index }) {
+function DetailSetting({ obj, index, accumTime }) {
   let reduxState = useSelector((state) => {
     return state;
   });
-  if (obj.dto === null) return;
+  let mTimeInputRef = useRef();
+  if (
+    obj.dto === null ||
+    reduxState.timeSetObj.find((obj) => {
+      return obj.day === index + 1;
+    }) === undefined
+  )
+    return;
+  accumTime = accumTime + getNAccumDetailTime(index, reduxState, obj);
   return (
     <div className="detailSetting__container">
       <div className="movingTime">
         <FontAwesomeIcon icon={faEllipsisVertical} />
         <div className="movingTime__time">
           {/* 이동시간 받아서 뿌려주는 input */}
-          <input type="number" style={{ width: "37px" }} defaultValue={5} />
+          <input
+            type="number"
+            style={{ width: "37px" }}
+            defaultValue={obj.mtime / 1000 / 60}
+            ref={mTimeInputRef}
+          />
           <span>분</span>
         </div>
       </div>
@@ -213,24 +230,13 @@ function DetailSetting({ obj, index }) {
             </div>
             <div className="detailLocation__clock">
               <span>
-                {reduxState.timeSetObj
-                  .find((obj) => {
-                    return obj.day === index + 1;
-                  })
-                  .time.toString()
-                  .trim()
-                  .padStart(2, "0")}
-                :
-                {reduxState.timeSetObj
-                  .find((obj) => {
-                    return obj.day === index + 1;
-                  })
-                  .min.toString()
-                  .trim()
-                  .padStart(2, "0")}
+                {Math.floor(accumTime / 60)}:{Math.floor(accumTime % 60)}
               </span>
               <span>~</span>
-              <span>ddd</span>
+              <span>
+                {Math.floor((accumTime + obj.atime / 1000 / 60) / 60)}:
+                {Math.floor((accumTime + obj.atime / 1000 / 60) % 60)}
+              </span>
             </div>
           </div>
           <div className="detailLocation__part-bottom">
@@ -243,6 +249,15 @@ function DetailSetting({ obj, index }) {
       </div>
     </div>
   );
+}
+
+function getNAccumDetailTime(index, reduxState, obj) {
+  let sTime = reduxState.timeSetObj.find((obj) => {
+    return obj.day === index + 1;
+  });
+  if (sTime.ampm === "오후") return sTime.time + 12;
+  let sumTime = sTime.time * 60 + sTime.min + obj.mtime / 1000 / 60;
+  return sumTime;
 }
 
 function getAmpmTmStart(newValue, index) {
