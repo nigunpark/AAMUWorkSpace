@@ -26,8 +26,6 @@ const Modal = ({setIsOpen}) => {
     }, []);
 
   return (
-    <Container >
-        <Overlay>
             <ModalWrap >
                 <Contents>    
                     <form className="form_rweets" >{/*onSubmit={onSubmit}// <form method="post" enctype="multipart/form-data">*/}
@@ -74,8 +72,6 @@ const Modal = ({setIsOpen}) => {
                     </form>
                 </Contents>
             </ModalWrap>
-        </Overlay>
-    </Container>
   )
 }
 
