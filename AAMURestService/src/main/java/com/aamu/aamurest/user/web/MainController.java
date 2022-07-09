@@ -1,6 +1,6 @@
 package com.aamu.aamurest.user.web;
 
-import java.text.SimpleDateFormat;
+import java.text.SimpleDateFormat;\
 
 import java.util.HashMap;
 import java.util.List;
