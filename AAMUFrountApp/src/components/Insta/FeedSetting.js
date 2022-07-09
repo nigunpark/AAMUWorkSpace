@@ -1,36 +1,53 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import styled from "styled-components";
 import React, {  useRef, useState } from 'react'
-import Dotsvg from './Dotsvg';
+import Profile from './ModalGroup/Profile';
 import MenuModal from './ModalGroup/MenuModal';
+import Comment from './ModalGroup/Comment';
 
 function FeedSetting() {
     let menuRef = useRef();
+    let profileRef = useRef();
+    let commentRef = useRef();
     const [heart,setHeart] = useState(false);
     const [modalShow, setModalShow] = useState(false);
+    const [profileModal, setprofileModal] = useState(false);
+    const [commentModal, setcommentModal] = useState(false);
     
-    // function menuModalRef(e){
-    //     e.stopPropagation();
-    //     if (e.target != menuRef.current) setModalShow(false);
-    // }
-    // window.addEventListener("click", menuModalRef);
+    function menuModalRef(e){
+        e.stopPropagation();
+        if (e.target != menuRef.current) setModalShow(false);
+    }
+    window.addEventListener("click", menuModalRef);
 
   return (
 <div>
     <div className="feeds-setting">  
             <div className="title-profile">
-                <img src="./img/bk.jpg" alt="프사" />
-                <span>eyesmag</span>       
-                {/* <button  onClick={() => setModalShow(!modalShow)}>
-                    <Dotsvg ></Dotsvg> 
-                {modalShow ? <MenuModal></MenuModal>:null}
-                </button>  
-                                   */}
-            <div className="dot" onClick={() => setModalShow(!modalShow)}>
-            {modalShow ?
-                <i className="fa-solid fa-ellipsis fa-2x">
-                 <MenuModal></MenuModal></i>:
-                 <i className="fa-solid fa-ellipsis fa-2x"></i>}
-            </div>
+                <img src="./img/bk.jpg" alt="프사" />                
+                    <span
+                    ref={profileRef}
+                    className="profileSpan"
+                    onMouseOver={()=>{setprofileModal(true)}}
+                    >eyesmag</span> 
+                    <div className="profile">          
+                        {profileModal ? 
+                            <div 
+                            ref={profileRef}
+                            onMouseOver={()=>{setprofileModal(true)}}
+                            onMouseOut={()=>{setprofileModal(false)}}>
+                                <Profile></Profile>
+                            </div>
+                        : null
+                        }         
+                    </div>
+            <div className="dot">
+                <i className="fa-solid fa-ellipsis fa-2x"
+                ref={menuRef}
+                onClick={() => setModalShow(!modalShow)}></i>
+                {modalShow 
+                    ?<MenuModal></MenuModal>
+                    :null}
+            </div>  
             </div>
             <div className="location">
                 <p>어딘가에서</p>
@@ -44,8 +61,19 @@ function FeedSetting() {
                         {heart ?<i class="fa-solid fa-heart fa-2x"onClick={()=>{setHeart(!heart)}} style={{color:'red'}} />
                         :<i className="fa-regular fa-heart fa-2x"  onClick={()=>{setHeart(!heart)}}></i>}
                     </div>
-                    <div className="talk-icon" >
-                        <i className="fa-regular fa-comment fa-2x"></i>
+                    <div >
+                        <i className="talk-icon fa-regular fa-comment fa-2x"
+                        onClick={()=>{setcommentModal(!commentModal)}}></i>
+                        {commentModal ?
+                        <Container1>
+                            <Overlay
+                            ref={commentRef} 
+                            onClick={ (e) => { if(e.target == commentRef.current) setcommentModal(false) } }
+                            >
+                                <Comment onClick={ () => setcommentModal(false) }></Comment>
+                            </Overlay>
+                        </Container1>
+                        :null}
                     </div>
                     <div className="share-icon">
                     <i className="fa-regular fa-paper-plane fa-2x"></i>
@@ -140,4 +168,25 @@ function FeedSetting() {
   )
 }
 
+const Container1 = styled.div`
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    z-index: 1000;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+`
+const Overlay = styled.div`
+    position: absolute;
+    margin-right:30px;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+`
 export default FeedSetting
