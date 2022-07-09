@@ -320,7 +320,7 @@ const KMap = ({
                   return val !== 0;
                 }).length !==
                   reduxState.tripPeriod.length - 1 ||
-                reduxState.arrForPickJangso.length !==
+                reduxState.arrForPickJangso.length <
                   reduxState.tripPeriod.length
               ) {
                 setShowAlert(true);
