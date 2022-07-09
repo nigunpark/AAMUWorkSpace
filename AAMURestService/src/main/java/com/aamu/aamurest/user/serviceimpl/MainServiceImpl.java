@@ -171,9 +171,9 @@ public class MainServiceImpl implements MainService{
 		return dao.plannerInsert(dto);
 	}
 	@Override
-	public int RouteInsert(RouteDTO route) {
+	public int RouteInsert(List<RouteDTO> routes) {
 		// TODO Auto-generated method stub
-		return dao.routeInsert(route);
+		return dao.routeInsert(routes);
 	}
 	
 ///////////////////////////////////////////////////get place impl
@@ -323,6 +323,27 @@ public class MainServiceImpl implements MainService{
 	public int updateUrl(AttractionDTO dto) {
 		return dao.updateUrl(dto);
 	}
+	
+	
+	
+	
+	///////////////planner update
+	@Override
+	public int updateRoute(List<RouteDTO> routes) {
+		
+		return dao.updateRoute(routes);
+	}
+	@Override
+	public int updatePlanner(PlannerDTO dto) {
+
+		return dao.updatePlanner(dto);
+	}
+	@Override
+	public int deletePlanner(Map map) {
+		
+		return dao.deletePlanner(map);
+	}
+
 
 
 }

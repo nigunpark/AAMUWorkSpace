@@ -93,10 +93,34 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 		return dao.commuPlaceUpdate(map);
 	}
 	
+	//글 삭제용
+	@Override
+	public int commuDelete(String lno) {
+		return dao.commuDelete(lno);
+	}
+	
+	//댓글 생성용
+	@Override
+	public int commuCommentInsert(Map map) {
+		return dao.commuCommentInsert(map);
+	}
+	
+	//댓글 수정용
+	@Override
+	public int commuCommentUpdate(Map map) {
+		return dao.commuCommentUpdate(map);
+	}
+	
 	//글 좋아요_insert likeboard 테이블
 	@Override
 	public int commuLikeInsert(Map map) {
 		return dao.commuLikeInsert(map);
+	}
+	
+	//글 좋아요_update community테이블에 likecount
+	@Override
+	public int commuLikeUpdate(Map map) {
+		return dao.commuLikeUpdate(map);
 	}
 	
 	

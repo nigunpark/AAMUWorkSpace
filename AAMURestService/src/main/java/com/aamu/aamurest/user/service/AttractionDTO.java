@@ -1,5 +1,10 @@
 package com.aamu.aamurest.user.service;
 
+import java.util.List;
+
+
+import com.aamu.aamurest.user.service.api.KakaoReview.CommentInfo;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -33,4 +38,6 @@ public class AttractionDTO {
 	private String eventtime;
 	private long atime = 2*1000*60*60;
 	private String table;
+	private double star;
+	public List<CommentInfo> commentInfo=null;
 }

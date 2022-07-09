@@ -71,9 +71,29 @@ public class CommuDAO {
 		return template.update("commuPlaceUpdate",map);
 	}
 	
+	//글 삭제용
+	public int commuDelete(String lno) {
+		return template.delete("commuDelete",lno);
+	}
+	
+	//댓글 생성용
+	public int commuCommentInsert(Map map) {
+		return template.insert("commuCommentInsert",map);
+	}
+	
+	//댓글 수정용
+	public int commuCommentUpdate(Map map) {
+		return template.update("commuCommentUpdate",map);
+	}
+	
 	//글 좋아요_insert likeboard 테이블
 	public int commuLikeInsert(Map map) {
 		return template.insert("commuLikeInsert",map);
+	}
+	
+	//글 좋아요_update community테이블에 likecount
+	public int commuLikeUpdate(Map map) {
+		return template.update("commuLikeUpdate",map);
 	}
 	
 

@@ -34,7 +34,22 @@ public interface CommuService<T> {
 	//글 수정용_commuplace 수정
 	int commuPlaceUpdate(Map map);
 	
-	//글 좋아요
+	//글 삭제용
+	int commuDelete(String lno);
+	
+	//댓글 생성용
+	int commuCommentInsert(Map map);
+	
+	//댓글 수정용
+	int commuCommentUpdate(Map map);
+	
+	//글 좋아요_insert likeboard 테이블
 	int commuLikeInsert(Map map);
+	
+	//글 좋아요_update community테이블에 likecount
+	int commuLikeUpdate(Map map);
+	
+	//글 좋아요 취소
+	//int commuDislikeDelete(Map map);
 	
 }

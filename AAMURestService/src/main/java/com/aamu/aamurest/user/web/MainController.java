@@ -10,6 +10,8 @@ import java.util.Vector;
 import javax.swing.event.ListSelectionEvent;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,11 +20,14 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 
 import com.aamu.aamurest.user.service.AttractionDTO;
 import com.aamu.aamurest.user.service.MainService;
 import com.aamu.aamurest.user.service.PlannerDTO;
 import com.aamu.aamurest.user.service.RouteDTO;
+import com.aamu.aamurest.user.service.api.KakaoReview;
+import com.aamu.aamurest.user.service.api.KakaoReview.CommentInfo;
 
 @RestController
 @CrossOrigin("*")
@@ -31,42 +36,40 @@ public class MainController {
 	@Autowired
 	private MainService service;
 	
+	@Autowired
+	private RestTemplate restTemplate;
+	
 	@PostMapping("planner/edit")
 	public int plannerInsert(PlannerDTO dto) {
 		int affected = 0;
-		int countRoute = 0;
 		affected = service.plannerInsert(dto);
 		List<RouteDTO> routes = dto.getRoute();
-		Map map = new HashMap();
-
-		for(RouteDTO route:routes) {
-			service.RouteInsert(route);
-			countRoute++;
-		}
+		
+		service.RouteInsert(routes);
 		
 		
 		return affected;
 	}
 	
 	@PutMapping("planner/edit")
-	public Map plannerUpdate(PlannerDTO dto) {
+	public int plannerUpdate(PlannerDTO dto) {
 		int affected = 0;
 		
+		affected = service.updatePlanner(dto);
+		List<RouteDTO> routes = dto.getRoute();
 		
-		Map map = new HashMap();
-		map.put("result",affected);
+		service.updateRoute(routes);
 		
-		return map;
+		
+		return affected;
 	}
 	@DeleteMapping("planner/edit")
-	public Map plannerDelete(PlannerDTO dto) {
+	public int deletePlanner(@RequestParam Map map) {
 		int affected = 0;
+		affected = service.deletePlanner(map);
 		
 		
-		Map map = new HashMap();
-		map.put("result",affected);
-		
-		return map;
+		return affected;
 	}
 	@PostMapping("planner/data")
 	public PlannerDTO plannerData(@RequestBody PlannerDTO dto) {
@@ -190,8 +193,37 @@ public class MainController {
 			}
 			list = service.selectPlacesList(map);
 		}
+		for(AttractionDTO dto:list) {
+			
+			if(dto.getKakaokey()!=null) {
+				String uri = "http://127.0.0.1:5000/aamu?map="+dto.getKakaokey();
+				
+				ResponseEntity<KakaoReview> responseEntity = 
+						restTemplate.exchange(uri, HttpMethod.GET, null, KakaoReview.class);
+				
+				
+				dto.setStar(responseEntity.getBody().getBasicInfo().getStar());
+				list.add(dto);
+			}
+			
+		}
 		
 		return list;
+	}
+	
+	@GetMapping("info/review")
+	public KakaoReview getReview(@RequestParam String kakaoKey) {
+		KakaoReview kakaReview = new KakaoReview();
+		if(kakaoKey!=null) {
+			
+			String uri = "http://127.0.0.1:5000/aamu?map="+kakaoKey;
+			
+			ResponseEntity<KakaoReview> responseEntity = 
+					restTemplate.exchange(uri, HttpMethod.GET, null, KakaoReview.class);
+			kakaReview = responseEntity.getBody();
+		}
+		return kakaReview;
+		
 	}
 	
 	@GetMapping("/info/search")
