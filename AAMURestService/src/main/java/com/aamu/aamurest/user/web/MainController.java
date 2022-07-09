@@ -10,6 +10,8 @@ import java.util.Vector;
 import javax.swing.event.ListSelectionEvent;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,11 +20,14 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 
 import com.aamu.aamurest.user.service.AttractionDTO;
 import com.aamu.aamurest.user.service.MainService;
 import com.aamu.aamurest.user.service.PlannerDTO;
 import com.aamu.aamurest.user.service.RouteDTO;
+import com.aamu.aamurest.user.service.api.KakaoReview;
+import com.aamu.aamurest.user.service.api.KakaoReview.CommentInfo;
 
 @RestController
 @CrossOrigin("*")
@@ -30,6 +35,9 @@ public class MainController {
 	
 	@Autowired
 	private MainService service;
+	
+	@Autowired
+	private RestTemplate restTemplate;
 	
 	@PostMapping("planner/edit")
 	public int plannerInsert(PlannerDTO dto) {
@@ -190,8 +198,37 @@ public class MainController {
 			}
 			list = service.selectPlacesList(map);
 		}
+		for(AttractionDTO dto:list) {
+			
+			if(dto.getKakaokey()!=null) {
+				String uri = "http://127.0.0.1:5000/aamu?map="+dto.getKakaokey();
+				
+				ResponseEntity<KakaoReview> responseEntity = 
+						restTemplate.exchange(uri, HttpMethod.GET, null, KakaoReview.class);
+				
+				
+				dto.setStar(responseEntity.getBody().getBasicInfo().getStar());
+				list.add(dto);
+			}
+			
+		}
 		
 		return list;
+	}
+	
+	@GetMapping("info/review")
+	public KakaoReview getReview(@RequestParam String kakaoKey) {
+		KakaoReview kakaReview = new KakaoReview();
+		if(kakaoKey!=null) {
+			
+			String uri = "http://127.0.0.1:5000/aamu?map="+kakaoKey;
+			
+			ResponseEntity<KakaoReview> responseEntity = 
+					restTemplate.exchange(uri, HttpMethod.GET, null, KakaoReview.class);
+			kakaReview = responseEntity.getBody();
+		}
+		return kakaReview;
+		
 	}
 	
 	@GetMapping("/info/search")
