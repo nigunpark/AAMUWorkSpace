@@ -1,6 +1,8 @@
 package com.aamu.aamuandroidapp.initfragment
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +16,7 @@ import com.aamu.aamuandroidapp.R
 import com.aamu.aamuandroidapp.databinding.FragmentLoadingBinding
 import com.aamu.aamuandroidapp.util.setStatusBarOrigin
 import com.aamu.aamuandroidapp.util.setStatusBarTransparent
+import kotlinx.coroutines.delay
 import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledExecutorService
 import java.util.concurrent.TimeUnit
@@ -43,13 +46,9 @@ class LoadingFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         requireActivity().setStatusBarTransparent()
-        val worker : ScheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
-        val runnable = Runnable {
-
+        Handler(Looper.getMainLooper()).postDelayed({
             navController.navigate(R.id.action_loadingFragment_to_loginFragment)
-        }
-        //2초후에 스레드 실행하기
-        worker.schedule(runnable,5, TimeUnit.SECONDS);
+        },5000)
     }
 
     override fun onStop() {

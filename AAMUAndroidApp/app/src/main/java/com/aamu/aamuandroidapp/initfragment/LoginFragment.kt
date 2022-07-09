@@ -2,6 +2,8 @@ package com.aamu.aamuandroidapp.initfragment
 
 import android.content.Context
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +13,9 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.aamu.aamuandroidapp.R
 import com.aamu.aamuandroidapp.databinding.FragmentLoginBinding
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class LoginFragment : Fragment() {
 
@@ -33,7 +38,11 @@ class LoginFragment : Fragment() {
         navController = Navigation.findNavController(view)
 
         binding.cirLoginButton.setOnClickListener{
-            navController.navigate(R.id.action_loginFragment_to_mainFragment)
+            binding.cirLoginButton.startAnimation()
+            Handler(Looper.getMainLooper()).postDelayed({
+                navController.navigate(R.id.action_loginFragment_to_mainFragment)
+            },5000)
+
         }
     }
 
