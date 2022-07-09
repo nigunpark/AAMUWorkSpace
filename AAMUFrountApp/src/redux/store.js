@@ -247,6 +247,17 @@ let monthNdate = createSlice({
 });
 export let { addMonthNDate, resetMonthNDate } = monthNdate.actions;
 
+// let accum = createSlice({
+//   name: "accum",
+//   initialState: 0,
+//   reducers: {
+//     addToAccum(state, action) {
+//       state = state + action.payload;
+//     },
+//   },
+// });
+// export let { addToAccum } = accum.actions;
+
 export default configureStore({
   reducer: {
     localNameForMarker: localNameForMarker.reducer,
@@ -264,6 +275,7 @@ export default configureStore({
     tripPeriod: tripPeriod.reducer,
     monthNdate: monthNdate.reducer,
     movingTime: movingTime.reducer,
+    // accum: accum.reducer,
   },
   //planTripTime.js 168번줄쯤의 fullDate를 위한 serializable무시
   middleware: (getDefaultMiddleware) =>
