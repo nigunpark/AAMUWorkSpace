@@ -1,5 +1,6 @@
 import {
   faCalendar,
+  faChevronDown,
   faClock,
   faEllipsisVertical,
   faLocationDot,
@@ -13,36 +14,90 @@ import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { TextField } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { corrTimeSetObj } from "../../redux/store";
+import { addToAccum, corrTimeSetObj } from "../../redux/store";
 const CreatePlanLeft = ({ currPosition, fromWooJaeData }) => {
   let reduxState = useSelector((state) => {
     return state;
   });
-
+  const [whichModal, setWhichModal] = useState("전체일정");
+  const dayRef = useRef();
+  // console.log("fromWooJaeData:", fromWooJaeData);
+  const [temp, setTemp] = useState("");
+  useEffect(() => {
+    setTemp(dayRef.current);
+  }, []);
   return (
     <div className="createPlanLeft">
       <div className="createPlanLeft__days">
         <h5>일정</h5>
-        <span style={{ fontSize: "11px" }}>전체일정</span>
+        <span
+          className="wholeDays days-container-active"
+          ref={dayRef}
+          style={{ fontSize: "11px" }}
+          onClick={(e) => {
+            setWhichModal("전체일정");
+            setTemp(e.target);
+            temp.classList.remove("days-container-active");
+            e.target.classList.add("days-container-active");
+          }}
+        >
+          전체일정
+        </span>
         <div className="createPlanLeft__days-container">
           {reduxState.tripPeriod.map((day, index) => {
-            return <span key={index}>Day{index + 1}</span>;
+            return (
+              <span
+                className="days-span"
+                key={index}
+                onClick={(e) => {
+                  setWhichModal(`day${index + 1}`);
+                  setTemp(e.target);
+                  temp.classList.remove("days-container-active");
+                  e.target.classList.add("days-container-active");
+                }}
+              >
+                Day{index + 1}
+              </span>
+            );
           })}
         </div>
       </div>
+      <div style={{ width: "100%" }}>
+        <WhichModal
+          whichModal={whichModal}
+          currPosition={currPosition}
+          fromWooJaeData={fromWooJaeData}
+        />
+      </div>
+    </div>
+  );
+};
+
+function WhichModal({ whichModal, currPosition, fromWooJaeData }) {
+  if (whichModal === "전체일정") {
+    return (
       <WholeSchedule
         currPosition={currPosition}
         fromWooJaeData={fromWooJaeData}
       />
-    </div>
-  );
-};
+    );
+  } else {
+    let obj = fromWooJaeData.find((obj, i) => {
+      return Object.keys(obj).toString() == whichModal;
+    });
+    let arr = obj[Object.keys(obj)];
+    let newArr = new Array(arr.length - 1).fill(0);
+    return newArr.map((val, index) => {
+      return <Step arr={arr} index={index} key={index} />;
+    });
+  }
+}
 
 function WholeSchedule({ currPosition, fromWooJaeData }) {
   let reduxState = useSelector((state) => {
     return state;
   });
-
+  let [accumTime, setAccumTime] = useState(0);
   return (
     <div className="createPlanLeft__schedule">
       <div className="createPlanLeft__schedule-title">
@@ -61,6 +116,8 @@ function WholeSchedule({ currPosition, fromWooJaeData }) {
               index={index}
               key={index}
               fromWooJaeData={fromWooJaeData}
+              accumTime={accumTime}
+              setAccumTime={setAccumTime}
             />
           );
         })}
@@ -69,15 +126,14 @@ function WholeSchedule({ currPosition, fromWooJaeData }) {
   );
 }
 
-function Content({ index, fromWooJaeData }) {
+function Content({ index, fromWooJaeData, accumTime, setAccumTime }) {
   let reduxState = useSelector((state) => {
     return state;
   });
   let dispatch = useDispatch();
   let [showTimePicker, setShowTimePicker] = useState(false);
-  let accumTime = 0;
+  // console.log("accumTime:", accumTime);
   if (fromWooJaeData.length === 0) return;
-  console.log("fromWooJaeData:", fromWooJaeData);
   return (
     <div className="createPlanLeft__schedule__content">
       <select className="createPlanLeft__schedule__select">
@@ -172,18 +228,40 @@ function Content({ index, fromWooJaeData }) {
       ) : null}
       {fromWooJaeData[index]["day" + (index + 1)].map((obj, i) => {
         return (
-          <DetailSetting obj={obj} key={i} index={i} accumTime={accumTime} />
+          <DetailSetting
+            obj={obj}
+            key={i}
+            index={i}
+            accumTime={accumTime}
+            setAccumTime={setAccumTime}
+          />
         );
       })}
     </div>
   );
 }
 
-function DetailSetting({ obj, index, accumTime }) {
+function DetailSetting({ obj, index, accumTime, setAccumTime }) {
   let reduxState = useSelector((state) => {
     return state;
   });
-  let mTimeInputRef = useRef();
+  const [upTime, setUpTime] = useState(0);
+  const [downTime, setDownTime] = useState(0);
+  useEffect(() => {
+    if (index === 0) {
+      let firstAccum = getNAccumDetailTime(index, reduxState, obj);
+      // console.log(firstAccum);
+      setUpTime(firstAccum);
+      setDownTime(firstAccum + obj.atime / 1000 / 60);
+      setAccumTime(firstAccum + obj.atime / 1000 / 60);
+    }
+    if (index !== 0) {
+      setUpTime(accumTime + obj.mtime / 1000 / 60);
+      setDownTime(accumTime + obj.mtime / 1000 / 60 + obj.atime / 1000 / 60);
+      setAccumTime(accumTime + obj.mtime / 1000 / 60 + obj.atime / 1000 / 60);
+    }
+  }, []);
+  const [showMemo, setShowMemo] = useState(false);
   if (
     obj.dto === null ||
     reduxState.timeSetObj.find((obj) => {
@@ -191,7 +269,6 @@ function DetailSetting({ obj, index, accumTime }) {
     }) === undefined
   )
     return;
-  accumTime = accumTime + getNAccumDetailTime(index, reduxState, obj);
   return (
     <div className="detailSetting__container">
       <div className="movingTime">
@@ -202,7 +279,6 @@ function DetailSetting({ obj, index, accumTime }) {
             type="number"
             style={{ width: "37px" }}
             defaultValue={obj.mtime / 1000 / 60}
-            ref={mTimeInputRef}
           />
           <span>분</span>
         </div>
@@ -223,37 +299,107 @@ function DetailSetting({ obj, index, accumTime }) {
           <div className="detailLocation__part-top">
             <div>
               <div>{obj.dto.title}</div>
-              <div>
+              <div style={{ color: "var(--orange)" }}>
                 {obj.atime / 1000 / 60 / 60 + "시간"}{" "}
                 {((obj.atime / 1000 / 60) % 60) + "분"}
               </div>
             </div>
             <div className="detailLocation__clock">
               <span>
-                {Math.floor(accumTime / 60)}:{Math.floor(accumTime % 60)}
+                {Math.floor(upTime / 60)}:{Math.floor(upTime % 60)}
               </span>
               <span>~</span>
               <span>
-                {Math.floor((accumTime + obj.atime / 1000 / 60) / 60)}:
-                {Math.floor((accumTime + obj.atime / 1000 / 60) % 60)}
+                {Math.floor(downTime / 60)}:{Math.floor(downTime % 60)}
               </span>
             </div>
           </div>
           <div className="detailLocation__part-bottom">
             <span>시간표</span>
-            <span>구매</span>
-            <span>메모</span>
+            <a
+              href={`https://www.myrealtrip.com/search?q=${obj.dto.title}`}
+              target="blank"
+            >
+              <span>구매</span>
+            </a>
+            <span
+              onClick={() => {
+                setShowMemo(true);
+              }}
+            >
+              메모
+            </span>
             <span>삭제</span>
           </div>
+        </div>
+        {showMemo && <MemoArea setShowMemo={setShowMemo} />}
+      </div>
+    </div>
+  );
+}
+
+function Step({ arr, index }) {
+  return (
+    <div className="step">
+      <div className="step__container">
+        <div className="step__step">
+          <span>STEP{index + 1}</span>
+        </div>
+        <div className="step__content">
+          <span>{arr[index].dto.title}</span>
+          <FontAwesomeIcon icon={faChevronDown} />
+          <span>{arr[index + 1].dto.title}</span>
+        </div>
+        <div className="step__btn">
+          <a
+            target="_blank"
+            className="step__btn-atag"
+            href={`https://map.kakao.com/?sName=${arr[index].dto.title}&eName=${
+              arr[index + 1].dto.title
+            }`}
+          >
+            상세경로
+          </a>
         </div>
       </div>
     </div>
   );
 }
 
+function MemoArea({ setShowMemo }) {
+  let textAreaRef = useRef();
+
+  return (
+    <div className="memoArea__container">
+      <div className="memoArea__content">
+        <div>
+          <h5>Memo</h5>
+        </div>
+        <div className="memoArea__textArea">
+          <textarea
+            ref={textAreaRef}
+            rows="3"
+            cols="25"
+            style={{ resize: "none" }}
+          ></textarea>
+        </div>
+      </div>
+      <div className="memoArea__btn">
+        <span
+          onClick={() => {
+            setShowMemo(false);
+          }}
+        >
+          완료
+        </span>
+      </div>
+    </div>
+  );
+}
 function getNAccumDetailTime(index, reduxState, obj) {
-  let sTime = reduxState.timeSetObj.find((obj) => {
-    return obj.day === index + 1;
+  // console.log("timeSetObj", reduxState.timeSetObj);
+  let sTime = reduxState.timeSetObj.find((val) => {
+    return val.day === index + 1;
   });
   if (sTime.ampm === "오후") return sTime.time + 12;
   let sumTime = sTime.time * 60 + sTime.min + obj.mtime / 1000 / 60;
