@@ -160,16 +160,6 @@ function User() {
               <span className="follow">팔로우</span>
             </div>
           </div>
-          <div className="recommend-contents">
-            <img src="./img/bk.jpg" alt="추사" />
-            <div>
-              <p className="user-id">0hyun0hyun</p>
-              <p className="user-name">0hyun0hyun님 외 2명이...</p>
-            </div>
-            <div>
-              <span className="follow">팔로우</span>
-            </div>
-          </div>
         </div>
       </div>
       <div className="information">
