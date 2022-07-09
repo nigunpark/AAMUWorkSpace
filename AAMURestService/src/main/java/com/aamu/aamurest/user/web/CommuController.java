@@ -9,11 +9,13 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
@@ -96,7 +98,7 @@ public class CommuController {
 	}
 	
 	//글 수정용
-	@PutMapping("gram/edit/{id}")
+	@PutMapping("/gram/edit/{id}")
 	public Map commuUpdate(@PathVariable String id,@RequestParam Map map) {
 		int commuUpdateAffected=commuService.commuUpdate(map);
 		//commuplace에 contentid수정
@@ -104,27 +106,77 @@ public class CommuController {
 		Map resultMap = new HashMap();
 		if(commuUpdateAffected==1 && commuPlaceUpdateAffected==1) 
 			resultMap.put("result", "updateSuccess");
-		else resultMap.put("result", "updateNotSuccess");
+		else 
+			resultMap.put("result", "updateNotSuccess");
+		return resultMap;
+	}
+	
+	//글 삭제용
+	@DeleteMapping("/gram/edit/{lno}")
+	public Map commuDelete(@PathVariable String lno) {
+		int commuDeleteAffected=commuService.commuDelete(lno);
+		Map map = new HashMap();
+		if(commuDeleteAffected == 1)
+			map.put("result", "deleteSuccess");
+		else
+			map.put("result", "deleteNotSuccess");
+		return map;
+	}
+	
+	//댓글 생성용
+	@PostMapping("/gram/comment/edit")
+	public Map commuCommentInsert(@RequestParam Map map) {
+		System.out.println("(cc)map:"+map);
+		int commuCommentAffected=commuService.commuCommentInsert(map);
+		Map resultMap = new HashMap();
+		if(commuCommentAffected == 1)
+			resultMap.put("result", "insertCommentSuccess");
+		else
+			resultMap.put("result", "insertCommentNotSuccess");
+		return resultMap;
+	}
+	
+	//댓글 수정용
+	@PutMapping("/gram/comment/edit")
+	public Map commuCommentUpdate(@RequestParam Map map) {
+		System.out.println("(cc)map:"+map);
+		int commuCommentUpdateAffected=commuService.commuCommentUpdate(map);
+		Map resultMap = new HashMap();
+		if(commuCommentUpdateAffected == 1)
+			resultMap.put("result", "UpdateCommentSuccess");
+		else
+			resultMap.put("result", "UpdateCommentNotSuccess");
 		return resultMap;
 	}
 	
 	//글 좋아요
 	//글의 likecount수를 뿌려줘야됨
-	//"like":"true" 넘어오면 좋아요 눌렀잖아 그럼 그 lno에 대한거 likeboard테이블에 insert 시켜주기
+	//좋아요 눌렀잖아 그럼 그 lno에 대한거 likeboard테이블에 insert 시켜주기 
 	//community테이블에 likecount를 +1 update시켜주기
 	//update 성공하면 resultInsertLike true 반환
-	@GetMapping("/gram/like")
+	@PostMapping("/gram/like")
 	public Map commuLike(@RequestParam Map map) {
-		int commuLikeInsertAffected=commuService.commuLikeInsert(map);
+		//likeboard테이블에 insert
+		int commuLikeInsertAffected=commuService.commuLikeInsert(map); 
+		//community테이블에 rcount update 
+		int commuLikeUpdateAffected=commuService.commuLikeUpdate(map);
 		Map resultMap = new HashMap();
-		if(commuLikeInsertAffected==1)
-			resultMap.put("result", "true");
-		else resultMap.put("result", "false");
-		return map;
+		if(commuLikeInsertAffected==1 && commuLikeUpdateAffected==1)
+			resultMap.put("result", "likeSuccess");
+		else 
+			resultMap.put("result", "likeNotSuccess");
+		return resultMap;
 	}
 	
 	//글 좋아요 취소
+	//likecount가 0이면 likeboard테이블이
 	//like테이블 delete 시켜주고
-	//해당 lno communituy테이블에 likecount-1 update시켜죽
+	//해당 lno communituy테이블에 likecount-1 update시켜주기
+	/*
+	@DeleteMapping("/gram/dislike")
+	public Map commuDislike(@RequestParam Map map) {
+		commuService.commuDislikeDelete(map);
+	}
+	*/
 
 }
