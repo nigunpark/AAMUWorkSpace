@@ -36,10 +36,28 @@
 		INSERT INTO routeboard VALUES(SEQ_PLA.NEXTVAL,#{title},SYSDATE,#{id})
 	</insert>
 	
-	<insert id="routeInsert" parameterType="routeDTO">
-		INSERT INTO route VALUES(#{contentid},#{day},#{starttime},#{atime},#{mtime})
+	<insert id="routeInsert" parameterType="List">
+		INSERT INTO route VALUES
+		<foreach collection="list" item="routeDTO" separator=",">
+		(#{item.contentid},#{item.day},#{item.starttime},#{item.atime},#{item.mtime})
+		</foreach>
 	</insert>
+	<update id="updatePlanner" parameterType="planDTO">
+	 	UPDATE routeboard SET title=#{title} WHERE rbn=#{rbn}
+	</update>
 	
+	<update id="updateRoute" parameterType="List">
+		UPDATE route SET
+		<foreach collection="list" item="routeDTO" separator=",">
+		contentid=#{item.contentid},day=#{item.day},starttime=#{item.starttime},atime=#{item.atime},mtime=#{item.mtime} WHERE rbn=#{rbn}
+		</foreach>
+	</update>
+
+
+	<delete id="deletePlanner" parameterType="Map">
+		DELETE FROM routeboard WHERE rbn=#{rbn}
+	</delete>
+		
 	<select id="selectRouteList" parameterType="int" resultType="routeDTO">
 		SELECT * FROM route WHERE rbn=#{rbn}
 	</select>
@@ -88,4 +106,6 @@
 	<select id="checkPlace" parameterType="int" resultType="int">
 		SELECT count(*) FROM places WHERE contentid=#{contentid}
 	</select>
+	
+
 </mapper>

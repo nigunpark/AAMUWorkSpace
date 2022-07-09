@@ -42,39 +42,34 @@ public class MainController {
 	@PostMapping("planner/edit")
 	public int plannerInsert(PlannerDTO dto) {
 		int affected = 0;
-		int countRoute = 0;
 		affected = service.plannerInsert(dto);
 		List<RouteDTO> routes = dto.getRoute();
-		Map map = new HashMap();
-
-		for(RouteDTO route:routes) {
-			service.RouteInsert(route);
-			countRoute++;
-		}
+		
+		service.RouteInsert(routes);
 		
 		
 		return affected;
 	}
 	
 	@PutMapping("planner/edit")
-	public Map plannerUpdate(PlannerDTO dto) {
+	public int plannerUpdate(PlannerDTO dto) {
 		int affected = 0;
 		
+		affected = service.updatePlanner(dto);
+		List<RouteDTO> routes = dto.getRoute();
 		
-		Map map = new HashMap();
-		map.put("result",affected);
+		service.updateRoute(routes);
 		
-		return map;
+		
+		return affected;
 	}
 	@DeleteMapping("planner/edit")
-	public Map plannerDelete(PlannerDTO dto) {
+	public int deletePlanner(@RequestParam Map map) {
 		int affected = 0;
+		affected = service.deletePlanner(map);
 		
 		
-		Map map = new HashMap();
-		map.put("result",affected);
-		
-		return map;
+		return affected;
 	}
 	@PostMapping("planner/data")
 	public PlannerDTO plannerData(@RequestBody PlannerDTO dto) {

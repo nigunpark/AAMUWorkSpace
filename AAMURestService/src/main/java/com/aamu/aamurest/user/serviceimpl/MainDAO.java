@@ -40,9 +40,9 @@ public class MainDAO {
 		return template.insert("plannerInsert",dto);
 	}
 
-	public int routeInsert(RouteDTO route) {
+	public int routeInsert(List<RouteDTO> routes) {
 		
-		return template.insert("routeInsert",route);
+		return template.insert("routeInsert",routes);
 	}
 
 	public List<RouteDTO> selectRouteList(int rbn) {
@@ -77,6 +77,21 @@ public class MainDAO {
 	public int checkPlace(int contentid) {
 		
 		return template.selectOne("checkPlace", contentid);
+	}
+
+	public int updateRoute(List<RouteDTO> routes) {
+		
+		return template.update("updateRoute", routes);
+	}
+
+	public int updatePlanner(PlannerDTO dto) {
+
+		return template.update("updatePlanner", dto);
+	}
+
+	public int deletePlanner(Map map) {
+		
+		return template.delete("deletePlanner",map);
 	}
 
 	
