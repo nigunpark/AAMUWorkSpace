@@ -3,6 +3,9 @@ import React, {  useRef, useState } from 'react'
 import Profile from './ModalGroup/Profile';
 import MenuModal from './ModalGroup/MenuModal';
 import Comment from './ModalGroup/Comment';
+import Slider from "react-slick";
+import "./ModalGroup/slick-theme.css";
+import "./ModalGroup/slick.css";
 
 function FeedSetting() {
     let menuRef = useRef();
@@ -12,6 +15,14 @@ function FeedSetting() {
     const [modalShow, setModalShow] = useState(false);
     const [profileModal, setprofileModal] = useState(false);
     const [commentModal, setcommentModal] = useState(false);
+
+    const settings = {
+        dots: true,
+        infinite: true,
+        speed: 500,
+        slidesToShow: 1,
+        slidesToScroll: 1
+      };
     
     function menuModalRef(e){
         e.stopPropagation();
@@ -52,17 +63,35 @@ function FeedSetting() {
             <div className="location">
                 <p>어딘가에서</p>
             </div>
-            <div className="container">
-            <img src="img/v.jpg" className="main-image" alt="메인" />
+                    
+            <div>
+                <Slider {...settings}>
+                    <div className="container">
+                    <img src="img/b.jpg" className="main-image" alt="메인" />
+                    </div>
+                    <div className="container">
+                    <img src="img/b.jpg" className="main-image" alt="메인" />
+                    </div>
+                    <div className="container">
+                    <img src="img/b.jpg" className="main-image" alt="메인" />
+                    </div>
+                    <div className="container">
+                    <img src="img/b.jpg" className="main-image" alt="메인" />
+                    </div>
+                    <div className="container">
+                    <img src="img/b.jpg" className="main-image" alt="메인" />
+                    </div>
+                </Slider>
             </div>
+
             <div className="feeds-contents">
                 <div className="feeds-icons">
                     <div className='heart-icon'>
                         {heart ?<i class="fa-solid fa-heart fa-2x"onClick={()=>{setHeart(!heart)}} style={{color:'red'}} />
                         :<i className="fa-regular fa-heart fa-2x"  onClick={()=>{setHeart(!heart)}}></i>}
                     </div>
-                    <div >
-                        <i className="talk-icon fa-regular fa-comment fa-2x"
+                    <div className="talk-icon ">
+                        <i className=" fa-regular fa-comment fa-2x"
                         onClick={()=>{setcommentModal(!commentModal)}}></i>
                         {commentModal ?
                         <Container1>
@@ -116,8 +145,27 @@ function FeedSetting() {
                 <p>어딘가에서</p>
             </div>
             <div>
-            <div className="container">
+            {/* <div className="container">
             <img src="img/b.jpg" className="main-image" alt="메인" />
+            </div> */}
+            <div>
+                <Slider {...settings}>
+                    <div>
+                    <img src="img/b.jpg" className="main-image" alt="메인" />
+                    </div>
+                    <div>
+                    <img src="img/b.jpg" className="main-image" alt="메인" />
+                    </div>
+                    <div>
+                    <img src="img/b.jpg" className="main-image" alt="메인" />
+                    </div>
+                    <div>
+                    <img src="img/b.jpg" className="main-image" alt="메인" />
+                    </div>
+                    <div>
+                    <img src="img/b.jpg" className="main-image" alt="메인" />
+                    </div>
+                </Slider>
             </div>
             </div>
             <div className="feeds-contents">
@@ -184,7 +232,6 @@ const Container1 = styled.div`
 `
 const Overlay = styled.div`
     position: absolute;
-    margin-right:30px;
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.6);
