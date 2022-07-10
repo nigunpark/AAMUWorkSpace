@@ -5,19 +5,19 @@ const MyHomeTopLine = () => {
         <div className="projects-status">
 
             <div className="item-status">
-                <span className="status-number">45</span>
-                <span className="status-type">In Progress</span>
+                <span className="status-number">4</span>
+                <span className="status-type">Total</span>
             </div>
 
             <div className="item-status">
-                <span className="status-number">24</span>
-                <span className="status-type">Upcoming</span>
+                <span className="status-number">0</span>
+                <span className="status-type">Upload</span>
             </div>
 
-            <div className="item-status">
+            {/* <div className="item-status">
                 <span className="status-number">62</span>
                 <span className="status-type">Total Projects</span>
-            </div>
+            </div> */}
 
             
             
