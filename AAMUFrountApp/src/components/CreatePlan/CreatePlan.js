@@ -16,6 +16,7 @@ const CreatePlan = ({
   showCreatePlan,
   currPosition,
   fromWooJaeData,
+  setFromWooJaeData,
 }) => {
   return (
     <div>
@@ -35,6 +36,7 @@ const CreatePlan = ({
             <CreatePlanLeft
               currPosition={currPosition}
               fromWooJaeData={fromWooJaeData}
+              setFromWooJaeData={setFromWooJaeData}
             />
             <CreatePlanMap
               showCreatePlan={showCreatePlan}
