@@ -78,6 +78,7 @@ public class MainController {
 		int tripDay = list.get(0).getDay();
 
 		Map<Integer,List<RouteDTO>> map=new HashMap<>();
+
 		for(RouteDTO route: list) {
 			int contentid = route.getContentid();
 			AttractionDTO placeInfo = service.selectOnePlace(contentid);
@@ -88,11 +89,15 @@ public class MainController {
 				}
 			}
 		}////////////////////
-		
+/*
 		for(int i=0;i<list.size();i++) {
 			if(list.get(i).getContenttypeid()==32) {
 				int hotelDay = list.get(i).getDay();
 				Collections.swap(list, hotelDay-1, i);
+				if(tripDay<hotelDay) tripDay =hotelDay;
+			}
+			else {
+				list.get(i).setMtime(30*1000*60);
 			}
 		}///////////////list index change
 		/////////////////////////
@@ -111,27 +116,46 @@ public class MainController {
 		int result = (int)Math.ceil(((double)list.size()-tripDay)/tripDay);
 		int count = 0;
 		int day=1;
+		double attrxy=0;
 		/////////////////////////////
 		if(list.size()-tripDay*2==1) {
 			list.get(list.size()-1).setDay(1);
 		}////////////////if
 		/////////////////////////////
+		
 		else {
-			for(int i=tripDay*2;i<list.size();i++) {
-				if(list.get(i).getDay()==0) {
-					if(result>count) {
-						double attrxy = list.get(tripDay).getDto().getMapx()+list.get(tripDay).getDto().getMapy();
-						list.get(i).setDay(day);
-						count++;
+			for(int i=1;i<tripDay;i++) {
+				if(result-1>count) {
+					
+					if(i==1&&count==0) attrxy = list.get(tripDay+i).getDto().getMapx()+list.get(tripDay+i).getDto().getMapy();
+					else  attrxy = list.get(tripDay*(2+count)+i).getDto().getMapx()+list.get((2+count)+i).getDto().getMapy();
+					double low = attrxy;
+					for(int k=tripDay*(2+count);k<list.size();k++) {
+						double resultxy = attrxy-list.get(k).getDto().getMapx()+list.get(k).getDto().getMapy();
+						if(low>resultxy) {
+							low=resultxy;
+							Collections.swap(list,tripDay*(2+count)+i,k);
+						}
 					}
+					list.get(tripDay*(2+count)+i).setDay(day);
+					count++;
+				}
 				else {
+					count=0;
 					day++;
+					attrxy = list.get(tripDay+i).getDto().getMapx()+list.get(tripDay+i).getDto().getMapy();
 					list.get(i).setDay(day);
-				}
-				}
+					
+					count++;
+					
+				}//////////
 			}////////////for attr most near place
-		}////////////////if
-		/*
+		}////////////////else
+*/
+		int result = (int)Math.ceil(((double)list.size()-tripDay)/tripDay);
+		int count = 0;
+		int day=1;
+
 		if(list.size()-tripDay*2==1) {
 			for(RouteDTO route:list) {
 				if(route.getDay()==0) {
@@ -168,7 +192,7 @@ public class MainController {
 					
 			}///////////////for
 		}////////////////else
-		*/
+
 		
 			
 		PlannerDTO routeList = new PlannerDTO();
