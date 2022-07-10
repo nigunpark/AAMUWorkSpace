@@ -235,11 +235,6 @@ const MyPage = () => {
           </div>
           <div className="messages">
             <MyMessageBar />
-            <MyMessageBar />
-            <MyMessageBar />
-            <MyMessageBar />
-            <MyMessageBar />
-            <MyMessageBar />
           </div>
         </div>
       </div>
@@ -253,14 +248,14 @@ function TabContent({clickTab,setClickTab}) {
 
   if (clickTab === 0) {
     return totalEdit.map(() => {
-      return <MyHomeBox  clickTab={clickTab} setClickTab={setClickTab}/>;
+      return <MyHomeBox setClickTab={setClickTab}/>;
     });
   }
   else if (clickTab === 1) {
     return <div>Tab 2 내용입니다.</div>;
   }
   else if (clickTab === 2) {
-    return <div>Tab 3 내용입니다.</div>;
+    return <MyHomeBox/>;
   }
   else if (clickTab === 3) {
     return <MyProfileBox />;
@@ -269,14 +264,12 @@ function TabContent({clickTab,setClickTab}) {
     return (
     <div className="MyWrite-container">
       <div className="write-box">
-        <input type='text' className="wirte-title"  placeholder="제목을 입력하세요">
-          
-        </input>
+        <input type='text' className="wirte-title"  placeholder="제목을 입력하세요"/>
       </div>
 
       <div className="write-box">
-        <input className="write-picture-input" type='file' id='abcd'></input>
-        <label className="write-picture-label" for='abcd'>사진 등록</label>
+        <input className="write-picture-input" type='file' id='upload'/>
+        <label className="write-picture-label" for='upload'>사진 등록</label>
       </div>
 
       <div className="write-box">
@@ -284,13 +277,9 @@ function TabContent({clickTab,setClickTab}) {
       </div>
 
       <div className="write-box writer">
-        <textarea className="write-section" placeholder="글 쓰기">
-          
-        </textarea>
+        <textarea className="write-section" placeholder="글 쓰기"/>
         <div className="box-gab"></div>
-        <textarea className="tag-section" placeholder="#tag">
-            
-        </textarea>
+        <input type='text' className="tag-section" placeholder="#tag"/>
       </div>
 
       <div className="write-box add-delete">
@@ -333,7 +322,7 @@ function TabTopLine({clickTab}) {
     return <div>Tab 2 TopLine</div>;
   }
   else if (clickTab === 2) {
-    return <div>Tab 3 TopLine</div>;
+    return <div>즐겨찾기</div>;
   }
   else if (clickTab === 3) {
     return <MyProfileTopLine />;
