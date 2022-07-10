@@ -87,12 +87,14 @@ function FeedSetting() {
             <div className="feeds-contents">
                 <div className="feeds-icons">
                     <div className='heart-icon'>
-                        {heart ?<i class="fa-solid fa-heart fa-2x"onClick={()=>{setHeart(!heart)}} style={{color:'red'}} />
-                        :<i className="fa-regular fa-heart fa-2x"  onClick={()=>{setHeart(!heart)}}></i>}
+                        {heart ?<i class="fa-solid fa-heart fa-2x"onClick={()=>{setHeart(false)}} style={{color:'red'}} />
+                        :<i className="fa-regular fa-heart fa-2x"  onClick={()=>{setHeart(true)}}></i>}
                     </div>
-                    <div className="talk-icon ">
-                        <i className=" fa-regular fa-comment fa-2x"
-                        onClick={()=>{setcommentModal(!commentModal)}}></i>
+                    <div>
+                        <div className="talk-icon">
+                            <i className="fa-regular fa-comment fa-2x"
+                            onClick={()=>{setcommentModal(!commentModal)}}></i>
+                        </div>
                         {commentModal ?
                         <Container1>
                             <Overlay
@@ -234,6 +236,7 @@ const Overlay = styled.div`
     position: absolute;
     width: 100%;
     height: 100%;
+    overflow:hidden;
     background-color: rgba(0, 0, 0, 0.6);
 `
 export default FeedSetting
