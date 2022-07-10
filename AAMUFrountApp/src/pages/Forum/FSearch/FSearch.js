@@ -9,7 +9,8 @@ const FSearch = () => {
     <>
       <div className="FS_search__container">
           <form action="#" method="post" className="FS_search__container__form">
-            <p>정렬버튼 자리</p>
+            {/* 큼지막한 기능 다 만들면 정렬버튼 */}
+            <p></p>
             <FSelect/>
             <input type="text" placeholder="검색어를 입력하세요" />
             <button type="submit">
