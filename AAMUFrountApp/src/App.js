@@ -50,7 +50,7 @@ function App() {
         <Route path="/login" element={<LoginTest />} />
         <Route path="/test" element={<Test />} />
         <Route path="/Detailmodal" element={<DetailModal />} />
-        
+
         <Route
           path="/oauth/callback/kakao"
           element={<KakaoRedirectHandler />}
