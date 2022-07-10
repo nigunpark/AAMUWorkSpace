@@ -40,8 +40,17 @@ public interface CommuService<T> {
 	//댓글 생성용
 	int commuCommentInsert(Map map);
 	
+	//댓글 생성용_Rcount +1
+	int commuRcPlusUpdate(Map map);
+	
 	//댓글 수정용
 	int commuCommentUpdate(Map map);
+	
+	//댓글 삭제용
+	int commuCommentDelete(Map map);
+	
+	//댓글 삭제용_Rcount -1
+	int commuRcMinusUpdate(Map map);
 	
 	//글 좋아요_insert likeboard 테이블
 	int commuLikeInsert(Map map);

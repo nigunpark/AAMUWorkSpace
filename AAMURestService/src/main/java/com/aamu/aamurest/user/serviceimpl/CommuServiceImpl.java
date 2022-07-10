@@ -105,10 +105,28 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 		return dao.commuCommentInsert(map);
 	}
 	
+	//댓글 생성용_Rcount컬럼 +1
+	@Override
+	public int commuRcPlusUpdate(Map map) {
+		return dao.commuRcPlusUpdate(map);
+	}
+	
 	//댓글 수정용
 	@Override
 	public int commuCommentUpdate(Map map) {
 		return dao.commuCommentUpdate(map);
+	}
+	
+	//댓글 삭제용
+	@Override
+	public int commuCommentDelete(Map map) {
+		return dao.commuCommentDelete(map);
+	}
+	
+	//댓글 삭제용_Rcount컬럼 -1
+	@Override
+	public int commuRcMinusUpdate(Map map) {
+		return dao.commuRcMinusUpdate(map);
 	}
 	
 	//글 좋아요_insert likeboard 테이블

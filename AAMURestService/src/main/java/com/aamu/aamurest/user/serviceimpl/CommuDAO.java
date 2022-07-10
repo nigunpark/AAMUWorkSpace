@@ -81,9 +81,24 @@ public class CommuDAO {
 		return template.insert("commuCommentInsert",map);
 	}
 	
+	//댓글 생성용_Rcount컬럼 +1
+	public int commuRcPlusUpdate(Map map) {
+		return template.update("commuRcPlusUpdate",map);
+	}
+	
 	//댓글 수정용
 	public int commuCommentUpdate(Map map) {
 		return template.update("commuCommentUpdate",map);
+	}
+	
+	//댓글 삭제용
+	public int commuCommentDelete(Map map) {
+		return template.delete("commuCommentDelete",map);
+	}
+	
+	//댓글 삭제용_Rcount컬럼 -1
+	public int commuRcMinusUpdate(Map map) {
+		return template.update("commuRcMinusUpdate",map);
 	}
 	
 	//글 좋아요_insert likeboard 테이블
