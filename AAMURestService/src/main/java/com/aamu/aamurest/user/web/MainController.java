@@ -1,7 +1,7 @@
 package com.aamu.aamurest.user.web;
 
 import java.text.SimpleDateFormat;
-
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -88,12 +88,52 @@ public class MainController {
 				}
 			}
 		}////////////////////
+		
+		for(int i=0;i<list.size();i++) {
+			if(list.get(i).getContenttypeid()==32) {
+				int hotelDay = list.get(i).getDay();
+				Collections.swap(list, hotelDay-1, i);
+			}
+		}///////////////list index change
+		/////////////////////////
+		for(int i=0;i<tripDay;i++) {
+			double hotelxy =list.get(i).getDto().getMapx()+list.get(i).getDto().getMapy();
+			double low = hotelxy;
+			for(int k=tripDay;k<list.size();k++) {
+				double xyResult = hotelxy-list.get(k+i).getDto().getMapx()+list.get(k+i).getDto().getMapy();
+				if(low>xyResult) {
+					low=xyResult;
+					Collections.swap(list,tripDay+i,k);
+				}
+			}
+			list.get(tripDay+i).setDay(i);
+		}//////////////////hotel most near place index change
 		int result = (int)Math.ceil(((double)list.size()-tripDay)/tripDay);
 		int count = 0;
 		int day=1;
+		/////////////////////////////
+		if(list.size()-tripDay*2==1) {
+			list.get(list.size()-1).setDay(1);
+		}////////////////if
+		/////////////////////////////
+		else {
+			for(int i=tripDay*2;i<list.size();i++) {
+				if(list.get(i).getDay()==0) {
+					if(result>count) {
+						double attrxy = list.get(tripDay).getDto().getMapx()+list.get(tripDay).getDto().getMapy();
+						list.get(i).setDay(day);
+						count++;
+					}
+				else {
+					day++;
+					list.get(i).setDay(day);
+				}
+				}
+			}////////////for attr most near place
+		}////////////////if
+		/*
 		if(list.size()-tripDay*2==1) {
 			for(RouteDTO route:list) {
-				
 				if(route.getDay()==0) {
 					if(result>count) {
 						route.setDay(day);
@@ -128,7 +168,7 @@ public class MainController {
 					
 			}///////////////for
 		}////////////////else
-		
+		*/
 		
 			
 		PlannerDTO routeList = new PlannerDTO();

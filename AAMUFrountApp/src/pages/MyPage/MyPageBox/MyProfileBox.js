@@ -5,7 +5,7 @@ const MyProfileBox = () => {
     <div className="profile_project-box-wrapper">
         <div className="profile-project-box">
             <div className="project-box-header">
-                <span>December 10, 2020</span>
+                <span>가입일. December 10, 2020</span>
 
                 <div className="more-wrapper">
                     ㅇㅅㅇ

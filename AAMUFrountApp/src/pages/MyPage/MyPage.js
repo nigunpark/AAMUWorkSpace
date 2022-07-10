@@ -5,6 +5,7 @@ import MyHomeTopLine from "./MyPageBox/MyHomeTopLine";
 import MyProfileBox from "./MyPageBox/MyProfileBox";
 import MyProfileTopLine from "./MyPageBox/MyProfileTopLine";
 import MyMessageBar from "./MyMessageBar/MyMessageBar";
+import styled from "styled-components";
 const MyPage = () => {
 
   let [clickTab, setClickTab] = useState(0);
@@ -104,7 +105,7 @@ const MyPage = () => {
             onClick={() => {
               setClickTab(0);
             }}
-          >
+            >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="24"
@@ -116,7 +117,7 @@ const MyPage = () => {
               strokeLinecap="round"
               strokeLinejoin="round"
               className="feather feather-home"
-            >
+              >
               <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
               <polyline points="9 22 9 12 15 12 15 22app-content" />
             </svg>
@@ -127,7 +128,7 @@ const MyPage = () => {
             onClick={() => {
               setClickTab(1);
             }}
-          >
+            >
             <svg
               className="link-icon feather feather-pie-chart"
               xmlns="http://www.w3.org/2000/svg"
@@ -139,7 +140,7 @@ const MyPage = () => {
               strokeLinejoin="round"
               strokeWidth="2"
               viewBox="0 0 24 24"
-            >
+              >
               <defs />
               <path d="M21.21 15.89A10 10 0 118 2.83M22 12A10 10 0 0012 2v10z" />
             </svg>
@@ -150,7 +151,7 @@ const MyPage = () => {
             onClick={() => {
               setClickTab(2);
             }}
-          >
+            >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="24"
@@ -162,7 +163,7 @@ const MyPage = () => {
               strokeLinecap="round"
               strokeLinejoin="round"
               className="feather feather-calendar"
-            >
+              >
               <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
               <line x1="16" y1="2" x2="16" y2="6" />
               <line x1="8" y1="2" x2="8" y2="6" />
@@ -175,7 +176,7 @@ const MyPage = () => {
             onClick={() => {
               setClickTab(3);
             }}
-          >
+            >
             <svg
               className="link-icon feather feather-settings"
               xmlns="http://www.w3.org/2000/svg"
@@ -187,7 +188,7 @@ const MyPage = () => {
               strokeLinejoin="round"
               strokeWidth="2"
               viewBox="0 0 24 24"
-            >
+              >
               <defs />
               <circle cx="12" cy="12" r="3" />
               <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z" />
@@ -197,7 +198,7 @@ const MyPage = () => {
 
         <div className="projects-section">
           <div className="projects-section-header">
-            <p>MyPage</p>
+            <Title clickTab={clickTab}/>
             <p className="time">December, 12</p>
           </div>
           <div className="projects-section-line">
@@ -234,11 +235,6 @@ const MyPage = () => {
           </div>
           <div className="messages">
             <MyMessageBar />
-            <MyMessageBar />
-            <MyMessageBar />
-            <MyMessageBar />
-            <MyMessageBar />
-            <MyMessageBar />
           </div>
         </div>
       </div>
@@ -246,6 +242,21 @@ const MyPage = () => {
   );
 };
 
+function Title({clickTab}){
+  if (clickTab === 0) {
+    return <div className="projects-title">MyPage</div>;
+  }
+  else if (clickTab === 1) {
+    return <div className="projects-title">MyPage</div>;
+  }
+  else if (clickTab === 2) {
+    return <div className="projects-title">즐겨찾기</div>;
+  }
+  else if (clickTab === 3) {
+    return <div className="projects-title">프로필 수정</div>;
+  }
+
+}
 
 function TabContent({clickTab,setClickTab}) {
 
@@ -253,20 +264,108 @@ function TabContent({clickTab,setClickTab}) {
 
   if (clickTab === 0) {
     return totalEdit.map(() => {
-      return <MyHomeBox  clickTab={clickTab} setClickTab={setClickTab}/>;
+      return <MyHomeBox setClickTab={setClickTab}/>;
     });
   }
   else if (clickTab === 1) {
     return <div>Tab 2 내용입니다.</div>;
   }
   else if (clickTab === 2) {
-    return <div>Tab 3 내용입니다.</div>;
+    return (
+      <div className="project-box-wrapper">
+        <div className="project-box">
+            <div className="project-box-header">
+                <span>December 10, 2020 저장일</span>
+
+                <div className="more-wrapper">
+                    <button className="project-btn-more">
+                        <svg 
+                        xmlns="http://www.w3.org/2000/svg" 
+                        width="24" height="24" 
+                        viewBox="0 0 24 24" fill="none" 
+                        stroke="currentColor" stroke-width="2" 
+                        stroke-linecap="round" stroke-linejoin="round"
+                        className="feather feather-more-vertical">
+                            <circle cx="12" cy="12" r="1" />
+                            <circle cx="12" cy="5" r="1" />
+                            <circle cx="12" cy="19" r="1" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <div className="project-box-content-header">
+                <img className='MapImgSize' src='/images/imageMap.png'/>
+            </div>
+
+            <div className="box-progress-wrapper">
+                <p className="box-progress-header">Progress</p>
+                <div className="box-progress-bar">
+                    <span className="box-progress"></span>
+                </div>
+            </div>
+
+            <div className="project-box-footer">
+                <div className="participants">
+
+                </div>
+
+                <div className='detail-button'>
+                    <button className="learn-more" type="button">삭제</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    );
   }
   else if (clickTab === 3) {
     return <MyProfileBox />;
   }
   else if (clickTab === 10) {
-    return <div>Tab 10 내용입니다.</div>;
+
+    return (
+    <div className="MyWrite-container">
+      <div className="write-box">
+        <input type='text' className="wirte-title"  placeholder="제목을 입력하세요"/>
+      </div>
+
+      <div className="write-box">
+        <input className="write-picture-input" type='file' id='upload'/>
+        <label className="write-picture-label" for='upload'>사진 등록</label>
+      </div>
+
+      <div className="write-box">
+        <Imgs src='/images/imageMap.png'/>
+      </div>
+
+      <div className="write-box writer">
+        <textarea className="write-section" placeholder="글 쓰기"/>
+        <div className="box-gab"></div>
+        <input type='text' className="tag-section" placeholder="#tag"/>
+      </div>
+
+      <div className="write-box add-delete">
+        <Imgs src='/images/imageMap.png'/>
+        <Imgs src='/images/bg1.png'/>
+        <Imgs src='/images/bg5.png'/>
+        <Imgs src='/images/imageMap.png'/>
+        <Imgs src='/images/imageMap.png'/>
+        {/*
+        첫 사진 - 여행 경로(지도)
+
+        그 외 4개 사진은 직접 찍은거로
+        단, 최대 4개까지 업로드 가능한거로
+        */}
+      </div>
+
+      <div className="write-box">
+        <div className='detail-button'>
+          <button className="learn-more" type="button">공유하기</button>
+        </div>
+      </div>
+
+    </div>
+    );
   }
 }
 
@@ -277,18 +376,38 @@ function TabContent({clickTab,setClickTab}) {
 //   return(sdf)
 // }
 
-function TabTopLine(props) {
-  if (props.clickTab === 0) {
+function TabTopLine({clickTab}) {
+
+  if (clickTab === 0) {
     return <MyHomeTopLine />;
   }
-  else if (props.clickTab === 1) {
+  else if (clickTab === 1) {
     return <div>Tab 2 TopLine</div>;
   }
-  else if (props.clickTab === 2) {
-    return <div>Tab 3 TopLine</div>;
+  else if (clickTab === 2) {
+    return (
+      <div className="projects-status">
+        <div className="item-status">
+          <span className="status-number">4</span>
+          <span className="status-type">Total</span>
+        </div>
+      </div>
+    );
   }
-  else if (props.clickTab === 3) {
-    return <MyProfileTopLine />;
+  else if (clickTab === 3) {
+    // return <MyProfileTopLine />;
+  }
+  else if (clickTab === 10) {
+    return <div></div>;
   }
 }
+
+const Imgs = styled.img`
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  object-fit: contain;
+`
+
+
 export default MyPage;

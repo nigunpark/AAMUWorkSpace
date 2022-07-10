@@ -2,6 +2,7 @@ package com.aamu.aamurest.user.serviceimpl;
 
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.aamu.aamurest.user.service.UsersDTO;
@@ -9,23 +10,25 @@ import com.aamu.aamurest.user.service.UsersService;
 
 @Service
 public class UsersServiceImpl implements UsersService{
-
+	@Autowired
+	private UsersDAO dao;
+	
 	@Override
 	public int joinUser(UsersDTO dto) {
 		
-		return 0;
+		return dao.joinUser(dto);
 	}
 
 	@Override
 	public UsersDTO selectOneUser(Map map) {
-		// TODO Auto-generated method stub
-		return null;
+
+		return dao.selectOneUser(map);
 	}
 
 	@Override
 	public int updateUser(UsersDTO dto) {
-		// TODO Auto-generated method stub
-		return 0;
+
+		return dao.updateUser(dto);
 	}
 	
 	

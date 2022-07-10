@@ -7,8 +7,8 @@ public interface MainService {
 	
 	
 	int usersTotalCount();
-	int usersTodayCount(Date today);
+	int usersTodayCount(String today);
 	int placesTotalCount(Map map);
-	
+	int selectPeriod(Map map);
 	
 }

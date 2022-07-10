@@ -1,8 +1,11 @@
 package com.aamu.admin.main.web;
 
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,7 +25,20 @@ public class MainController {
 	@RequestMapping(value = "admin.do", method = RequestMethod.GET)
 	public String home(Model model) {
 		
+		Map<String, String> map = new HashMap<>();
 		
+		
+		Date current = new Date();
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+		String today = formatter.format(current);
+		model.addAttribute("users",service.usersTotalCount());
+		model.addAttribute("todayUsers", service.usersTodayCount(today));
+		map.put("places", "placesinfo");
+		model.addAttribute("places", service.placesTotalCount(map));
+		map.put("places", "hotelinfo");
+		model.addAttribute("hotel", service.placesTotalCount(map));
+		map.put("places", "dinerinfo");
+		model.addAttribute("diner", service.placesTotalCount(map));
 		
 		return "/main/main";
 	}

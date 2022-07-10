@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
-const Upload = ({setIsOpen}) => {
+const Modal = ({setIsOpen}) => {
 
     const [hide, setHide] = useState(false);
    
@@ -30,18 +30,24 @@ const Upload = ({setIsOpen}) => {
   return (
     <ModalWrap>
         <Contents>   
-            <div className='newentire'>
-                <div className="newPosting">
-                    <h2>새 글 작성하기</h2>
-                </div>
+            {/* <button style={{
+                    width: "50px",
+                    height: "50px",
+                    cursor: "pointer",
+                    marginBottom:'-50px'}}
+                    onClick={() => deleteFileImage()} > 삭제 </button>  */}
+            <h2>새 글 작성하기</h2>
+            <div className="preview_container">
+                {hide ?(
+                <>
                 <div 
-                    className='newframeImage' >
+                    className='picfileframe' >
                     <label 
-                    className="newframe" 
+                    className="rweet_file_btn" 
                     onClick={()=>{setHide(!hide)}}
                     for="input-file"                
                     >
-                        컴퓨터에서 선택
+                        <FontAwesomeIcon icon={faImage} size="4x"/>
                     </label>
                     <input
                         id="input-file"
@@ -49,11 +55,31 @@ const Upload = ({setIsOpen}) => {
                         accept="image/*" 
                         onChange={saveFileImage} />  
                 </div>
-                {/* <div className='imageDiv'  
+                <div className='imageDiv'  
                 style={{marginRight:'30px',width:"100%",height:"100%" }}>
                     {fileImage && ( <img alt="sample" src={fileImage}
                                         style={{ height:"100%",width:"100%" }} /> )}
-                </div>   */}
+                </div>  
+                </>
+                ):(
+<>
+                <div 
+                    className='picfileframe' >
+                    <label 
+                    className="rweet_file_btn" 
+                    onClick={()=>{setHide(!hide)}}
+                    for="input-file"                
+                    >
+                        <FontAwesomeIcon icon={faImage} size="4x"/>
+                    </label>
+                    <input
+                        id="input-file"
+                        type="file"
+                        accept="image/*" 
+                        onChange={saveFileImage} />  
+                </div>
+                </>
+                )}
             </div>
         </Contents>
     </ModalWrap>
@@ -76,14 +102,11 @@ const ModalWrap = styled.div`
 `
 
 const Contents = styled.div`
-    position: absolute;
     display: flex;
     flex-direction: column;
     width: 100%;
     height: 100%;
-    justify-content: center;
     align-items: center;
-    right:2px;
     
     h1{
         font-size: 30px;
@@ -100,4 +123,4 @@ const Contents = styled.div`
 `
 
 
-export default Upload
+export default Modal

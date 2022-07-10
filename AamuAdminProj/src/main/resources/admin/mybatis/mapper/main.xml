@@ -2,13 +2,17 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="admin.mybatis.mapper.user">
+<mapper namespace="admin.mybatis.mapper.main">
 	<select id="usersTotalCount" resultType="int">
 		SELECT COUNT(*) FROM users
 	</select>
 	
-	<select id="usersTodayCount" parameterType="Date" resultType="int">
-		SELECT COUNT(*) FROM users WHERE joindate=TO_DATE(#{today},'YY-MM-DD')
+	<select id="usersTodayCount" parameterType="String" resultType="int">
+		SELECT COUNT(*) FROM users WHERE TO_DATE(joindate,'YYYY-MM-DD')=TO_DATE(#{today},'YYYY-MM-DD')
+	</select>
+	
+	<select id="placesTotalCount" parameterType="Map" resultType="int">
+		SELECT COUNT(*) FROM ${places}
 	</select>
 	
 </mapper>

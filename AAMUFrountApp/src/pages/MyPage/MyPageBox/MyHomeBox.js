@@ -2,10 +2,6 @@ import React from 'react'
 
 const MyBox = ({setClickTab}) => {
 
-    function handleClick(){
-        window.location.replace('/write')
-    }
-
   return (
     <div className="project-box-wrapper">
         <div className="project-box"> {/*  style="background-color: #fee4cb;" */}
