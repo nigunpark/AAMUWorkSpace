@@ -12,8 +12,6 @@ import Main from "./components/Insta/Main";
 import LoginTest from "./components/Login/LoginTest";
 import Forum from "./pages/Forum/Forum";
 import MyPage from "./pages/MyPage/MyPage";
-import MyWrite from "./pages/MyPage/MyPageBox/MyWrite";
-import Board from "./pages/Forum/Board2/Board";
 import DetailModal from "./pages/Forum/DetailModal/DetailModal";
 import KakaoRedirectHandler from "./components/Login/Kakao/KakaoRedirectHandler";
 
@@ -45,7 +43,6 @@ function App() {
           <Route path="/Insta" element={<Main />}></Route>
           <Route path="/login" element={<LoginTest />}></Route>
           <Route path="/myPage" element={<MyPage />} />
-          <Route path="/write" element={<MyWrite />} />
         </Route>
         <Route path="/login" element={<LoginTest />} />
         <Route path="/test" element={<Test />} />
@@ -63,7 +60,6 @@ function changeLocation(location, setWhereUrl) {
   if (
     location.pathname.indexOf("mainPage") === 1 ||
     location.pathname.indexOf("forum") === 1 ||
-    location.pathname.indexOf("write") === 1 ||
     location.pathname.indexOf("login") === 1 ||
     location.pathname.indexOf("myPage") === 1 ||
     location.pathname.indexOf("Insta") === 1
