@@ -94,15 +94,29 @@
 		UPDATE community SET rcount=rcount-1 WHERE lno=#{lno}
 	</update>
 	
-	<!-- 글 좋아요_insert likeboard 테이블 -->
+	<!-- 글 좋아요 -->
+	<select id="commuLikeSelect" parameterType="Map" resultType="int">
+		SELECT count(*) from likeboard WHERE id=#{id}
+	</select>
+	
+	<!-- 글 좋아요_insert(likeboard테이블) -->
 	<insert id="commuLikeInsert" parameterType="Map">
 		INSERT INTO likeboard VALUES (#{id},#{lno})
-		
 	</insert>
 	
-	<!-- 글 좋아요_update community테이블에 likecount -->
-	<update id="commuLikeUpdate" parameterType="Map">
+	<!-- 글 좋아요_update(community테이블의 likecount+1) -->
+	<update id="commuLikePlusUpdate" parameterType="Map">
 		UPDATE community SET likecount=likecount+1 WHERE lno=#{lno}
+	</update>
+	
+	<!-- 글 좋아요취소_delete(likeboard테이블) -->
+	<delete id="commuLikeDelete" parameterType="Map">
+		DELETE FROM likeboard WHERE id=#{id} AND lno=#{lno}
+	</delete>
+	
+	<!-- 글 좋아요_update(community테이블의 likecount-1) -->
+	<update id="commuLikeMinusUpdate" parameterType="Map">
+		UPDATE community SET likecount=likecount-1 WHERE lno=#{lno}
 	</update>
 	
 	

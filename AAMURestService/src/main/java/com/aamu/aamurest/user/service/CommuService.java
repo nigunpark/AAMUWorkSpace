@@ -52,13 +52,7 @@ public interface CommuService<T> {
 	//댓글 삭제용_Rcount -1
 	int commuRcMinusUpdate(Map map);
 	
-	//글 좋아요_insert likeboard 테이블
-	int commuLikeInsert(Map map);
-	
-	//글 좋아요_update community테이블에 likecount
-	int commuLikeUpdate(Map map);
-	
-	//글 좋아요 취소
-	//int commuDislikeDelete(Map map);
+	//글 좋아요
+	int commuLike(Map map);
 	
 }

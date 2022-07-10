@@ -101,15 +101,30 @@ public class CommuDAO {
 		return template.update("commuRcMinusUpdate",map);
 	}
 	
-	//글 좋아요_insert likeboard 테이블
+	//글 좋아요_
+	public int commuLikeSelect(Map map) {
+		return template.selectOne("commuLikeSelect",map);
+	}
+	
+	//글 좋아요_insert(likeboard테이블)
 	public int commuLikeInsert(Map map) {
 		return template.insert("commuLikeInsert",map);
 	}
 	
-	//글 좋아요_update community테이블에 likecount
-	public int commuLikeUpdate(Map map) {
-		return template.update("commuLikeUpdate",map);
+	//글 좋아요_update(community테이블의 likecount+1)
+	public int commuLikePlusUpdate(Map map) {
+		return template.update("commuLikePlusUpdate",map);
 	}
 	
+	//글 좋아요취소_delete(likeboard테이블)
+	public int commuLikeDelete(Map map) {
+		System.out.println("(dao)map:"+map);
+		return template.delete("commuLikeDelete",map);
+	}
+	
+	//글 좋아요취소_update(community테이블의 likecount+1)
+	public int commuLikeMinusUpdate(Map map) {
+		return template.delete("commuLikeMinusUpdate",map);
+	}
 
 }
