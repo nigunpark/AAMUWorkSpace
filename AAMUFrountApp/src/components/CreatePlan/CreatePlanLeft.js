@@ -12,9 +12,10 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import Stack from "@mui/material/Stack";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-import { TextField } from "@mui/material";
+import { Alert, AlertTitle, TextField } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { addToAccum, corrTimeSetObj } from "../../redux/store";
+
 const CreatePlanLeft = ({ currPosition, fromWooJaeData }) => {
   let reduxState = useSelector((state) => {
     return state;
@@ -86,10 +87,20 @@ function WhichModal({ whichModal, currPosition, fromWooJaeData }) {
       return Object.keys(obj).toString() == whichModal;
     });
     let arr = obj[Object.keys(obj)];
-    let newArr = new Array(arr.length - 1).fill(0);
-    return newArr.map((val, index) => {
-      return <Step arr={arr} index={index} key={index} />;
-    });
+    if (arr.length <= 1) {
+      return (
+        <Alert severity="info">
+          <strong>장소가 최소 2개이상 있어야</strong>
+          <br />
+          <strong>상세경로 확인 가능해요</strong>
+        </Alert>
+      );
+    } else {
+      let newArr = new Array(arr.length - 1).fill(0);
+      return newArr.map((val, index) => {
+        return <Step arr={arr} index={index} key={index} />;
+      });
+    }
   }
 }
 
@@ -131,12 +142,18 @@ function Content({ index, fromWooJaeData, accumTime, setAccumTime }) {
     return state;
   });
   let dispatch = useDispatch();
-  let [showTimePicker, setShowTimePicker] = useState(false);
-  // console.log("accumTime:", accumTime);
+  let contentRef = useRef();
+  const [showTimePicker, setShowTimePicker] = useState(false);
+  const [forReRenDetail, setForReRenDetail] = useState(false);
   if (fromWooJaeData.length === 0) return;
   return (
-    <div className="createPlanLeft__schedule__content">
-      <select className="createPlanLeft__schedule__select">
+    <div className="createPlanLeft__schedule__content" ref={contentRef}>
+      <select
+        className="createPlanLeft__schedule__select"
+        onChange={() => {
+          console.log(contentRef.current);
+        }}
+      >
         {reduxState.tripPeriod.map((val, i) => {
           return (
             <option
@@ -232,8 +249,12 @@ function Content({ index, fromWooJaeData, accumTime, setAccumTime }) {
             obj={obj}
             key={i}
             index={i}
+            periodIndex={index}
             accumTime={accumTime}
             setAccumTime={setAccumTime}
+            fromWooJaeData={fromWooJaeData}
+            forReRenDetail={forReRenDetail}
+            setForReRenDetail={setForReRenDetail}
           />
         );
       })}
@@ -241,16 +262,28 @@ function Content({ index, fromWooJaeData, accumTime, setAccumTime }) {
   );
 }
 
-function DetailSetting({ obj, index, accumTime, setAccumTime }) {
+function DetailSetting({
+  obj,
+  index,
+  accumTime,
+  setAccumTime,
+  fromWooJaeData,
+  periodIndex,
+  forReRenDetail,
+  setForReRenDetail,
+}) {
   let reduxState = useSelector((state) => {
     return state;
   });
   const [upTime, setUpTime] = useState(0);
   const [downTime, setDownTime] = useState(0);
+  const [memoBadge, setMemoBadge] = useState(false);
+  let memoRef = useRef();
+  let textAreaRef = useRef();
+
   useEffect(() => {
     if (index === 0) {
       let firstAccum = getNAccumDetailTime(index, reduxState, obj);
-      // console.log(firstAccum);
       setUpTime(firstAccum);
       setDownTime(firstAccum + obj.atime / 1000 / 60);
       setAccumTime(firstAccum + obj.atime / 1000 / 60);
@@ -261,7 +294,7 @@ function DetailSetting({ obj, index, accumTime, setAccumTime }) {
       setAccumTime(accumTime + obj.mtime / 1000 / 60 + obj.atime / 1000 / 60);
     }
   }, []);
-  const [showMemo, setShowMemo] = useState(false);
+
   if (
     obj.dto === null ||
     reduxState.timeSetObj.find((obj) => {
@@ -269,6 +302,7 @@ function DetailSetting({ obj, index, accumTime, setAccumTime }) {
     }) === undefined
   )
     return;
+  if (fromWooJaeData === undefined) return;
   return (
     <div className="detailSetting__container">
       <div className="movingTime">
@@ -323,16 +357,39 @@ function DetailSetting({ obj, index, accumTime, setAccumTime }) {
               <span>구매</span>
             </a>
             <span
+              className="memoBtn"
               onClick={() => {
-                setShowMemo(true);
+                memoRef.current.classList.add("memo_visible");
               }}
             >
               메모
+              {textAreaRef.current !== undefined ? (
+                textAreaRef.current.value.length !== 0 ? (
+                  <span className="memo__badge">.</span>
+                ) : null
+              ) : null}
             </span>
-            <span>삭제</span>
+            <span
+              onClick={() => {
+                if (window.confirm("정말 삭제하시겠습니까?")) {
+                  Object.values(fromWooJaeData[periodIndex])[0].splice(
+                    index,
+                    1
+                  );
+                  setForReRenDetail(!forReRenDetail);
+                }
+              }}
+            >
+              삭제
+            </span>
           </div>
         </div>
-        {showMemo && <MemoArea setShowMemo={setShowMemo} />}
+        <MemoArea
+          memoRef={memoRef}
+          textAreaRef={textAreaRef}
+          memoBadge={memoBadge}
+          setMemoBadge={setMemoBadge}
+        />
       </div>
     </div>
   );
@@ -366,32 +423,33 @@ function Step({ arr, index }) {
   );
 }
 
-function MemoArea({ setShowMemo }) {
-  let textAreaRef = useRef();
-
+function MemoArea({ memoRef, textAreaRef, memoBadge, setMemoBadge }) {
   return (
-    <div className="memoArea__container">
-      <div className="memoArea__content">
-        <div>
-          <h5>Memo</h5>
+    <div className="memoArea" ref={memoRef}>
+      <div className="memoArea__container">
+        <div className="memoArea__content">
+          <div>
+            <h5>Memo</h5>
+          </div>
+          <div className="memoArea__textArea">
+            <textarea
+              ref={textAreaRef}
+              rows="3"
+              cols="25"
+              style={{ resize: "none" }}
+            ></textarea>
+          </div>
         </div>
-        <div className="memoArea__textArea">
-          <textarea
-            ref={textAreaRef}
-            rows="3"
-            cols="25"
-            style={{ resize: "none" }}
-          ></textarea>
+        <div className="memoArea__btn">
+          <span
+            onClick={(e) => {
+              memoRef.current.classList.remove("memo_visible");
+              setMemoBadge(!memoBadge);
+            }}
+          >
+            완료
+          </span>
         </div>
-      </div>
-      <div className="memoArea__btn">
-        <span
-          onClick={() => {
-            setShowMemo(false);
-          }}
-        >
-          완료
-        </span>
       </div>
     </div>
   );
