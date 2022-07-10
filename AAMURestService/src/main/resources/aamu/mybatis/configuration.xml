@@ -15,6 +15,7 @@
   		<typeAlias type="com.aamu.aamurest.user.service.RouteDTO" alias="routeDTO"/>
   		<typeAlias type="com.aamu.aamurest.user.service.ReviewDTO" alias="reviewDTO"/>
   		<typeAlias type="com.aamu.aamurest.user.service.BBSDTO" alias="bbsDTO"/>
+  		<typeAlias type="com.aamu.aamurest.user.service.UsersDTO" alias="usersDTO"/>
 
   	</typeAliases>
 	<mappers>
