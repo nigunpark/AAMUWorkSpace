@@ -46,6 +46,7 @@ const MainPage = () => {
           showCreatePlan={showCreatePlan}
           currPosition={currPosition}
           fromWooJaeData={fromWooJaeData}
+          setFromWooJaeData={setFromWooJaeData}
         />
       ) : null}
     </div>
