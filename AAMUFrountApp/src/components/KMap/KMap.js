@@ -661,7 +661,6 @@ async function toWooJae(currPosition, reduxState, setFromWooJaeData) {
       }
     );
     let settedData = manufacData(resp.data.route, reduxState);
-    console.log("settedData:", settedData);
     setFromWooJaeData(settedData);
   } catch (error) {
     console.log(error);
@@ -680,7 +679,7 @@ function manufacData(data, reduxState) {
     }
     if (periodIndex === reduxState.tripPeriod.length - 1) {
       temp.starttime = arr[0].starttime;
-
+      temp.day = arr[0].day;
       arr.splice(0, 1, temp);
     }
     return { ["day" + (periodIndex + 1)]: arr };
