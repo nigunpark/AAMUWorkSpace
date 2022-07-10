@@ -198,7 +198,7 @@ const MyPage = () => {
 
         <div className="projects-section">
           <div className="projects-section-header">
-            <p>MyPage</p>
+            <Title clickTab={clickTab}/>
             <p className="time">December, 12</p>
           </div>
           <div className="projects-section-line">
@@ -242,6 +242,22 @@ const MyPage = () => {
   );
 };
 
+function Title({clickTab}){
+  if (clickTab === 0) {
+    return <div className="projects-title">MyPage</div>;
+  }
+  else if (clickTab === 1) {
+    return <div className="projects-title">MyPage</div>;
+  }
+  else if (clickTab === 2) {
+    return <div className="projects-title">즐겨찾기</div>;
+  }
+  else if (clickTab === 3) {
+    return <div className="projects-title">프로필 수정</div>;
+  }
+
+}
+
 function TabContent({clickTab,setClickTab}) {
 
   let totalEdit = [1, 2, 3, 4];
@@ -255,7 +271,52 @@ function TabContent({clickTab,setClickTab}) {
     return <div>Tab 2 내용입니다.</div>;
   }
   else if (clickTab === 2) {
-    return <MyHomeBox/>;
+    return (
+      <div className="project-box-wrapper">
+        <div className="project-box">
+            <div className="project-box-header">
+                <span>December 10, 2020 저장일</span>
+
+                <div className="more-wrapper">
+                    <button className="project-btn-more">
+                        <svg 
+                        xmlns="http://www.w3.org/2000/svg" 
+                        width="24" height="24" 
+                        viewBox="0 0 24 24" fill="none" 
+                        stroke="currentColor" stroke-width="2" 
+                        stroke-linecap="round" stroke-linejoin="round"
+                        className="feather feather-more-vertical">
+                            <circle cx="12" cy="12" r="1" />
+                            <circle cx="12" cy="5" r="1" />
+                            <circle cx="12" cy="19" r="1" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <div className="project-box-content-header">
+                <img className='MapImgSize' src='/images/imageMap.png'/>
+            </div>
+
+            <div className="box-progress-wrapper">
+                <p className="box-progress-header">Progress</p>
+                <div className="box-progress-bar">
+                    <span className="box-progress"></span>
+                </div>
+            </div>
+
+            <div className="project-box-footer">
+                <div className="participants">
+
+                </div>
+
+                <div className='detail-button'>
+                    <button className="learn-more" type="button">삭제</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    );
   }
   else if (clickTab === 3) {
     return <MyProfileBox />;
@@ -315,6 +376,7 @@ function TabContent({clickTab,setClickTab}) {
 // }
 
 function TabTopLine({clickTab}) {
+  
   if (clickTab === 0) {
     return <MyHomeTopLine />;
   }
@@ -322,10 +384,17 @@ function TabTopLine({clickTab}) {
     return <div>Tab 2 TopLine</div>;
   }
   else if (clickTab === 2) {
-    return <div>즐겨찾기</div>;
+    return (
+      <div className="projects-status">
+        <div className="item-status">
+          <span className="status-number">4</span>
+          <span className="status-type">Total</span>
+        </div>
+      </div>
+    );
   }
   else if (clickTab === 3) {
-    return <MyProfileTopLine />;
+    // return <MyProfileTopLine />;
   }
   else if (clickTab === 10) {
     return <div></div>;
