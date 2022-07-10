@@ -9,6 +9,7 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
 @Configuration
+@PropertySource("classpath:admin/resources/connect.properties")
 public class HikariConfiguration {
 
 	@Value("${driver}")
@@ -22,7 +23,6 @@ public class HikariConfiguration {
 
 	@Bean(name = "dataSource")
 	public HikariDataSource dataSource() {
-		
 		HikariConfig hikariConfig = new HikariConfig();
 		hikariConfig.setDriverClassName(driver);
 		hikariConfig.setJdbcUrl(url);

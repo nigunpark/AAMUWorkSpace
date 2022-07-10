@@ -20,11 +20,11 @@
                           <!--정보 페이지-->
                           <div>
                             <p class="statistics-title">가입자</p>
-                            <h3 class="rate-percentage">102</h3>
+                            <h3 class="rate-percentage">${todayUsers}</h3>
                           </div>
                           <div>
                             <p class="statistics-title">회원</p>
-                            <h3 class="rate-percentage">102</h3>
+                            <h3 class="rate-percentage">${users}</h3>
                           </div>
                           <div>
                             <p class="statistics-title">게시판</p>
@@ -36,11 +36,11 @@
                         </div>
                         <div>
                             <p class="statistics-title">여행지</p>
-                            <h3 class="rate-percentage">300</h3>
+                            <h3 class="rate-percentage">${places}</h3>
                         </div>
                         <div>
                             <p class="statistics-title">호텔</p>
-                            <h3 class="rate-percentage">300</h3>
+                            <h3 class="rate-percentage">${hotel}</h3>
                         </div>
                         <div>
                             <p class="statistics-title">진행중인 행사</p>
@@ -48,7 +48,7 @@
                         </div>
                          <div>
                             <p class="statistics-title">식당</p>
-                            <h3 class="rate-percentage">300</h3>
+                            <h3 class="rate-percentage">${diner}</h3>
                         </div>
                       </div>
                     </div>
@@ -273,11 +273,12 @@ $(function() {
 	   * Data and config for chartjs
 	   */
 	  'use strict';
+	  var userData = '${users}'
 	  var data = {
 	    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
 	    datasets: [{
 	      label: '# of Votes',
-	      data: [10, 19, 3, 5, 2, 3, 10, 20, 30],
+	      data: [userData, 19, 3, 5, 2, 3, 10, 20, 30],
 	      backgroundColor: [
 	        'rgba(255, 99, 132, 0.2)',
 	        'rgba(54, 162, 235, 0.2)',

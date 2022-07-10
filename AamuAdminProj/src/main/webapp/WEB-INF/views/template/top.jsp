@@ -125,7 +125,22 @@
               </ul>
             </div>
           </li>
+          <li class="nav-item nav-category">관리자 게시판</li>
           <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
+              <i class="menu-icon mdi mdi-floor-plan"></i>
+              <span class="menu-title">공지사항 및 QnA</span>
+              <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="ui-basic">
+              <ul class="nav flex-column sub-menu">
+                <li class="nav-item"> <a class="nav-link" href="#">공지사항</a></li>
+                <li class="nav-item"> <a class="nav-link" href="#">QnA</a></li>
+              </ul>
+            </div>
+          </li>
+          <li class="nav-item nav-category">통계</li>
+           <li class="nav-item">
             <a class="nav-link" data-bs-toggle="collapse" href="#charts" aria-expanded="false" aria-controls="charts">
               <i class="menu-icon mdi mdi-chart-line"></i>
               <span class="menu-title">통계</span>
@@ -133,7 +148,9 @@
             </a>
             <div class="collapse" id="charts">
               <ul class="nav flex-column sub-menu">
-                <li class="nav-item"> <a class="nav-link" href="#">세부통계</a></li>
+                <li class="nav-item"> <a class="nav-link" href="#">유저 세부통계</a></li>
+                <li class="nav-item"> <a class="nav-link" href="#">게시판 세부통계</a></li>
+                <li class="nav-item"> <a class="nav-link" href="#">커뮤니티 세부통계</a></li>
               </ul>
             </div>
           </li>

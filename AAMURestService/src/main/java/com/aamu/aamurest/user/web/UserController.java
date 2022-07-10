@@ -1,9 +1,14 @@
 package com.aamu.aamurest.user.web;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.aamu.aamurest.user.service.UsersDTO;
@@ -17,7 +22,7 @@ public class UserController {
 	private UsersService service;
 	
 	
-	@PutMapping("users/join")
+	@PostMapping("users/edit")
 	public int join(@RequestBody UsersDTO dto) {
 		int affected=0;
 		
@@ -25,5 +30,24 @@ public class UserController {
 		
 		return affected;
 	}
+	
+	@GetMapping("users/selectone")
+	public UsersDTO selectOneUser(@RequestParam Map map) {
+		
+		UsersDTO dto = service.selectOneUser(map);
+		
+		return dto;
+	}
+	
+	
+	@PutMapping("users/edit")
+	public int updateUser(@RequestBody UsersDTO dto) {
+		int affected=0;
+		
+		affected = service.updateUser(dto);
+		
+		return affected;
+	}
+	
 	
 }

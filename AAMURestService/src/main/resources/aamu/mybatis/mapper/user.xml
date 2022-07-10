@@ -14,8 +14,15 @@
 		SELECT m.id as username,m.pwd as password,authority FROM users m JOIN AUTHORITY_SECURITY AU ON m.id=au.id WHERE m.id='${value}'
 	</select>
 	
-	<select id="userTotalCount" resultType="int">
-		SELECT * FROM users
+	<insert id="joinUser" parameterType="usersDTO">
+		INSERT INTO users VALUES(#{id},#{email},#{pwd},#{name},#{gender},#{phonenum},#{addrid},#{self},SYSDATE,#{userprofile})
+	</insert>
+	
+	<select id="selectOneUser" parameterType="Map" resultType="usersDTO">
+		SELECT * FROM users WHERE id=#{id}
 	</select>
 	
+	<update id="updateUser" parameterType="usersDTO">
+		UPDATE users SET email=#{email},pwd=#{pwd},name=#{name},gender=#{gender},phonenum=#{phonenum},addrid=#{addrid},self=#{self},userprofile=#{userprofile} WHERE id=#{id}
+	</update>
 </mapper>
