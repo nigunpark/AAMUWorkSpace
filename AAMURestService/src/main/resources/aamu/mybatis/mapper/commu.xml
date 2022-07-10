@@ -66,13 +66,7 @@
 	
 	<!-- 글 삭제용 -->
 	<delete id="commuDelete" parameterType="String">
-		BEGIN
-			DELETE FROM commuplace WHERE lno=#{lno};
-			DELETE FROM commuphoto WHERE lno=#{lno};
-			DELETE FROM commucomment WHERE lno=#{lno};
-			DELETE FROM likeboard WHERE lno=#{lno};
-			DELETE FROM community WHERE lno=#{lno};
-		END;
+		DELETE FROM community WHERE lno=#{lno}
 	</delete>
 	
 	<!-- 댓글 생성용 -->
@@ -80,14 +74,30 @@
 		INSERT INTO commucomment VALUES (SEQ_REP.NEXTVAL,#{id},#{lno},#{reply},DEFAULT)
 	</insert>
 	
+	<!-- 댓글 생성용_Rcount컬럼 +1 -->
+	<update id="commuRcPlusUpdate" parameterType="Map">
+		UPDATE community SET rcount=rcount+1 WHERE lno=#{lno}
+	</update>
+	
 	<!-- 댓글 수정용 -->
 	<update id="commuCommentUpdate" parameterType="Map">
 		UPDATE commucomment SET reply=#{reply} WHERE cno=#{cno}
 	</update>
 	
+	<!-- 댓글 삭제용 -->
+	<delete id="commuCommentDelete" parameterType="Map">
+		DELETE FROM commucomment WHERE cno=#{cno}
+	</delete>
+	
+	<!-- 댓글 삭제용_Rcount컬럼 -1 -->
+	<update id="commuRcMinusUpdate" parameterType="Map">
+		UPDATE community SET rcount=rcount-1 WHERE lno=#{lno}
+	</update>
+	
 	<!-- 글 좋아요_insert likeboard 테이블 -->
 	<insert id="commuLikeInsert" parameterType="Map">
 		INSERT INTO likeboard VALUES (#{id},#{lno})
+		
 	</insert>
 	
 	<!-- 글 좋아요_update community테이블에 likecount -->

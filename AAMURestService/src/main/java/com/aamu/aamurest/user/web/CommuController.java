@@ -126,10 +126,10 @@ public class CommuController {
 	//댓글 생성용
 	@PostMapping("/gram/comment/edit")
 	public Map commuCommentInsert(@RequestParam Map map) {
-		System.out.println("(cc)map:"+map);
 		int commuCommentAffected=commuService.commuCommentInsert(map);
+		int RcPlusAffected=commuService.commuRcPlusUpdate(map);
 		Map resultMap = new HashMap();
-		if(commuCommentAffected == 1)
+		if(commuCommentAffected == 1 && RcPlusAffected ==1)
 			resultMap.put("result", "insertCommentSuccess");
 		else
 			resultMap.put("result", "insertCommentNotSuccess");
@@ -149,6 +149,20 @@ public class CommuController {
 		return resultMap;
 	}
 	
+	//댓글 삭제용
+	@DeleteMapping("/gram/comment/edit")
+	public Map commuCommentDelete(@RequestParam Map map) {
+		int commuCommentDeleteAffected=commuService.commuCommentDelete(map);
+		//rcount -1
+		int RcMinusAffected=commuService.commuRcMinusUpdate(map);
+		Map resultMap = new HashMap();
+		if(commuCommentDeleteAffected == 1 && RcMinusAffected==1)
+			resultMap.put("result", "DeleteCommentSuccess");
+		else
+			resultMap.put("result", "DeleteCommentNotSuccess");
+		return resultMap;
+	}
+	
 	//글 좋아요
 	//글의 likecount수를 뿌려줘야됨
 	//좋아요 눌렀잖아 그럼 그 lno에 대한거 likeboard테이블에 insert 시켜주기 
@@ -158,7 +172,7 @@ public class CommuController {
 	public Map commuLike(@RequestParam Map map) {
 		//likeboard테이블에 insert
 		int commuLikeInsertAffected=commuService.commuLikeInsert(map); 
-		//community테이블에 rcount update 
+		//community테이블의 likecount update 
 		int commuLikeUpdateAffected=commuService.commuLikeUpdate(map);
 		Map resultMap = new HashMap();
 		if(commuLikeInsertAffected==1 && commuLikeUpdateAffected==1)
