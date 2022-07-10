@@ -322,6 +322,7 @@ function TabContent({clickTab,setClickTab}) {
     return <MyProfileBox />;
   }
   else if (clickTab === 10) {
+
     return (
     <div className="MyWrite-container">
       <div className="write-box">
@@ -376,7 +377,7 @@ function TabContent({clickTab,setClickTab}) {
 // }
 
 function TabTopLine({clickTab}) {
-  
+
   if (clickTab === 0) {
     return <MyHomeTopLine />;
   }
