@@ -36,7 +36,6 @@ const CreatePlan = ({
             <CreatePlanLeft
               currPosition={currPosition}
               fromWooJaeData={fromWooJaeData}
-              setFromWooJaeData={setFromWooJaeData}
             />
             <CreatePlanMap
               showCreatePlan={showCreatePlan}

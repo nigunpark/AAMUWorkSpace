@@ -1,5 +1,4 @@
 import {
-  faCalendar,
   faChevronDown,
   faClock,
   faEllipsisVertical,
@@ -12,7 +11,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import Stack from "@mui/material/Stack";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-import { Alert, AlertTitle, TextField } from "@mui/material";
+import { Alert, TextField } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { addToAccum, corrTimeSetObj } from "../../redux/store";
 
@@ -22,11 +21,13 @@ const CreatePlanLeft = ({ currPosition, fromWooJaeData }) => {
   });
   const [whichModal, setWhichModal] = useState("전체일정");
   const dayRef = useRef();
-  // console.log("fromWooJaeData:", fromWooJaeData);
   const [temp, setTemp] = useState("");
   useEffect(() => {
     setTemp(dayRef.current);
+    // console.log("fromWooJaeData:", fromWooJaeData);
+    console.log("들어옴");
   }, []);
+
   return (
     <div className="createPlanLeft">
       <div className="createPlanLeft__days">
@@ -75,11 +76,14 @@ const CreatePlanLeft = ({ currPosition, fromWooJaeData }) => {
 };
 
 function WhichModal({ whichModal, currPosition, fromWooJaeData }) {
+  const [forReRenClock, setForReRenClock] = useState(false);
   if (whichModal === "전체일정") {
     return (
       <WholeSchedule
         currPosition={currPosition}
         fromWooJaeData={fromWooJaeData}
+        forReRenClock={forReRenClock}
+        setForReRenClock={setForReRenClock}
       />
     );
   } else {
@@ -104,11 +108,16 @@ function WhichModal({ whichModal, currPosition, fromWooJaeData }) {
   }
 }
 
-function WholeSchedule({ currPosition, fromWooJaeData }) {
+function WholeSchedule({
+  currPosition,
+  fromWooJaeData,
+  forReRenClock,
+  setForReRenClock,
+}) {
   let reduxState = useSelector((state) => {
     return state;
   });
-  let [accumTime, setAccumTime] = useState(0);
+
   return (
     <div className="createPlanLeft__schedule">
       <div className="createPlanLeft__schedule-title">
@@ -127,8 +136,8 @@ function WholeSchedule({ currPosition, fromWooJaeData }) {
               index={index}
               key={index}
               fromWooJaeData={fromWooJaeData}
-              accumTime={accumTime}
-              setAccumTime={setAccumTime}
+              forReRenClock={forReRenClock}
+              setForReRenClock={setForReRenClock}
             />
           );
         })}
@@ -137,23 +146,18 @@ function WholeSchedule({ currPosition, fromWooJaeData }) {
   );
 }
 
-function Content({ index, fromWooJaeData, accumTime, setAccumTime }) {
+function Content({ index, fromWooJaeData, forReRenClock, setForReRenClock }) {
   let reduxState = useSelector((state) => {
     return state;
   });
   let dispatch = useDispatch();
   let contentRef = useRef();
   const [showTimePicker, setShowTimePicker] = useState(false);
-  const [forReRenDetail, setForReRenDetail] = useState(false);
+  const [forReRender, setForReRender] = useState(false);
   if (fromWooJaeData.length === 0) return;
   return (
     <div className="createPlanLeft__schedule__content" ref={contentRef}>
-      <select
-        className="createPlanLeft__schedule__select"
-        onChange={() => {
-          console.log(contentRef.current);
-        }}
-      >
+      <select className="createPlanLeft__schedule__select" onChange={() => {}}>
         {reduxState.tripPeriod.map((val, i) => {
           return (
             <option
@@ -238,6 +242,7 @@ function Content({ index, fromWooJaeData, accumTime, setAccumTime }) {
               onChange={(newValue) => {
                 let newObj = getAmpmTmStart(newValue, index);
                 dispatch(corrTimeSetObj(newObj));
+                setForReRenClock(!forReRenClock);
               }}
             />
           </Stack>
@@ -248,13 +253,11 @@ function Content({ index, fromWooJaeData, accumTime, setAccumTime }) {
           <DetailSetting
             obj={obj}
             key={i}
-            index={i}
+            i={i}
             periodIndex={index}
-            accumTime={accumTime}
-            setAccumTime={setAccumTime}
             fromWooJaeData={fromWooJaeData}
-            forReRenDetail={forReRenDetail}
-            setForReRenDetail={setForReRenDetail}
+            forReRender={forReRender}
+            setForReRender={setForReRender}
           />
         );
       })}
@@ -264,13 +267,11 @@ function Content({ index, fromWooJaeData, accumTime, setAccumTime }) {
 
 function DetailSetting({
   obj,
-  index,
-  accumTime,
-  setAccumTime,
+  i,
   fromWooJaeData,
   periodIndex,
-  forReRenDetail,
-  setForReRenDetail,
+  forReRender,
+  setForReRender,
 }) {
   let reduxState = useSelector((state) => {
     return state;
@@ -280,29 +281,50 @@ function DetailSetting({
   const [memoBadge, setMemoBadge] = useState(false);
   let memoRef = useRef();
   let textAreaRef = useRef();
-
   useEffect(() => {
-    if (index === 0) {
-      let firstAccum = getNAccumDetailTime(index, reduxState, obj);
+    if (i === 0) {
+      let firstAccum = getNAccumDetailTime(periodIndex, reduxState, obj);
       setUpTime(firstAccum);
       setDownTime(firstAccum + obj.atime / 1000 / 60);
-      setAccumTime(firstAccum + obj.atime / 1000 / 60);
+      fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i + 1].starttime =
+        firstAccum + obj.atime / 1000 / 60;
     }
-    if (index !== 0) {
-      setUpTime(accumTime + obj.mtime / 1000 / 60);
-      setDownTime(accumTime + obj.mtime / 1000 / 60 + obj.atime / 1000 / 60);
-      setAccumTime(accumTime + obj.mtime / 1000 / 60 + obj.atime / 1000 / 60);
+    if (i !== 0) {
+      setUpTime(
+        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime +
+          obj.mtime / 1000 / 60
+      );
+      setDownTime(
+        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime +
+          obj.mtime / 1000 / 60 +
+          fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].atime /
+            1000 /
+            60
+      );
+      if (
+        i !==
+        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)].length - 1
+      ) {
+        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][
+          i + 1
+        ].starttime =
+          fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime +
+          obj.mtime / 1000 / 60 +
+          fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].atime /
+            1000 /
+            60;
+      }
     }
   }, []);
-
   if (
     obj.dto === null ||
     reduxState.timeSetObj.find((obj) => {
-      return obj.day === index + 1;
+      return obj.day === i + 1;
     }) === undefined
   )
     return;
   if (fromWooJaeData === undefined) return;
+  // console.log("accumTime:", accumTime, index);
   return (
     <div className="detailSetting__container">
       <div className="movingTime">
@@ -340,11 +362,23 @@ function DetailSetting({
             </div>
             <div className="detailLocation__clock">
               <span>
-                {Math.floor(upTime / 60)}:{Math.floor(upTime % 60)}
+                {Math.floor(upTime / 60)
+                  .toString()
+                  .padStart(2, "0")}
+                :
+                {Math.floor(upTime % 60)
+                  .toString()
+                  .padStart(2, "0")}
               </span>
               <span>~</span>
               <span>
-                {Math.floor(downTime / 60)}:{Math.floor(downTime % 60)}
+                {Math.floor(downTime / 60)
+                  .toString()
+                  .padStart(2, "0")}
+                :
+                {Math.floor(downTime % 60)
+                  .toString()
+                  .padStart(2, "0")}
               </span>
             </div>
           </div>
@@ -372,11 +406,8 @@ function DetailSetting({
             <span
               onClick={() => {
                 if (window.confirm("정말 삭제하시겠습니까?")) {
-                  Object.values(fromWooJaeData[periodIndex])[0].splice(
-                    index,
-                    1
-                  );
-                  setForReRenDetail(!forReRenDetail);
+                  Object.values(fromWooJaeData[periodIndex])[0].splice(i, 1);
+                  setForReRender(!forReRender);
                 }
               }}
             >
@@ -389,6 +420,9 @@ function DetailSetting({
           textAreaRef={textAreaRef}
           memoBadge={memoBadge}
           setMemoBadge={setMemoBadge}
+          fromWooJaeData={fromWooJaeData}
+          periodIndex={periodIndex}
+          index={i}
         />
       </div>
     </div>
@@ -423,7 +457,15 @@ function Step({ arr, index }) {
   );
 }
 
-function MemoArea({ memoRef, textAreaRef, memoBadge, setMemoBadge }) {
+function MemoArea({
+  memoRef,
+  textAreaRef,
+  memoBadge,
+  setMemoBadge,
+  fromWooJaeData,
+  periodIndex,
+  index,
+}) {
   return (
     <div className="memoArea" ref={memoRef}>
       <div className="memoArea__container">
@@ -437,12 +479,16 @@ function MemoArea({ memoRef, textAreaRef, memoBadge, setMemoBadge }) {
               rows="3"
               cols="25"
               style={{ resize: "none" }}
-            ></textarea>
+            >
+              {Object.values(fromWooJaeData[periodIndex])[0][index].comment}
+            </textarea>
           </div>
         </div>
         <div className="memoArea__btn">
           <span
             onClick={(e) => {
+              Object.values(fromWooJaeData[periodIndex])[0][index].comment =
+                textAreaRef.current.value;
               memoRef.current.classList.remove("memo_visible");
               setMemoBadge(!memoBadge);
             }}
@@ -454,13 +500,18 @@ function MemoArea({ memoRef, textAreaRef, memoBadge, setMemoBadge }) {
     </div>
   );
 }
-function getNAccumDetailTime(index, reduxState, obj) {
-  // console.log("timeSetObj", reduxState.timeSetObj);
+function getNAccumDetailTime(periodIndex, reduxState, obj) {
+  let sumTime;
   let sTime = reduxState.timeSetObj.find((val) => {
-    return val.day === index + 1;
+    return val.day === periodIndex + 1;
   });
-  if (sTime.ampm === "오후") return sTime.time + 12;
-  let sumTime = sTime.time * 60 + sTime.min + obj.mtime / 1000 / 60;
+  // console.log("sTime.time", sTime.time);
+  if (sTime.ampm === "오후" && sTime.time >= 1 && sTime.time <= 11) {
+    sumTime = (sTime.time + 12) * 60 + sTime.min + obj.mtime / 1000 / 60;
+  } else {
+    sumTime = sTime.time * 60 + sTime.min + obj.mtime / 1000 / 60;
+  }
+  // sumTime = sTime.time * 60 + sTime.min + obj.mtime / 1000 / 60;
   return sumTime;
 }
 
@@ -474,15 +525,20 @@ function getAmpmTmStart(newValue, index) {
   );
   array.push(ampm);
   //시간가져오는 코드
-  let time = localeString
-    .substring(localeString.indexOf(":") - 2, localeString.indexOf(":"))
-    .trim()
-    .padStart(2, 0);
+  let time = parseInt(
+    localeString.substring(
+      localeString.indexOf(":") - 2,
+      localeString.indexOf(":")
+    )
+  );
+
   array.push(time);
   //분 가져오는 코드
-  let min = localeString.substring(
-    localeString.indexOf(":") + 1,
-    localeString.lastIndexOf(":")
+  let min = parseInt(
+    localeString.substring(
+      localeString.indexOf(":") + 1,
+      localeString.lastIndexOf(":")
+    )
   );
 
   return {
