@@ -107,8 +107,9 @@
             </a>
             <div class="collapse" id="form-elements">
               <ul class="nav flex-column sub-menu">
-                <li class="nav-item"><a class="nav-link" href="#">게시판 관리</a></li>
-                <li class="nav-item"> <a class="nav-link" href="#">리뷰 관리</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">전체 게시글 관리</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">신고 게시글 관리</a></li>
+                <li class="nav-item"> <a class="nav-link" href="#">댓글 관리</a></li>
               </ul>
             </div>
           </li>
