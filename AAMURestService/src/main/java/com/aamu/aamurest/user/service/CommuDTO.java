@@ -20,7 +20,7 @@ public class CommuDTO {
 	public String id;
 	public String ctitle;
 	public String content;
-	public Date postdate;
+	public String postdate;
 	public String likecount;
 	public String rcount;
 	public String userprofile;
