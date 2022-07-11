@@ -37,12 +37,17 @@
     <style name="textInputparent" parent="Widget.Design.TextInputLayout">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="colorControlNormal">@color/themeColor</item>  // unFocus 상태일때 밑줄 색.
-        <item name="boxStrokeColor">@color/themeColor</item> // Focus 상태일때 밑줄 색.
-        <item name="android:textCursorDrawable">@color/themeColor</item>  // cursor 색.
+        <item name="colorControlNormal">@color/themeColor</item>
+        // unFocus 상태일때 밑줄 색.
+        <item name="boxStrokeColor">@color/themeColor</item>
+        // Focus 상태일때 밑줄 색.
+        <item name="android:textCursorDrawable">@color/themeColor</item>
+        // cursor 색.
 
-        <item name="android:textColorHint">@color/themeColor</item>  // hint 색
-        <item name="hintTextColor">@color/themeColor</item>   // floating hint 색
+        <item name="android:textColorHint">@color/themeColor</item>
+        // hint 색
+        <item name="hintTextColor">@color/themeColor</item>
+        // floating hint 색
 
         <item name="errorTextColor">@color/themeColor</item>
     </style>
