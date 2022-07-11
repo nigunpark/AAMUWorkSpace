@@ -28,35 +28,13 @@ const Upload = ({setIsOpen}) => {
     }, []);
 
   return (
-    <ModalWrap>
-        <Contents>   
-            <div className='newentire'>
-                <div className="newPosting">
-                    <h2>새 글 작성하기</h2>
-                </div>
-                <div 
-                    className='newframeImage' >
-                    <label 
-                    className="newframe" 
-                    onClick={()=>{setHide(!hide)}}
-                    for="input-file"                
-                    >
-                        컴퓨터에서 선택
-                    </label>
-                    <input
-                        id="input-file"
-                        type="file"
-                        accept="image/*" 
-                        onChange={saveFileImage} />  
-                </div>
-                {/* <div className='imageDiv'  
+        <Contents>  
+                <div className='imageDiv'  
                 style={{marginRight:'30px',width:"100%",height:"100%" }}>
                     {fileImage && ( <img alt="sample" src={fileImage}
                                         style={{ height:"100%",width:"100%" }} /> )}
-                </div>   */}
-            </div>
+                </div>  
         </Contents>
-    </ModalWrap>
   )
 }
 
@@ -84,6 +62,7 @@ const Contents = styled.div`
     justify-content: center;
     align-items: center;
     right:2px;
+    z-index:100000px;
     
     h1{
         font-size: 30px;

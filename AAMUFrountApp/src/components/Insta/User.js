@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import NotificationModal from "./ModalGroup/Notification";
 import SearchModal from "./Search";
-import WriteModal from "./ModalGroup/Upload"
+import WriteModal from "./ModalGroup/UploadSecond/Upload"
 
 function User() {
   const modalRef = useRef();
@@ -66,14 +66,14 @@ function User() {
               style={{ color: "black" }}
             >
             </i></div>
-            <Container>
-              <Overlay
-              ref={outside} 
-              onClick={ (e) => { if(e.target == outside.current) setsquare(false) } }
-              >
-                <WriteModal onClick={ () => setsquare(false) }></WriteModal>
-              </Overlay>
-            </Container>
+              <Container>
+                <Overlay
+                ref={outside} 
+                onClick={ (e) => { if(e.target == outside.current) setsquare(false) } }
+                >
+                  <WriteModal onClick={ () => setsquare(false) }></WriteModal>
+                </Overlay>
+              </Container>
           </>
           ) : (
             <div className="post-icon">
