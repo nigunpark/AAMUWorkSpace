@@ -141,16 +141,20 @@ function getAmpmTmStart(
   );
   array.push(ampm);
   //시간가져오는 코드
-  let time = localeString
-    .substring(localeString.indexOf(":") - 2, localeString.indexOf(":"))
-    .trim()
-    .padStart(2, 0);
+  let time = parseInt(
+    localeString
+      .substring(localeString.indexOf(":") - 2, localeString.indexOf(":"))
+      .trim()
+      .padStart(2, 0)
+  );
   array.push(time);
   //분 가져오는 코드
-  let min = localeString
-    .substring(localeString.indexOf(":") + 1, localeString.lastIndexOf(":"))
-    .trim()
-    .padStart(2, 0);
+  let min = parseInt(
+    localeString
+      .substring(localeString.indexOf(":") + 1, localeString.lastIndexOf(":"))
+      .trim()
+      .padStart(2, 0)
+  );
   array.push(min);
   setStartTimeArray(array);
   if (
