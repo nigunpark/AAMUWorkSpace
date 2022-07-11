@@ -232,7 +232,7 @@ const KMap = ({
         <div
           id="map"
           ref={container}
-          style={{ width: "100%", height: "99vh" }}
+          style={{ width: "100%", height: "92vh" }}
         ></div>
         <div id="roadview" style={{ width: "100%", height: "99vh" }}></div>
         <div className="kmap__right-btn__container">
@@ -663,7 +663,7 @@ async function toWooJae(currPosition, reduxState, setFromWooJaeData) {
     let settedData = manufacData(resp.data.route, reduxState);
     setFromWooJaeData(settedData);
   } catch (error) {
-    console.log(error);
+    console.log("error", error);
   }
 }
 //일정생성버튼 눌렀을 시 우재한테 받은 데이터를 다시 가공하는 함수
@@ -673,7 +673,12 @@ function manufacData(data, reduxState) {
     let arr = data.filter((obj) => {
       return obj.day === periodIndex + 1;
     });
-    if (periodIndex !== reduxState.tripPeriod.length - 1) arr.push(arr[0]);
+    // if (periodIndex !== reduxState.tripPeriod.length - 1) {
+
+    let newArr = { ...arr[0] };
+    newArr.starttime = 0;
+    arr.push(newArr);
+
     if (periodIndex === reduxState.tripPeriod.length - 2) {
       temp = arr[arr.length - 1];
     }
