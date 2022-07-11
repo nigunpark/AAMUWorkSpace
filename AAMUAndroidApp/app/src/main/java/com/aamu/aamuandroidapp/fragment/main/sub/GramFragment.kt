@@ -6,9 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.runtime.remember
+import com.aamu.aamuandroidapp.components.gram.AAMUgramHome
 import com.aamu.aamuandroidapp.data.DemoDataProvider
 import com.aamu.aamuandroidapp.databinding.FragmentGramBinding
-import com.aamu.aamuandroidapp.mainfragment.sub.gramcomponents.InstagramHome
 import com.aamu.aamuandroidapp.ui.theme.ComposeCookBookTheme
 
 class GramFragment : Fragment() {
@@ -25,7 +25,7 @@ class GramFragment : Fragment() {
             val posts = remember { DemoDataProvider.tweetList.filter { it.tweetImageId != 0 } }
             val profiles = remember { DemoDataProvider.tweetList }
             ComposeCookBookTheme {
-                InstagramHome(
+                AAMUgramHome(
                     posts = posts,
                     profiles = profiles,
                     onLikeClicked = {},

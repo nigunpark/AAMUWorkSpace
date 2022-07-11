@@ -50,7 +50,7 @@ fun PostItem(
             isLiked = isLiked,
             onLikeClicked = onLikeClicked,
             onCommentsClicked = onCommentsClicked,
-            onSendClicked = onSendClicked
+            onSendClicked = onSendClicked,
         )
         ProfileSection(
             firstImageId = post.authorImageId,
