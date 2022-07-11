@@ -17,8 +17,8 @@ public class CommuDAO {
 	private SqlSessionTemplate template;
 	
 	//글 목록용
-	public List<CommuDTO> commuSelectList(){
-		return template.selectList("commuSelectList");
+	public List<CommuDTO> commuSelectList(Map map){
+		return template.selectList("commuSelectList",map);
 	}
 	
 	//글 목록용_댓글 하나 뿌려주기

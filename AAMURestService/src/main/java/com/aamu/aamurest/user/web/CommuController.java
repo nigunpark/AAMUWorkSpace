@@ -44,9 +44,9 @@ public class CommuController {
 	
 	//글 목록용
 	@GetMapping("/gram/selectList")
-	public List<CommuDTO> commuSelectList(){
+	public List<CommuDTO> commuSelectList(@RequestParam Map map){
 		//list=글 목록들
-		List<CommuDTO> list = commuService.commuSelectList();
+		List<CommuDTO> list = commuService.commuSelectList(map);
 		for(CommuDTO dto : list) {//글 목록들 list에서 하나씩 꺼내서 dto에 담는다
 			dto.setCommuComment(commuService.commuCommentSelectOne(dto.getLno()));
 			dto.setPhoto(commuService.commuSelectPhotoList(dto.getLno()));

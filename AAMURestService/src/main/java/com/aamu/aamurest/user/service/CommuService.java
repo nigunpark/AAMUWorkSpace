@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 @Service
 public interface CommuService<T> {
 	//글 목록용
-	List<T> commuSelectList();
+	List<T> commuSelectList(Map map);
 	
 	//글 목록용_댓글 하나 뿌려주기
 	CommuCommentDTO commuCommentSelectOne(String lno);
