@@ -113,10 +113,9 @@ public class MainController {
 				
 				if(k+i==list.size()) break;
 				double xyResult = hotelxy-list.get(k+i).getDto().getMapx()+list.get(k+i).getDto().getMapy();
-				System.out.println(String.format("장소:%s, 호텔과 위도경도의 차이:%s", list.get(k+i).getDto().getTitle(),xyResult));
+				
 				if(low<xyResult) {
 					low=xyResult;
-					System.out.println(low);
 					Collections.swap(list,tripDay+i,k+i);
 				}
 			}
@@ -125,7 +124,7 @@ public class MainController {
 
 		}//////////////////hotel most near place index change
 		int result = (int)Math.ceil(((double)list.size()-tripDay)/tripDay);
-		int count = 0;
+		int count = 1;
 		int day=1;
 		double attrxy=0;
 		/////////////////////////////
@@ -138,33 +137,35 @@ public class MainController {
 		
 		else {
 			for(int i=tripDay*(2);i<list.size();i++) {
-				if(result-1>count) {
-					if(i==tripDay*(2)&&count==0) attrxy = list.get(tripDay+day-1).getDto().getMapx()+list.get(tripDay+day-1).getDto().getMapy();
-					else  attrxy = list.get(tripDay*(2+count)+day).getDto().getMapx()+list.get((2+count)+day).getDto().getMapy();
-					double low = attrxy;
-					for(int k=tripDay*(2+count)+day;k<list.size();k++) {
+				if(result>count) {
+					if(i==tripDay*(2)&&count==1) attrxy = list.get(tripDay+day-1).getDto().getMapx()+list.get(tripDay+day-1).getDto().getMapy();
+					else  attrxy = list.get(tripDay*count+day-1).getDto().getMapx()+list.get(tripDay*count+day-1).getDto().getMapy();
+					double low = 0;
+					for(int k=tripDay*2;k<list.size();k++) {
+						if(k==list.size()) break;
 						double resultxy = attrxy-list.get(k).getDto().getMapx()+list.get(k).getDto().getMapy();
-						if(low<resultxy) {
-							low=resultxy;
-							Collections.swap(list,tripDay*(2+count)+day,k);
-						}
-					}
-					list.get(tripDay*(2+count)+i).setDay(day);
-					count++;
-				}
-				else {
-					count=0;
-					day++;
-					attrxy = list.get(tripDay+day).getDto().getMapx()+list.get(tripDay+day).getDto().getMapy();
-					for(int k=tripDay*2+day;k<list.size();k++){
-						double resultxy = attrxy-list.get(k).getDto().getMapx()+list.get(k).getDto().getMapy();
-						double low = attrxy;
+						System.out.println("카운트:"+count);
 						if(low<resultxy) {
 							low=resultxy;
 							Collections.swap(list,tripDay*2+day,k);
 						}
 					}
-					list.get(i).setDay(day);
+					list.get(tripDay*2+day).setDay(day);
+					count++;
+				}
+				else {
+					count=1;
+					day++;
+					attrxy = list.get(tripDay+day-1).getDto().getMapx()+list.get(tripDay+day-1).getDto().getMapy();
+					for(int k=tripDay*2+day-1;k<list.size();k++){
+						double resultxy = attrxy-list.get(k).getDto().getMapx()+list.get(k).getDto().getMapy();
+						double low = 0;
+						if(low<resultxy) {
+							low=resultxy;
+							Collections.swap(list,tripDay*2+day-1,k);
+						}
+					}
+					list.get(tripDay*2+day-1).setDay(day);
 					
 					count++;
 					
@@ -173,7 +174,7 @@ public class MainController {
 		}////////////////else
 
 
-
+		/*
 		for(RouteDTO route: list) {
 			int contentid = route.getContentid();
 			AttractionDTO placeInfo = service.selectOnePlace(contentid);
@@ -185,7 +186,7 @@ public class MainController {
 			}
 		}////////////////////
 		
-		/*
+
 		int result = (int)Math.ceil(((double)list.size()-tripDay)/tripDay);
 		int count = 0;
 		int day=1;
@@ -332,5 +333,7 @@ public class MainController {
 		
 		return lists;
 	}
+	
+	
 
 }
