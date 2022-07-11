@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/loadingFragment"
-        android:name="com.aamu.aamuandroidapp.initfragment.LoadingFragment"
+        android:name="com.aamu.aamuandroidapp.fragment.init.LoadingFragment"
         android:label="fragment_loading"
         tools:layout="@layout/fragment_loading" >
         <action
@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.aamu.aamuandroidapp.initfragment.LoginFragment"
+        android:name="com.aamu.aamuandroidapp.fragment.init.LoginFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_login" >
         <action
@@ -27,7 +27,7 @@
     </fragment>
     <fragment
         android:id="@+id/mainFragment"
-        android:name="com.aamu.aamuandroidapp.mainfragment.MainFragment"
+        android:name="com.aamu.aamuandroidapp.fragment.main.MainFragment"
         android:label="fragment_main"
         tools:layout="@layout/fragment_main" />
 </navigation>
