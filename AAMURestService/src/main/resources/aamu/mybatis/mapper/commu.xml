@@ -6,8 +6,14 @@
 <mapper namespace="aamu.mybatis.mapper.commu">
 
 	<!-- 글 목록용 -->
-	<select id="commuSelectList" resultType="commuDTO" >
-		SELECT c.*,cp.contentid,p.title FROM community c JOIN commuplace cp ON c.lno=cp.lno JOIN places p ON cp.contentid=p.contentid ORDER BY c.lno DESC
+	<select id="commuSelectList" resultType="commuDTO" parameterType="Map">
+		SELECT c.*,cp.contentid,p.title FROM community c
+		JOIN commuplace cp ON c.lno=cp.lno
+		JOIN places p ON cp.contentid=p.contentid
+		<if test="searchColumn != null">
+  	 		WHERE ${searchColumn} LIKE '%'||#{searchWord}||'%' 
+  	 	</if>
+		ORDER BY c.lno DESC
 	</select>
 	
 	<!-- 글 목록용_댓글 한개 뿌려주기 -->
