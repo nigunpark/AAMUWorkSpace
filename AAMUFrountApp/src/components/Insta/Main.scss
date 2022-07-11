@@ -504,7 +504,6 @@
         height: 10%;
         border-bottom: 1px solid #dbdbdb;
         flex-direction: row;
-        display: flex;
         align-items: center;
 
         .location {
@@ -1203,6 +1202,7 @@
       font-size: 12px;
     }
   }
+  
 
   .post-icon {
     width: 30px;
@@ -1215,10 +1215,42 @@
   .post-icon :hover {
     color: #adadad;
   }
-  .imageDiv{
-    width: 100%;
-    height: 100%;
+  .newPosting{
+    display: inline-block;
+    text-align: center;
+    align-items: center;
+    width: 540px;
+   margin-top: 15px;
+    
   }
+  .picfileframe{
+    
+    position: relative;
+    border: 1px solid #000;
+    width: 100px;
+    height: 300px;
+    margin-left: -20px;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    .rweet_file_btn{
+      position: absolute;
+      display: flex;
+      margin-top: 150px;
+      font-size: 50px;
+      color: #adadad;
+      z-index: 1;
+      overflow: hidden;
+    }
+    .imageDiv{
+      position: absolute;
+      margin-right:30px;
+      height: 100%;
+      width: 100%;
+    }
+  }
+  
+  
   #input-file::-webkit-file-upload-button{
     display: none;
     // visibility: hidden;
