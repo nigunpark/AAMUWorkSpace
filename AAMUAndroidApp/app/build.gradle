@@ -82,4 +82,8 @@ dependencies {
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
     implementation 'com.github.Gurupreet:FontAwesomeCompose:1.0.0'
 
+    //retrofit
+    implementation "com.squareup.retrofit2:retrofit:2.9.0"
+    implementation 'com.squareup.retrofit2:converter-jackson:2.9.0'
+    implementation 'com.squareup.okhttp3:okhttp:4.10.0'
 }

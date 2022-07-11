@@ -1,4 +1,4 @@
-package com.aamu.aamuandroidapp.mainfragment.sub.gramcomponents
+package com.aamu.aamuandroidapp.components.gram
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
@@ -29,7 +29,7 @@ import com.aamu.aamuandroidapp.components.gram.stories.StoryList
 import com.aamu.aamuandroidapp.components.gram.stories.StoryPopup
 
 @Composable
-fun InstagramHome(
+fun AAMUgramHome(
     posts: List<Tweet>,
     profiles: List<Tweet>,
     onLikeClicked: () -> Unit,
@@ -102,7 +102,7 @@ fun InstagramHome(
 @Preview
 @Composable
 fun PreviewInstagramHome() {
-    InstagramHome(
+    AAMUgramHome(
         posts = DemoDataProvider.tweetList.filter { it.tweetImageId != 0 },
         profiles = DemoDataProvider.tweetList,
         onLikeClicked = {},
