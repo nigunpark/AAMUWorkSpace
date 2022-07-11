@@ -18,6 +18,7 @@ const AuSModal = styled.div`
   width: 400px;
   height: 125px;
   padding: 30px 50px;
+  border-radius: 5px;
 `;
 
 const AusBtnContainer = styled.div`
