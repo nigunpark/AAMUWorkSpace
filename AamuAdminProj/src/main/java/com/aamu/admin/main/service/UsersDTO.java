@@ -1,5 +1,6 @@
 package com.aamu.admin.main.service;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import lombok.Getter;
@@ -16,7 +17,7 @@ public class UsersDTO {
 	private String phonenum;
 	private String addrid;
 	private String self;
-	private Date joindate;
+	private String joindate;
 	private String userprofile;
 	
 }

@@ -126,12 +126,16 @@ public class MainServiceImpl implements MainService{
 		}
 		////////////////////////////////////////////////////////////////////////////////////////
 		else if(dto.getContenttypeid()==15) {
+			/*
 			String start = dto.getEventstart();
 			String end = dto.getEventend();
 			start = start.substring(0, 4) +"-"+start.substring(4, 6)+"-"+start.substring(6,8);
 			end = end.substring(0, 4) +"-"+end.substring(4, 6)+"-"+end.substring(6,8);
 			dto.setEventstart(start);
 			dto.setEventend(end);
+			System.out.println(dto.getEventstart());
+			System.out.println(dto.getEventend());
+			*/
 			String eventTime = dto.getEventtime();
 			if(eventTime!=null) {
 				if(eventTime.contains("<br>")) {

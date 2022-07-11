@@ -15,6 +15,6 @@ public class PlannerDTO {
 	private List<RouteDTO> route=null;
 	private String id;
 	private Date routeDate;
-
+	
 	
 }

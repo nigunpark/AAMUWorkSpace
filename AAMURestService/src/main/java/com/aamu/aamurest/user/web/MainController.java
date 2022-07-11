@@ -73,11 +73,106 @@ public class MainController {
 	}
 	@PostMapping("planner/data")
 	public PlannerDTO plannerData(@RequestBody PlannerDTO dto) {
-		System.out.println(dto.getRoute());
 		List<RouteDTO> list = dto.getRoute();
 		int tripDay = list.get(0).getDay();
-
 		Map<Integer,List<RouteDTO>> map=new HashMap<>();
+
+		for(int i=0;i<list.size();i++) {
+			int contentid = list.get(i).getContentid();
+			AttractionDTO placeInfo = service.selectOnePlace(contentid);
+			list.get(i).setDto(placeInfo);
+			
+			if(list.get(i).getDay()!=0) {
+				int hotelDay = list.get(i).getDay();
+				Collections.swap(list, hotelDay-1, i);
+				if(tripDay<hotelDay) tripDay =hotelDay;
+				
+			}
+			else {
+				list.get(i).setMtime(30*1000*60);
+			}
+		}///////////////list index change
+		/////////////////////////
+		list.get(tripDay-1).setContentid(list.get(tripDay-2).getContentid());
+		list.get(tripDay-1).setContenttypeid(list.get(tripDay-2).getContenttypeid());
+		for(RouteDTO route:list) {
+			int contentid = route.getContentid();
+			AttractionDTO placeInfo = service.selectOnePlace(contentid);
+			route.setDto(placeInfo);
+			if(route.getContenttypeid()!=32) {
+				route.setMtime(1000*60*30);
+			}
+
+		}
+		
+		for(int i=0;i<tripDay;i++) {
+			
+			double hotelxy =list.get(i).getDto().getMapx()+list.get(i).getDto().getMapy();
+			double low = 0;
+			for(int k=tripDay;k<list.size();k++) {
+				
+				if(k+i==list.size()) break;
+				double xyResult = hotelxy-list.get(k+i).getDto().getMapx()+list.get(k+i).getDto().getMapy();
+				System.out.println(String.format("장소:%s, 호텔과 위도경도의 차이:%s", list.get(k+i).getDto().getTitle(),xyResult));
+				if(low<xyResult) {
+					low=xyResult;
+					System.out.println(low);
+					Collections.swap(list,tripDay+i,k+i);
+				}
+			}
+			
+			list.get(tripDay+i).setDay(i+1);
+
+		}//////////////////hotel most near place index change
+		int result = (int)Math.ceil(((double)list.size()-tripDay)/tripDay);
+		int count = 0;
+		int day=1;
+		double attrxy=0;
+		/////////////////////////////
+
+
+		if(list.size()-tripDay*2==1) {
+			list.get(list.size()-1).setDay(1);
+		}////////////////if
+		/////////////////////////////
+		
+		else {
+			for(int i=tripDay*(2);i<list.size();i++) {
+				if(result-1>count) {
+					if(i==tripDay*(2)&&count==0) attrxy = list.get(tripDay+day-1).getDto().getMapx()+list.get(tripDay+day-1).getDto().getMapy();
+					else  attrxy = list.get(tripDay*(2+count)+day).getDto().getMapx()+list.get((2+count)+day).getDto().getMapy();
+					double low = attrxy;
+					for(int k=tripDay*(2+count)+day;k<list.size();k++) {
+						double resultxy = attrxy-list.get(k).getDto().getMapx()+list.get(k).getDto().getMapy();
+						if(low<resultxy) {
+							low=resultxy;
+							Collections.swap(list,tripDay*(2+count)+day,k);
+						}
+					}
+					list.get(tripDay*(2+count)+i).setDay(day);
+					count++;
+				}
+				else {
+					count=0;
+					day++;
+					attrxy = list.get(tripDay+day).getDto().getMapx()+list.get(tripDay+day).getDto().getMapy();
+					for(int k=tripDay*2+day;k<list.size();k++){
+						double resultxy = attrxy-list.get(k).getDto().getMapx()+list.get(k).getDto().getMapy();
+						double low = attrxy;
+						if(low<resultxy) {
+							low=resultxy;
+							Collections.swap(list,tripDay*2+day,k);
+						}
+					}
+					list.get(i).setDay(day);
+					
+					count++;
+					
+				}//////////
+			}////////////for attr most near place
+		}////////////////else
+
+
 
 		for(RouteDTO route: list) {
 			int contentid = route.getContentid();
@@ -89,69 +184,8 @@ public class MainController {
 				}
 			}
 		}////////////////////
-/*
-		for(int i=0;i<list.size();i++) {
-			if(list.get(i).getContenttypeid()==32) {
-				int hotelDay = list.get(i).getDay();
-				Collections.swap(list, hotelDay-1, i);
-				if(tripDay<hotelDay) tripDay =hotelDay;
-			}
-			else {
-				list.get(i).setMtime(30*1000*60);
-			}
-		}///////////////list index change
-		/////////////////////////
-		for(int i=0;i<tripDay;i++) {
-			double hotelxy =list.get(i).getDto().getMapx()+list.get(i).getDto().getMapy();
-			double low = hotelxy;
-			for(int k=tripDay;k<list.size();k++) {
-				double xyResult = hotelxy-list.get(k+i).getDto().getMapx()+list.get(k+i).getDto().getMapy();
-				if(low>xyResult) {
-					low=xyResult;
-					Collections.swap(list,tripDay+i,k);
-				}
-			}
-			list.get(tripDay+i).setDay(i);
-		}//////////////////hotel most near place index change
-		int result = (int)Math.ceil(((double)list.size()-tripDay)/tripDay);
-		int count = 0;
-		int day=1;
-		double attrxy=0;
-		/////////////////////////////
-		if(list.size()-tripDay*2==1) {
-			list.get(list.size()-1).setDay(1);
-		}////////////////if
-		/////////////////////////////
 		
-		else {
-			for(int i=1;i<tripDay;i++) {
-				if(result-1>count) {
-					
-					if(i==1&&count==0) attrxy = list.get(tripDay+i).getDto().getMapx()+list.get(tripDay+i).getDto().getMapy();
-					else  attrxy = list.get(tripDay*(2+count)+i).getDto().getMapx()+list.get((2+count)+i).getDto().getMapy();
-					double low = attrxy;
-					for(int k=tripDay*(2+count);k<list.size();k++) {
-						double resultxy = attrxy-list.get(k).getDto().getMapx()+list.get(k).getDto().getMapy();
-						if(low>resultxy) {
-							low=resultxy;
-							Collections.swap(list,tripDay*(2+count)+i,k);
-						}
-					}
-					list.get(tripDay*(2+count)+i).setDay(day);
-					count++;
-				}
-				else {
-					count=0;
-					day++;
-					attrxy = list.get(tripDay+i).getDto().getMapx()+list.get(tripDay+i).getDto().getMapy();
-					list.get(i).setDay(day);
-					
-					count++;
-					
-				}//////////
-			}////////////for attr most near place
-		}////////////////else
-*/
+		/*
 		int result = (int)Math.ceil(((double)list.size()-tripDay)/tripDay);
 		int count = 0;
 		int day=1;
@@ -192,12 +226,12 @@ public class MainController {
 					
 			}///////////////for
 		}////////////////else
-
-		
+	*/
 			
 		PlannerDTO routeList = new PlannerDTO();
 		routeList.setRoute(list);
 		return routeList;
+		
 	}
 	@GetMapping("planner/selectone")
 	public PlannerDTO selectPlannerOne(@RequestParam Map map) {
@@ -257,6 +291,7 @@ public class MainController {
 			}
 			list = service.selectPlacesList(map);
 		}
+		/*
 		for(AttractionDTO dto:list) {
 			
 			if(dto.getKakaokey()!=null) {
@@ -271,7 +306,7 @@ public class MainController {
 			}
 			
 		}
-		
+		*/
 		return list;
 	}
 	

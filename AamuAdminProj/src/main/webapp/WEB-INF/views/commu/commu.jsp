@@ -2,8 +2,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <jsp:include page="/WEB-INF/views/template/top.jsp"/>
  
- <body class="sidebar-dark">
-  <div class="container-scroller">
       <div class="main-panel">
         <div class="content-wrapper" style="background-color: white;">
           <div class="row">
@@ -67,8 +65,6 @@
         <!--main-panel-->
       </div>
   
-    </div>
-  </div>
   <script>
     var selectLength=$(':checkbox').slice(1).length;
     $(':checkbox').click(function(){

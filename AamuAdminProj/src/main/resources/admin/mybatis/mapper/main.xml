@@ -8,11 +8,15 @@
 	</select>
 	
 	<select id="usersTodayCount" parameterType="String" resultType="int">
-		SELECT COUNT(*) FROM users WHERE TO_DATE(joindate,'YYYY-MM-DD')=TO_DATE(#{today},'YYYY-MM-DD')
+		SELECT COUNT(*) FROM users WHERE TO_DATE(joindate,'YYYY-MM-DD')=TO_DATE(sysdate,'YYYY-MM-DD')
 	</select>
 	
 	<select id="placesTotalCount" parameterType="Map" resultType="int">
 		SELECT COUNT(*) FROM ${places}
+	</select>
+	
+	<select id="selectEvent" parameterType="Map" resultType="int">
+		SELECT COUNT(*) FROM eventinfo WHERE TO_DATE(sysdate,'YYYY-MM-DD') <![CDATA[<=]]> To_DATE(eventstart,'YYYY-MM-DD')
 	</select>
 	
 </mapper>
