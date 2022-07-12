@@ -76,7 +76,7 @@ public class MainController {
 		List<RouteDTO> list = dto.getRoute();
 		int tripDay = list.get(0).getDay();
 		Map<Integer,List<RouteDTO>> map=new HashMap<>();
-
+		
 		for(int i=0;i<list.size();i++) {
 			int contentid = list.get(i).getContentid();
 			AttractionDTO placeInfo = service.selectOnePlace(contentid);
@@ -104,7 +104,7 @@ public class MainController {
 			}
 
 		}
-		
+		/*
 		for(int i=0;i<tripDay;i++) {
 			
 			double hotelxy =list.get(i).getDto().getMapx()+list.get(i).getDto().getMapy();
@@ -123,10 +123,11 @@ public class MainController {
 			list.get(tripDay+i).setDay(i+1);
 
 		}//////////////////hotel most near place index change
+		*/
 		int result = (int)Math.ceil(((double)list.size()-tripDay)/tripDay);
-		int count = 1;
-		int day=1;
+		int index=0;
 		double attrxy=0;
+		int count = 0;
 		/////////////////////////////
 
 
@@ -136,45 +137,49 @@ public class MainController {
 		/////////////////////////////
 		
 		else {
-			for(int i=tripDay*(2);i<list.size();i++) {
-				if(result>count) {
-					if(i==tripDay*(2)&&count==1) attrxy = list.get(tripDay+day-1).getDto().getMapx()+list.get(tripDay+day-1).getDto().getMapy();
-					else  attrxy = list.get(tripDay*count+day-1).getDto().getMapx()+list.get(tripDay*count+day-1).getDto().getMapy();
-					double low = 0;
-					for(int k=tripDay*2;k<list.size();k++) {
-						if(k==list.size()) break;
-						double resultxy = attrxy-list.get(k).getDto().getMapx()+list.get(k).getDto().getMapy();
-						System.out.println("카운트:"+count);
-						if(low<resultxy) {
-							low=resultxy;
-							Collections.swap(list,tripDay*2+day,k);
+			for(int i=tripDay;i<=list.size()+1;i++) {
+
+				if(count<result) {
+					double standardx = list.get(count*tripDay+index).getDto().getMapx();
+					double standardy = list.get(count*tripDay+index).getDto().getMapy();
+					System.out.println("기준장소:"+list.get(count*tripDay+index).getDto().getTitle());
+					double low = 100;
+					for(int k=tripDay;k<list.size();k++) {
+						if(list.get(k).getDay()==0) {
+							double attrx = list.get(k).getDto().getMapx();
+							double attry = list.get(k).getDto().getMapy();
+							double resultxy = Math.sqrt(Math.pow(Math.abs(standardx-attrx),2)+Math.pow(Math.abs(standardy-attry),2));
+							System.out.println(String.format("비교장소:%s, 비교결과:%s",list.get(k).getDto().getTitle(),resultxy));
+							if(low>resultxy) {
+								low=resultxy;
+								if(k<tripDay*(count+1)+index)
+									continue;
+								Collections.swap(list,k,tripDay*(count+1)+index);
+								System.out.println("low:"+low);
+								System.out.println(String.format("swap할 인덱스 tripday:%s,index:%s,주소:%s",tripDay*(count+1)+index,k,list.get(k).getDto().getTitle()));
+								
+							}
+							
 						}
+						
 					}
-					list.get(tripDay*2+day).setDay(day);
+					
+					list.get(tripDay*(count+1)+index).setDay(index+1);
+					System.out.println(String.format("주소:%s, 세팅된 인덱스:%s, 세팅된 날짜:%s",list.get(tripDay*(count+1)+index).getDto().getTitle(),tripDay*(count+1)+index,list.get(tripDay*(count+1)+index).getDay()));
 					count++;
 				}
 				else {
-					count=1;
-					day++;
-					attrxy = list.get(tripDay+day-1).getDto().getMapx()+list.get(tripDay+day-1).getDto().getMapy();
-					for(int k=tripDay*2+day-1;k<list.size();k++){
-						double resultxy = attrxy-list.get(k).getDto().getMapx()+list.get(k).getDto().getMapy();
-						double low = 0;
-						if(low<resultxy) {
-							low=resultxy;
-							Collections.swap(list,tripDay*2+day-1,k);
-						}
-					}
-					list.get(tripDay*2+day-1).setDay(day);
+					count=0;
+					index++;
+					continue;
 					
-					count++;
 					
 				}//////////
 			}////////////for attr most near place
-		}////////////////else
-
-
+		}
 		/*
+
+
 		for(RouteDTO route: list) {
 			int contentid = route.getContentid();
 			AttractionDTO placeInfo = service.selectOnePlace(contentid);
@@ -227,8 +232,7 @@ public class MainController {
 					
 			}///////////////for
 		}////////////////else
-	*/
-			
+		 */
 		PlannerDTO routeList = new PlannerDTO();
 		routeList.setRoute(list);
 		return routeList;

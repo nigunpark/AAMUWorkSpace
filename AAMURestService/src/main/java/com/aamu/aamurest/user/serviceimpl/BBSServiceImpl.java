@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import com.aamu.aamurest.user.service.BBSDTO;
 import com.aamu.aamurest.user.service.BBSService;
 
-@Service("bbsService")
+@Service
 public class BBSServiceImpl implements BBSService{
 	
 	@Autowired

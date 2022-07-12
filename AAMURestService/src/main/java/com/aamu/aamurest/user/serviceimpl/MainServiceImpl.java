@@ -319,9 +319,9 @@ public class MainServiceImpl implements MainService{
 		return dao.selectOnePlace(contentid);
 	}
 	@Override
-	public int checkPlace(int contentid) {
+	public int checkPlace(Map map) {
 		
-		return dao.checkPlace(contentid);
+		return dao.checkPlace(map);
 	}
 	@Override
 	public int updateUrl(AttractionDTO dto) {
