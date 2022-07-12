@@ -10,5 +10,6 @@ public interface MainService {
 	int usersTodayCount(String today);
 	int placesTotalCount(Map map);
 	int selectPeriod(Map map);
+
 	
 }

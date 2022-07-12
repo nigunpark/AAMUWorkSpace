@@ -26,11 +26,11 @@ public class MainController {
 	public String home(Model model) {
 		
 		Map<String, String> map = new HashMap<>();
-		
-		
+
 		Date current = new Date();
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+		SimpleDateFormat formatter = new SimpleDateFormat("yy-MM-dd");
 		String today = formatter.format(current);
+		System.out.println(today);
 		model.addAttribute("users",service.usersTotalCount());
 		model.addAttribute("todayUsers", service.usersTodayCount(today));
 		map.put("places", "placesinfo");

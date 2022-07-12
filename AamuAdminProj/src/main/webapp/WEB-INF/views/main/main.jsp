@@ -74,11 +74,11 @@
                     </div>
                   </div>
                   <div class="row">
-                  <div class="col-lg-12 grid-margin stretch-card">
+                  <div class="col-lg-9 grid-margin stretch-card">
                       <div class="card">
                         <div class="card-body">
-                          <h4 class="card-title">게시물과 커뮤니티</h4>
-                          <canvas id="linechart-multi"></canvas>
+                          <h4 class="card-title">게시물</h4>
+                          <canvas id="linechart-multi" style="height: 800px;"></canvas>
                         </div>
                       </div>
                     </div>
@@ -315,15 +315,6 @@ $(function() {
 	        data: [5, 23, 7, 12, 42, 23],
 	        borderColor: [
 	          '#ede190'
-	        ],
-	        borderWidth: 2,
-	        fill: false
-	      },
-	      {
-	        label: 'Dataset 3',
-	        data: [15, 10, 21, 32, 12, 33],
-	        borderColor: [
-	          '#f44252'
 	        ],
 	        borderWidth: 2,
 	        fill: false

@@ -15,4 +15,6 @@ public class RouteDTO {
 	private int day;
 	private long atime;
 	private long mtime;
+	private long endtime=0;
+	private String comment=null;
 }

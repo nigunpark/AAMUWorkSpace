@@ -1,7 +1,7 @@
 import {
-  faCalendar,
   faChevronDown,
   faClock,
+  faClockRotateLeft,
   faEllipsisVertical,
   faLocationDot,
 } from "@fortawesome/free-solid-svg-icons";
@@ -12,9 +12,9 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import Stack from "@mui/material/Stack";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-import { Alert, AlertTitle, TextField } from "@mui/material";
+import { Alert, TextField } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { addToAccum, corrTimeSetObj } from "../../redux/store";
+import { corrTimeSetObj } from "../../redux/store";
 
 const CreatePlanLeft = ({ currPosition, fromWooJaeData }) => {
   let reduxState = useSelector((state) => {
@@ -22,11 +22,12 @@ const CreatePlanLeft = ({ currPosition, fromWooJaeData }) => {
   });
   const [whichModal, setWhichModal] = useState("전체일정");
   const dayRef = useRef();
-  // console.log("fromWooJaeData:", fromWooJaeData);
   const [temp, setTemp] = useState("");
   useEffect(() => {
     setTemp(dayRef.current);
+    // console.log("fromWooJaeData:", fromWooJaeData);
   }, []);
+
   return (
     <div className="createPlanLeft">
       <div className="createPlanLeft__days">
@@ -75,11 +76,15 @@ const CreatePlanLeft = ({ currPosition, fromWooJaeData }) => {
 };
 
 function WhichModal({ whichModal, currPosition, fromWooJaeData }) {
+  const [forReRender, setForReRender] = useState(false);
+  console.log(forReRender);
   if (whichModal === "전체일정") {
     return (
       <WholeSchedule
         currPosition={currPosition}
         fromWooJaeData={fromWooJaeData}
+        forReRender={forReRender}
+        setForReRender={setForReRender}
       />
     );
   } else {
@@ -104,11 +109,16 @@ function WhichModal({ whichModal, currPosition, fromWooJaeData }) {
   }
 }
 
-function WholeSchedule({ currPosition, fromWooJaeData }) {
+function WholeSchedule({
+  currPosition,
+  fromWooJaeData,
+  forReRender,
+  setForReRender,
+}) {
   let reduxState = useSelector((state) => {
     return state;
   });
-  let [accumTime, setAccumTime] = useState(0);
+
   return (
     <div className="createPlanLeft__schedule">
       <div className="createPlanLeft__schedule-title">
@@ -127,8 +137,8 @@ function WholeSchedule({ currPosition, fromWooJaeData }) {
               index={index}
               key={index}
               fromWooJaeData={fromWooJaeData}
-              accumTime={accumTime}
-              setAccumTime={setAccumTime}
+              forReRender={forReRender}
+              setForReRender={setForReRender}
             />
           );
         })}
@@ -137,23 +147,19 @@ function WholeSchedule({ currPosition, fromWooJaeData }) {
   );
 }
 
-function Content({ index, fromWooJaeData, accumTime, setAccumTime }) {
+function Content({ index, fromWooJaeData, forReRender, setForReRender }) {
   let reduxState = useSelector((state) => {
     return state;
   });
   let dispatch = useDispatch();
   let contentRef = useRef();
   const [showTimePicker, setShowTimePicker] = useState(false);
-  const [forReRenDetail, setForReRenDetail] = useState(false);
+
   if (fromWooJaeData.length === 0) return;
+  if (fromWooJaeData === undefined) return;
   return (
     <div className="createPlanLeft__schedule__content" ref={contentRef}>
-      <select
-        className="createPlanLeft__schedule__select"
-        onChange={() => {
-          console.log(contentRef.current);
-        }}
-      >
+      <select className="createPlanLeft__schedule__select" onChange={() => {}}>
         {reduxState.tripPeriod.map((val, i) => {
           return (
             <option
@@ -212,6 +218,7 @@ function Content({ index, fromWooJaeData, accumTime, setAccumTime }) {
           </span>
         </span>
         <FontAwesomeIcon
+          style={{ cursor: "pointer" }}
           icon={faClock}
           onClick={() => {
             setShowTimePicker(!showTimePicker);
@@ -235,9 +242,11 @@ function Content({ index, fromWooJaeData, accumTime, setAccumTime }) {
               }
               showToolbar={true}
               label=""
-              onChange={(newValue) => {
+              onChange={(newValue) => {}}
+              onAccept={(newValue) => {
                 let newObj = getAmpmTmStart(newValue, index);
                 dispatch(corrTimeSetObj(newObj));
+                setForReRender(!forReRender);
               }}
             />
           </Stack>
@@ -248,13 +257,11 @@ function Content({ index, fromWooJaeData, accumTime, setAccumTime }) {
           <DetailSetting
             obj={obj}
             key={i}
-            index={i}
+            i={i}
             periodIndex={index}
-            accumTime={accumTime}
-            setAccumTime={setAccumTime}
             fromWooJaeData={fromWooJaeData}
-            forReRenDetail={forReRenDetail}
-            setForReRenDetail={setForReRenDetail}
+            forReRender={forReRender}
+            setForReRender={setForReRender}
           />
         );
       })}
@@ -264,13 +271,11 @@ function Content({ index, fromWooJaeData, accumTime, setAccumTime }) {
 
 function DetailSetting({
   obj,
-  index,
-  accumTime,
-  setAccumTime,
+  i,
   fromWooJaeData,
   periodIndex,
-  forReRenDetail,
-  setForReRenDetail,
+  forReRender,
+  setForReRender,
 }) {
   let reduxState = useSelector((state) => {
     return state;
@@ -278,30 +283,54 @@ function DetailSetting({
   const [upTime, setUpTime] = useState(0);
   const [downTime, setDownTime] = useState(0);
   const [memoBadge, setMemoBadge] = useState(false);
+  const [showAdjustMTime, setShowAdjustMTime] = useState(false);
   let memoRef = useRef();
   let textAreaRef = useRef();
+  let mTimeRef = useRef();
 
   useEffect(() => {
-    if (index === 0) {
-      let firstAccum = getNAccumDetailTime(index, reduxState, obj);
+    if (i === 0) {
+      let firstAccum = getNAccumDetailTime(periodIndex, reduxState, obj);
       setUpTime(firstAccum);
       setDownTime(firstAccum + obj.atime / 1000 / 60);
-      setAccumTime(firstAccum + obj.atime / 1000 / 60);
+      fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i + 1].starttime =
+        firstAccum + obj.atime / 1000 / 60;
     }
-    if (index !== 0) {
-      setUpTime(accumTime + obj.mtime / 1000 / 60);
-      setDownTime(accumTime + obj.mtime / 1000 / 60 + obj.atime / 1000 / 60);
-      setAccumTime(accumTime + obj.mtime / 1000 / 60 + obj.atime / 1000 / 60);
+    if (i !== 0) {
+      setUpTime(
+        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime +
+          obj.mtime / 1000 / 60
+      );
+      setDownTime(
+        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime +
+          obj.mtime / 1000 / 60 +
+          fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].atime /
+            1000 /
+            60
+      );
+      if (
+        i !==
+        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)].length - 1
+      ) {
+        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][
+          i + 1
+        ].starttime =
+          fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime +
+          obj.mtime / 1000 / 60 +
+          fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].atime /
+            1000 /
+            60;
+      }
     }
   }, []);
-
-  if (
-    obj.dto === null ||
-    reduxState.timeSetObj.find((obj) => {
-      return obj.day === index + 1;
-    }) === undefined
-  )
-    return;
+  // if (
+  //   obj.dto === null ||
+  //   reduxState.timeSetObj.find((obj) => {
+  //     return obj.day === i + 1;
+  //   }) === undefined
+  // )
+  //   return;
+  if (obj.dto === null) return;
   if (fromWooJaeData === undefined) return;
   return (
     <div className="detailSetting__container">
@@ -313,6 +342,11 @@ function DetailSetting({
             type="number"
             style={{ width: "37px" }}
             defaultValue={obj.mtime / 1000 / 60}
+            ref={mTimeRef}
+            onChange={(e) => {
+              obj.mtime = e.target.value * 1000 * 60;
+              setForReRender(!forReRender);
+            }}
           />
           <span>분</span>
         </div>
@@ -322,7 +356,6 @@ function DetailSetting({
           <img
             className="detailLocation__img"
             src={obj.dto.smallimage ?? "/images/no-image.jpg"}
-            // src={"/images/no-image.jpg"}
             alt="이미지"
             onError={(e) => {
               e.target.src = "/images/no-image.jpg";
@@ -331,20 +364,60 @@ function DetailSetting({
         </div>
         <div className="detailLocation__inform-container">
           <div className="detailLocation__part-top">
-            <div>
-              <div>{obj.dto.title}</div>
-              <div style={{ color: "var(--orange)" }}>
-                {obj.atime / 1000 / 60 / 60 + "시간"}{" "}
-                {((obj.atime / 1000 / 60) % 60) + "분"}
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "5px",
+              }}
+            >
+              <div style={{ fontWeight: "bold", fontSize: "13px" }}>
+                {obj.dto.title}
+              </div>
+              <div
+                className="detailLocation__aTime"
+                style={{ fontSize: "14px" }}
+              >
+                <span style={{ color: "var(--orange)" }}>
+                  {Math.floor(obj.atime / 1000 / 60 / 60)}
+                </span>{" "}
+                시간{" "}
+                <span style={{ color: "var(--orange)" }}>
+                  {Math.floor((obj.atime / 1000 / 60) % 60)}
+                </span>{" "}
+                분{" "}
+                <FontAwesomeIcon
+                  icon={faClockRotateLeft}
+                  style={{
+                    color: "rgba(0,0,0,0.7)",
+                    fontSize: "11px",
+                    cursor: "pointer",
+                  }}
+                  onClick={() => {
+                    setShowAdjustMTime(true);
+                  }}
+                />
               </div>
             </div>
             <div className="detailLocation__clock">
               <span>
-                {Math.floor(upTime / 60)}:{Math.floor(upTime % 60)}
+                {Math.floor(upTime / 60)
+                  .toString()
+                  .padStart(2, "0")}
+                :
+                {Math.floor(upTime % 60)
+                  .toString()
+                  .padStart(2, "0")}
               </span>
               <span>~</span>
               <span>
-                {Math.floor(downTime / 60)}:{Math.floor(downTime % 60)}
+                {Math.floor(downTime / 60)
+                  .toString()
+                  .padStart(2, "0")}
+                :
+                {Math.floor(downTime % 60)
+                  .toString()
+                  .padStart(2, "0")}
               </span>
             </div>
           </div>
@@ -372,11 +445,8 @@ function DetailSetting({
             <span
               onClick={() => {
                 if (window.confirm("정말 삭제하시겠습니까?")) {
-                  Object.values(fromWooJaeData[periodIndex])[0].splice(
-                    index,
-                    1
-                  );
-                  setForReRenDetail(!forReRenDetail);
+                  Object.values(fromWooJaeData[periodIndex])[0].splice(i, 1);
+                  setForReRender(!forReRender);
                 }
               }}
             >
@@ -389,7 +459,18 @@ function DetailSetting({
           textAreaRef={textAreaRef}
           memoBadge={memoBadge}
           setMemoBadge={setMemoBadge}
+          fromWooJaeData={fromWooJaeData}
+          periodIndex={periodIndex}
+          index={i}
         />
+        {showAdjustMTime && (
+          <AdjustMTime
+            setShowAdjustMTime={setShowAdjustMTime}
+            obj={obj}
+            setForReRender={setForReRender}
+            forReRender={forReRender}
+          />
+        )}
       </div>
     </div>
   );
@@ -423,7 +504,15 @@ function Step({ arr, index }) {
   );
 }
 
-function MemoArea({ memoRef, textAreaRef, memoBadge, setMemoBadge }) {
+function MemoArea({
+  memoRef,
+  textAreaRef,
+  memoBadge,
+  setMemoBadge,
+  fromWooJaeData,
+  periodIndex,
+  index,
+}) {
   return (
     <div className="memoArea" ref={memoRef}>
       <div className="memoArea__container">
@@ -437,12 +526,16 @@ function MemoArea({ memoRef, textAreaRef, memoBadge, setMemoBadge }) {
               rows="3"
               cols="25"
               style={{ resize: "none" }}
-            ></textarea>
+            >
+              {Object.values(fromWooJaeData[periodIndex])[0][index].comment}
+            </textarea>
           </div>
         </div>
         <div className="memoArea__btn">
           <span
             onClick={(e) => {
+              Object.values(fromWooJaeData[periodIndex])[0][index].comment =
+                textAreaRef.current.value;
               memoRef.current.classList.remove("memo_visible");
               setMemoBadge(!memoBadge);
             }}
@@ -454,13 +547,69 @@ function MemoArea({ memoRef, textAreaRef, memoBadge, setMemoBadge }) {
     </div>
   );
 }
-function getNAccumDetailTime(index, reduxState, obj) {
-  // console.log("timeSetObj", reduxState.timeSetObj);
+
+function AdjustMTime({ setShowAdjustMTime, obj, setForReRender, forReRender }) {
+  let timeRef = useRef();
+  let minRef = useRef();
+  return (
+    <div className="adjustMTime">
+      <div className="adjustMTime__container">
+        <div className="adjustMTime__content">
+          <h5>머무는 시간 설정</h5>
+          <div className="adjustMTime__input-container">
+            <input
+              ref={timeRef}
+              type="number"
+              min={0}
+              max={23}
+              defaultValue={Math.floor(obj.atime / 1000 / 60 / 60)}
+              onChange={(e) => {
+                obj.atime =
+                  e.target.value * 1000 * 60 * 60 +
+                  minRef.current.value * 1000 * 60;
+              }}
+            />
+            <span>시간</span>
+            <input
+              ref={minRef}
+              type="number"
+              min={0}
+              max={59}
+              defaultValue={Math.floor((obj.atime / 1000 / 60) % 60)}
+              onChange={(e) => {
+                obj.atime =
+                  e.target.value * 1000 * 60 +
+                  timeRef.current.value * 1000 * 60 * 60;
+              }}
+            />
+            <span>분</span>
+          </div>
+        </div>
+        <div className="adjustMTime__btn">
+          <span
+            onClick={() => {
+              setShowAdjustMTime(false);
+              setForReRender(!forReRender);
+            }}
+          >
+            완료
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function getNAccumDetailTime(periodIndex, reduxState, obj) {
+  let sumTime;
   let sTime = reduxState.timeSetObj.find((val) => {
-    return val.day === index + 1;
+    return val.day === periodIndex + 1;
   });
-  if (sTime.ampm === "오후") return sTime.time + 12;
-  let sumTime = sTime.time * 60 + sTime.min + obj.mtime / 1000 / 60;
+  if (sTime.ampm === "오후" && sTime.time >= 1 && sTime.time <= 11) {
+    sumTime = (sTime.time + 12) * 60 + sTime.min + obj.mtime / 1000 / 60;
+  } else {
+    sumTime = sTime.time * 60 + sTime.min + obj.mtime / 1000 / 60;
+  }
   return sumTime;
 }
 
@@ -474,15 +623,20 @@ function getAmpmTmStart(newValue, index) {
   );
   array.push(ampm);
   //시간가져오는 코드
-  let time = localeString
-    .substring(localeString.indexOf(":") - 2, localeString.indexOf(":"))
-    .trim()
-    .padStart(2, 0);
+  let time = parseInt(
+    localeString.substring(
+      localeString.indexOf(":") - 2,
+      localeString.indexOf(":")
+    )
+  );
+
   array.push(time);
   //분 가져오는 코드
-  let min = localeString.substring(
-    localeString.indexOf(":") + 1,
-    localeString.lastIndexOf(":")
+  let min = parseInt(
+    localeString.substring(
+      localeString.indexOf(":") + 1,
+      localeString.lastIndexOf(":")
+    )
   );
 
   return {

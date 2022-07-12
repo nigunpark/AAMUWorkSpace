@@ -8,13 +8,16 @@ import org.springframework.stereotype.Service;
 @Service
 public interface CommuService<T> {
 	//글 목록용
-	List<T> commuSelectList();
+	List<T> commuSelectList(Map map);
 	
 	//글 목록용_댓글 하나 뿌려주기
 	CommuCommentDTO commuCommentSelectOne(String lno);
 	
 	//글 목록용_사진 뿌려주기
 	List commuSelectPhotoList(String lno);
+	
+	//글 목록용_좋아요 여부 뿌려주기
+	Boolean commuIsLike(Map map);
 	
 	//글 생성용
 	int commuInsert(Map map);

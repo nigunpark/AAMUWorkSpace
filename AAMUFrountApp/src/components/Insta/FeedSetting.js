@@ -7,6 +7,8 @@ import Slider from "react-slick";
 import "./ModalGroup/slick-theme.css";
 import "./ModalGroup/slick.css";
 
+
+
 function FeedSetting() {
     let menuRef = useRef();
     let profileRef = useRef();
@@ -18,10 +20,11 @@ function FeedSetting() {
 
     const settings = {
         dots: true,
-        infinite: true,
+        infinite: false,
         speed: 500,
         slidesToShow: 1,
         slidesToScroll: 1
+        
       };
     
     function menuModalRef(e){
@@ -58,13 +61,12 @@ function FeedSetting() {
                 {modalShow 
                     ?<MenuModal></MenuModal>
                     :null}
+                    
             </div>  
             </div>
             <div className="location">
                 <p>어딘가에서</p>
             </div>
-                    
-            <div>
                 <Slider {...settings}>
                     <div className="container">
                     <img src="img/b.jpg" className="main-image" alt="메인" />
@@ -82,7 +84,6 @@ function FeedSetting() {
                     <img src="img/b.jpg" className="main-image" alt="메인" />
                     </div>
                 </Slider>
-            </div>
 
             <div className="feeds-contents">
                 <div className="feeds-icons">
@@ -150,7 +151,6 @@ function FeedSetting() {
             {/* <div className="container">
             <img src="img/b.jpg" className="main-image" alt="메인" />
             </div> */}
-            <div>
                 <Slider {...settings}>
                     <div>
                     <img src="img/b.jpg" className="main-image" alt="메인" />
@@ -168,7 +168,6 @@ function FeedSetting() {
                     <img src="img/b.jpg" className="main-image" alt="메인" />
                     </div>
                 </Slider>
-            </div>
             </div>
             <div className="feeds-contents">
                 <div className="feeds-icons">

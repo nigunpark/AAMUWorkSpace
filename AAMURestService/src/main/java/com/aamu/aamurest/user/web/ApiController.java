@@ -187,7 +187,7 @@ public class ApiController {
 							httpEntity,KakaoKey.class);
 
 			if(responseEntity3.getBody().getDocuments().size()==0 && title!=null && !"".equals(title)) {
-				System.out.println(title);
+				
 				uri ="https://dapi.kakao.com/v2/local/search/keyword.json?"
 						+ "y="+dto.getMapy()+"&x="+dto.getMapx()+"&radius=20000&query="+title;
 

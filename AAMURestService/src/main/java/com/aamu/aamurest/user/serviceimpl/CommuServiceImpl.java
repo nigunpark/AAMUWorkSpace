@@ -18,8 +18,8 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 	
 	//글 목록용
 	@Override
-	public List<CommuDTO> commuSelectList() {
-		return dao.commuSelectList();
+	public List<CommuDTO> commuSelectList(Map map) {
+		return dao.commuSelectList(map);
 	}
 	
 	//글 목록용_댓글 하나 뿌려주기
@@ -32,6 +32,14 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 	@Override
 	public List commuSelectPhotoList(String lno) {
 		return dao.commuSelectPhotoList(lno);
+	}
+	
+	//글 목록용_좋아요 여부 뿌려주기
+	@Override
+	public Boolean commuIsLike(Map map) {
+		int isLikeaffected=dao.commuIsLike(map);
+		if(isLikeaffected == 1) return true;
+		else return false;
 	}
 	
 	//글 생성용

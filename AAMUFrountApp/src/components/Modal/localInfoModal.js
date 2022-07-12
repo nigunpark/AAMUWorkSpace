@@ -75,6 +75,7 @@ const CloseLim = styled.div`
   font-size: 20px;
   &:hover {
     cursor: pointer;
+    color: var(--orange);
   }
 `;
 
