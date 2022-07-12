@@ -38,31 +38,31 @@ function FeedSetting() {
     <div className="feeds-setting">  
             <div className="title-profile">
                 <img src="./img/bk.jpg" alt="프사" />                
-                    <span
-                    ref={profileRef}
-                    className="profileSpan"
-                    onMouseOver={()=>{setprofileModal(true)}}
-                    >eyesmag</span> 
-                    <div className="profile">          
-                        {profileModal ? 
-                            <div 
-                            ref={profileRef}
-                            onMouseOver={()=>{setprofileModal(true)}}
-                            onMouseOut={()=>{setprofileModal(false)}}>
-                                <Profile></Profile>
-                            </div>
-                        : null
-                        }         
-                    </div>
-            <div className="dot">
-                <i className="fa-solid fa-ellipsis fa-2x"
-                ref={menuRef}
-                onClick={() => setModalShow(!modalShow)}></i>
-                {modalShow 
-                    ?<MenuModal></MenuModal>
-                    :null}
-                    
-            </div>  
+                <span
+                ref={profileRef}
+                className="profileSpan"
+                onMouseOver={()=>{setprofileModal(true)}}
+                >eyesmag</span> 
+                <div className="profile">          
+                    {profileModal ? 
+                        <div 
+                        ref={profileRef}
+                        onMouseOver={()=>{setprofileModal(true)}}
+                        onMouseOut={()=>{setprofileModal(false)}}>
+                            <Profile></Profile>
+                        </div>
+                    : null
+                    }         
+                </div>
+                <div className="dot">
+                    <i className="fa-solid fa-ellipsis fa-2x"
+                    ref={menuRef}
+                    onClick={() => setModalShow(!modalShow)}></i>
+                    {modalShow 
+                        ?<MenuModal></MenuModal>
+                        :null}
+                        
+                </div>  
             </div>
             <div className="location">
                 <p>어딘가에서</p>
@@ -88,7 +88,7 @@ function FeedSetting() {
             <div className="feeds-contents">
                 <div className="feeds-icons">
                     <div className='heart-icon'>
-                        {heart ?<i class="fa-solid fa-heart fa-2x"onClick={()=>{setHeart(false)}} style={{color:'red'}} />
+                        {heart ?<i className="fa-solid fa-heart fa-2x"onClick={()=>{setHeart(false)}} style={{color:'red'}} />
                         :<i className="fa-regular fa-heart fa-2x"  onClick={()=>{setHeart(true)}}></i>}
                     </div>
                     <div>
@@ -120,6 +120,9 @@ function FeedSetting() {
                 <div className="feeds-like">
                     <img src="./img/bk.jpg" className="feeds-commentimage" alt="프사" />
                     <span><span className="like-bold">0hyun0hyun</span>님<span className="like-bold">외 10명</span>이 좋아합니다</span>
+                </div>
+                <div className="feeds-title">
+                    <span className="comment-id">제목 : </span><span> 뉴 랜덤 다이버시티 전시 📷</span>
                 </div>
                 <div className="feeds-writing">
                     <span className="comment-id">eyesmag </span><span> 송원아트센터에서 진행하는 뉴 랜덤 다이버시티 전시 📷</span>
@@ -172,7 +175,15 @@ function FeedSetting() {
             <div className="feeds-contents">
                 <div className="feeds-icons">
                     <div className='heart-icon'>
-                        {heart ?<i class="fa-solid fa-heart fa-2x"onClick={()=>{setHeart(!heart)}} style={{color:'red'}} />:<i class="fa-regular fa-heart fa-2x"  onClick={()=>{setHeart(!heart)}}></i>}
+                        {heart 
+                        ?
+                        <i className="fa-solid fa-heart fa-2x"
+                            onClick={()=>{setHeart(!heart)}} 
+                            style={{color:'red'}} />
+                        :
+                        <i className="fa-regular fa-heart fa-2x"  
+                            onClick={()=>{setHeart(!heart)}}></i>
+                        }
                     </div>
                     <svg className="talk-icon" fill="#262626" viewBox="0 0 512 512" >
                         <path d="M256,0C114.848,0,0,114.848,0,256c0,49.216,13.792,96.48,39.936,137.216L1.152,490.048
