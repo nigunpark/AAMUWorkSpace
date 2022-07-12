@@ -6,6 +6,8 @@ import MyProfileBox from "./MyPageBox/MyProfileBox";
 import MyProfileTopLine from "./MyPageBox/MyProfileTopLine";
 import MyMessageBar from "./MyMessageBar/MyMessageBar";
 import styled from "styled-components";
+import { faStar } from "@fortawesome/free-regular-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 const MyPage = () => {
 
   let [clickTab, setClickTab] = useState(0);
@@ -164,12 +166,14 @@ const MyPage = () => {
               strokeLinejoin="round"
               className="feather feather-calendar"
               >
-              <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+              {/* <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
               <line x1="16" y1="2" x2="16" y2="6" />
               <line x1="8" y1="2" x2="8" y2="6" />
-              <line x1="3" y1="10" x2="21" y2="10" />
+              <line x1="3" y1="10" x2="21" y2="10" /> */}
+              <FontAwesomeIcon icon={faStar} />
             </svg>
           </button>
+
           <button
             ref={setting}
             className="app-sidebar-link"
