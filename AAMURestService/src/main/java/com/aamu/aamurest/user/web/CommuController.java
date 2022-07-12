@@ -50,7 +50,11 @@ public class CommuController {
 		for(CommuDTO dto : list) {//글 목록들 list에서 하나씩 꺼내서 dto에 담는다
 			dto.setCommuComment(commuService.commuCommentSelectOne(dto.getLno()));
 			dto.setPhoto(commuService.commuSelectPhotoList(dto.getLno()));
-		}
+			//좋아요여부 셋팅_글의 lno랑 commulike_lno가 같으면 쿼리실행
+			if(dto.getLno().equals(map.get("lno")))
+				dto.setIslike(commuService.commuIsLike(map));
+			else dto.setIslike(false); //같지않으면 false반환
+		}/////for
 		
 		return list;
 	}////////////////commuSelectList
@@ -60,7 +64,7 @@ public class CommuController {
 	@PostMapping(value="/gram/edit")
 	public Map commuInsert(@RequestParam List<MultipartFile> multifiles, @RequestParam Map map, HttpServletRequest req) {
 		//서버의 물리적 경로 얻기
-		String path=req.getSession().getServletContext().getRealPath("/resources/upload");
+		String path=req.getSession().getServletContext().getRealPath("/resources/commuUpload");
 		
 		try {
 			List<String> uploads= FileUploadUtil.fileProcess(multifiles, path);
@@ -165,9 +169,17 @@ public class CommuController {
 	@GetMapping("/gram/like")
 	public Map commuLike(@RequestParam Map map) {
 		int affected=commuService.commuLike(map);
+		//community테이블의 selectone likecount
+		int likecount=commuService.commuLikecountSelect(map);
 		Map resultMap = new HashMap();
-		if(affected==1) resultMap.put("result", "Success");
-		else resultMap.put("result", "NotSuccess");
+		if(affected==1) {
+			resultMap.put("result", "Success");
+			resultMap.put("likecount", likecount);
+		}
+		else {
+			resultMap.put("result", "NotSuccess");
+			resultMap.put("likecount", likecount);
+		}
 		return resultMap;
 	}
 	

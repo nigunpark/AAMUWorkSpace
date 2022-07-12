@@ -22,6 +22,7 @@ public class CommuDTO {
 	public String content;
 	public String postdate;
 	public String likecount;
+	public Boolean islike;
 	public String rcount;
 	public String userprofile;
 	public CommuCommentDTO commuComment;

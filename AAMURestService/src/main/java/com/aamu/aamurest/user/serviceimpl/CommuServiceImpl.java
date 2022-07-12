@@ -34,6 +34,14 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 		return dao.commuSelectPhotoList(lno);
 	}
 	
+	//글 목록용_좋아요 여부 뿌려주기
+	@Override
+	public Boolean commuIsLike(Map map) {
+		int isLikeaffected=dao.commuLikeSelect(map);
+		if(isLikeaffected == 1) return true;
+		else return false;
+	}
+	
 	//글 생성용
 	@Override
 	public int commuInsert(Map map) {
@@ -152,6 +160,12 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 			if(commuLikeDeleteAffected==1 && commuLikeUpdateAffected==1) return 1;
 			else return 0;
 		}
+	}
+	
+	//글 좋아요_selectOne(community테이블의 likecount)
+	@Override
+	public int commuLikecountSelect(Map map) {
+		return dao.commuLikecountSelect(map);
 	}
 
 	

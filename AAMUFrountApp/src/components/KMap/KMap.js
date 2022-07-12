@@ -7,7 +7,6 @@ import {
   changeInfo,
   changePickedTransport,
   changeTimeSetObj,
-  clearLatLng,
 } from "../../redux/store";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Box from "@mui/material/Box";
@@ -39,7 +38,8 @@ import { Alert, AlertTitle } from "@mui/material";
 import { ContainerInValid, OverlayInValid } from "../Modal/InVaildModal.js";
 
 const { kakao } = window;
-
+let mainMarkers = [];
+let markers = [];
 const KMap = ({
   currPosition,
   setTitleName,
@@ -81,17 +81,19 @@ const KMap = ({
   //지도 레벨 state
   const [mapLevel, setMapLevel] = useState(9);
   const [kMap, setKMap] = useState(null);
-  const [markers, setMarkers] = useState([1]);
+  // const [markers, setMarkers] = useState([1]);
   const [showAlert, setShowAlert] = useState(false);
   //-------------------------------------------------------------------------
   let pickedJangso = [];
+  let mainMarker;
   useEffect(() => {
+    let map;
     const center = new kakao.maps.LatLng(lat, lng);
     const options = {
       center,
       level: mapLevel,
     };
-    const map = new kakao.maps.Map(container.current, options);
+    map = new kakao.maps.Map(container.current, options);
     let geocoder = new kakao.maps.services.Geocoder();
     // 주소로 좌표를 검색합니다
     geocoder.addressSearch(currPosition, (result, status) => {
@@ -118,18 +120,13 @@ const KMap = ({
       let newCoords = new kakao.maps.LatLng(center.getLat(), center.getLng());
       kMap.setCenter(newCoords);
     });
-  }, []);
+  }, [container]);
 
   //주소변경시 해당위치로 맵의 중심옮김 & 인포윈도우생성
   useEffect(() => {
     let coords;
     let infowindow;
-    let mainMarker;
     if (kMap === null) return;
-    // setMarkers((markers) => {
-    //   console.log(markers);
-    //   // markers.forEach((marker) => marker.setMap(null));
-    // });
     let geocoder = new kakao.maps.services.Geocoder();
     // 주소로 좌표를 검색합니다
     geocoder.addressSearch(
@@ -167,37 +164,53 @@ const KMap = ({
             "            </div>" +
             "        </div>" +
             "    </div>    " +
-            "</div>", // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
+            "</div>",
+          // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
           // iwPosition = new kakao.maps.LatLng(lat, lng), //인포윈도우 표시 위치입니다
-          iwRemoveable = true; // removeable 속성을 ture 로 설정하면 인포윈도우를 닫을 수 있는 x버튼이 표시됩니다
+          iwRemoveable = true;
+        // removeable 속성을 ture 로 설정하면 인포윈도우를 닫을 수 있는 x버튼이 표시됩니다
 
         // 인포윈도우를 생성하고 지도에 표시합니다
         infowindow = new kakao.maps.InfoWindow({
           content: iwContent,
           removable: iwRemoveable,
         });
+
         mainMarker = new kakao.maps.Marker({
           map: kMap,
           position: coords,
           clickable: true,
         });
+
+        if (mainMarkers.length != 0) {
+          mainMarkers.pop().setMap(null);
+        }
+        mainMarkers.push(mainMarker);
         kakao.maps.event.addListener(mainMarker, "click", function () {
           infowindow.open(kMap, mainMarker);
         });
       }
     );
 
-    // 마커를 표시할 위치와 title 객체 배열입니다
-    reduxState.arrForPickJangso.map((jangsoObj) => {
+    if (reduxState.arrForPickJangso.length !== 0) {
+      let jangsoObj =
+        reduxState.arrForPickJangso[reduxState.arrForPickJangso.length - 1];
       pickedJangso.push({
         title: jangsoObj.title,
         latlng: new kakao.maps.LatLng(jangsoObj.mapy, jangsoObj.mapx),
       });
-    });
+    }
+    if (reduxState.arrForPickJangso.length === 0) {
+      if (markers.length !== 0) {
+        markers.forEach((val) => {
+          val.setMap(null);
+        });
+      }
+    }
+
     // 마커 이미지의 이미지 주소입니다
     let imageSrc =
       "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
-    // <i class="fa-solid fa-hotel"></i>
 
     for (let i = 0; i < pickedJangso.length; i++) {
       // 마커 이미지의 이미지 크기 입니다
@@ -211,8 +224,8 @@ const KMap = ({
         title: pickedJangso[i].title, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
         image: markerImage, // 마커 이미지
       });
-
       marker.setMap(kMap);
+      markers.push(marker);
     }
   }, [
     reduxState.localNameForMarker,
@@ -674,19 +687,20 @@ function manufacData(data, reduxState) {
       return obj.day === periodIndex + 1;
     });
     // if (periodIndex !== reduxState.tripPeriod.length - 1) {
-
     let newArr = { ...arr[0] };
     newArr.starttime = 0;
     arr.push(newArr);
-
     if (periodIndex === reduxState.tripPeriod.length - 2) {
-      temp = arr[arr.length - 1];
+      temp = { ...arr[arr.length - 1] };
     }
     if (periodIndex === reduxState.tripPeriod.length - 1) {
       temp.starttime = arr[0].starttime;
       temp.day = arr[0].day;
       arr.splice(0, 1, temp);
     }
+    arr = arr.filter((val, i) => {
+      return val.dto !== null;
+    });
     return { ["day" + (periodIndex + 1)]: arr };
   });
 }

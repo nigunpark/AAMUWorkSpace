@@ -91,6 +91,7 @@ function LocalInfoModal({
   localContainer,
 }) {
   let dispatch = useDispatch();
+
   return (
     <ContainerLim>
       <OverlayLim onClick={() => setLocaInfoModal(!locaInfoModal)} />
@@ -150,12 +151,13 @@ function LocalInfoModal({
               </li>
             </a>
             <a
-              href={`https://www.google.com/maps/place/${local.title}`}
+              href={`https://map.kakao.com/link/search/${local.title}
+              `}
               target="_blank"
             >
               <li>
                 <img
-                  src={process.env.PUBLIC_URL + "/images/sns/googlemap.png"}
+                  src={process.env.PUBLIC_URL + "/images/sns/kakaoMap.png"}
                 />
               </li>
             </a>

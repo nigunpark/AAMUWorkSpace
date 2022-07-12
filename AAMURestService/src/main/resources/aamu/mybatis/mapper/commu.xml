@@ -102,7 +102,7 @@
 	
 	<!-- 글 좋아요 -->
 	<select id="commuLikeSelect" parameterType="Map" resultType="int">
-		SELECT count(*) from likeboard WHERE id=#{id}
+		SELECT count(*) from likeboard WHERE id=#{id} AND lno=#{lno}
 	</select>
 	
 	<!-- 글 좋아요_insert(likeboard테이블) -->
@@ -115,12 +115,17 @@
 		UPDATE community SET likecount=likecount+1 WHERE lno=#{lno}
 	</update>
 	
+	<!-- 글 좋아요_select -->
+	<select id="commuLikecountSelect" parameterType="Map" resultType="int">
+		select likecount from community where lno=#{lno}
+	</select>
+	
 	<!-- 글 좋아요취소_delete(likeboard테이블) -->
 	<delete id="commuLikeDelete" parameterType="Map">
 		DELETE FROM likeboard WHERE id=#{id} AND lno=#{lno}
 	</delete>
 	
-	<!-- 글 좋아요_update(community테이블의 likecount-1) -->
+	<!-- 글 좋아요취소_update(community테이블의 likecount-1) -->
 	<update id="commuLikeMinusUpdate" parameterType="Map">
 		UPDATE community SET likecount=likecount-1 WHERE lno=#{lno}
 	</update>
