@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import "./MyPage.scss";
 import MyHomeBox from "./MyPageBox/MyHomeBox";
 import MyHomeTopLine from "./MyPageBox/MyHomeTopLine";
@@ -10,6 +10,13 @@ import { faStar } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 const MyPage = () => {
 
+  
+
+  // state = {
+  //   title: '',
+  //   content: '',
+  // };
+
   let [clickTab, setClickTab] = useState(0);
 
   let home = useRef();
@@ -20,25 +27,25 @@ const MyPage = () => {
   useEffect(() => {
     if (clickTab === 0) {
       home.current.classList.add("active");
-      two.current.classList.remove("active");
+      // two.current.classList.remove("active");
       three.current.classList.remove("active");
       setting.current.classList.remove("active");
     }
     else if (clickTab === 1) {
       home.current.classList.remove("active");
-      two.current.classList.add("active");
+      // two.current.classList.add("active");
       three.current.classList.remove("active");
       setting.current.classList.remove("active");
     }
     else if (clickTab === 2) {
       home.current.classList.remove("active");
-      two.current.classList.remove("active");
+      // two.current.classList.remove("active");
       three.current.classList.add("active");
       setting.current.classList.remove("active");
     }
     else if (clickTab === 3)  {
       home.current.classList.remove("active");
-      two.current.classList.remove("active");
+      // two.current.classList.remove("active");
       three.current.classList.remove("active");
       setting.current.classList.add("active");
     }
@@ -124,7 +131,8 @@ const MyPage = () => {
               <polyline points="9 22 9 12 15 12 15 22app-content" />
             </svg>
           </button>
-          <button
+          
+          {/* <button
             ref={two}
             className="app-sidebar-link"
             onClick={() => {
@@ -146,7 +154,8 @@ const MyPage = () => {
               <defs />
               <path d="M21.21 15.89A10 10 0 118 2.83M22 12A10 10 0 0012 2v10z" />
             </svg>
-          </button>
+          </button> */}
+
           <button
             ref={three}
             className="app-sidebar-link"
@@ -209,9 +218,10 @@ const MyPage = () => {
             {/* <MyHomeTopLine/> */}
             <TabTopLine clickTab={clickTab} />
           </div>
-          <div className="project-boxes jsGridView">
+          <div className="project-boxes jsListView"> {/* jsGridView */}
             {/* <MyHomeBox/> */}
-            <TabContent clickTab={clickTab} setClickTab={setClickTab}/>
+            <TabContent
+            clickTab={clickTab} setClickTab={setClickTab}/>
           </div>
         </div>
 
@@ -246,6 +256,8 @@ const MyPage = () => {
   );
 };
 
+
+
 function Title({clickTab}){
   if (clickTab === 0) {
     return <div className="projects-title">MyPage</div>;
@@ -262,7 +274,86 @@ function Title({clickTab}){
 
 }
 
+
+
+//-----------------------------------------------------------------------
 function TabContent({clickTab,setClickTab}) {
+  
+  //--------------------------------이미지 시작--------------------------------
+  const [showImages, setShowImages] = useState([]);
+
+  console.log('등록한 이미지:',showImages);
+
+  //이미지 등록
+  const handleAddImages = (e) => {
+    const imageLists = e.target.files;
+    let imageUrlLists = [...showImages];
+
+    for (let i = 0; i < imageLists.length; i++) {
+      const currentImageUrl = URL.createObjectURL(imageLists[i]);
+      imageUrlLists.push(currentImageUrl);
+    }
+
+    if (imageUrlLists.length > 5) { //사진 5개 제한
+      imageUrlLists = imageUrlLists.slice(0, 5);
+    }
+
+    setShowImages(imageUrlLists);
+  };
+
+  const handleDeleteImage = (id) => { //등록한 사진 삭제
+    setShowImages(showImages.filter((_, index) => index !== id));
+  };
+  //--------------------------------이미지 끝--------------------------------
+
+
+
+  
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+  const [tag, setTag] = useState("");
+
+  console.log('입력한 제목:',title);
+  console.log('입력한 내용:',content);
+  console.log('입력한 태그:',tag);
+  // const [image, setImage] = useState({
+  //   image_file: "",
+  //   // preview_URL: "image/default_image.png",
+  // });
+
+  const canSubmit = useCallback(() => {
+    return content !== "" && title !== "";
+  }, [title, content]); //이 코드 필요없을수도있음
+
+  // const handleSubmit = () => {
+  //   console.log('입력한 제목 handleSubmit :',title);
+  //   console.log('등록한 사진 handleSubmit :',showImages);
+
+  //   if (content.length===0 || title.length===0 ) {
+  //     alert("제목과 내용을 입력하세요");
+  //     return;
+  //   }
+
+  //   // try{
+  //     const formData = new FormData();
+  //     formData.append("title", title);
+  //     formData.append("content", content);
+  //     formData.append("file", showImages);
+  //     // formData.append("user_id", jwtUtils.getId(token));
+
+  //     // await api.post("/api/board", formData);
+  //     // window.alert("😎등록이 완료되었습니다😎");
+  //     console.log('입력한 제목 formData :',formData.title);
+  //   //   return formData;
+      
+  //   //   // navigate("/board-list");
+  //   // } catch (e) {
+  //   //   window.alert("등록을 실패했습니다");
+  //   // }
+  // };
+
+
+  
 
   let totalEdit = [1, 2, 3, 4];
 
@@ -325,17 +416,43 @@ function TabContent({clickTab,setClickTab}) {
   else if (clickTab === 3) {
     return <MyProfileBox />;
   }
-  else if (clickTab === 10) {
+  else if (clickTab === 10) { //-----------------------Write------------------------
+    // const imgFileUpload = (fileBlob) => {
+    //   const reader = new FileReader();
+  
+    //   reader.readAsDataURL(fileBlob);
+  
+    //   return new Promise((resolve) => {
+    //     reader.onload = () => {
+    //       setImageSrc(reader.result);
+    //       resolve();
+    //     };
+    //   });
+    // };
 
     return (
     <div className="MyWrite-container">
       <div className="write-box">
-        <input type='text' className="wirte-title"  placeholder="제목을 입력하세요"/>
+        <input
+        onChange={(e)=>{
+          setTitle(e.target.value);
+        }}
+        name="title"
+        type="text"
+        className="wirte-title"
+        placeholder="제목을 입력하세요"
+        value={title}/>
       </div>
 
       <div className="write-box">
-        <input className="write-picture-input" type='file' id='upload'/>
-        <label className="write-picture-label" for='upload'>사진 등록</label>
+        <input
+          multiple
+          className="write-picture-input"
+          type='file' id='upload'
+          onChange={handleAddImages}/>
+        <label className="write-picture-label" for='upload'>
+          사진 고르기
+        </label>
       </div>
 
       <div className="write-box">
@@ -343,28 +460,42 @@ function TabContent({clickTab,setClickTab}) {
       </div>
 
       <div className="write-box writer">
-        <textarea className="write-section" placeholder="글 쓰기"/>
+        <textarea
+          onChange={(e) => {
+            setContent(e.target.value);
+          }}
+          name="content"
+          className="write-section"
+          placeholder="글 쓰기"
+          value={content}/>
         <div className="box-gab"></div>
-        <input type='text' className="tag-section" placeholder="#tag"/>
+        <input
+          onChange={(e) => {
+            setTag(e.target.value);
+          }}
+          type='text'
+          className="tag-section"
+          placeholder="#tag"
+          value={tag}/>
       </div>
-
+      
       <div className="write-box add-delete">
-        <Imgs src='/images/imageMap.png'/>
-        <Imgs src='/images/bg1.png'/>
-        <Imgs src='/images/bg5.png'/>
-        <Imgs src='/images/imageMap.png'/>
-        <Imgs src='/images/imageMap.png'/>
-        {/*
-        첫 사진 - 여행 경로(지도)
-
-        그 외 4개 사진은 직접 찍은거로
-        단, 최대 4개까지 업로드 가능한거로
-        */}
+        {showImages.map((image, id) => (
+          <Imgs
+            src={image}
+            alt={`${image}-${id}`}
+            onClick={() => handleDeleteImage(id)}/>
+        ))}
+        
       </div>
 
       <div className="write-box">
         <div className='detail-button'>
+        {canSubmit() ? (
           <button className="learn-more" type="button">공유하기</button>
+          ) : (
+            <button  type="button" disabled>사진과 내용을 모두 입력하세요😭</button>
+          )}
         </div>
       </div>
 
@@ -372,6 +503,10 @@ function TabContent({clickTab,setClickTab}) {
     );
   }
 }
+
+
+
+
 
 // function Comp (){
 //   useEffect(()=>{
@@ -411,6 +546,7 @@ const Imgs = styled.img`
   height: 100%;
   overflow: hidden;
   object-fit: contain;
+  position: relative;
 `
 
 
