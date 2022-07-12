@@ -83,13 +83,11 @@ const KMap = ({
   const [kMap, setKMap] = useState(null);
   // const [markers, setMarkers] = useState([1]);
   const [showAlert, setShowAlert] = useState(false);
-  const [forReRender, setForReRender] = useState(false);
   //-------------------------------------------------------------------------
   let pickedJangso = [];
   let mainMarker;
   useEffect(() => {
     let map;
-    //mainMarkers = [];
     const center = new kakao.maps.LatLng(lat, lng);
     const options = {
       center,
@@ -129,10 +127,6 @@ const KMap = ({
     let coords;
     let infowindow;
     if (kMap === null) return;
-    // setMarkers((markers) => {
-    //   console.log(markers);
-    //   // markers.forEach((marker) => marker.setMap(null));
-    // });
     let geocoder = new kakao.maps.services.Geocoder();
     // 주소로 좌표를 검색합니다
     geocoder.addressSearch(
@@ -173,7 +167,8 @@ const KMap = ({
             "</div>",
           // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
           // iwPosition = new kakao.maps.LatLng(lat, lng), //인포윈도우 표시 위치입니다
-          iwRemoveable = true; // removeable 속성을 ture 로 설정하면 인포윈도우를 닫을 수 있는 x버튼이 표시됩니다
+          iwRemoveable = true;
+        // removeable 속성을 ture 로 설정하면 인포윈도우를 닫을 수 있는 x버튼이 표시됩니다
 
         // 인포윈도우를 생성하고 지도에 표시합니다
         infowindow = new kakao.maps.InfoWindow({
@@ -186,6 +181,7 @@ const KMap = ({
           position: coords,
           clickable: true,
         });
+
         if (mainMarkers.length != 0) {
           mainMarkers.pop().setMap(null);
         }
@@ -196,31 +192,16 @@ const KMap = ({
       }
     );
 
-    // reduxState.saveDaysNPickedSuksoRedux.map((suksoObj) => {
-    //   pickedSukso.push({
-    //     title: suksoObj.title,
-    //     latlng: new kakao.maps.LatLng(suksoObj.mapy, suksoObj.mapx),
-    //   });
-    // });
-
-    // 마커를 표시할 위치와 title 객체 배열입니다
-    // reduxState.arrForPickJangso.map((jangsoObj) => {
-    //   pickedJangso.push({
-    //     title: jangsoObj.title,
-    //     latlng: new kakao.maps.LatLng(jangsoObj.mapy, jangsoObj.mapx),
-    //   });
-    // });
     if (reduxState.arrForPickJangso.length !== 0) {
       let jangsoObj =
         reduxState.arrForPickJangso[reduxState.arrForPickJangso.length - 1];
       pickedJangso.push({
-        // title: jangsoObj.title,
+        title: jangsoObj.title,
         latlng: new kakao.maps.LatLng(jangsoObj.mapy, jangsoObj.mapx),
       });
     }
     if (reduxState.arrForPickJangso.length === 0) {
       if (markers.length !== 0) {
-        console.log("markers.forEach");
         markers.forEach((val) => {
           val.setMap(null);
         });
@@ -230,10 +211,7 @@ const KMap = ({
     // 마커 이미지의 이미지 주소입니다
     let imageSrc =
       "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
-    // <i class="fa-solid fa-hotel"></i>
-    if (markers.length !== 0) {
-      markers.forEach((val, i) => {});
-    }
+
     for (let i = 0; i < pickedJangso.length; i++) {
       // 마커 이미지의 이미지 크기 입니다
       let imageSize = new kakao.maps.Size(24, 35);
@@ -248,8 +226,6 @@ const KMap = ({
       });
       marker.setMap(kMap);
       markers.push(marker);
-
-      // marker.setMap(kMap);
     }
   }, [
     reduxState.localNameForMarker,
