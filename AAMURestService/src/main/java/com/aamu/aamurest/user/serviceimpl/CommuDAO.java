@@ -31,6 +31,11 @@ public class CommuDAO {
 		return template.selectList("commuSelectPhotoList",lno);
 	}
 	
+	//글 목록용_좋아요 여부 뿌려주기
+	public int commuIsLike(Map map) {
+		return template.selectOne("commuIsLike",map);
+	}
+	
 	//글 생성용
 	public int commuInsert(Map map) {
 		return template.insert("commuInsert",map);

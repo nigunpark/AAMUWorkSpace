@@ -34,6 +34,14 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 		return dao.commuSelectPhotoList(lno);
 	}
 	
+	//글 목록용_좋아요 여부 뿌려주기
+	@Override
+	public Boolean commuIsLike(Map map) {
+		int isLikeaffected=dao.commuIsLike(map);
+		if(isLikeaffected == 1) return true;
+		else return false;
+	}
+	
 	//글 생성용
 	@Override
 	public int commuInsert(Map map) {

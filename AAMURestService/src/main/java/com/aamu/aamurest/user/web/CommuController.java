@@ -50,7 +50,11 @@ public class CommuController {
 		for(CommuDTO dto : list) {//글 목록들 list에서 하나씩 꺼내서 dto에 담는다
 			dto.setCommuComment(commuService.commuCommentSelectOne(dto.getLno()));
 			dto.setPhoto(commuService.commuSelectPhotoList(dto.getLno()));
-		}
+			System.out.println(dto.getLno().equals(map.get("lno")));
+			if(dto.getLno().equals(map.get("lno")))
+				dto.setIslike(commuService.commuIsLike(map));
+			else dto.setIslike(false);
+		}/////for
 		
 		return list;
 	}////////////////commuSelectList
@@ -60,7 +64,7 @@ public class CommuController {
 	@PostMapping(value="/gram/edit")
 	public Map commuInsert(@RequestParam List<MultipartFile> multifiles, @RequestParam Map map, HttpServletRequest req) {
 		//서버의 물리적 경로 얻기
-		String path=req.getSession().getServletContext().getRealPath("/resources/upload");
+		String path=req.getSession().getServletContext().getRealPath("/resources/commuUpload");
 		
 		try {
 			List<String> uploads= FileUploadUtil.fileProcess(multifiles, path);

@@ -26,6 +26,11 @@
 		SELECT photo FROM commuphoto WHERE lno=#{lno}
 	</select>
 	
+	<!-- 글 목록용_좋아요 여부 뿌려주기 -->
+	<select id="commuIsLike" parameterType="Map" resultType="int">
+		SELECT COUNT(*) FROM likeboard WHERE id=#{id} AND lno=#{lno} 
+	</select>
+	
 	<!-- 글 생성용 -->
 	<insert id="commuInsert" parameterType="Map">
 		INSERT INTO community
@@ -102,7 +107,7 @@
 	
 	<!-- 글 좋아요 -->
 	<select id="commuLikeSelect" parameterType="Map" resultType="int">
-		SELECT count(*) from likeboard WHERE id=#{id}
+		SELECT count(*) from likeboard WHERE id=#{id} AND lno=#{lno}
 	</select>
 	
 	<!-- 글 좋아요_insert(likeboard테이블) -->
