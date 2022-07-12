@@ -48,7 +48,7 @@ class LoadingFragment : Fragment() {
         requireActivity().setStatusBarTransparent()
         Handler(Looper.getMainLooper()).postDelayed({
             navController.navigate(R.id.action_loadingFragment_to_loginFragment)
-        },5000)
+        },100)
     }
 
     override fun onStop() {

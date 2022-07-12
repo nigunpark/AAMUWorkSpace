@@ -41,7 +41,7 @@ class LoginFragment : Fragment() {
             binding.cirLoginButton.startAnimation()
             Handler(Looper.getMainLooper()).postDelayed({
                 navController.navigate(R.id.action_loginFragment_to_mainFragment)
-            },5000)
+            },100)
 
         }
     }
