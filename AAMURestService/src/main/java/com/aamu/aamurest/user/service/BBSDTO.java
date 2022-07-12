@@ -14,9 +14,10 @@ public class BBSDTO {
 	public int rbn;
 	public String title;
 	public String content;
+	public java.sql.Date postdate;
 	public int themeid;
 	public String themename;
-	public double rateavg;
+	public double rateavg; //평균 평점
 	public List<String> photo;
 	private int day; //1일차, 2일차 등
 	private long starttime;

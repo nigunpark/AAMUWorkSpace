@@ -2,14 +2,15 @@ package com.aamu.aamurest.user.service;
 
 import java.util.Date;
 
-
 import lombok.Getter;
 import lombok.Setter;
 
 public class ReviewDTO {
-	private String id;
-	private double rate;
-	private String review;
-	private Date ratedate;
-	private int number;
+	public int rbn;
+	public String id;
+	public int rate; //평점
+	public String review;
+	public Date ratedate;
+	public String rno;
+		
 }
