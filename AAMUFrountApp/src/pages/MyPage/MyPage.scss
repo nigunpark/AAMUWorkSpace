@@ -276,7 +276,7 @@ button, a {
 }
 
 .projects-section {
-  flex: 2;
+  flex: 3;
   background-color: var(--projects-section);
   border-radius: 32px;
   padding: 32px 32px 0 32px;
@@ -553,6 +553,7 @@ button, a {
     .project-box-content-header {
       order: 1;
       max-width: 120px;
+      max-height: 80px;
     }
     
     .project-box-header {
@@ -579,6 +580,7 @@ button, a {
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;
+      
     }
     
     .project-box-header > span {
@@ -591,6 +593,7 @@ button, a {
     .box-progress-wrapper {
       order: 3;
       flex: 1;
+      flex-wrap: nowrap;
     }
   }
 }
@@ -779,7 +782,10 @@ button, a {
   padding-left: 40%;
 }
 .MapImgSize{
-  max-width: 100%;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  overflow: hidden;
 }
 
 .box-content-subheader {
@@ -1025,6 +1031,7 @@ button, a {
 
   .box-progress-header {
     font-size: 12px;
+
   }
 
   .box-progress-percentage {
