@@ -1,6 +1,7 @@
 import {
   faChevronDown,
   faClock,
+  faClockRotateLeft,
   faEllipsisVertical,
   faLocationDot,
 } from "@fortawesome/free-solid-svg-icons";
@@ -13,7 +14,7 @@ import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { Alert, TextField } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { addToAccum, corrTimeSetObj } from "../../redux/store";
+import { corrTimeSetObj } from "../../redux/store";
 
 const CreatePlanLeft = ({ currPosition, fromWooJaeData }) => {
   let reduxState = useSelector((state) => {
@@ -25,7 +26,6 @@ const CreatePlanLeft = ({ currPosition, fromWooJaeData }) => {
   useEffect(() => {
     setTemp(dayRef.current);
     // console.log("fromWooJaeData:", fromWooJaeData);
-    console.log("들어옴");
   }, []);
 
   return (
@@ -76,14 +76,15 @@ const CreatePlanLeft = ({ currPosition, fromWooJaeData }) => {
 };
 
 function WhichModal({ whichModal, currPosition, fromWooJaeData }) {
-  const [forReRenClock, setForReRenClock] = useState(false);
+  const [forReRender, setForReRender] = useState(false);
+  console.log(forReRender);
   if (whichModal === "전체일정") {
     return (
       <WholeSchedule
         currPosition={currPosition}
         fromWooJaeData={fromWooJaeData}
-        forReRenClock={forReRenClock}
-        setForReRenClock={setForReRenClock}
+        forReRender={forReRender}
+        setForReRender={setForReRender}
       />
     );
   } else {
@@ -111,8 +112,8 @@ function WhichModal({ whichModal, currPosition, fromWooJaeData }) {
 function WholeSchedule({
   currPosition,
   fromWooJaeData,
-  forReRenClock,
-  setForReRenClock,
+  forReRender,
+  setForReRender,
 }) {
   let reduxState = useSelector((state) => {
     return state;
@@ -136,8 +137,8 @@ function WholeSchedule({
               index={index}
               key={index}
               fromWooJaeData={fromWooJaeData}
-              forReRenClock={forReRenClock}
-              setForReRenClock={setForReRenClock}
+              forReRender={forReRender}
+              setForReRender={setForReRender}
             />
           );
         })}
@@ -146,15 +147,16 @@ function WholeSchedule({
   );
 }
 
-function Content({ index, fromWooJaeData, forReRenClock, setForReRenClock }) {
+function Content({ index, fromWooJaeData, forReRender, setForReRender }) {
   let reduxState = useSelector((state) => {
     return state;
   });
   let dispatch = useDispatch();
   let contentRef = useRef();
   const [showTimePicker, setShowTimePicker] = useState(false);
-  const [forReRender, setForReRender] = useState(false);
+
   if (fromWooJaeData.length === 0) return;
+  if (fromWooJaeData === undefined) return;
   return (
     <div className="createPlanLeft__schedule__content" ref={contentRef}>
       <select className="createPlanLeft__schedule__select" onChange={() => {}}>
@@ -216,6 +218,7 @@ function Content({ index, fromWooJaeData, forReRenClock, setForReRenClock }) {
           </span>
         </span>
         <FontAwesomeIcon
+          style={{ cursor: "pointer" }}
           icon={faClock}
           onClick={() => {
             setShowTimePicker(!showTimePicker);
@@ -239,10 +242,11 @@ function Content({ index, fromWooJaeData, forReRenClock, setForReRenClock }) {
               }
               showToolbar={true}
               label=""
-              onChange={(newValue) => {
+              onChange={(newValue) => {}}
+              onAccept={(newValue) => {
                 let newObj = getAmpmTmStart(newValue, index);
                 dispatch(corrTimeSetObj(newObj));
-                setForReRenClock(!forReRenClock);
+                setForReRender(!forReRender);
               }}
             />
           </Stack>
@@ -279,8 +283,11 @@ function DetailSetting({
   const [upTime, setUpTime] = useState(0);
   const [downTime, setDownTime] = useState(0);
   const [memoBadge, setMemoBadge] = useState(false);
+  const [showAdjustMTime, setShowAdjustMTime] = useState(false);
   let memoRef = useRef();
   let textAreaRef = useRef();
+  let mTimeRef = useRef();
+
   useEffect(() => {
     if (i === 0) {
       let firstAccum = getNAccumDetailTime(periodIndex, reduxState, obj);
@@ -316,15 +323,15 @@ function DetailSetting({
       }
     }
   }, []);
-  if (
-    obj.dto === null ||
-    reduxState.timeSetObj.find((obj) => {
-      return obj.day === i + 1;
-    }) === undefined
-  )
-    return;
+  // if (
+  //   obj.dto === null ||
+  //   reduxState.timeSetObj.find((obj) => {
+  //     return obj.day === i + 1;
+  //   }) === undefined
+  // )
+  //   return;
+  if (obj.dto === null) return;
   if (fromWooJaeData === undefined) return;
-  // console.log("accumTime:", accumTime, index);
   return (
     <div className="detailSetting__container">
       <div className="movingTime">
@@ -335,6 +342,11 @@ function DetailSetting({
             type="number"
             style={{ width: "37px" }}
             defaultValue={obj.mtime / 1000 / 60}
+            ref={mTimeRef}
+            onChange={(e) => {
+              obj.mtime = e.target.value * 1000 * 60;
+              setForReRender(!forReRender);
+            }}
           />
           <span>분</span>
         </div>
@@ -344,7 +356,6 @@ function DetailSetting({
           <img
             className="detailLocation__img"
             src={obj.dto.smallimage ?? "/images/no-image.jpg"}
-            // src={"/images/no-image.jpg"}
             alt="이미지"
             onError={(e) => {
               e.target.src = "/images/no-image.jpg";
@@ -353,11 +364,39 @@ function DetailSetting({
         </div>
         <div className="detailLocation__inform-container">
           <div className="detailLocation__part-top">
-            <div>
-              <div>{obj.dto.title}</div>
-              <div style={{ color: "var(--orange)" }}>
-                {obj.atime / 1000 / 60 / 60 + "시간"}{" "}
-                {((obj.atime / 1000 / 60) % 60) + "분"}
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "5px",
+              }}
+            >
+              <div style={{ fontWeight: "bold", fontSize: "13px" }}>
+                {obj.dto.title}
+              </div>
+              <div
+                className="detailLocation__aTime"
+                style={{ fontSize: "14px" }}
+              >
+                <span style={{ color: "var(--orange)" }}>
+                  {Math.floor(obj.atime / 1000 / 60 / 60)}
+                </span>{" "}
+                시간{" "}
+                <span style={{ color: "var(--orange)" }}>
+                  {Math.floor((obj.atime / 1000 / 60) % 60)}
+                </span>{" "}
+                분{" "}
+                <FontAwesomeIcon
+                  icon={faClockRotateLeft}
+                  style={{
+                    color: "rgba(0,0,0,0.7)",
+                    fontSize: "11px",
+                    cursor: "pointer",
+                  }}
+                  onClick={() => {
+                    setShowAdjustMTime(true);
+                  }}
+                />
               </div>
             </div>
             <div className="detailLocation__clock">
@@ -424,6 +463,14 @@ function DetailSetting({
           periodIndex={periodIndex}
           index={i}
         />
+        {showAdjustMTime && (
+          <AdjustMTime
+            setShowAdjustMTime={setShowAdjustMTime}
+            obj={obj}
+            setForReRender={setForReRender}
+            forReRender={forReRender}
+          />
+        )}
       </div>
     </div>
   );
@@ -500,18 +547,69 @@ function MemoArea({
     </div>
   );
 }
+
+function AdjustMTime({ setShowAdjustMTime, obj, setForReRender, forReRender }) {
+  let timeRef = useRef();
+  let minRef = useRef();
+  return (
+    <div className="adjustMTime">
+      <div className="adjustMTime__container">
+        <div className="adjustMTime__content">
+          <h5>머무는 시간 설정</h5>
+          <div className="adjustMTime__input-container">
+            <input
+              ref={timeRef}
+              type="number"
+              min={0}
+              max={23}
+              defaultValue={Math.floor(obj.atime / 1000 / 60 / 60)}
+              onChange={(e) => {
+                obj.atime =
+                  e.target.value * 1000 * 60 * 60 +
+                  minRef.current.value * 1000 * 60;
+              }}
+            />
+            <span>시간</span>
+            <input
+              ref={minRef}
+              type="number"
+              min={0}
+              max={59}
+              defaultValue={Math.floor((obj.atime / 1000 / 60) % 60)}
+              onChange={(e) => {
+                obj.atime =
+                  e.target.value * 1000 * 60 +
+                  timeRef.current.value * 1000 * 60 * 60;
+              }}
+            />
+            <span>분</span>
+          </div>
+        </div>
+        <div className="adjustMTime__btn">
+          <span
+            onClick={() => {
+              setShowAdjustMTime(false);
+              setForReRender(!forReRender);
+            }}
+          >
+            완료
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function getNAccumDetailTime(periodIndex, reduxState, obj) {
   let sumTime;
   let sTime = reduxState.timeSetObj.find((val) => {
     return val.day === periodIndex + 1;
   });
-  // console.log("sTime.time", sTime.time);
   if (sTime.ampm === "오후" && sTime.time >= 1 && sTime.time <= 11) {
     sumTime = (sTime.time + 12) * 60 + sTime.min + obj.mtime / 1000 / 60;
   } else {
     sumTime = sTime.time * 60 + sTime.min + obj.mtime / 1000 / 60;
   }
-  // sumTime = sTime.time * 60 + sTime.min + obj.mtime / 1000 / 60;
   return sumTime;
 }
 
