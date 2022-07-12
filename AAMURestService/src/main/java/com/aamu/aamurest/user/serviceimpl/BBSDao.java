@@ -11,7 +11,7 @@ import com.aamu.aamurest.user.service.BBSDTO;
 import com.aamu.aamurest.user.service.BBSService;
 
 @Repository
-public class BBSDao {
+public class BBSDAO {
 	
 	@Autowired
 	private SqlSessionTemplate template;
@@ -26,11 +26,25 @@ public class BBSDao {
 		return template.selectList("bbsSelectPhotoList",rbn);
 	}
 	
-
+	//글 등록
+	public int bbsInsert(Map map) {
+		return template.insert("bbsInsert",map);
+	}
+	
+	//글 등록_사진 저장
+	public int photoInsert(Map photomap) {
+		System.out.println("(bbsdao):"+photomap);
+		return template.insert("photoInsert",photomap);
+	}
+	
+	//글 수정
+	public int bbsUpdate(Map map) {		
+		return template.update("bbsUpdate",map);
+	}
 	
 	
-
 	
-
+	
 	
 }
+

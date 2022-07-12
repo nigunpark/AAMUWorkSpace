@@ -12,9 +12,23 @@
 	<select id="bbsSelectPhotoList" parameterType="int" resultType="String">
 		SELECT photo FROM routebbsphoto WHERE rbn=#{rbn}
 	</select>
+	<!-- 글 등록 -->
+	<insert id="bbsInsert" parameterType="map">
+		INSERT INTO routebbs VALUES (#{rbn},#{title},TO_DATE(#{postdate},'YYYY-MM-DD'),#{content},1,1)
+	<selectKey keyProperty="rbn" resultType="int" order="AFTER">
+    	SELECT #{rbn} FROM DUAL
+    </selectKey>
+	</insert>
 	
-	
-	
+	<!-- 글 생성용_사진 저장 -->
+	<insert id="photoInsert" parameterType="Map" >
+		INSERT INTO routebbsphoto VALUES (#{rbn},#{photo})
+	</insert>
+		
+	<!-- 글 수정 -->
+	<update id="bbsUpdate" parameterType="map">
+	UPDATE bbs SET title=#{title},content=#{content} WHERE rbn=#{rbn}
+	 </update>
 	
 	
 </mapper>
