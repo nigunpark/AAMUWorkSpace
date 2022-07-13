@@ -1,7 +1,9 @@
 package com.aamu.aamuandroidapp.data.api
 
+import com.aamu.aamuandroidapp.data.api.response.AAMUUserResponse
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
+import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.jackson.JacksonConverterFactory
 import retrofit2.http.Body
@@ -10,7 +12,7 @@ import retrofit2.http.POST
 interface AAMUApi {
 
     @POST
-    suspend fun login(@Body username : String, @Body password : String)
+    suspend fun doLogin(@Body username : String, @Body password : String): Response<AAMUUserResponse>
 
     companion object {
         private const val BASE_URL = "http://192.168.0.25:8080/aamurest/"
