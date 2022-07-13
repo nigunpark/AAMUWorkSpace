@@ -8,5 +8,6 @@
   	</typeAliases>
 	<mappers>
 		<mapper resource="admin/mybatis/mapper/main.xml" />
+		<mapper resource="admin/mybatis/mapper/commu.xml" />
 	</mappers>
 </configuration>
