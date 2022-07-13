@@ -12,6 +12,9 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CommuDTO {
+	public String lno;
 	public String id;
-
+	public String ctitle;
+	public String content;
+	public java.sql.Date postdate;
 }

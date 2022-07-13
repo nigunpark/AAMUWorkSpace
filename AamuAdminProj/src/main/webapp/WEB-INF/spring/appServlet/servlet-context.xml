@@ -21,7 +21,7 @@
 		<beans:property name="suffix" value=".jsp" />
 	</beans:bean>
 	
-	<context:property-placeholder location="classpath:admin/resources/connect.properties"/>
+	<context:property-placeholder location="classpath:admin/resources/connect.properties, classpath:admin/resources/paging.properties"/>
 	
 	<context:component-scan base-package="com.aamu.admin" />
 	
