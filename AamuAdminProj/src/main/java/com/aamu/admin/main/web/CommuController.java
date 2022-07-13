@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.aamu.admin.main.service.CommuDTO;
+import com.aamu.admin.main.service.ListPagingData;
+import com.aamu.admin.main.service.PagingUtil;
 import com.aamu.admin.main.serviceimpl.CommuServiceImpl;
 
 @Controller
@@ -28,9 +31,6 @@ public class CommuController {
 			HttpServletRequest req,
 			Model model) {
 		
-		//현재 페이지를 맵에 저장
-		map.put(PagingUtil.NOW_PAGE, nowPage);
-		ListPagingData<OneMemoDTO> listPagingData= memoService.selectList(map, req, nowPage);
 		
 		
 		
