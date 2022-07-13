@@ -109,9 +109,9 @@
             </a>
             <div class="collapse" id="form-elements">
               <ul class="nav flex-column sub-menu">
-                <li class="nav-item"><a class="nav-link" href="<c:url value="/admin/Commu.do"/>">전체 게시글 관리</a></li>
-                <li class="nav-item"><a class="nav-link" href="/admin/CommuComplain.do">신고 게시글 관리</a></li>
-                <li class="nav-item"> <a class="nav-link" href="/admin/CommuComment.do">댓글 관리</a></li>
+                <li class="nav-item"><a class="nav-link" href="<c:url value="#"/>">전체 게시글 관리</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">신고 게시글 관리</a></li>
+                <li class="nav-item"> <a class="nav-link" href="#">리뷰 관리</a></li>
               </ul>
             </div>
           </li>
@@ -123,8 +123,9 @@
             </a>
             <div class="collapse" id="tables">
               <ul class="nav flex-column sub-menu">
-                <li class="nav-item"><a class="nav-link" href="#">커뮤니티 관리</a></li>
-                <li class="nav-item"> <a class="nav-link" href="#">유저 관리</a></li>
+                <li class="nav-item"><a class="nav-link" href="<c:url value="/admin/Commu.do"/>">전체 커뮤니티 관리</a></li>
+                <li class="nav-item"><a class="nav-link" href="/admin/CommuComplain.do">신고 커뮤니티 관리</a></li>
+                <li class="nav-item"> <a class="nav-link" href="/admin/CommuComment.do">댓글 관리</a></li>
               </ul>
             </div>
           </li>
