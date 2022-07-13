@@ -65,6 +65,7 @@ dependencies {
 
     def lottieVersion = '5.2.0'
     implementation "com.airbnb.android:lottie:$lottieVersion"
+    implementation "com.airbnb.android:lottie-compose:$lottieVersion"
 
     //animated button for login
     implementation 'br.com.simplepass:loading-button-android:2.2.0'

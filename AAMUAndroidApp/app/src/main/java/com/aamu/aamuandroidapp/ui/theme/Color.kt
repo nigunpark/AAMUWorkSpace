@@ -6,6 +6,10 @@ val green200 = Color(0xffa5d6a7)
 val green500 = Color(0xff4caf50)
 val green700 = Color(0xff388e3c)
 
+val cyan200 = Color(0xff80DEEA)
+val cyan500 = Color(0xff00BCD4)
+val cyan700 = Color(0xff0097A7)
+
 val blue500 = Color(0xFF3F51B5)
 val blue200 = Color(0xFF9FA8DA)
 val blue700 = Color(0xFF303F9F)
@@ -13,6 +17,10 @@ val blue700 = Color(0xFF303F9F)
 val purple200 = Color(0xFFB39DDB)
 val purple = Color(0xFF833AB4)
 val purple700 = Color(0xFF512DA8)
+
+val amber200 = Color(0xFFFFE082)
+val amber500 = Color(0xFFFFC107)
+val amber700 = Color(0xFFFFA000)
 
 val orange200 = Color(0xFFff7961)
 val orange500 = Color(0xFFf44336)
