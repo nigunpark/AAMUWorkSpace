@@ -37,6 +37,7 @@ public class CommuController {
 		
 		//데이타 저장]		
 		model.addAttribute("listPagingData",listPagingData);
+		model.addAttribute("totalCount",commuService.commuGetTotalRecordCount(map));
 		
 		//뷰정보 반환
 		return "commu/commu";

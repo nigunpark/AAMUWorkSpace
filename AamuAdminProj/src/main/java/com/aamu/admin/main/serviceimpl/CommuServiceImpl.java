@@ -51,6 +51,11 @@ public class CommuServiceImpl implements CommuService {
 		
 		return listPagingData;
 	}
+	
+	@Override
+	public int commuGetTotalRecordCount(Map map) {
+		return dao.commuGetTotalRecordCount(map);
+	}
 
 	
 	

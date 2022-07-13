@@ -13,8 +13,10 @@ import lombok.Setter;
 @AllArgsConstructor
 public class CommuDTO {
 	public String lno;
-	public String id;
 	public String ctitle;
-	public String content;
+	public String id;
 	public java.sql.Date postdate;
+	public String rcount;
+	public String likecount;
+	
 }

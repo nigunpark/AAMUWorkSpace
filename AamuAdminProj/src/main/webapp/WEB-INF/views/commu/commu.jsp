@@ -17,39 +17,55 @@
                         <h4 class="card-title">게시글 전체 리스트</h4>
                         
                         <div class="card-numberOfBoard">
-                          총 게시글 수: 0개
+                          총 게시글 수: ${totalCount}개
                           <a href="#" class="btn btn-primary text-white me-0 " style="float:right"> 삭제</a>
                         </div>
                         <div class="table-responsive text-center">
-                          <table class="table">
+                          <table class="table text-center">
                             <thead>
                               <tr>
                                 <th class="col-1 ">
-                                    <input type="checkbox" class="form-check-input" aria-checked="false" value="all"><i class="input-helper"></i>
+                                    <div class="form-check form-check-flat mt-0">
+	                                    <label class="form-check-label">
+	                                    <input type="checkbox" class="form-check-input" aria-checked="false"><i class="input-helper"></i></label>
+									</div>
                                 </th>
                                 <th class="col-1">글번호</th>
-                                <th class="col-4">제목</th>
-                                <th class="col-1">ID</th>
-                                <th class="col-1">등록일</th>
+                                <th>제목</th>
+                                <th class="col-2">ID</th>
+                                <th class="col-2">작성일</th>
                                 <th class="col-1">댓글수</th>
                                 <th class="col-1">좋아요수</th>
                               </tr>
                             </thead>
                             <tbody>
-                              <tr>
-                                <td>
-                                  <input type="checkbox" class="form-check-input" aria-checked="false"><i class="input-helper"></i>
-                                </td>
-                                <td>1</td>
-                                <td >제목입니다</td>
-                                <td>김경희</td>
-                                <td>2022.06.29</td>
-                                <td>1</td>
-                                <td>1</td>
-                              </tr>
-                              
+                                <c:if test="${empty listPagingData.lists }" var="isEmpty">
+									<tr>
+										<td colspan="4">등록된 글이 없습니다.</td>
+									</tr>
+								</c:if>
+								<c:if test="${not isEmpty }">
+									<c:forEach var="record" items="${listPagingData.lists}" varStatus="loop">
+										<tr>
+											<td>
+			                                  <div class="form-check form-check-flat mt-0">
+	                                            <label class="form-check-label">
+	                                              <input type="checkbox" class="form-check-input" aria-checked="false"><i class="input-helper"></i></label>
+	                                          </div>
+			                                </td>
+											<td>${listPagingData.map.totalCount - (((listPagingData.map.nowPage - 1) * listPagingData.map.pageSize) + loop.index)}</td>
+			                                <td >${record.ctitle}</td>
+			                                <td>${record.id}</td>
+			                                <td>${record.postdate}</td>
+			                                <td>${record.rcount}</td>
+			                                <td>${record.likecount}</td>
+		                          		</tr>
+		                          	</c:forEach>
+								</c:if>
                             </tbody>
                           </table>
+                        <!-- 페이징 출력 -->
+						<div>${listPagingData.pagingString}</div>
                         </div>
                       </div>
                     </div>

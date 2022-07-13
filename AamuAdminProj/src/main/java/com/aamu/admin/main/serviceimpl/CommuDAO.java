@@ -14,15 +14,17 @@ public class CommuDAO {
 	@Autowired
 	private SqlSessionTemplate template;
 	
+	//전체 레코드수
+		public int commuGetTotalRecordCount(Map map) {
+			return template.selectOne("commuGetTotalRecordCount", map);
+		}
+	
 	//글 리스트 뿌려주기
 	public List<CommuDTO> commuSelectList(Map map){
 		List<CommuDTO> records = template.selectList("commuSelectList",map);
 		return records;
 	}
 	
-	//전체 레코드수
-	public int commuGetTotalRecordCount(Map map) {
-		return template.selectOne("commuGetTotalRecordCount", map);
-	}
+	
 
 }
