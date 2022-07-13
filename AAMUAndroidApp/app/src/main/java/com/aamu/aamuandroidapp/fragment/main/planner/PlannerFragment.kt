@@ -1,47 +1,39 @@
-package com.aamu.aamuandroidapp.fragment.init
+package com.aamu.aamuandroidapp.fragment.main.planner
 
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.NavController
-import androidx.navigation.Navigation
-import com.aamu.aamuandroidapp.R
-import com.aamu.aamuandroidapp.databinding.FragmentLoadingBinding
+import com.aamu.aamuandroidapp.components.aamuplan.AAMUPlanHome
+import com.aamu.aamuandroidapp.databinding.FragmentPlannerBinding
 import com.aamu.aamuandroidapp.util.setStatusBarOrigin
 import com.aamu.aamuandroidapp.util.setStatusBarTransparent
 
-class LoadingFragment : Fragment() {
 
-    private lateinit var binding: FragmentLoadingBinding
+class PlannerFragment : Fragment() {
 
-    private lateinit var navController: NavController
+    private lateinit var binding: FragmentPlannerBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentLoadingBinding.inflate(layoutInflater)
-
+        binding = FragmentPlannerBinding.inflate(inflater)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        navController = Navigation.findNavController(view)
-
+        binding.plannerCompose.setContent {
+            AAMUPlanHome()
+        }
     }
 
     override fun onResume() {
         super.onResume()
         requireActivity().setStatusBarTransparent()
-        Handler(Looper.getMainLooper()).postDelayed({
-            navController.navigate(R.id.action_loadingFragment_to_loginFragment)
-        },100)
     }
 
     override fun onStop() {

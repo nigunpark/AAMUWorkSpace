@@ -31,11 +31,6 @@ public class CommuDAO {
 		return template.selectList("commuSelectPhotoList",lno);
 	}
 	
-	//글 목록용_좋아요 여부 뿌려주기
-	public int commuIsLike(Map map) {
-		return template.selectOne("commuIsLike",map);
-	}
-	
 	//글 생성용
 	public int commuInsert(Map map) {
 		return template.insert("commuInsert",map);
@@ -121,6 +116,11 @@ public class CommuDAO {
 		return template.update("commuLikePlusUpdate",map);
 	}
 	
+	//글 좋아요_select(community테이블의 likecount)
+	public int commuLikecountSelect(Map map) {
+		return template.selectOne("commuLikecountSelect",map);
+	}
+	
 	//글 좋아요취소_delete(likeboard테이블)
 	public int commuLikeDelete(Map map) {
 		System.out.println("(dao)map:"+map);
@@ -131,5 +131,6 @@ public class CommuDAO {
 	public int commuLikeMinusUpdate(Map map) {
 		return template.delete("commuLikeMinusUpdate",map);
 	}
+	
 
 }

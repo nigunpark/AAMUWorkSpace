@@ -28,7 +28,7 @@ public interface MainService{
 
 	AttractionDTO selectOnePlace(int contentid);
 	
-	int checkPlace(int contentid);
+	int checkPlace(Map map);
 
 	int updateRoute(List<RouteDTO> routes);
 

@@ -50,10 +50,10 @@ public class CommuController {
 		for(CommuDTO dto : list) {//글 목록들 list에서 하나씩 꺼내서 dto에 담는다
 			dto.setCommuComment(commuService.commuCommentSelectOne(dto.getLno()));
 			dto.setPhoto(commuService.commuSelectPhotoList(dto.getLno()));
-			System.out.println(dto.getLno().equals(map.get("lno")));
+			//좋아요여부 셋팅_글의 lno랑 commulike_lno가 같으면 쿼리실행
 			if(dto.getLno().equals(map.get("lno")))
 				dto.setIslike(commuService.commuIsLike(map));
-			else dto.setIslike(false);
+			else dto.setIslike(false); //같지않으면 false반환
 		}/////for
 		
 		return list;
@@ -169,9 +169,17 @@ public class CommuController {
 	@GetMapping("/gram/like")
 	public Map commuLike(@RequestParam Map map) {
 		int affected=commuService.commuLike(map);
+		//community테이블의 selectone likecount
+		int likecount=commuService.commuLikecountSelect(map);
 		Map resultMap = new HashMap();
-		if(affected==1) resultMap.put("result", "Success");
-		else resultMap.put("result", "NotSuccess");
+		if(affected==1) {
+			resultMap.put("result", "Success");
+			resultMap.put("likecount", likecount);
+		}
+		else {
+			resultMap.put("result", "NotSuccess");
+			resultMap.put("likecount", likecount);
+		}
 		return resultMap;
 	}
 	

@@ -29,5 +29,16 @@
         android:id="@+id/mainFragment"
         android:name="com.aamu.aamuandroidapp.fragment.main.MainFragment"
         android:label="fragment_main"
-        tools:layout="@layout/fragment_main" />
+        tools:layout="@layout/fragment_main" >
+        <action
+            android:id="@+id/action_mainFragment_to_plannerFragment"
+            app:destination="@id/plannerFragment"
+            app:popUpTo="@id/mainFragment"
+            app:popUpToInclusive="false" />
+    </fragment>
+    <fragment
+        android:id="@+id/plannerFragment"
+        android:name="com.aamu.aamuandroidapp.fragment.main.planner.PlannerFragment"
+        android:label="fragment_planner"
+        tools:layout="@layout/fragment_planner" />
 </navigation>

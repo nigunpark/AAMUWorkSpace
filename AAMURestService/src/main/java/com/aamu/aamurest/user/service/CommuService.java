@@ -58,4 +58,8 @@ public interface CommuService<T> {
 	//글 좋아요
 	int commuLike(Map map);
 	
+	//글 좋아요_selectOne(community테이블의 likecount)
+	int commuLikecountSelect(Map map); 
+	
+	
 }

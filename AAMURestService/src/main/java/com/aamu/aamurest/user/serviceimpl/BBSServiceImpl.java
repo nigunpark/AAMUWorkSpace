@@ -11,7 +11,7 @@ import com.aamu.aamurest.user.service.BBSDTO;
 import com.aamu.aamurest.user.service.BBSService;
 import com.aamu.aamurest.user.service.ReviewDTO;
 
-@Service("bbsService")
+@Service
 public class BBSServiceImpl implements BBSService{
 	
 	@Autowired

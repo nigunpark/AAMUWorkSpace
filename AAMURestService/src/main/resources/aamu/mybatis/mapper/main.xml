@@ -25,7 +25,7 @@
 	</insert>
 	
 	<select id="selectPlacesList" parameterType="Map" resultType="attrDTO">
-		SELECT p.*,i.* FROM places p JOIN ${selecttable} i ON p.contentid=i.contentid WHERE p.areacode=#{areacode} AND p.contenttypeid=#{contenttypeid} AND <![CDATA[rownum<=60]]>
+		SELECT p.*,i.* FROM places p JOIN ${selecttable} i ON p.contentid=i.contentid WHERE p.areacode=#{areacode} AND p.contenttypeid=#{contenttypeid} AND <![CDATA[rownum<=100]]>
 	</select>
 	
 	<select id="selectAttrSigungu" parameterType="Map" resultType="attrDTO">
@@ -103,8 +103,12 @@
 		UPDATE places SET url=#{url} WHERE contentid=#{contentid}
 	</update>
 	
-	<select id="checkPlace" parameterType="int" resultType="int">
-		SELECT count(*) FROM places WHERE contentid=#{contentid}
+	<select id="checkPlace" parameterType="Map" resultType="int">
+		SELECT count(*) FROM ${table} WHERE contentid=#{contentid}
+	</select>
+	
+	<select id="countPlace" parameterType="Map" resultType="int">
+		SELECT COUNT(*) FROM ${table} WHERE contentid=#{contentid}
 	</select>
 	
 

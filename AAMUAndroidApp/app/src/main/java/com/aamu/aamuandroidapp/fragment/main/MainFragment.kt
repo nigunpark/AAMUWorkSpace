@@ -1,5 +1,8 @@
 package com.aamu.aamuandroidapp.fragment.main
 
+import android.Manifest
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -13,6 +16,7 @@ import com.aamu.aamuandroidapp.fragment.main.sub.GramFragment
 import com.aamu.aamuandroidapp.fragment.main.sub.HomeFragment
 import com.aamu.aamuandroidapp.fragment.main.sub.InfoFragment
 import com.aamu.aamuandroidapp.fragment.main.sub.RouteBBSFragment
+import com.aamu.aamuandroidapp.util.PermissionUtils
 import meow.bottomnavigation.MeowBottomNavigation
 
 class MainFragment : Fragment() {
@@ -20,6 +24,14 @@ class MainFragment : Fragment() {
     private lateinit var binding : FragmentMainBinding
 
     private lateinit var navControllerHost : NavController
+
+    private lateinit var permissionUtils: PermissionUtils
+
+    private lateinit var preferences: SharedPreferences
+
+    private var permissions = arrayOf(
+        Manifest.permission.ACCESS_FINE_LOCATION,
+        Manifest.permission.ACCESS_COARSE_LOCATION)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -52,6 +64,31 @@ class MainFragment : Fragment() {
             }
         }
 
+        permissionUtils = PermissionUtils(requireContext(), requireActivity(),permissions)
+
+        preferences = requireContext().getSharedPreferences("local", Context.MODE_PRIVATE)
+
+        if (!permissionUtils.checkPermission()) {
+            //권한 요청
+            permissionUtils.requestPermissions();
+        } else {
+            preferences.edit().putString("local", "N").commit()
+        }
+
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.requireActivity().onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (!permissionUtils.requestPermissionsResult(requestCode, permissions, grantResults)) {
+            preferences.edit().putString("local", "Y").commit()
+        }
+        else{
+            preferences.edit().putString("local", "N").commit()
+        }
     }
 
     private fun replace(fragmet : Fragment){

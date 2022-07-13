@@ -74,9 +74,9 @@ public class MainDAO {
 		return template.selectOne("selectOnePlace", contentid);
 	}
 
-	public int checkPlace(int contentid) {
+	public int checkPlace(Map map) {
 		
-		return template.selectOne("checkPlace", contentid);
+		return template.selectOne("checkPlace", map);
 	}
 
 	public int updateRoute(List<RouteDTO> routes) {

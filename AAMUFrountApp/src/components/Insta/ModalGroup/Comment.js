@@ -120,7 +120,7 @@ function Comment() {
                 <div className="contentIcon">
                     <div className="feeds-icons">
                         <div className='heart-icon'>
-                            {heart ?<i class="fa-solid fa-heart fa-2x"onClick={()=>{setHeart(!heart)}} style={{color:'red'}} />
+                            {heart ?<i className="fa-solid fa-heart fa-2x"onClick={()=>{setHeart(!heart)}} style={{color:'red'}} />
                             :<i className="fa-regular fa-heart fa-2x"  onClick={()=>{setHeart(!heart)}}></i>}
                         </div>
                         <div className="talk-icon">

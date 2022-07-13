@@ -1,19 +1,20 @@
 package com.aamu.aamuandroidapp.fragment.init
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
+import androidx.compose.animation.Crossfade
+import androidx.compose.runtime.*
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.aamu.aamuandroidapp.R
+import com.aamu.aamuandroidapp.components.login.LoginScreen
 import com.aamu.aamuandroidapp.databinding.FragmentLoginBinding
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -37,13 +38,18 @@ class LoginFragment : Fragment() {
 
         navController = Navigation.findNavController(view)
 
-        binding.cirLoginButton.setOnClickListener{
-            binding.cirLoginButton.startAnimation()
-            Handler(Looper.getMainLooper()).postDelayed({
-                navController.navigate(R.id.action_loginFragment_to_mainFragment)
-            },5000)
+//        binding.cirLoginButton.setOnClickListener{
+//            binding.cirLoginButton.startAnimation()
+//            Handler(Looper.getMainLooper()).postDelayed({
+//                navController.navigate(R.id.action_loginFragment_to_mainFragment)
+//            },100)
+//
+//        }
 
+        binding.loginCompose.setContent {
+            LoginOnboarding()
         }
+
     }
 
     override fun onAttach(context: Context) {
@@ -63,5 +69,19 @@ class LoginFragment : Fragment() {
             }
         }
 
+    }
+    @SuppressLint("UnusedCrossfadeTargetStateParameter")
+    @Composable
+    fun LoginOnboarding() {
+        var loggedIn by remember { mutableStateOf(false) }
+        val coroutineScope = rememberCoroutineScope()
+        Crossfade(targetState = loggedIn) {
+            LoginScreen {
+                coroutineScope.launch {
+                    delay(2000)
+                    loggedIn = true
+                }
+            }
+        }
     }
 }
