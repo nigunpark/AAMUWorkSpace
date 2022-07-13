@@ -34,9 +34,8 @@ import {
   AuSBtn,
 } from "../Modal/AreUSurePlanModal.js";
 import axios from "axios";
-import { Alert, AlertTitle } from "@mui/material";
+import { Alert } from "@mui/material";
 import { ContainerInValid, OverlayInValid } from "../Modal/InVaildModal.js";
-
 const { kakao } = window;
 let mainMarkers = [];
 let markers = [];
@@ -382,7 +381,7 @@ const KMap = ({
           setFromWooJaeData={setFromWooJaeData}
         />
       ) : null}
-      {showAlert ? (
+      {showAlert && (
         <ContainerInValid>
           <OverlayInValid
             onClick={() => {
@@ -405,7 +404,7 @@ const KMap = ({
             />
           </Alert>
         </ContainerInValid>
-      ) : null}
+      )}
     </div>
   );
 };
@@ -773,6 +772,7 @@ function getCurrpositionHotel(currPosition, dispatch) {
     })
     .then((resp) => {
       dispatch(changeArrForSukso(resp.data));
+      // console.log(resp.data);
     })
     .catch((error) => {
       console.log((error) => console.log("호텔가져오기 실패", error));

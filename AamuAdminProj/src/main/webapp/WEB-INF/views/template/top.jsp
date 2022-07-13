@@ -33,10 +33,10 @@
           </button>
         </div>
         <div>
-          <a class="navbar-brand brand-logo" href="../../index.html">
+          <a class="navbar-brand brand-logo" href="<c:url value="admin.do"/>">
             <img src="images/logo.svg" alt="logo" />
           </a>
-          <a class="navbar-brand brand-logo-mini" href="../../index.html">
+          <a class="navbar-brand brand-logo-mini" href="<c:url value="admin.do"/>">
             <img src="images/logo-mini.svg" alt="logo" />
           </a>
         </div>
@@ -80,7 +80,7 @@
       <nav class="sidebar sidebar-offcanvas" id="sidebar">
         <ul class="nav">
           <li class="nav-item">
-            <a class="nav-link" href="../../index.html">
+            <a class="nav-link" href="<c:url value="admin.do"/>">
               <i class="mdi mdi-grid-large menu-icon"></i>
               <span class="menu-title">메인 페이지</span>
             </a>
@@ -109,9 +109,9 @@
             </a>
             <div class="collapse" id="form-elements">
               <ul class="nav flex-column sub-menu">
-                <li class="nav-item"><a class="nav-link" href="<c:url value="/admin/Commu.do"/>">전체 게시글 관리</a></li>
-                <li class="nav-item"><a class="nav-link" href="/admin/CommuComplain.do">신고 게시글 관리</a></li>
-                <li class="nav-item"> <a class="nav-link" href="/admin/CommuComment.do">댓글 관리</a></li>
+                <li class="nav-item"><a class="nav-link" href="<c:url value="#"/>">전체 게시글 관리</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">신고 게시글 관리</a></li>
+                <li class="nav-item"> <a class="nav-link" href="#">리뷰 관리</a></li>
               </ul>
             </div>
           </li>
@@ -123,8 +123,9 @@
             </a>
             <div class="collapse" id="tables">
               <ul class="nav flex-column sub-menu">
-                <li class="nav-item"><a class="nav-link" href="#">커뮤니티 관리</a></li>
-                <li class="nav-item"> <a class="nav-link" href="#">유저 관리</a></li>
+                <li class="nav-item"><a class="nav-link" href="<c:url value="/admin/Commu.do"/>">전체 커뮤니티 관리</a></li>
+                <li class="nav-item"><a class="nav-link" href="/admin/CommuComplain.do">신고 커뮤니티 관리</a></li>
+                <li class="nav-item"> <a class="nav-link" href="/admin/CommuComment.do">댓글 관리</a></li>
               </ul>
             </div>
           </li>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "./CreatePlan.css";
 import CreatePlanMap from "./CreatePlanMap";
 import CreatePlanLeft from "./CreatePlanLeft.js";
@@ -18,6 +18,8 @@ const CreatePlan = ({
   fromWooJaeData,
   setFromWooJaeData,
 }) => {
+  const [forDayLine, setForDayLine] = useState(0);
+  console.log(forDayLine);
   return (
     <div>
       <DimmedContainer>
@@ -36,10 +38,13 @@ const CreatePlan = ({
             <CreatePlanLeft
               currPosition={currPosition}
               fromWooJaeData={fromWooJaeData}
+              setForDayLine={setForDayLine}
             />
             <CreatePlanMap
-              showCreatePlan={showCreatePlan}
+              // showCreatePlan={showCreatePlan}
               currPosition={currPosition}
+              fromWooJaeData={fromWooJaeData}
+              forDayLine={forDayLine}
             />
           </Contents>
         </Modal>
