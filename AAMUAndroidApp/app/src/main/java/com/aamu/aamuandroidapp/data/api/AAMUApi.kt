@@ -33,7 +33,7 @@ interface AAMUApi {
                 .addInterceptor(requestInterceptor)
                 .build()
 
-            return  Retrofit.Builder()
+            return Retrofit.Builder()
                 .client(okHttpClient)
                 .baseUrl(BASE_URL)
                 .addConverterFactory(JacksonConverterFactory.create())
