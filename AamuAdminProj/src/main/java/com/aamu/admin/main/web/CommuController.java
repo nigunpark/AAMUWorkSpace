@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.aamu.admin.main.service.CommuDTO;
-import com.aamu.admin.main.service.ListPagingData;
 import com.aamu.admin.main.service.PagingUtil;
 import com.aamu.admin.main.serviceimpl.CommuServiceImpl;
 

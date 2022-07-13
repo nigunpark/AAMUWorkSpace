@@ -9,5 +9,6 @@
 	<mappers>
 		<mapper resource="admin/mybatis/mapper/main.xml" />
 		<mapper resource="admin/mybatis/mapper/commu.xml" />
+		<mapper resource="admin/mybatis/mapper/notice.xml" />
 	</mappers>
 </configuration>
