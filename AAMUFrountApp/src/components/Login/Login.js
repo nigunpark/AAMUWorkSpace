@@ -21,7 +21,7 @@ const Login = () => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     axios
-      .post("http://192.168.0.19:8080/aamurest/authenticate", {
+      .post("/aamurest/authenticate", {
         username: data.get("email"),
         password: data.get("password"),
       })
