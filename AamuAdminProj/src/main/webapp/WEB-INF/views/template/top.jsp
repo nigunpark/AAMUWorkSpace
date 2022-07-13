@@ -33,10 +33,10 @@
           </button>
         </div>
         <div>
-          <a class="navbar-brand brand-logo" href="../../index.html">
+          <a class="navbar-brand brand-logo" href="<c:url value="admin.do"/>">
             <img src="images/logo.svg" alt="logo" />
           </a>
-          <a class="navbar-brand brand-logo-mini" href="../../index.html">
+          <a class="navbar-brand brand-logo-mini" href="<c:url value="admin.do"/>">
             <img src="images/logo-mini.svg" alt="logo" />
           </a>
         </div>
@@ -80,7 +80,7 @@
       <nav class="sidebar sidebar-offcanvas" id="sidebar">
         <ul class="nav">
           <li class="nav-item">
-            <a class="nav-link" href="../../index.html">
+            <a class="nav-link" href="<c:url value="admin.do"/>">
               <i class="mdi mdi-grid-large menu-icon"></i>
               <span class="menu-title">메인 페이지</span>
             </a>
