@@ -128,8 +128,10 @@ public class MainController {
 		int index=0;
 		double attrxy=0;
 		int count = 0;
+		int setDay =0;
+		int reset = 0;
 		/////////////////////////////
-
+		
 
 		if(list.size()-tripDay*2==1) {
 			list.get(list.size()-1).setDay(1);
@@ -137,44 +139,70 @@ public class MainController {
 		/////////////////////////////
 		
 		else {
-			for(int i=tripDay;i<=list.size()+1;i++) {
-
+			while(true){
+				
 				if(count<result) {
 					double standardx = list.get(count*tripDay+index).getDto().getMapx();
 					double standardy = list.get(count*tripDay+index).getDto().getMapy();
-					System.out.println("기준장소:"+list.get(count*tripDay+index).getDto().getTitle());
+					//System.out.println("기준장소:"+list.get(count*tripDay+index).getDto().getTitle());
 					double low = 100;
+					double attrx =0;
+					double attry =0;
+					double resultxy=0;
 					for(int k=tripDay;k<list.size();k++) {
+						
 						if(list.get(k).getDay()==0) {
-							double attrx = list.get(k).getDto().getMapx();
-							double attry = list.get(k).getDto().getMapy();
-							double resultxy = Math.sqrt(Math.pow(Math.abs(standardx-attrx),2)+Math.pow(Math.abs(standardy-attry),2));
+							
+							//System.out.println(k);
+							attrx = list.get(k).getDto().getMapx();
+							attry = list.get(k).getDto().getMapy();
+							resultxy = Math.sqrt(Math.pow(Math.abs(standardx-attrx),2)+Math.pow(Math.abs(standardy-attry),2));
 							System.out.println(String.format("비교장소:%s, 비교결과:%s",list.get(k).getDto().getTitle(),resultxy));
-							if(low>resultxy) {
+							if(low>resultxy && tripDay*(count+1)+index<list.size()) {
+								
 								low=resultxy;
-								if(k<tripDay*(count+1)+index)
-									continue;
-								Collections.swap(list,k,tripDay*(count+1)+index);
-								System.out.println("low:"+low);
-								System.out.println(String.format("swap할 인덱스 tripday:%s,index:%s,주소:%s",tripDay*(count+1)+index,k,list.get(k).getDto().getTitle()));
+								
+								
+								//System.out.println("low:"+low);
+								//System.out.println(String.format("swap할 인덱스 tripday:%s,index:%s,주소:%s",tripDay*(count+1)+index,k,list.get(k).getDto().getTitle()));
 								
 							}
-							
+				
+						}
+						if(k==list.size()-1) {
+							for(int j=tripDay;j<list.size();j++) {
+								attrx = list.get(j).getDto().getMapx();
+								attry = list.get(j).getDto().getMapy();
+								resultxy = Math.sqrt(Math.pow(Math.abs(standardx-attrx),2)+Math.pow(Math.abs(standardy-attry),2));
+								if(low==resultxy) {Collections.swap(list,j,tripDay*(count+1)+index); break;} 
+							}
 						}
 						
 					}
+					if(tripDay*(count+1)+index<list.size() && list.get(tripDay*(count+1)+index).getDay()==0) {
+						list.get(tripDay*(count+1)+index).setDay(index+1);
+						System.out.println(String.format("주소:%s, 세팅된 인덱스:%s, 세팅된 날짜:%s",list.get(tripDay*(count+1)+index).getDto().getTitle(),tripDay*(count+1)+index,list.get(tripDay*(count+1)+index).getDay()));
+					}
+
+					setDay++;
 					
-					list.get(tripDay*(count+1)+index).setDay(index+1);
-					System.out.println(String.format("주소:%s, 세팅된 인덱스:%s, 세팅된 날짜:%s",list.get(tripDay*(count+1)+index).getDto().getTitle(),tripDay*(count+1)+index,list.get(tripDay*(count+1)+index).getDay()));
 					count++;
+					
 				}
 				else {
 					count=0;
-					index++;
+					//System.out.println("index"+index);
+					if(index<tripDay) {
+						index++;
+					}
+
 					continue;
 					
 					
 				}//////////
+			//System.out.println(setDay);
+			//System.out.println(list.size()-1);
+			if(setDay==list.size()) break;
 			}////////////for attr most near place
 		}
 		/*
