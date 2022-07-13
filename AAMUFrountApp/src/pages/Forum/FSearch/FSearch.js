@@ -1,5 +1,5 @@
 import React from 'react'
-import "./FSearch.css";
+import "./FSearch.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import FSelect from '../FSelect/FSelect';
