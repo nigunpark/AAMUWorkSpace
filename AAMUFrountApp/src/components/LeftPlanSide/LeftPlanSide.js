@@ -226,7 +226,9 @@ function PickedLocation({ local }) {
       </div>
       <div className="pickedLocation__info-container">
         <div className="pickedLocation__info-title">
-          <h4>{local.title}</h4>
+          <div>
+            <h5>{local.title}</h5>
+          </div>
           <FontAwesomeIcon
             icon={faX}
             className="pickedLocation__info-title__closeBtn"

@@ -9,7 +9,7 @@ import {
   CloseLim,
   BodyLim,
   ImgLim,
-} from "../Modal/localInfoModal.js";
+} from "../Modal/localInfoModalParts.js";
 import { useDispatch } from "react-redux";
 //redux에서 localNameForMarker(마커찍기위한 장소이름) 변경함수
 import {
