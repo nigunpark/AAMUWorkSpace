@@ -16,7 +16,7 @@ import { Alert, TextField } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { corrTimeSetObj } from "../../redux/store";
 
-const CreatePlanLeft = ({ currPosition, fromWooJaeData }) => {
+const CreatePlanLeft = ({ currPosition, fromWooJaeData, setForDayLine }) => {
   let reduxState = useSelector((state) => {
     return state;
   });
@@ -41,6 +41,7 @@ const CreatePlanLeft = ({ currPosition, fromWooJaeData }) => {
             setTemp(e.target);
             temp.classList.remove("days-container-active");
             e.target.classList.add("days-container-active");
+            setForDayLine(0);
           }}
         >
           전체일정
@@ -56,6 +57,7 @@ const CreatePlanLeft = ({ currPosition, fromWooJaeData }) => {
                   setTemp(e.target);
                   temp.classList.remove("days-container-active");
                   e.target.classList.add("days-container-active");
+                  setForDayLine(index + 1);
                 }}
               >
                 Day{index + 1}
@@ -77,7 +79,6 @@ const CreatePlanLeft = ({ currPosition, fromWooJaeData }) => {
 
 function WhichModal({ whichModal, currPosition, fromWooJaeData }) {
   const [forReRender, setForReRender] = useState(false);
-  console.log(forReRender);
   if (whichModal === "전체일정") {
     return (
       <WholeSchedule
@@ -351,7 +352,12 @@ function DetailSetting({
           <span>분</span>
         </div>
       </div>
-      <div className="detailLocation">
+      <div
+        className="detailLocation"
+        onClick={() => {
+          console.log("13");
+        }}
+      >
         <div className="detailLocation__img-container">
           <img
             className="detailLocation__img"
