@@ -8,6 +8,7 @@ import MyMessageBar from "./MyMessageBar/MyMessageBar";
 import styled from "styled-components";
 import { faStar } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import axios from "axios";
 const MyPage = () => {
 
   
@@ -23,6 +24,8 @@ const MyPage = () => {
   let two = useRef();
   let three = useRef();
   let setting = useRef();
+  
+  let homeBox = useRef();
 
   useEffect(() => {
     if (clickTab === 0) {
@@ -30,6 +33,9 @@ const MyPage = () => {
       // two.current.classList.remove("active");
       three.current.classList.remove("active");
       setting.current.classList.remove("active");
+
+      homeBox.current.classList.add("jsListView");
+      homeBox.current.classList.remove("jsGridView");
     }
     else if (clickTab === 1) {
       home.current.classList.remove("active");
@@ -42,6 +48,9 @@ const MyPage = () => {
       // two.current.classList.remove("active");
       three.current.classList.add("active");
       setting.current.classList.remove("active");
+
+      homeBox.current.classList.remove("jsListView");
+      homeBox.current.classList.add("jsGridView");
     }
     else if (clickTab === 3)  {
       home.current.classList.remove("active");
@@ -218,7 +227,7 @@ const MyPage = () => {
             {/* <MyHomeTopLine/> */}
             <TabTopLine clickTab={clickTab} />
           </div>
-          <div className="project-boxes jsListView"> {/* jsGridView */}
+          <div ref={homeBox} className="project-boxes "> {/* jsListView jsGridView */}
             {/* <MyHomeBox/> */}
             <TabContent
             clickTab={clickTab} setClickTab={setClickTab}/>
@@ -279,10 +288,9 @@ function Title({clickTab}){
 //-----------------------------------------------------------------------
 function TabContent({clickTab,setClickTab}) {
   
+  
   //--------------------------------이미지 시작--------------------------------
   const [showImages, setShowImages] = useState([]);
-
-  console.log('등록한 이미지:',showImages);
 
   //이미지 등록
   const handleAddImages = (e) => {
@@ -306,54 +314,46 @@ function TabContent({clickTab,setClickTab}) {
   };
   //--------------------------------이미지 끝--------------------------------
 
-
-
-  
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [tag, setTag] = useState("");
 
+  console.log('등록한 이미지:',showImages);
+  console.log('등록한 이미지 1:',showImages[0]);
+  console.log('등록한 이미지 2:',showImages[1]);
   console.log('입력한 제목:',title);
   console.log('입력한 내용:',content);
   console.log('입력한 태그:',tag);
-  // const [image, setImage] = useState({
-  //   image_file: "",
-  //   // preview_URL: "image/default_image.png",
-  // });
+
+  let myImgs = showImages.map((showImages, imgIndex)=>{
+    console.log('인덱스:',imgIndex,' 값:',showImages);
+
+    return {imgIndex:showImages};
+  });
+  console.log('저장된 myImgs:',myImgs);
+
+  
+
+  const write = () => {
+    let token = sessionStorage.getItem("token");
+
+    axios.post("",{
+      //저장한 여행경로 고유번호(고유아이디)값 추가해야함 (no 같은거)
+      title: `${title}`,
+      content: `${content}`,
+      tag: `${tag}`,
+      showImages:`${myImgs}`
+
+    },{
+      headers: {
+        Authorization: `Bearer ${token}`,
+        }
+    });
+  };
 
   const canSubmit = useCallback(() => {
     return content !== "" && title !== "";
-  }, [title, content]); //이 코드 필요없을수도있음
-
-  // const handleSubmit = () => {
-  //   console.log('입력한 제목 handleSubmit :',title);
-  //   console.log('등록한 사진 handleSubmit :',showImages);
-
-  //   if (content.length===0 || title.length===0 ) {
-  //     alert("제목과 내용을 입력하세요");
-  //     return;
-  //   }
-
-  //   // try{
-  //     const formData = new FormData();
-  //     formData.append("title", title);
-  //     formData.append("content", content);
-  //     formData.append("file", showImages);
-  //     // formData.append("user_id", jwtUtils.getId(token));
-
-  //     // await api.post("/api/board", formData);
-  //     // window.alert("😎등록이 완료되었습니다😎");
-  //     console.log('입력한 제목 formData :',formData.title);
-  //   //   return formData;
-      
-  //   //   // navigate("/board-list");
-  //   // } catch (e) {
-  //   //   window.alert("등록을 실패했습니다");
-  //   // }
-  // };
-
-
-  
+  }, [title, content]);
 
   let totalEdit = [1, 2, 3, 4];
 
@@ -449,9 +449,10 @@ function TabContent({clickTab,setClickTab}) {
           multiple
           className="write-picture-input"
           type='file' id='upload'
-          onChange={handleAddImages}/>
+          onChange={handleAddImages}
+          onClick={(e)=>e.target.value = null}/>
         <label className="write-picture-label" for='upload'>
-          사진 고르기
+        File Upload
         </label>
       </div>
 
@@ -492,7 +493,7 @@ function TabContent({clickTab,setClickTab}) {
       <div className="write-box">
         <div className='detail-button'>
         {canSubmit() ? (
-          <button className="learn-more" type="button">공유하기</button>
+          <button className="learn-more" type="button" onClick={write}>공유하기</button>
           ) : (
             <button  type="button" disabled>사진과 내용을 모두 입력하세요😭</button>
           )}
