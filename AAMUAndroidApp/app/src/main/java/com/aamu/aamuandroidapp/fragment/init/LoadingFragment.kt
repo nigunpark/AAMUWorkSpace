@@ -7,19 +7,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.OnBackPressedCallback
-import androidx.activity.addCallback
 import androidx.navigation.NavController
-import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
 import com.aamu.aamuandroidapp.R
 import com.aamu.aamuandroidapp.databinding.FragmentLoadingBinding
 import com.aamu.aamuandroidapp.util.setStatusBarOrigin
 import com.aamu.aamuandroidapp.util.setStatusBarTransparent
-import kotlinx.coroutines.delay
-import java.util.concurrent.Executors
-import java.util.concurrent.ScheduledExecutorService
-import java.util.concurrent.TimeUnit
 
 class LoadingFragment : Fragment() {
 

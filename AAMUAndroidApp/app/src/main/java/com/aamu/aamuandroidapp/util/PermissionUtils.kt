@@ -3,7 +3,6 @@ package com.aamu.aamuandroidapp.util
 import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
-import androidx.activity.result.ActivityResultLauncher
 import androidx.core.app.ActivityCompat
 import java.util.*
 

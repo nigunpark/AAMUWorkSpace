@@ -22,6 +22,15 @@ public interface BBSService {
 	
 	//글 등록일자
 
+	//리뷰 목록
+	List<ReviewDTO> reviewSelectList(Map map);
 	
+	//리뷰 목록_리뷰 하나 뿌려주기
+	String reviewSelectOne(String rno);
+	
+	//평점 평균 
+	double getRatingAverage(int rate);
+	
+	//평점 평균 반영 및 업데이트
 	
 }
