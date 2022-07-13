@@ -6,8 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.aamu.aamuandroidapp.components.aamuplan.AAMUPlanHome
-import com.aamu.aamuandroidapp.components.aamuplan.mapView
-import com.aamu.aamuandroidapp.components.aamuplan.KakaoMap
 import com.aamu.aamuandroidapp.databinding.FragmentPlannerBinding
 import com.aamu.aamuandroidapp.util.setStatusBarOrigin
 import com.aamu.aamuandroidapp.util.setStatusBarTransparent
