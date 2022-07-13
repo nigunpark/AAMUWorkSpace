@@ -24,6 +24,7 @@ import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import com.aamu.aamurest.user.service.BBSDTO;
 import com.aamu.aamurest.user.service.CommuDTO;
+import com.aamu.aamurest.user.service.ReviewDTO;
 import com.aamu.aamurest.user.serviceimpl.BBSServiceImpl;
 import com.aamu.aamurest.util.FileUploadUtil;
 
@@ -79,5 +80,17 @@ public class BBSController {
 			resultMap.put("result", "updateNotSuccess");
 		return resultMap;
 	}
+	
+	//리뷰 목록
+	@GetMapping("/review/selectList")
+	public List<ReviewDTO> reviewSelectList(@RequestParam Map map){
+		List<ReviewDTO> list = bbsService.reviewSelectList(map);
+			
+		return list;
+		}
+	
+	//평점 평균 반영
+	
+	//평점 평균 
 }
 	

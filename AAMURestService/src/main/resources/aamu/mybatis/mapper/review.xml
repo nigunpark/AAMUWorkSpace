@@ -5,4 +5,6 @@
   
 <mapper namespace="aamu.mybatis.mapper.review">
 
+	<!--  리뷰 목록 -->
+
 </mapper>

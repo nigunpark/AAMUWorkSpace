@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.aamu.aamurest.user.service.BBSDTO;
 import com.aamu.aamurest.user.service.BBSService;
+import com.aamu.aamurest.user.service.ReviewDTO;
 
 @Service("bbsService")
 public class BBSServiceImpl implements BBSService{
@@ -60,6 +61,29 @@ public class BBSServiceImpl implements BBSService{
 	
 	//글 등록일자
 	
+	//리뷰 목록
+	@Override
+	public List<ReviewDTO> reviewSelectList(Map map) {
+		return dao.bbsSelectList(map);
+	}
+	
+	//리뷰 목록_리뷰 하나 뿌려주기
+	public String reviewSelectOne(String rno) {
+		return dao.reviewSelectOne(rno);
+	}
 
+	@Override
+	public double getRatingAverage(int rate) {
+		return 0;
+	}
+	
+	/*
+	//평점 평균 보내주기
+	public double getRatingAverage(int rate) {
+		//ratingAvg = (double) (Math.round(ratingAvg*10));
+		//ratingAvg = ratingAvg / 10
+		return dao.getRatingAverage(rate);
+
+	}*/
 }
 	
