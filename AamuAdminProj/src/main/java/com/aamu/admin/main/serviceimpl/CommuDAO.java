@@ -25,6 +25,11 @@ public class CommuDAO {
 		return records;
 	}
 	
+	//글 삭제
+	public int commuDelete(Map map) {
+		return template.delete("commuDelete",map);
+	}
+	
 	
 
 }

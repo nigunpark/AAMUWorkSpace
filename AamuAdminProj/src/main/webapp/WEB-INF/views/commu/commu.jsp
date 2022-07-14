@@ -105,16 +105,24 @@
     $('button').click(function(){
     	console.log("버튼이벤트 발생");
     	var tr=$('table > tbody > tr:nth-child(1)');
-    	var valueArr = new Array();
-    	var list = $("input[name='RowCheck']");
+    	/* var lnoArr = new Array(); //선택한 lno담은 배열
+    	var list = $("input[name='RowCheck']");//체크박스
     	console.log(list[0]);
     	for(var i=0; i<list.length; i++){
-    		if(list[i].checked){
-    			valueArr.push(list[i].value);
-    			console.log("valueArr:"+valueArr);
+    		if(list[i].checked){//체크됐다면
+    			lnoArr.push(list[i].value);
+    			console.log("lnoArr:"+lnoArr);
     		}
-    	}////////for
-    	if(valueArr.length ==0){
+    	}////////for */
+    	var lnoArr = [];
+        $('input[name="RowCheck"]:checked').each(function(i){//체크된 리스트 저장
+        	lnoArr.push($(this).val());
+        	console.log("lnoArr:"+lnoArr); //lnoArr:63,62
+        });
+        var lnoParams = {
+                "lnoArr" : lnoArr       
+            };
+    	if(lnoArr.length ==0){
     		alert("선택된 글이 없습니다.");
     	}
     	else{
@@ -122,9 +130,7 @@
     		$.ajax({
        			url:"<c:url value="/admin/CommuDelete.do"/>",
        			type:"post",
-       			data:{
-       				valueArr : valueArr
-       			},
+       			data:"lno="+lnoArr,
        			dataType:'json'
        		}).done(data=>{
        			console.log('삭제성공:',data);

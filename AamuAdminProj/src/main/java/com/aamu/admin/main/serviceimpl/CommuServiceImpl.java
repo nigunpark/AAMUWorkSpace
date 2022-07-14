@@ -1,5 +1,6 @@
 package com.aamu.admin.main.serviceimpl;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -26,6 +27,7 @@ public class CommuServiceImpl implements CommuService {
 	@Value("${blockPage}")
 	private int blockPage;
 	
+	//목록용
 	@Override
 	public ListPagingData<CommuDTO> selectList(Map map, HttpServletRequest req, int nowPage) {
 		//페이징을 위한 로직 시작]
@@ -52,9 +54,24 @@ public class CommuServiceImpl implements CommuService {
 		return listPagingData;
 	}
 	
+	//전체 게시물 수 뿌려주기
 	@Override
 	public int commuGetTotalRecordCount(Map map) {
 		return dao.commuGetTotalRecordCount(map);
+	}
+	
+	//글 삭제
+	@Override
+	public int commuDelete(Map map) {
+		System.out.println(map.get("lno").getClass().getName());
+		List<String> list=(List<String>)map.get("lno");
+		System.out.println(list);
+		Map lnoMap = new HashMap(); 
+		lnoMap.put("lno", map.get("lno")); 
+		System.out.println(lnoMap);
+		 
+		int affected=dao.commuDelete(map);
+		return affected==1 ? 1 : 0;
 	}
 
 	
