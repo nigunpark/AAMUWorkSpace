@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import com.aamu.aamurest.user.service.AttractionDTO;
 import com.aamu.aamurest.user.service.MainService;
@@ -18,6 +19,8 @@ public class MainServiceImpl implements MainService{
 	@Autowired
 	private MainDAO dao;
 	
+	@Autowired
+	private TransactionTemplate transactionTemplate;
 ///////////////////////////////////////////////////insert place impl
 	@Override
 	public int placeInsert(AttractionDTO dto) {
@@ -172,34 +175,36 @@ public class MainServiceImpl implements MainService{
 	@Override
 	public int plannerInsert(PlannerDTO dto) {
 		int affected=0;
-		dao.plannerInsert(dto);
-		List<RouteDTO> routes = dto.getRoute();
+		affected = transactionTemplate.execute(tx->{
+			int insertPlanner = dao.plannerInsert(dto);
+			List<RouteDTO> routes = dto.getRoute();
+			
+			for(RouteDTO route:routes) {
+				route.setRbn(dto.getRbn());
+				dao.routeInsert(route);
+			}
+			return insertPlanner;
+			
+		});
 		
-		for(RouteDTO route:routes) {
-			route.setRbn(dto.getRbn());
-			affected = dao.routeInsert(route);
-		}
-		if(affected>1)affected=1;
-		else {
-			affected=0;
-		} 
+		
 		return affected;
 	}
 	@Override
 	public int updatePlanner(PlannerDTO dto) {
 		int affected=0;
-		dao.updatePlanner(dto);
-		dao.deleteRoute(dto.getRbn());
-		List<RouteDTO> routes = dto.getRoute();
+		affected = transactionTemplate.execute(tx->{
+			int updatePlanner = dao.updatePlanner(dto);
+			dao.deleteRoute(dto.getRbn());
+			List<RouteDTO> routes = dto.getRoute();
+			
+			for(RouteDTO route:routes) {
+				route.setRbn(dto.getRbn());
+				dao.routeInsert(route);
+			}
+			return updatePlanner;
+		});
 		
-		for(RouteDTO route:routes) {
-			route.setRbn(dto.getRbn());
-			affected = dao.routeInsert(route);
-		}
-		if(affected>1)affected=1;
-		else {
-			affected=0;
-		} 
 		return affected;
 	}
 	
