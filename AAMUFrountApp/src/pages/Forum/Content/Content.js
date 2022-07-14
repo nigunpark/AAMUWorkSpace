@@ -11,20 +11,20 @@ const Content = () => {
 
     let token = sessionStorage.getItem("token");
 
-    let [list, setList] = useState('');
+    // let [list, setList] = useState('');
     
-    useEffect(()=>{
-        axios.get('',{
-            headers: {
-                Authorization: `Bearer ${token}`,
-              }
-        }).then((resp)=>{
-            setList(resp.data);
-            console.log('데이터 형태 : ',resp.data);
-        }).catch((error)=>{
-            console.log((error) => console.log("글 목록 가져오기 실패", error));
-        });
-    });
+    // useEffect(()=>{
+    //     axios.get('',{
+    //         headers: {
+    //             Authorization: `Bearer ${token}`,
+    //           }
+    //     }).then((resp)=>{
+    //         setList(resp.data);
+    //         console.log('데이터 형태 : ',resp.data);
+    //     }).catch((error)=>{
+    //         console.log((error) => console.log("글 목록 가져오기 실패", error));
+    //     });
+    // });
     
 
     return (
