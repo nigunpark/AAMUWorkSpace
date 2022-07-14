@@ -8,6 +8,7 @@ import lombok.ToString;
 @Setter
 @ToString
 public class RouteDTO {
+	private int rbn;
 	private int contentid;
 	private int contenttypeid;
 	private long starttime;

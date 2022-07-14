@@ -40,13 +40,13 @@ public class MainServiceImpl implements MainService{
 	}
 
 	@Override
-	public List selectJoin(List day) {
+	public int selectJoin(String day) {
 		
 		return dao.selectJoin(day);
 	}
 
 	@Override
-	public int selectUsers(Map map) {
+	public List selectUsers(Map map) {
 		
 		return dao.selectUsers(map);
 	}

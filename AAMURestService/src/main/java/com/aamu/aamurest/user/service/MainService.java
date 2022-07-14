@@ -10,8 +10,6 @@ public interface MainService{
 
 	int plannerInsert(PlannerDTO dto);
 	
-	int RouteInsert(List<RouteDTO> routes);
-	
 	List<RouteDTO> selectRouteList(int rbn); 
 	
 	List<AttractionDTO> selectPlacesList(Map map);
@@ -34,7 +32,9 @@ public interface MainService{
 
 	int updatePlanner(PlannerDTO dto);
 
-	int deletePlanner(Map map);
+	int deletePlanner(int rbn);
+
+	int deleteRoute(int rbn);
 
 	
 }

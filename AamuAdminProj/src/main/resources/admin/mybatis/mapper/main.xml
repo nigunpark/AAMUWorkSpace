@@ -19,15 +19,11 @@
 		SELECT COUNT(*) FROM eventinfo WHERE TO_DATE(sysdate,'YYYY-MM-DD') <![CDATA[<=]]> To_DATE(eventstart,'YYYY-MM-DD')
 	</select>
 	
-	<select id="selectJoin" parameterType="List" resultType="List">
-		SELECT COUNT(*) FROM users WHERE TO_CHAR(joindate,'YYYY-MM-DD')= 
-		<foreach collection="List" item="item" ></foreach>
-		TO_CHAR(${item},'YYYY-MM-DD')
+	<select id="selectJoin" parameterType="List" resultType="int">
+		SELECT COUNT(*) FROM users WHERE TO_CHAR(joindate,'YYYY-MM-DD') = TO_CHAR(${item},'YYYY-MM-DD')
 	</select>
 	
-	<select id="selectUsers" parameterType="List" resultType="List">
-		SELECT COUNT(*) FROM users WHERE TO_CHAR(joindate,'YYYY-MM-DD') <![CDATA[<=]]> 
-		<foreach collection="List" item="item" ></foreach>
-		TO_CHAR(${item},'YYYY-MM-DD')
+	<select id="selectUsers" parameterType="Map" resultType="int">
+		SELECT COUNT(*) FROM users WHERE TO_CHAR(joindate,'YYYY-MM-DD') BETWWEN TO_CHAR(${start},'YYYY-MM-DD') AND TO_CHAR(${end},'YYYY-MM-DD')
 	</select>
 </mapper>
