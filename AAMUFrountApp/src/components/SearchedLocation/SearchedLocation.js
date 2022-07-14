@@ -59,9 +59,9 @@ const SearchedLocation = ({ local }) => {
                 className="searchedLocation__i"
                 onClick={(e) => {
                   e.stopPropagation();
-                  localContainer.current.classList.add(
-                    "searchedLocation__fadeOut"
-                  );
+                  // localContainer.current.classList.add(
+                  //   "searchedLocation__fadeOut"
+                  // );
                   dispatch(timeSetter(2));
                   dispatch(addPickJangso(local));
                   dispatch(deleteArrInJangso(local));

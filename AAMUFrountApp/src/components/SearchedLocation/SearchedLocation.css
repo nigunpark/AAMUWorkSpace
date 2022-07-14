@@ -12,10 +12,12 @@
   height: 80px;
   box-shadow: var(--shadow);
   border-radius: 5px;
+  transition: 0.1s;
 }
 
 .searchedLocation__container:hover {
   cursor: pointer;
+  transform: scale(1.03);
 }
 
 .searchedLocation__info {
@@ -34,10 +36,15 @@
 
 .searchedLocation__info__content .searchedLocation__i:hover {
   cursor: pointer;
+  color: var(--darkOrange);
 }
 
 .searchedLocation__info__content .searchedLocation__i:first-child {
   color: rgba(0, 0, 0, 0.4);
+}
+
+.searchedLocation__info__content .searchedLocation__i:first-child:hover {
+  color: var(--darkOrange);
 }
 
 .searchedLocation__fadeOut {

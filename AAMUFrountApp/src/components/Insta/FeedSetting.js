@@ -24,7 +24,6 @@ function FeedSetting() {
         speed: 500,
         slidesToShow: 1,
         slidesToScroll: 1
-        
       };
     
     function menuModalRef(e){

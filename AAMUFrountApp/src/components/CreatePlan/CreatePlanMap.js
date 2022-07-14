@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
+import axios from "axios";
 const { kakao } = window;
 let markersArr = [];
 let polylineArr = [];
@@ -18,26 +19,26 @@ const CreatePlanMap = ({
     return state;
   });
   useEffect(() => {
-    var mapContainer = cMapRef.current, // 지도를 표시할 div
+    let mapContainer = cMapRef.current, // 지도를 표시할 div
       mapOption = {
         center: new kakao.maps.LatLng(lat, lng), // 지도의 중심좌표
         level: mapLevel, // 지도의 확대 레벨
       };
-    var map = new kakao.maps.Map(mapContainer, mapOption);
+    let map = new kakao.maps.Map(mapContainer, mapOption);
     // if (cMap != null) {
     //   // map = new kakao.maps.Map(mapContainer, mapOption);
     //   map = cMap; // 지도를 생성합니다
     // } else {
     //   map = new kakao.maps.Map(mapContainer, mapOption);
     // }
-    var geocoder = new kakao.maps.services.Geocoder();
+    let geocoder = new kakao.maps.services.Geocoder();
     // 주소로 좌표를 검색합니다
     geocoder.addressSearch(
       reduxState.localNameForMarker.addr ?? currPosition,
       (result, status) => {
         // 정상적으로 검색이 완료됐으면
         if (status === kakao.maps.services.Status.OK) {
-          var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+          let coords = new kakao.maps.LatLng(result[0].y, result[0].x);
           setLat(result[0].y);
           setLng(result[0].x);
           map.panTo(coords);
@@ -187,6 +188,7 @@ const CreatePlanMap = ({
   return (
     <div
       style={{
+        position: "relative",
         width: "100%",
         display: "inline-block",
       }}
@@ -199,6 +201,45 @@ const CreatePlanMap = ({
           height: "100%",
         }}
       ></div>
+      <div className="cMap__btn-container">
+        <div>수정저장</div>
+        <div>버튼버튼</div>
+        <div
+          onClick={() => {
+            let toWoo = [];
+            reduxState.tripPeriod.forEach((val, i) => {
+              Object.values(fromWooJaeData[i])[0].forEach((obj, idx) => {
+                toWoo.push(obj);
+              });
+            });
+            let token = sessionStorage.getItem("token");
+            axios
+              .post(
+                "/aamurest/planner/edit",
+                {
+                  title: `${currPosition} ${
+                    reduxState.tripPeriod.length - 1
+                  }박 ${reduxState.tripPeriod.length}일`,
+                  route: toWoo,
+                  id: sessionStorage.getItem("username"),
+                },
+                {
+                  headers: {
+                    Authorization: `Bearer ${token}`,
+                  },
+                }
+              )
+              .then((resp) => {
+                console.log(resp.data);
+              })
+              .catch((error) => {
+                console.log(error);
+              });
+          }}
+        >
+          일정저장
+        </div>
+      </div>
     </div>
   );
 };

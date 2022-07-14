@@ -14,6 +14,7 @@ import Forum from "./pages/Forum/Forum";
 import MyPage from "./pages/MyPage/MyPage";
 import DetailModal from "./pages/Forum/DetailModal/DetailModal";
 import KakaoRedirectHandler from "./components/Login/Kakao/KakaoRedirectHandler";
+import Join from "./Join/Join";
 
 function App() {
   let location = useLocation();
@@ -44,6 +45,7 @@ function App() {
           <Route path="/login" element={<LoginTest />}></Route>
           <Route path="/myPage" element={<MyPage />} />
         </Route>
+        <Route path="/join" element={<Join />} />
         <Route path="/login" element={<LoginTest />} />
         <Route path="/test" element={<Test />} />
         <Route path="/Detailmodal" element={<DetailModal />} />

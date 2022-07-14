@@ -71,7 +71,9 @@ const Navbar = ({ scrollNav, whereUrl }) => {
                 >
                   로그인
                 </button>
-                <button className="navbar-btn">회원가입</button>
+                <Link to="/join">
+                  <button className="navbar-btn">회원가입</button>
+                </Link>
               </>
             ) : (
               <UserBadge />
