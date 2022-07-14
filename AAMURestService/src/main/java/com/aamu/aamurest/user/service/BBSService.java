@@ -12,8 +12,10 @@ public interface BBSService {
 	//글 목록_사진 뿌려주기
 	List bbsSelectPhotoList(int rbn);
 	
-	//글 등록
+	//글 작성
 	int bbsInsert(Map map);
+	
+	//
 	
 	//글 수정
 	int bbsUpdate(Map map);
@@ -21,6 +23,8 @@ public interface BBSService {
 	//글 삭제
 	
 	//글 등록일자
+	
+	/*----------------------------------------------------------*/
 
 	//리뷰 목록
 	List<ReviewDTO> reviewSelectList(Map map);

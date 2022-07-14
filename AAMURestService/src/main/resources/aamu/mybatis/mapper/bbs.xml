@@ -24,7 +24,7 @@
 	<insert id="photoInsert" parameterType="Map" >
 		INSERT INTO routebbsphoto VALUES (#{rbn},#{photo})
 	</insert>
-		
+	
 	<!-- 글 수정 -->
 	<update id="bbsUpdate" parameterType="map">
 	UPDATE bbs SET title=#{title},content=#{content} WHERE rbn=#{rbn}
