@@ -9,8 +9,9 @@ const Uploader = () => {
 let searchRef = useRef();
 const [hide, setHide] = useState(false);
 const [showNext, setshowNext] = useState(false);
-const [showPrev, setshowPrev] = useState(false);
+const [search, setSearch] = useState([]);
 const [showSearch, setshowSearch] = useState(false);
+const [show] = useState(false);
 
   const [image, setImage] = useState({
     image_file: "",
@@ -22,6 +23,8 @@ const [showSearch, setshowSearch] = useState(false);
     if (e.target !== searchRef.current) setshowSearch(false);
   }
   window.addEventListener("click", handleModal);
+
+  
 
   let inputRef;
   const saveImage = (e) => {
@@ -84,7 +87,9 @@ const [showSearch, setshowSearch] = useState(false);
     }
   }
 
-  function searchWord(val){
+ 
+
+  function searchWord(val,setSearch){
     console.log(val);
     let token = sessionStorage.getItem("token");
     axios.get('/aamurest/gram/place/selectList',{
@@ -97,11 +102,36 @@ const [showSearch, setshowSearch] = useState(false);
     })
     .then((resp) => {
       console.log(resp.data);
+      setSearch(resp.data);
       })
       .catch((error) => {
         console.log(error);
       });
   }
+
+
+  function gramEdit(val){
+    let token = sessionStorage.getItem("token");
+    axios.post('/aamurest/gram/edit',{
+      headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          id:'id',
+          ctitle:'ctitle',
+          content :'content',
+          photo :'photo',
+          contentid :'contentid',
+
+        })
+    .then((resp) => {
+      console.log(resp.data);
+      
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    }
+
 
   function fn_checkByte(obj){
     const maxByte = 1000; //최대 100바이트
@@ -131,7 +161,7 @@ const [showSearch, setshowSearch] = useState(false);
         }
     }
   return (
-  <ModalWrap>
+  
     <Contents>   
         <FirstLine>
             <Deletebtn 
@@ -147,127 +177,116 @@ const [showSearch, setshowSearch] = useState(false);
               <Nextbtn  onClick={()=>setshowNext(!showNext)}>다음</Nextbtn>
             }    
         </FirstLine>
-            <div className='UploadEntire'>           
+            <Body>           
                 <div 
                     className='picfileframe' >
-                        <label 
-                        className="rweet_file_btn" 
-                        onClick={ ()=>{setHide(!hide)} }
-                        htmlFor="input-file"                
-                        >
-                            {hide ?
-                            null
-                            :
-                            <Button 
-                                type="primary" 
-                                variant="contained" 
-                                onClick={() => inputRef.click()}>
-                                컴퓨터에서 선택
-                            </Button>}
+                  <label 
+                    className="rweet_file_btn" 
+                    onClick={ ()=>{setHide(!hide)} }
+                    htmlFor="input-file"                
+                    >
+                        {hide ?
+                        null
+                        :
+                        <Button 
+                            type="primary" 
+                            variant="contained" 
+                            onClick={() => inputRef.click()}>
+                            컴퓨터에서 선택
+                        </Button>}
                     </label>
                     <input  
-                            id="input-file"
-                            type="file" 
-                            accept="image/*"
-                            onChange={saveImage}
-                        // 클릭할 때 마다 file input의 value를 초기화 하지 않으면 버그가 발생할 수 있다
-                        // 사진 등록을 두개 띄우고 첫번째에 사진을 올리고 지우고 두번째에 같은 사진을 올리면 그 값이 남아있음!
-                            onClick={(e) => e.target.value = null}
-                            ref={refParam => inputRef = refParam}
-                            style={{display: "none" , width:'100%',height:'100%'}}
+                        id="input-file"
+                        type="file" 
+                        accept="image/*"
+                        onChange={saveImage}
+                    // 클릭할 때 마다 file input의 value를 초기화 하지 않으면 버그가 발생할 수 있다
+                    // 사진 등록을 두개 띄우고 첫번째에 사진을 올리고 지우고 두번째에 같은 사진을 올리면 그 값이 남아있음!
+                        onClick={(e) => e.target.value = null}
+                        ref={refParam => inputRef = refParam}
+                        style={{display: "none" , width:'100%',height:'100%'}}
                     />
                     <img className='divimage' alt="sample" src={image.preview_URL}/>
                 </div>
-                <div className='side'>
-                  <div className="title-profile">
-                      <img src="./img/bk.jpg" alt="프사" />                
-                      <span>eyesmag</span> 
-                  </div>
-                  <div>
-                    <span style={{fontWeight:'bold'}}>제목 : </span><input type="text" placeholder="제목을 입력하세요"/>
-                  </div>
-                  <div>
-                    <textarea 
-                      className="form-control" 
-                      id="textArea_byteLimit" 
-                      name="textArea_byteLimit" 
-                      onKeyUp={(e)=>fn_checkByte(e)}
-                      cols="42" rows="8" 
-                      placeholder="문구입력..." 
-                      style={{border:'none',resize: 'none',
+                    {/* {showNext ?  */}
+                    <div className='side'>
+                      <div className="title-profile">
+                          <img src="./img/bk.jpg" alt="프사" />                
+                          <span>eyesmag</span> 
+                      </div>
+                      <div>
+                        <span style={{fontWeight:'bold', marginLeft:'10px'}}>제목 : </span><input type="text" placeholder="제목을 입력하세요"/>
+                      </div>
+                      <div>
+                        <textarea 
+                          className="form-control" 
+                          id="textArea_byteLimit" 
+                          name="textArea_byteLimit" 
+                          onKeyUp={(e)=>fn_checkByte(e)}
+                          rows="8" 
+                          placeholder="문구입력..." 
+                          style={{border:'none',resize: 'none',
                               fontSize: '16px',fontFamily:'normal',
-                              outline: 'none',paddingTop:'5px' }}>
-                    </textarea>    
+                              outline: 'none',paddingTop:'5px' ,
+                              marginLeft:'10px',width:'90%',position:'relative'}}>
+                        </textarea>    
+                      </div>
+                      <div style={{borderBottom:'0.1px solid #c0c0c0',width:'97%',height:'27px'}}>
+                        <sup style={{float:'right',paddingRight:'15px',color:'#c0c0c0'}}>(<span id="nowByte">0</span>/1000bytes)</sup>
+                      </div>                
+                      <div className='uploadLocation' onClick={()=>{setshowSearch(!showSearch);}}>
+                        <input 
+                            onKeyUp={(e)=>searchWord(e.target.value,setSearch)}
+                            placeholder="위치 추가" 
+                            type="text"
+                            ref={searchRef}/>
+                            {showSearch ? <SearchModal search={search}></SearchModal> : null}
+                        <i class="fa-solid fa-location-dot"></i>
+                      </div>                
                   </div>
-                  <div style={{borderBottom:'0.1px solid #c0c0c0',width:'97%',height:'27px'}}>
-                    <sup style={{float:'right',paddingRight:'15px',color:'#c0c0c0'}}>(<span id="nowByte">0</span>/1000bytes)</sup>
-                  </div>                
-                  <div className='uploadLocation' onClick={()=>{setshowSearch(!showSearch);}}>
-                    <input 
-                        onKeyUp={(e)=>searchWord(e.target.value)}
-                        placeholder="위치 추가" 
-                        type="text"
-                        ref={searchRef}/>
-                        {showSearch ? <SearchModal></SearchModal> : null}
-                    <i class="fa-solid fa-location-dot"></i>
-                  </div>                
-                </div>
-            </div>
+                  {/* // :null} */}
+                  </Body>
+                  {/* {show?<SearchModal search={search}/>:null} */}
         </Contents>
-    </ModalWrap>
+
+ 
   );
 }
 
-const ModalWrap = styled.div`
-    width: 900px;
-    overflow: hidden;
-    height:650px;
-    border-radius: 15px;
-    background-color: #fff;
-    position: relative;
-    justify-content: center;
-    align-items: center;
-    top: 55%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    //border: solid 5px black;
-`
 
 const Contents = styled.div`
-    position: absolute;
-    
-    right:50px;
-    width: 100%;
-    height: 100%;
-    align-items: center;
-    right:2px;
+  position: relative;
+  top:30px;
+  padding : 0 auto;
+  width:60%;
+  // min-width:30%;
+  // max-width:60%;
+  height: 700px;
+  background :white;
+  display:flex;
+  flex-direction:column;
+  border-radius:7px;
 `
 
 const FirstLine = styled.div`
-    display: flex;
-    border-bottom : 0.1px solid #d3d3d3;
-    width: 100%;
-    height: 8%;
+  height:auto;
+  display:flex;
+  justify-content:space-around;
+  align-items:center;
+  border-bottom:0.1px solid rgb(211, 211, 211) ;
+
 `
+const Body = styled.div`
+  display: flex;
+  height: 100%;
+`
+
 const Deletebtn = styled.button`
-      float: left;
-      display:flex;
-      width: 58px;
-      padding-left:10px;
-      height:fit-content;
-      margin-top: 10px;
-      font-size: 30px;
-      color: #000;
+  font-size : 20px;
 `
 const Nextbtn = styled.button`
-    float: right;
-    display:flex;
-    width: fit-content;
-    height:fit-content;
-    margin-top: 15px;
-    font-size: 20px;
-    font-weight:bold;
-    color: #0095f6;
-    align-items: center;
+  font-size:19px;
+  color:blue;
+  font-weight:bold;
 `
 export default Uploader;

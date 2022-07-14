@@ -1,7 +1,5 @@
 package com.aamu.aamuandroidapp.components.login
 
-import android.annotation.SuppressLint
-import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -18,6 +16,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -31,6 +30,7 @@ import androidx.compose.ui.text.input.*
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.aamu.aamuandroidapp.R
 import com.aamu.aamuandroidapp.ui.theme.amber700
 import com.aamu.aamuandroidapp.ui.theme.cyan500
@@ -40,8 +40,6 @@ import com.aamu.aamuandroidapp.util.LottieLoadingView
 import com.aamu.aamuandroidapp.util.TextWithShadow
 import com.guru.fontawesomecomposelib.FaIcon
 import com.guru.fontawesomecomposelib.FaIcons
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 fun invalidInput(email: String, password: String) =
     email.isBlank() || password.isBlank()
@@ -62,6 +60,10 @@ fun LoginScreen(onLoginSuccess: () -> Unit) {
         val passwordInteractionState = remember { MutableInteractionSource() }
         val emailInteractionState = remember { MutableInteractionSource() }
 
+        val viewModel: LoginViewModel = viewModel(
+            factory = LoginViewModelFactory()
+        )
+
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
@@ -79,7 +81,7 @@ fun LoginScreen(onLoginSuccess: () -> Unit) {
                             .height(250.dp)
                     )
                     TextWithShadow(
-                        text = "아무여행",
+                        text = "AAMU",
                         style= TextStyle.Default.copy(
                             color = amber700,
                             fontSize = 100.sp,
@@ -167,8 +169,21 @@ fun LoginScreen(onLoginSuccess: () -> Unit) {
                     visualTransformation = passwordVisualTransformation,
                 )
             }
+
             item {
                 var loading by remember { mutableStateOf(false) }
+                var loggedIn by remember { mutableStateOf(false)}
+                if(loggedIn){
+                    hasError = true
+                    loading = false
+                    Text(
+                        text = "로그인이 실패하였습니다 아이디 또는 비밀번호를 확인해 주세요",
+                        style = TextStyle.Default.copy(
+                            color = Color.Red,
+                            fontSize = 10.sp
+                        )
+                    )
+                }
                 Button(
                     onClick = {
                         if (invalidInput(username.text, password.text)) {
@@ -178,6 +193,8 @@ fun LoginScreen(onLoginSuccess: () -> Unit) {
                             loading = true
                             hasError = false
                             onLoginSuccess.invoke()
+                            loggedIn = true
+                            viewModel.doLogin(username.text,password.text)
                         }
                     },
                     modifier = Modifier

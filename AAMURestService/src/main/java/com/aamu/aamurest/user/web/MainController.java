@@ -39,39 +39,28 @@ public class MainController {
 	@Autowired
 	private RestTemplate restTemplate;
 	
-	@PostMapping("planner/edit")
-	public int plannerInsert(PlannerDTO dto) {
-		int affected = 0;
-		affected = service.plannerInsert(dto);
-		List<RouteDTO> routes = dto.getRoute();
+	@PostMapping("/planner/edit")
+	public int plannerInsert(@RequestBody PlannerDTO dto) {
 		
-		service.RouteInsert(routes);
-		
-		
-		return affected;
+
+		return service.plannerInsert(dto);
 	}
 	
-	@PutMapping("planner/edit")
-	public int plannerUpdate(PlannerDTO dto) {
+	@PutMapping("/planner/edit")
+	public int plannerUpdate(@RequestBody PlannerDTO dto) {
+		
+		
+		return service.updatePlanner(dto);
+	}
+	@DeleteMapping("/planner/edit")
+	public int deletePlanner(@RequestParam int rbn) {
 		int affected = 0;
-		
-		affected = service.updatePlanner(dto);
-		List<RouteDTO> routes = dto.getRoute();
-		
-		service.updateRoute(routes);
+		affected = service.deletePlanner(rbn);
 		
 		
 		return affected;
 	}
-	@DeleteMapping("planner/edit")
-	public int deletePlanner(@RequestParam Map map) {
-		int affected = 0;
-		affected = service.deletePlanner(map);
-		
-		
-		return affected;
-	}
-	@PostMapping("planner/data")
+	@PostMapping("/planner/data")
 	public PlannerDTO plannerData(@RequestBody PlannerDTO dto) {
 		List<RouteDTO> list = dto.getRoute();
 		int tripDay = list.get(0).getDay();
@@ -266,7 +255,7 @@ public class MainController {
 		return routeList;
 		
 	}
-	@GetMapping("planner/selectone")
+	@GetMapping("/planner/selectone")
 	public PlannerDTO selectPlannerOne(@RequestParam Map map) {
 		
 		PlannerDTO dto = new PlannerDTO();
@@ -343,7 +332,7 @@ public class MainController {
 		return list;
 	}
 	
-	@GetMapping("info/review")
+	@GetMapping("/info/review")
 	public KakaoReview getReview(@RequestParam String kakaoKey) {
 		KakaoReview kakaReview = new KakaoReview();
 		if(kakaoKey!=null) {

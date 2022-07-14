@@ -1,21 +1,24 @@
 package com.aamu.aamuandroidapp.data.api
 
+import android.app.Activity
+import android.util.Log
 import com.aamu.aamuandroidapp.data.api.response.AAMUUserResponse
+import com.aamu.aamuandroidapp.util.getToken
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.jackson.JacksonConverterFactory
-import retrofit2.http.Body
-import retrofit2.http.POST
+import retrofit2.http.*
 
 interface AAMUApi {
 
-    @POST
-    suspend fun doLogin(@Body username : String, @Body password : String): Response<AAMUUserResponse>
+    @POST("authenticate")
+    suspend fun doLogin(@Body user: userLogin): Response<AAMUUserResponse>
 
     companion object {
-        private const val BASE_URL = "http://192.168.0.25:8080/aamurest/"
+        private const val BASE_URL = "http://192.168.0.19:8080/aamurest/"
 
         operator fun invoke():AAMUApi{
             val requestInterceptor  = Interceptor{ chain ->
@@ -25,7 +28,8 @@ interface AAMUApi {
                     .build()
 
                 if(1==1){
-                    request.newBuilder().addHeader("Authorization","Bearer "+"").build()
+                    request.newBuilder().addHeader("Authorization","Bearer "+ (getToken()?:"")).build()
+                    Log.i("com.aamu.aamu","Token is "+(getToken()?:""))
                 }
 
                 return@Interceptor chain.proceed(request)
@@ -38,9 +42,14 @@ interface AAMUApi {
             return Retrofit.Builder()
                 .client(okHttpClient)
                 .baseUrl(BASE_URL)
-                .addConverterFactory(JacksonConverterFactory.create())
+                .addConverterFactory(JacksonConverterFactory.create(jacksonObjectMapper()))
                 .build()
                 .create(AAMUApi::class.java)
         }
     }
 }
+
+data class userLogin(
+    val username: String,
+    val password: String
+)

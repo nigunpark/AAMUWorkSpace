@@ -273,12 +273,14 @@ $(function() {
 	   * Data and config for chartjs
 	   */
 	  'use strict';
-	  var userData = '${users}'
+	  var date = new Date();
+	  console.log(date)
+	  var arr=${join}
 	  var data = {
 	    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
 	    datasets: [{
 	      label: '# of Votes',
-	      data: [userData, 19, 3, 5, 2, 3, 10, 20, 30],
+	      data: arr,
 	      backgroundColor: [
 	        'rgba(255, 99, 132, 0.2)',
 	        'rgba(54, 162, 235, 0.2)',
@@ -295,6 +297,16 @@ $(function() {
 	        'rgba(153, 102, 255, 1)',
 	        'rgba(255, 159, 64, 1)'
 	      ],
+	      borderWidth: 1,
+	      fill: true
+	    }]
+	  };
+	  var arr=${join}
+	  var data2 = {
+	    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+	    datasets: [{
+	      label: '# of Votes',
+	      data: arr,
 	      borderWidth: 1,
 	      fill: true
 	    }]
@@ -391,7 +403,7 @@ $(function() {
 	    var lineChartCanvas = $("#lineChart").get(0).getContext("2d");
 	    var lineChart = new Chart(lineChartCanvas, {
 	      type: 'line',
-	      data: data,
+	      data: data2,
 	      options: options
 	    });
 	  }

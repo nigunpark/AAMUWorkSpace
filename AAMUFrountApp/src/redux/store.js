@@ -43,7 +43,8 @@ let arrForJangso = createSlice({
       );
     },
     addAtimeArrForJangso(state, action) {
-      state.atime = action.payload;
+      [...state].atime = action.payload;
+      // state.atime = action.payload;
     },
   },
 });

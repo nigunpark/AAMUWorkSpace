@@ -3,7 +3,11 @@ package com.aamu.aamuandroidapp.util
 import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
+import android.util.Log
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
+import androidx.fragment.app.Fragment
+import com.aamu.aamuandroidapp.fragment.main.MainFragment
 import java.util.*
 
 open class PermissionUtils(private val context : Context,
@@ -19,17 +23,12 @@ open class PermissionUtils(private val context : Context,
         deniedPermissions.clear()
         for (permission in requestPermissions) {
             val checkPermission = ActivityCompat.checkSelfPermission(
-                context,
-                permission!!
-            )
+                context, permission!!)
             //권한이 없는 경우 deniedPermissions에 저장
-            if (checkPermission == PackageManager.PERMISSION_DENIED) deniedPermissions.add(
-                permission
-            )
+            if (checkPermission == PackageManager.PERMISSION_DENIED)
+                deniedPermissions.add(permission)
         }
-        return if (!deniedPermissions.isEmpty()) {
-            false
-        } else true
+        return if (!deniedPermissions.isEmpty()) false else true
     }
 
     //사용자에게 권한 허용 요청

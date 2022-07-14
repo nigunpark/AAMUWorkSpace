@@ -34,28 +34,25 @@
 	
 	<insert id="plannerInsert" parameterType="planDTO">
 		INSERT INTO routeboard VALUES(SEQ_PLA.NEXTVAL,#{title},SYSDATE,#{id})
+		<selectKey keyProperty="rbn" resultType="int" order="AFTER">
+	    	SELECT SEQ_PLA.CURRVAL FROM DUAL
+	    </selectKey>
+	</insert>
+
+	<insert id="routeInsert" parameterType="routeDTO">
+		INSERT INTO route VALUES(#{rbn},#{contentid},#{day},#{starttime},#{atime},#{mtime})
+
 	</insert>
 	
-	<insert id="routeInsert" parameterType="List">
-		INSERT INTO route VALUES
-		<foreach collection="list" item="routeDTO" separator=",">
-		(#{item.contentid},#{item.day},#{item.starttime},#{item.atime},#{item.mtime})
-		</foreach>
-	</insert>
 	<update id="updatePlanner" parameterType="planDTO">
 	 	UPDATE routeboard SET title=#{title} WHERE rbn=#{rbn}
 	</update>
-	
-	<update id="updateRoute" parameterType="List">
-		UPDATE route SET
-		<foreach collection="list" item="routeDTO" separator=",">
-		contentid=#{item.contentid},day=#{item.day},starttime=#{item.starttime},atime=#{item.atime},mtime=#{item.mtime} WHERE rbn=#{rbn}
-		</foreach>
-	</update>
 
-
-	<delete id="deletePlanner" parameterType="Map">
+	<delete id="deletePlanner" parameterType="int">
 		DELETE FROM routeboard WHERE rbn=#{rbn}
+	</delete>
+	<delete id="deleteRoute" parameterType="int">
+		DELETE FROM route WHERE rbn=#{rbn}
 	</delete>
 		
 	<select id="selectRouteList" parameterType="int" resultType="routeDTO">
