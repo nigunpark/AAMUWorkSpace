@@ -50,12 +50,12 @@
 											<td>
 			                                  <div class="form-check form-check-flat mt-0">
 	                                            <label class="form-check-label">
-	                                              <input name="RowCheck" type="checkbox" class="form-check-input" aria-checked="false" value="${list.lno}">
+	                                              <input name="RowCheck" type="checkbox" class="form-check-input" aria-checked="false" value="${record.lno}">
 	                                              <i class="input-helper"></i>
 	                                          	</label>
 	                                          </div>
 			                                </td>
-											<td>${listPagingData.map.totalCount - (((listPagingData.map.nowPage - 1) * listPagingData.map.pageSize) + loop.index)}</td>
+											<td>${record.lno}</td>
 			                                <td >${record.ctitle}</td>
 			                                <td>${record.id}</td>
 			                                <td>${record.postdate}</td>
@@ -103,32 +103,36 @@
     
     //삭제 click
     $('button').click(function(){
-    	console.log("버튼이벤트 발생")
+    	console.log("버튼이벤트 발생");
+    	var tr=$('table > tbody > tr:nth-child(1)');
     	var valueArr = new Array();
     	var list = $("input[name='RowCheck']");
     	console.log(list[0]);
     	for(var i=0; i<list.length; i++){
     		if(list[i].checked){
     			valueArr.push(list[i].value);
+    			console.log("valueArr:"+valueArr);
     		}
     	}////////for
     	if(valueArr.length ==0){
     		alert("선택된 글이 없습니다.");
     	}
     	else{
-    		confirm("정말 삭제하시겠습니까?");{
-    			$.ajax({
-        			url:"<c:url value="/admin/CommuDelete.do"/>",
-        			type:"post",
-        			data:{
-        				valueArr : valueArr
-        			}
-        			dataType:'json'
-        		});
-    		}
-    		
-    	}/////////////else
-    	
+    		confirm("정말 삭제하시겠습니까?");
+    		$.ajax({
+       			url:"<c:url value="/admin/CommuDelete.do"/>",
+       			type:"post",
+       			data:{
+       				valueArr : valueArr
+       			},
+       			dataType:'json'
+       		}).done(data=>{
+       			console.log('삭제성공:',data);
+       			tr.remove();
+       		}).fail(error=>{
+       			console.log('삭제에러:',error);
+       		});
+    	}//////else
     });
   </script>
 </body>

@@ -20,7 +20,7 @@ public class CommuDTO {
 	public String id;
 	public String ctitle;
 	public String content;
-	public String postdate;
+	public java.sql.Date postdate;
 	public String likecount;
 	public Boolean islike;
 	public String rcount;
