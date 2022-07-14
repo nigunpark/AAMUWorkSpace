@@ -1,9 +1,12 @@
 package com.aamu.aamuandroidapp.util
 
 import android.app.Activity
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Build
 import android.view.View
 import android.view.WindowManager
+import androidx.compose.ui.platform.LocalContext
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
@@ -34,6 +37,19 @@ fun Activity.setStatusBarOrigin() {
         WindowInsetsControllerCompat(this.window , window.decorView).show(WindowInsetsCompat.Type.navigationBars())
     }
 }
+private lateinit var contextL : Context
+fun setContextapp(context: Context){
+    contextL = context
+}
+
+fun getToken() : String?{
+    val preferences : SharedPreferences = contextL.getSharedPreferences("usersInfo", Context.MODE_PRIVATE)
+    val token : String? = preferences.getString("token",null)
+    return token
+}
+
+
+
 
 //fun Activity.hideSystemUI() {
 //    activity?.let { WindowCompat.setDecorFitsSystemWindows(it?.window, false) }
