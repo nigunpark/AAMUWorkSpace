@@ -2,10 +2,13 @@ package com.aamu.admin.main.web;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Vector;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -30,7 +33,8 @@ public class MainController {
 		Date current = new Date();
 		SimpleDateFormat formatter = new SimpleDateFormat("yy-MM-dd");
 		String today = formatter.format(current);
-		System.out.println(today);
+		List counts = new Vector<>();
+
 		model.addAttribute("users",service.usersTotalCount());
 		model.addAttribute("todayUsers", service.usersTodayCount(today));
 		map.put("places", "placesinfo");
@@ -39,7 +43,13 @@ public class MainController {
 		model.addAttribute("hotel", service.placesTotalCount(map));
 		map.put("places", "dinerinfo");
 		model.addAttribute("diner", service.placesTotalCount(map));
-		
+		for(int i=6;i>=0;i--) {
+			String day = "sysdate-"+i;
+			int count = service.selectJoin(day);
+			counts.add(count);
+		}
+		model.addAttribute("join",counts);
+
 		return "/main/main";
 	}
 	

@@ -4,10 +4,12 @@ import android.Manifest
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.aamu.aamuandroidapp.R
@@ -68,27 +70,23 @@ class MainFragment : Fragment() {
 
         preferences = requireContext().getSharedPreferences("local", Context.MODE_PRIVATE)
 
+        val requestMultiplePermissions = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions())
+        { permissions ->
+            permissions.entries.forEach {
+                if(!it.value) {
+                    preferences.edit().putString("local", "N").commit()
+                    return@registerForActivityResult
+                }
+                preferences.edit().putString("local", "Y").commit()
+            }
+        }
         if (!permissionUtils.checkPermission()) {
             //권한 요청
-            permissionUtils.requestPermissions();
+            requestMultiplePermissions.launch(permissions)
         } else {
-            preferences.edit().putString("local", "N").commit()
-        }
-
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.requireActivity().onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (!permissionUtils.requestPermissionsResult(requestCode, permissions, grantResults)) {
             preferences.edit().putString("local", "Y").commit()
         }
-        else{
-            preferences.edit().putString("local", "N").commit()
-        }
+
     }
 
     private fun replace(fragmet : Fragment){

@@ -1,7 +1,7 @@
 package com.aamu.admin.main.serviceimpl;
 
 import java.util.Date;
-
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +37,18 @@ public class MainServiceImpl implements MainService{
 	public int selectPeriod(Map map) {
 		
 		return dao.selectPeriod(map);
+	}
+
+	@Override
+	public int selectJoin(String day) {
+		
+		return dao.selectJoin(day);
+	}
+
+	@Override
+	public List selectUsers(Map map) {
+		
+		return dao.selectUsers(map);
 	}
 	
 	

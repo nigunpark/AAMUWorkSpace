@@ -2,7 +2,9 @@ package com.aamu.aamuandroidapp.fragment.init
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -10,11 +12,17 @@ import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.compose.animation.Crossfade
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.aamu.aamuandroidapp.R
 import com.aamu.aamuandroidapp.components.login.LoginScreen
+import com.aamu.aamuandroidapp.components.login.LoginViewModel
+import com.aamu.aamuandroidapp.components.login.LoginViewModelFactory
 import com.aamu.aamuandroidapp.databinding.FragmentLoginBinding
+import com.aamu.aamuandroidapp.util.setContextapp
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -73,13 +81,20 @@ class LoginFragment : Fragment() {
     @SuppressLint("UnusedCrossfadeTargetStateParameter")
     @Composable
     fun LoginOnboarding() {
-        var loggedIn by remember { mutableStateOf(false) }
         val coroutineScope = rememberCoroutineScope()
-        Crossfade(targetState = loggedIn) {
+        val viewModel: LoginViewModel = viewModel(
+            factory = LoginViewModelFactory()
+        )
+        val token by viewModel.token.observeAsState()
+        if(token!=null){
+            navController.navigate(R.id.action_loginFragment_to_mainFragment)
+            val  preferences : SharedPreferences = LocalContext.current.getSharedPreferences("usersInfo",Context.MODE_PRIVATE)
+            preferences.edit().putString("token",token).commit()
+        }
+        else {
             LoginScreen {
                 coroutineScope.launch {
                     delay(2000)
-                    loggedIn = true
                 }
             }
         }

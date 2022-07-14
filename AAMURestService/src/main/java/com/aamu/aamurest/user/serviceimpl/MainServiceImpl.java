@@ -171,13 +171,36 @@ public class MainServiceImpl implements MainService{
 	}
 	@Override
 	public int plannerInsert(PlannerDTO dto) {
+		int affected=0;
+		dao.plannerInsert(dto);
+		List<RouteDTO> routes = dto.getRoute();
 		
-		return dao.plannerInsert(dto);
+		for(RouteDTO route:routes) {
+			route.setRbn(dto.getRbn());
+			affected = dao.routeInsert(route);
+		}
+		if(affected>1)affected=1;
+		else {
+			affected=0;
+		} 
+		return affected;
 	}
 	@Override
-	public int RouteInsert(List<RouteDTO> routes) {
-		// TODO Auto-generated method stub
-		return dao.routeInsert(routes);
+	public int updatePlanner(PlannerDTO dto) {
+		int affected=0;
+		dao.updatePlanner(dto);
+		dao.deleteRoute(dto.getRbn());
+		List<RouteDTO> routes = dto.getRoute();
+		
+		for(RouteDTO route:routes) {
+			route.setRbn(dto.getRbn());
+			affected = dao.routeInsert(route);
+		}
+		if(affected>1)affected=1;
+		else {
+			affected=0;
+		} 
+		return affected;
 	}
 	
 ///////////////////////////////////////////////////get place impl
@@ -337,15 +360,16 @@ public class MainServiceImpl implements MainService{
 		
 		return dao.updateRoute(routes);
 	}
+	
 	@Override
-	public int updatePlanner(PlannerDTO dto) {
-
-		return dao.updatePlanner(dto);
+	public int deletePlanner(int rbn) {
+		
+		return dao.deletePlanner(rbn);
 	}
 	@Override
-	public int deletePlanner(Map map) {
+	public int deleteRoute(int rbn) {
 		
-		return dao.deletePlanner(map);
+		return dao.deleteRoute(rbn);
 	}
 
 

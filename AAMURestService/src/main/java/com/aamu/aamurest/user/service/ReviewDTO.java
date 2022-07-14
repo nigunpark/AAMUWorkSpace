@@ -15,7 +15,6 @@ public class ReviewDTO {
 	public Date ratedate;
 	public String rno;
 	public void setReview(String reviewSelectOne) {
-		// TODO Auto-generated method stub
 		
 	}
 		

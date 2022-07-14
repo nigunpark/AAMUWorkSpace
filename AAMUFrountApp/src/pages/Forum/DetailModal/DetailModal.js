@@ -7,9 +7,6 @@ import { Link } from 'react-router-dom'
 import { Rating } from '@mui/material'
 
 const DetailModal = ({setIsOpen}) => {
-
-    const [value, setValue] = useState(2.5);
-
     //const modalRef = useRef(null);
 
     const handleClose = () => {
@@ -27,6 +24,50 @@ const DetailModal = ({setIsOpen}) => {
             );
     }, []);
 
+    const [star, setStar] = useState(0); //사용자가 입력하는 별점
+    let [commentStar, setCommentStar] = useState([]); //commentStar에 별점 저장
+
+    console.log('맨 위 별점:',star);
+
+    let [userName] = useState('ADMIN');
+    let [comment, setComment] = useState(''); // comment 사용자가 입력하는 댓글
+    let [feedComments, setFeedComments] = useState([]); // feedComments 댓글 리스트 저장
+    let [isValid, setIsValid] = useState(false); // 댓글 게시가능여부 (유효성 검사)
+
+    let post = (e) => {
+         // 전개연산자를 사용해서 feedComments에 담겨있는 댓글과
+         // commentStar에 담겨있는 별점 가져오기
+        const copyFeedComments = [...feedComments];
+        const copyStar = [...commentStar];
+
+        //기존 댓글 배열이 담긴 copyFeedComments에 사용자가 입력한 comment 를 push
+        copyFeedComments.push(comment);
+        //기존 별점 배열이 담긴 copyStar에 사용자가 입력한 star 를 push
+        copyStar.push(star);
+
+        //사용자가 입력한 댓글을 포함시켜서 setFeedComments을 변경
+        setFeedComments(copyFeedComments);
+        //사용자가 입력한 별점을 포함시켜서 setCommentStar을 변경
+        setCommentStar(copyStar);
+
+        //사용자가 입력한 댓글창과 별점 초기화
+        setComment('');
+        setStar(0);
+    };
+
+    const CommentList = (props) =>{ //리뷰댓글 컴포넌트
+        return(
+            <div>
+                <div>
+                    <img src='/images/star.jpg' style={{width:'30px'}}/>
+                    {props.stars}점
+                </div>
+                <p>{props.userName}</p>
+                <div>{props.userComment}</div>
+            </div>
+        );
+    };
+
 // ref={modalRef}
   return (
     <DetailContainer >
@@ -34,7 +75,7 @@ const DetailModal = ({setIsOpen}) => {
             <DetailModalWrap>
 
                 <DetailTitle>
-                    <span>제목</span>
+                    <span>제주도 3박 4일 여행</span>
                     {/* <Button onClick={handleClose}>Close</Button> 주석 */}
                     <div className='detail-button'>
                         {/* DetailButton.scss 주석 */}
@@ -54,40 +95,60 @@ const DetailModal = ({setIsOpen}) => {
                     <div>
                         <Rating
                             name="simple-controlled"
-                            value={value}
                             precision={0.5}
-                            onChange={(event, newValue) => {
-                            setValue(newValue);
-                            }}
+                            onChange={(e, newValue) => {
+                                setStar(newValue);
+                            }}// 사용자가 선택한만큼 setStar를 통해 star의 값 변경
+                            value={star}
                         />
                     </div>
                     <Tag>
-                        <Date>2022-07-03</Date>
+                        <Date>작성일. 2022-07-03</Date>
                         <Link to='/'>
                             #tag
                         </Link>
                     </Tag>
-                    <input type="text" placeholder="리뷰 달기..."/>
+                    <input
+                        type="text"
+                        placeholder="리뷰 달기..."
+                        onChange={(e)=>{
+                            setComment(e.target.value);
+                        }} //리뷰창 변할때마다 setComment를 통해 comment의 값 변경
+                        onKeyUp={(e)=>{
+                            e.target.value.length > 0 ? setIsValid(true) : setIsValid(false);
+                        }} //사용자가 리뷰를 작성했을 때 빈공간인지 확인하여 유효성 검사
+                        value={comment}
+                        />
                     <div className='detail-button'>
                         {/* DetailButton.scss 주석 */}
-                        <button className="learn-more" type="button">게시</button>
+                        <button
+                            className="learn-more"
+                            type="button"
+                            onClick={post}
+                            disabled={isValid ? false : true}
+                            >
+                            리뷰 등록
+                        </button>
                     </div>
                 </DetailContents>
-                
-                {/* 주석
                 <DetailReview>
-                    <div>
-                        리뷰인듯 1. 달린 리뷰의 개수가 늘어나면 위 아래가 잘림
-                                    모달창 스크롤 기능 혹은 안잘리게 하는거 찾아봐야함
-                                    리뷰인듯 1. 달린 리뷰의 개수가 늘어나면 위 아래가 잘림
-                                    모달창 스크롤 기능 혹은 안잘리게 하는거 찾아봐야함리뷰인듯 1. 달린 리뷰의 개수가 늘어나면 위 아래가 잘림
-                                    모달창 스크롤 기능 혹은 안잘리게 하는거 찾아봐야함
-                    </div>
-                    <button>
-                        <img src='/images/content-delete.png'/>
-                    </button>
-                    
-                </DetailReview>주석 */}
+                    {//feedComments 에 담겨있을 댓글 값을 CommentList 컴포넌트에 담아서 가져오기
+                     //CommentList 컴포넌트는 반복적으로 추가되는 사용자 댓글을 하나하나 담고있음
+                     //userName 은 위에서 ADMIN 을 담은 값을,
+                     //userComment 는 feedComments 에 담겨있는 배열 담는다
+                     //stars 는 commentStar의 인덱스 번호에 맞는 별점 배열을 담는다
+                        feedComments.map((commnetArr, idx)=>{
+                            return(
+                                <CommentList
+                                    stars={commentStar[idx]}
+                                    userName={userName}
+                                    userComment={commnetArr}
+                                    key={idx}
+                                />
+                            );
+                        })
+                    }
+                </DetailReview>
                 
             </DetailModalWrap>
         </DetailOverlay>
@@ -97,8 +158,8 @@ const DetailModal = ({setIsOpen}) => {
 }
 const Textarea = styled.div`
     position: relative;
-    width: 450px;
-    height: 330px;
+    width: 99%;
+    height: 320px;
     overflow: auto;
     box-shadow: 0 0 0 2px #e9ebec, 0 0 0 11px #fcfdfe;
     // border: solid 1px black
@@ -116,6 +177,7 @@ const Textarea = styled.div`
 // position: fixed; 모달창 열리면 외부 스크롤바 안되게
 const DetailContainer = styled.div`
     position: fixed;
+    display:auto;
     width: 100%;
     height: 100%;
     z-index: 1000;
@@ -126,6 +188,7 @@ const DetailContainer = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+    overflow: auto;
 `
 
 const DetailOverlay = styled.div`
@@ -136,8 +199,13 @@ const DetailOverlay = styled.div`
 `
 
 const DetailModalWrap = styled.div`
-    width: 1000px;
-    height: fit-content;
+    display: grid;
+    //
+    width: 1050px;
+    height: 90%;
+
+    overflow: auto;
+
     border-radius: 15px;
     background-color: #fff;
     position: absolute;
@@ -162,18 +230,16 @@ const DetailTitle = styled.div`
 `
 
 const DetailReview = styled.div`
-    margin-left: 40px;
-    margin-right: 40px;
     
-    font-size: 1em;
+    margin-left: 20px;
+    margin-right: 20px;
     
+    font-size: 18px;
+
     div{
-        
-        display: inline-block;
-        text-align: center;
-        margin: 5px;
-        border: solid 2px black;
-        height: 50%;
+        display: flex;
+        flex-wrap : nowrap;
+        border: solid 1px red;
     }
 
     border: solid 2px black;
@@ -182,7 +248,11 @@ const DetailReview = styled.div`
 const DetailContents = styled.div`
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    margin: 40px 30px;
+    gap: 5px;
+
+    // overflow: auto;
+
+    margin: 20px 10px;
     
     h1{
         font-size: 30px;
@@ -195,7 +265,7 @@ const DetailContents = styled.div`
     input{
         width: 100%;
         margin-left: 10px;
-        font-size: 20px;
+        font-size: 18px;
     }
 `
 const Tag = styled.span`
