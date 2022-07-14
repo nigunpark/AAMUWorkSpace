@@ -1,12 +1,31 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import ContentItem from './ContentItem';
 import './Content.css'
 import { Link, useNavigate } from 'react-router-dom';
 import FSearch from '../FSearch/FSearch';
+import axios from "axios";
 
 const Content = () => {
     //let navigate = useNavigate();
     const forMapTestArr = [1, 2, 3, 5, 6, 7];
+
+    let token = sessionStorage.getItem("token");
+
+    // let [list, setList] = useState('');
+    
+    // useEffect(()=>{
+    //     axios.get('',{
+    //         headers: {
+    //             Authorization: `Bearer ${token}`,
+    //           }
+    //     }).then((resp)=>{
+    //         setList(resp.data);
+    //         console.log('데이터 형태 : ',resp.data);
+    //     }).catch((error)=>{
+    //         console.log((error) => console.log("글 목록 가져오기 실패", error));
+    //     });
+    // });
+    
 
     return (
         <div className="Cards_minCon">
