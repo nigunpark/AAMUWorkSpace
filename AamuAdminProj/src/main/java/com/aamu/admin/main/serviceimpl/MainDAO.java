@@ -1,6 +1,7 @@
 package com.aamu.admin.main.serviceimpl;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
@@ -30,6 +31,16 @@ public class MainDAO {
 	public int selectPeriod(Map map) {
 		
 		return template.selectOne("selectPeriod",map);
+	}
+
+	public List selectJoin(List day) {
+		
+		return template.selectOne("selectJoin",day);
+	}
+
+	public int selectUsers(Map map) {
+		
+		return template.selectOne("selectUsers",map);
 	}
 
 }

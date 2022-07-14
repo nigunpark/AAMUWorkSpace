@@ -71,7 +71,7 @@ public class BBSServiceImpl implements BBSService{
 	public String reviewSelectOne(String rno) {
 		return dao.reviewSelectOne(rno);
 	}
-
+	
 	@Override
 	public double getRatingAverage(int rate) {
 		return 0;

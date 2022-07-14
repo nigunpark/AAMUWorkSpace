@@ -8,6 +8,7 @@ const ContentItem = ({ i }) => {
 
     const [value, setValue] = useState(2.5);
     const [isOpen, setIsOpen] = useState(false);
+
     const onClickModal = () =>{
         setIsOpen(true);
     };
@@ -26,19 +27,20 @@ const ContentItem = ({ i }) => {
                         />
                     </div>
                     <div className="card__item__rating_minCon">
-                        <Rating
+                        {/* <Rating
                             name="simple-controlled"
                             value={value}
                             precision={0.5}
                             onChange={(event, newValue) => {
                             setValue(newValue);
                             }}
-                        />
-                        <span className="idSpan_minCon">kim**58님의 plan</span>
+                        /> */}
+                        <img src='/images/star.jpg' style={{width:'30px'}}/>4.8
+                        <span className="idSpan_minCon" style={{marginLeft: 'auto'}}>kim**58님의 plan</span>
                     </div>
                     <div className="card__item__content_minCon">
-                        <h3>제주도 3박4일</h3>
-                        <p>국시치고 가족과 함께 제주도 여행다녀왔어요</p>
+                        <h3>제주도 3박4일</h3> {/* 제목 */}
+                        <p style={{fontSize: '12.5px', color: '#8e8e8e'}}>#tag</p>
                     </div>
                 </figure>
             </div>
