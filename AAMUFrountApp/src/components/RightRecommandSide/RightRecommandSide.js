@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Search from "../Search/Search";
 import SearchedLocation from "../SearchedLocation/SearchedLocation";
 import "./RightRecommandSide.css";
-import { changeInfo, changeRightToggle } from "../../redux/store";
+import { changeInfo } from "../../redux/store";
 import SearchedSukso from "../SearchedLocation/SearchedSukso";
 const RightRecommandSide = ({ titleName, setTitleName, conWhichModal }) => {
   let reduxState = useSelector((state) => {
