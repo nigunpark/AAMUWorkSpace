@@ -161,11 +161,12 @@ const login = (idRef, pwdRef, navigate, setShowValid) => {
     })
     .then((resp) => {
       sessionStorage.setItem("token", resp.data.token);
+      sessionStorage.setItem("username", idRef.current.value);
       navigate(-1);
     })
     .catch((error) => {
       console.log("error:", error);
-      setShowValid(true);
+      // setShowValid(true);
     });
 };
 const Container = styled.div`
