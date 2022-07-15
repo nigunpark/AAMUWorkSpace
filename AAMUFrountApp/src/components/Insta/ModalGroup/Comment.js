@@ -47,74 +47,37 @@ function Comment() {
                 </div>
                 <div className="recommend">                    
                     <div className="recommend-down">
+
                         <div className="recommend-contents">
                             <img className='likeimg' src="./img/bk.jpg" alt="추사" />
-                            <div>
-                                <p className="userName">내용</p>
-                                <p className="userName">태그</p>
-                                <p className="userName">등록일</p>
+                            <div style={{display:'flex',flexDirection:'column',marginTop:'10px',marginLeft:'10px'}}>
+                                <div style={{display:'flex',flexDirection:'row'}}>
+                                    <p className="userName"><strong>0hyun0hyun</strong></p>
+                                    <p className="userName">내용들어갑니다 #들어갈지 말지 고민중</p>
+                                    
+                                </div>
+                                <div style={{fontSize:'10px',color:'#a5a5a5',marginTop:'8px'}}>
+                                    <p className="postDate">등록일</p>
+                                </div>
                             </div>
                         </div>
+
                         <div className="recommend-contents">
                             <img className='likeimg' src="./img/bk.jpg" alt="추사" />
-                            <div>
-                                <p className="userName"><big>0hyun0hyun</big>님이 댓글을 달았습니다</p>
+                            <div style={{display:'flex',flexDirection:'column',marginTop:'10px',marginLeft:'10px'}}>
+                                <div style={{display:'flex',flexDirection:'row'}}>
+                                    <p className="userName"><strong>0hyun0hyun</strong></p>
+                                    <p className="userName">풍경사진 잘 보고 갑니다</p>
+                                </div>
+                                <div>
+                                     <i class="fa-regular fa-heart"></i>
+                                </div>
+                                <div style={{fontSize:'10px',color:'#a5a5a5',marginTop:'8px'}}>
+                                    <p className="postDate">등록일</p>
+                                </div>
                             </div>
                         </div>
-                        <div className="recommend-contents">
-                        <img className='likeimg' src="./img/bk.jpg" alt="추사" />
-                            <div>
-                                <p className="userName"><big>0hyun0hyun</big>님이 댓글을 달았습니다</p>
-                            </div>
-                        </div>
-                        <div className="recommend-contents">
-                        <img className='likeimg' src="./img/bk.jpg" alt="추사" />
-                            <div>
-                                <p className="userName"><big>0hyun0hyun</big>님이 댓글을 달았습니다</p>
-                            </div>
-                        </div>
-                        <div className="recommend-contents">
-                        <img className='likeimg' src="./img/bk.jpg" alt="추사" />
-                            <div>
-                                <p className="userName"><big>0hyun0hyun</big>님이 댓글을 달았습니다</p>
-                            </div>
-                        </div>
-                        <div className="recommend-contents">
-                        <img className='likeimg' src="./img/bk.jpg" alt="추사" />
-                            <div>
-                                <p className="userName"><big>0hyun0hyun</big>님이 댓글을 달았습니다</p>
-                            </div>
-                        </div>
-                        <div className="recommend-contents">
-                            <img className='likeimg' src="./img/bk.jpg" alt="추사" />
-                            <div>
-                                <p className="userName"><big>0hyun0hyun</big>님이 댓글을 달았습니다</p>
-                            </div>
-                        </div>
-                        <div className="recommend-contents">
-                        <img className='likeimg' src="./img/bk.jpg" alt="추사" />
-                            <div>
-                                <p className="userName"><big>0hyun0hyun</big>님이 댓글을 달았습니다</p>
-                            </div>
-                        </div>
-                        <div className="recommend-contents">
-                        <img className='likeimg' src="./img/bk.jpg" alt="추사" />
-                            <div>
-                                <p className="userName"><big>0hyun0hyun</big>님이 댓글을 달았습니다</p>
-                            </div>
-                        </div>
-                        <div className="recommend-contents">
-                        <img className='likeimg' src="./img/bk.jpg" alt="추사" />
-                            <div>
-                                <p className="userName"><big>0hyun0hyun</big>님이 댓글을 달았습니다</p>
-                            </div>
-                        </div>
-                        <div className="recommend-contents">
-                        <img className='likeimg' src="./img/bk.jpg" alt="추사" />
-                            <div>
-                                <p className="userName"><big>0hyun0hyun</big>님이 댓글을 달았습니다</p>
-                            </div>
-                        </div>
+                       
                     </div>    
                 </div>
                 <div className="contentIcon">
