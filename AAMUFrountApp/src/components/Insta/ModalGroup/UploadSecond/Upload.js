@@ -99,21 +99,21 @@ const [inputValue,setinputValue] = useState('');
     let val = e.target.value
     if(e.keyCode!=13) return;
     let token = sessionStorage.getItem("token");
-    axios.get('/aamurest/gram/place/selectList',{
-      headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          params: {
-            searchWord: val,
-          },
-    })
-    .then((resp) => {
-      // console.log(resp.data);
-      setSearch(resp.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    // axios.get('/aamurest/gram/place/selectList',{
+    //   headers: {
+    //         Authorization: `Bearer ${token}`,
+    //       },
+    //       params: {
+    //         searchWord: val,
+    //       },
+    // })
+    // .then((resp) => {
+    //   // console.log(resp.data);
+    //   setSearch(resp.data);
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //   });
   }
 
 
@@ -158,7 +158,7 @@ const [inputValue,setinputValue] = useState('');
             {showNext ? 
               <Nextbtn  onClick={()=>{
                let temp= uploadFile(image)
-               console.log(temp)
+              //  console.log(temp)
                 gramEdit(temp,setShowWrite,titleRef,textareaRef,searchRef,search)
               }}>업로드</Nextbtn>
             :
@@ -262,35 +262,35 @@ function gramEdit(temp,setShowWrite,titleRef,textareaRef,searchRef,search){
  let searched= search.find((val,i)=>{
     return val.TITLE===searchRef.current.value
   })
-  console.log('searched:',searched)
+  // console.log('searched:',searched)
 
-  temp.append('id',sessionStorage.getItem('username'))
-  temp.append('ctitle',titleRef.current.value)
-  temp.append('content',textareaRef.current.value)
-  temp.append('contentid',searched.CONTENTID)
+  // temp.append('id',sessionStorage.getItem('username'))
+  // temp.append('ctitle',titleRef.current.value)
+  // temp.append('content',textareaRef.current.value)
+  // temp.append('contentid',searched.CONTENTID)
 
-  let token = sessionStorage.getItem("token");
-  axios.post('/aamurest/gram/edit',temp,
-      //  { temp,
-      //   id: sessionStorage.getItem('username'),
-      //   ctitle: titleRef.current.value,
-      //   content: textareaRef.current.value,
-      //   contentid:searched.CONTENTID
-      // },  
-       { headers: {
-              Authorization: `Bearer ${token}`,
-              'Content-Type': 'multipart/form-data',
-            }}
+  // let token = sessionStorage.getItem("token");
+  // axios.post('/aamurest/gram/edit',temp,
+  //     //  { temp,
+  //     //   id: sessionStorage.getItem('username'),
+  //     //   ctitle: titleRef.current.value,
+  //     //   content: textareaRef.current.value,
+  //     //   contentid:searched.CONTENTID
+  //     // },  
+  //      { headers: {
+  //             Authorization: `Bearer ${token}`,
+  //             'Content-Type': 'multipart/form-data',
+  //           }}
 
-      )
-  .then((resp) => {
-    console.log(resp.data);
-    setShowWrite(resp.data);
+  //     )
+  // .then((resp) => {
+  //   console.log(resp.data);
+  //   setShowWrite(resp.data);
     
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+  //   })
+  //   .catch((error) => {
+  //     console.log(error);
+  //   });
   }
 
 const Contents = styled.div`

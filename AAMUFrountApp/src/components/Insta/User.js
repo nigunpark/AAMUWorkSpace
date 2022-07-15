@@ -24,13 +24,14 @@ function User() {
   
   return (
     <div>
-      <ButtonGroup></ButtonGroup>
-      <div className="search" onClick={() => { setsearch(!search); }} >
-        <input type="text" className="search-bar"  placeholder="검색" 
-          ref={modalRef} />
-        {search ? <SearchModal></SearchModal> : null}
+      <div className="userSearch">
+        <ButtonGroup></ButtonGroup>
+        <div className="search" onClick={() => { setsearch(!search); }} >
+          <input type="text" className="search-bar"  placeholder="검색" 
+            ref={modalRef} />
+          {search ? <SearchModal></SearchModal> : null}
+        </div>
       </div>
-
       <div className="user">
         <img src="./img/bk.jpg" alt="사프" />
         <div>
