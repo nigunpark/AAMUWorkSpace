@@ -11,7 +11,8 @@ public interface MainService {
 	int usersTodayCount(String today);
 	int placesTotalCount(Map map);
 	int selectPeriod(Map map);
-	List selectJoin(List day);
+	int selectJoin(String day);
 	int selectUsers(Map map);
+	String selectDate(String day);
 	
 }

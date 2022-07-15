@@ -3,6 +3,7 @@ import styled from "styled-components";
 import NotificationModal from "./ModalGroup/Notification";
 import SearchModal from "./Search";
 import WriteModal from "./ModalGroup/UploadSecond/Upload"
+// import ButtonGroup from "./ModalGroup/UploadSecond/ButtonGroup"
 
 function User() {
   const modalRef = useRef();
@@ -23,6 +24,7 @@ function User() {
   
   return (
     <div>
+      {/* <ButtonGroup></ButtonGroup> */}
       <div className="search" onClick={() => { setsearch(!search); }} >
         <input type="text" className="search-bar"  placeholder="검색" 
           ref={modalRef} />
@@ -70,9 +72,9 @@ function User() {
                 <Overlay
                 ref={outside} 
                 onClick={ (e) => { if(e.target == outside.current) setsquare(false) } }
-                >
+                />
                   <WriteModal onClick={ () => setsquare(false) }></WriteModal>
-                </Overlay>
+                
               </Container>
           </>
           ) : (
@@ -183,13 +185,11 @@ const Container = styled.div`
     right: 0;
     bottom: 0;
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
 `
 const Overlay = styled.div`
     position: absolute;
-    margin-right:30px;
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.6);

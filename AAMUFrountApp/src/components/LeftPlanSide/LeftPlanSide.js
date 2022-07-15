@@ -12,6 +12,7 @@ import {
   addArrInForJangso,
   addAtimeArrForJangso,
   addMonthNDate,
+  changeLnfM,
   changeSaveDaysRedux,
   changeShowWhichModal,
   deleteAllPickJanso,
@@ -214,9 +215,18 @@ function PickedLocation({ local }) {
   let [timeVal, setTimeVal] = useState(2);
   let [minVal, setMinVal] = useState(0);
   let dispatch = useDispatch();
+  let reduxState = useSelector((state) => {
+    return state;
+  });
   return (
     <div className="pickedLocation__container slide-in-right">
-      <div className="pickedLocation__img-container">
+      <div
+        className="pickedLocation__img-container"
+        onClick={(e) => {
+          e.stopPropagation();
+          dispatch(changeLnfM(local));
+        }}
+      >
         <img
           src={local.smallimage ?? "/images/no-image.jpg"}
           onError={(e) => {
@@ -232,9 +242,12 @@ function PickedLocation({ local }) {
           <FontAwesomeIcon
             icon={faX}
             className="pickedLocation__info-title__closeBtn"
-            onClick={() => {
+            onClick={(e) => {
+              e.stopPropagation();
               dispatch(deletePickJangso(local));
+              console.log(timeVal);
               dispatch(timeSetter(-2));
+              dispatch(minSetter(-0));
               dispatch(addArrInForJangso(local));
             }}
           />
@@ -249,31 +262,50 @@ function PickedLocation({ local }) {
             maxLength={5}
             defaultValue={timeVal}
             style={{ width: "40px", fontSize: "20px", color: "var(--orange)" }}
-            onClick={(e) => {
-              if (e.target.value !== 0) {
-                if (timeVal > e.target.value) dispatch(timeSetter(-1));
-                else dispatch(timeSetter(1));
-                setTimeVal(e.target.value);
-                dispatch(addAtimeArrForJangso(timeVal * 60 * 60 * 1000));
+            // onClick={(e) => {
+            //   if (e.target.value !== 0) {
+            //     if (timeVal > e.target.value) dispatch(timeSetter(-1));
+            //     else dispatch(timeSetter(1));
+            //     setTimeVal(e.target.value);
+            //     dispatch(addAtimeArrForJangso(timeVal * 60 * 60 * 1000));
+            //   }
+            // }}
+            // onKeyUp={(e) => {
+            //   if (e.code === "Enter") {
+            //     if (timeVal > e.target.value)
+            //       dispatch(timeSetter(e.target.value - timeVal));
+            //     else dispatch(timeSetter(e.target.value - timeVal));
+            //     setTimeVal(e.target.value);
+            //     dispatch(addAtimeArrForJangso(timeVal * 60 * 60 * 1000));
+            //   }
+            // }}
+            // onBlur={(e) => {
+            //   if (e.target.value !== 0) {
+            //     if (timeVal > e.target.value)
+            //       dispatch(timeSetter(e.target.value - timeVal));
+            //     else dispatch(timeSetter(e.target.value - timeVal));
+            //     setTimeVal(e.target.value);
+            //     dispatch(addAtimeArrForJangso(timeVal * 60 * 60 * 1000));
+            //   }
+            // }}
+            onChange={(e) => {
+              e.stopPropagation();
+              if (
+                reduxState.leftSideTimeSetter * 60 +
+                  reduxState.leftSideMinSetter >
+                reduxState.tripPeriod.length * 1440
+              ) {
+                alert("여행일자 x 24시간을 초과할 수 없습니다");
+                setTimeVal(timeVal);
+                // return;
               }
-            }}
-            onKeyUp={(e) => {
-              if (e.code === "Enter") {
-                if (timeVal > e.target.value)
-                  dispatch(timeSetter(e.target.value - timeVal));
-                else dispatch(timeSetter(e.target.value - timeVal));
-                setTimeVal(e.target.value);
-                dispatch(addAtimeArrForJangso(timeVal * 60 * 60 * 1000));
-              }
-            }}
-            onBlur={(e) => {
-              if (e.target.value !== 0) {
-                if (timeVal > e.target.value)
-                  dispatch(timeSetter(e.target.value - timeVal));
-                else dispatch(timeSetter(e.target.value - timeVal));
-                setTimeVal(e.target.value);
-                dispatch(addAtimeArrForJangso(timeVal * 60 * 60 * 1000));
-              }
+              // if (e.target.value !== 0) {
+              if (timeVal > e.target.value)
+                dispatch(timeSetter(e.target.value - timeVal));
+              else dispatch(timeSetter(e.target.value - timeVal));
+              setTimeVal(e.target.value);
+              dispatch(addAtimeArrForJangso(timeVal * 60 * 60 * 1000));
+              // }
             }}
           />
           <span style={{ fontSize: "13px" }}>시간</span>
@@ -283,31 +315,54 @@ function PickedLocation({ local }) {
             max={59}
             style={{ width: "40px", fontSize: "20px", color: "var(--orange)" }}
             defaultValue={minVal}
-            onClick={(e) => {
-              if (e.target.value !== 0) {
-                if (minVal > e.target.value) dispatch(minSetter(-1));
-                else if (minVal < e.target.value) dispatch(minSetter(1));
-                setMinVal(e.target.value);
-                dispatch(addAtimeArrForJangso(minVal * 60 * 1000));
+            // onClick={(e) => {
+            //   if (e.target.value !== 0) {
+            //     if (minVal > e.target.value) dispatch(minSetter(-1));
+            //     else if (minVal < e.target.value) dispatch(minSetter(1));
+            //     setMinVal(e.target.value);
+            //     dispatch(addAtimeArrForJangso(minVal * 60 * 1000));
+            //   }
+            // }}
+            // onKeyUp={(e) => {
+            //   if (e.code === "Enter") {
+            //     if (minVal > e.target.value)
+            //       dispatch(minSetter(e.target.value - minVal));
+            //     else dispatch(minSetter(e.target.value - minVal));
+            //     setMinVal(e.target.value);
+            //     dispatch(addAtimeArrForJangso(minVal * 60 * 1000));
+            //   }
+            // }}
+            // onBlur={(e) => {
+            //   if (e.target.value !== 0) {
+            //     if (minVal > e.target.value)
+            //       dispatch(minSetter(e.target.value - minVal));
+            //     else dispatch(minSetter(e.target.value - minVal));
+            //     setMinVal(e.target.value);
+            //     dispatch(addAtimeArrForJangso(minVal * 60 * 1000));
+            //   }
+            // }}
+            onChange={(e) => {
+              e.stopPropagation();
+              if (
+                reduxState.leftSideTimeSetter * 60 +
+                  reduxState.leftSideMinSetter >
+                reduxState.tripPeriod.length * 1440
+              ) {
+                alert("여행일자 x 24시간을 초과할 수 없습니다");
+                setMinVal(minVal);
+                // return;
               }
-            }}
-            onKeyUp={(e) => {
-              if (e.code === "Enter") {
-                if (minVal > e.target.value)
-                  dispatch(minSetter(e.target.value - minVal));
-                else dispatch(minSetter(e.target.value - minVal));
-                setMinVal(e.target.value);
-                dispatch(addAtimeArrForJangso(minVal * 60 * 1000));
+              // if (e.target.value !== 0) {
+              if (e.target.value >= 60) {
+                timeVal++;
+                e.target.value = 0;
               }
-            }}
-            onBlur={(e) => {
-              if (e.target.value !== 0) {
-                if (minVal > e.target.value)
-                  dispatch(minSetter(e.target.value - minVal));
-                else dispatch(minSetter(e.target.value - minVal));
-                setMinVal(e.target.value);
-                dispatch(addAtimeArrForJangso(minVal * 60 * 1000));
-              }
+              if (minVal > e.target.value)
+                dispatch(minSetter(e.target.value - minVal));
+              else dispatch(minSetter(e.target.value - minVal));
+              setMinVal(e.target.value);
+              dispatch(addAtimeArrForJangso(minVal * 60 * 1000));
+              // }
             }}
           />
           <span style={{ fontSize: "13px" }}>분</span>
@@ -383,12 +438,17 @@ function SukSoSubModal({ index, local }) {
 
 function PickedSukso({ local }) {
   let dispatch = useDispatch();
-  let reduxState = useSelector((state) => {
-    return state;
-  });
+
   return (
     <div className="pickedSukso__container slide-in-right">
-      <div className="pickedSukso__img-container">
+      <div
+        className="pickedSukso__img-container"
+        onClick={(e) => {
+          e.stopPropagation();
+          console.log("123");
+          dispatch(changeLnfM(local));
+        }}
+      >
         <img
           src={local.smallimage ?? "/images/no-image.jpg"}
           onError={(e) => {

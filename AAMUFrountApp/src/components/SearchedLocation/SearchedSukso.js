@@ -20,7 +20,6 @@ import {
 
 const SearchedSukso = ({ local, index }) => {
   const [locaInfoModal, setLocaInfoModal] = useState(false);
-  const [showBadge, setShowBadge] = useState(false);
   let dispatch = useDispatch();
   let localNameRef = useRef();
   let reduxState = useSelector((state) => {

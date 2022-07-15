@@ -19,7 +19,6 @@ const CreatePlan = ({
   setFromWooJaeData,
 }) => {
   const [forDayLine, setForDayLine] = useState(0);
-  console.log(forDayLine);
   return (
     <div>
       <DimmedContainer>

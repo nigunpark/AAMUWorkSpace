@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
 import {
+  faHouse,
   faKey,
   faUnlockKeyhole,
   faUser,
@@ -9,6 +10,7 @@ import { Typography } from "@mui/material";
 import axios from "axios";
 import React, { useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { keyframes } from "styled-components";
 import "./Login.css";
 const LoginTest = () => {
   let idRef = useRef();
@@ -21,6 +23,9 @@ const LoginTest = () => {
       <Container />
       <Overlay>
         <Content>
+          <Link to="/">
+            <FontAwesomeIcon className="home-btn" icon={faHouse} />
+          </Link>
           <Title>
             <div className="loginTitle__container">
               <FontAwesomeIcon
@@ -161,13 +166,25 @@ const login = (idRef, pwdRef, navigate, setShowValid) => {
     })
     .then((resp) => {
       sessionStorage.setItem("token", resp.data.token);
+      sessionStorage.setItem("username", idRef.current.value);
       navigate(-1);
     })
     .catch((error) => {
       console.log("error:", error);
-      setShowValid(true);
+      // setShowValid(true);
     });
 };
+
+const flip = keyframes`
+0% {
+  box-shadow: 0 0 #3e3e3e, 0 0 #3e3e3e, 0 0 #3e3e3e, 0 0 #3e3e3e, 0 0 #3e3e3e, 0 0 #3e3e3e, 0 0 #3e3e3e, 0 0 #3e3e3e;
+  transform: translateX(0) translateY(0);
+}
+100% {
+  box-shadow: 1px -1px #3e3e3e, 2px -2px #3e3e3e, 3px -3px #3e3e3e, 4px -4px #3e3e3e, 5px -5px #3e3e3e, 6px -6px #3e3e3e, 7px -7px #3e3e3e, 8px -8px #3e3e3e;
+  transform: translateX(-8px) translateY(8px);
+}
+`;
 const Container = styled.div`
   position: fixed;
   // background: url();
@@ -195,22 +212,21 @@ const Overlay = styled.div`
 `;
 const Content = styled.div`
   position: relative;
-  width: 25%;
+  width: 450px;
   height: 600px;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 3rem;
-  // border: 1px solid rgba(250, 163, 7, 0.5);
   border: 1px solid rgba(255, 255, 255, 0.5);
   padding: 0 30px;
   border-radius: 15px;
   box-shadow: var(--shadow);
-  margin: auto;
   background: rgba(255, 255, 255, 0.6);
+  animation: ${flip} 0.5s cubic-bezier(0.47, 0, 0.745, 0.715) both;
 `;
 const Title = styled.div`
-  margin-top: 60px;
+  margin-top: 30px;
   width: 100%;
   height: auto;
   display: flex;

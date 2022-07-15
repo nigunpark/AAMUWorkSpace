@@ -18,7 +18,7 @@
 	
 	<!-- 글 목록용_댓글 한개 뿌려주기 -->
 	<select id="commuCommentSelectOne" parameterType="String" resultType="commuCommentDTO" >
-		SELECT * FROM commucomment WHERE lno=#{lno} AND ROWNUM = 1
+		SELECT * FROM commucomment WHERE lno=#{lno} AND ROWNUM = 1 ORDER BY cno
 	</select>
 	
 	<!-- 글 목록용_사진 뿌려주기 -->
@@ -29,7 +29,7 @@
 	<!-- 글 생성용 -->
 	<insert id="commuInsert" parameterType="Map">
 		INSERT INTO community
-		VALUES (SEQ_COM.NEXTVAL,#{id},#{title},#{content},TO_DATE(#{postdate},'YYYY-MM-DD'),DEFAULT,DEFAULT)
+		VALUES (SEQ_COM.NEXTVAL,#{id},#{ctitle},#{content},SYSDATE,DEFAULT,DEFAULT)
 		<selectKey keyProperty="lno" resultType="int" order="AFTER">
 	    	SELECT SEQ_COM.CURRVAL FROM DUAL
 	    </selectKey>
@@ -47,7 +47,7 @@
 	
 	<!-- 글 생성용_장소 뿌려주기 -->
 	<select id="commuPlaceList" resultType="Map" parameterType="Map">
-		SELECT contentid, title, addr FROM places WHERE title LIKE '%'||#{searchWord}||'%' or addr LIKE '%'||#{searchWord}||'%'
+		SELECT contentid, title FROM places WHERE title LIKE '%'||#{searchWord}||'%'
 	</select>
 	
 	<!-- 글 하나 뿌려주는 용-->

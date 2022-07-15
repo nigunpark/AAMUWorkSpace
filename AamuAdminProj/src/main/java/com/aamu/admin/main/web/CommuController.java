@@ -7,7 +7,10 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -41,6 +44,14 @@ public class CommuController {
 		
 		//뷰정보 반환
 		return "commu/commu";
+	}
+	
+	@PostMapping("CommuDelete.do")
+	public Map commuDelete(@RequestBody Map map){
+		//서비스 호출
+		commuService.commuDelete(map);		
+		//데이타 반환]		
+		return map;
 	}
 
 }

@@ -15,7 +15,6 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { Alert, TextField } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { corrTimeSetObj } from "../../redux/store";
-
 const CreatePlanLeft = ({ currPosition, fromWooJaeData, setForDayLine }) => {
   let reduxState = useSelector((state) => {
     return state;
@@ -25,9 +24,8 @@ const CreatePlanLeft = ({ currPosition, fromWooJaeData, setForDayLine }) => {
   const [temp, setTemp] = useState("");
   useEffect(() => {
     setTemp(dayRef.current);
-    // console.log("fromWooJaeData:", fromWooJaeData);
   }, []);
-
+  // console.log("fromWooJaeData:", fromWooJaeData);
   return (
     <div className="createPlanLeft">
       <div className="createPlanLeft__days">
@@ -78,14 +76,11 @@ const CreatePlanLeft = ({ currPosition, fromWooJaeData, setForDayLine }) => {
 };
 
 function WhichModal({ whichModal, currPosition, fromWooJaeData }) {
-  const [forReRender, setForReRender] = useState(false);
   if (whichModal === "전체일정") {
     return (
       <WholeSchedule
         currPosition={currPosition}
         fromWooJaeData={fromWooJaeData}
-        forReRender={forReRender}
-        setForReRender={setForReRender}
       />
     );
   } else {
@@ -110,16 +105,11 @@ function WhichModal({ whichModal, currPosition, fromWooJaeData }) {
   }
 }
 
-function WholeSchedule({
-  currPosition,
-  fromWooJaeData,
-  forReRender,
-  setForReRender,
-}) {
+function WholeSchedule({ currPosition, fromWooJaeData }) {
   let reduxState = useSelector((state) => {
     return state;
   });
-
+  const [forReRender, setForReRender] = useState(true);
   return (
     <div className="createPlanLeft__schedule">
       <div className="createPlanLeft__schedule-title">
@@ -243,10 +233,19 @@ function Content({ index, fromWooJaeData, forReRender, setForReRender }) {
               }
               showToolbar={true}
               label=""
-              onChange={(newValue) => {}}
+              onChange={() => {}}
               onAccept={(newValue) => {
                 let newObj = getAmpmTmStart(newValue, index);
                 dispatch(corrTimeSetObj(newObj));
+                //시작시간 변경 시 fromWooJaeData의 해당날짜 호텔 starttime에 넣어줌
+                if (newObj.ampm === "오후" && newObj.time >= 1) {
+                  fromWooJaeData[index]["day" + (index + 1)][0].starttime =
+                    (newObj.time + 12) * 60 * 60 * 1000 +
+                    newObj.min * 60 * 1000;
+                } else {
+                  fromWooJaeData[index]["day" + (index + 1)][0].starttime =
+                    newObj.time * 60 * 60 * 1000 + newObj.min * 60 * 1000;
+                }
                 setForReRender(!forReRender);
               }}
             />
@@ -352,12 +351,7 @@ function DetailSetting({
           <span>분</span>
         </div>
       </div>
-      <div
-        className="detailLocation"
-        onClick={() => {
-          console.log("13");
-        }}
-      >
+      <div className="detailLocation">
         <div className="detailLocation__img-container">
           <img
             className="detailLocation__img"
@@ -405,27 +399,29 @@ function DetailSetting({
                 />
               </div>
             </div>
-            <div className="detailLocation__clock">
-              <span>
-                {Math.floor(upTime / 60)
-                  .toString()
-                  .padStart(2, "0")}
-                :
-                {Math.floor(upTime % 60)
-                  .toString()
-                  .padStart(2, "0")}
-              </span>
-              <span>~</span>
-              <span>
-                {Math.floor(downTime / 60)
-                  .toString()
-                  .padStart(2, "0")}
-                :
-                {Math.floor(downTime % 60)
-                  .toString()
-                  .padStart(2, "0")}
-              </span>
-            </div>
+            {forReRender && (
+              <div className="detailLocation__clock">
+                <span>
+                  {Math.floor(upTime / 60)
+                    .toString()
+                    .padStart(2, "0")}
+                  :
+                  {Math.floor(upTime % 60)
+                    .toString()
+                    .padStart(2, "0")}
+                </span>
+                <span>~</span>
+                <span>
+                  {Math.floor(downTime / 60)
+                    .toString()
+                    .padStart(2, "0")}
+                  :
+                  {Math.floor(downTime % 60)
+                    .toString()
+                    .padStart(2, "0")}
+                </span>
+              </div>
+            )}
           </div>
           <div className="detailLocation__part-bottom">
             <span>시간표</span>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import "./App.css";
 import Navbar from "./components/Navbar/Navbar";
 import { Routes, Route, useLocation } from "react-router-dom";
@@ -6,7 +6,6 @@ import Home from "./pages/Home.js";
 import { useEffect, useState } from "react";
 import WholeMap from "./pages/WholeMap.js";
 import MainPage from "./pages/MainPage/MainPage";
-import Login from "./components/Login/Login";
 import Test from "./Test";
 import Main from "./components/Insta/Main";
 import LoginTest from "./components/Login/LoginTest";
@@ -14,6 +13,8 @@ import Forum from "./pages/Forum/Forum";
 import MyPage from "./pages/MyPage/MyPage";
 import DetailModal from "./pages/Forum/DetailModal/DetailModal";
 import KakaoRedirectHandler from "./components/Login/Kakao/KakaoRedirectHandler";
+import JoinStep1 from "./Join/JoinStep1";
+import JoinStep2 from "./Join/JoinStep2";
 
 function App() {
   let location = useLocation();
@@ -41,9 +42,11 @@ function App() {
           {/* <Route path="/review" element={<Board />} /> */}
           <Route path="/Insta" element={<Main />} />
           <Route path="/Insta" element={<Main />}></Route>
-          <Route path="/login" element={<LoginTest />}></Route>
           <Route path="/myPage" element={<MyPage />} />
         </Route>
+        <Route path="/login" element={<LoginTest />}></Route>
+        <Route path="/join" element={<JoinStep1 />} />
+        <Route path="/joinTwo" element={<JoinStep2 />} />
         <Route path="/login" element={<LoginTest />} />
         <Route path="/test" element={<Test />} />
         <Route path="/Detailmodal" element={<DetailModal />} />

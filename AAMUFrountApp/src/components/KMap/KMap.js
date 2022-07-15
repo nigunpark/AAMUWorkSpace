@@ -82,6 +82,7 @@ const KMap = ({
   const [kMap, setKMap] = useState(null);
   // const [markers, setMarkers] = useState([1]);
   const [showAlert, setShowAlert] = useState(false);
+  const [showAlertTime, setAlertTime] = useState(false);
   //-------------------------------------------------------------------------
   let pickedJangso = [];
   let mainMarker;
@@ -105,7 +106,7 @@ const KMap = ({
     //지도 최대레벨 제한
     map.setMaxLevel(10);
     setKMap(map);
-  }, [container]);
+  }, []);
 
   //지도 줌인줌아웃시 지도레벨 setting state
   useEffect(() => {
@@ -157,10 +158,11 @@ const KMap = ({
             "</span>" +
             '              <div style="display:flex"><a href="https://place.map.kakao.com/' +
             reduxState.localNameForMarker.kakaokey +
-            '" target="_blank" class="iwContent__link"><span>상세보기</span></a>&nbsp<span class="iwContent__link" onclick="' +
-            roadview() +
-            '">로드뷰</span></div>' +
-            "            </div>" +
+            '" target="_blank" class="iwContent__link"><span style="color:var(--skyblue);font-weight:bold">상세보기</span></a>&nbsp' +
+            '<a href="https://map.kakao.com/link/roadview/' +
+            reduxState.localNameForMarker.kakaokey +
+            '" target="_blank" class="iwContent__link"><span style="color:var(--skyblue);font-weight:bold">로드뷰</span></div><a/>' +
+            "           </div>" +
             "        </div>" +
             "    </div>    " +
             "</div>",
@@ -232,6 +234,19 @@ const KMap = ({
     pickedJangso,
   ]);
 
+  function roadview() {
+    console.log("로드뷰");
+    var roadviewContainer = document.getElementById("roadview"); //로드뷰를 표시할 div
+    var roadview = new kakao.maps.Roadview(roadviewContainer); //로드뷰 객체
+    var roadviewClient = new kakao.maps.RoadviewClient(); //좌표로부터 로드뷰 파노ID를 가져올 로드뷰 helper객체
+
+    var position = new kakao.maps.LatLng(33.450701, 126.570667);
+
+    // 특정 위치의 좌표와 가까운 로드뷰의 panoId를 추출하여 로드뷰를 띄운다.
+    roadviewClient.getNearestPanoId(position, 50, function (panoId) {
+      roadview.setPanoId(panoId, position); //panoId와 중심좌표를 통해 로드뷰 실행
+    });
+  }
   return (
     <div>
       <div
@@ -259,7 +274,8 @@ const KMap = ({
             추천숙소
           </div>
           <div
-            onClick={() => {
+            onClick={(e) => {
+              e.stopPropagation();
               setTitleName("추천장소");
               dispatch(changeInfo("추천장소"));
               setConWhichModal(false);
@@ -271,7 +287,8 @@ const KMap = ({
         <div className="kmap__left-btn__container">
           <div>이용방법</div>
           <div
-            onClick={() => {
+            onClick={(e) => {
+              e.stopPropagation();
               setAppearRegisterModal(true);
             }}
           >
@@ -279,7 +296,8 @@ const KMap = ({
           </div>
           <span className="kmap__transportation">
             <div
-              onClick={() => {
+              onClick={(e) => {
+                e.stopPropagation();
                 setShowTransport(!showTransport);
               }}
             >
@@ -291,6 +309,7 @@ const KMap = ({
                   className="slide-in-left-public_transport public"
                   ref={publicRef}
                   onClick={(e) => {
+                    e.stopPropagation();
                     dispatch(changePickedTransport("public"));
                     whichTransport(e);
                   }}
@@ -327,6 +346,14 @@ const KMap = ({
           <div
             onClick={(e) => {
               e.stopPropagation();
+              if (
+                reduxState.leftSideTimeSetter * 60 +
+                  reduxState.leftSideMinSetter >
+                1440 * reduxState.tripPeriod.length
+              ) {
+                setAlertTime(true);
+                return;
+              }
               if (
                 reduxState.saveDaysNPickedSuksoRedux.filter((val) => {
                   return val !== 0;
@@ -381,11 +408,12 @@ const KMap = ({
           setFromWooJaeData={setFromWooJaeData}
         />
       ) : null}
-      {showAlert && (
+      {(showAlert || showAlertTime) && (
         <ContainerInValid>
           <OverlayInValid
             onClick={() => {
               setShowAlert(false);
+              setAlertTime(false);
             }}
           />
           <Alert
@@ -394,12 +422,18 @@ const KMap = ({
             style={{ zIndex: "1000", padding: "30px 100px", fontSize: "20px" }}
           >
             {/* <AlertTitle></AlertTitle> */}
-            <strong> 여행일자만큼 숙소와 여행지를 선택해주세요</strong>
+            {showAlert && (
+              <strong> 여행일자만큼 숙소와 여행지를 선택해주세요</strong>
+            )}
+            {showAlertTime && (
+              <strong> 여행일자 x 24시간을 초과할 수 없습니다.</strong>
+            )}
             <FontAwesomeIcon
               icon={faCircleXmark}
               className="alert_X"
               onClick={() => {
                 setShowAlert(false);
+                setAlertTime(false);
               }}
             />
           </Alert>
@@ -590,19 +624,6 @@ function whichTransport(e) {
     );
     e.target.classList.add("pickedTransport");
   }
-}
-
-function roadview() {
-  var roadviewContainer = document.getElementById("roadview"); //로드뷰를 표시할 div
-  var roadview = new kakao.maps.Roadview(roadviewContainer); //로드뷰 객체
-  var roadviewClient = new kakao.maps.RoadviewClient(); //좌표로부터 로드뷰 파노ID를 가져올 로드뷰 helper객체
-
-  var position = new kakao.maps.LatLng(33.450701, 126.570667);
-
-  // 특정 위치의 좌표와 가까운 로드뷰의 panoId를 추출하여 로드뷰를 띄운다.
-  roadviewClient.getNearestPanoId(position, 50, function (panoId) {
-    roadview.setPanoId(panoId, position); //panoId와 중심좌표를 통해 로드뷰 실행
-  });
 }
 
 async function toWooJae(currPosition, reduxState, setFromWooJaeData) {

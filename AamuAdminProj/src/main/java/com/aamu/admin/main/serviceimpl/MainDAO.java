@@ -33,7 +33,7 @@ public class MainDAO {
 		return template.selectOne("selectPeriod",map);
 	}
 
-	public List selectJoin(List day) {
+	public int selectJoin(String day) {
 		
 		return template.selectOne("selectJoin",day);
 	}
@@ -41,6 +41,11 @@ public class MainDAO {
 	public int selectUsers(Map map) {
 		
 		return template.selectOne("selectUsers",map);
+	}
+
+	public String selectDate(String day) {
+	
+		return template.selectOne("selectDate", day);
 	}
 
 }

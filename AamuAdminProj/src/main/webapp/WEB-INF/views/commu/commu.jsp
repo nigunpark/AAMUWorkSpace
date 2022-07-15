@@ -18,7 +18,7 @@
                         
                         <div class="card-numberOfBoard">
                           총 게시글 수: ${totalCount}개
-                          <a href="#" class="btn btn-primary text-white me-0 " style="float:right"> 삭제</a>
+                          <button class="btn btn-primary text-white me-0" style="float:right">삭제</button>
                         </div>
                         <div class="table-responsive text-center">
                           <table class="table text-center">
@@ -32,8 +32,8 @@
                                 </th>
                                 <th class="col-1">글번호</th>
                                 <th>제목</th>
-                                <th class="col-2">ID</th>
-                                <th class="col-2">작성일</th>
+                                <th class="col-1">ID</th>
+                                <th class="col-1">작성일</th>
                                 <th class="col-1">댓글수</th>
                                 <th class="col-1">좋아요수</th>
                               </tr>
@@ -50,10 +50,12 @@
 											<td>
 			                                  <div class="form-check form-check-flat mt-0">
 	                                            <label class="form-check-label">
-	                                              <input type="checkbox" class="form-check-input" aria-checked="false"><i class="input-helper"></i></label>
+	                                              <input name="RowCheck" type="checkbox" class="form-check-input" aria-checked="false" value="${record.lno}">
+	                                              <i class="input-helper"></i>
+	                                          	</label>
 	                                          </div>
 			                                </td>
-											<td>${listPagingData.map.totalCount - (((listPagingData.map.nowPage - 1) * listPagingData.map.pageSize) + loop.index)}</td>
+											<td>${record.lno}</td>
 			                                <td >${record.ctitle}</td>
 			                                <td>${record.id}</td>
 			                                <td>${record.postdate}</td>
@@ -82,6 +84,7 @@
       </div>
   
   <script>
+  	//체크박스 
     var selectLength=$(':checkbox').slice(1).length;
     $(':checkbox').click(function(){
       if($(this).val()==='all'){
@@ -96,6 +99,48 @@
         }
         else $(':checkbox:first').prop('checked',false)
       }
+    });
+    
+    //삭제 click
+    $('button').click(function(){
+    	console.log("버튼이벤트 발생");
+    	var tr=$('table > tbody > tr:nth-child(1)');
+    	/* var lnoArr = new Array(); //선택한 lno담은 배열
+    	var list = $("input[name='RowCheck']");//체크박스
+    	console.log(list[0]);
+    	for(var i=0; i<list.length; i++){
+    		if(list[i].checked){//체크됐다면
+    			lnoArr.push(list[i].value);
+    			console.log("lnoArr:"+lnoArr);
+    		}
+    	}////////for */
+    	var lnoArr = new Array();
+        $('input[name="RowCheck"]:checked').each(function(i){//체크된 리스트 저장
+        	lnoArr.push($(this).val());
+        	console.log($(this).val()); //lnoArr:63,62
+        });
+        /* var lnoParams = {
+                "lnoArr" : lnoArr       
+            }; */
+    	if(lnoArr.length ==0){
+    		alert("선택된 글이 없습니다.");
+    	}
+    	else{
+    		confirm("정말 삭제하시겠습니까?");
+    		var jsonString = JSON.stringify({lno : lnoArr})
+    		$.ajax({
+       			url:"<c:url value="/admin/CommuDelete.do"/>",
+       			type:"post",
+       			headers: {'Content-Type': 'application/json'},
+       			data: jsonString,
+       			dataType:'json'
+       		}).done(data=>{
+       			console.log('삭제성공:',data);
+       			tr.remove();
+       		}).fail(error=>{
+       			console.log('삭제에러:',error);
+       		});
+    	}//////else
     });
   </script>
 </body>

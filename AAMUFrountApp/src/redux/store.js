@@ -43,7 +43,8 @@ let arrForJangso = createSlice({
       );
     },
     addAtimeArrForJangso(state, action) {
-      state.atime = action.payload;
+      [...state].atime = action.payload;
+      // state.atime = action.payload;
     },
   },
 });
@@ -249,6 +250,28 @@ let monthNdate = createSlice({
 });
 export let { addMonthNDate, resetMonthNDate } = monthNdate.actions;
 
+//회원가입데이터 넣는 redux(사진제외)
+let joinData = createSlice({
+  name: "joinData",
+  initialState: {
+    id: "",
+    pwd: "",
+    gender: "",
+    email: "",
+    name: "",
+    phonenum: "",
+    addid: "",
+    self: "",
+  },
+  reducers: {
+    addStepOne(state, action) {
+      state.id = action.payload[0];
+      state.pwd = action.payload[1];
+    },
+  },
+});
+export let { addStepOne } = joinData.actions;
+
 export default configureStore({
   reducer: {
     localNameForMarker: localNameForMarker.reducer,
@@ -266,6 +289,7 @@ export default configureStore({
     tripPeriod: tripPeriod.reducer,
     monthNdate: monthNdate.reducer,
     movingTime: movingTime.reducer,
+    joinData: joinData.reducer,
   },
   //planTripTime.js 168번줄쯤의 fullDate를 위한 serializable무시
   middleware: (getDefaultMiddleware) =>
