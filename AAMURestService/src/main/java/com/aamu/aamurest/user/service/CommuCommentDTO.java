@@ -18,5 +18,5 @@ public class CommuCommentDTO {
 	public String id;
 	public String lno;
 	public String reply;
-	public Date replydate;
+	public java.sql.Date replydate;
 }
