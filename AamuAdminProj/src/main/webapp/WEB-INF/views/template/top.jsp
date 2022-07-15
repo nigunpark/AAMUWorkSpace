@@ -44,8 +44,8 @@
       <div class="navbar-menu-wrapper d-flex align-items-top">
         <ul class="navbar-nav">
           <li class="nav-item font-weight-semibold d-none d-lg-block ms-0">
-            <h1 class="welcome-text"><span class="text-black fw-bold">Main Page</span></h1>
-            <h3 class="welcome-sub-text">Main Page입니다 </h3>
+            <h1 class="welcome-text"><span class="text-black fw-bold">Admin Page</span></h1>
+            <h3 class="welcome-sub-text">AAMU 관리자 게시판</h3>
           </li>
         </ul>
         <ul class="navbar-nav ms-auto">

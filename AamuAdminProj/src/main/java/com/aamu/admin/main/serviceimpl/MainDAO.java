@@ -28,19 +28,19 @@ public class MainDAO {
 		return template.selectOne("placesTotalCount",map);
 	}
 
-	public int selectPeriod(Map map) {
+	public int selectEvent() {
 		
-		return template.selectOne("selectPeriod",map);
+		return template.selectOne("selectEvent");
 	}
 
-	public int selectJoin(String day) {
+	public int selectWeek(Map map) {
 		
-		return template.selectOne("selectJoin",day);
+		return template.selectOne("selectWeek",map);
 	}
 
-	public int selectUsers(Map map) {
+	public int selectUsers(String day) {
 		
-		return template.selectOne("selectUsers",map);
+		return template.selectOne("selectUsers",day);
 	}
 
 	public String selectDate(String day) {

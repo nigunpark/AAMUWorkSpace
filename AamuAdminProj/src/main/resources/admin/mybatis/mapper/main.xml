@@ -15,18 +15,18 @@
 		SELECT COUNT(*) FROM ${places}
 	</select>
 	
-	<select id="selectEvent" parameterType="Map" resultType="int">
-		SELECT COUNT(*) FROM eventinfo WHERE TO_DATE(sysdate,'YYYY-MM-DD') <![CDATA[<=]]> To_DATE(eventstart,'YYYY-MM-DD')
+	<select id="selectEvent" resultType="int">
+		SELECT COUNT(*) FROM eventinfo WHERE TO_DATE(sysdate,'YYYY-MM-DD') <![CDATA[<=]]> To_DATE(eventend,'YYYY-MM-DD')
 	</select>
 	
-	<select id="selectJoin" parameterType="List" resultType="int">
-		SELECT COUNT(*) FROM users WHERE TO_CHAR(joindate,'YYYY-MM-DD') = TO_CHAR(${item},'YYYY-MM-DD')
+	<select id="selectWeek" parameterType="Map" resultType="int">
+		SELECT COUNT(*) FROM ${table} WHERE TO_CHAR(${column},'YYYY-MM-DD') = TO_CHAR(${day},'YYYY-MM-DD')
 	</select>
 	
 	<select id="selectUserPeriod" parameterType="Map" resultType="int">
 		SELECT COUNT(*) FROM users WHERE TO_CHAR(joindate,'YYYY-MM-DD') BETWEEN TO_CHAR(${start},'YYYY-MM-DD') AND TO_CHAR(${end},'YYYY-MM-DD')
 	</select>
-	<select id="selectUsers" parameterType="Map" resultType="int">
+	<select id="selectUsers" parameterType="String" resultType="int">
 		SELECT COUNT(*) FROM users WHERE TO_CHAR(joindate,'YYYY-MM-DD') <![CDATA[<=]]> TO_CHAR(${day},'YYYY-MM-DD')
 	</select>
 	<select id="selectDate" parameterType="String" resultType="String">

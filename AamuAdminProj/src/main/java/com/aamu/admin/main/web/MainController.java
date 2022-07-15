@@ -28,33 +28,24 @@ public class MainController {
 	@RequestMapping(value = "admin.do", method = RequestMethod.GET)
 	public String home(Model model) {
 		
-		Map<String, String> map = new HashMap<>();
-
-		Date current = new Date();
-		SimpleDateFormat formatter = new SimpleDateFormat("yy-MM-dd");
-		String today = formatter.format(current);
-		List counts = new Vector<>();
-		List date = new Vector<>();
-		model.addAttribute("users",service.usersTotalCount());
-		model.addAttribute("todayUsers", service.usersTodayCount(today));
-		map.put("places", "placesinfo");
-		model.addAttribute("places", service.placesTotalCount(map));
-		map.put("places", "hotelinfo");
-		model.addAttribute("hotel", service.placesTotalCount(map));
-		map.put("places", "dinerinfo");
-		model.addAttribute("diner", service.placesTotalCount(map));
-		for(int i=6;i>=0;i--) {
-			String day = "sysdate-"+i;
-			
-			int count = service.selectJoin(day);
-			String days =  "\""+service.selectDate(day)+"\"";
-			date.add(days);
-			counts.add(count);
-		}
 		
-		model.addAttribute("date",date);
-		model.addAttribute("join",counts);
+		Map map = service.placesTotalCount();
+		Map chartMap = service.selectWeek();		
+		
+		model.addAttribute("users",service.usersTotalCount());
+		model.addAttribute("todayUsers", service.usersTodayCount());
 
+		model.addAttribute("attraction",map.get("attraction"));	
+		model.addAttribute("hotel",map.get("hotel"));
+		model.addAttribute("diner",map.get("diner"));
+		model.addAttribute("event",map.get("event"));
+		
+		model.addAttribute("usersWeek",chartMap.get("userWeek"));
+		model.addAttribute("date",chartMap.get("date"));
+		model.addAttribute("join",chartMap.get("join"));
+		model.addAttribute("commu",chartMap.get("commu"));
+		model.addAttribute("bbs",chartMap.get("bbs"));
+		model.addAttribute("planner",chartMap.get("planner"));
 		return "/main/main";
 	}
 	
