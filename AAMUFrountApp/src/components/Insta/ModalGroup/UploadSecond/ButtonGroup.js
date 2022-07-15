@@ -1,16 +1,33 @@
+import React, { useState } from 'react';
+import styled from 'styled-components';
 
-import DropdownButton from 'react-bootstrap/DropdownButton';
-import Dropdown from 'react-bootstrap/Dropdown';
+function Dropdown() {
+    
 
-function ButtonGroup() {
-  return (
-    <ButtonGroup>
-      <DropdownButton as={ButtonGroup} title="Dropdown" id="bg-nested-dropdown">
-        <Dropdown.Item eventKey="1">Dropdown link</Dropdown.Item>
-        <Dropdown.Item eventKey="2">Dropdown link</Dropdown.Item>
-      </DropdownButton>
-    </ButtonGroup>
-  );
+    return (
+      <Select name="select" class="select">
+          <option disabled selected>선택</option>
+          <option value="title">제목</option>
+          <option value="id">아이디</option>
+          <option value="tag">태그</option>
+      </Select>
+    )
 }
+ 
+const Select = styled.select`
+    background-color:#fff;
+    padding:5px;
+    margin-top:28px;
+    border-radius:3px;
 
-export default ButtonGroup;
+    .items {
+      position: absolute;
+      background-color: DodgerBlue;
+      top: 100%;
+      left: 0;
+      right: 0;
+      z-index: 99;
+    }
+`
+
+export default Dropdown;
