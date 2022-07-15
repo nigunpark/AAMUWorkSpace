@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -46,8 +47,7 @@ public class CommuController {
 	}
 	
 	@PostMapping("CommuDelete.do")
-	public Map commuDelete(@RequestParam Map map){
-		System.out.println("map:"+map);
+	public Map commuDelete(@RequestBody Map map){
 		//서비스 호출
 		commuService.commuDelete(map);		
 		//데이타 반환]		

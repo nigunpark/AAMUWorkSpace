@@ -63,15 +63,19 @@ public class CommuServiceImpl implements CommuService {
 	//글 삭제
 	@Override
 	public int commuDelete(Map map) {
-		System.out.println(map.get("lno").getClass().getName());
-		List<String> list=(List<String>)map.get("lno");
-		System.out.println(list);
-		Map lnoMap = new HashMap(); 
-		lnoMap.put("lno", map.get("lno")); 
-		System.out.println(lnoMap);
-		 
-		int affected=dao.commuDelete(map);
-		return affected==1 ? 1 : 0;
+		int affected=0;
+		List<String> lnolists=(List<String>)map.get("lno");
+		System.out.println(lnolists);
+		for(String lno:lnolists) {
+			Map lnoMap = new HashMap(); 
+			lnoMap.put("lno", lno); 
+			affected+=dao.commuDelete(map);
+		}
+		if(affected==((List)map.get("lno")).size()) {
+			return 1;
+		}
+		else
+			return 0;
 	}
 
 	
