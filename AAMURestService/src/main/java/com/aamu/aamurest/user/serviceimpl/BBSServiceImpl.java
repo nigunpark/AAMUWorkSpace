@@ -5,12 +5,14 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import com.aamu.aamurest.user.service.BBSDTO;
 import com.aamu.aamurest.user.service.BBSService;
 import com.aamu.aamurest.user.service.ReviewDTO;
 
+@Repository
 @Service
 public class BBSServiceImpl implements BBSService{
 	
@@ -55,16 +57,26 @@ public class BBSServiceImpl implements BBSService{
 	public int bbsUpdate(Map map) {
 		return dao.bbsUpdate(map);
 	}
-
 	
 	//글 삭제
+	@Override
+	public int bbsDelete(String rbn) {
+		return dao.bbsDelete(rbn);
+	}
 	
 	//글 등록일자
 	
+	/*---------------------------------------------------*/
 	//리뷰 목록
 	@Override
 	public List<ReviewDTO> reviewSelectList(Map map) {
-		return dao.bbsSelectList(map);
+		return dao.reviewSelectList(map);
+	}
+	
+	//리뷰 등록
+	@Override
+	public int reviewInsert(Map map) {
+		return dao.reviewInsert(map);
 	}
 	
 	//리뷰 목록_리뷰 하나 뿌려주기
@@ -73,17 +85,16 @@ public class BBSServiceImpl implements BBSService{
 	}
 	
 	@Override
-	public double getRatingAverage(int rate) {
-		return 0;
+	//평점 평균 반영하기
+	public int updateRating(ReviewDTO rate) {
+		return dao.updateRating(rate);
 	}
-	
-	/*
-	//평점 평균 보내주기
-	public double getRatingAverage(int rate) {
-		//ratingAvg = (double) (Math.round(ratingAvg*10));
-		//ratingAvg = ratingAvg / 10
-		return dao.getRatingAverage(rate);
 
-	}*/
+	@Override
+	public double getRatingAverage(int ratingavg) {
+		return dao.getRatingAverage(ratingavg);
+	}
+
+
 }
 	

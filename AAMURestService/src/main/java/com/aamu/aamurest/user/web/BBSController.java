@@ -23,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import com.aamu.aamurest.user.service.BBSDTO;
+import com.aamu.aamurest.user.service.BBSService;
 import com.aamu.aamurest.user.service.CommuDTO;
 import com.aamu.aamurest.user.service.ReviewDTO;
 import com.aamu.aamurest.user.serviceimpl.BBSServiceImpl;
@@ -40,7 +41,7 @@ public class BBSController {
 	@Autowired
 	private CommonsMultipartResolver multipartResolver;
 	
-	//글 목록용
+	//글 목록
 	@GetMapping("/bbs/SelectList")
 	public List<BBSDTO> bbsSelectList(){
 		List<BBSDTO> list = bbsService.bbsSelectList();
@@ -50,7 +51,7 @@ public class BBSController {
 		return list;
 	}
 	
-	//글 등록용
+	//글 등록 + 리뷰 등록
 	@PostMapping("/bbs/edit")
 	public Map bbsInsert(@RequestParam List<MultipartFile> multifiles, @RequestParam Map map, HttpServletRequest req) {
 		//서버의 물리적 경로 얻기
@@ -69,14 +70,14 @@ public class BBSController {
 		return resultMap;
 	}
 	
-	//글 수정용
-	@PutMapping("/bbs/edit/{themeid}")
-    public Map bbsUpdate(@PathVariable String id,@RequestParam Map map) {
+	//글 수정
+	@PutMapping("/bbs/edit")
+    public Map bbsUpdate(@RequestParam Map map) {
 		int bbsUpdateAffected=bbsService.bbsUpdate(map);
 		Map resultMap = new HashMap();
 		if(bbsUpdateAffected==1) 
 			resultMap.put("result", "updateSuccess");
-		else 
+		else
 			resultMap.put("result", "updateNotSuccess");
 		return resultMap;
 	}
@@ -89,8 +90,26 @@ public class BBSController {
 		return list;
 		}
 	
-	//평점 평균 반영
 	
+	//평점 평균 반영
+	public double getRatingAverage(int rno) {
+	/*
+	Double ratingAvg = BBSServiceImpl.getRatingAverage(rno);	
+	if(ratingAvg == null) {
+		ratingAvg = 0.0;
+	}
+	
+	ratingAvg = (double) (Math.round(ratingAvg*10));
+	ratingAvg = ratingAvg / 10;
+	
+	ReviewDTO rd = new ReviewDTO();
+	rd.setId(rd);
+	rd.setRatingAvg(ratingAvg);	
+	
+	replyMapper.updateRating(urd);	
+	}*/
 	//평점 평균 
+		return 0;
+	}
 }
 	

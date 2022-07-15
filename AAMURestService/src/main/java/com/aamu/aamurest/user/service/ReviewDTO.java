@@ -9,13 +9,9 @@ import lombok.Setter;
 @Setter
 public class ReviewDTO {
 	public int rbn;
-	public String id;
+	public String id; //리뷰 작성자
 	public int rate; //평점
 	public String review;
-	public Date ratedate;
-	public String rno;
-	public void setReview(String reviewSelectOne) {
-		
-	}
-		
+	public Date ratedate; //리뷰 작성날짜
+	public String rno;		
 }

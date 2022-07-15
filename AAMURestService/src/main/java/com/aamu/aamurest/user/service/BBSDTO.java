@@ -17,11 +17,10 @@ public class BBSDTO {
 	public java.sql.Date postdate;
 	public int themeid;
 	public String themename;
-	public double rateavg; //평균 평점
+	public String id; //작성자
 	public List<String> photo;
-	public String id; //작성자 id
 	private int day; //1일차, 2일차 등
-	private long starttime;
+	private long starttime; //출발시간
 	private long atime; //머문시간
 	private long mtime; //이동시간
 }
