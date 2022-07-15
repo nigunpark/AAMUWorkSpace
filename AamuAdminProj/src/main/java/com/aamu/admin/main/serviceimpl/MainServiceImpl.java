@@ -50,6 +50,12 @@ public class MainServiceImpl implements MainService{
 		
 		return dao.selectUsers(map);
 	}
+
+	@Override
+	public String selectDate(String day) {
+		
+		return dao.selectDate(day);
+	}
 	
 	
 	

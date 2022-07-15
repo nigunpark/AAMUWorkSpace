@@ -29,4 +29,9 @@ public class UsersDAO {
 		return template.update("updateUser",dto);
 	}
 
+	public int checkId(String id) {
+		
+		return template.selectOne("checkId",id);
+	}
+
 }

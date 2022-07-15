@@ -30,6 +30,12 @@ public class UsersServiceImpl implements UsersService{
 
 		return dao.updateUser(dto);
 	}
+
+	@Override
+	public int checkId(String id) {
+	
+		return dao.checkId(id);
+	}
 	
 	
 

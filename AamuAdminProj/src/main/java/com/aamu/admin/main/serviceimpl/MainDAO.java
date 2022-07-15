@@ -43,4 +43,9 @@ public class MainDAO {
 		return template.selectOne("selectUsers",map);
 	}
 
+	public String selectDate(String day) {
+	
+		return template.selectOne("selectDate", day);
+	}
+
 }

@@ -34,7 +34,7 @@ public class MainController {
 		SimpleDateFormat formatter = new SimpleDateFormat("yy-MM-dd");
 		String today = formatter.format(current);
 		List counts = new Vector<>();
-
+		List date = new Vector<>();
 		model.addAttribute("users",service.usersTotalCount());
 		model.addAttribute("todayUsers", service.usersTodayCount(today));
 		map.put("places", "placesinfo");
@@ -45,9 +45,16 @@ public class MainController {
 		model.addAttribute("diner", service.placesTotalCount(map));
 		for(int i=6;i>=0;i--) {
 			String day = "sysdate-"+i;
+			
 			int count = service.selectJoin(day);
+			String days =  "\""+service.selectDate(day)+"\"";
+			date.add(days);
 			counts.add(count);
 		}
+		map.put("start", "sysdate-6");
+		map.put("end", "sysdate");
+		model.addAttribute("users", service.selectUsers(map));
+		model.addAttribute("date",date);
 		model.addAttribute("join",counts);
 
 		return "/main/main";

@@ -22,7 +22,7 @@ public class UserController {
 	private UsersService service;
 	
 	
-	@PostMapping("users/edit")
+	@PostMapping("/users/insert")
 	public int join(@RequestBody UsersDTO dto) {
 		int affected=0;
 		
@@ -31,7 +31,7 @@ public class UserController {
 		return affected;
 	}
 	
-	@GetMapping("users/selectone")
+	@GetMapping("/users/selectone")
 	public UsersDTO selectOneUser(@RequestParam Map map) {
 		
 		UsersDTO dto = service.selectOneUser(map);
@@ -40,13 +40,18 @@ public class UserController {
 	}
 	
 	
-	@PutMapping("users/edit")
+	@PutMapping("/users/update")
 	public int updateUser(@RequestBody UsersDTO dto) {
 		int affected=0;
 		
 		affected = service.updateUser(dto);
 		
 		return affected;
+	}
+	@GetMapping("/users/checkid")
+	public int checkId(@RequestParam String id) {
+		System.out.println(id);
+		return service.checkId(id);
 	}
 	
 	
