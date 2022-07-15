@@ -5,14 +5,12 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import com.aamu.aamurest.user.service.BBSDTO;
 import com.aamu.aamurest.user.service.BBSService;
 import com.aamu.aamurest.user.service.ReviewDTO;
 
-@Repository
 @Service
 public class BBSServiceImpl implements BBSService{
 	

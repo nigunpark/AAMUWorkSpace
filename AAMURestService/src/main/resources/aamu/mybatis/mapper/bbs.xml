@@ -35,7 +35,10 @@
 	 <!--                            리뷰                              -->
 	 
 	 <!-- 리뷰 등록 -->
-	 INSERT INTO ratereview VALUES (#{rbn},#{id},#{rate},#)
+	 <insert id="">
+	 	INSERT INTO ratereview VALUES (#{rbn},#{id},#{rate},#)
+	 </insert>
+	 
 	 
 	 <!-- 평점 평균 구하기 -->
 	 <select id="getRatingAverage" resultType="double">
