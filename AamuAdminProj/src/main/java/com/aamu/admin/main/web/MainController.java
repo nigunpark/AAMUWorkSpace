@@ -51,9 +51,7 @@ public class MainController {
 			date.add(days);
 			counts.add(count);
 		}
-		map.put("start", "sysdate-6");
-		map.put("end", "sysdate");
-		model.addAttribute("users", service.selectUsers(map));
+		
 		model.addAttribute("date",date);
 		model.addAttribute("join",counts);
 

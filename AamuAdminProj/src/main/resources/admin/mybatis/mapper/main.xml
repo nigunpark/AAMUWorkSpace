@@ -23,8 +23,11 @@
 		SELECT COUNT(*) FROM users WHERE TO_CHAR(joindate,'YYYY-MM-DD') = TO_CHAR(${item},'YYYY-MM-DD')
 	</select>
 	
-	<select id="selectUsers" parameterType="Map" resultType="int">
+	<select id="selectUserPeriod" parameterType="Map" resultType="int">
 		SELECT COUNT(*) FROM users WHERE TO_CHAR(joindate,'YYYY-MM-DD') BETWEEN TO_CHAR(${start},'YYYY-MM-DD') AND TO_CHAR(${end},'YYYY-MM-DD')
+	</select>
+	<select id="selectUsers" parameterType="Map" resultType="int">
+		SELECT COUNT(*) FROM users WHERE TO_CHAR(joindate,'YYYY-MM-DD') <![CDATA[<=]]> TO_CHAR(${day},'YYYY-MM-DD')
 	</select>
 	<select id="selectDate" parameterType="String" resultType="String">
 		SELECT TO_CHAR(${day}, 'MM-DD') FROM dual

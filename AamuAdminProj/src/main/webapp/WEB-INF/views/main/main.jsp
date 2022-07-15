@@ -304,7 +304,7 @@ $(function() {
 	  };
 	  var arr=${join}
 	  var data2 = {
-	    labels: ${users},
+	    labels: date,
 	    datasets: [{
 	      label: '# of Votes',
 	      data: arr,
