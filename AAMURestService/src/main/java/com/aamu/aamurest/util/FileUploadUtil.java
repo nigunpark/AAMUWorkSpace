@@ -20,7 +20,7 @@ public class FileUploadUtil {
         	String filename = uuid.toString()+"_"+multiFile.getOriginalFilename();
         	File file = new File(pathString+File.separator+filename);
         	multiFile.transferTo(file);
-        	fileList.add(multiFile.getOriginalFilename());
+        	fileList.add(filename);
         }
         return fileList;
     }
