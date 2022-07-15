@@ -45,14 +45,18 @@ function FeedSetting({val}) {
         ref={profileRef}
         className="profileSpan"
         onMouseOver={()=>{setprofileModal(true)}}
-        >{val.id}</span> 
+        >아이디
+            {/* {val.id} */}
+            </span> 
         <div className="profile" style={{position : 'relative'}}>          
             {profileModal ? 
                 <div 
                 ref={profileRef}
                 onMouseOver={()=>{setprofileModal(true)}}
                 onMouseOut={()=>{setprofileModal(false)}}>
-                    <Profile val={val}></Profile>
+                    <Profile 
+                    // val={val}
+                    ></Profile>
                 </div>
             : null
             }         
@@ -68,11 +72,15 @@ function FeedSetting({val}) {
         </div>  
     </div>
     <div className="location">
-        <p>{val.title}</p>
+        <p>제목
+            {/* {val.title} */}
+            </p>
     </div>
         <Slider {...settings}>
             <div className="container">
-            <img src={val.photo[0]} className="main-image" alt="메인" />
+            <img src=''
+            // {val.photo[0]} 
+            className="main-image" alt="메인" />
             </div>
             
         </Slider>
@@ -111,21 +119,38 @@ function FeedSetting({val}) {
         </div>
         <div className="feeds-like">
             <img src="./img/bk.jpg" className="feeds-commentimage" alt="프사" />
-            <span><span className="like-bold">0hyun0hyun</span>님<span className="like-bold">외 {val.likecount}명</span>이 좋아합니다</span>
+            <span><span className="like-bold">0hyun0hyun</span>님
+            <span className="like-bold">외
+             {/* {val.likecount} */}
+             명</span>이 좋아합니다</span>
         </div>
         <div className="feeds-title">
-            <span className="comment-id">제목 : </span><span>{val.ctitle}</span>
+            <span className="comment-id">제목 : </span>
+            <span>
+                {/* {val.ctitle} */}
+                </span>
         </div>
         <div className="feeds-writing">
-            <span className="comment-id">{val.id} </span><span> {val.content}</span>
+            <span className="comment-id">
+                {/* {val.id}  */}
+                </span>
+                <span> 
+                    {/* {val.content} */}
+                    </span>
         </div>
         <div className="feeds-writing">
-            <span className="comment-id">{val.commuComment==null?"":val.commuComment.id}</span>
-            <span>{val.commuComment==null?"":val.commuComment.reply}</span>
+            <span className="comment-id">
+                {/* {val.commuComment==null?"":val.commuComment.id} */}
+                </span>
+            <span>
+                {/* {val.commuComment==null?"":val.commuComment.reply} */}
+                </span>
         </div>
         <div className="feeds-comment">
         </div>
-        <span className="time">{val.postdate}</span>    
+        <span className="time">
+            {/* {val.postdate} */}
+            </span>    
     </div>
     <div className="comment">
         <input type="text" className="typing-comment" placeholder="댓글 달기..."/>
