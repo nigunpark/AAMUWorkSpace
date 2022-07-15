@@ -49,7 +49,8 @@ public class CommuController {
 		List<CommuDTO> list = commuService.commuSelectList(map);
 		for(CommuDTO dto : list) {//글 목록들 list에서 하나씩 꺼내서 dto에 담는다
 			dto.setCommuComment(commuService.commuCommentSelectOne(dto.getLno()));
-			dto.setPhoto(FileUploadUtil.requestFilePath(commuService.commuSelectPhotoList(dto.getLno()), "/resources/commuUpload", req));
+			
+			dto.setPhoto(commuService.commuSelectPhotoList(dto.getLno()));
 			//좋아요여부 셋팅_글의 lno랑 commulike_lno가 같으면 쿼리실행
 			if(dto.getLno().equals(map.get("lno")))
 				dto.setIslike(commuService.commuIsLike(map));

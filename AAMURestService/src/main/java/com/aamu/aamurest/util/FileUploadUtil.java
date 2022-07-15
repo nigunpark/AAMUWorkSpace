@@ -34,9 +34,11 @@ public class FileUploadUtil {
 		List<byte[]> filePath = new Vector<byte[]>();
 		for(String filename : filenames) {
 			try {
-		        inputStream = new FileInputStream(request.getSession().getServletContext().getRealPath(pathString+filename));
+		        inputStream = new FileInputStream(request.getSession().getServletContext().getRealPath(pathString+File.separator+filename));
 		    }
-		    catch (FileNotFoundException e) {}
+		    catch (FileNotFoundException e) {
+		    	System.out.println("파일 이름 : "+request.getSession().getServletContext().getRealPath(pathString+File.separator+filename));
+		    }
 
 		    int readCount = 0;
 		    byte[] buffer = new byte[1024];
@@ -51,7 +53,7 @@ public class FileUploadUtil {
 		        outputStream.close();
 
 		    }
-		    catch (IOException e) {}
+		    catch (IOException | NullPointerException e) {}
 			filePath.add(fileArray);
 		}
 		return filePath;
