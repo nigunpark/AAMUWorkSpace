@@ -32,7 +32,7 @@ public class FileUploadUtil {
 		List<String> filePath = new Vector<String>();
 		for(String filename : filenames) {
 			String requesturl = request.getRequestURL().toString().replace(request.getRequestURI(), "/aamurest"+pathString);
-			filePath.add(requesturl+"/"+filename);
+			filePath.add(requesturl+File.separator+filename);
 		}
 		return filePath;
 	}
