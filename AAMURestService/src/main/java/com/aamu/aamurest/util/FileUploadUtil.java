@@ -28,33 +28,11 @@ public class FileUploadUtil {
         return fileList;
     }
 	
-	public static List<byte[]> requestFilePath(List<String> filenames,String pathString,HttpServletRequest request){
-		FileInputStream inputStream = null;
-		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-		List<byte[]> filePath = new Vector<byte[]>();
+	public static List<String> requestFilePath(List<String> filenames,String pathString,HttpServletRequest request){
+		List<String> filePath = new Vector<String>();
 		for(String filename : filenames) {
-			try {
-		        inputStream = new FileInputStream(request.getSession().getServletContext().getRealPath(pathString+File.separator+filename));
-		    }
-		    catch (FileNotFoundException e) {
-		    	System.out.println("파일 이름 : "+request.getSession().getServletContext().getRealPath(pathString+File.separator+filename));
-		    }
-
-		    int readCount = 0;
-		    byte[] buffer = new byte[1024];
-		    byte[] fileArray = null;
-
-		    try {
-		        while((readCount = inputStream.read(buffer)) != -1){
-		            outputStream.write(buffer, 0, readCount);
-		        }
-		        fileArray = outputStream.toByteArray();
-		        inputStream.close();
-		        outputStream.close();
-
-		    }
-		    catch (IOException | NullPointerException e) {}
-			filePath.add(fileArray);
+			String requesturl = request.getRequestURL().toString().replace(request.getRequestURI(), "/aamurest"+pathString);
+			filePath.add(requesturl+"/"+filename);
 		}
 		return filePath;
 	}

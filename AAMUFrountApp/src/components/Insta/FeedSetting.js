@@ -72,7 +72,7 @@ function FeedSetting({val}) {
     </div>
         <Slider {...settings}>
             <div className="container">
-            <img src={val.photobyte[0]} className="main-image" alt="메인" />
+            <img src={val.photo[0]} className="main-image" alt="메인" />
             </div>
             
         </Slider>
