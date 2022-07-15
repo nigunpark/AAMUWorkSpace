@@ -38,9 +38,14 @@ public class MainDAO {
 		return template.selectOne("selectJoin",day);
 	}
 
-	public List selectUsers(Map map) {
+	public int selectUsers(Map map) {
 		
 		return template.selectOne("selectUsers",map);
+	}
+
+	public String selectDate(String day) {
+	
+		return template.selectOne("selectDate", day);
 	}
 
 }

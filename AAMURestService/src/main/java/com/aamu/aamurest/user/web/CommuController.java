@@ -63,6 +63,9 @@ public class CommuController {
 	//글 생성용
 	@PostMapping(value="/gram/edit")
 	public Map commuInsert(@RequestParam List<MultipartFile> multifiles, @RequestParam Map map, HttpServletRequest req) {
+		System.out.println("map:"+map);
+		System.out.println("contentid:"+map.get("contentid"));
+		System.out.println("multifiles:"+multifiles);
 		//서버의 물리적 경로 얻기
 		String path=req.getSession().getServletContext().getRealPath("/resources/commuUpload");
 		

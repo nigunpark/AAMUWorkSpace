@@ -273,11 +273,12 @@ $(function() {
 	   * Data and config for chartjs
 	   */
 	  'use strict';
-	  var date = new Date();
-	  console.log(date)
 	  var arr=${join}
+	  console.log('${date}')
+	  var date =[];
+	  date=${date}
 	  var data = {
-	    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+	    labels: date,
 	    datasets: [{
 	      label: '# of Votes',
 	      data: arr,
@@ -303,7 +304,7 @@ $(function() {
 	  };
 	  var arr=${join}
 	  var data2 = {
-	    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+	    labels: date,
 	    datasets: [{
 	      label: '# of Votes',
 	      data: arr,
@@ -312,7 +313,7 @@ $(function() {
 	    }]
 	  };
 	  var multiLineData = {
-	    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+	    labels: date,
 	    datasets: [{
 	        label: 'Dataset 1',
 	        data: [12, 19, 3, 5, 2, 3],

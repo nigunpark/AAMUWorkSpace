@@ -8,5 +8,7 @@ public interface UsersService {
 	UsersDTO selectOneUser(Map map);
 	
 	int updateUser(UsersDTO dto);
+
+	int checkId(String id);
 	
 }

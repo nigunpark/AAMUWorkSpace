@@ -25,4 +25,7 @@
 	<update id="updateUser" parameterType="usersDTO">
 		UPDATE users SET email=#{email},pwd=#{pwd},name=#{name},gender=#{gender},phonenum=#{phonenum},addrid=#{addrid},self=#{self},userprofile=#{userprofile} WHERE id=#{id}
 	</update>
+	<select id="checkId" parameterType="String" resultType="int">
+		SELECT COUNT(*) FROM users WHERE id=#{id}
+	</select>
 </mapper>

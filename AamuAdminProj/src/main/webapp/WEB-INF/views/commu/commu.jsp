@@ -114,23 +114,25 @@
     			console.log("lnoArr:"+lnoArr);
     		}
     	}////////for */
-    	var lnoArr = [];
+    	var lnoArr = new Array();
         $('input[name="RowCheck"]:checked').each(function(i){//체크된 리스트 저장
         	lnoArr.push($(this).val());
-        	console.log("lnoArr:"+lnoArr); //lnoArr:63,62
+        	console.log($(this).val()); //lnoArr:63,62
         });
-        var lnoParams = {
+        /* var lnoParams = {
                 "lnoArr" : lnoArr       
-            };
+            }; */
     	if(lnoArr.length ==0){
     		alert("선택된 글이 없습니다.");
     	}
     	else{
     		confirm("정말 삭제하시겠습니까?");
+    		var jsonString = JSON.stringify({lno : lnoArr})
     		$.ajax({
        			url:"<c:url value="/admin/CommuDelete.do"/>",
        			type:"post",
-       			data:"lno="+lnoArr,
+       			headers: {'Content-Type': 'application/json'},
+       			data: jsonString,
        			dataType:'json'
        		}).done(data=>{
        			console.log('삭제성공:',data);

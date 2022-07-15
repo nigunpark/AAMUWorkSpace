@@ -64,6 +64,7 @@ public class MainController {
 	public PlannerDTO plannerData(@RequestBody PlannerDTO dto) {
 		List<RouteDTO> list = dto.getRoute();
 		int tripDay = list.get(0).getDay();
+		int setDay =0;
 		Map<Integer,List<RouteDTO>> map=new HashMap<>();
 		
 		for(int i=0;i<list.size();i++) {
@@ -115,10 +116,8 @@ public class MainController {
 		*/
 		int result = (int)Math.ceil(((double)list.size()-tripDay)/tripDay);
 		int index=0;
-		double attrxy=0;
 		int count = 0;
-		int setDay =0;
-		int reset = 0;
+
 		/////////////////////////////
 		
 

@@ -46,9 +46,15 @@ public class MainServiceImpl implements MainService{
 	}
 
 	@Override
-	public List selectUsers(Map map) {
+	public int selectUsers(Map map) {
 		
 		return dao.selectUsers(map);
+	}
+
+	@Override
+	public String selectDate(String day) {
+		
+		return dao.selectDate(day);
 	}
 	
 	

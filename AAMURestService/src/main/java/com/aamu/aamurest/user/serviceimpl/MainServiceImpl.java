@@ -18,9 +18,10 @@ public class MainServiceImpl implements MainService{
 
 	@Autowired
 	private MainDAO dao;
-	
+
 	@Autowired
 	private TransactionTemplate transactionTemplate;
+
 ///////////////////////////////////////////////////insert place impl
 	@Override
 	public int placeInsert(AttractionDTO dto) {
@@ -53,6 +54,10 @@ public class MainServiceImpl implements MainService{
 				dto.setUrl(resultUrl);
 			}
 			
+		}
+		if(dto.getMapx()>999 || dto.getMapy()>999) {
+			dto.setMapx(0);
+			dto.setMapy(0);
 		}
 		String tel = dto.getTel();
 		if(tel!=null) {
@@ -175,6 +180,7 @@ public class MainServiceImpl implements MainService{
 	@Override
 	public int plannerInsert(PlannerDTO dto) {
 		int affected=0;
+		
 		affected = transactionTemplate.execute(tx->{
 			int insertPlanner = dao.plannerInsert(dto);
 			List<RouteDTO> routes = dto.getRoute();
@@ -187,12 +193,21 @@ public class MainServiceImpl implements MainService{
 			
 		});
 		
+		/*
+		int insertPlanner = dao.plannerInsert(dto);
+		List<RouteDTO> routes = dto.getRoute();
 		
+		for(RouteDTO route:routes) {
+			route.setRbn(dto.getRbn());
+			dao.routeInsert(route);
+		}
+		*/
 		return affected;
 	}
 	@Override
 	public int updatePlanner(PlannerDTO dto) {
 		int affected=0;
+		
 		affected = transactionTemplate.execute(tx->{
 			int updatePlanner = dao.updatePlanner(dto);
 			dao.deleteRoute(dto.getRbn());
@@ -204,7 +219,16 @@ public class MainServiceImpl implements MainService{
 			}
 			return updatePlanner;
 		});
+		/*
+		int updatePlanner = dao.updatePlanner(dto);
+		dao.deleteRoute(dto.getRbn());
+		List<RouteDTO> routes = dto.getRoute();
 		
+		for(RouteDTO route:routes) {
+			route.setRbn(dto.getRbn());
+			dao.routeInsert(route);
+		}
+		*/
 		return affected;
 	}
 	
