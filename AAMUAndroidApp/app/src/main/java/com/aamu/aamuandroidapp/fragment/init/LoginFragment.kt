@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -86,15 +85,22 @@ class LoginFragment : Fragment() {
             factory = LoginViewModelFactory()
         )
         val token by viewModel.token.observeAsState()
+        val islogin by viewModel.islogin.observeAsState()
+        var loginfail by remember { mutableStateOf(false) }
         if(token!=null){
-            navController.navigate(R.id.action_loginFragment_to_mainFragment)
-            val  preferences : SharedPreferences = LocalContext.current.getSharedPreferences("usersInfo",Context.MODE_PRIVATE)
-            preferences.edit().putString("token",token).commit()
+            val preferences: SharedPreferences =
+                LocalContext.current.getSharedPreferences("usersInfo", Context.MODE_PRIVATE)
+            preferences.edit().putString("token", token).commit()
+            viewModel.isok()
+            if(islogin == true) {
+                navController.navigate(R.id.action_loginFragment_to_mainFragment)
+            }
         }
         else {
-            LoginScreen {
+            LoginScreen(loginfail = loginfail){
                 coroutineScope.launch {
                     delay(2000)
+                    loginfail = true
                 }
             }
         }

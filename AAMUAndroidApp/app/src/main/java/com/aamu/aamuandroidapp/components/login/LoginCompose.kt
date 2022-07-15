@@ -46,7 +46,7 @@ fun invalidInput(email: String, password: String) =
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginScreen(onLoginSuccess: () -> Unit) {
+fun LoginScreen(loginfail : Boolean,onLoginSuccess: () -> Unit) {
     Scaffold( ) {
         //TextFields
         var username by remember { mutableStateOf(TextFieldValue("")) }
@@ -172,8 +172,7 @@ fun LoginScreen(onLoginSuccess: () -> Unit) {
 
             item {
                 var loading by remember { mutableStateOf(false) }
-                var loggedIn by remember { mutableStateOf(false)}
-                if(loggedIn){
+                if(loginfail){
                     hasError = true
                     loading = false
                     Text(
@@ -193,8 +192,7 @@ fun LoginScreen(onLoginSuccess: () -> Unit) {
                             loading = true
                             hasError = false
                             onLoginSuccess.invoke()
-                            loggedIn = true
-                            viewModel.doLogin(username.text,password.text)
+                            viewModel.doLogin(username.text, password.text)
                         }
                     },
                     modifier = Modifier

@@ -39,8 +39,8 @@ public class AuthenticateController {
         return map;
     }
     
-    @GetMapping("/Hello")
+    @GetMapping("/isOK")
     public String hello() {
-    	return "asdfasdf";
+    	return "ok";
     }
 }
