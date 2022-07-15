@@ -13,5 +13,6 @@ public interface MainService {
 	int selectPeriod(Map map);
 	int selectJoin(String day);
 	List selectUsers(Map map);
+	String selectDate(String day);
 	
 }
