@@ -69,7 +69,8 @@ public class CommuServiceImpl implements CommuService {
 		for(String lno:lnolists) {
 			Map lnoMap = new HashMap(); 
 			lnoMap.put("lno", lno); 
-			affected+=dao.commuDelete(map);
+			System.out.println(lnoMap);
+			affected+=dao.commuDelete(lnoMap);
 		}
 		if(affected==((List)map.get("lno")).size()) {
 			return 1;

@@ -131,9 +131,8 @@
     		$.ajax({
        			url:"<c:url value="/admin/CommuDelete.do"/>",
        			type:"post",
-       			headers: {'Content-Type': 'application/json'},
        			data: jsonString,
-       			dataType:'json'
+       			contentType:"application/json"
        		}).done(data=>{
        			console.log('삭제성공:',data);
        			tr.remove();
