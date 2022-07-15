@@ -1,6 +1,7 @@
 package com.aamu.aamuandroidapp.components.login
 
 import android.content.Context
+import android.util.Log
 import androidx.compose.runtime.*
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.MutableLiveData
@@ -24,8 +25,8 @@ class LoginViewModel() : ViewModel(){
 
     private val aamuRepository : AAMURepository = AAMUDIGraph.createAAMURepository()
 
-    val token = MutableLiveData<String>(getToken())
-    var loggedIn = MutableLiveData(false)
+    val token = MutableLiveData<String?>(getToken())
+    val islogin = MutableLiveData(false)
     fun doLogin(username : String, password : String) = viewModelScope.launch{
         val retoken = aamuRepository.dologin(username = username, password = password)
         retoken?.let {
@@ -33,7 +34,14 @@ class LoginViewModel() : ViewModel(){
         }
     }
 
-//    fun setLoggedIn(boolean: Boolean){
-//        loggedIn.value = boolean
-//    }
+    fun isok() = viewModelScope.launch {
+        Log.i("com.aamu.aamu",token.value.toString())
+        if(aamuRepository.isok()){
+            islogin.value = true
+        }
+        else{
+            token.value = null
+        }
+
+    }
 }
