@@ -132,7 +132,8 @@
        			url:"<c:url value="/admin/CommuDelete.do"/>",
        			type:"post",
        			data: jsonString,
-       			contentType:"application/json"
+       			contentType:"application/json",
+       			dataType: "json"
        		}).done(data=>{
        			console.log('삭제성공:',data);
        			tr.remove();
