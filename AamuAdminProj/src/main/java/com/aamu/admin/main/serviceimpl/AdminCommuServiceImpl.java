@@ -46,7 +46,7 @@ public class AdminCommuServiceImpl implements AdminCommuService {
 				Integer.parseInt(map.get(PagingUtil.PAGE_SIZE).toString()), 
 				Integer.parseInt(map.get(PagingUtil.BLOCK_PAGE).toString()), 
 				Integer.parseInt(map.get(PagingUtil.NOW_PAGE).toString()), 
-				req.getContextPath()+"Commu.do?");
+				req.getContextPath()+"/Commu.do?");
 		
 		//Lombok라이브러리 사용시
 		ListPagingData<AdminCommuDTO> listPagingData =ListPagingData.builder().lists(lists).map(map).pagingString(pagingString).build();

@@ -17,7 +17,7 @@
                         <h4 class="card-title">게시글 전체 리스트</h4>
                         
                         <div class="card-numberOfBoard">
-                          총 게시글 수: <span>${totalCount}</span>개
+                          총 게시글 수: ${totalCount}개
                           <button class="btn btn-primary text-white me-0" style="float:right">삭제</button>
                         </div>
                         <div class="table-responsive text-center">
