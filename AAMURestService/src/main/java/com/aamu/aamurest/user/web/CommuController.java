@@ -47,6 +47,8 @@ public class CommuController {
 	public List<CommuDTO> commuSelectList(@RequestParam Map map, HttpServletRequest req){
 		//list=글 목록들
 		List<CommuDTO> list = commuService.commuSelectList(map);
+		
+		System.out.println("req:+"+req.getRequestURL().toString());
 		for(CommuDTO dto : list) {//글 목록들 list에서 하나씩 꺼내서 dto에 담는다
 			dto.setCommuComment(commuService.commuCommentSelectOne(dto.getLno()));
 			dto.setPhoto(FileUploadUtil.requestFilePath(commuService.commuSelectPhotoList(dto.getLno()), "/resources/commuUpload", req));

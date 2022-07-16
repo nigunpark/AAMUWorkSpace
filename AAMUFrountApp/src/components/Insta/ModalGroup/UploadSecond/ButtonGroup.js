@@ -1,16 +1,19 @@
+import React, { useState } from 'react';
+import styled from 'styled-components';
 
-import DropdownButton from 'react-bootstrap/DropdownButton';
-import Dropdown from 'react-bootstrap/Dropdown';
+function Dropdown() {
+    
 
-function ButtonGroup() {
-  return (
-    <ButtonGroup>
-      <DropdownButton as={ButtonGroup} title="Dropdown" id="bg-nested-dropdown">
-        <Dropdown.Item eventKey="1">Dropdown link</Dropdown.Item>
-        <Dropdown.Item eventKey="2">Dropdown link</Dropdown.Item>
-      </DropdownButton>
-    </ButtonGroup>
-  );
+    return (
+      <select name="select" className="select">
+          <option defaultValue={'DEFAULT'}>선택</option>
+          <option value="title">제목</option>
+          <option value="id">아이디</option>
+          <option value="tag">태그</option>
+      </select>
+    )
 }
+ 
 
-export default ButtonGroup;
+
+export default Dropdown;

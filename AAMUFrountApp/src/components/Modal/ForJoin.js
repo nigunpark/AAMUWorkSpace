@@ -13,10 +13,9 @@ const flip = keyframes`
 
 const Container = styled.div`
   position: fixed;
-  // background: url();
-  // background-image: url("/images/window.jpg");
-  // background-repeat: no-repeat;
-  // background-size: cover;
+  background-image: url("/images/tropical.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
   top: 0;
   left: 0;
   width: 100%;
@@ -49,7 +48,7 @@ const Content = styled.div`
   border-radius: 15px;
   box-shadow: var(--shadow);
   margin: auto;
-  background: rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.8);
   animation: ${flip} 0.5s cubic-bezier(0.47, 0, 0.745, 0.715) both;
 `;
 const ContentStep2 = styled.div`
@@ -65,7 +64,7 @@ const ContentStep2 = styled.div`
   border-radius: 15px;
   box-shadow: var(--shadow);
   margin: auto;
-  background: rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.8);
   animation: ${flip} 0.5s cubic-bezier(0.47, 0, 0.745, 0.715) both;
 `;
 
@@ -80,6 +79,7 @@ const Title = styled.div`
   gap: 5px;
 `;
 const Body = styled.div`
+  position: relative;
   width: 100%;
   height: auto;
   display: flex;

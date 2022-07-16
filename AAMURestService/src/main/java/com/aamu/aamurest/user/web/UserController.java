@@ -1,6 +1,11 @@
 package com.aamu.aamurest.user.web;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Map;
+import java.util.UUID;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -10,6 +15,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.aamu.aamurest.user.service.UsersDTO;
 import com.aamu.aamurest.user.service.UsersService;
@@ -23,8 +29,10 @@ public class UserController {
 	
 	
 	@PostMapping("/users/insert")
-	public int join(@RequestBody UsersDTO dto) {
+	public int join(@RequestBody UsersDTO dto,@RequestParam MultipartFile multipartFile,HttpServletRequest req) throws IllegalStateException, IOException {
 		int affected=0;
+		String path = req.getSession().getServletContext().getRealPath("/resources/userUpload");
+		
 		
 		affected = service.joinUser(dto);
 		

@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import NotificationModal from "./ModalGroup/Notification";
-import SearchModal from "./Search";
+import SearchModal from "./ModalGroup/Search";
 import WriteModal from "./ModalGroup/UploadSecond/Upload"
-// import ButtonGroup from "./ModalGroup/UploadSecond/ButtonGroup"
+import ButtonGroup from './ModalGroup/UploadSecond/ButtonGroup';
 
 function User() {
   const modalRef = useRef();
@@ -24,13 +24,14 @@ function User() {
   
   return (
     <div>
-      {/* <ButtonGroup></ButtonGroup> */}
-      <div className="search" onClick={() => { setsearch(!search); }} >
-        <input type="text" className="search-bar"  placeholder="검색" 
-          ref={modalRef} />
-        {search ? <SearchModal></SearchModal> : null}
+      <div className="userSearch">
+        <ButtonGroup></ButtonGroup>
+        <div className="search" onClick={() => { setsearch(!search); }} >
+          <input type="text" className="search-bar"  placeholder="검색" 
+            ref={modalRef} />
+          {search ? <SearchModal></SearchModal> : null}
+        </div>
       </div>
-
       <div className="user">
         <img src="./img/bk.jpg" alt="사프" />
         <div>

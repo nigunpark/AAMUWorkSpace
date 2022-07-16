@@ -139,19 +139,22 @@
 
       .title-profile {
         display: flex;
+        position: relative;
         flex-direction: row;
         justify-content: flex-start;
         align-items: center;
         margin: 10px;
+        width: 100%;
 
         > img {
-          width: 35px;
+          width: 40px;
           border: 1px solid #dbdbdb;
           border-radius: 50%;
         }
 
         .dot {
-          margin-left: 330px;
+          position: absolute;
+          left: 450px;
           font-size: 10px;
           margin-top: 5px;
           cursor: pointer;
@@ -509,7 +512,7 @@
         }
       }
       .contents{
-        width: 45%;
+        width: 560px;
         height: 100%;
         display: flex;
         flex-direction: column;
@@ -589,19 +592,7 @@
             margin-left: 9px;
           }
 
-          big{
-            font-size: 16px;
-            font-weight: bold;
-          }
-
-          .userName {
-            width: 100%;
-            font-size: 15px;
-            font-family: nomal;
-            font-weight: normal;
-            color: #282828;
-            
-          }
+         
         }
       } 
       .recommend {
@@ -660,12 +651,17 @@
               width: 37px;
               border-radius: 50%;
               cursor: pointer;
-              
-            margin-left: 10px;
+              margin-top: -5px;
+               margin-left: 15px;
             }
   
             p {
               margin-left: 7px;
+            }
+
+            i{
+              width: 10%;
+              float: right;
             }
   
             .user-id {
@@ -788,10 +784,31 @@
       // overflow: auto;
     }
 
+    .userSearch{
+        display: flex;
+        flex-direction: row;
+        position: relative;
+        margin-top:30px;
+    }
+    .select{
+      height: 28px;
+    background-color:rgb(255, 255, 255);
+    padding:5px;
+    border-radius: 5px;
+
+    .items {
+      position: absolute;
+      background-color: DodgerBlue;
+      top: 100%;
+      left: 0;
+      right: 0;
+      z-index: 99;
+    }
+  }
     .search {
-      margin-top: 30px;
+      margin-left: 85px;
       margin-bottom: 15px;
-      position: relative;
+      position: absolute;
       
 
       .search-bar {
@@ -803,11 +820,10 @@
                 background-repeat: no-repeat;
                 */
 
-        width: 270px;
+        width: 180px;
         height: 28px;
         border: 1.7px solid #ffffff;
         background-color: #fff;
-        border-radius: 2px;
         text-align: center;
         font-size: 14px;
         font-weight: lighter;
@@ -819,7 +835,7 @@
                 돋보기 구현 전
                 background-image: none;
                 */
-        width: 270px;
+        width: 230px;
         padding-left: 28px;
         color: #262626;
         text-align: left;
@@ -828,13 +844,13 @@
       .search-all {
         position: absolute;
         top: 30px;
-        left: 172px;
+        left: 115px;
         transform: translate(-50%);
         background-color: #fff;
         box-shadow: 0 0 5px 1px rgba(var(--jb7, 0, 0, 0), 0.0975);
         border: 1px solid #fff;
-        border-radius: 5px;
         z-index: 20;
+        border-radius: 5px;
       }
       .search-squre {
         //position: absolute;
@@ -843,18 +859,19 @@
         width: 16px;
         height: 16px;
         transform: rotate(45deg);
-        //box-shadow: 0 0 5px 1px rgba(var(--jb7, 0, 0, 0), .0975);
+       
         background-color: #fff;
         z-index: 8000;
       }
 
       .search-engine {
         position: relative;
-        width: 340px;
-        height: 380px;
+        width: 230px;
+        height: 350px;
         background-color: #fff;
         z-index: 9;
         overflow: auto;
+        border-radius: 5px;
 
         .search-squre {
           position: absolute;
@@ -1051,7 +1068,6 @@
     
 
     .user {
-      margin-top: -10px;
       display: flex;
       flex-direction: row;
       align-items: center;
@@ -1067,6 +1083,7 @@
         
       }
 
+     
     
 
       .user-id {

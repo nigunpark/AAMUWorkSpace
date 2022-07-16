@@ -27,16 +27,12 @@
                             <h3 class="rate-percentage">${users}</h3>
                           </div>
                           <div>
-                            <p class="statistics-title">게시판</p>
-                            <h3 class="rate-percentage">200</h3>
-                          </div>
-                          <div>
-                            <p class="statistics-title">커뮤니티</p>
-                            <h3 class="rate-percentage">300</h3>
-                        </div>
-                        <div>
-                            <p class="statistics-title">여행지</p>
+                            <p class="statistics-title">등록된 여행지</p>
                             <h3 class="rate-percentage">${places}</h3>
+                          </div>
+                        <div>
+                            <p class="statistics-title">관광지</p>
+                            <h3 class="rate-percentage">${attraction}</h3>
                         </div>
                         <div>
                             <p class="statistics-title">호텔</p>
@@ -44,7 +40,7 @@
                         </div>
                         <div>
                             <p class="statistics-title">진행중인 행사</p>
-                            <h3 class="rate-percentage">300</h3>
+                            <h3 class="rate-percentage">${event}</h3>
                         </div>
                          <div>
                             <p class="statistics-title">식당</p>
@@ -74,15 +70,23 @@
                     </div>
                   </div>
                   <div class="row">
-                  <div class="col-lg-9 grid-margin stretch-card">
+                 	<div class="col-6 grid-margin stretch-card">
                       <div class="card">
                         <div class="card-body">
-                          <h4 class="card-title">게시물</h4>
-                          <canvas id="linechart-multi" style="height: 800px;"></canvas>
+                          <h4 class="card-title">사용자 활동</h4>
+                          <canvas id="linechart-multi"></canvas>
                         </div>
                       </div>
-                    </div>
-                  </div>
+                     </div>
+                    <div class="col-6 grid-margin stretch-card">
+                      <div class="card">
+                        <div class="card-body">
+                          <h4 class="card-title">사용자 활동</h4>
+                          <canvas id="barChart2"></canvas>
+                        </div>
+                      </div>
+                     </div>
+	              </div>
                   <!--차트 정보 끝-->
                   <div class="col-lg-12 grid-margin stretch-card">
                     <div class="card">
@@ -266,6 +270,7 @@
   </div>
   </div>
   <!-- container-scroller -->
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script>
 $(function() {
 	  /* ChartJS
@@ -273,15 +278,14 @@ $(function() {
 	   * Data and config for chartjs
 	   */
 	  'use strict';
-	  var arr=${join}
 	  console.log('${date}')
 	  var date =[];
 	  date=${date}
 	  var data = {
 	    labels: date,
 	    datasets: [{
-	      label: '# of Votes',
-	      data: arr,
+	      label: '가입자 수',
+	      data: ${join},
 	      backgroundColor: [
 	        'rgba(255, 99, 132, 0.2)',
 	        'rgba(54, 162, 235, 0.2)',
@@ -302,21 +306,45 @@ $(function() {
 	      fill: true
 	    }]
 	  };
-	  var arr=${join}
 	  var data2 = {
 	    labels: date,
 	    datasets: [{
-	      label: '# of Votes',
-	      data: arr,
+	      label: '총 회원수',
+	      data: ${usersWeek},
 	      borderWidth: 1,
 	      fill: true
 	    }]
 	  };
+	  var data3 = {
+			    labels: ["커뮤니티","게시판","플래너"],
+			    datasets: [{
+			      label: '등록된 글',
+			      data: [${commuCount},${bbsCount},${plannerCount}],
+			      backgroundColor: [
+			        'rgba(255, 99, 132, 0.2)',
+			        'rgba(54, 162, 235, 0.2)',
+			        'rgba(255, 206, 86, 0.2)',
+			        'rgba(75, 192, 192, 0.2)',
+			        'rgba(153, 102, 255, 0.2)',
+			        'rgba(255, 159, 64, 0.2)'
+			      ],
+			      borderColor: [
+			        'rgba(255,99,132,1)',
+			        'rgba(54, 162, 235, 1)',
+			        'rgba(255, 206, 86, 1)',
+			        'rgba(75, 192, 192, 1)',
+			        'rgba(153, 102, 255, 1)',
+			        'rgba(255, 159, 64, 1)'
+			      ],
+			      borderWidth: 1,
+			      fill: true
+			    }]
+			  };
 	  var multiLineData = {
 	    labels: date,
 	    datasets: [{
-	        label: 'Dataset 1',
-	        data: [12, 19, 3, 5, 2, 3],
+	        label: '게시판',
+	        data: ${bbs},
 	        borderColor: [
 	          '#587ce4'
 	        ],
@@ -324,14 +352,23 @@ $(function() {
 	        fill: false
 	      },
 	      {
-	        label: 'Dataset 2',
-	        data: [5, 23, 7, 12, 42, 23],
+	        label: '커뮤니티',
+	        data: ${commu},
 	        borderColor: [
 	          '#ede190'
 	        ],
 	        borderWidth: 2,
 	        fill: false
-	      }
+	      },
+	      {
+	        label: '플래너',
+	        data: ${planner},
+	        borderColor: [
+	          '#ede190'
+	        ],
+	        borderWidth: 2,
+	        fill: false
+		  }
 	    ]
 	  };
 	  var options = {
@@ -343,7 +380,7 @@ $(function() {
 	      }]
 	    },
 	    legend: {
-	      display: false
+	      display: true
 	    },
 	    elements: {
 	      point: {
@@ -352,6 +389,24 @@ $(function() {
 	    }
 
 	  };
+	  var options2 = {
+			    scales: {
+			      yAxes: [{
+			        ticks: {
+			          beginAtZero: true
+			        }
+			      }]
+			    },
+			    legend: {
+			      display: false
+			    },
+			    elements: {
+			      point: {
+			        radius: 0
+			      }
+			    }
+
+			  };
 	  var doughnutPieData = {
 	    datasets: [{
 	      data: [30, 40, 30],
@@ -396,10 +451,19 @@ $(function() {
 	    var barChart = new Chart(barChartCanvas, {
 	      type: 'bar',
 	      data: data,
-	      options: options
+	      options: options2
 	    });
 	  }
-
+	  if ($("#barChart2").length) {
+		    var barChartCanvas = $("#barChart2").get(0).getContext("2d");
+		    // This will get the first returned node in the jQuery collection.
+		    var barChart = new Chart(barChartCanvas, {
+		      type: 'bar',
+		      data: data3,
+		      options: options2
+		    });
+		  }
+	
 	  if ($("#lineChart").length) {
 	    var lineChartCanvas = $("#lineChart").get(0).getContext("2d");
 	    var lineChart = new Chart(lineChartCanvas, {

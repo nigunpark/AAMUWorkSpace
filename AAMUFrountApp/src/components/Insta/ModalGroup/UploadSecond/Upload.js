@@ -5,24 +5,31 @@ import styled from 'styled-components';
 import $, { escapeSelector } from 'jquery';
 import SearchModal from './SearchModal'
 
+
 const Uploader = () => {
 let searchRef = useRef();
+let titleRef = useRef();
+let textareaRef = useRef();
+
 const [hide, setHide] = useState(false);
 const [showNext, setshowNext] = useState(false);
 const [search, setSearch] = useState([]);
 const [showSearch, setshowSearch] = useState(false);
+const [showWrite, setShowWrite] = useState([]);
 const [show] = useState(false);
+const [hasText,setHasText] = useState(false); 
+const [inputValue,setinputValue] = useState(''); 
 
   const [image, setImage] = useState({
     image_file: "",
     preview_URL: "img/image.jpg",
   });
 
-  function handleModal(e) {
-    e.stopPropagation();
-    if (e.target !== searchRef.current) setshowSearch(false);
-  }
-  window.addEventListener("click", handleModal);
+  // function handleModal(e) {
+  //   e.stopPropagation();
+  //   if (e.target !== searchRef.current) setshowSearch(false);
+  // }
+  // window.addEventListener("click", handleModal);
 
   
 
@@ -71,66 +78,43 @@ const [show] = useState(false);
       URL.revokeObjectURL(image.preview_URL)
     }
   }, [])
-
-  const sendImageToServer = async () => {
-    if (image.image_file) {
-      const formData = new FormData()
-      formData.append('file', image.image_file);
-      await axios.get('/aamurest/gram/place/selectList', formData,);
-      alert("서버에 등록이 완료되었습니다!");
-      setImage({
-        image_file: "",
-        preview_URL: "img/image.jpg",
-      });
-    } else {
-      alert("사진을 등록하세요!")
-    }
-  }
+  // const sendImageToServer = async () => {
+  //   if (image.image_file) {
+  //     const formData = new FormData()
+  //     formData.append('file', image.image_file);
+  //     await axios.get('/aamurest//gram/edit', formData,);
+  //     alert("서버에 등록이 완료되었습니다!");
+  //     setImage({
+  //       image_file: "",
+  //       preview_URL: "img/image.jpg",
+  //     });
+  //   } else {
+  //     alert("사진을 등록하세요!")
+  //   }
+  // }
 
  
 
-  function searchWord(val,setSearch){
-    console.log(val);
+  function searchWord(e,setSearch){
+    let val = e.target.value
+    if(e.keyCode!=13) return;
     let token = sessionStorage.getItem("token");
-    axios.get('/aamurest/gram/place/selectList',{
-      headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          params: {
-            searchWord: val,
-          },
-    })
-    .then((resp) => {
-      console.log(resp.data);
-      setSearch(resp.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    // axios.get('/aamurest/gram/place/selectList',{
+    //   headers: {
+    //         Authorization: `Bearer ${token}`,
+    //       },
+    //       params: {
+    //         searchWord: val,
+    //       },
+    // })
+    // .then((resp) => {
+    //   // console.log(resp.data);
+    //   setSearch(resp.data);
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //   });
   }
-
-
-  function gramEdit(val){
-    let token = sessionStorage.getItem("token");
-    axios.post('/aamurest/gram/edit',{
-      headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          id:'id',
-          ctitle:'ctitle',
-          content :'content',
-          photo :'photo',
-          contentid :'contentid',
-
-        })
-    .then((resp) => {
-      console.log(resp.data);
-      
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-    }
 
 
   function fn_checkByte(obj){
@@ -162,7 +146,7 @@ const [show] = useState(false);
     }
   return (
   
-    <Contents>   
+    <Contents>  
         <FirstLine>
             <Deletebtn 
                 variant="contained" onClick={deleteImage} > 
@@ -172,28 +156,31 @@ const [show] = useState(false);
                 <h2>새 게시물 만들기</h2>
             </div>
             {showNext ? 
-              <Nextbtn  onClick={sendImageToServer}>업로드</Nextbtn>
+              <Nextbtn  onClick={()=>{
+               let temp= uploadFile(image)
+              //  console.log(temp)
+                gramEdit(temp,setShowWrite,titleRef,textareaRef,searchRef,search)
+              }}>업로드</Nextbtn>
             :
               <Nextbtn  onClick={()=>setshowNext(!showNext)}>다음</Nextbtn>
             }    
         </FirstLine>
             <Body>           
-                <div 
-                    className='picfileframe' >
-                  <label 
-                    className="rweet_file_btn" 
-                    onClick={ ()=>{setHide(!hide)} }
-                    htmlFor="input-file"                
-                    >
-                        {hide ?
-                        null
-                        :
-                        <Button 
-                            type="primary" 
-                            variant="contained" 
-                            onClick={() => inputRef.click()}>
-                            컴퓨터에서 선택
-                        </Button>}
+                <form className='picfileframe' encType='multipart/form-data'>
+                    <label 
+                      className="rweet_file_btn" 
+                      onClick={ ()=>{setHide(!hide)} }
+                      htmlFor="input-file"                
+                      >
+                          {hide ?
+                          null
+                          :
+                          <Button 
+                              type="primary" 
+                              variant="contained" 
+                              onClick={() => inputRef.click()}>
+                              컴퓨터에서 선택
+                          </Button>}
                     </label>
                     <input  
                         id="input-file"
@@ -207,7 +194,7 @@ const [show] = useState(false);
                         style={{display: "none" , width:'100%',height:'100%'}}
                     />
                     <img className='divimage' alt="sample" src={image.preview_URL}/>
-                </div>
+                </form>
                     {/* {showNext ?  */}
                     <div className='side'>
                       <div className="title-profile">
@@ -215,10 +202,12 @@ const [show] = useState(false);
                           <span>eyesmag</span> 
                       </div>
                       <div>
-                        <span style={{fontWeight:'bold', marginLeft:'10px'}}>제목 : </span><input type="text" placeholder="제목을 입력하세요"/>
+                        <span style={{fontWeight:'bold', marginLeft:'10px'}}>제목 : </span>
+                        <input ref={titleRef} type="text" placeholder="제목을 입력하세요"/>
                       </div>
                       <div>
                         <textarea 
+                          ref={textareaRef}
                           className="form-control" 
                           id="textArea_byteLimit" 
                           name="textArea_byteLimit" 
@@ -234,14 +223,25 @@ const [show] = useState(false);
                       <div style={{borderBottom:'0.1px solid #c0c0c0',width:'97%',height:'27px'}}>
                         <sup style={{float:'right',paddingRight:'15px',color:'#c0c0c0'}}>(<span id="nowByte">0</span>/1000bytes)</sup>
                       </div>                
-                      <div className='uploadLocation' onClick={()=>{setshowSearch(!showSearch);}}>
+                      <div className='uploadLocation' 
+                             onClick={()=>{setshowSearch(!showSearch)}}
+                       >
                         <input 
-                            onKeyUp={(e)=>searchWord(e.target.value,setSearch)}
+                            onKeyUp={(e)=>searchWord(e,setSearch)}
+                            value={inputValue}
+                            onChange={(e)=>{setinputValue(e.target.value)
+                              setHasText(true)
+                            }}
                             placeholder="위치 추가" 
                             type="text"
                             ref={searchRef}/>
-                            {showSearch ? <SearchModal search={search}></SearchModal> : null}
-                        <i class="fa-solid fa-location-dot"></i>
+                            {hasText ? 
+                            <SearchModal search={search} 
+                            inputValue={inputValue}
+                            setHasText={setHasText}
+                            setinputValue={setinputValue}/>
+                                            : null}
+                        <i className="fa-solid fa-location-dot"></i>
                       </div>                
                   </div>
                   {/* // :null} */}
@@ -252,7 +252,46 @@ const [show] = useState(false);
  
   );
 }
+ function uploadFile(image){
+  let formData = new FormData(); // formData 객체를 생성한다.
+  formData.append("multifiles", image.image_file)
+  return formData;
+}
 
+function gramEdit(temp,setShowWrite,titleRef,textareaRef,searchRef,search){
+ let searched= search.find((val,i)=>{
+    return val.TITLE===searchRef.current.value
+  })
+  // console.log('searched:',searched)
+
+  // temp.append('id',sessionStorage.getItem('username'))
+  // temp.append('ctitle',titleRef.current.value)
+  // temp.append('content',textareaRef.current.value)
+  // temp.append('contentid',searched.CONTENTID)
+
+  // let token = sessionStorage.getItem("token");
+  // axios.post('/aamurest/gram/edit',temp,
+  //     //  { temp,
+  //     //   id: sessionStorage.getItem('username'),
+  //     //   ctitle: titleRef.current.value,
+  //     //   content: textareaRef.current.value,
+  //     //   contentid:searched.CONTENTID
+  //     // },  
+  //      { headers: {
+  //             Authorization: `Bearer ${token}`,
+  //             'Content-Type': 'multipart/form-data',
+  //           }}
+
+  //     )
+  // .then((resp) => {
+  //   console.log(resp.data);
+  //   setShowWrite(resp.data);
+    
+  //   })
+  //   .catch((error) => {
+  //     console.log(error);
+  //   });
+  }
 
 const Contents = styled.div`
   position: relative;

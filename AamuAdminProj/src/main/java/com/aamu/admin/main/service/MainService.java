@@ -8,11 +8,9 @@ public interface MainService {
 	
 	
 	int usersTotalCount();
-	int usersTodayCount(String today);
-	int placesTotalCount(Map map);
-	int selectPeriod(Map map);
-	int selectJoin(String day);
-	int selectUsers(Map map);
-	String selectDate(String day);
+	int usersTodayCount();
+	Map placesTotalCount();
+	int selectEvent();
+	Map selectWeek();
 	
 }

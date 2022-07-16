@@ -1,5 +1,6 @@
 package com.aamu.admin.main.web;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -13,18 +14,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.aamu.admin.main.service.CommuDTO;
+import com.aamu.admin.main.service.AdminCommuDTO;
 import com.aamu.admin.main.service.ListPagingData;
 import com.aamu.admin.main.service.PagingUtil;
-import com.aamu.admin.main.serviceimpl.CommuServiceImpl;
+import com.aamu.admin.main.serviceimpl.AdminCommuServiceImpl;
 
 @Controller
-@RequestMapping("/admin/")
-public class CommuController {
+public class AdminCommuController {
 	
 	@Autowired
-	private CommuServiceImpl commuService;
+	private AdminCommuServiceImpl commuService;
 	
 	@RequestMapping("Commu.do")
 	public String list(
@@ -36,7 +37,7 @@ public class CommuController {
 		
 		//현재 페이지를 맵에 저장
 		map.put(PagingUtil.NOW_PAGE, nowPage);
-		ListPagingData<CommuDTO> listPagingData= commuService.selectList(map, req, nowPage);
+		ListPagingData<AdminCommuDTO> listPagingData= commuService.selectList(map, req, nowPage);
 		
 		//데이타 저장]		
 		model.addAttribute("listPagingData",listPagingData);
@@ -47,11 +48,15 @@ public class CommuController {
 	}
 	
 	@PostMapping("CommuDelete.do")
+	@ResponseBody
 	public Map commuDelete(@RequestBody Map map){
-		//서비스 호출
-		commuService.commuDelete(map);		
-		//데이타 반환]		
-		return map;
+		int affected=commuService.commuDelete(map);
+		//데이타 반환
+		Map resultMap = new HashMap();
+		System.out.println("affected:"+affected);
+		if(affected==1) resultMap.put("result", "Success");
+		else resultMap.put("result", "NotSuccess");
+		return resultMap;
 	}
 
 }

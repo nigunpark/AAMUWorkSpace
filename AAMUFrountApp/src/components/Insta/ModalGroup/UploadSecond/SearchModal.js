@@ -3,44 +3,37 @@ import React from 'react'
 import styled from 'styled-components';
 
 
-function SearchModal({search}){
+function SearchModal({search, inputValue,setinputValue,setHasText}){
     
 
   return (
     
-    <SearchAll>
+    // <SearchAll>
         <Searchengine>
             <Searchcontents>
-              {
-              search.map((val)=>{
-                return(<P>
-                  {val.TITLE}
-              </P>)
-              })}
+            
+              {search.map((val,i)=>{return <P onClick={(e)=>{
+                setinputValue(e.target.textContent)
+                setHasText(false)}              
+              }>{val.TITLE}</P>
                 
+               }
+            
+              )}
+                {/* // val.indexOf(inputValue)!==-1?<P onClick={()=>onClick(i)}>{val.TITLE}</P>  */}
+           
             </Searchcontents>
         </Searchengine>
-    </SearchAll>
+    /* </SearchAll> */
                  
    
   )
 }
 
-const SearchAll = styled.div`
-    position: absolute;
-    bottom: 20px;
-    right: -124px;
-    width: 30%;
-    height: 300px;
-    transform: translate(-50%);
-    background-color:transparent;
-    border-radius: 5px;
-    z-index: 202;
- `
  const Searchengine = styled.div`
-    position: relative;
-    width: 100%;
-    height: 100%;
+    position: absolute;
+    width: 35%;
+    height: 300px;
     background-color: transparent;
     right:10px;
     z-index: 9;
@@ -48,6 +41,7 @@ const SearchAll = styled.div`
  `
  const Searchcontents = styled.div`
     position: absolute;
+    width: 95%;
     display: flex;
     background-color: #fff;
     flex-direction: column;
@@ -55,11 +49,18 @@ const SearchAll = styled.div`
     align-items: center;
     margin-left: 10px;
  `
- const P = styled.p`  
+ const P = styled.div`  
     display: flex;
-    position: absolute;
+    position: relative;
     width: 100%;
-    height: 100%;
+    height: 50PX;
+    padding-left: 10px;
+    align-items: center;
+    cursor:pointer;
+
+    &:hover {
+      background-color: #e5e5e5;
+    }
  `
     
 export default SearchModal

@@ -1,8 +1,11 @@
 package com.aamu.admin.main.serviceimpl;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Vector;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,42 +25,96 @@ public class MainServiceImpl implements MainService{
 	}
 
 	@Override
-	public int usersTodayCount(String today) {
-		
+	public int usersTodayCount() {
+		Date current = new Date();
+		SimpleDateFormat formatter = new SimpleDateFormat("yy-MM-dd");
+		String today = formatter.format(current);
 		return dao.usersTodayCount(today);
 	}
 
 	@Override
-	public int placesTotalCount(Map map) {
-	
-		return dao.placesTotalCount(map);
+	public Map placesTotalCount() {
+		
+		Map map = new HashMap<>();
+		
+		map.put("places", "placesinfo");
+		map.put("attraction", dao.placesTotalCount(map));
+		
+		map.put("places", "hotelinfo");
+		map.put("hotel", dao.placesTotalCount(map));
+		
+		map.put("places", "dinerinfo");
+		map.put("diner", dao.placesTotalCount(map));
+		
+		map.put("event", dao.selectEvent());
+		
+		map.put("places", "COMMUNITY");
+		map.put("commuCount", dao.placesTotalCount(map));
+		
+		map.put("places", "routebbs");
+		map.put("bbsCount", dao.placesTotalCount(map));
+		
+		map.put("places", "routeboard");
+		map.put("plannerCount", dao.placesTotalCount(map));
+		
+		map.put("places","places");
+		map.put("places", dao.placesTotalCount(map));
+		
+		return map;
 	}
 
 	@Override
-	public int selectPeriod(Map map) {
+	public int selectEvent() {
 		
-		return dao.selectPeriod(map);
+		return dao.selectEvent();
 	}
 
-	@Override
-	public int selectJoin(String day) {
-		
-		return dao.selectJoin(day);
-	}
+
 
 	@Override
-	public int selectUsers(Map map) {
+	public Map selectWeek() {
 		
-		return dao.selectUsers(map);
-	}
+		Map map = new HashMap<>();
+		
+		List join = new Vector<>();
+		List date = new Vector<>();
+		List users = new Vector<>();
+		List commu = new Vector<>();
+		List bbs = new Vector<>();
+		List planner = new Vector<>();
+		for(int i=6;i>=0;i--) {
+			String day = "sysdate-"+i;
+			int userCount = dao.selectUsers(day);
+			map.put("table", "users");
+			map.put("column", "joindate");
+			map.put("day", day);
+			int countJoin = dao.selectWeek(map);
+			map.put("table", "COMMUNITY");
+			map.put("column", "postdate");
+			int countCommu = dao.selectWeek(map);
+			map.put("table", "routebbs");
+			int countBBS = dao.selectWeek(map);
+			map.put("table", "routeboard");
+			map.put("column", "routedate");
+			int countPlanner = dao.selectWeek(map);
+			String days =  "\""+dao.selectDate(day)+"\"";
+			
+			users.add(userCount);
+			date.add(days);
+			join.add(countJoin);
+			commu.add(countCommu);
+			bbs.add(countBBS);
+			planner.add(countPlanner);
+		}
 
-	@Override
-	public String selectDate(String day) {
-		
-		return dao.selectDate(day);
+		map.put("userWeek", users);
+		map.put("date", date);
+		map.put("join",join);
+		map.put("commu", commu);
+		map.put("bbs", bbs);
+		map.put("planner", planner);
+		return map;
 	}
-	
-	
 	
 	
 }

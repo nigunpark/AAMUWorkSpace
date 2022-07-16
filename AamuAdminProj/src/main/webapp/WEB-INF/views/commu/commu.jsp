@@ -104,24 +104,11 @@
     //삭제 click
     $('button').click(function(){
     	console.log("버튼이벤트 발생");
-    	var tr=$('table > tbody > tr:nth-child(1)');
-    	/* var lnoArr = new Array(); //선택한 lno담은 배열
-    	var list = $("input[name='RowCheck']");//체크박스
-    	console.log(list[0]);
-    	for(var i=0; i<list.length; i++){
-    		if(list[i].checked){//체크됐다면
-    			lnoArr.push(list[i].value);
-    			console.log("lnoArr:"+lnoArr);
-    		}
-    	}////////for */
     	var lnoArr = new Array();
         $('input[name="RowCheck"]:checked').each(function(i){//체크된 리스트 저장
         	lnoArr.push($(this).val());
         	console.log($(this).val()); //lnoArr:63,62
         });
-        /* var lnoParams = {
-                "lnoArr" : lnoArr       
-            }; */
     	if(lnoArr.length ==0){
     		alert("선택된 글이 없습니다.");
     	}
@@ -129,14 +116,15 @@
     		confirm("정말 삭제하시겠습니까?");
     		var jsonString = JSON.stringify({lno : lnoArr})
     		$.ajax({
-       			url:"<c:url value="/admin/CommuDelete.do"/>",
+       			url:"<c:url value="CommuDelete.do"/>",
        			type:"post",
-       			headers: {'Content-Type': 'application/json'},
        			data: jsonString,
-       			dataType:'json'
+       			contentType:"application/json", //데이타 보낼 때
+       			dataType: "json" //데이타 받을 때 
        		}).done(data=>{
        			console.log('삭제성공:',data);
-       			tr.remove();
+       			location.replace("Commu.do");
+       			
        		}).fail(error=>{
        			console.log('삭제에러:',error);
        		});
