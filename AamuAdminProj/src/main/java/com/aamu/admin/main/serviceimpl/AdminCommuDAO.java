@@ -7,10 +7,10 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.aamu.admin.main.service.CommuDTO;
+import com.aamu.admin.main.service.AdminCommuDTO;
 
 @Repository
-public class CommuDAO {
+public class AdminCommuDAO {
 	@Autowired
 	private SqlSessionTemplate template;
 	
@@ -20,8 +20,8 @@ public class CommuDAO {
 		}
 	
 	//글 리스트 뿌려주기
-	public List<CommuDTO> commuSelectList(Map map){
-		List<CommuDTO> records = template.selectList("commuSelectList",map);
+	public List<AdminCommuDTO> commuSelectList(Map map){
+		List<AdminCommuDTO> records = template.selectList("commuSelectList",map);
 		return records;
 	}
 	
