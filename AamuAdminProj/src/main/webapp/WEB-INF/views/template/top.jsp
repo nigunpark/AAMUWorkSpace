@@ -13,12 +13,13 @@
   <link rel="stylesheet" href="<c:url value="/resources/vendors/mdi/css/materialdesignicons.min.css"/>">
   <!-- inject:css -->
   <link rel="stylesheet" href="<c:url value="/resources/css/vertical-layout-light/style.css"/>">
+  
   <script src="<c:url value="/resources/vendors/js/vendor.bundle.base.js"/>"></script>
+  
   <!--축소 페이지용 js-->
   <script src="<c:url value="/resources/js/off-canvas.js"/>"></script>
   <!-- commu_plugins:css _체크박스v모양 나오게 -->
   <link rel="stylesheet" href="<c:url value="/resources/vendors/ti-icons/css/themify-icons.css"/>">
-
 
 </head>
 

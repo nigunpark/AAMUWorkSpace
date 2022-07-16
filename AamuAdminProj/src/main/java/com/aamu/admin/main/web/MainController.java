@@ -54,8 +54,22 @@ public class MainController {
 		model.addAttribute("planner",chartMap.get("planner"));
 		return "/main/main";
 	}
+	@GetMapping("userstatstart.do")
+	public String getUserStat(Model model) {
+		
+		
+		Map map = service.placesTotalCount();
+		Map chartMap = service.selectWeek();		
+		
+		model.addAttribute("users",service.usersTotalCount());
+		model.addAttribute("todayUsers", service.usersTodayCount());
+		
+		model.addAttribute("usersWeek",chartMap.get("userWeek"));
+
+		return "/main/statistics";
+	}
 	
-	@GetMapping("userstat")
+	@GetMapping("userstat.do")
 	@ResponseBody
 	public Map userStat() {
 		Map map = new HashMap<>();

@@ -55,7 +55,7 @@
                     <div class="col-lg-6 grid-margin stretch-card">
                       <div class="card">
                         <div class="card-body">
-                          <h4 class="card-title">총 회원 수</h4>
+                          <a href="<c:url value="userstatstart.do"/>"><h4 class="card-title">총 회원 수</h4></a>
                           <canvas id="lineChart"></canvas>
                         </div>
                       </div>

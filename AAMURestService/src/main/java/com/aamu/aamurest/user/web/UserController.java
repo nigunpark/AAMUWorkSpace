@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.aamu.aamurest.user.service.UsersDTO;
 import com.aamu.aamurest.user.service.UsersService;
+import com.aamu.aamurest.util.FileUploadUtil;
 
 @RestController
 @CrossOrigin
@@ -32,7 +33,9 @@ public class UserController {
 	public int join(@RequestBody UsersDTO dto,@RequestParam MultipartFile multipartFile,HttpServletRequest req) throws IllegalStateException, IOException {
 		int affected=0;
 		String path = req.getSession().getServletContext().getRealPath("/resources/userUpload");
+		String photo = FileUploadUtil.oneFile(multipartFile, path);
 		
+		dto.setUserprofile(photo);
 		
 		affected = service.joinUser(dto);
 		
@@ -40,9 +43,11 @@ public class UserController {
 	}
 	
 	@GetMapping("/users/selectone")
-	public UsersDTO selectOneUser(@RequestParam Map map) {
+	public UsersDTO selectOneUser(@RequestParam Map map,HttpServletRequest req) {
 		
 		UsersDTO dto = service.selectOneUser(map);
+		String path = req.getSession().getServletContext().getRealPath("/resources/userUpload");
+		dto.setUserprofile(FileUploadUtil.requestOneFile(dto.getUserprofile(), path, req));
 		
 		return dto;
 	}
