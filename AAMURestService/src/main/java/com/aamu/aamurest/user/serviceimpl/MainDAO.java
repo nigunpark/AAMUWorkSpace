@@ -105,8 +105,13 @@ public class MainDAO {
 	}
 	
 	public AttractionDTO selectPlace(Map map) {
-		System.out.println(map);
+		
 		return template.selectOne("selectPlace",map);
+	}
+
+	public double getRecentPlaceOne(Map map) {
+		
+		return template.selectOne("getRecentPlaceOne", map);
 	}
 
 	

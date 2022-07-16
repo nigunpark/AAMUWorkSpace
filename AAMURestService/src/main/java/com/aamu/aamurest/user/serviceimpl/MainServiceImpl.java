@@ -435,6 +435,11 @@ public class MainServiceImpl implements MainService{
 		
 		return returnList;
 	}
+	@Override
+	public double getRecentPlaceOne(Map map) {
+		
+		return dao.getRecentPlaceOne(map);
+	}
 
 
 

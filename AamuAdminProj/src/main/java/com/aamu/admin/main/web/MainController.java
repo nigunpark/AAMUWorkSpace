@@ -14,8 +14,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.aamu.admin.main.service.MainService;
 
@@ -51,6 +53,15 @@ public class MainController {
 		model.addAttribute("bbs",chartMap.get("bbs"));
 		model.addAttribute("planner",chartMap.get("planner"));
 		return "/main/main";
+	}
+	
+	@GetMapping("userstat")
+	@ResponseBody
+	public Map userStat() {
+		Map map = new HashMap<>();
+		
+		return map;
+		
 	}
 	
 	
