@@ -246,7 +246,8 @@ function Content({ index, fromWooJaeData, forReRender, setForReRender }) {
                   fromWooJaeData[index]["day" + (index + 1)][0].starttime =
                     newObj.time * 60 * 60 * 1000 + newObj.min * 60 * 1000;
                 }
-                setForReRender(!forReRender);
+                setForReRender(false);
+                setForReRender(true);
               }}
             />
           </Stack>
@@ -345,7 +346,8 @@ function DetailSetting({
             ref={mTimeRef}
             onChange={(e) => {
               obj.mtime = e.target.value * 1000 * 60;
-              setForReRender(!forReRender);
+              setForReRender(false);
+              setForReRender(true);
             }}
           />
           <span>분</span>
@@ -399,7 +401,29 @@ function DetailSetting({
                 />
               </div>
             </div>
-            {forReRender && (
+            {forReRender ? (
+              <div className="detailLocation__clock">
+                <span>
+                  {Math.floor(upTime / 60)
+                    .toString()
+                    .padStart(2, "0")}
+                  :
+                  {Math.floor(upTime % 60)
+                    .toString()
+                    .padStart(2, "0")}
+                </span>
+                <span>~</span>
+                <span>
+                  {Math.floor(downTime / 60)
+                    .toString()
+                    .padStart(2, "0")}
+                  :
+                  {Math.floor(downTime % 60)
+                    .toString()
+                    .padStart(2, "0")}
+                </span>
+              </div>
+            ) : (
               <div className="detailLocation__clock">
                 <span>
                   {Math.floor(upTime / 60)
