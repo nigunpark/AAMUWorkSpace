@@ -353,7 +353,14 @@ public class MainController {
 		
 		return lists;
 	}
-	
+	@GetMapping("/info/recentplace")
+	public List<AttractionDTO> getRecentPlace(@RequestParam Map map){
+		if(map.get("distance")==null) map.put("distance", 3);
+
+		List<AttractionDTO> lists = service.getRecentPlaceAll(map);
+		
+		return lists;
+	}
 	
 
 }

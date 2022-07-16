@@ -28,7 +28,7 @@
                           </div>
                           <div>
                             <p class="statistics-title">등록된 여행지</p>
-                            <h3 class="rate-percentage">${attraction}</h3>
+                            <h3 class="rate-percentage">${places}</h3>
                           </div>
                         <div>
                             <p class="statistics-title">관광지</p>
@@ -316,10 +316,10 @@ $(function() {
 	    }]
 	  };
 	  var data3 = {
-			    labels: ["게시판","플래너","커뮤니티"],
+			    labels: ["커뮤니티","게시판","플래너"],
 			    datasets: [{
 			      label: '등록된 글',
-			      data: [1,10,20],
+			      data: [${commuCount},${bbsCount},${plannerCount}],
 			      backgroundColor: [
 			        'rgba(255, 99, 132, 0.2)',
 			        'rgba(54, 162, 235, 0.2)',

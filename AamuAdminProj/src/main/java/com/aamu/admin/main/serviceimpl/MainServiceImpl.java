@@ -48,6 +48,18 @@ public class MainServiceImpl implements MainService{
 		
 		map.put("event", dao.selectEvent());
 		
+		map.put("places", "COMMUNITY");
+		map.put("commuCount", dao.placesTotalCount(map));
+		
+		map.put("places", "routebbs");
+		map.put("bbsCount", dao.placesTotalCount(map));
+		
+		map.put("places", "routeboard");
+		map.put("plannerCount", dao.placesTotalCount(map));
+		
+		map.put("places","places");
+		map.put("places", dao.placesTotalCount(map));
+		
 		return map;
 	}
 
