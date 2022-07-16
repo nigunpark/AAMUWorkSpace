@@ -202,8 +202,10 @@ function doubleCheck(idRef, idValidRef, setDoneDoubleCk, setWhichIdValid) {
       params: { id: idRef.current.value },
     })
     .then((resp) => {
-      if (resp.data === 0) setDoneDoubleCk(true);
-      else {
+      if (resp.data === 0) {
+        setDoneDoubleCk(true);
+        idRef.current.parentElement.style.borderColor = "yellowGreen";
+      } else {
         alert("이미 존재하는 아이디입니다");
         setWhichIdValid(true);
         idRef.current.parentElement.style.borderColor = "grey";
@@ -301,11 +303,12 @@ function validation(
       alert("아이디 중복확인을 하세요");
       return;
     }
+    forSlideRef.current.classList.remove("join__slide-in-left");
     forSlideRef.current.classList.add("join__slide-out-right");
     setTimeout(() => {
       dispatch(addStepOne([idRef.current.value, pwdRef.current.value]));
       navigate("/joinTwo");
-    }, 150);
+    }, 300);
   }
 }
 

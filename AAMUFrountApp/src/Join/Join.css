@@ -24,7 +24,7 @@
 }
 
 .join__input-div {
-  border: 2px solid grey;
+  border: 2px solid rgb(128, 128, 128);
   border-radius: 5px;
   height: 40px;
   display: flex;
@@ -123,25 +123,62 @@
 }
 
 .join__stepTwo-input-div {
-  border: 2px solid grey;
+  border: 2px solid rgb(128, 128, 128);
   border-radius: 5px;
   height: 30px;
+  width: 255px;
 }
 
 .join__stepTwo-label {
   border: 1px solid rgba(0, 0, 0, 0.3);
   border-radius: 5px;
   position: absolute;
-  width: 120px;
-  height: 150px;
+  width: 130px;
+  height: 170px;
 }
 
 .join__stepTwo-img {
   position: "absolute";
   object-fit: cover;
-  width: 120px;
-  height: 150px;
+  width: 130px;
+  height: 170px;
   z-index: -1;
+}
+
+.join__stepTwo-joomin-input-div {
+  border: 2px solid rgb(128, 128, 128);
+  border-radius: 5px;
+  height: 30px;
+  width: 120px;
+}
+
+.join__stepTwo-joomin-input-back-div {
+  height: 30px;
+  width: 110px;
+  display: flex;
+  justify-content: space-around;
+  /* gap: 10px; */
+}
+
+.join__stepTwo-email-selector {
+  height: 30px;
+  width: 100%;
+  border: 2px solid rgb(128, 128, 128);
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.join__stepTwo-email-selector select {
+  height: 30px;
+  text-align: center;
+  font-size: 15px;
+  width: 100%;
+}
+
+.join__stepTwo-email-selector select option {
+  height: 30px;
 }
 
 .join__profile-img-preview {
@@ -165,7 +202,86 @@
 
 .join__stepTwo-input-wrap {
   width: 100%;
-  border: 1px solid blue;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.join__stepTwo-phonenum-input-div {
+  border: 2px solid rgb(128, 128, 128);
+  border-radius: 5px;
+  height: 30px;
+  width: 70px;
+}
+.join__stepTwo-phonenum-input {
+  font-size: 15px;
+  margin-left: 3px;
+  letter-spacing: 5px;
+  width: 60px;
+  text-align: center;
+}
+
+.join__stepTwo-email-input-div {
+  border: 2px solid rgb(128, 128, 128);
+  border-radius: 5px;
+  height: 30px;
+  width: 40%;
+}
+
+.join__stepTwo-keyup-validSpan {
+  visibility: hidden;
+  color: red;
+  font-size: 13px;
+}
+
+.join__stepTwo-content-container {
+  margin-top: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.join__stepTwo-input-common {
+  border: 2px solid rgb(128, 128, 128);
+  border-radius: 5px;
+  height: 30px;
+}
+
+.daumPostCode {
+  animation: daumPostCode-in-left 0.5s cubic-bezier(0.47, 0, 0.745, 0.715) both;
+}
+
+.postCodeFind-btn {
+  background-color: var(--skyblue);
+  font-size: 12px;
+  border-radius: 5px;
+  margin-left: 5px;
+  display: flex;
+  align-items: center;
+  color: white;
+  padding: 5px;
+  cursor: pointer;
+  transition: 0.2s;
+  border: 1px solid var(--skyblue);
+}
+
+.postCodeFind-btn:hover {
+  color: var(--skyblue);
+  border: 1px solid var(--skyblue);
+  background-color: white;
+}
+
+.join__stepTwo-introduce-div {
+  border: 2px solid rgb(128, 128, 128);
+  border-radius: 5px;
+  width: 100%;
+  height: 50px;
+}
+
+.join__stepTwo-introduce {
+  position: relative;
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
 }
 
 @keyframes join__slide-out-right {
@@ -174,14 +290,14 @@
     opacity: 1;
   }
   100% {
-    transform: translateX(-1000px);
+    transform: translateX(-700px);
     opacity: 0;
   }
 }
 
 @keyframes join__slide-in-right {
   0% {
-    transform: translateX(1000px);
+    transform: translateX(700px);
     opacity: 0;
   }
   100% {
@@ -189,9 +305,21 @@
     opacity: 1;
   }
 }
+
 @keyframes join__slide-in-left {
   0% {
-    transform: translateX(-1000px);
+    transform: translateX(-700px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes daumPostCode-in-left {
+  0% {
+    transform: translateX(-200px);
     opacity: 0;
   }
   100% {
