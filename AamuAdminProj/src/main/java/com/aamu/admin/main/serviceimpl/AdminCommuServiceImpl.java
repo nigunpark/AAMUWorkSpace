@@ -10,16 +10,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import com.aamu.admin.main.service.CommuDTO;
-import com.aamu.admin.main.service.CommuService;
+import com.aamu.admin.main.service.AdminCommuDTO;
+import com.aamu.admin.main.service.AdminCommuService;
 import com.aamu.admin.main.service.ListPagingData;
 import com.aamu.admin.main.service.PagingUtil;
 
 @Service
-public class CommuServiceImpl implements CommuService {
+public class AdminCommuServiceImpl implements AdminCommuService {
 	
 	@Autowired
-	private CommuDAO dao;
+	private AdminCommuDAO dao;
 	
 	//리소스파일(paging.properties)에서 읽어오기
 	@Value("${pageSize}")
@@ -29,7 +29,7 @@ public class CommuServiceImpl implements CommuService {
 	
 	//목록용
 	@Override
-	public ListPagingData<CommuDTO> selectList(Map map, HttpServletRequest req, int nowPage) {
+	public ListPagingData<AdminCommuDTO> selectList(Map map, HttpServletRequest req, int nowPage) {
 		//페이징을 위한 로직 시작]
 		//전체 레코드수
 		int totalCount=dao.commuGetTotalRecordCount(map);
@@ -46,10 +46,10 @@ public class CommuServiceImpl implements CommuService {
 				Integer.parseInt(map.get(PagingUtil.PAGE_SIZE).toString()), 
 				Integer.parseInt(map.get(PagingUtil.BLOCK_PAGE).toString()), 
 				Integer.parseInt(map.get(PagingUtil.NOW_PAGE).toString()), 
-				req.getContextPath()+"/admin/Commu.do?");
+				req.getContextPath()+"Commu.do?");
 		
 		//Lombok라이브러리 사용시
-		ListPagingData<CommuDTO> listPagingData =ListPagingData.builder().lists(lists).map(map).pagingString(pagingString).build();
+		ListPagingData<AdminCommuDTO> listPagingData =ListPagingData.builder().lists(lists).map(map).pagingString(pagingString).build();
 		
 		return listPagingData;
 	}
@@ -78,7 +78,7 @@ public class CommuServiceImpl implements CommuService {
 		else
 			return 0;
 	}
-
+	
 	
 	
 

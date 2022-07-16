@@ -36,5 +36,7 @@ public interface MainService{
 
 	int deleteRoute(int rbn);
 
+	List<AttractionDTO> getRecentPlaceAll(Map map);
+
 	
 }

@@ -25,7 +25,7 @@ public class MainController {
 	@Autowired
 	private MainService service;
 	
-	@RequestMapping(value = "admin.do", method = RequestMethod.GET)
+	@GetMapping("main.do")
 	public String home(Model model) {
 		
 		
@@ -34,11 +34,15 @@ public class MainController {
 		
 		model.addAttribute("users",service.usersTotalCount());
 		model.addAttribute("todayUsers", service.usersTodayCount());
-
+		model.addAttribute("places",map.get("places"));
 		model.addAttribute("attraction",map.get("attraction"));	
 		model.addAttribute("hotel",map.get("hotel"));
 		model.addAttribute("diner",map.get("diner"));
 		model.addAttribute("event",map.get("event"));
+		
+		model.addAttribute("commuCount",map.get("commuCount"));
+		model.addAttribute("bbsCount",map.get("bbsCount"));
+		model.addAttribute("plannerCount",map.get("plannerCount"));
 		
 		model.addAttribute("usersWeek",chartMap.get("userWeek"));
 		model.addAttribute("date",chartMap.get("date"));
