@@ -25,7 +25,7 @@ public class MainController {
 	@Autowired
 	private MainService service;
 	
-	@RequestMapping(value = "admin.do", method = RequestMethod.GET)
+	@GetMapping("main.do")
 	public String home(Model model) {
 		
 		

@@ -22,7 +22,6 @@ import com.aamu.admin.main.service.PagingUtil;
 import com.aamu.admin.main.serviceimpl.CommuServiceImpl;
 
 @Controller
-@RequestMapping("/admin/")
 public class CommuController {
 	
 	@Autowired
