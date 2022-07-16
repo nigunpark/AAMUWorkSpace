@@ -74,15 +74,22 @@
                     </div>
                   </div>
                   <div class="row">
-                  <div class="col-lg-6 grid-margin stretch-card">
-                      <div class="card">
-                        <div class="card-body">
-                          <h4 class="card-title">사용자 활동</h4>
-                          <canvas id="linechart-multi" style="height: 800px;"></canvas>
-                        </div>
+	                  <div class="col-lg-8 grid-margin stretch-card">
+	                      <div class="card">
+	                        <div class="card-body">
+	                          <h4 class="card-title">사용자 활동</h4>
+	                          <canvas id="linechart-multi"></canvas>
+	                        </div>
+	                      </div>
                       </div>
-                    </div>
-                  </div>
+                       <div class="col-lg-4 grid-margin stretch-card">
+	                      <div class="card">
+	                        <div class="card-body">
+	                          <h4 class="card-title">사용자 활동</h4>
+	                        </div>
+	                      </div>
+                      </div>>
+	              </div>
                   <!--차트 정보 끝-->
                   <div class="col-lg-12 grid-margin stretch-card">
                     <div class="card">
