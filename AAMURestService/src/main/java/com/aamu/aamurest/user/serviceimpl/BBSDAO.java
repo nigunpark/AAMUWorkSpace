@@ -18,13 +18,18 @@ public class BBSDAO {
 	private SqlSessionTemplate template;
 	
 	//글 목록
-	public List<BBSDTO> bbsSelectList(){
-		return template.selectList("bbsSelectList");
+	public List<BBSDTO> bbsSelectList(Map map){
+		return template.selectList("bbsSelectList",map);
 	}
 	
 	//글 목록_사진 뿌려주기
 	public List bbsSelectPhotoList(int rbn) {
 		return template.selectList("bbsSelectPhotoList",rbn);
+	}
+
+	//글 하나 선택
+	public BBSDTO bbsSelectOne(String rbn) {
+		return template.selectOne("bbsSelectOne",rbn);
 	}
 	
 	//글 등록
@@ -49,9 +54,10 @@ public class BBSDAO {
 	}
 	
 	/*----------------------------------------------------*/
-	//리뷰 목록
-	public List<ReviewDTO> reviewSelectList(Map map) {
-		return template.selectList("reviewSelectList",map);
+	
+	//글 상세보기_모든 리뷰 보기
+	public List<ReviewDTO> reviewList(String rno) {
+		return template.selectList("reviewList",rno);
 	}
 	
 	//리뷰 등록
@@ -69,18 +75,14 @@ public class BBSDAO {
 		return template.delete("reviewDelete",map);
 	}
 	
-	//평점 평균 반영 및 업데이트
-	public int updateRating(ReviewDTO rate) {
-		return template.update("updateRating",rate);
-	}
-
 	//평점 평균 구하기
 	public double getRatingAverage(int ratingavg) {
 		return ratingavg;
 	}
 	
-	public List<ReviewDTO> reviewList(String rno) {
-		return template.selectList("reviewList",rno);
+	//평점 평균 반영 및 업데이트
+	public int updateRating(ReviewDTO rate) {
+		return template.update("updateRating",rate);
 	}
 
 	

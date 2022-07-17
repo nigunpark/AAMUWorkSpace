@@ -44,8 +44,8 @@ public class BBSController {
 	
 	//글 목록
 	@GetMapping("/bbs/SelectList")
-	public List<BBSDTO> bbsSelectList(){
-		List<BBSDTO> list = bbsService.bbsSelectList();
+	public List<BBSDTO> bbsSelectList(@RequestParam Map map){
+		List<BBSDTO> list = bbsService.bbsSelectList(map);
 		for(BBSDTO dto : list) {
 			dto.setPhoto(bbsService.bbsSelectPhotoList(dto.getRbn()));
 		}
@@ -70,6 +70,9 @@ public class BBSController {
 		else resultMap.put("result", "insertNotSuccess");
 		return resultMap;
 	}
+	
+	//글 하나 선택
+	@GetMapping("/bbs/SelectOne/{rbn}")
 	
 	//글 수정
 	@PutMapping("/bbs/edit")
@@ -96,14 +99,14 @@ public class BBSController {
 		
 	}
 	
-	//리뷰 목록
-	@GetMapping("/review/selectList")
-	public List<ReviewDTO> reviewSelectList(@RequestParam Map map){
-		List<ReviewDTO> list = bbsService.reviewSelectList(map);
-			
-		return list;
-		}
-	
+	////글 상세보기_모든 리뷰 보기
+	@GetMapping("/review/SelectList/{rno}")
+	public BBSDTO bbsSelectOne(@PathVariable String rbn) {
+		BBSDTO dto=bbsService.bbsSelectOne(rbn);
+		//모든 리뷰 가져오기
+		dto.setReviewList(bbsService.reviewList(rbn));
+		return dto;
+	}
 	//리뷰 등록
 	@PostMapping("/review/edit")
 	public Map reviewInsert(@RequestParam Map map) {

@@ -19,8 +19,8 @@ public class BBSServiceImpl implements BBSService{
 	
 	//글 목록
 	@Override
-	public List<BBSDTO> bbsSelectList() {
-		return dao.bbsSelectList();
+	public List<BBSDTO> bbsSelectList(Map map) {
+		return dao.bbsSelectList(map);
 	}
 	
 	//글 목록_사진 뿌려주기
@@ -28,6 +28,13 @@ public class BBSServiceImpl implements BBSService{
 	public List bbsSelectPhotoList(int rbn) {
 		return dao.bbsSelectPhotoList(rbn);
 	}
+	
+	//글 하나 선택
+	@Override
+	public BBSDTO bbsSelectOne(String rbn) {
+		return dao.bbsSelectOne(rbn);
+	}
+		
 	//글 등록
 	@Override
 	public int bbsInsert(Map map) {
@@ -62,13 +69,12 @@ public class BBSServiceImpl implements BBSService{
 		return dao.bbsDelete(map);
 	}
 	
-	//글 등록일자
-	
 	/*---------------------------------------------------*/
-	//리뷰 목록
+	
+	//글 상세보기_모든 리뷰 보기
 	@Override
-	public List<ReviewDTO> reviewSelectList(Map map) {
-		return dao.reviewSelectList(map);
+	public List<ReviewDTO> reviewList(String rno) {
+		return dao.reviewList(rno);
 	}
 	
 	//리뷰 등록
@@ -89,26 +95,17 @@ public class BBSServiceImpl implements BBSService{
 		return dao.reviewDelete(map);
 	}
 	
+	//평점 평균 구하기
+	@Override
+	public Double getRatingAverage(int ratingavg) {
+		return dao.getRatingAverage(ratingavg);
+	}
+	
 	@Override
 	//평점 평균 반영하기
 	public int updateRating(ReviewDTO rate) {
 		return dao.updateRating(rate);
 	}
-
-	@Override
-	public Double getRatingAverage(int ratingavg) {
-		return dao.getRatingAverage(ratingavg);
-	}
-	//글 상세보기_모든 리뷰 보기
-	@Override
-	public List<ReviewDTO> reviewList(String rno) {
-		return dao.reviewList(rno);
-	}
-
-	@Override
-	public int updateRating(Map map) {
-		return 0;
-	}
-
+	
 }
 	
