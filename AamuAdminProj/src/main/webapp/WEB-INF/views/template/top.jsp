@@ -18,6 +18,10 @@
   
   <!--축소 페이지용 js-->
   <script src="<c:url value="/resources/js/off-canvas.js"/>"></script>
+  <!--datepicker용 js-->
+  <script src="<c:url value="/resources/vendors/bootstrap-datepicker/bootstrap-datepicker.min.js"/>"></script>
+  <!-- 데이트피커용 -->
+  <script src="<c:url value="/resources/js/dashboard.js"/>"></script>
   <!-- commu_plugins:css _체크박스v모양 나오게 -->
   <link rel="stylesheet" href="<c:url value="/resources/vendors/ti-icons/css/themify-icons.css"/>">
 
@@ -50,6 +54,14 @@
           </li>
         </ul>
         <ul class="navbar-nav ms-auto">
+          <li class="nav-item d-none d-lg-block">
+            <div id="datepicker-popup" class="input-group date datepicker navbar-date-picker">
+              <span class="input-group-addon input-group-prepend border-right">
+                <span class="icon-calendar input-group-text calendar-icon"></span>
+              </span>
+              <input type="text" class="form-control" >
+            </div>
+          </li>
           <li class="nav-item">
             <form class="search-form" action="#">
               <i class="icon-search"></i>

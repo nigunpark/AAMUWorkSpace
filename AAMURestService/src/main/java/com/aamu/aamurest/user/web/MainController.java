@@ -130,10 +130,12 @@ public class MainController {
 			while(true){
 				
 				if(count<result) {
-					//double standardx = list.get(count*tripDay+index).getDto().getMapx();
-					//double standardy = list.get(count*tripDay+index).getDto().getMapy();
+					/*
+					double standardx = list.get(count*tripDay+index).getDto().getMapx();
+					double standardy = list.get(count*tripDay+index).getDto().getMapy();
+					*/
 					map.put("firstx", list.get(count*tripDay+index).getDto().getMapx());
-					map.put("firsty", list.get(count*tripDay+index).getDto().getMapx());
+					map.put("firsty", list.get(count*tripDay+index).getDto().getMapy());
 					//System.out.println("기준장소:"+list.get(count*tripDay+index).getDto().getTitle());
 					double low = Integer.MAX_VALUE;
 					//double attrx =0;
@@ -149,8 +151,10 @@ public class MainController {
 							attry = list.get(k).getDto().getMapy();
 							resultxy = Math.sqrt(Math.pow(Math.abs(standardx-attrx),2)+Math.pow(Math.abs(standardy-attry),2));
 							*/
+							
 							map.put("secondx", list.get(k).getDto().getMapx());
 							map.put("secondy", list.get(k).getDto().getMapy());
+							
 							resultxy = service.getRecentPlaceOne(map);
 							System.out.println(String.format("비교장소:%s, 비교결과:%s",list.get(k).getDto().getTitle(),resultxy));
 							if(low>resultxy && tripDay*(count+1)+index<list.size()) {
@@ -169,10 +173,13 @@ public class MainController {
 								//attrx = list.get(j).getDto().getMapx();
 								//attry = list.get(j).getDto().getMapy();
 								//resultxy = Math.sqrt(Math.pow(Math.abs(standardx-attrx),2)+Math.pow(Math.abs(standardy-attry),2));
-								map.put("secondx", list.get(k).getDto().getMapx());
-								map.put("secondy", list.get(k).getDto().getMapy());
-								resultxy = service.getRecentPlaceOne(map);
-								if(low==resultxy) {Collections.swap(list,j,tripDay*(count+1)+index); break;} 
+								if(j!=count*tripDay+index) {
+									map.put("secondx", list.get(j).getDto().getMapx());
+									map.put("secondy", list.get(j).getDto().getMapy());
+									resultxy = service.getRecentPlaceOne(map);
+									
+									if(low==resultxy) {Collections.swap(list,j,tripDay*(count+1)+index); break;} 
+								}
 							}
 						}
 						
@@ -259,6 +266,7 @@ public class MainController {
 			}///////////////for
 		}////////////////else
 		 */
+
 		PlannerDTO routeList = new PlannerDTO();
 		routeList.setRoute(list);
 		return routeList;
