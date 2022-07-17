@@ -135,21 +135,23 @@ const DetailModal = ({setIsOpen}) => {
                             setComment(e.target.value);
                         }} //리뷰창 변할때마다 setComment를 통해 comment의 값 변경
                         onKeyUp={(e)=>{
+                            console.log('e.target.value : ',e.target.value.length);
                             e.target.value.length > 0 ? setIsValid(true) : setIsValid(false);
+                            console.log('isValid :',isValid);
                         }} //사용자가 리뷰를 작성했을 때 빈공간인지 확인하여 유효성 검사
                         value={comment}
                         />
+
+                    {/* DetailButton.scss */}
                     <div className='detail-button'>
-                        {/* DetailButton.scss 주석 */}
-                        <button
-                            className="learn-more"
-                            type="button"
-                            onClick={post}
-                            disabled={isValid ? false : true}
-                            >
-                            리뷰 등록
-                        </button>
+                        {
+                            isValid ? 
+                            <button className="learn-more" type="button" onClick={post}>리뷰 등록</button>
+                            : 
+                            <button className="learn-more" type="button" disabled>리뷰를 작성하세요</button>
+                        }
                     </div>
+                    
                 </DetailContents>
                 <DetailReview>
                     {//feedComments 에 담겨있을 댓글 값을 CommentList 컴포넌트에 담아서 가져오기
