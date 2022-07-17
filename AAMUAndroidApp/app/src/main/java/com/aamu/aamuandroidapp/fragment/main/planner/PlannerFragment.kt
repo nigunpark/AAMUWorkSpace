@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.aamu.aamuandroidapp.components.aamuplan.AAMUPlanHome
@@ -34,6 +35,7 @@ class PlannerFragment : Fragment() {
 
         val permission = requireContext().getSharedPreferences("local",Context.MODE_PRIVATE)
         val checkPermission = permission.getString("local","")
+        binding.plannerCompose.setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
         binding.plannerCompose.setContent {
             if(checkPermission != "Y"){
                 navController.popBackStack()
@@ -51,4 +53,5 @@ class PlannerFragment : Fragment() {
         super.onStop()
         requireActivity().setStatusBarOrigin()
     }
+
 }

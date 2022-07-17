@@ -18,7 +18,7 @@ class LoadingFragment : Fragment() {
 
     private lateinit var binding: FragmentLoadingBinding
 
-    private lateinit var navController: NavController
+    private var navController: NavController? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,12 +40,17 @@ class LoadingFragment : Fragment() {
         super.onResume()
         requireActivity().setStatusBarTransparent()
         Handler(Looper.getMainLooper()).postDelayed({
-            navController.navigate(R.id.action_loadingFragment_to_loginFragment)
+            navController?.let {
+                if (it.currentDestination?.id == R.id.loadingFragment) {
+                    it.navigate(R.id.action_loadingFragment_to_loginFragment)
+                }
+            }
         },100)
     }
 
     override fun onStop() {
         super.onStop()
         requireActivity().setStatusBarOrigin()
+        navController = null
     }
 }

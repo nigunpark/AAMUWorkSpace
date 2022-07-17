@@ -43,7 +43,7 @@ fun AAMUPlanHome(){
                 }
                 FloatingActionButton(onClick = {
                     mapviewModel.mapView.currentLocationTrackingMode=MapView.CurrentLocationTrackingMode.TrackingModeOff
-                    mapviewModel.setMarker()
+                    mapviewModel.getRcentPlaces()
 
                 }, modifier = Modifier
                     .align(Alignment.TopEnd)

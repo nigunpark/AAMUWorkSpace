@@ -2,6 +2,7 @@ package com.aamu.aamuandroidapp.data.api
 
 import android.app.Activity
 import android.util.Log
+import com.aamu.aamuandroidapp.data.api.response.AAMUPlaceResponse
 import com.aamu.aamuandroidapp.data.api.response.AAMUUserResponse
 import com.aamu.aamuandroidapp.util.getToken
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
@@ -20,6 +21,12 @@ interface AAMUApi {
 
     @GET("isOK")
     suspend fun isok() : Response<String>
+
+    @GET("info/recentplace")
+    suspend fun getRecentPlace(@Query("placey") placey : Double,@Query("placex") placex : Double) : Response<List<AAMUPlaceResponse>>
+
+    @GET("info/recentdiner")
+    suspend fun getRecentDiner(@Query("placey") placey : Double,@Query("placex") placex : Double) : Response<List<AAMUPlaceResponse>>
 
     companion object {
         private const val BASE_URL = "http://192.168.0.19:8080/aamurest/"
