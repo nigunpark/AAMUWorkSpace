@@ -92,7 +92,6 @@ const DetailModal = ({setIsOpen}) => {
 
                 <DetailTitle>
                     <span>제주도 3박 4일 여행</span>
-                    {/* <Button onClick={handleClose}>Close</Button> 주석 */}
                     <div className='detail-button'>
                         {/* DetailButton.scss 주석 */}
                         <button className="learn-more_exit" type="button" onClick={(e)=>{
@@ -102,8 +101,6 @@ const DetailModal = ({setIsOpen}) => {
                 </DetailTitle>
 
                 <DetailContents>
-                    {/* <img src='/images/imageMap.png' alt='smile'/> 주석 */}
-
                     <Notice/>
                     <Textarea>
                         내용 들어갈 자리
@@ -181,16 +178,6 @@ const Textarea = styled.div`
     box-shadow: 0 0 0 2px #e9ebec, 0 0 0 11px #fcfdfe;
     // border: solid 1px black
 `
-// textarea{
-//     position: absolute;
-//     width: 100%;
-//     height: 100%;
-//     top: 0;
-//     left: 0;
-//     resize: none;
-// }
-
-
 // position: fixed; 모달창 열리면 외부 스크롤바 안되게
 const DetailContainer = styled.div`
     position: fixed;
@@ -329,17 +316,5 @@ const Button = styled.button`
         background-color: #898989;
     }
 `
-
-// const DetailCloseButton = styled.div`
-//     float: right;
-//     width: 40px;
-//     height: 40px;
-//     margin: 20px;
-//     cursor: pointer;
-//     i{
-//         color: #5d5d5d;
-//         font-size: 30px;
-//     }
-// `
 
 export default DetailModal
