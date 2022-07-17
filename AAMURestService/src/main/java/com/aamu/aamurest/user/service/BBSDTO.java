@@ -23,4 +23,5 @@ public class BBSDTO {
 	private long starttime; //출발시간
 	private long atime; //머문시간
 	private long mtime; //이동시간
+	private List<ReviewDTO> reviewList;
 }
