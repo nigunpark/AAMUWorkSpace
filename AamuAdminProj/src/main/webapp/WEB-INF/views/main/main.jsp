@@ -277,6 +277,50 @@ $(function() {
 	   * -------
 	   * Data and config for chartjs
 	   */
+	  var start = $('#datepicker-popup').datepicker({
+	    	format: "yyyy-mm-dd",
+			endDate: '+0d',
+	    	clearBtn : true,
+	    	autoclose : true,
+	        enableOnReadonly: true,
+	        todayHighlight: true,
+	      });
+
+      var end = $('#datepicker-popup2').datepicker({
+    	format: "yyyy-mm-dd",
+		endDate: '+0d',
+		autoclose : true,
+    	clearBtn : true,
+        enableOnReadonly: true,
+        todayHighlight: true,
+      	  });
+      var startDate = null;
+     $("#datepicker-popup").on("changeDate",function(e){
+    	 startDate = new Date(e.date.valueOf());
+    	 console.log("첫번째 startDate",startDate);
+         var end = $("#datepicker-popup2").datepicker("setStartDate", startDate);
+         
+     });
+     $("#datepicker-popup2").on("changeDate",function(e){
+    	 var endDate = new Date(e.date.valueOf());
+    	 console.log("두번째 startDate",startDate);
+    	 console.log(endDate);
+         if(startDate!=null){
+        	 var dateData = JSON.stringify({start : startDate,end : endDate})
+        	 $.ajax({
+     			url:"<c:url value="userstatend.do"/>",
+     			type:"post",
+     			data: dateData,
+     			contentType:"application/json", //데이타 보낼 때
+     			dataType: "json" //데이타 받을 때 
+     		}).done(data=>{
+     			console.log(data);
+     		}).fail(error=>{
+     			console.log('삭제에러:',error);
+     		});
+         }
+     });
+
 	  'use strict';
 	  console.log('${date}')
 	  var date =[];

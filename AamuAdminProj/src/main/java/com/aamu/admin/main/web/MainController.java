@@ -11,9 +11,11 @@ import java.util.Map;
 import java.util.Vector;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -69,10 +71,16 @@ public class MainController {
 		return "/main/statistics";
 	}
 	
-	@GetMapping("userstat.do")
+	@PostMapping("userstatend.do")
 	@ResponseBody
-	public Map userStat() {
-		Map map = new HashMap<>();
+	public Map userStat(@RequestBody Map map) {
+
+		String start = map.get("start").toString().split("T15")[0];
+		String end = map.get("end").toString().split("T15")[0];
+		
+		map.replace("start", start);
+		map.replace("end", end);
+		
 		
 		return map;
 		
