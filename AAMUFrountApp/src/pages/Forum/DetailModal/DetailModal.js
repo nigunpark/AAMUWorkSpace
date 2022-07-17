@@ -17,19 +17,20 @@ const DetailModal = ({setIsOpen}) => {
             );
     }, []);
 
+    let [userName] = useState('ADMIN');
+
     let [star, setStar] = useState(0); //사용자가 입력하는 별점
     let [commentStar, setCommentStar] = useState([]); //commentStar에 별점 저장
 
-    console.log('저장된 별점:',commentStar);
-
-    let [userName] = useState('ADMIN');
     let [comment, setComment] = useState(''); // comment 사용자가 입력하는 댓글
     let [feedComments, setFeedComments] = useState([]); // feedComments 댓글 리스트 저장
     let [isValid, setIsValid] = useState(false); // 댓글 게시가능여부 (유효성 검사)
 
+    // console.log('저장된 별점:',commentStar);
+
     let post = (e) => {
-         // 전개연산자를 사용해서 feedComments에 담겨있는 댓글과
-         // commentStar에 담겨있는 별점 가져오기
+        // 전개연산자를 사용해서 feedComments에 담겨있는 댓글과
+        // commentStar에 담겨있는 별점 가져오기
         const copyFeedComments = [...feedComments];
         const copyStar = [...commentStar];
 
