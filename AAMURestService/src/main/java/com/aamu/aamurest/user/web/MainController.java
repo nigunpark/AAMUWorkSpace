@@ -10,6 +10,10 @@ import java.util.Vector;
 import javax.swing.event.ListSelectionEvent;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -26,12 +30,18 @@ import com.aamu.aamurest.user.service.AttractionDTO;
 import com.aamu.aamurest.user.service.MainService;
 import com.aamu.aamurest.user.service.PlannerDTO;
 import com.aamu.aamurest.user.service.RouteDTO;
+import com.aamu.aamurest.user.service.api.KakaoKey;
+import com.aamu.aamurest.user.service.api.KakaoKey.Document;
 import com.aamu.aamurest.user.service.api.KakaoReview;
 import com.aamu.aamurest.user.service.api.KakaoReview.CommentInfo;
 
 @RestController
 @CrossOrigin("*")
+@PropertySource("classpath:aamu/resources/api.properties")
 public class MainController {
+	
+	@Value("${kakaokey}")
+	private String kakaokey;
 	
 	@Autowired
 	private MainService service;
@@ -178,7 +188,16 @@ public class MainController {
 									map.put("secondy", list.get(j).getDto().getMapy());
 									resultxy = service.getRecentPlaceOne(map);
 									
-									if(low==resultxy) {Collections.swap(list,j,tripDay*(count+1)+index); break;} 
+									if(low==resultxy) {
+										Collections.swap(list,j,tripDay*(count+1)+index);
+										/*
+										String uri = "http://127.0.0.1:5000/aamu?firstx="+list.get(count*tripDay+index).getDto().getMapx()+"firsty="
+												+list.get(count*tripDay+index).getDto().getMapy()+"second";
+										
+										ResponseEntity<KakaoReview> responseEntity = 
+												restTemplate.exchange(uri, HttpMethod.GET, null, KakaoReview.class);
+										*/
+										break;} 
 								}
 							}
 						}
@@ -188,7 +207,7 @@ public class MainController {
 						list.get(tripDay*(count+1)+index).setDay(index+1);
 						System.out.println(String.format("주소:%s, 세팅된 인덱스:%s, 세팅된 날짜:%s",list.get(tripDay*(count+1)+index).getDto().getTitle(),tripDay*(count+1)+index,list.get(tripDay*(count+1)+index).getDay()));
 					}
-
+					
 					setDay++;
 					
 					count++;
@@ -378,6 +397,67 @@ public class MainController {
 		List<AttractionDTO> lists = service.getRecentPlaceAll(map);
 		
 		return lists;
+	}
+	@GetMapping("info/recentdiner")
+	public List<AttractionDTO> getRecentDiner(@RequestParam Map map){
+		int radius = 100;
+		int page = 1;
+		List<AttractionDTO> list = new Vector<>();
+		HttpHeaders header = new HttpHeaders();
+		header.add("Authorization", "KakaoAK "+kakaokey);
+		HttpEntity httpEntity = new HttpEntity(header);
+		System.out.println(map.get("placex"));
+		System.out.println(map.get("placey"));
+		
+		String uri="https://dapi.kakao.com/v2/local/search/category.json?y="+map.get("placey")
+		+"&x="+map.get("placex")
+		+"&radius="+radius+"&category_group_code=FD6&page="+1+"&sort=distance";
+
+		ResponseEntity<KakaoKey> responseEntity = 
+				restTemplate.exchange(uri, HttpMethod.GET, httpEntity, KakaoKey.class);
+		List<Document> listDocument =  responseEntity.getBody().getDocuments();
+		if(listDocument.size()<10) {
+			radius +=1000;
+			System.out.println(radius);
+			uri="https://dapi.kakao.com/v2/local/search/category.json?y="+map.get("placey")
+			+"&x="+map.get("placex")
+			+"&radius="+radius+"&category_group_code=FD6&page="+page+"&sort=distance";
+
+			 responseEntity = 
+					restTemplate.exchange(uri, HttpMethod.GET, httpEntity, KakaoKey.class);
+			 listDocument =  responseEntity.getBody().getDocuments();
+		}
+		for(Document document:listDocument) {
+			System.out.println(listDocument.size());
+			
+			AttractionDTO dto = new AttractionDTO();
+			System.out.println(document.getRoadAddressName());
+			System.out.println(document.getPlaceName());
+			dto.setAddr(document.getRoadAddressName());
+			dto.setContenttypeid(39);
+			dto.setUrl(document.getPlaceUrl());
+			dto.setTel(document.getPhone());
+			dto.setTitle(document.getPlaceName());
+			dto.setMenu(document.getCategoryName());
+			dto.setMapx(Double.parseDouble(document.getX()));
+			dto.setMapy(Double.parseDouble(document.getY()));
+			
+			list.add(dto);
+			if(responseEntity.getBody().getMeta().getIsEnd()&&list.size()<50) {
+				page++;
+				uri="https://dapi.kakao.com/v2/local/search/category.json?y="+map.get("placey")
+				+"&x="+map.get("placex")
+				+"&radius="+radius+"&category_group_code=FD6&page="+page+"&sort=distance";
+
+				 responseEntity = 
+						restTemplate.exchange(uri, HttpMethod.GET, httpEntity, KakaoKey.class);
+			}
+			if(!responseEntity.getBody().getMeta().getIsEnd() ||list.size()==50) break;
+		}
+		
+		
+		
+		return list;
 	}
 	
 

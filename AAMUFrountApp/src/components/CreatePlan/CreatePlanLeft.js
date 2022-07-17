@@ -15,17 +15,45 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { Alert, TextField } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { corrTimeSetObj } from "../../redux/store";
-const CreatePlanLeft = ({ currPosition, fromWooJaeData, setForDayLine }) => {
+const CreatePlanLeft = ({
+  currPosition,
+  fromWooJaeData,
+  setForDayLine,
+  setFromWooJaeData,
+}) => {
   let reduxState = useSelector((state) => {
     return state;
   });
   const [whichModal, setWhichModal] = useState("전체일정");
   const dayRef = useRef();
   const [temp, setTemp] = useState("");
+  const [sortedWholeList, setSortedWhoeList] = useState([]);
+
   useEffect(() => {
     setTemp(dayRef.current);
   }, []);
-  // console.log("fromWooJaeData:", fromWooJaeData);
+  if (fromWooJaeData.length === 0) return;
+  if (fromWooJaeData === undefined) return;
+
+  let tempWholeArr = [];
+  fromWooJaeData.forEach((val, i) => {
+    let temp = Object.values(val)[0];
+    temp.map((obj, i) => {
+      tempWholeArr.push(obj);
+    });
+  });
+  tempWholeArr.forEach((val, i) => {
+    val.id = i;
+  });
+
+  fromWooJaeData = reduxState.tripPeriod.map((day, idx) => {
+    let arr = tempWholeArr.filter((val, i) => {
+      return val.day === idx + 1;
+    });
+    return { ["day" + (idx + 1)]: arr };
+  });
+
+  console.log("fromWooJaeData:", fromWooJaeData);
   return (
     <div className="createPlanLeft">
       <div className="createPlanLeft__days">
@@ -69,18 +97,25 @@ const CreatePlanLeft = ({ currPosition, fromWooJaeData, setForDayLine }) => {
           whichModal={whichModal}
           currPosition={currPosition}
           fromWooJaeData={fromWooJaeData}
+          setFromWooJaeData={setFromWooJaeData}
         />
       </div>
     </div>
   );
 };
 
-function WhichModal({ whichModal, currPosition, fromWooJaeData }) {
+function WhichModal({
+  whichModal,
+  currPosition,
+  fromWooJaeData,
+  setFromWooJaeData,
+}) {
   if (whichModal === "전체일정") {
     return (
       <WholeSchedule
         currPosition={currPosition}
         fromWooJaeData={fromWooJaeData}
+        setFromWooJaeData={setFromWooJaeData}
       />
     );
   } else {
@@ -105,11 +140,12 @@ function WhichModal({ whichModal, currPosition, fromWooJaeData }) {
   }
 }
 
-function WholeSchedule({ currPosition, fromWooJaeData }) {
+function WholeSchedule({ currPosition, fromWooJaeData, setFromWooJaeData }) {
   let reduxState = useSelector((state) => {
     return state;
   });
   const [forReRender, setForReRender] = useState(true);
+
   return (
     <div className="createPlanLeft__schedule">
       <div className="createPlanLeft__schedule-title">
@@ -128,6 +164,7 @@ function WholeSchedule({ currPosition, fromWooJaeData }) {
               index={index}
               key={index}
               fromWooJaeData={fromWooJaeData}
+              setFromWooJaeData={setFromWooJaeData}
               forReRender={forReRender}
               setForReRender={setForReRender}
             />
@@ -138,16 +175,111 @@ function WholeSchedule({ currPosition, fromWooJaeData }) {
   );
 }
 
-function Content({ index, fromWooJaeData, forReRender, setForReRender }) {
+function Content({ index, fromWooJaeData, setForReRender, setFromWooJaeData }) {
   let reduxState = useSelector((state) => {
     return state;
   });
+  const [sortedList, setSortedList] = useState([]);
   let dispatch = useDispatch();
   let contentRef = useRef();
+  let sourceElement = null;
   const [showTimePicker, setShowTimePicker] = useState(false);
 
-  if (fromWooJaeData.length === 0) return;
+  useEffect(() => {
+    // console.log("fromWooJaeData[index]", fromWooJaeData[index]);
+    if (fromWooJaeData[index] !== undefined) {
+      let newArr = [...fromWooJaeData[index]["day" + (index + 1)]];
+      setSortedList(newArr);
+    }
+  }, []);
   if (fromWooJaeData === undefined) return;
+  if (fromWooJaeData.length === 0) return;
+  if (fromWooJaeData[index] === undefined) return;
+
+  const handleDragStart = (e) => {
+    e.target.style.opacity = 0.5;
+    sourceElement = e.target;
+    // e.dataTransfer.effectAllowed = "move";
+    e.dataTransfer.effectAllowed = "move";
+    // console.log("sourceElement", sourceElement);
+    // console.log("sortedList", sortedList);
+    // console.log("e.target", e.target);
+  };
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = "move";
+  };
+  const handleDragEnter = (e) => {
+    e.target.classList.add("over");
+  };
+  const handleDragLeave = (e) => {
+    e.target.classList.remove("over");
+  };
+  const handleDrop = (e, testRef) => {
+    e.stopPropagation();
+    if (sourceElement.id !== e.target.id) {
+      //drag를 당하는 녀석을 제외하고 새로운 배열
+      const list = sortedList.filter(
+        (val, i) => i.toString() !== sourceElement.id
+      );
+
+      //지워지는 detail
+      const removed = sortedList.filter(
+        (val, i) => i.toString() === sourceElement.id
+      )[0];
+      const dropedIt = sortedList.filter(
+        (val, i) => val.id === Number(e.target.id)
+      )[0];
+      let temp = removed.starttime;
+      removed.starttime = dropedIt.starttime;
+      dropedIt.starttime = temp;
+      // insert removed item after this number.
+      let insertAt = Number(e.target.id);
+      let tempList = [];
+      // 마지막 detailing위에 놓았을 때 id+1안되도록
+      if (insertAt >= list.length) {
+        tempList = list.slice(0).concat(removed);
+        e.target.classList.remove("over");
+        console.log("tempList(마지막위)", tempList);
+      }
+      //마지막detailing이 아닌 다른녀석 위에 놓았을 때
+      else if (insertAt < list.length) {
+        //drag 당하는 녀석을 다시 배열에 추가
+        tempList = list.slice(0, insertAt).concat(removed);
+        //놓아짐 당했던 녀석 이후에 있던녀석들과 다시 합치기
+        const newList = tempList.concat(list.slice(insertAt));
+        tempList = [...newList];
+        console.log("newList(다른위)", newList);
+        e.target.classList.remove("over");
+      }
+      setSortedList(tempList);
+      setFromWooJaeData((current) => {
+        let newData = [...current];
+        newData[index]["day" + (index + 1)] = tempList;
+        return newData;
+      });
+    }
+    //drag당하는 녀석을 다시 자기위치에 놓았을 때
+    e.target.classList.remove("over");
+  };
+
+  const handleDragEnd = (event) => {
+    event.target.style.opacity = 1;
+  };
+
+  const handleDelete = (e, testRef) => {
+    e.preventDefault();
+    const list = sortedList.filter(
+      (item, i) => i !== Number(testRef.current.id)
+    );
+    setSortedList(list);
+    setFromWooJaeData((current) => {
+      let newData = [...current];
+      newData[index]["day" + (index + 1)] = list;
+      return newData;
+    });
+  };
+
   return (
     <div className="createPlanLeft__schedule__content" ref={contentRef}>
       <select className="createPlanLeft__schedule__select" onChange={() => {}}>
@@ -253,19 +385,26 @@ function Content({ index, fromWooJaeData, forReRender, setForReRender }) {
           </Stack>
         </LocalizationProvider>
       ) : null}
-      {fromWooJaeData[index]["day" + (index + 1)].map((obj, i) => {
-        return (
-          <DetailSetting
-            obj={obj}
-            key={i}
-            i={i}
-            periodIndex={index}
-            fromWooJaeData={fromWooJaeData}
-            forReRender={forReRender}
-            setForReRender={setForReRender}
-          />
-        );
-      })}
+      {sortedList.length !== 0 &&
+        // fromWooJaeData[index]["day" + (index + 1)].map((obj, i) => {
+        sortedList.map((obj, i) => {
+          return (
+            <DetailSetting
+              obj={obj}
+              key={i}
+              i={i}
+              periodIndex={index}
+              fromWooJaeData={fromWooJaeData}
+              handleDragStart={handleDragStart}
+              handleDragOver={handleDragOver}
+              handleDragEnter={handleDragEnter}
+              handleDragLeave={handleDragLeave}
+              handleDrop={handleDrop}
+              handleDragEnd={handleDragEnd}
+              handleDelete={handleDelete}
+            />
+          );
+        })}
     </div>
   );
 }
@@ -275,8 +414,13 @@ function DetailSetting({
   i,
   fromWooJaeData,
   periodIndex,
-  forReRender,
-  setForReRender,
+  handleDragStart,
+  handleDragOver,
+  handleDragEnter,
+  handleDragLeave,
+  handleDrop,
+  handleDragEnd,
+  handleDelete,
 }) {
   let reduxState = useSelector((state) => {
     return state;
@@ -288,7 +432,7 @@ function DetailSetting({
   let memoRef = useRef();
   let textAreaRef = useRef();
   let mTimeRef = useRef();
-
+  let testRef = useRef();
   useEffect(() => {
     if (i === 0) {
       let firstAccum = getNAccumDetailTime(periodIndex, reduxState, obj);
@@ -324,17 +468,12 @@ function DetailSetting({
       }
     }
   }, []);
-  // if (
-  //   obj.dto === null ||
-  //   reduxState.timeSetObj.find((obj) => {
-  //     return obj.day === i + 1;
-  //   }) === undefined
-  // )
-  //   return;
-  if (obj.dto === null) return;
+  // console.log(obj);
+  // if (obj.dto === null) return;
   if (fromWooJaeData === undefined) return;
+  if (obj === undefined) return;
   return (
-    <div className="detailSetting__container">
+    <div className="detailSetting__container" id={i}>
       <div className="movingTime">
         <FontAwesomeIcon icon={faEllipsisVertical} />
         <div className="movingTime__time">
@@ -346,8 +485,6 @@ function DetailSetting({
             ref={mTimeRef}
             onChange={(e) => {
               obj.mtime = e.target.value * 1000 * 60;
-              setForReRender(false);
-              setForReRender(true);
             }}
           />
           <span>분</span>
@@ -362,6 +499,17 @@ function DetailSetting({
             onError={(e) => {
               e.target.src = "/images/no-image.jpg";
             }}
+            ref={testRef}
+            id={i}
+            draggable="true"
+            onDragStart={handleDragStart}
+            onDragOver={handleDragOver}
+            onDragEnter={handleDragEnter}
+            onDragLeave={handleDragLeave}
+            onDrop={(e) => {
+              handleDrop(e, testRef);
+            }}
+            onDragEnd={handleDragEnd}
           />
         </div>
         <div className="detailLocation__inform-container">
@@ -401,51 +549,28 @@ function DetailSetting({
                 />
               </div>
             </div>
-            {forReRender ? (
-              <div className="detailLocation__clock">
-                <span>
-                  {Math.floor(upTime / 60)
-                    .toString()
-                    .padStart(2, "0")}
-                  :
-                  {Math.floor(upTime % 60)
-                    .toString()
-                    .padStart(2, "0")}
-                </span>
-                <span>~</span>
-                <span>
-                  {Math.floor(downTime / 60)
-                    .toString()
-                    .padStart(2, "0")}
-                  :
-                  {Math.floor(downTime % 60)
-                    .toString()
-                    .padStart(2, "0")}
-                </span>
-              </div>
-            ) : (
-              <div className="detailLocation__clock">
-                <span>
-                  {Math.floor(upTime / 60)
-                    .toString()
-                    .padStart(2, "0")}
-                  :
-                  {Math.floor(upTime % 60)
-                    .toString()
-                    .padStart(2, "0")}
-                </span>
-                <span>~</span>
-                <span>
-                  {Math.floor(downTime / 60)
-                    .toString()
-                    .padStart(2, "0")}
-                  :
-                  {Math.floor(downTime % 60)
-                    .toString()
-                    .padStart(2, "0")}
-                </span>
-              </div>
-            )}
+
+            <div className="detailLocation__clock">
+              <span>
+                {Math.floor(upTime / 60)
+                  .toString()
+                  .padStart(2, "0")}
+                :
+                {Math.floor(upTime % 60)
+                  .toString()
+                  .padStart(2, "0")}
+              </span>
+              <span>~</span>
+              <span>
+                {Math.floor(downTime / 60)
+                  .toString()
+                  .padStart(2, "0")}
+                :
+                {Math.floor(downTime % 60)
+                  .toString()
+                  .padStart(2, "0")}
+              </span>
+            </div>
           </div>
           <div className="detailLocation__part-bottom">
             <span>시간표</span>
@@ -469,10 +594,10 @@ function DetailSetting({
               ) : null}
             </span>
             <span
-              onClick={() => {
+              onClick={(e) => {
                 if (window.confirm("정말 삭제하시겠습니까?")) {
-                  Object.values(fromWooJaeData[periodIndex])[0].splice(i, 1);
-                  setForReRender(!forReRender);
+                  handleDelete(e, testRef);
+                  // Object.values(fromWooJaeData[periodIndex])[0].splice(i, 1);
                 }
               }}
             >
@@ -490,12 +615,7 @@ function DetailSetting({
           index={i}
         />
         {showAdjustMTime && (
-          <AdjustMTime
-            setShowAdjustMTime={setShowAdjustMTime}
-            obj={obj}
-            setForReRender={setForReRender}
-            forReRender={forReRender}
-          />
+          <AdjustMTime setShowAdjustMTime={setShowAdjustMTime} obj={obj} />
         )}
       </div>
     </div>
@@ -539,6 +659,9 @@ function MemoArea({
   periodIndex,
   index,
 }) {
+  if (fromWooJaeData === undefined) return;
+  if (Object.values(fromWooJaeData[periodIndex])[0][index] === undefined)
+    return;
   return (
     <div className="memoArea" ref={memoRef}>
       <div className="memoArea__container">
@@ -574,7 +697,7 @@ function MemoArea({
   );
 }
 
-function AdjustMTime({ setShowAdjustMTime, obj, setForReRender, forReRender }) {
+function AdjustMTime({ setShowAdjustMTime, obj }) {
   let timeRef = useRef();
   let minRef = useRef();
   return (
@@ -615,7 +738,6 @@ function AdjustMTime({ setShowAdjustMTime, obj, setForReRender, forReRender }) {
           <span
             onClick={() => {
               setShowAdjustMTime(false);
-              setForReRender(!forReRender);
             }}
           >
             완료

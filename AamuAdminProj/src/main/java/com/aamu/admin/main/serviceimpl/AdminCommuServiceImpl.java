@@ -113,6 +113,25 @@ public class AdminCommuServiceImpl implements AdminCommuService {
 		return dao.commuCommentGetTotalRecordCount(map);
 	}
 	
+	//댓글 삭제
+	@Override
+	public int commuCommentDelete(Map map) {
+		int affected=0;
+		List<String> cnolists=(List<String>)map.get("cno");
+		System.out.println(cnolists);
+		for(String cno:cnolists) {
+			Map cnoMap = new HashMap(); 
+			cnoMap.put("cno",cno); 
+			System.out.println(cnoMap);
+			affected+=dao.commuCommentDelete(cnoMap);
+		}
+		if(affected==((List)map.get("cno")).size()) {
+			return 1;
+		}
+		else
+			return 0;
+	}
+	
 	
 	
 	

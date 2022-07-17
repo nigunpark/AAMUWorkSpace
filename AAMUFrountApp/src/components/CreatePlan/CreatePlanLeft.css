@@ -415,6 +415,10 @@
   transform: scale(1.1);
 }
 
+.over {
+  transform: scale(1.01);
+}
+
 @keyframes fade-in-fwd {
   0% {
     transform: translateX(-80px);

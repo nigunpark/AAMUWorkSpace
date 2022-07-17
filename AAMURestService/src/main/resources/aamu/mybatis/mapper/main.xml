@@ -113,7 +113,7 @@
 		SELECT COUNT(*) FROM ${table} WHERE contentid=#{contentid}
 	</select>
 	<select id="getRecentPlaceAll" parameterType="Map" resultType="attrDTO">
-		SELECT * FROM (SELECT ( 6371 * acos( cos( radians( ${placey} ) ) * cos( radians( mapy ) ) * cos( radians( mapx ) - radians(${placex}) ) + sin( radians(${placey}) ) * sin( radians(mapy) ) ) ) AS distance,places.* FROM places) DATA WHERE DATA.distance <![CDATA[<]]> ${distance}	
+		SELECT * FROM (SELECT ( 6371 * acos( cos( radians( ${placey} ) ) * cos( radians( mapy ) ) * cos( radians( mapx ) - radians(${placex}) ) + sin( radians(${placey}) ) * sin( radians(mapy) ) ) ) AS distance,places.* FROM places) DATA WHERE DATA.distance <![CDATA[<]]> ${distance} ORDER BY DATA.distance	
 	</select>
 	<select id="getRecentPlaceOne" parameterType="Map" resultType="Double">
 		SELECT ( 6371 * acos( cos( radians( ${firsty} ) )

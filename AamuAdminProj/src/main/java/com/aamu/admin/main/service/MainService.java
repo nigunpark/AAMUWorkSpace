@@ -12,5 +12,5 @@ public interface MainService {
 	Map placesTotalCount();
 	int selectEvent();
 	Map selectWeek();
-	
+
 }

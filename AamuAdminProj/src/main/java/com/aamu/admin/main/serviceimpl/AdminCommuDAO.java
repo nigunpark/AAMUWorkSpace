@@ -43,6 +43,11 @@ public class AdminCommuDAO {
 		return template.selectOne("commuCommentGetTotalRecordCount", map);
 	}
 	
+	//댓글 삭제
+	public int commuCommentDelete(Map map) {
+		return template.delete("commuCommentDelete",map);
+	}
+	
 	
 
 }
