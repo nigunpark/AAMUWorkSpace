@@ -47,6 +47,7 @@ const DetailModal = ({setIsOpen}) => {
         //사용자가 입력한 댓글창과 별점 초기화
         setComment('');
         setStar(0);
+        setIsValid(false);
     };
 
     const reviewDelete = (no) => {
@@ -102,6 +103,7 @@ const DetailModal = ({setIsOpen}) => {
 
                 <DetailContents>
                     <Notice/>
+                    
                     <Textarea>
                         내용 들어갈 자리
                     </Textarea>
@@ -129,6 +131,7 @@ const DetailModal = ({setIsOpen}) => {
                         }} //리뷰창 변할때마다 setComment를 통해 comment의 값 변경
                         onKeyUp={(e)=>{
                             e.target.value.length > 0 ? setIsValid(true) : setIsValid(false);
+                            console.log(isValid);
                         }} //사용자가 리뷰를 작성했을 때 빈공간인지 확인하여 유효성 검사
                         value={comment}
                         />
@@ -144,6 +147,7 @@ const DetailModal = ({setIsOpen}) => {
                     </div>
                     
                 </DetailContents>
+
                 <DetailReview>
                     {//feedComments 에 담겨있을 댓글 값을 CommentList 컴포넌트에 담아서 가져오기
                      //CommentList 컴포넌트는 반복적으로 추가되는 사용자 댓글을 하나하나 담고있음
@@ -232,8 +236,7 @@ const DetailTitle = styled.div`
 `
 
 const DetailReview = styled.div`
-    margin-left: 20px;
-    margin-right: 20px;
+    margin: 0px 20px;
     
     font-size: 18px;
 
@@ -266,11 +269,12 @@ const EditDelte = styled.button`
 const DetailContents = styled.div`
     display: grid;
     grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: 380px 50px 50px;
     gap: 5px;
 
     // overflow: auto;
 
-    margin: 20px 10px;
+    margin: 10px 10px;
     
     h1{
         font-size: 30px;
