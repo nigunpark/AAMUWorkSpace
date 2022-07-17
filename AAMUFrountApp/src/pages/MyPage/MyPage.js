@@ -362,10 +362,10 @@ function TabContent({clickTab,setClickTab}) {
       return <MyHomeBox setClickTab={setClickTab}/>;
     });
   }
-  else if (clickTab === 1) {
+  else if (clickTab === 1) { //현재 없는 선택지
     return <div>Tab 2 내용입니다.</div>;
   }
-  else if (clickTab === 2) {
+  else if (clickTab === 2) { //즐겨찾기
     return (
       <div className="project-box-wrapper">
         <div className="project-box">
@@ -394,7 +394,7 @@ function TabContent({clickTab,setClickTab}) {
             </div>
 
             <div className="box-progress-wrapper">
-                <p className="box-progress-header">Progress</p>
+                <p className="box-progress-header">제목</p>
                 <div className="box-progress-bar">
                     <span className="box-progress"></span>
                 </div>
@@ -492,11 +492,13 @@ function TabContent({clickTab,setClickTab}) {
 
       <div className="write-box">
         <div className='detail-button'>
-        {canSubmit() ? (
+        {
+        canSubmit() ? (
           <button className="learn-more" type="button" onClick={write}>공유하기</button>
           ) : (
             <button  type="button" disabled>사진과 내용을 모두 입력하세요😭</button>
-          )}
+          )
+        }
         </div>
       </div>
 
