@@ -27,7 +27,7 @@ const DetailModal = ({setIsOpen}) => {
     const [star, setStar] = useState(0); //사용자가 입력하는 별점
     let [commentStar, setCommentStar] = useState([]); //commentStar에 별점 저장
 
-    console.log('맨 위 별점:',star);
+    // console.log('맨 위 별점:',star);
 
     let [userName] = useState('ADMIN');
     let [comment, setComment] = useState(''); // comment 사용자가 입력하는 댓글
@@ -56,10 +56,11 @@ const DetailModal = ({setIsOpen}) => {
     };
 
     const reviewDelete = (no) => {
-        console.log('프롭스 잘 넘어오나~', no);
-        console.log('feedComments : ', feedComments);
+        // console.log('프롭스 잘 넘어오나~', no);
+        // console.log('feedComments : ', feedComments);
 
         setFeedComments(feedComments.filter((e, index)=>index !== no));
+        // filter 이거가지고 검색기능 가능할듯
     }
 
     const CommentList = (props) =>{ //리뷰댓글 컴포넌트
