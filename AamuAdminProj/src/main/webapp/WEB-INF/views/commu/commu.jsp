@@ -27,7 +27,7 @@
 													<th class="col-1 ">
 														<div class="form-check form-check-flat mt-0">
 															<label class="form-check-label"> 
-																<input type="checkbox" class="form-check-input" aria-checked="false"><i class="input-helper"></i>
+																<input type="checkbox" class="form-check-input" aria-checked="false" id="chkAll"><i class="input-helper"></i>
 															</label>
 														</div>
 													</th>
@@ -42,7 +42,7 @@
 											<tbody>
 												<c:if test="${empty listPagingData.lists }" var="isEmpty">
 													<tr>
-														<td colspan="4">등록된 글이 없습니다.</td>
+														<td colspan="8">등록된 글이 없습니다.</td>
 													</tr>
 												</c:if>
 												<c:if test="${not isEmpty }">
@@ -79,7 +79,7 @@
 								<div class="form-group row">
 									<div class="col-sm-12">
 										<select class="form-control background-color-secondary text-black" name="searchColumn">
-											<option value="id">id</option>
+											<option value="c.id">id</option>
 											<option value="ctitle">제목</option>
 											<option value="content">내용</option>
 										</select>
@@ -126,6 +126,11 @@
         else $(':checkbox:first').prop('checked',false)
       }
     });
+    //체크박스all버튼 눌렀을 때 전체 선택
+	$('#chkAll').click(function(){
+		if($('#chkAll').is(":checked")) $(':checkbox').prop("checked",true)
+		else $(':checkbox').prop("checked",false)
+	});  
     
     //삭제 click
     $('div.card-numberOfBoard > button').click(function(){
@@ -157,30 +162,6 @@
     	}//////else
     });
     
-    //검색 버튼 click
-    /*
-    $('div:nth-child(3) > div > button').click(function(){
-    	//에이태그 추가?
-    	searchColumn=$('select').val();
-    	searchWord=$('input[name=searchWord]').val();
-    	$.ajax({
-    		url:"<c:url value="CommuSearch.do"/>",
-    		type:"post",
-    		data:JSON.stringify({
-    			searchColumn : searchColumn
-    			searchWord : searchWord
-    			}),
-    		contentType:"application/json",
-    		dataType: "json"
-    	}).done(data=>{
-    		console.log('검색성공:',data);
-    		location.replace("CommuSearch.do");
-    	}).fail(error=>{
-    		console.log('삭제에러:',error);
-    	});
-    	
-    });
-    */
   </script>
 </body>
 </html>

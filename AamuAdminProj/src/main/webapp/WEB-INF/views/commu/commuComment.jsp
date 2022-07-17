@@ -27,7 +27,7 @@
                                 <th class="col-1 ">
                                     <div class="form-check form-check-flat mt-0">
 	                                    <label class="form-check-label">
-	                                    <input type="checkbox" class="form-check-input" aria-checked="false"><i class="input-helper"></i></label>
+	                                    <input type="checkbox" class="form-check-input" aria-checked="false" id="chkAll"><i class="input-helper"></i></label>
 									</div>
                                 </th>
                                 <th class="col-1">댓글 번호</th>
@@ -41,7 +41,7 @@
                             <tbody>
                                 <c:if test="${empty listPagingData.lists }" var="isEmpty">
 									<tr>
-										<td colspan="4" >등록된 댓글이 없습니다.</td>
+										<td colspan="8" >등록된 댓글이 없습니다.</td>
 									</tr>
 								</c:if>
 								<c:if test="${not isEmpty }">
@@ -100,6 +100,11 @@
         else $(':checkbox:first').prop('checked',false)
       }
     });
+  	//체크박스all 눌렀을 때 전체 선택
+	$('#chkAll').click(function(){
+		if($('#chkAll').is(":checked")) $(':checkbox').prop("checked",true)
+		else $(':checkbox').prop("checked",false)
+	}); 
     
     //삭제 click
     $('button').click(function(){

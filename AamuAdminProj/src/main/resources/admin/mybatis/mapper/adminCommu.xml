@@ -7,7 +7,11 @@
 	<select id="commuSelectList"  parameterType="Map" resultType="adminCommuDTO">
 		SELECT * FROM
 		(SELECT T.*,ROWNUM R FROM (
-		SELECT c.* FROM community c JOIN users u ON c.id=u.id ORDER BY lno DESC) T)
+		SELECT c.* FROM community c JOIN users u ON c.id=u.id 
+		<if test="searchColumn != null">
+	  	 	WHERE ${searchColumn} LIKE '%' || #{searchWord} || '%' 
+	  	 </if>  
+		ORDER BY lno DESC) T)
 		WHERE R BETWEEN #{start} AND #{end}
 	</select>
 	
