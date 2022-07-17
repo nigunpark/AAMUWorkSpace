@@ -58,8 +58,8 @@ public class BBSServiceImpl implements BBSService{
 	
 	//글 삭제
 	@Override
-	public int bbsDelete(String rbn) {
-		return dao.bbsDelete(rbn);
+	public int bbsDelete(Map map) {
+		return dao.bbsDelete(map);
 	}
 	
 	//글 등록일자
@@ -77,9 +77,16 @@ public class BBSServiceImpl implements BBSService{
 		return dao.reviewInsert(map);
 	}
 	
-	//리뷰 목록_리뷰 하나 뿌려주기
-	public String reviewSelectOne(String rno) {
-		return dao.reviewSelectOne(rno);
+	//리뷰 수정
+	@Override
+	public int reviewUpdate(Map map) {
+		return dao.reviewUpdate(map);
+	}
+	
+	//리뷰 삭제
+	@Override
+	public int reviewDelete(Map map) {
+		return dao.reviewDelete(map);
 	}
 	
 	@Override
@@ -89,10 +96,19 @@ public class BBSServiceImpl implements BBSService{
 	}
 
 	@Override
-	public double getRatingAverage(int ratingavg) {
+	public Double getRatingAverage(int ratingavg) {
 		return dao.getRatingAverage(ratingavg);
 	}
+	//글 상세보기_모든 리뷰 보기
+	@Override
+	public List<ReviewDTO> reviewList(String rno) {
+		return dao.reviewList(rno);
+	}
 
+	@Override
+	public int updateRating(Map map) {
+		return 0;
+	}
 
 }
 	

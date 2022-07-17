@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -51,7 +52,7 @@ public class BBSController {
 		return list;
 	}
 	
-	//글 등록 + 리뷰 등록
+	//글 등록
 	@PostMapping("/bbs/edit")
 	public Map bbsInsert(@RequestParam List<MultipartFile> multifiles, @RequestParam Map map, HttpServletRequest req) {
 		//서버의 물리적 경로 얻기
@@ -82,6 +83,19 @@ public class BBSController {
 		return resultMap;
 	}
 	
+	//글 삭제
+	@DeleteMapping("/bbs/edit")
+	public Map bbsDelete(@RequestParam Map map) {
+		int bbsDeleteAffected=bbsService.bbsDelete(map);
+		Map resultMap = new HashMap();
+		if(bbsDeleteAffected==1) 
+			resultMap.put("result", "deleteSuccess");
+		else
+			resultMap.put("result", "deleteNotSuccess");
+		return resultMap;
+		
+	}
+	
 	//리뷰 목록
 	@GetMapping("/review/selectList")
 	public List<ReviewDTO> reviewSelectList(@RequestParam Map map){
@@ -90,6 +104,15 @@ public class BBSController {
 		return list;
 		}
 	
+	//리뷰 등록
+	@PostMapping("/review/edit")
+	public Map reviewInsert(@RequestParam Map map) {
+		return null;
+	}
+	
+	//리뷰 수정
+	
+	//리뷰 삭제
 	
 	//평점 평균 반영
 	public double getRatingAverage(int rno) {

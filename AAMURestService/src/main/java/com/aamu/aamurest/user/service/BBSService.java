@@ -19,9 +19,10 @@ public interface BBSService {
 	int bbsUpdate(Map map);
 	
 	//글 삭제
-	int bbsDelete(String rbn);
+	int bbsDelete(Map map);
 	
-	//
+	//글 상세보기_모든 리뷰 보기
+	List<ReviewDTO> reviewList(String rno);
 	
 	/*----------------------------------------------------*/
 
@@ -31,13 +32,20 @@ public interface BBSService {
 	//리뷰 등록
 	int reviewInsert(Map map);
 	
-	//리뷰 목록_리뷰 하나 뿌려주기
-	String reviewSelectOne(String rno);
+	//리뷰 수정
+	int reviewUpdate(Map map);
 	
-	//평점 평균 구하기
-	double getRatingAverage(int ratingavg);
+	//리뷰 삭제
+	int reviewDelete(Map map);
+	
+	//평점 평균 구하기 (소수점 한자리까지)
+	Double getRatingAverage(int rno);
 	
 	//평점 평균 반영하기
+	int updateRating(Map map);
+	
 	int updateRating(ReviewDTO rate);
+	
+	
 	
 }
