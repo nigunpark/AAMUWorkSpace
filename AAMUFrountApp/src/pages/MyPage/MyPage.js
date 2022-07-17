@@ -492,11 +492,13 @@ function TabContent({clickTab,setClickTab}) {
 
       <div className="write-box">
         <div className='detail-button'>
-        {canSubmit() ? (
+        {
+        canSubmit() ? (
           <button className="learn-more" type="button" onClick={write}>공유하기</button>
           ) : (
             <button  type="button" disabled>사진과 내용을 모두 입력하세요😭</button>
-          )}
+          )
+        }
         </div>
       </div>
 
