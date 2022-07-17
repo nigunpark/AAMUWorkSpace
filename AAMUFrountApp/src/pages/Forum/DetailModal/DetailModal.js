@@ -7,13 +7,6 @@ import { Link } from 'react-router-dom'
 import { Rating } from '@mui/material'
 
 const DetailModal = ({setIsOpen}) => {
-    //const modalRef = useRef(null);
-
-    const handleClose = () => {
-        setIsOpen(false);
-    };
-
-    //useOutSideClick(modalRef, handleClose);
 
     useEffect(() => {
         const $body = document.querySelector("body");
@@ -24,19 +17,20 @@ const DetailModal = ({setIsOpen}) => {
             );
     }, []);
 
-    const [star, setStar] = useState(0); //사용자가 입력하는 별점
+    let [userName] = useState('ADMIN');
+
+    let [star, setStar] = useState(0); //사용자가 입력하는 별점
     let [commentStar, setCommentStar] = useState([]); //commentStar에 별점 저장
 
-    console.log('맨 위 별점:',star);
-
-    let [userName] = useState('ADMIN');
     let [comment, setComment] = useState(''); // comment 사용자가 입력하는 댓글
     let [feedComments, setFeedComments] = useState([]); // feedComments 댓글 리스트 저장
     let [isValid, setIsValid] = useState(false); // 댓글 게시가능여부 (유효성 검사)
 
+    // console.log('저장된 별점:',commentStar);
+
     let post = (e) => {
-         // 전개연산자를 사용해서 feedComments에 담겨있는 댓글과
-         // commentStar에 담겨있는 별점 가져오기
+        // 전개연산자를 사용해서 feedComments에 담겨있는 댓글과
+        // commentStar에 담겨있는 별점 가져오기
         const copyFeedComments = [...feedComments];
         const copyStar = [...commentStar];
 
@@ -53,17 +47,40 @@ const DetailModal = ({setIsOpen}) => {
         //사용자가 입력한 댓글창과 별점 초기화
         setComment('');
         setStar(0);
+        setIsValid(false);
     };
+
+    const reviewDelete = (no) => {
+        // console.log('프롭스 잘 넘어오나~', no);
+        // console.log('feedComments : ', feedComments);
+
+        setFeedComments(feedComments.filter((e, index)=>index !== no));
+        setCommentStar(commentStar.filter((e, index)=>index !== no));
+
+        // filter 이거가지고 검색기능 가능할듯
+    }
 
     const CommentList = (props) =>{ //리뷰댓글 컴포넌트
         return(
             <div>
-                <div>
+                <Stars>
                     <img src='/images/star.jpg' style={{width:'30px'}}/>
-                    {props.stars}점
-                </div>
-                <p>{props.userName}</p>
-                <div>{props.userComment}</div>
+                    {props.stars}
+                </Stars>
+
+                <UserName>{props.userName}<Name>님 (2022-07-10)</Name></UserName>
+
+                <p>{props.userComment}</p>
+
+                <EditDelte type='button'>
+                    <Name>수정</Name>
+                </EditDelte>
+                <EditDelte type='button' onClick={()=>{reviewDelete(props.index)}}>
+                    <Name>삭제</Name>
+                </EditDelte>
+                {/* {
+                    console.log('인덱스 넘어온거 : ', props.index)
+                } */}
             </div>
         );
     };
@@ -76,7 +93,6 @@ const DetailModal = ({setIsOpen}) => {
 
                 <DetailTitle>
                     <span>제주도 3박 4일 여행</span>
-                    {/* <Button onClick={handleClose}>Close</Button> 주석 */}
                     <div className='detail-button'>
                         {/* DetailButton.scss 주석 */}
                         <button className="learn-more_exit" type="button" onClick={(e)=>{
@@ -86,9 +102,8 @@ const DetailModal = ({setIsOpen}) => {
                 </DetailTitle>
 
                 <DetailContents>
-                    {/* <img src='/images/imageMap.png' alt='smile'/> 주석 */}
-
                     <Notice/>
+                    
                     <Textarea>
                         내용 들어갈 자리
                     </Textarea>
@@ -116,21 +131,23 @@ const DetailModal = ({setIsOpen}) => {
                         }} //리뷰창 변할때마다 setComment를 통해 comment의 값 변경
                         onKeyUp={(e)=>{
                             e.target.value.length > 0 ? setIsValid(true) : setIsValid(false);
+                            console.log(isValid);
                         }} //사용자가 리뷰를 작성했을 때 빈공간인지 확인하여 유효성 검사
                         value={comment}
                         />
+
+                    {/* DetailButton.scss */}
                     <div className='detail-button'>
-                        {/* DetailButton.scss 주석 */}
-                        <button
-                            className="learn-more"
-                            type="button"
-                            onClick={post}
-                            disabled={isValid ? false : true}
-                            >
-                            리뷰 등록
-                        </button>
+                        {
+                            isValid ? 
+                            <button className="learn-more" type="button" onClick={post}>리뷰 등록</button>
+                            : 
+                            <button className="learn-more" type="button" disabled>리뷰를 작성하세요</button>
+                        }
                     </div>
+                    
                 </DetailContents>
+
                 <DetailReview>
                     {//feedComments 에 담겨있을 댓글 값을 CommentList 컴포넌트에 담아서 가져오기
                      //CommentList 컴포넌트는 반복적으로 추가되는 사용자 댓글을 하나하나 담고있음
@@ -144,6 +161,7 @@ const DetailModal = ({setIsOpen}) => {
                                     userName={userName}
                                     userComment={commnetArr}
                                     key={idx}
+                                    index={idx}
                                 />
                             );
                         })
@@ -164,16 +182,6 @@ const Textarea = styled.div`
     box-shadow: 0 0 0 2px #e9ebec, 0 0 0 11px #fcfdfe;
     // border: solid 1px black
 `
-// textarea{
-//     position: absolute;
-//     width: 100%;
-//     height: 100%;
-//     top: 0;
-//     left: 0;
-//     resize: none;
-// }
-
-
 // position: fixed; 모달창 열리면 외부 스크롤바 안되게
 const DetailContainer = styled.div`
     position: fixed;
@@ -200,7 +208,6 @@ const DetailOverlay = styled.div`
 
 const DetailModalWrap = styled.div`
     display: grid;
-    //
     width: 1050px;
     height: 90%;
 
@@ -213,7 +220,6 @@ const DetailModalWrap = styled.div`
     left: 50%;
     transform: translate(-50%, -50%);
     box-shadow: 0 0 0 10px #e9ebec, 0 0 0 11px #fcfdfe;
-    //border: solid 5px black;
 `
 
 const DetailTitle = styled.div`
@@ -230,29 +236,45 @@ const DetailTitle = styled.div`
 `
 
 const DetailReview = styled.div`
-    
-    margin-left: 20px;
-    margin-right: 20px;
+    margin: 0px 20px;
     
     font-size: 18px;
 
     div{
-        display: flex;
-        flex-wrap : nowrap;
-        border: solid 1px red;
+        display: grid;
+        grid-template-columns:70px 200px 670px 30px 30px;
+        margin-top: 2px;
+        border-bottom: solid 1px #c3cff4;
     }
+`
+const Stars = styled.span`
+    // border: 1px solid red;
+    // width: 80px;
+`
+const UserName = styled.span`
+    // border: 1px solid blue;
+    // width: 100px;
+`
+const Name = styled.span`
+    font-size: 13px;
+    color: #6d6875;
+`
 
-    border: solid 2px black;
+const EditDelte = styled.button`
+    // border: 1px solid black;
+    height: 30px;
+    margin-left: 3px;
 `
 
 const DetailContents = styled.div`
     display: grid;
     grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: 380px 50px 50px;
     gap: 5px;
 
     // overflow: auto;
 
-    margin: 20px 10px;
+    margin: 10px 10px;
     
     h1{
         font-size: 30px;
@@ -298,17 +320,5 @@ const Button = styled.button`
         background-color: #898989;
     }
 `
-
-// const DetailCloseButton = styled.div`
-//     float: right;
-//     width: 40px;
-//     height: 40px;
-//     margin: 20px;
-//     cursor: pointer;
-//     i{
-//         color: #5d5d5d;
-//         font-size: 30px;
-//     }
-// `
 
 export default DetailModal
