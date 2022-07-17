@@ -11,6 +11,7 @@ import {
   Contents,
   CloseBtn,
 } from "./CratePlanModal";
+
 const CreatePlan = ({
   setShowCratePlan,
   showCreatePlan,
@@ -37,8 +38,10 @@ const CreatePlan = ({
             <CreatePlanLeft
               currPosition={currPosition}
               fromWooJaeData={fromWooJaeData}
+              setFromWooJaeData={setFromWooJaeData}
               setForDayLine={setForDayLine}
             />
+
             <CreatePlanMap
               // showCreatePlan={showCreatePlan}
               currPosition={currPosition}
