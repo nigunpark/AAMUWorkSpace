@@ -7,13 +7,6 @@ import { Link } from 'react-router-dom'
 import { Rating } from '@mui/material'
 
 const DetailModal = ({setIsOpen}) => {
-    //const modalRef = useRef(null);
-
-    const handleClose = () => {
-        setIsOpen(false);
-    };
-
-    //useOutSideClick(modalRef, handleClose);
 
     useEffect(() => {
         const $body = document.querySelector("body");
@@ -24,10 +17,10 @@ const DetailModal = ({setIsOpen}) => {
             );
     }, []);
 
-    const [star, setStar] = useState(0); //사용자가 입력하는 별점
+    let [star, setStar] = useState(0); //사용자가 입력하는 별점
     let [commentStar, setCommentStar] = useState([]); //commentStar에 별점 저장
 
-    // console.log('맨 위 별점:',star);
+    console.log('저장된 별점:',commentStar);
 
     let [userName] = useState('ADMIN');
     let [comment, setComment] = useState(''); // comment 사용자가 입력하는 댓글
@@ -60,6 +53,8 @@ const DetailModal = ({setIsOpen}) => {
         // console.log('feedComments : ', feedComments);
 
         setFeedComments(feedComments.filter((e, index)=>index !== no));
+        setCommentStar(commentStar.filter((e, index)=>index !== no));
+
         // filter 이거가지고 검색기능 가능할듯
     }
 
@@ -82,7 +77,7 @@ const DetailModal = ({setIsOpen}) => {
                     <Name>삭제</Name>
                 </EditDelte>
                 {/* {
-                    console.log('인덱스(키값) : ', props.index)
+                    console.log('인덱스 넘어온거 : ', props.index)
                 } */}
             </div>
         );
@@ -135,9 +130,7 @@ const DetailModal = ({setIsOpen}) => {
                             setComment(e.target.value);
                         }} //리뷰창 변할때마다 setComment를 통해 comment의 값 변경
                         onKeyUp={(e)=>{
-                            console.log('e.target.value : ',e.target.value.length);
                             e.target.value.length > 0 ? setIsValid(true) : setIsValid(false);
-                            console.log('isValid :',isValid);
                         }} //사용자가 리뷰를 작성했을 때 빈공간인지 확인하여 유효성 검사
                         value={comment}
                         />
