@@ -3,7 +3,7 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="admin.mybatis.mapper.commu">
-	<!-- 글 리스트 뿌려주기 -->
+	<!-- 전체 글 뿌려주기 -->
 	<select id="commuSelectList"  parameterType="Map" resultType="adminCommuDTO">
 		SELECT * FROM
 		(SELECT T.*,ROWNUM R FROM (
@@ -11,9 +11,9 @@
 		WHERE R BETWEEN #{start} AND #{end}
 	</select>
 	
-	<!-- 전체 레코드수 -->
+	<!-- 전체 글 레코드수 -->
 	<select id="commuGetTotalRecordCount" parameterType="Map" resultType="int">
-	 	SELECT COUNT(*) FROM community c JOIN users u ON c.id=u.id
+	 	SELECT COUNT(*) FROM community
 	</select>
 	
 	<!-- 글 삭제 -->
@@ -21,5 +21,17 @@
 		DELETE community WHERE lno = #{lno}
 	</delete>
 	
+	<!-- 전체 댓글 뿌려주기 -->
+	<select id="commuCommentSelectList"  parameterType="Map" resultType="AdminCommuCommentDTO">
+	SELECT * FROM
+	(SELECT T.*,ROWNUM R FROM (
+	SELECT cc.*,c.ctitle FROM commucomment cc JOIN community c ON cc.lno=c.lno ORDER BY cno DESC) T)
+	WHERE R BETWEEN #{start} AND #{end}
+	</select>
+	
+	<!-- 전체 댓글 레코드수 -->
+	<select id="commuCommentGetTotalRecordCount" parameterType="Map" resultType="int">
+	 	SELECT COUNT(*) FROM commucomment
+	</select>
 	
 </mapper>
