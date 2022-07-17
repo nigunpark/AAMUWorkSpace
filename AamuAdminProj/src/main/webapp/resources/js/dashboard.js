@@ -216,7 +216,7 @@
     if ($("#datepicker-popup").length) {
       $('#datepicker-popup').datepicker({
         enableOnReadonly: true,
-        todayHighlight: true,
+        todayHighlight: false,
       });
       $("#datepicker-popup").datepicker("setDate", "0");
     }

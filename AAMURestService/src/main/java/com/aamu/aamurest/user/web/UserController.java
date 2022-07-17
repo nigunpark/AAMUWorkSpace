@@ -30,7 +30,7 @@ public class UserController {
 	
 	
 	@PostMapping("/users/insert")
-	public int join(@RequestBody UsersDTO dto,@RequestParam MultipartFile multipartFile,HttpServletRequest req) throws IllegalStateException, IOException {
+	public int join(@RequestParam UsersDTO dto,@RequestParam MultipartFile multipartFile,HttpServletRequest req) throws IllegalStateException, IOException {
 		int affected=0;
 		String path = req.getSession().getServletContext().getRealPath("/resources/userUpload");
 		String photo = FileUploadUtil.oneFile(multipartFile, path);
