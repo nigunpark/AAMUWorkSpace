@@ -7,11 +7,12 @@
 		<setting name="jdbcTypeForNull" value="NULL"/>
 	</settings>
 	<typeAliases>
-		<typeAlias type="com.aamu.admin.main.service.CommuDTO" alias="commuDTO"/>
+		<typeAlias type="com.aamu.admin.main.service.AdminCommuDTO" alias="adminCommuDTO"/>
+		<typeAlias type="com.aamu.admin.main.service.AdminCommuCommentDTO" alias="adminCommuCommentDTO"/>
   	</typeAliases>
 	<mappers>
 		<mapper resource="admin/mybatis/mapper/main.xml" />
-		<mapper resource="admin/mybatis/mapper/commu.xml" />
+		<mapper resource="admin/mybatis/mapper/adminCommu.xml" />
 		<mapper resource="admin/mybatis/mapper/notice.xml" />
 		<mapper resource="admin/mybatis/mapper/bbs.xml" />
 	</mappers>

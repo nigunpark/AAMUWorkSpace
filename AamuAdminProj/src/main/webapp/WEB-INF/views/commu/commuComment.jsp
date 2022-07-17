@@ -10,14 +10,14 @@
                 <div class="tab-content tab-content-basic">
                   <!--여기부터 내용을 넣으시오-->
 
-                  <!--커뮤니티 게시글 관리-->
+                  <!--커뮤니티 댓글 관리-->
                   <div class="col-lg-12 grid-margin stretch-card">
                     <div class="card">
                       <div class="card-body">
-                        <h4 class="card-title">게시글 전체 리스트</h4>
+                        <h4 class="card-title">커뮤니티 댓글 전체 리스트</h4>
                         
                         <div class="card-numberOfBoard">
-                          총 게시글 수: ${totalCount}개
+                          총 댓글 수: ${totalCount}개
                           <button class="btn btn-primary text-white me-0" style="float:right">삭제</button>
                         </div>
                         <div class="table-responsive text-center">
@@ -30,18 +30,17 @@
 	                                    <input type="checkbox" class="form-check-input" aria-checked="false"><i class="input-helper"></i></label>
 									</div>
                                 </th>
-                                <th class="col-1">글번호</th>
-                                <th>제목</th>
+                                <th class="col-1">댓글번호</th>
+                                <th>내용</th>
+                                <th>댓글이 달린 글제목</th>
                                 <th class="col-1">ID</th>
                                 <th class="col-1">작성일</th>
-                                <th class="col-1">댓글수</th>
-                                <th class="col-1">좋아요수</th>
                               </tr>
                             </thead>
                             <tbody>
                                 <c:if test="${empty listPagingData.lists }" var="isEmpty">
 									<tr>
-										<td colspan="4">등록된 글이 없습니다.</td>
+										<td colspan="4" >등록된 댓글이 없습니다.</td>
 									</tr>
 								</c:if>
 								<c:if test="${not isEmpty }">
@@ -55,12 +54,11 @@
 	                                          	</label>
 	                                          </div>
 			                                </td>
-											<td>${record.lno}</td>
+											<td>${record.cno}</td>
+											<td>${record.reply}</td>
 			                                <td >${record.ctitle}</td>
 			                                <td>${record.id}</td>
-			                                <td>${record.postdate}</td>
-			                                <td>${record.rcount}</td>
-			                                <td>${record.likecount}</td>
+			                                <td>${record.replydate}</td>
 		                          		</tr>
 		                          	</c:forEach>
 								</c:if>
@@ -116,14 +114,14 @@
     		confirm("정말 삭제하시겠습니까?");
     		var jsonString = JSON.stringify({lno : lnoArr})
     		$.ajax({
-       			url:"<c:url value="CommuDelete.do"/>",
+       			url:"<c:url value="CommuCommentDelete.do"/>",
        			type:"post",
        			data: jsonString,
        			contentType:"application/json", //데이타 보낼 때
        			dataType: "json" //데이타 받을 때 
        		}).done(data=>{
        			console.log('삭제성공:',data);
-       			location.replace("Commu.do");
+       			location.replace("CommuComment.do");
        			
        		}).fail(error=>{
        			console.log('삭제에러:',error);

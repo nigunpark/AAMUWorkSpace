@@ -21,6 +21,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.lifecycle.viewmodel.compose.viewModel
 import net.daum.mf.map.api.MapPoint
 import net.daum.mf.map.api.MapView
 
@@ -28,6 +29,9 @@ import net.daum.mf.map.api.MapView
 @Composable
 fun AAMUPlanHome(){
     val bottomSheetScaffoldState = rememberBottomSheetScaffoldState()
+    val mapviewModel : AAMUPlanViewModel = viewModel(
+        factory = AAMUPlanViewModelFactory(LocalContext.current)
+    )
     BottomSheetScaffold(
         modifier = Modifier.shadow(0.dp),
         sheetElevation = 0.dp,
@@ -35,10 +39,13 @@ fun AAMUPlanHome(){
         content = {
             Box(contentAlignment = Alignment.Center) {
                 Box(modifier = Modifier.fillMaxSize()) {
-                    val map = mapView()
-                    KakaoMap(mapView = map, latitude = "1.3521", longitude = "103.8198", PlanListener())
+                    KakaoMap(mapView = mapviewModel.mapView, PlanListener())
                 }
-                FloatingActionButton(onClick = {}, modifier = Modifier
+                FloatingActionButton(onClick = {
+                    mapviewModel.mapView.currentLocationTrackingMode=MapView.CurrentLocationTrackingMode.TrackingModeOff
+                    mapviewModel.setMarker()
+
+                }, modifier = Modifier
                     .align(Alignment.TopEnd)
                     .size(width = 50.dp, height = 50.dp)
                     .offset(x = (-10).dp, y = 30.dp)
@@ -61,28 +68,17 @@ fun AAMUPlanHome(){
 }
 
 
-@Composable
-fun mapView(): MapView {
-    val context = LocalContext.current
-    val mapView = remember {
-        MapView(context)
-    }
-    return mapView
-}
+
 
 @Composable
 fun KakaoMap(
     mapView: MapView,
-    latitude: String,
-    longitude: String,
     eventListener: PlanListener
 ) {
     AndroidView({ mapView })
     {mapView->
-        mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(latitude.toDouble(), longitude.toDouble()), true)
-        mapView.setZoomLevel(3, true)
         mapView.setCurrentLocationEventListener(eventListener)
-        mapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeading)
+        mapView.currentLocationTrackingMode=MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeading
     }
 }
 
@@ -114,7 +110,10 @@ fun PlanBottomSheet(){
                 .width(80.dp)
                 .clip(RoundedCornerShape(50.dp))
         )
-        Box(Modifier.padding(top = 25.dp).height(300.dp)) {
+        Box(
+            Modifier
+                .padding(top = 25.dp)
+                .height(300.dp)) {
         }
     }
 }

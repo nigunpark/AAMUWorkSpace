@@ -36,4 +36,19 @@ public class FileUploadUtil {
 		}
 		return filePath;
 	}
+	public static String oneFile(MultipartFile multipartFile,String path) throws IllegalStateException, IOException {
+		UUID uuid = UUID.randomUUID();
+    	String filename = uuid.toString()+"_"+multipartFile.getOriginalFilename();
+    	File file = new File(path+File.separator+filename);
+    	multipartFile.transferTo(file);
+    	
+    	return filename;
+	}
+	public static String requestOneFile(String filename,String path,HttpServletRequest req){
+		
+		String requesturl = req.getRequestURL().toString().replace(req.getRequestURI(), "/aamurest"+path)+File.separator+filename;
+
+		return requesturl;
+	}
+
 }

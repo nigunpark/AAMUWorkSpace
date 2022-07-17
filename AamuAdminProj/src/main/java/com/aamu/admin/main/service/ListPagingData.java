@@ -12,7 +12,6 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
 public class ListPagingData<T> {
 	//레코드 목록 데이타 저장

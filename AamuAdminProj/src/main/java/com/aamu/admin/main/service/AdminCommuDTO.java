@@ -11,7 +11,7 @@ import lombok.Setter;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CommuDTO {
+public class AdminCommuDTO {
 	public String lno;
 	public String ctitle;
 	public String id;

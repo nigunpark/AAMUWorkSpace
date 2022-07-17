@@ -99,6 +99,21 @@ public class MainDAO {
 		return template.delete("deleteRoute",rbn);
 	}
 
+	public List<AttractionDTO> getRecentPlaceAll(Map map) {
+		
+		return template.selectList("getRecentPlaceAll", map);
+	}
+	
+	public AttractionDTO selectPlace(Map map) {
+		
+		return template.selectOne("selectPlace",map);
+	}
+
+	public double getRecentPlaceOne(Map map) {
+		
+		return template.selectOne("getRecentPlaceOne", map);
+	}
+
 	
 
 

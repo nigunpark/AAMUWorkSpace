@@ -18,7 +18,7 @@ interface AAMUApi {
     @POST("authenticate")
     suspend fun doLogin(@Body user: userLogin): Response<AAMUUserResponse>
 
-    @GET("Hello")
+    @GET("isOK")
     suspend fun isok() : Response<String>
 
     companion object {

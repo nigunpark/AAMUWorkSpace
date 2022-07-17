@@ -32,6 +32,11 @@
 		SELECT p.*,i.* FROM places p JOIN ${selecttable} i ON p.contentid=i.contentid WHERE p.areacode=#{areacode} AND p.contenttypeid=#{contenttypeid} AND p.sigungucode=#{sigungucode} AND <![CDATA[rownum<=20]]>
 	</select>
 	
+	<select id="selectPlace" parameterType="Map" resultType="attrDTO">
+		SELECT p.*,i.* FROM places p JOIN ${selecttable} i ON p.contentid=i.contentid WHERE p.contentid=#{contentid}
+	</select>
+	
+	
 	<insert id="plannerInsert" parameterType="planDTO">
 		INSERT INTO routeboard VALUES(SEQ_PLA.NEXTVAL,#{title},SYSDATE,#{id})
 		<selectKey keyProperty="rbn" resultType="int" order="AFTER">
@@ -106,6 +111,16 @@
 	
 	<select id="countPlace" parameterType="Map" resultType="int">
 		SELECT COUNT(*) FROM ${table} WHERE contentid=#{contentid}
+	</select>
+	<select id="getRecentPlaceAll" parameterType="Map" resultType="attrDTO">
+		SELECT * FROM (SELECT ( 6371 * acos( cos( radians( ${placey} ) ) * cos( radians( mapy ) ) * cos( radians( mapx ) - radians(${placex}) ) + sin( radians(${placey}) ) * sin( radians(mapy) ) ) ) AS distance,places.* FROM places) DATA WHERE DATA.distance <![CDATA[<]]> ${distance}	
+	</select>
+	<select id="getRecentPlaceOne" parameterType="Map" resultType="Double">
+		SELECT ( 6371 * acos( cos( radians( ${firsty} ) )
+		* cos( radians( ${secondy} ) ) * 
+		cos( radians( ${firstx} ) - radians(${secondx}) ) 
+		+ sin( radians(${firsty} ) ) 
+		* sin( radians(${secondy}) ) ) ) from dual
 	</select>
 	
 

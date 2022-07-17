@@ -65,7 +65,7 @@ public class MainController {
 		List<RouteDTO> list = dto.getRoute();
 		int tripDay = list.get(0).getDay();
 		int setDay =0;
-		Map<Integer,List<RouteDTO>> map=new HashMap<>();
+		Map<String,Double> map=new HashMap<>();
 		
 		for(int i=0;i<list.size();i++) {
 			int contentid = list.get(i).getContentid();
@@ -130,21 +130,32 @@ public class MainController {
 			while(true){
 				
 				if(count<result) {
+					/*
 					double standardx = list.get(count*tripDay+index).getDto().getMapx();
 					double standardy = list.get(count*tripDay+index).getDto().getMapy();
+					*/
+					map.put("firstx", list.get(count*tripDay+index).getDto().getMapx());
+					map.put("firsty", list.get(count*tripDay+index).getDto().getMapy());
 					//System.out.println("기준장소:"+list.get(count*tripDay+index).getDto().getTitle());
-					double low = 100;
-					double attrx =0;
-					double attry =0;
+					double low = Integer.MAX_VALUE;
+					//double attrx =0;
+					//double attry =0;
 					double resultxy=0;
 					for(int k=tripDay;k<list.size();k++) {
 						
 						if(list.get(k).getDay()==0) {
 							
 							//System.out.println(k);
+							/*
 							attrx = list.get(k).getDto().getMapx();
 							attry = list.get(k).getDto().getMapy();
 							resultxy = Math.sqrt(Math.pow(Math.abs(standardx-attrx),2)+Math.pow(Math.abs(standardy-attry),2));
+							*/
+							
+							map.put("secondx", list.get(k).getDto().getMapx());
+							map.put("secondy", list.get(k).getDto().getMapy());
+							
+							resultxy = service.getRecentPlaceOne(map);
 							System.out.println(String.format("비교장소:%s, 비교결과:%s",list.get(k).getDto().getTitle(),resultxy));
 							if(low>resultxy && tripDay*(count+1)+index<list.size()) {
 								
@@ -159,10 +170,16 @@ public class MainController {
 						}
 						if(k==list.size()-1) {
 							for(int j=tripDay;j<list.size();j++) {
-								attrx = list.get(j).getDto().getMapx();
-								attry = list.get(j).getDto().getMapy();
-								resultxy = Math.sqrt(Math.pow(Math.abs(standardx-attrx),2)+Math.pow(Math.abs(standardy-attry),2));
-								if(low==resultxy) {Collections.swap(list,j,tripDay*(count+1)+index); break;} 
+								//attrx = list.get(j).getDto().getMapx();
+								//attry = list.get(j).getDto().getMapy();
+								//resultxy = Math.sqrt(Math.pow(Math.abs(standardx-attrx),2)+Math.pow(Math.abs(standardy-attry),2));
+								if(j!=count*tripDay+index) {
+									map.put("secondx", list.get(j).getDto().getMapx());
+									map.put("secondy", list.get(j).getDto().getMapy());
+									resultxy = service.getRecentPlaceOne(map);
+									
+									if(low==resultxy) {Collections.swap(list,j,tripDay*(count+1)+index); break;} 
+								}
 							}
 						}
 						
@@ -249,6 +266,7 @@ public class MainController {
 			}///////////////for
 		}////////////////else
 		 */
+
 		PlannerDTO routeList = new PlannerDTO();
 		routeList.setRoute(list);
 		return routeList;
@@ -353,7 +371,14 @@ public class MainController {
 		
 		return lists;
 	}
-	
+	@GetMapping("/info/recentplace")
+	public List<AttractionDTO> getRecentPlace(@RequestParam Map map){
+		if(map.get("distance")==null) map.put("distance", 3);
+
+		List<AttractionDTO> lists = service.getRecentPlaceAll(map);
+		
+		return lists;
+	}
 	
 
 }

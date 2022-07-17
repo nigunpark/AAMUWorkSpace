@@ -3,6 +3,7 @@ package com.aamu.aamurest.user.serviceimpl;
 import java.util.List;
 
 import java.util.Map;
+import java.util.Vector;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -399,6 +400,45 @@ public class MainServiceImpl implements MainService{
 	public int deleteRoute(int rbn) {
 		
 		return dao.deleteRoute(rbn);
+	}
+	@Override
+	public List<AttractionDTO> getRecentPlaceAll(Map map) {
+		List<AttractionDTO> lists = dao.getRecentPlaceAll(map);
+		List<AttractionDTO> returnList = new Vector<>();
+		for(int i=0;i<lists.size();i++) {
+			AttractionDTO dto =lists.get(i);
+			switch(dto.getContenttypeid()) {
+			case 12:
+			case 28:
+				map.put("selecttable", "placesinfo");
+				map.put("contentid", dto.getContentid());
+				dto = dao.selectPlace(map);
+				break;
+			case 15:
+				map.put("selecttable", "eventinfo");
+				map.put("contentid", dto.getContentid());
+				dto = dao.selectPlace(map);
+				break;
+			case 32:
+				map.put("selecttable", "hotelinfo");
+				map.put("contentid", dto.getContentid());
+				dto = dao.selectPlace(map);
+				break;
+			case 39:
+				map.put("selecttable", "dinerinfo");
+				map.put("contentid", dto.getContentid());
+				dto = dao.selectPlace(map);
+				break;
+			}
+			returnList.add(dto);
+		}
+		
+		return returnList;
+	}
+	@Override
+	public double getRecentPlaceOne(Map map) {
+		
+		return dao.getRecentPlaceOne(map);
 	}
 
 

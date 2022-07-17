@@ -13,12 +13,17 @@
   <link rel="stylesheet" href="<c:url value="/resources/vendors/mdi/css/materialdesignicons.min.css"/>">
   <!-- inject:css -->
   <link rel="stylesheet" href="<c:url value="/resources/css/vertical-layout-light/style.css"/>">
+  
   <script src="<c:url value="/resources/vendors/js/vendor.bundle.base.js"/>"></script>
+  
   <!--축소 페이지용 js-->
   <script src="<c:url value="/resources/js/off-canvas.js"/>"></script>
+  <!--datepicker용 js-->
+  <script src="<c:url value="/resources/vendors/bootstrap-datepicker/bootstrap-datepicker.min.js"/>"></script>
+  <!-- 데이트피커용 -->
+  <script src="<c:url value="/resources/js/dashboard.js"/>"></script>
   <!-- commu_plugins:css _체크박스v모양 나오게 -->
   <link rel="stylesheet" href="<c:url value="/resources/vendors/ti-icons/css/themify-icons.css"/>">
-
 
 </head>
 
@@ -33,10 +38,10 @@
           </button>
         </div>
         <div>
-          <a class="navbar-brand brand-logo" href="<c:url value="admin.do"/>">
+          <a class="navbar-brand brand-logo" href="<c:url value="main.do"/>">
             <img src="images/logo.svg" alt="logo" />
           </a>
-          <a class="navbar-brand brand-logo-mini" href="<c:url value="admin.do"/>">
+          <a class="navbar-brand brand-logo-mini" href="<c:url value="main.do"/>">
             <img src="images/logo-mini.svg" alt="logo" />
           </a>
         </div>
@@ -49,6 +54,14 @@
           </li>
         </ul>
         <ul class="navbar-nav ms-auto">
+          <li class="nav-item d-none d-lg-block">
+            <div id="datepicker-popup" class="input-group date datepicker navbar-date-picker">
+              <span class="input-group-addon input-group-prepend border-right">
+                <span class="icon-calendar input-group-text calendar-icon"></span>
+              </span>
+              <input type="text" class="form-control" >
+            </div>
+          </li>
           <li class="nav-item">
             <form class="search-form" action="#">
               <i class="icon-search"></i>
@@ -80,7 +93,7 @@
       <nav class="sidebar sidebar-offcanvas" id="sidebar">
         <ul class="nav">
           <li class="nav-item">
-            <a class="nav-link" href="<c:url value="admin.do"/>">
+            <a class="nav-link" href="<c:url value="main.do"/>">
               <i class="mdi mdi-grid-large menu-icon"></i>
               <span class="menu-title">메인 페이지</span>
             </a>
@@ -123,9 +136,9 @@
             </a>
             <div class="collapse" id="tables">
               <ul class="nav flex-column sub-menu">
-                <li class="nav-item"><a class="nav-link" href="<c:url value="/admin/Commu.do"/>">전체 커뮤니티 관리</a></li>
-                <li class="nav-item"><a class="nav-link" href="/admin/CommuComplain.do">신고 커뮤니티 관리</a></li>
-                <li class="nav-item"> <a class="nav-link" href="/admin/CommuComment.do">댓글 관리</a></li>
+                <li class="nav-item"><a class="nav-link" href="<c:url value="Commu.do"/>">전체 커뮤니티 관리</a></li>
+                <li class="nav-item"><a class="nav-link" href="CommuComplain.do">신고 커뮤니티 관리</a></li>
+                <li class="nav-item"> <a class="nav-link" href="CommuComment.do">댓글 관리</a></li>
               </ul>
             </div>
           </li>
