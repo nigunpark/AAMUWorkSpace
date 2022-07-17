@@ -22,7 +22,7 @@
 	</delete>
 	
 	<!-- 전체 댓글 뿌려주기 -->
-	<select id="commuCommentSelectList"  parameterType="Map" resultType="AdminCommuCommentDTO">
+	<select id="commuCommentSelectList"  parameterType="Map" resultType="adminCommuCommentDTO">
 	SELECT * FROM
 	(SELECT T.*,ROWNUM R FROM (
 	SELECT cc.*,c.ctitle FROM commucomment cc JOIN community c ON cc.lno=c.lno ORDER BY cno DESC) T)

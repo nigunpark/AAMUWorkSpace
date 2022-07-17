@@ -8,6 +8,7 @@
 	</settings>
 	<typeAliases>
 		<typeAlias type="com.aamu.admin.main.service.AdminCommuDTO" alias="adminCommuDTO"/>
+		<typeAlias type="com.aamu.admin.main.service.AdminCommuCommentDTO" alias="adminCommuCommentDTO"/>
   	</typeAliases>
 	<mappers>
 		<mapper resource="admin/mybatis/mapper/main.xml" />
