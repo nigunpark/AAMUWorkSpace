@@ -5,7 +5,7 @@ import {
   Title,
   Body,
   Footer,
-} from "../components/Modal/ForJoin.js";
+} from "../Modal/ForJoin.js";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-regular-svg-icons";
 import "./Join.css";
@@ -16,7 +16,6 @@ import { useSelector } from "react-redux";
 import DaumPostcode from "react-daum-postcode";
 const JoinStep2 = () => {
   let joominGender = useRef();
-  let pwdRef = useRef();
   let nameRef = useRef();
   let nameValidRef = useRef();
   let joominValidRef = useRef();

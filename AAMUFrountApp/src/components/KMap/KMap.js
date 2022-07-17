@@ -693,8 +693,8 @@ async function toWooJae(currPosition, reduxState, setFromWooJaeData) {
         },
       }
     );
-    let settedData = manufacData(resp.data.route, reduxState);
-    setFromWooJaeData(settedData);
+    let settedData = await manufacData(resp.data.route, reduxState);
+    await setFromWooJaeData(settedData);
   } catch (error) {
     console.log("error", error);
   }
@@ -702,6 +702,7 @@ async function toWooJae(currPosition, reduxState, setFromWooJaeData) {
 //일정생성버튼 눌렀을 시 우재한테 받은 데이터를 다시 가공하는 함수
 function manufacData(data, reduxState) {
   let temp;
+
   return reduxState.tripPeriod.map((val, periodIndex) => {
     let arr = data.filter((obj) => {
       return obj.day === periodIndex + 1;

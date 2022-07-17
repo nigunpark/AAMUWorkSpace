@@ -14,7 +14,7 @@ import MyPage from "./pages/MyPage/MyPage";
 import DetailModal from "./pages/Forum/DetailModal/DetailModal";
 import KakaoRedirectHandler from "./components/Login/Kakao/KakaoRedirectHandler";
 import JoinStep1 from "./Join/JoinStep1";
-import JoinStep2 from "./Join/JoinStep2";
+import JoinStep2 from "./components/Join/JoinStep2.js";
 
 function App() {
   let location = useLocation();
