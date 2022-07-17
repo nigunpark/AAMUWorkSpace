@@ -22,6 +22,9 @@ public interface AdminCommuService {
 	//전체 게시물 수 뿌려주기
 	int commuCommentGetTotalRecordCount(Map map);
 	
+	//글 삭제
+	int commuCommentDelete(Map map);
+	
 	
 
 }

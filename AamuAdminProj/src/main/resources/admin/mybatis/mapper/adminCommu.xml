@@ -34,4 +34,9 @@
 	 	SELECT COUNT(*) FROM commucomment
 	</select>
 	
+	<!-- 댓글 삭제 -->
+	<delete id="commuCommentDelete" parameterType="Map">
+		DELETE commucomment WHERE cno = #{cno}
+	</delete>
+	
 </mapper>

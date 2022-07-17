@@ -17,4 +17,5 @@ public class AdminCommuCommentDTO {
 	public String lno;
 	public String reply;
 	public java.sql.Date replydate;
+	public String ctitle;
 }

@@ -30,11 +30,12 @@
 	                                    <input type="checkbox" class="form-check-input" aria-checked="false"><i class="input-helper"></i></label>
 									</div>
                                 </th>
-                                <th class="col-1">댓글번호</th>
+                                <th class="col-1">댓글 번호</th>
                                 <th>내용</th>
-                                <th>댓글이 달린 글제목</th>
                                 <th class="col-1">ID</th>
                                 <th class="col-1">작성일</th>
+                                <th class="col-1">해당 게시물 번호</th>
+                                <th>해당 게시물 제목</th>
                               </tr>
                             </thead>
                             <tbody>
@@ -49,16 +50,17 @@
 											<td>
 			                                  <div class="form-check form-check-flat mt-0">
 	                                            <label class="form-check-label">
-	                                              <input name="RowCheck" type="checkbox" class="form-check-input" aria-checked="false" value="${record.lno}">
+	                                              <input name="RowCheck" type="checkbox" class="form-check-input" aria-checked="false" value="${record.cno}">
 	                                              <i class="input-helper"></i>
 	                                          	</label>
 	                                          </div>
 			                                </td>
 											<td>${record.cno}</td>
 											<td>${record.reply}</td>
-			                                <td >${record.ctitle}</td>
 			                                <td>${record.id}</td>
 			                                <td>${record.replydate}</td>
+			                                <td >${record.lno}</td>
+			                                <td >${record.ctitle}</td>
 		                          		</tr>
 		                          	</c:forEach>
 								</c:if>
@@ -102,17 +104,17 @@
     //삭제 click
     $('button').click(function(){
     	console.log("버튼이벤트 발생");
-    	var lnoArr = new Array();
+    	var cnoArr = new Array();
         $('input[name="RowCheck"]:checked').each(function(i){//체크된 리스트 저장
-        	lnoArr.push($(this).val());
-        	console.log($(this).val()); //lnoArr:63,62
+        	cnoArr.push($(this).val());
+        	console.log($(this).val()); //cnoArr:63,62
         });
-    	if(lnoArr.length ==0){
+    	if(cnoArr.length ==0){
     		alert("선택된 글이 없습니다.");
     	}
     	else{
     		confirm("정말 삭제하시겠습니까?");
-    		var jsonString = JSON.stringify({lno : lnoArr})
+    		var jsonString = JSON.stringify({cno : cnoArr})
     		$.ajax({
        			url:"<c:url value="CommuCommentDelete.do"/>",
        			type:"post",

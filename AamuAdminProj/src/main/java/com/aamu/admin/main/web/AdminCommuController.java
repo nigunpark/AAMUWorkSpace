@@ -37,6 +37,7 @@ public class AdminCommuController {
 			HttpServletRequest req,
 			Model model) {
 		
+		System.out.println("search:"+map.get("searchWorld"));
 		//현재 페이지를 맵에 저장
 		map.put(PagingUtil.NOW_PAGE, nowPage);
 		ListPagingData<AdminCommuDTO> listPagingData= commuService.commuSelectList(map, req, nowPage);
@@ -81,5 +82,19 @@ public class AdminCommuController {
 		
 		return "commu/commuComment";
 	}
+	
+	//댓글 삭제
+	@PostMapping("CommuCommentDelete.do")
+	@ResponseBody
+	public Map commuCommentDelete(@RequestBody Map map){
+		int affected=commuService.commuCommentDelete(map);
+		//데이타 반환
+		Map resultMap = new HashMap();
+		System.out.println("affected:"+affected);
+		if(affected==1) resultMap.put("result", "Success");
+		else resultMap.put("result", "NotSuccess");
+		return resultMap;
+	}
+	
 
 }
