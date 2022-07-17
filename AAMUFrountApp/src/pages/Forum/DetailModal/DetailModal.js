@@ -55,15 +55,34 @@ const DetailModal = ({setIsOpen}) => {
         setStar(0);
     };
 
+    const reviewDelete = (no) => {
+        console.log('프롭스 잘 넘어오나~', no);
+        console.log('feedComments : ', feedComments);
+
+        setFeedComments(feedComments.filter((e, index)=>index !== no));
+    }
+
     const CommentList = (props) =>{ //리뷰댓글 컴포넌트
         return(
             <div>
-                <div>
+                <Stars>
                     <img src='/images/star.jpg' style={{width:'30px'}}/>
-                    {props.stars}점
-                </div>
-                <p>{props.userName}</p>
-                <div>{props.userComment}</div>
+                    {props.stars}
+                </Stars>
+
+                <UserName>{props.userName}<Name>님 (2022-07-10)</Name></UserName>
+
+                <p>{props.userComment}</p>
+
+                <EditDelte type='button'>
+                    <Name>수정</Name>
+                </EditDelte>
+                <EditDelte type='button' onClick={()=>{reviewDelete(props.index)}}>
+                    <Name>삭제</Name>
+                </EditDelte>
+                {/* {
+                    console.log('인덱스(키값) : ', props.index)
+                } */}
             </div>
         );
     };
@@ -144,6 +163,7 @@ const DetailModal = ({setIsOpen}) => {
                                     userName={userName}
                                     userComment={commnetArr}
                                     key={idx}
+                                    index={idx}
                                 />
                             );
                         })
@@ -200,7 +220,6 @@ const DetailOverlay = styled.div`
 
 const DetailModalWrap = styled.div`
     display: grid;
-    //
     width: 1050px;
     height: 90%;
 
@@ -213,7 +232,6 @@ const DetailModalWrap = styled.div`
     left: 50%;
     transform: translate(-50%, -50%);
     box-shadow: 0 0 0 10px #e9ebec, 0 0 0 11px #fcfdfe;
-    //border: solid 5px black;
 `
 
 const DetailTitle = styled.div`
@@ -230,19 +248,35 @@ const DetailTitle = styled.div`
 `
 
 const DetailReview = styled.div`
-    
     margin-left: 20px;
     margin-right: 20px;
     
     font-size: 18px;
 
     div{
-        display: flex;
-        flex-wrap : nowrap;
-        border: solid 1px red;
+        display: grid;
+        grid-template-columns:70px 200px 670px 30px 30px;
+        margin-top: 2px;
+        border-bottom: solid 1px #c3cff4;
     }
+`
+const Stars = styled.span`
+    // border: 1px solid red;
+    // width: 80px;
+`
+const UserName = styled.span`
+    // border: 1px solid blue;
+    // width: 100px;
+`
+const Name = styled.span`
+    font-size: 13px;
+    color: #6d6875;
+`
 
-    border: solid 2px black;
+const EditDelte = styled.button`
+    // border: 1px solid black;
+    height: 30px;
+    margin-left: 3px;
 `
 
 const DetailContents = styled.div`

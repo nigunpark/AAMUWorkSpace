@@ -13,7 +13,7 @@ import Forum from "./pages/Forum/Forum";
 import MyPage from "./pages/MyPage/MyPage";
 import DetailModal from "./pages/Forum/DetailModal/DetailModal";
 import KakaoRedirectHandler from "./components/Login/Kakao/KakaoRedirectHandler";
-import JoinStep1 from "./Join/JoinStep1";
+// import JoinStep1 from "./Join/JoinStep1";
 import JoinStep2 from "./components/Join/JoinStep2.js";
 
 function App() {
@@ -45,7 +45,7 @@ function App() {
           <Route path="/myPage" element={<MyPage />} />
         </Route>
         <Route path="/login" element={<LoginTest />}></Route>
-        <Route path="/join" element={<JoinStep1 />} />
+        {/* <Route path="/join" element={<JoinStep1 />} /> */}
         <Route path="/joinTwo" element={<JoinStep2 />} />
         <Route path="/login" element={<LoginTest />} />
         <Route path="/test" element={<Test />} />
