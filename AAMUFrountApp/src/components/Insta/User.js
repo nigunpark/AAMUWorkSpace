@@ -5,7 +5,7 @@ import SearchModal from "./ModalGroup/Search";
 import WriteModal from "./ModalGroup/UploadSecond/Upload"
 import ButtonGroup from './ModalGroup/UploadSecond/ButtonGroup';
 
-function User() {
+function User({setlist}) {
   const modalRef = useRef();
   const notimodalRef = useRef();
   const outside = useRef();
@@ -74,7 +74,7 @@ function User() {
                 ref={outside} 
                 onClick={ (e) => { if(e.target == outside.current) setsquare(false) } }
                 />
-                  <WriteModal onClick={ () => setsquare(false) }></WriteModal>
+                  <WriteModal onClick={ () => setsquare(false) } setsquare={setsquare} setlist={setlist}/>
                 
               </Container>
           </>
