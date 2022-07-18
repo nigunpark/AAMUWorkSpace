@@ -50,7 +50,7 @@ const CreatePlanMap = ({
     );
     setCMap(map);
     map.relayout();
-  }, []);
+  }, [cMapRef]);
 
   //지도 줌 관련
   useEffect(() => {
