@@ -28,7 +28,7 @@ const DetailModal = ({setIsOpen}) => {
 
     // console.log('저장된 별점:',commentStar);
 
-    let post = (e) => {
+    let reviewPost = (e) => {
         // 전개연산자를 사용해서 feedComments에 담겨있는 댓글과
         // commentStar에 담겨있는 별점 가져오기
         const copyFeedComments = [...feedComments];
@@ -140,7 +140,7 @@ const DetailModal = ({setIsOpen}) => {
                     <div className='detail-button'>
                         {
                             isValid ? 
-                            <button className="learn-more" type="button" onClick={post}>리뷰 등록</button>
+                            <button className="learn-more" type="button" onClick={reviewPost}>리뷰 등록</button>
                             : 
                             <button className="learn-more" type="button" disabled>리뷰를 작성하세요</button>
                         }
@@ -210,11 +210,11 @@ const DetailModalWrap = styled.div`
     display: grid;
     width: 1050px;
     height: 90%;
-
     overflow: auto;
 
     border-radius: 15px;
     background-color: #fff;
+
     position: absolute;
     top: 50%;
     left: 50%;
@@ -224,11 +224,14 @@ const DetailModalWrap = styled.div`
 
 const DetailTitle = styled.div`
     margin-top: 15px;
+    margin-bottom: 10px;
+    height: 20%;
 
     span{
         float: center;
         font-size: 1.5em;
         margin-left: 40px;
+        
     }
     div{
         margin-right: 25px;
