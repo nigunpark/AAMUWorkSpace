@@ -11,7 +11,10 @@ import "swiper/css/pagination";
 
 
 
-const Notice = () => {
+const Notice = ({dummy}) => {
+
+    console.log('이미지 파일', dummy.imgsdata);
+
   return (
     <div className='Notice'>
         <div className="swiper__container_Notice">
@@ -32,6 +35,18 @@ const Notice = () => {
                         pagination={{ clickable: true }}
                         scrollbar={{ draggable: true }}
                         >
+                        {/* {
+                            dummy.imgsdata.map((value, idx)=>{
+                                <SwiperSlide>
+                                    <NoticeItem
+                                    src="/images/imageMap.png"
+                                    //text="Explore the hidden waterfall deep inside the Amazon Jungle"
+                                    // label="Adventure"
+                                    path="/"
+                                    />
+                                </SwiperSlide>
+                            })
+                        } */}
                         <SwiperSlide>
                             <NoticeItem
                             src="/images/imageMap.png"

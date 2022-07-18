@@ -1,34 +1,113 @@
 {
-    "id" : "kim123",
-    "title" : "제주도 4박 5일 여행기",
-    "content" : "너무 좋았어요",
-    "mapurl" : "/public/images/imageMap.png",
-    "imgsdata" : [
-        {
-            "imgs" : "/public/images/bg1.png"
+    "forumContent" : [
+        {   
+            "no" : 0,
+            "id" : "kim123",
+            "title" : "제주도 4박 5일 여행기",
+            "content" : "너무 좋았어요",
+            "mapurl" : "/public/images/imageMap.png",
+            "postDate" : "2022-07-16",
+            "imgsdata" : [
+                {
+                    "imgs" : "/images/img-2.jpg"
+                },
+                {
+                    "imgs" : "/images/bg2.png"
+                },
+                {
+                    "imgs" : "/images/bg3.png"
+                }
+            ],
+            "reviewdata" : [
+                {
+                    "reviewId" : "lee345",
+                    "star" : "4.5",
+                    "review" : "더미1"
+                },
+                {
+                    "reviewId" : "nav333",
+                    "star" : "2",
+                    "review" : "별로네요1"
+                },
+                {
+                    "reviewId" : "park0099",
+                    "star" : "5",
+                    "review" : "ㄷㄷ1"
+                }
+            ]
         },
         {
-            "imgs" : "/public/images/bg2.png"
+            "no" : 1,
+            "id" : "test3322",
+            "title" : "부산",
+            "content" : "바다 보니 좋네여",
+            "mapurl" : "/public/images/imageMap.png",
+            "postDate" : "2022-07-17",
+            "imgsdata" : [
+                {
+                    "imgs" : "/images/img-3.jpg"
+                },
+                {
+                    "imgs" : "/images/bg2.png"
+                },
+                {
+                    "imgs" : "/images/bg3.png"
+                },
+                {
+                    "imgs" : "/images/woah.jpg"
+                }
+            ],
+            "reviewdata" : [
+                {
+                    "reviewId" : "lee345",
+                    "star" : "4.5",
+                    "review" : "더미2"
+                },
+                {
+                    "reviewId" : "nav333",
+                    "star" : "2",
+                    "review" : "별로네요2"
+                },
+                {
+                    "reviewId" : "park0099",
+                    "star" : "5",
+                    "review" : "ㄷㄷ2"
+                },
+                {
+                    "reviewId" : "dtd7721",
+                    "star" : "1",
+                    "review" : "ㅇㅅㅇ"
+                }
+            ]
         },
         {
-            "imgs" : "/public/images/bg3.png"
-        }
-    ],
-    "reviewdata" : [
-        {
-            "reviewId" : "lee345",
-            "star" : "4.5",
-            "review" : "굿"
-        },
-        {
-            "reviewId" : "nav333",
-            "star" : "2",
-            "review" : "별로네요"
-        },
-        {
-            "reviewId" : "park0099",
-            "star" : "5",
-            "review" : "ㄷㄷ"
+            "no" : 2,
+            "id" : "kang123",
+            "title" : "자전거여행",
+            "content" : "너무 좋았어요",
+            "mapurl" : "/public/images/imageMap.png",
+            "postDate" : "2022-07-18",
+            "imgsdata" : [
+                {
+                    "imgs" : "/images/img-1.jpg"
+                },
+                {
+                    "imgs" : "/images/bg2.png"
+                }
+            ],
+            "reviewdata" : [
+                {
+                    "reviewId" : "lee345",
+                    "star" : "4.5",
+                    "review" : "더미3"
+                },
+                {
+                    "reviewId" : "nav333",
+                    "star" : "2",
+                    "review" : "별로네요3"
+                }
+            ]
         }
     ]
+    
 }

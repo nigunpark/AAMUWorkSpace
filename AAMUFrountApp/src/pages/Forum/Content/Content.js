@@ -5,13 +5,18 @@ import { Link, useNavigate } from 'react-router-dom';
 import FSearch from '../FSearch/FSearch';
 import axios from "axios";
 
-import "../DB/contentdata.json";
+import dummy from "../DB/contentdata.json";
 
 const Content = () => {
     //let navigate = useNavigate();
-    const forMapTestArr = [1, 2, 3, 5, 6, 7];
 
     let token = sessionStorage.getItem("token");
+
+    // let index = 0;
+    // let indexTwo = 0;
+    // console.log("더미데이터 : ",dummy.forumContent[index].reviewdata[indexTwo].star);
+
+
 
     // let [list, setList] = useState('');
     
@@ -27,7 +32,6 @@ const Content = () => {
     //         console.log((error) => console.log("글 목록 가져오기 실패", error));
     //     });
     // });
-    
 
     return (
         <div className="Cards_minCon">
@@ -46,8 +50,8 @@ const Content = () => {
                     <FSearch/>
                     
                     <ul className="card__items_minCon">
-                        {forMapTestArr.map((val, index) => {
-                        return <ContentItem i={val} key={index} />;
+                        {dummy.forumContent.map((dummyData, index) => {
+                        return <ContentItem dummy={dummyData} keys={index}/>;
                         })}
                     </ul>
                 </div>

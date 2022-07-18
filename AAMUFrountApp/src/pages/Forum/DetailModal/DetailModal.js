@@ -6,7 +6,9 @@ import '../Board2/DetailButton.scss'
 import { Link } from 'react-router-dom'
 import { Rating } from '@mui/material'
 
-const DetailModal = ({setIsOpen}) => {
+const DetailModal = ({setIsOpen, dummy}) => {
+
+    console.log('모달창에서 본 dummy 데이터 :', dummy);
 
     useEffect(() => {
         const $body = document.querySelector("body");
@@ -92,7 +94,7 @@ const DetailModal = ({setIsOpen}) => {
             <DetailModalWrap>
 
                 <DetailTitle>
-                    <span>제주도 3박 4일 여행</span>
+                    <span>{dummy.title}</span>
                     <div className='detail-button'>
                         {/* DetailButton.scss 주석 */}
                         <button className="learn-more_exit" type="button" onClick={(e)=>{
@@ -102,10 +104,10 @@ const DetailModal = ({setIsOpen}) => {
                 </DetailTitle>
 
                 <DetailContents>
-                    <Notice/>
+                    <Notice dummy={dummy}/>
                     
                     <Textarea>
-                        내용 들어갈 자리
+                        {dummy.content}
                     </Textarea>
                     <div>
                         <Rating
@@ -118,7 +120,7 @@ const DetailModal = ({setIsOpen}) => {
                         />
                     </div>
                     <Tag>
-                        <Date>작성일. 2022-07-03</Date>
+                        <Date>작성일. {dummy.postDate}</Date>
                         <Link to='/'>
                             #tag
                         </Link>
