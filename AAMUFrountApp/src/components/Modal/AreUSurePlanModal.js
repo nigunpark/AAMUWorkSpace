@@ -35,6 +35,15 @@ const AuSModal = styled.div`
   border-radius: 5px;
   z-index: 10;
 `;
+const AuSModal2 = styled.div`
+  position: absolute;
+  background: white;
+  width: 400px;
+  height: 155px;
+  padding: 30px 30px;
+  border-radius: 5px;
+  z-index: 10;
+`;
 
 const SavePlanModal = styled.div`
   position: relative;
@@ -82,6 +91,7 @@ export {
   SavePlanBtnContainer,
   DimmedSavePlanContainer,
   AuSModal,
+  AuSModal2,
   AusBtnContainer,
   AuSBtn,
   SavePlanModal,
