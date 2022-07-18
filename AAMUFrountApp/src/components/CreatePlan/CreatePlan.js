@@ -21,6 +21,7 @@ import {
   AuSBtn,
   AusBtnContainer,
   AuSModal,
+  AuSModal2,
   DimmedAuSContainer,
   DimmedSavePlanContainer,
   SavePlanBtnContainer,
@@ -42,6 +43,12 @@ const CreatePlan = ({
 
   return (
     <div>
+      {auSure && (
+        <AuSureModal
+          setShowCratePlan={setShowCratePlan}
+          setAuSure={setAuSure}
+        />
+      )}
       <DimmedContainer>
         <Modal>
           <TitleBar>
@@ -78,12 +85,6 @@ const CreatePlan = ({
             setSavePlan={setSavePlan}
             fromWooJaeData={fromWooJaeData}
             currPosition={currPosition}
-          />
-        )}
-        {auSure && (
-          <AuSureModal
-            setShowCratePlan={setShowCratePlan}
-            setAuSure={setAuSure}
           />
         )}
       </DimmedContainer>
@@ -139,9 +140,9 @@ const SavePlan = ({ setSavePlan, fromWooJaeData, currPosition }) => {
 const AuSureModal = ({ setShowCratePlan, setAuSure }) => {
   return (
     <DimmedSavePlanContainer>
-      <AuSModal>
-        <div>현재 창을 닫으시면 일정이 저장되지 않습니다.</div>
-        <div> 창을 닫으시겠습니까?</div>
+      <AuSModal2>
+        <h4>현재 창을 닫으시면 일정이 저장되지 않습니다.</h4>
+        <h4> 창을 닫으시겠습니까?</h4>
         <AusBtnContainer>
           <AuSBtn
             onClick={() => {
@@ -158,7 +159,7 @@ const AuSureModal = ({ setShowCratePlan, setAuSure }) => {
             취소
           </AuSBtn>
         </AusBtnContainer>
-      </AuSModal>
+      </AuSModal2>
     </DimmedSavePlanContainer>
   );
 };
