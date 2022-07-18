@@ -1,0 +1,43 @@
+.savePlan__icon-container {
+  background: var(--skyblue);
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: center;
+  border-radius: 5px;
+  border: 2px solid var(--skyblue);
+  transition: 0.2s;
+}
+.savePlan__icon {
+  color: white;
+  font-size: 100px;
+}
+.savePlan__comment {
+  color: white;
+}
+.savePlan__icon-container:hover {
+  background: white;
+  border: 2px solid var(--orange);
+  cursor: pointer;
+}
+
+.savePlan__icon-container:hover .savePlan__icon {
+  color: var(--orange);
+}
+.savePlan__icon-container:hover .savePlan__comment {
+  color: var(--orange);
+}
+
+.savePlan__close {
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  cursor: pointer;
+  font-size: 20px;
+  transition: 0.1s;
+}
+
+.savePlan__close:hover {
+  color: var(--orange);
+}
