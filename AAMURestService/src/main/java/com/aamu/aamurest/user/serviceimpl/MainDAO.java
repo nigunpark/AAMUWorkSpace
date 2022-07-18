@@ -114,6 +114,11 @@ public class MainDAO {
 		return template.selectOne("getRecentPlaceOne", map);
 	}
 
+	public List<PlannerDTO> getPlannerList(String id) {
+	
+		return template.selectList("getPlannerList", id);
+	}
+
 	
 
 

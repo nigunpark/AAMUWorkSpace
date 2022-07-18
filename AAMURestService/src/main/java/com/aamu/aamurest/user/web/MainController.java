@@ -127,15 +127,11 @@ public class MainController {
 		int result = (int)Math.ceil(((double)list.size()-tripDay)/tripDay);
 		int index=0;
 		int count = 0;
-
 		/////////////////////////////
-		
-
 		if(list.size()-tripDay*2==1) {
 			list.get(list.size()-1).setDay(1);
 		}////////////////if
 		/////////////////////////////
-		
 		else {
 			while(true){
 				
@@ -190,13 +186,7 @@ public class MainController {
 									
 									if(low==resultxy) {
 										Collections.swap(list,j,tripDay*(count+1)+index);
-										/*
-										String uri = "http://127.0.0.1:5000/aamu?firstx="+list.get(count*tripDay+index).getDto().getMapx()+"firsty="
-												+list.get(count*tripDay+index).getDto().getMapy()+"second";
-										
-										ResponseEntity<KakaoReview> responseEntity = 
-												restTemplate.exchange(uri, HttpMethod.GET, null, KakaoReview.class);
-										*/
+	
 										break;} 
 								}
 							}
@@ -205,6 +195,18 @@ public class MainController {
 					}
 					if(tripDay*(count+1)+index<list.size() && list.get(tripDay*(count+1)+index).getDay()==0) {
 						list.get(tripDay*(count+1)+index).setDay(index+1);
+						/*
+						String uri = "http://127.0.0.1:5000/mvtm?firstx="+list.get(count*tripDay+index).getDto().getMapx()+"&firsty="
+								+list.get(count*tripDay+index).getDto().getMapy()+"&secondx="
+								+list.get(tripDay*(count+1)+index).getDto().getMapx()+"&secondy="
+								+list.get(tripDay*(count+1)+index).getDto().getMapy();
+						
+						ResponseEntity<Map> responseEntity = 
+								restTemplate.exchange(uri, HttpMethod.GET, null, Map.class);
+						long mtime = Long.parseLong(responseEntity.getBody().get("MVTM").toString())*1000*60;
+						list.get(tripDay*(count+1)+index).setMtime(mtime);
+						System.out.println(mtime);
+						*/
 						System.out.println(String.format("주소:%s, 세팅된 인덱스:%s, 세팅된 날짜:%s",list.get(tripDay*(count+1)+index).getDto().getTitle(),tripDay*(count+1)+index,list.get(tripDay*(count+1)+index).getDay()));
 					}
 					
@@ -305,6 +307,15 @@ public class MainController {
 		dto.setRoute(routes);
 		
 		return dto;
+	}
+	@GetMapping("/planner/selectList")
+	public List<PlannerDTO> selectPlannerList(@RequestParam String id){
+		
+		
+		List<PlannerDTO> list = service.getPlannerList(id);
+		
+		
+		return list;
 	}
 	
 	@GetMapping("/info/places")
