@@ -440,6 +440,11 @@ public class MainServiceImpl implements MainService{
 		
 		return dao.getRecentPlaceOne(map);
 	}
+	@Override
+	public List<PlannerDTO> getPlannerList(String id) {
+
+		return dao.getPlannerList(id);
+	}
 
 
 

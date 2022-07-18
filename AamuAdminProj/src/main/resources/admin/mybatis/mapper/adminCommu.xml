@@ -10,7 +10,7 @@
 		SELECT c.* FROM community c JOIN users u ON c.id=u.id 
 		<if test="searchColumn != null">
 	  	 	WHERE ${searchColumn} LIKE '%' || #{searchWord} || '%' 
-	  	 </if>  
+	  	</if>  
 		ORDER BY lno DESC) T)
 		WHERE R BETWEEN #{start} AND #{end}
 	</select>
@@ -29,7 +29,11 @@
 	<select id="commuCommentSelectList"  parameterType="Map" resultType="adminCommuCommentDTO">
 	SELECT * FROM
 	(SELECT T.*,ROWNUM R FROM (
-	SELECT cc.*,c.ctitle FROM commucomment cc JOIN community c ON cc.lno=c.lno ORDER BY cno DESC) T)
+	SELECT cc.*,c.ctitle FROM commucomment cc JOIN community c ON cc.lno=c.lno 
+	<if test="searchColumn != null">
+  	 	WHERE ${searchColumn} LIKE '%' || #{searchWord} || '%' 
+  	</if>
+	ORDER BY cno DESC) T)
 	WHERE R BETWEEN #{start} AND #{end}
 	</select>
 	

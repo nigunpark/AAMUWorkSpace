@@ -14,9 +14,9 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CommuCommentDTO {
-	public String cno;
-	public String id;
-	public String lno;
-	public String reply;
-	public java.sql.Date replydate;
+	private String cno;
+	private String id;
+	private String lno;
+	private String reply;
+	private java.sql.Date replydate;
 }
