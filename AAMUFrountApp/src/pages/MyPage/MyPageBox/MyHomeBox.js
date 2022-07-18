@@ -1,6 +1,23 @@
-import React from 'react'
+import axios from 'axios';
+import React, { useEffect } from 'react'
 
 const MyBox = ({setClickTab}) => {
+
+    const myTravel = () => {
+        let token = sessionStorage.getItem("token");
+    
+        axios.get('/planner/selectList',{
+            id:sessionStorage.getItem('token'),
+            headers: {
+                Authorization: `Bearer ${token}`,
+            }
+        }).then((resp)=>{
+            
+            console.log('데이터 형태 : ',resp.data);
+        }).catch((error)=>{
+            console.log((error) => console.log("여행경로 가져오기 실패", error));
+        });
+    };
 
   return (
     <div className="project-box-wrapper">
@@ -26,8 +43,6 @@ const MyBox = ({setClickTab}) => {
             </div>
 
             <div className="project-box-content-header">
-                {/* <p className="box-content-header">Web Designing</p>
-                <p className="box-content-subheader">Prototyping</p> */}
                 <img className='MapImgSize' src='/images/img-3.jpg' style={{marginTop:'10px'}}/>
                 {/* 저장한 경로 */}
             </div>
@@ -51,7 +66,7 @@ const MyBox = ({setClickTab}) => {
                     <button className="learn-more" type="button" onClick={()=>{setClickTab(10)}}>공유하기</button>
                 </div>
                 <div className='detail-button'>
-                    <button className="learn-more" type="button" style={{marginTop:'20px'}}>일정보기</button>
+                    <button className="learn-more" type="button" style={{marginTop:'20px'}} onClick={myTravel}>일정보기</button>
                 </div>
             </div>
             <div className="project-box-footer" style={{marginTop:'5px'}}>

@@ -58,7 +58,8 @@ const Notice = ({dummy}) => {
                                 </SwiperSlide>
                             })
                         }
-{/* 
+                        
+                        {/* 
                                 <SwiperSlide>
                                     <li className="swiper__item_Notice">
                                         <Link to='/' className="swiper__item__link_Notice">
