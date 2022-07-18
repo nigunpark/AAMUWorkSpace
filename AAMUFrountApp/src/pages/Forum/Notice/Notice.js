@@ -35,20 +35,22 @@ const Notice = ({dummy}) => {
                         pagination={{ clickable: true }}
                         scrollbar={{ draggable: true }}
                         >
+                        {/* <SwiperSlide>
                         {
                             dummy.imgsdata.map((value, idx)=>{
                                 console.log('value :',value.imgs);
-                                <SwiperSlide>
+                                
                                     <NoticeItem
-                                    src={value.imgs}
+                                    imgdata={value}
                                     //text="Explore the hidden waterfall deep inside the Amazon Jungle"
                                     // label="Adventure"
                                     path="/"
                                     />
-                                </SwiperSlide>
+                                
                             })
                         }
-                        {/* <SwiperSlide>
+                        </SwiperSlide> */}
+                        <SwiperSlide>
                             <NoticeItem
                             src="/images/imageMap.png"
                             //text="Explore the hidden waterfall deep inside the Amazon Jungle"
@@ -79,7 +81,7 @@ const Notice = ({dummy}) => {
                             // label="Adventure"
                             path="/"
                             />
-                        </SwiperSlide> */}
+                        </SwiperSlide>
                     </Swiper>
                 </ul>
             </div>
