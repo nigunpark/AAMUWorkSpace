@@ -40,4 +40,6 @@ public interface MainService{
 	
 	double getRecentPlaceOne(Map map);
 	
+	List<PlannerDTO> getPlannerList(String id);
+	
 }

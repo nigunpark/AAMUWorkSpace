@@ -307,6 +307,7 @@ $(function() {
     	 console.log(endDate);
          if(startDate!=null){
         	 var dateData = JSON.stringify({start : startDate,end : endDate})
+        	 console.log("dateData:",dateData);
         	 $.ajax({
      			url:"<c:url value="userstatend.do"/>",
      			type:"post",
