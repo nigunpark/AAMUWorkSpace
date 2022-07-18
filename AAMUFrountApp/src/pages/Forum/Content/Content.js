@@ -5,6 +5,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import FSearch from '../FSearch/FSearch';
 import axios from "axios";
 
+import "../DB/contentdata.json";
+
 const Content = () => {
     //let navigate = useNavigate();
     const forMapTestArr = [1, 2, 3, 5, 6, 7];
