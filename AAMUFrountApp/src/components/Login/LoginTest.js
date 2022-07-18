@@ -18,10 +18,11 @@ const LoginTest = () => {
   let navigate = useNavigate();
   const [showValid, setShowValid] = useState(false);
   return (
-    <div>
-      {/* <video src="/images/video1.mp4" autoPlay muted loop /> */}
+    <div className="LoginTest">
+      {/* <video src="/images/video3.mp4" muted autoPlay loop /> */}
       <Container />
       <Overlay>
+        {/* <Image /> */}
         <Content>
           <Link to="/">
             <FontAwesomeIcon className="home-btn" icon={faHouse} />
@@ -187,8 +188,7 @@ const flip = keyframes`
 `;
 const Container = styled.div`
   position: fixed;
-  // background: url();
-  // background-image: url("/images/window.jpg");
+  // background-image: url("/images/travel.jpg");
   // background-repeat: no-repeat;
   // background-size: cover;
   top: 0;
@@ -209,6 +209,16 @@ const Overlay = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+`;
+const Image = styled.div`
+  position: absolute;
+  width: 450px;
+  height: 200px;
+  // background-image: url("/images/travel.jpg");
+  // background-repeat: no-repeat;
+  // background-size: cover;
+  border: 1px solid red;
+  top: 0;
 `;
 const Content = styled.div`
   position: relative;
