@@ -55,12 +55,12 @@ const MyBox = ({setClickTab}) => {
                 </div>
             </div>
             <div className="project-box-footer" style={{marginTop:'5px'}}>
-                <div className='detail-button'>
+                {/* <div className='detail-button'>
                     <button className="learn-more" type="button">수정하기</button>
                 </div>
                 <div className='detail-button' style={{marginTop:'20px'}}>
                     <button className="learn-more" type="button">삭제하기</button>
-                </div>
+                </div> */}
             </div>
         </div>
     </div>
