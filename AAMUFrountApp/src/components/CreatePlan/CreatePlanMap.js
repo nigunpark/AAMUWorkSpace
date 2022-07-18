@@ -1,6 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import axios from "axios";
+import {
+  AuSBtn,
+  AusBtnContainer,
+  DimmedAuSContainer,
+  SavePlanModal,
+} from "../Modal/AreUSurePlanModal";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 const { kakao } = window;
 let markersArr = [];
 let polylineArr = [];
@@ -230,6 +237,9 @@ const CreatePlanMap = ({
                 }
               )
               .then((resp) => {
+                if (resp.data === 1) {
+                  return <SavePlan />;
+                }
                 console.log(resp.data);
               })
               .catch((error) => {
@@ -241,6 +251,21 @@ const CreatePlanMap = ({
         </div>
       </div>
     </div>
+  );
+};
+
+const SavePlan = () => {
+  return (
+    <DimmedAuSContainer>
+      <SavePlanModal>
+        <h4>일정을 저장하시겠습니까?</h4>
+        <AusBtnContainer>
+          {/* <FontAwesomeIcon icon= /> */}
+          <AuSBtn onClick={() => {}}>저장</AuSBtn>
+          <AuSBtn onClick={() => {}}>취소</AuSBtn>
+        </AusBtnContainer>
+      </SavePlanModal>
+    </DimmedAuSContainer>
   );
 };
 
