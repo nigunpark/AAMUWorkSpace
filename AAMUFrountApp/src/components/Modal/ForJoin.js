@@ -48,7 +48,7 @@ const Content = styled.div`
   border-radius: 15px;
   box-shadow: var(--shadow);
   margin: auto;
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 1);
   animation: ${flip} 0.5s cubic-bezier(0.47, 0, 0.745, 0.715) both;
 `;
 const ContentStep2 = styled.div`
