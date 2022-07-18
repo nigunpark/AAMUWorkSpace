@@ -7,7 +7,9 @@ const MyBox = ({setClickTab}) => {
         let token = sessionStorage.getItem("token");
     
         axios.get('/planner/selectList',{
-            id:sessionStorage.getItem('token'),
+            params:{
+                id:sessionStorage.getItem('token')
+            },
             headers: {
                 Authorization: `Bearer ${token}`,
             }
