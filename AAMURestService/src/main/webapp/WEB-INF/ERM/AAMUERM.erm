@@ -135,7 +135,7 @@
 			</connections>
 			<display>false</display>
 			<creation_date>2022-06-25 15:20:16</creation_date>
-			<updated_date>2022-07-18 16:18:49</updated_date>
+			<updated_date>2022-07-18 16:23:57</updated_date>
 			<model_property>
 				<name>프로젝트명</name>
 				<value></value>
@@ -15606,8 +15606,8 @@
 					<relation>22</relation>
 					<description></description>
 					<unique_key_name></unique_key_name>
-					<logical_name>LBID</logical_name>
-					<physical_name>LBID</physical_name>
+					<logical_name></logical_name>
+					<physical_name></physical_name>
 					<type>varchar(n)</type>
 					<constraint></constraint>
 					<default_value></default_value>
