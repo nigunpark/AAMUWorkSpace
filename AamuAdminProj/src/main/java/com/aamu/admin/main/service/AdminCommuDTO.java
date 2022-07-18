@@ -12,11 +12,11 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AdminCommuDTO {
-	public String lno;
-	public String ctitle;
-	public String id;
-	public java.sql.Date postdate;
-	public String rcount;
-	public String likecount;
+	private String lno;
+	private String ctitle;
+	private String id;
+	private java.sql.Date postdate;
+	private String rcount;
+	private String likecount;
 	
 }
