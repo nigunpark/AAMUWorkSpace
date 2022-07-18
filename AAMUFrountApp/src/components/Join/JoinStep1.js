@@ -94,6 +94,18 @@ const Join = () => {
                           idValidRef.current.style.visibility = "visible";
                           return;
                         }
+                        if (idRef.current.value.length === 0) {
+                          idRef.current.parentElement.classList.add(
+                            "validation"
+                          );
+                          idRef.current.focus();
+                          setTimeout(() => {
+                            idRef.current.parentElement.classList.remove(
+                              "validation"
+                            );
+                          }, 1100);
+                          return;
+                        }
                         doubleCheck(
                           idRef,
                           idValidRef,
