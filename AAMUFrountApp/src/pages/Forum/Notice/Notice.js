@@ -38,6 +38,7 @@ const Notice = ({dummy}) => {
                         {
                             dummy.imgsdata.map((value, idx)=>{
                                 console.log('value :',value.imgs);
+                                
                                 <SwiperSlide>
                                     <NoticeItem
                                     src={value.imgs}
