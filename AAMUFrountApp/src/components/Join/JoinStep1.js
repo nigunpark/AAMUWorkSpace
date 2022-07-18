@@ -1,11 +1,5 @@
 import React, { useRef, useState } from "react";
-import {
-  Container,
-  Content,
-  Title,
-  Body,
-  Footer,
-} from "../components/Modal/ForJoin.js";
+import { Container, Content, Title, Body, Footer } from "../Modal/ForJoin.js";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-regular-svg-icons";
 import "./Join.css";
@@ -20,7 +14,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { addStepOne } from "../redux/store.js";
+import { addStepOne } from "../../redux/store.js";
 const Join = () => {
   const idRef = useRef();
   const pwdRef = useRef();
