@@ -9,7 +9,7 @@ import { faPaperPlane } from '@fortawesome/free-regular-svg-icons';
 import { Link, useNavigate } from 'react-router-dom';
 
 
-const Uploader = ({setsquare,setlist}) => {
+const Edit = ({setsquare,setlist}) => {
 let searchRef = useRef();
 let titleRef = useRef();
 let textareaRef = useRef();
@@ -359,4 +359,4 @@ const Nextbtn = styled.button`
   font-size:13px;
   font-weight:bold;
 `
-export default Uploader;
+export default Edit;
