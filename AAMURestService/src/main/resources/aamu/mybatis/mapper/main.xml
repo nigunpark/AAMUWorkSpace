@@ -123,5 +123,9 @@
 		* sin( radians(${secondy}) ) ) ) from dual
 	</select>
 	
+	<select id="getPlannerList" parameterType="String" resultType="planDTO">
+		SELECT p.*,r.* FROM routeboard p JOIN route r ON r.rbn = p.rbn WHERE p.id=#{id}
+	</select>
+	
 
 </mapper>

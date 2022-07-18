@@ -103,11 +103,25 @@
                 },
                 {
                     "reviewId" : "nav333",
-                    "star" : "2",
+                    "star" : "5",
                     "review" : "별로네요3"
+                },
+                {
+                    "reviewId" : "nav333",
+                    "star" : "4",
+                    "review" : "더미3-1"
+                },
+                {
+                    "reviewId" : "nav333",
+                    "star" : "3",
+                    "review" : "더미3-2"
+                },
+                {
+                    "reviewId" : "nav333",
+                    "star" : "5",
+                    "review" : "더미3-3"
                 }
             ]
         }
     ]
-    
 }

@@ -5,19 +5,17 @@ import useOutSideClick from './hook/useOutSideClick'
 import '../Board2/DetailButton.scss'
 import { Link } from 'react-router-dom'
 import { Rating } from '@mui/material'
+import axios from 'axios'
 
 const DetailModal = ({setIsOpen, dummy}) => {
 
-    console.log('모달창에서 본 dummy 데이터 :', dummy);
+    console.log('모달창에서 본 dummy 데이터 :', dummy.reviewdata);
 
-    useEffect(() => {
-        const $body = document.querySelector("body");
-        $body.style.overflow= "hidden";
+    let [tempObj, setTempObj] = useState({review: "",
+                                        reviewId: "",
+                                        star: ""});
 
-        return () => (
-            $body.style.overflow = "auto"
-            );
-    }, []);
+    console.log('tempObj 인듯 : ', tempObj);
 
     let [userName] = useState('ADMIN');
 
@@ -28,29 +26,82 @@ const DetailModal = ({setIsOpen, dummy}) => {
     let [feedComments, setFeedComments] = useState([]); // feedComments 댓글 리스트 저장
     let [isValid, setIsValid] = useState(false); // 댓글 게시가능여부 (유효성 검사)
 
+    console.log('저장됬는지 : ',feedComments);
+
+    useEffect(() => {
+       
+       const $body = document.querySelector("body");
+       $body.style.overflow= "hidden";
+
+       return () => (
+           $body.style.overflow = "auto"
+           );
+    }, []);
+
+    // 더미 데이터
+    useEffect(()=>{
+        let temp = [...dummy.reviewdata]
+        setFeedComments(temp)
+    },[])
+    
+
+    
+    // console.log('ddd',feedComments);
     // console.log('저장된 별점:',commentStar);
 
     let reviewPost = (e) => {
+        
+        // setTempObj((curr)=>{return {...curr, star:star, review:comment, reviewId:sessionStorage.getItem('token')}});
+        // setFeedComments([...feedComments, tempObj]);
+
         // 전개연산자를 사용해서 feedComments에 담겨있는 댓글과
         // commentStar에 담겨있는 별점 가져오기
-        const copyFeedComments = [...feedComments];
-        const copyStar = [...commentStar];
+        // const copyFeedComments = [...feedComments];
+        // const copyStar = [...commentStar];
+
+
+        // setStar 와 setComment 의 값이 입력할때마다 값이 변경됨
+        console.log('comment 추가됬나 확인 :',comment);
+        console.log('star 값 저장됬나 확인 :',star);
+
+
+
+        // let token = sessionStorage.getItem("token");
+
+        // axios.post("",{
+        // comment: `${comment}`,
+        // star: `${star}`,
+        // id: sessionStorage.getItem('token')
+
+        // },{
+        // headers: {
+        //     Authorization: `Bearer ${token}`,
+        //     }
+        // }).then((res)=>{
+        //     setFeedComments(res.data);
+        // });
+
+        
 
         //기존 댓글 배열이 담긴 copyFeedComments에 사용자가 입력한 comment 를 push
-        copyFeedComments.push(comment);
+        // copyFeedComments.push(comment);
+
         //기존 별점 배열이 담긴 copyStar에 사용자가 입력한 star 를 push
-        copyStar.push(star);
+        // copyStar.push(star);
 
         //사용자가 입력한 댓글을 포함시켜서 setFeedComments을 변경
-        setFeedComments(copyFeedComments);
+        // setFeedComments(copyFeedComments);
         //사용자가 입력한 별점을 포함시켜서 setCommentStar을 변경
-        setCommentStar(copyStar);
+        // setCommentStar(copyStar);
 
         //사용자가 입력한 댓글창과 별점 초기화
         setComment('');
         setStar(0);
         setIsValid(false);
     };
+    
+    // console.log('입력한 댓글 저장 확인 :', feedComments);
+    // console.log('입력한 별점 저장 확인 :', star);
 
     const reviewDelete = (no) => {
         // console.log('프롭스 잘 넘어오나~', no);
@@ -67,12 +118,12 @@ const DetailModal = ({setIsOpen, dummy}) => {
             <div>
                 <Stars>
                     <img src='/images/star.jpg' style={{width:'30px'}}/>
-                    {props.stars}
+                    {props.commnetArr.star}
                 </Stars>
 
-                <UserName>{props.userName}<Name>님 (2022-07-10)</Name></UserName>
+                <UserName>{props.commnetArr.reviewId}<Name>님 (2022-07-10)</Name></UserName>
 
-                <p>{props.userComment}</p>
+                <p>{props.commnetArr.review}</p>
 
                 <EditDelte type='button'>
                     <Name>수정</Name>
@@ -159,11 +210,12 @@ const DetailModal = ({setIsOpen, dummy}) => {
                         feedComments.map((commnetArr, idx)=>{
                             return(
                                 <CommentList
-                                    stars={commentStar[idx]}
-                                    userName={userName}
-                                    userComment={commnetArr}
-                                    key={idx}
-                                    index={idx}
+                                    commnetArr={commnetArr}
+                                    // stars={commentStar[idx]}
+                                    // userName={userName}
+                                    // userComment={commnetArr}
+                                    // key={idx}
+                                    // index={idx}
                                 />
                             );
                         })
