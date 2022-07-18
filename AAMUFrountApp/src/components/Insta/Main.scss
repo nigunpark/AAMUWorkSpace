@@ -1,5 +1,5 @@
 .main {
-  background-color: #ebebeb;
+  background-color: #f3f3f3;
   display: grid;
   grid-template-columns: 200px auto 500px 200px;
   z-index: 2;
@@ -118,22 +118,19 @@
   grid-column: 2/4;
 
   .main-left {
-    flex-wrap: nowrap;
     position: relative;
-    margin: 68px 180px;
+    margin: 90px 200px;
     display: flex;
     grid-column: 2/3;
     justify-items: center;
-    width: 850px;
+    width: fit-content;
 
     .feeds-setting {
       //display: flex;
       width: 500px;
       border: 1px solid #dbdbdb;
-      margin-left: 30px;
-      margin-right: 50px;
-      margin-top: 32px;
-      margin-bottom: 15px;
+      margin-right: 220px;
+      margin-top: 12px;
       background-color: #fff;
       border-radius: 10px;
 
@@ -349,8 +346,7 @@
       }
       .profile-all {
         position: absolute;
-        top: 65px;
-        left: 275px;
+        left: 140px;
         transform: translate(-50%);
         background-color: #fff;
         box-shadow: 0 0 5px 1px rgba(var(--jb7, 0, 0, 0), 0.0975);

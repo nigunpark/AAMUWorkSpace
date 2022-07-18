@@ -6,7 +6,9 @@ import '../Board2/DetailButton.scss'
 import { Link } from 'react-router-dom'
 import { Rating } from '@mui/material'
 
-const DetailModal = ({setIsOpen}) => {
+const DetailModal = ({setIsOpen, dummy}) => {
+
+    console.log('모달창에서 본 dummy 데이터 :', dummy);
 
     useEffect(() => {
         const $body = document.querySelector("body");
@@ -28,7 +30,7 @@ const DetailModal = ({setIsOpen}) => {
 
     // console.log('저장된 별점:',commentStar);
 
-    let post = (e) => {
+    let reviewPost = (e) => {
         // 전개연산자를 사용해서 feedComments에 담겨있는 댓글과
         // commentStar에 담겨있는 별점 가져오기
         const copyFeedComments = [...feedComments];
@@ -92,7 +94,7 @@ const DetailModal = ({setIsOpen}) => {
             <DetailModalWrap>
 
                 <DetailTitle>
-                    <span>제주도 3박 4일 여행</span>
+                    <span>{dummy.title}</span>
                     <div className='detail-button'>
                         {/* DetailButton.scss 주석 */}
                         <button className="learn-more_exit" type="button" onClick={(e)=>{
@@ -102,10 +104,10 @@ const DetailModal = ({setIsOpen}) => {
                 </DetailTitle>
 
                 <DetailContents>
-                    <Notice/>
+                    <Notice dummy={dummy}/>
                     
                     <Textarea>
-                        내용 들어갈 자리
+                        {dummy.content}
                     </Textarea>
                     <div>
                         <Rating
@@ -118,7 +120,7 @@ const DetailModal = ({setIsOpen}) => {
                         />
                     </div>
                     <Tag>
-                        <Date>작성일. 2022-07-03</Date>
+                        <Date>작성일. {dummy.postDate}</Date>
                         <Link to='/'>
                             #tag
                         </Link>
@@ -140,7 +142,7 @@ const DetailModal = ({setIsOpen}) => {
                     <div className='detail-button'>
                         {
                             isValid ? 
-                            <button className="learn-more" type="button" onClick={post}>리뷰 등록</button>
+                            <button className="learn-more" type="button" onClick={reviewPost}>리뷰 등록</button>
                             : 
                             <button className="learn-more" type="button" disabled>리뷰를 작성하세요</button>
                         }
@@ -210,11 +212,11 @@ const DetailModalWrap = styled.div`
     display: grid;
     width: 1050px;
     height: 90%;
-
     overflow: auto;
 
     border-radius: 15px;
     background-color: #fff;
+
     position: absolute;
     top: 50%;
     left: 50%;
@@ -224,11 +226,14 @@ const DetailModalWrap = styled.div`
 
 const DetailTitle = styled.div`
     margin-top: 15px;
+    margin-bottom: 10px;
+    height: 20%;
 
     span{
         float: center;
         font-size: 1.5em;
         margin-left: 40px;
+        
     }
     div{
         margin-right: 25px;
