@@ -12,22 +12,40 @@ const DimmedAuSContainer = styled.div`
   align-items: center;
   background-color: rgba(0, 0, 0, 0.6);
 `;
+
+const DimmedSavePlanContainer = styled.div`
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  z-index: 2100;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.6);
+`;
+
 const AuSModal = styled.div`
-  position: relative;
+  position: absolute;
   background: white;
   width: 400px;
   height: 125px;
   padding: 30px 50px;
   border-radius: 5px;
+  z-index: 10;
 `;
 
 const SavePlanModal = styled.div`
   position: relative;
   background: white;
-  width: 400px;
-  height: 125px;
+  width: 640px;
+  height: 340px;
   padding: 30px 50px;
   border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const AusBtnContainer = styled.div`
@@ -36,10 +54,19 @@ const AusBtnContainer = styled.div`
   justify-self: center;
   gap: 1rem;
   margin-top: 15px;
-  width: auto%;
+  width: auto;
   height: auto;
   left: 70px;
   right: auto;
+`;
+
+const SavePlanBtnContainer = styled.div`
+  position: absolute;
+  display: flex;
+  justify-self: center;
+  gap: 1rem;
+  width: auto;
+  height: auto;
 `;
 
 const AuSBtn = styled.div`
@@ -50,4 +77,12 @@ const AuSBtn = styled.div`
   border-radius: 5px;
 `;
 
-export { DimmedAuSContainer, AuSModal, AusBtnContainer, AuSBtn, SavePlanModal };
+export {
+  DimmedAuSContainer,
+  SavePlanBtnContainer,
+  DimmedSavePlanContainer,
+  AuSModal,
+  AusBtnContainer,
+  AuSBtn,
+  SavePlanModal,
+};

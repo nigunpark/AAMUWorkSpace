@@ -6,7 +6,7 @@ import Comment from './ModalGroup/Comment';
 import Slider from "react-slick";
 import "./ModalGroup/slick-theme.css";
 import "./ModalGroup/slick.css";
-import axios from "axios";
+import dayjs from 'dayjs';
 
 function FeedSetting({val}) {
     let menuRef = useRef();
@@ -18,7 +18,19 @@ function FeedSetting({val}) {
     const [profileModal, setprofileModal] = useState(false);
     const [commentModal, setcommentModal] = useState(false);
 
-    const settings = {
+    let [comment, setComment] = useState('');
+    let [feedComments, setfeedComments] = useState([]); 
+    let [isValid, setisValid] = useState(false); 
+
+    let post = e => {//유효성 검사를 통과하고 게시버튼 클릭시 발생하는 함수
+        const copyFeedComments = [...feedComments];//feedComments에 담겨있던 댓글 받아옴
+        copyFeedComments.push(comment);//copyFeedComments에 있는 기존 댓글에 push하기 위함 
+        setfeedComments(copyFeedComments);//copyFeedComments 담겨있을 comment를 setfeedComments로 변경
+        setComment('');//사용자 댓글창을 빈 댓글 창으로 초기화
+    };
+
+
+    const settings = {//이미지 슬라이드
         dots: true,
         infinite: false,
         speed: 500,
@@ -27,7 +39,7 @@ function FeedSetting({val}) {
       };
       
 
-    function menuModalRef(e){
+    function menuModalRef(e){//메뉴 모달 나왔을때 주변 눌러도 꺼지게 만들기
         e.stopPropagation();
         if (e.target != menuRef.current) setModalShow(false);
     }
@@ -42,12 +54,12 @@ function FeedSetting({val}) {
     <div className="title-profile">
         <img src="./img/bk.jpg" alt="프사" />                
         <span
-        ref={profileRef}
-        className="profileSpan"
-        onMouseOver={()=>{setprofileModal(true)}}
-        >아이디
-            {/* {val.id} */}
-            </span> 
+            ref={profileRef}
+            className="profileSpan"
+            onMouseOver={()=>{setprofileModal(true)}}
+            >
+                {val.id}
+        </span> 
         <div className="profile" style={{position : 'relative'}}>          
             {profileModal ? 
                 <div 
@@ -55,7 +67,7 @@ function FeedSetting({val}) {
                 onMouseOver={()=>{setprofileModal(true)}}
                 onMouseOut={()=>{setprofileModal(false)}}>
                     <Profile 
-                    // val={val}
+                    val={val}
                     ></Profile>
                 </div>
             : null
@@ -72,15 +84,12 @@ function FeedSetting({val}) {
         </div>  
     </div>
     <div className="location">
-        <p>제목
-            {/* {val.title} */}
-            </p>
+        <p>{val.title}</p>
     </div>
         <Slider {...settings}>
             <div className="container">
-            <img src=''
-            // {val.photo[0]} 
-            className="main-image" alt="메인" />
+            <img src={val.photo[0]}
+                 className="main-image" alt="메인" />
             </div>
             
         </Slider>
@@ -121,40 +130,57 @@ function FeedSetting({val}) {
             <img src="./img/bk.jpg" className="feeds-commentimage" alt="프사" />
             <span><span className="like-bold">0hyun0hyun</span>님
             <span className="like-bold">외
-             {/* {val.likecount} */}
+             {val.likecount}
              명</span>이 좋아합니다</span>
         </div>
         <div className="feeds-title">
             <span className="comment-id">제목 : </span>
             <span>
-                {/* {val.ctitle} */}
+                {val.ctitle}
                 </span>
         </div>
         <div className="feeds-writing">
             <span className="comment-id">
-                {/* {val.id}  */}
+                {val.id} 
                 </span>
                 <span> 
-                    {/* {val.content} */}
+                    {val.content}
                     </span>
         </div>
         <div className="feeds-writing">
             <span className="comment-id">
-                {/* {val.commuComment==null?"":val.commuComment.id} */}
+                {val.commuComment==null?"":val.commuComment.id}
                 </span>
             <span>
-                {/* {val.commuComment==null?"":val.commuComment.reply} */}
+                {val.commuComment==null?"":val.commuComment.reply}
                 </span>
         </div>
         <div className="feeds-comment">
         </div>
         <span className="time">
-            {/* {val.postdate} */}
-            </span>    
+           <p>{dayjs(new Date(val.postdate)).format('YYYY/MM/DD')}</p>
+        </span>    
     </div>
     <div className="comment">
-        <input type="text" className="typing-comment" placeholder="댓글 달기..."/>
-        <button className="comment-button" type="button">게시</button>
+        <input type="text"
+                className="typing-comment" 
+                placeholder="댓글 달기..."
+                // onChange={(e)=>{
+                //     setComment(e.target.value);//댓글 창의 상태가 변할때마다 setComment를 통해 comment값을 바꿔준다
+                // }}
+                // onKeyUp={(e)=>{
+                //     e.target.value.length > 0//사용자가 키를 눌렀다 떼었을때 길이가 0을 넘는 값인지 유효성 검사 결과 값을 담는다
+                //     ? setisValid(true)
+                //     : setisValid(false);
+                // }}
+                // value={comment}
+                />
+
+        <button 
+                className="comment-button" 
+                type="button">
+                    게시
+        </button>
     </div>
     </div> 
 
