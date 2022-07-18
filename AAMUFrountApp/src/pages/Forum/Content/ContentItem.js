@@ -11,16 +11,19 @@ const ContentItem = ({dummy, keys }) => {
 
     const [isOpen, setIsOpen] = useState(false);
 
-    const [avgStar, setAvgStar] = useState([]);
-
     const onClickModal = () =>{
         setIsOpen(true);
     };
 
-    let num = 0;
-    let avg = 0;
+    let add=0;
+    dummy.reviewdata.forEach((obj,i)=>{
+            console.log('11',typeof Number(obj.star))
+            add+=Number(obj.star)
+    })
+    console.log();
 
-//<Link to="/review" className="card__item__link_minCon">
+    add = Math.round((add/dummy.reviewdata.length)*10)/10;
+
     return (
         <>
         <li className="card__item_minCon" onClick={onClickModal}>
@@ -34,22 +37,7 @@ const ContentItem = ({dummy, keys }) => {
                         />
                     </div>
                     <div className="card__item__rating_minCon">
-                        <img src='/images/star.jpg' style={{width:'30px'}}/>{
-                            dummy.reviewdata.map((stars, idx)=>{
-
-                                // console.log('stars: ',stars.star);
-
-                                // num += parseInt(stars.star*10);
-                                // console.log('별점 합계 :', num/10);
-                    
-                                // avg = Math.ceil(((num/10)/dummy.reviewdata.length)*10)/10;
-                                // console.log('별점 평균 :', avg);
-                                
-                                // return avg;
-
-
-                            })
-                        }
+                        <img src='/images/star.jpg' style={{width:'30px'}}/>{add}
                         <span className="idSpan_minCon" style={{marginLeft: 'auto'}}>{dummy.id}님의 plan</span>
                     </div>
                     <div className="card__item__content_minCon">
