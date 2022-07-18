@@ -38,7 +38,7 @@
 	
 	
 	<insert id="plannerInsert" parameterType="planDTO">
-		INSERT INTO routeboard VALUES(SEQ_PLA.NEXTVAL,#{title},SYSDATE,#{id})
+		INSERT INTO routeboard VALUES(SEQ_PLA.NEXTVAL,#{title},SYSDATE,#{id},#{plannerDate})
 		<selectKey keyProperty="rbn" resultType="int" order="AFTER">
 	    	SELECT SEQ_PLA.CURRVAL FROM DUAL
 	    </selectKey>
@@ -59,10 +59,6 @@
 	<delete id="deleteRoute" parameterType="int">
 		DELETE FROM route WHERE rbn=#{rbn}
 	</delete>
-		
-	<select id="selectRouteList" parameterType="int" resultType="routeDTO">
-		SELECT * FROM route WHERE rbn=#{rbn}
-	</select>
 	
 	<select id="selectOnePlace" parameterType="int" resultType="attrDTO">
 		SELECT * FROM places WHERE contentid=#{contentid}
@@ -125,6 +121,14 @@
 	
 	<select id="getPlannerList" parameterType="String" resultType="planDTO">
 		SELECT p.*,r.* FROM routeboard p JOIN route r ON r.rbn = p.rbn WHERE p.id=#{id}
+	</select>
+	
+	<select id="selectPlannerOne" parameterType="int" resultType="planDTO">
+		SELECT * FROM routeboard WHERE rbn=#{rbn}
+	</select>
+			
+	<select id="selectRouteList" parameterType="int" resultType="routeDTO">
+		SELECT * FROM route WHERE rbn=#{rbn}
 	</select>
 	
 

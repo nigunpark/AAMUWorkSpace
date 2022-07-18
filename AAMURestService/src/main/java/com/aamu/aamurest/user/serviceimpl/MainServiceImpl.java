@@ -234,11 +234,7 @@ public class MainServiceImpl implements MainService{
 	}
 	
 ///////////////////////////////////////////////////get place impl
-	@Override
-	public List<RouteDTO> selectRouteList(int rbn) {
-		
-		return dao.selectRouteList(rbn);
-	}
+
 	@Override
 	public List<AttractionDTO> selectPlacesList(Map map) {
 		
@@ -444,6 +440,14 @@ public class MainServiceImpl implements MainService{
 	public List<PlannerDTO> getPlannerList(String id) {
 
 		return dao.getPlannerList(id);
+	}
+	@Override
+	public PlannerDTO selectPlannerOne(int rbn) {
+		PlannerDTO dto = dao.selectPlannerOne(rbn);
+		List<RouteDTO>routes =  dao.selectRouteList(rbn);
+		dto.setRoute(routes);
+		
+		return dto;
 	}
 
 

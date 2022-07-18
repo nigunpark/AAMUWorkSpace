@@ -294,17 +294,9 @@ public class MainController {
 		
 	}
 	@GetMapping("/planner/selectone")
-	public PlannerDTO selectPlannerOne(@RequestParam Map map) {
+	public PlannerDTO selectPlannerOne(@RequestParam int rbn) {
 		
-		PlannerDTO dto = new PlannerDTO();
-		List<RouteDTO> routes = new Vector<>();
-		int rbn = dto.getRbn();
-		
-		routes = service.selectRouteList(rbn);
-		for(RouteDTO route :routes) {
-		}
-		
-		dto.setRoute(routes);
+		PlannerDTO dto = service.selectPlannerOne(rbn);
 		
 		return dto;
 	}

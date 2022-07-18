@@ -10,7 +10,7 @@ public interface MainService{
 
 	int plannerInsert(PlannerDTO dto);
 	
-	List<RouteDTO> selectRouteList(int rbn); 
+	PlannerDTO selectPlannerOne(int rbn); 
 	
 	List<AttractionDTO> selectPlacesList(Map map);
 
