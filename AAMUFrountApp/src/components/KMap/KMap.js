@@ -108,6 +108,7 @@ const KMap = ({
     //지도 최대레벨 제한
     map.setMaxLevel(10);
     setKMap(map);
+    setFromWooJaeData([]);
   }, []);
 
   //지도 줌인줌아웃시 지도레벨 setting state
