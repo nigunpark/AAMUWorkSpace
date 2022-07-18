@@ -27,7 +27,7 @@ class AAMUPlanViewModelFactory(val context: Context) : ViewModelProvider.Factory
     }
 }
 
-class AAMUPlanViewModel(context : Context) : ViewModel(){
+class AAMUPlanViewModel(context : Context) : ViewModel(), MapView.POIItemEventListener{
 
     private val aamuRepository : AAMURepository = AAMUDIGraph.createAAMURepository()
     private val context = context
@@ -41,9 +41,9 @@ class AAMUPlanViewModel(context : Context) : ViewModel(){
     }
 
     fun getRcentPlaces() = viewModelScope.launch {
-        aamuRepository.getRecentDiner(
-            mapView.mapCenterPoint.mapPointGeoCoord
-                .latitude,mapView.mapCenterPoint.mapPointGeoCoord.longitude)
+        aamuRepository.getRecentPlace(
+            mapView.mapCenterPoint.mapPointGeoCoord.latitude,
+            mapView.mapCenterPoint.mapPointGeoCoord.longitude)
             .collect { aamuplaces ->
                 if (aamuplaces.isNotEmpty()){
                     recentPlaces.value = aamuplaces
@@ -70,20 +70,23 @@ class AAMUPlanViewModel(context : Context) : ViewModel(){
         }
     }
 
-//    fun setMarker() {
-//
-//        val mCustomMarker :MapPOIItem =MapPOIItem()
-//        val name : String = "Custom Marker"
-//        mCustomMarker.itemName = name
-//        mCustomMarker.tag = 1
-//        mCustomMarker.mapPoint = mapView.mapCenterPoint
-//        mCustomMarker.showAnimationType = MapPOIItem.ShowAnimationType.SpringFromGround
-//        mCustomMarker.markerType = MapPOIItem.MarkerType.RedPin
-//
-//        mapView.addPOIItem(mCustomMarker)
-//        mapView.selectPOIItem(mCustomMarker, true)
-//        mapView.setMapCenterPoint(mapView.mapCenterPoint, true)
-//    }
+    override fun onPOIItemSelected(mapView: MapView?, mapPOIItem: MapPOIItem?) {
+
+    }
+
+    override fun onCalloutBalloonOfPOIItemTouched(mapView: MapView?, mapPOIItem: MapPOIItem?) {}
+
+    override fun onCalloutBalloonOfPOIItemTouched(
+        mapView: MapView?,
+        mapPOIItem: MapPOIItem?,
+        calloutBalloonButtonType: MapPOIItem.CalloutBalloonButtonType?
+    ) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onDraggablePOIItemMoved(mapView: MapView?, mapPOIItem: MapPOIItem?, mapPoint: MapPoint?) {
+        TODO("Not yet implemented")
+    }
 }
 
 class CustomCalloutBalloonAdapter : CalloutBalloonAdapter{
@@ -94,7 +97,7 @@ class CustomCalloutBalloonAdapter : CalloutBalloonAdapter{
         mCalloutBallon = ComposeView(PlannerFragment().requireContext())
     }
 
-    override fun getCalloutBalloon(p0: MapPOIItem?): View {
+    override fun getCalloutBalloon(mapPOIItem: MapPOIItem?): View {
         return mCalloutBallon.apply {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
@@ -103,7 +106,7 @@ class CustomCalloutBalloonAdapter : CalloutBalloonAdapter{
         }
     }
 
-    override fun getPressedCalloutBalloon(p0: MapPOIItem?): View? {
+    override fun getPressedCalloutBalloon(mapPOIItem: MapPOIItem?): View? {
         return null
     }
 
