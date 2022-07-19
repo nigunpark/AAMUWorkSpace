@@ -28,7 +28,7 @@ public class BBSDAO {
 	}
 
 	//글 하나 선택
-	public BBSDTO bbsSelectOne(String rbn) {
+	public BBSDTO bbsSelectOne(int rbn) {
 		return template.selectOne("bbsSelectOne",rbn);
 	}
 	
@@ -56,8 +56,8 @@ public class BBSDAO {
 	/*----------------------------------------------------*/
 	
 	//글 상세보기_모든 리뷰 보기
-	public List<ReviewDTO> reviewList(String rno) {
-		return template.selectList("reviewList",rno);
+	public List<ReviewDTO> reviewList(int rbn) {
+		return template.selectList("reviewList",rbn);
 	}
 	
 	//리뷰 등록
@@ -75,15 +75,24 @@ public class BBSDAO {
 		return template.delete("reviewDelete",map);
 	}
 	
-	//평점 평균 구하기
-	public double getRatingAverage(int ratingavg) {
-		return ratingavg;
+	//평점 반영
+	public int ratingInsert(Map map) {
+		return template.insert("ratingInsert",map);
 	}
 	
-	//평점 평균 반영 및 업데이트
-	public int updateRating(ReviewDTO rate) {
-		return template.update("updateRating",rate);
+	//평점 평균 반영
+	public int ratingAverageInsert(Map map) {
+		return template.insert("ratingAverageInsert",map);
 	}
+	
+	//테마
+	public int themeInsert(BBSDTO theme) {
+		return template.insert("themeInsert",theme);
+	}
+
+	
+
+	
 
 	
 	
