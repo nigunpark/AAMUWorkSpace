@@ -10,6 +10,7 @@
 		SELECT * FROM
 		(SELECT T.*, ROWNUM R FROM (
 		SELECT n. * FROM Notice n
+		JOIN users u ON n.id=u.id
 		ORDER BY nno DESC) T)
 		WHERE R BETWEEN #{start} AND #{end}
 	</select>
