@@ -51,6 +51,7 @@ const [inputValue,setinputValue] = useState('');
   
   //이미지 다중 업로드 시
   const [myImage,setMyImage] = useState([]);
+  const [myImagefile,setMyImageFile] = useState([]);
 
   const addImage = e => {
     const nowSelectImageList = e.target.files;//한번에 받은 파일 리스트(object)
@@ -63,6 +64,7 @@ const [inputValue,setinputValue] = useState('');
       //복사한 myImage에 추가
     }
     setMyImage(nowImageURLList);
+    setMyImageFile(nowSelectImageList);
 
     //myImage원본에 덮어씌우기
   }
@@ -185,7 +187,7 @@ const [inputValue,setinputValue] = useState('');
             {/* {showNext ?  */}
               <Nextbtn  
                       onClick={()=>{
-                        let temp= uploadFile(myImage)
+                        let temp= uploadFile(myImagefile)
                         gramEdit(temp,setShowWrite,titleRef,textareaRef,searchRef,search)
                         setsquare(false)
                         feedList(setlist)
@@ -313,9 +315,11 @@ function feedList(setlist){//업로드 버튼 누르고 화면 새로고침
 
 
 
- function uploadFile(myImage){//이미지 업로드
+ function uploadFile(myImagefile){//이미지 업로드
   let formData = new FormData(); // formData 객체를 생성한다.
-  formData.append("multifiles", myImage)
+  for (let i = 0; i < myImagefile.length; i++) { 
+    formData.append("multifiles", myImagefile[i]); // 반복문을 활용하여 파일들을 formData 객체에 추가한다
+  }
   return formData;
 }
 
