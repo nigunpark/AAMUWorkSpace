@@ -1,9 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import "./MyPage.scss";
 import MyHomeBox from "./MyPageBox/MyHomeBox";
-import MyHomeTopLine from "./MyPageBox/MyHomeTopLine";
 import MyProfileBox from "./MyPageBox/MyProfileBox";
-import MyProfileTopLine from "./MyPageBox/MyProfileTopLine";
 import MyMessageBar from "./MyMessageBar/MyMessageBar";
 import styled from "styled-components";
 import { faStar } from "@fortawesome/free-regular-svg-icons";
@@ -76,6 +74,9 @@ const MyPage = () => {
       // two.current.classList.remove("active");
       three.current.classList.remove("active");
       setting.current.classList.add("active");
+
+      homeBox.current.classList.remove("jsListView");
+      homeBox.current.classList.add("jsGridView");
     }
   }, [clickTab]);
   return (
@@ -249,7 +250,7 @@ const MyPage = () => {
               planList={planList}
               />
           </div>
-          <div ref={homeBox} className="project-boxes "> {/* jsListView jsGridView */}
+          <div ref={homeBox} className="project-boxes"> {/* jsListView jsGridView */}
             {/* <MyHomeBox/> */}
             <TabContent
               clickTab={clickTab}
@@ -380,14 +381,13 @@ function TabContent({clickTab, setClickTab, planList}) {
     return content !== "" && title !== "";
   }, [title, content]);
 
-  let totalEdit = [1];
-
   if (clickTab === 0) {// 메인화면
-    return totalEdit.map(() => {
+    return planList.map((val, idx) => {
       return (
           <MyHomeBox
             setClickTab={setClickTab}
-            planList={planList}/>
+            planList={val}
+            />
         );
     });
   }
