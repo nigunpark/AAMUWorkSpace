@@ -50,8 +50,8 @@ const Content = () => {
                     <FSearch/>
                     
                     <ul className="card__items_minCon">
-                        {dummy.forumContent.map((dummyData, index) => {
-                        return <ContentItem dummy={dummyData} keys={index}/>;
+                        {dummy.forumContent.map((dummyData, idx) => {
+                        return <ContentItem dummy={dummyData} keys={idx}/>;
                         })}
                     </ul>
                 </div>

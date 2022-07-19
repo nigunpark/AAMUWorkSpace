@@ -1,24 +1,9 @@
-import axios from 'axios';
-import React, { useEffect } from 'react'
+import React from 'react'
 
 const MyBox = ({setClickTab}) => {
 
     const myTravel = () => {
-        let token = sessionStorage.getItem("token");
-    
-        axios.get('/planner/selectList',{
-            params:{
-                id:sessionStorage.getItem('token')
-            },
-            headers: {
-                Authorization: `Bearer ${token}`,
-            }
-        }).then((resp)=>{
-            
-            console.log('데이터 형태 : ',resp.data);
-        }).catch((error)=>{
-            console.log((error) => console.log("여행경로 가져오기 실패", error));
-        });
+        
     };
 
   return (
