@@ -14,10 +14,10 @@ import lombok.Setter;
 public class NoticeDTO {
 
 	private String nno;
-	private String id;
 	private String title;
 	private String content;
 	private java.sql.Date noticedate;
 	private String ncount;
-	
+	private String id;
+
 }

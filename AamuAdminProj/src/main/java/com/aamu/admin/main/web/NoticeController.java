@@ -5,9 +5,11 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.aamu.admin.main.service.ListPagingData;
 import com.aamu.admin.main.service.NoticeDTO;
+import com.aamu.admin.main.service.NoticeService;
 import com.aamu.admin.main.service.PagingUtil;
 import com.aamu.admin.main.serviceimpl.NoticeServiceImpl;
 
@@ -39,6 +42,19 @@ public class NoticeController {
 		model.addAttribute("totalCount", noticeService.noticeGetTotalRecordCount(map));
 
 		// 뷰정보 반환
+		return "notice/adminNotice";
+	}
+	
+	
+	// 글 등록
+	@GetMapping("NoticeWrite.do")
+	public String noticeWrite() throws Exception {
+		return "notice/noticeWrite";
+	}
+
+	@PostMapping("NoticeWrite.do")
+	public String noticeWriteOk(@RequestParam Map map) {
+		noticeService.noticeWrite(map);
 		return "notice/adminNotice";
 	}
 

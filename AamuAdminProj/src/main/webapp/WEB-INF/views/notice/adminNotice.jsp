@@ -18,8 +18,11 @@
 
 									<div class="card-numberOfBoard">
 										총 게시글 수: ${totalCount}개
-										<button class="btn btn-primary text-white me-0" style="float: right">삭제</button>
+										
+										<button class="delete btn btn-primary text-white me-0" style="float: right">삭제</button>
+										<a href="<c:url value="NoticeWrite.do"/>"><button class="write btn btn-primary text-white me-0" style="float: right">등록</button></a>
 									</div>
+
 									<div class="table-responsive text-center">
 										<table class="table text-center">
 											<thead>
@@ -131,7 +134,7 @@
 	});  
     
     //삭제 click
-    $('div.card-numberOfBoard > button').click(function(){
+    $('div.card-numberOfBoard > button.delete').click(function(){
     	console.log("버튼이벤트 발생");
     	var nnoArr = new Array();
         $('input[name="RowCheck"]:checked').each(function(i){//체크된 리스트 저장

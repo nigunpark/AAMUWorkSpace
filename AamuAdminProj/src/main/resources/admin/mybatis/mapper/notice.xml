@@ -9,10 +9,12 @@
 		resultType="NoticeDTO">
 		SELECT * FROM
 		(SELECT T.*, ROWNUM R FROM (
-		SELECT n. * FROM Notice n
+		SELECT n. * FROM
+		Notice n
 		JOIN users u ON n.id=u.id
 		ORDER BY nno DESC) T)
-		WHERE R BETWEEN #{start} AND #{end}
+		WHERE R BETWEEN
+		#{start} AND #{end}
 	</select>
 
 	<!-- 전체 글 레코드수 -->
@@ -21,10 +23,25 @@
 		SELECT COUNT(*) FROM Notice
 	</select>
 
+	<!-- 글 등록 -->
+	
+
+	
+	<insert parameterType="Map" id="noticeWrite">
+		INSERT INTO notice VALUES
+		(SEQ_NNO.NEXTVAL,
+		#{title},
+		#{content},
+		SYSDATE,
+		DEFAULT,
+		#{id})
+	</insert>
+
 	<!-- 글 삭제 -->
 	<delete id="noticeDelete" parameterType="Map">
 		DELETE Notice WHERE
-		nno = #{nno}
+		nno =
+		#{nno}
 	</delete>
 
 </mapper>

@@ -26,6 +26,11 @@ public class NoticeDAO {
 		return template.selectOne("noticeGetTotalRecordCount", map);
 	}
 	
+	// 글 등록
+	public int noticeWrite(Map map) {		
+		return template.update("noticeWrite",map);
+	}
+	
 	//글 삭제
 	public int noticeDelete(Map map) {
 		return template.delete("noticeDelete",map);
