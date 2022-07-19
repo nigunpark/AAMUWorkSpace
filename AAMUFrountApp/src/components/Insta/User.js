@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import NotificationModal from "./ModalGroup/Notification";
 import SearchModal from "./ModalGroup/Search/Search";
-import WriteModal from "./ModalGroup//Upload/Upload"
+import WriteModal from "./ModalGroup/Upload/Upload"
 import ButtonGroup from './ModalGroup/Search/ButtonGroup';
 
 function User({setlist}) {
