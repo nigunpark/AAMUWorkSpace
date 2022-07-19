@@ -79,11 +79,11 @@ public class BBSDAO {
 	public int ratingInsert(Map map) {
 		return template.insert("ratingInsert",map);
 	}
-	
+	/*
 	//평점 평균 반영
 	public Double ratingAvgInsert(Map map) {
 		return template.insert("ratingAvgInsert",map);
-	}
+	}*/
 	
 	//테마
 	public int themeInsert(BBSDTO theme) {
