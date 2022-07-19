@@ -256,6 +256,7 @@ const KMap = ({
   }, [handleWheel]);
 
   const zoomAxios = (placey, placex) => {
+    let token = sessionStorage.getItem("token");
     axios
       .get("/aamurest/info/recentplace", {
         headers: {
