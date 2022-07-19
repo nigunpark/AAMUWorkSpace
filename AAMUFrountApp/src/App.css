@@ -122,8 +122,3 @@ hr {
   font-family: "baseFont";
   src: url("./font/LeferiBaseRegular.ttf");
 }
-
-@font-face {
-  font-family: "Kangwon";
-  src: url("./font/kangwon.ttf");
-}
