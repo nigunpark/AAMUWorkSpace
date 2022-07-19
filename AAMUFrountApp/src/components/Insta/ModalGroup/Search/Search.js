@@ -1,7 +1,11 @@
-import React, { useEffect, useRef, useState } from "react";
+import React,{useState,useEffect,useCallback,useMemo} from "react";
 import styled from "styled-components";
+import axios from 'axios';
 
-const search = ({ setIsOpen }) => {
+
+const search = () => {
+
+
   return (
     <div className="search-all disappear">
       <div className="search-engine">
