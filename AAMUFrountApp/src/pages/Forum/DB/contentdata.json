@@ -12,10 +12,10 @@
                     "imgs" : "/images/img-2.jpg"
                 },
                 {
-                    "imgs" : "/images/bg2.png"
+                    "imgs" : "/images/img-6.jpg"
                 },
                 {
-                    "imgs" : "/images/bg3.png"
+                    "imgs" : "/images/img-4.jpg"
                 }
             ],
             "reviewdata" : [
@@ -48,10 +48,10 @@
                     "imgs" : "/images/img-3.jpg"
                 },
                 {
-                    "imgs" : "/images/bg2.png"
+                    "imgs" : "/images/img-7.jpg"
                 },
                 {
-                    "imgs" : "/images/bg3.png"
+                    "imgs" : "/images/img-8.jpg"
                 },
                 {
                     "imgs" : "/images/woah.jpg"
@@ -92,7 +92,7 @@
                     "imgs" : "/images/img-1.jpg"
                 },
                 {
-                    "imgs" : "/images/bg2.png"
+                    "imgs" : "/images/bg5.png"
                 }
             ],
             "reviewdata" : [

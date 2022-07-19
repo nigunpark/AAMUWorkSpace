@@ -13,7 +13,7 @@ public interface BBSService {
 	List bbsSelectPhotoList(int rbn);
 	
 	//글 하나 선택
-	BBSDTO bbsSelectOne(String rbn);
+	BBSDTO bbsSelectOne(int rbn);
 	
 	//글 등록
 	int bbsInsert(Map map);
@@ -28,7 +28,7 @@ public interface BBSService {
 	/*----------------------------------------------------*/
 	
 	//글 상세보기_모든 리뷰 보기
-	List<ReviewDTO> reviewList(String rbn);
+	List<ReviewDTO> reviewList(int rbn);
 	
 	//리뷰 등록
 	int reviewInsert(Map map);
@@ -39,9 +39,11 @@ public interface BBSService {
 	//리뷰 삭제
 	int reviewDelete(Map map);
 	
-	//평점 평균 구하기 (소수점 한자리까지)
-	Double getRatingAverage(int rno);
+	//평점 반영
+	int rateInsert(Map map);
 	
-	//평점 평균 반영하기	
-	int updateRating(ReviewDTO rate);
+	//평점 평균 반영
+	int rateAvgInsert(Map map);
+
+
 }

@@ -74,15 +74,8 @@ public class MainController {
 	@PostMapping("userstatend.do")
 	@ResponseBody
 	public Map userStat(@RequestBody Map map) {
-		System.out.println(map.get("start"));
-		String start = map.get("start").toString().split("T15")[0];
-		String end = map.get("end").toString().split("T15")[0];
-		System.out.println(start);
-		map.put("start", start);
-		map.put("end", end);
 		
-		List<Integer> dataList = service.selectStartEnd(map);
-		
+		Map<String,List> dataList = service.selectStartEnd(map);
 		return map;
 		
 	}

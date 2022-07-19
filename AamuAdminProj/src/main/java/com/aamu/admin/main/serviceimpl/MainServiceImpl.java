@@ -1,6 +1,8 @@
 package com.aamu.admin.main.serviceimpl;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -117,16 +119,59 @@ public class MainServiceImpl implements MainService{
 	}
 
 	@Override
-	public List<Integer> selectStartEnd(Map map) {
-		int startInt = Integer.parseInt(map.get("start").toString().split("-")[2]);
-		int end = Integer.parseInt(map.get("end").toString().split("-")[2]);
+	public Map<String,List> selectStartEnd(Map map) {
+		Calendar cal = Calendar.getInstance();
 		
-		startInt+=1;
-		end+=1;
-		for(int i=0;i<=end;i++) {
+		String start = map.get("start").toString().split("T15")[0];
+		String end = map.get("end").toString().split("T15")[0];
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+		List<String> dateList = new Vector<>();
+		List<Integer> countList = new Vector<>();
+		try {
+			Date startday = formatter.parse(start);
+			Date endday = formatter.parse(end);
+			cal.setTime(endday);
+			cal.add(Calendar.DATE,1);
+			end = formatter.format(cal.getTime());
+
+			cal.setTime(startday);
+			cal.add(Calendar.DATE,1);
+			start = formatter.format(cal.getTime());
+			//startday = formatter.parse(start);
+			int countUser =0;
+			while(!start.equals(end)){
+				System.out.println("보내는 날짜:"+start);
+				map.put("table", "users");
+				map.put("column", "joindate");
+				//map.put("day", startday);
+				map.put("day", start);
+				countUser = dao.selectWeekToString(map);
+				countList.add(countUser);
+				start =start.substring(5);
+				dateList.add(start);
+				cal.add(Calendar.DATE,1);
+				start= formatter.format(cal.getTime());
+				//startday = formatter.parse(start);
+				
+	
+				System.out.println("세팅된 날짜:"+start);
+		    }
 			
+			//endday = formatter.parse(end);
+			//map.put("day", endday);
+			map.put("day", end);
+			countUser = dao.selectWeekToString(map);
+			countList.add(countUser);
+			end = end.substring(5);
+			dateList.add(end);
+		} catch (ParseException e) {
+			e.printStackTrace();
 		}
-		return null;
+		map.put("countList", countList);
+		map.put("dateList", dateList);
+		
+		
+		return map;
 	}
 	
 	

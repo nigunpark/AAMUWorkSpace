@@ -2,6 +2,46 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="admin.mybatis.mapper.main">
+<mapper namespace="admin.mybatis.mapper.notice">
+
+	<!-- 전체 글 뿌려주기 -->
+	<select id="noticeSelectList" parameterType="Map"
+		resultType="NoticeDTO">
+		SELECT * FROM
+		(SELECT T.*, ROWNUM R FROM (
+		SELECT n. * FROM
+		Notice n
+		JOIN users u ON n.id=u.id
+		ORDER BY nno DESC) T)
+		WHERE R BETWEEN
+		#{start} AND #{end}
+	</select>
+
+	<!-- 전체 글 레코드수 -->
+	<select id="noticeGetTotalRecordCount" parameterType="Map"
+		resultType="int">
+		SELECT COUNT(*) FROM Notice
+	</select>
+
+	<!-- 글 등록 -->
 	
+
+	
+	<insert parameterType="Map" id="noticeWrite">
+		INSERT INTO notice VALUES
+		(SEQ_NNO.NEXTVAL,
+		#{title},
+		#{content},
+		SYSDATE,
+		DEFAULT,
+		#{id})
+	</insert>
+
+	<!-- 글 삭제 -->
+	<delete id="noticeDelete" parameterType="Map">
+		DELETE Notice WHERE
+		nno =
+		#{nno}
+	</delete>
+
 </mapper>

@@ -18,8 +18,11 @@
 
 									<div class="card-numberOfBoard">
 										총 게시글 수: ${totalCount}개
-										<button class="btn btn-primary text-white me-0" style="float: right">삭제</button>
+										
+										<button class="delete btn btn-primary text-white me-0" style="float: right">삭제</button>
+										<a href="<c:url value="NoticeWrite.do"/>"><button class="write btn btn-primary text-white me-0" style="float: right">등록</button></a>
 									</div>
+
 									<div class="table-responsive text-center">
 										<table class="table text-center">
 											<thead>
@@ -35,8 +38,7 @@
 													<th>제목</th>
 													<th class="col-1">ID</th>
 													<th class="col-1">작성일</th>
-													<th class="col-1">댓글수</th>
-													<th class="col-1">좋아요수</th>
+													<th class="col-1">조회수</th>
 												</tr>
 											</thead>
 											<tbody>
@@ -51,16 +53,15 @@
 															<td>
 																<div class="form-check form-check-flat mt-0">
 																	<label class="form-check-label"> 
-																		<input name="RowCheck" type="checkbox" class="form-check-input" aria-checked="false" value="${record.lno}"> <i class="input-helper"></i>
+																		<input name="RowCheck" type="checkbox" class="form-check-input" aria-checked="false" value="${record.nno}"> <i class="input-helper"></i>
 																	</label>
 																</div>
 															</td>
-															<td>${record.lno}</td>
-															<td>${record.ctitle}</td>
+															<td>${record.nno}</td>
+															<td>${record.title}</td>
 															<td>${record.id}</td>
-															<td>${record.postdate}</td>
-															<td>${record.rcount}</td>
-															<td>${record.likecount}</td>
+															<td>${record.noticedate}</td>
+															<td>${record.ncount}</td>
 														</tr>
 													</c:forEach>
 												</c:if>
@@ -75,12 +76,12 @@
 						<!--예시 용 테이블-->
 						<!-- 검색 -->
 						<div class="row">
-							<form class="col-md-12 d-flex justify-content-center align-items-center" method="post" action="<c:url value="Commu.do"/>">
+							<form class="col-md-12 d-flex justify-content-center align-items-center" method="post" action="<c:url value="Notice.do"/>">
 								<div class="form-group row">
 									<div class="col-sm-12">
 										<select class="form-control background-color-secondary text-black" name="searchColumn">
-											<option value="c.id">id</option>
-											<option value="ctitle">제목</option>
+											<option value="n.id">id</option>
+											<option value="title">제목</option>
 											<option value="content">내용</option>
 										</select>
 									</div>
@@ -133,28 +134,28 @@
 	});  
     
     //삭제 click
-    $('div.card-numberOfBoard > button').click(function(){
+    $('div.card-numberOfBoard > button.delete').click(function(){
     	console.log("버튼이벤트 발생");
-    	var lnoArr = new Array();
+    	var nnoArr = new Array();
         $('input[name="RowCheck"]:checked').each(function(i){//체크된 리스트 저장
-        	lnoArr.push($(this).val());
-        	console.log($(this).val()); //lnoArr:63,62
+        	nnoArr.push($(this).val());
+        	console.log($(this).val()); //nnoArr:63,62
         });
-    	if(lnoArr.length ==0){
+    	if(nnoArr.length ==0){
     		alert("선택된 글이 없습니다.");
     	}
     	else{
     		confirm("정말 삭제하시겠습니까?");
-    		var jsonString = JSON.stringify({lno : lnoArr})
+    		var jsonString = JSON.stringify({nno : nnoArr})
     		$.ajax({
-       			url:"<c:url value="CommuDelete.do"/>",
+       			url:"<c:url value="NoticeDelete.do"/>",
        			type:"post",
        			data: jsonString,
        			contentType:"application/json", //데이타 보낼 때
        			dataType: "json" //데이타 받을 때 
        		}).done(data=>{
        			console.log('삭제성공:',data);
-       			location.replace("Commu.do");
+       			location.replace("Notice.do");
        			
        		}).fail(error=>{
        			console.log('삭제에러:',error);

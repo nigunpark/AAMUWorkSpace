@@ -55,9 +55,9 @@ public class CommuController {
 			//포토 셋팅
 			dto.setPhoto(FileUploadUtil.requestFilePath(commuService.commuSelectPhotoList(dto.getLno()), "/resources/commuUpload", req));
 			//좋아요여부 셋팅_글의 lno랑 commulike_lno가 같으면 쿼리실행
-			if(dto.getLno().equals(map.get("lno")))
-				dto.setIslike(commuService.commuIsLike(map));
-			else dto.setIslike(false); //같지않으면 false반환
+			//if(dto.getLno().equals(map.get("lno")))
+			//	dto.setIslike(commuService.commuIsLike(map));
+			//else dto.setIslike(false); //같지않으면 false반환
 		}/////for
 		
 		return list;

@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import NotificationModal from "./ModalGroup/Notification";
-import SearchModal from "./ModalGroup/Search";
-import WriteModal from "./ModalGroup/UploadSecond/Upload"
-import ButtonGroup from './ModalGroup/UploadSecond/ButtonGroup';
+import SearchModal from "./ModalGroup/Search/Search";
+import WriteModal from "./ModalGroup/Upload/Upload"
+import ButtonGroup from './ModalGroup/Search/ButtonGroup';
 
 function User({setlist}) {
   const modalRef = useRef();
@@ -21,6 +21,10 @@ function User({setlist}) {
     // if (e.target !== uploadmodalRef.current) setsquare(false);
   }
   window.addEventListener("click", handleModal);
+
+  const handleChange=(e)=>{
+    console.log(e.target.value);
+  }
   
   return (
     <div>
@@ -28,7 +32,7 @@ function User({setlist}) {
         <ButtonGroup></ButtonGroup>
         <div className="search" onClick={() => { setsearch(!search); }} >
           <input type="text" className="search-bar"  placeholder="검색" 
-            ref={modalRef} />
+                 onChange={handleChange} ref={modalRef} />
           {search ? <SearchModal></SearchModal> : null}
         </div>
       </div>

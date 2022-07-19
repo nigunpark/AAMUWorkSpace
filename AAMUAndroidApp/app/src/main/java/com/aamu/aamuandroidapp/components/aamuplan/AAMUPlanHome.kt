@@ -28,10 +28,10 @@ import net.daum.mf.map.api.MapView
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
 @Composable
 fun AAMUPlanHome(){
-    val bottomSheetScaffoldState = rememberBottomSheetScaffoldState()
-    val mapviewModel : AAMUPlanViewModel = viewModel(
-        factory = AAMUPlanViewModelFactory(LocalContext.current)
-    )
+//    val bottomSheetScaffoldState = rememberBottomSheetScaffoldState()
+//    val mapviewModel : AAMUPlanViewModel = viewModel(
+//        factory = AAMUPlanViewModelFactory(LocalContext.current)
+//    )
     BottomSheetScaffold(
         modifier = Modifier.shadow(0.dp),
         sheetElevation = 0.dp,
@@ -39,11 +39,11 @@ fun AAMUPlanHome(){
         content = {
             Box(contentAlignment = Alignment.Center) {
                 Box(modifier = Modifier.fillMaxSize()) {
-                    KakaoMap(mapView = mapviewModel.mapView, PlanListener())
+//                    KakaoMap(mapView = mapviewModel.mapView, PlanListener())
                 }
                 FloatingActionButton(onClick = {
-                    mapviewModel.mapView.currentLocationTrackingMode=MapView.CurrentLocationTrackingMode.TrackingModeOff
-                    mapviewModel.getRcentPlaces()
+//                    mapviewModel.mapView.currentLocationTrackingMode=MapView.CurrentLocationTrackingMode.TrackingModeOff
+//                    mapviewModel.getRcentPlaces()
 
                 }, modifier = Modifier
                     .align(Alignment.TopEnd)
@@ -62,7 +62,7 @@ fun AAMUPlanHome(){
         sheetContent = {
             PlanBottomSheet()
         },
-        scaffoldState = bottomSheetScaffoldState,
+//        scaffoldState = bottomSheetScaffoldState,
         sheetPeekHeight = 25.dp
     )
 }
@@ -85,11 +85,7 @@ fun KakaoMap(
 @Preview
 @Composable
 fun PreviewAAMUPlanHome() {
-    Column(modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center) {
         AAMUPlanHome()
-    }
 }
 
 @Composable

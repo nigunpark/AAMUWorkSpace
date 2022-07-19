@@ -37,6 +37,9 @@ public class MainDAO {
 		
 		return template.selectOne("selectWeek",map);
 	}
+	public int selectWeekToString(Map map) {
+		return template.selectOne("selectWeekToString", map);
+	}
 
 	public int selectUsers(String day) {
 		

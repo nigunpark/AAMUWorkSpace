@@ -6,8 +6,8 @@ import DetailModal from "../DetailModal/DetailModal";
 
 const ContentItem = ({dummy, keys }) => {
 
-    console.log("ContentItem dummy :",dummy.reviewdata);
-    console.log("keys : ",keys);
+    // console.log("ContentItem dummy :",dummy.reviewdata);
+    // console.log("keys : ",keys);
 
     const [isOpen, setIsOpen] = useState(false);
 
@@ -15,13 +15,12 @@ const ContentItem = ({dummy, keys }) => {
         setIsOpen(true);
     };
 
+    //목록에서 보여줄 평균 별점
     let add=0;
     dummy.reviewdata.forEach((obj,i)=>{
-            console.log('11',typeof Number(obj.star))
+            // console.log('11',typeof Number(obj.star))
             add+=Number(obj.star)
-    })
-    console.log();
-
+    });
     add = Math.round((add/dummy.reviewdata.length)*10)/10;
 
     return (

@@ -3,6 +3,7 @@ package com.aamu.aamurest.user.serviceimpl;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Vector;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,7 +20,14 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 	//글 목록용
 	@Override
 	public List<CommuDTO> commuSelectList(Map map) {
-		return dao.commuSelectList(map);
+		List<CommuDTO> lists=dao.commuSelectList(map);
+		List<CommuDTO> listLno = new Vector();
+		for(int i=0; i<lists.size(); i++) {
+			CommuDTO dto=lists.get(i);
+			map.put("lno", dto.getLno());
+		}
+		
+		return lists;
 	}
 	
 	//글 목록용_댓글 하나 뿌려주기

@@ -438,8 +438,15 @@ public class MainServiceImpl implements MainService{
 	}
 	@Override
 	public List<PlannerDTO> getPlannerList(String id) {
-
-		return dao.getPlannerList(id);
+		List<PlannerDTO> list = dao.getPlannerList(id);
+		List<PlannerDTO> returnList = new Vector<>();
+		
+		for(PlannerDTO dto:list) {
+			dto.setRoute(dao.selectRouteList(dto.getRbn()));;
+			returnList.add(dto);
+		}
+		
+		return returnList;
 	}
 	@Override
 	public PlannerDTO selectPlannerOne(int rbn) {
