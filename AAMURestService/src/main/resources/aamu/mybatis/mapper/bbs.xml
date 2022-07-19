@@ -56,7 +56,7 @@
 	 </delete>
 	 
 	<!-- 평점 평균 반영 -->
-	<update id="reviewUpdate">
+	<update id="rateReviewUpdate">
 		UPDATE ratereview SET rateavg =#{rateavg} WHERE rbn=#{rbn}
 	</update>
 		
