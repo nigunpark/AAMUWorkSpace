@@ -114,7 +114,7 @@ function Comment() {
                 </div>
                 <div className="comment">
                     <input type="text" className="typing-comment" placeholder="댓글 달기..."/>
-                    <button className="comment-button" type="button">게시</button>
+                    <button className="comment-button" type="button" >게시</button>
                 </div>
             </div>             
         </Contents>

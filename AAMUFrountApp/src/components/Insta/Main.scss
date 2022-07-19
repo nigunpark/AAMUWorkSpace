@@ -1271,19 +1271,14 @@
   .rweet_file_btn{
     position: absolute;
     display: flex;
-    margin-top: 380px;
+    top:300px;
+    align-items: center;
     font-size: 50px;
     color: #dbdbdb;
     z-index: 1;
     overflow: hidden;
   }
-  .divimage{
-    width: 100%;
-    position: absolute;
-    height: 100%;
-    border-radius: 0 0 0 7px;   
-    border:rgba(0,0,0,0.5);
-  }
+
   .side{
     // position: absolute;
     width: 35%;

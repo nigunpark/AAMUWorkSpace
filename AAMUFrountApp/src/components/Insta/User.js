@@ -184,7 +184,7 @@ const Container = styled.div`
     position: fixed;
     width: 100%;
     height: 100%;
-    z-index: 1000;
+   
     top: 0;
     left: 0;
     right: 0;
@@ -197,6 +197,7 @@ const Overlay = styled.div`
     position: absolute;
     width: 100%;
     height: 100%;
+    z-index: 10;
     background-color: rgba(0, 0, 0, 0.6);
 `
 

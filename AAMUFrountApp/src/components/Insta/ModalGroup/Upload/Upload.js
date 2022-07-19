@@ -1,4 +1,4 @@
-import {useEffect, useRef, useState} from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {Button} from "@mui/material";
 import axios from 'axios';
 import styled from 'styled-components';
@@ -6,12 +6,17 @@ import $, { escapeSelector } from 'jquery';
 import SearchModal from './SearchModal'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPaperPlane } from '@fortawesome/free-regular-svg-icons';
-import { Link, useNavigate } from 'react-router-dom';
-import Slider from "react-slick";
-import "../Slider/slick-theme.css";
-import "../Slider/slick.css";
-
-
+import { Link, useNavigate } from 'react-router-dom'; 
+ import Slider from "react-slick";
+ import '../Slider/slick-theme.css'
+ import '../Slider/slick.css'
+import { SwiperSlide,Swiper } from 'swiper/react';
+import SwipersItem from '../../Swipers/SwipersItem';
+import  { A11y, Autoplay, Navigation, Pagination, Scrollbar } from 'swiper';
+import "swiper/css"; //basic
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import '../Upload/UploadSwiper.css';
 const Uploader = ({setsquare,setlist}) => {
 let searchRef = useRef();
 let titleRef = useRef();
@@ -87,6 +92,7 @@ const [inputValue,setinputValue] = useState('');
 
   const deleteImage = () => {// 이미지 삭제를 위해
     // createObjectURL()을 통해 생성한 기존 URL을 폐기
+    setMyImage([]);
     URL.revokeObjectURL(myImage);
     setHide(false)
   }
@@ -112,7 +118,6 @@ const [inputValue,setinputValue] = useState('');
   //   }
   // }
 
- 
 
   function searchWord(e,setSearch){//위치 지정을 위한 백에게 받는 axios
     let val = e.target.value
@@ -134,15 +139,6 @@ const [inputValue,setinputValue] = useState('');
         console.log(error);
       });
   }
-
-  const settings = {//이미지 슬라이드
-    dots: false,
-    infinite: false,
-    speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1
-  };
-
 
   function fn_checkByte(obj){//textarea입력한 글자 count 및 글자 수 제한
     const maxByte = 1000; //최대 100바이트
@@ -171,8 +167,9 @@ const [inputValue,setinputValue] = useState('');
             document.getElementById("nowByte").style.color = "green";
         }
     }
-
-    console.log('myImage',myImage)
+   
+  
+ 
   return (
   
     <Contents>  
@@ -205,22 +202,7 @@ const [inputValue,setinputValue] = useState('');
         </FirstLine>
             <Body>           
                 <form className='picfileframe' encType='multipart/form-data'>
-                    <label 
-                      className="rweet_file_btn" 
-                      onClick={ ()=>{setHide(!hide)} }
-                      htmlFor="input-file"      
-                      onChange={addImage}          
-                      >
-                          {hide ?
-                          null
-                          :
-                          <Button 
-                              type="primary" 
-                              variant="contained" >
-                               {/* onClick={() => inputRef.click()} */}
-                              컴퓨터에서 선택
-                          </Button>}
-                    </label>
+               
                     <input  
                         id="input-file"
                         type="file" 
@@ -233,18 +215,62 @@ const [inputValue,setinputValue] = useState('');
                         // ref={refParam => inputRef = refParam}
                         style={{display: "none" , width:'100%',height:'100%'}}
                     />
-                   
-                    {/* <Slider {...settings}> */}
-                      {myImage.map((images,i)=>(
-                        <img className='divimage' alt="sample" src={images} setMyImage={setMyImage}/>
-                      ))}
-                    {/* </Slider> */}
-                </form>
+                       {/* {myImage.map((images,i)=>(
+                                   <img className='divimage' alt="sample" src={images}/>
+                             
+                          ))}  */}
+                      <div className="swiperUi">
+                  <ul>
+                    <Swiper
+                    className="swiperContainer"
+                    modules={[Navigation, Pagination, Scrollbar, A11y, Autoplay]}
+                    spaceBetween={10}
+                    slidesPerView={1}
+                    // navigation
+                    autoplay={{ delay: 2500 }}
+                    loop={true}
+                    pagination={{ clickable: true }}
+                    scrollbar={{ draggable: true }}
+                  >
+                    {myImage.map((image,i)=>{
+                      return(
+                      <SwiperSlide>
+                        <li>
+                        <img className='divimage' alt="sample" src={image}/>
+                        </li>
+                        {/* <img className='divimage' alt="sample" src='/images/bg1.png'/> */}
+                    </SwiperSlide>
+                      )
+                      
+                    })
+                    }      
+                  </Swiper>
+                  </ul>
+                  </div>   
+                  <label 
+                      className="rweet_file_btn" 
+                      onClick={ ()=>{setHide(!hide)} }
+                      htmlFor="input-file"      
+                      onChange={addImage}          
+                      >
+                          {hide ?
+                          null
+                          :
+                          <Button 
+                            
+                              type="primary" 
+                              variant="contained" >
+                               {/* onClick={() => inputRef.click()} */}
+                              컴퓨터에서 선택
+                          </Button>}
+                    </label>    
+                </form> 
+                
                     {/* {showNext ?  */}
                     <div className='side'>
                       <div className="title-profile">
-                          <img src="./img/bk.jpg" alt="프사" />                
-                          <span>eyesmag</span> 
+                          <img src="'/img/bk.jpg ' ?? '/images/user.jpg'" alt="프사" onError={(e)=>{e.target.src='/images/user.jpg'}}/>                
+                          <span>{sessionStorage.getItem('username')}</span> 
                       </div>
                       <div>
                         <span style={{fontWeight:'bold', marginLeft:'10px'}}>제목 : </span>
@@ -287,7 +313,8 @@ const [inputValue,setinputValue] = useState('');
                             setinputValue={setinputValue}/>
                                             : null}
                         <i className="fa-solid fa-location-dot"></i>
-                      </div>                
+                      </div>     
+                             
                   </div>
                   {/* // :null} */}
                   </Body>
@@ -359,6 +386,14 @@ function gramEdit(temp,setShowWrite,titleRef,textareaRef,searchRef,search){//새
     });
   }
 
+
+  const SliderContainer = styled.div`
+  margin: 0 auto;
+  margin-bottom: 2em;
+  display: flex; // 이미지들을 가로로 나열합니다.
+`;
+
+
 const Contents = styled.div`
   position: relative;
   top:30px;
@@ -371,6 +406,7 @@ const Contents = styled.div`
   display:flex;
   flex-direction:column;
   border-radius:7px;
+  z-index: 11;
 `
 
 const FirstLine = styled.div`
@@ -393,4 +429,7 @@ const Nextbtn = styled.button`
   font-size:13px;
   font-weight:bold;
 `
+const Center = styled.div`
+  text-align: center;
+`;
 export default Uploader;

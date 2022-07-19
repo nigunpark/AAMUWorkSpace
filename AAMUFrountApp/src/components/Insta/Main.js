@@ -13,6 +13,9 @@ function Main() {
       headers: {
             Authorization: `Bearer ${token}`,
           },
+          params:{
+            id:sessionStorage.getItem('username')
+          }
     })
     .then((resp) => {
       console.log(resp.data)
@@ -22,6 +25,7 @@ function Main() {
         console.log(error);
       });
   }
+ 
   useEffect(()=>{
     feedList()
   },[])
