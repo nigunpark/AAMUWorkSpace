@@ -8,7 +8,7 @@ import "./ModalGroup/slick-theme.css";
 import "./ModalGroup/slick.css";
 import dayjs from 'dayjs';
 
-function FeedSetting({val}) {
+function FeedSetting({val,setMyImage}) {
     let menuRef = useRef();
     let profileRef = useRef();
     let commentRef = useRef();
@@ -87,11 +87,14 @@ function FeedSetting({val}) {
         <p>{val.title}</p>
     </div>
         <Slider {...settings}>
-            <div className="container">
-            <img src={val.photo[0]}
-                 className="main-image" alt="메인" />
-            </div>
-            
+            {val.photo.map((image,i)=>(
+                <div className="container">
+                    <img src={image}
+                    // setMyImage={setMyImage}
+                        className="main-image" 
+                        alt="메인" />
+                </div> 
+            ))}
         </Slider>
 
     <div className="feeds-contents">
