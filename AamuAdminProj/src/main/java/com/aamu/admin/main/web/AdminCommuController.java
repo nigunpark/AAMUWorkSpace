@@ -94,5 +94,12 @@ public class AdminCommuController {
 		return resultMap;
 	}
 	
+	//커뮤니티 세부통계
+	@RequestMapping("CommuStatistics.do")
+	public String commuStatistics() {
+		
+		return "commu/commuStatistics";
+	}
+	
 
 }

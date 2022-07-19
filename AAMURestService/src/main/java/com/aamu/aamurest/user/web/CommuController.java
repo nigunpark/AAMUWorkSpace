@@ -45,19 +45,14 @@ public class CommuController {
 	//글 목록용
 	@GetMapping("/gram/selectList")
 	public List<CommuDTO> commuSelectList(@RequestParam Map map, HttpServletRequest req){
+		System.out.println("(컨트롤러)id:"+map.get("id"));
 		//list=글 목록들
 		List<CommuDTO> list = commuService.commuSelectList(map);
-		
-		System.out.println("req:+"+req.getRequestURL().toString());
 		for(CommuDTO dto : list) {//글 목록들 list에서 하나씩 꺼내서 dto에 담는다
 			//코멘트 셋팅
 			dto.setCommuComment(commuService.commuCommentSelectOne(dto.getLno()));
 			//포토 셋팅
 			dto.setPhoto(FileUploadUtil.requestFilePath(commuService.commuSelectPhotoList(dto.getLno()), "/resources/commuUpload", req));
-			//좋아요여부 셋팅_글의 lno랑 commulike_lno가 같으면 쿼리실행
-			//if(dto.getLno().equals(map.get("lno")))
-			//	dto.setIslike(commuService.commuIsLike(map));
-			//else dto.setIslike(false); //같지않으면 false반환
 		}/////for
 		
 		return list;

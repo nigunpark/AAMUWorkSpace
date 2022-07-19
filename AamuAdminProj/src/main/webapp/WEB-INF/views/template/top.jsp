@@ -16,6 +16,7 @@
   
   <script src="<c:url value="/resources/vendors/js/vendor.bundle.base.js"/>"></script>
   
+  
   <!--축소 페이지용 js-->
   <script src="<c:url value="/resources/js/off-canvas.js"/>"></script>
   <!--datepicker용 js-->
@@ -173,7 +174,7 @@
               <ul class="nav flex-column sub-menu">
                 <li class="nav-item"> <a class="nav-link" href="#">유저 세부통계</a></li>
                 <li class="nav-item"> <a class="nav-link" href="#">게시판 세부통계</a></li>
-                <li class="nav-item"> <a class="nav-link" href="#">커뮤니티 세부통계</a></li>
+                <li class="nav-item"> <a class="nav-link" href="CommuStatistics.do">커뮤니티 세부통계</a></li>
               </ul>
             </div>
           </li>
