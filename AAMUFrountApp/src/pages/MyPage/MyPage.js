@@ -1,22 +1,13 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import "./MyPage.scss";
 import MyHomeBox from "./MyPageBox/MyHomeBox";
-import MyHomeTopLine from "./MyPageBox/MyHomeTopLine";
 import MyProfileBox from "./MyPageBox/MyProfileBox";
-import MyProfileTopLine from "./MyPageBox/MyProfileTopLine";
 import MyMessageBar from "./MyMessageBar/MyMessageBar";
 import styled from "styled-components";
 import { faStar } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 const MyPage = () => {
-
-  
-
-  // state = {
-  //   title: '',
-  //   content: '',
-  // };
 
   let [clickTab, setClickTab] = useState(0);
 
@@ -26,6 +17,32 @@ const MyPage = () => {
   let setting = useRef();
   
   let homeBox = useRef();
+
+  // /aamurest/planner/selectList
+  // /aamurest/planner/selectOne
+
+  const [planList, setPlanList] = useState([]);
+
+  useEffect(()=>{
+      let token = sessionStorage.getItem("token");
+
+      axios.get('/aamurest/planner/selectList',{
+          params:{
+              id:sessionStorage.getItem('username')
+          },
+          headers: {
+              Authorization: `Bearer ${token}`,
+          }
+      }).then((resp)=>{
+          setPlanList(resp.data);
+          console.log('데이터 확인 : ',resp.data);
+      }).catch((error)=>{
+          console.log((error) => console.log("여행경로 가져오기 실패", error));
+      });
+      
+  },[]);
+
+  console.log('받아온 데이터 저장 확인 :',planList);
 
   useEffect(() => {
     if (clickTab === 0) {
@@ -57,6 +74,9 @@ const MyPage = () => {
       // two.current.classList.remove("active");
       three.current.classList.remove("active");
       setting.current.classList.add("active");
+
+      homeBox.current.classList.remove("jsListView");
+      homeBox.current.classList.add("jsGridView");
     }
   }, [clickTab]);
   return (
@@ -225,12 +245,18 @@ const MyPage = () => {
           </div>
           <div className="projects-section-line">
             {/* <MyHomeTopLine/> */}
-            <TabTopLine clickTab={clickTab} />
+            <TabTopLine
+              clickTab={clickTab}
+              planList={planList}
+              />
           </div>
-          <div ref={homeBox} className="project-boxes "> {/* jsListView jsGridView */}
+          <div ref={homeBox} className="project-boxes"> {/* jsListView jsGridView */}
             {/* <MyHomeBox/> */}
             <TabContent
-            clickTab={clickTab} setClickTab={setClickTab}/>
+              clickTab={clickTab}
+              setClickTab={setClickTab}
+              planList={planList}
+              />
           </div>
         </div>
 
@@ -286,7 +312,7 @@ function Title({clickTab}){
 
 
 //-----------------------------------------------------------------------
-function TabContent({clickTab,setClickTab}) {
+function TabContent({clickTab, setClickTab, planList}) {
   
   
   //--------------------------------이미지 시작--------------------------------
@@ -330,7 +356,7 @@ function TabContent({clickTab,setClickTab}) {
 
     return {imgIndex:showImages};
   });
-  console.log('저장된 myImgs:',myImgs);
+  // console.log('저장된 myImgs:',myImgs);
 
   
 
@@ -355,11 +381,14 @@ function TabContent({clickTab,setClickTab}) {
     return content !== "" && title !== "";
   }, [title, content]);
 
-  let totalEdit = [1, 2, 3, 4];
-
   if (clickTab === 0) {// 메인화면
-    return totalEdit.map(() => {
-      return <MyHomeBox setClickTab={setClickTab}/>;
+    return planList.map((val, idx) => {
+      return (
+          <MyHomeBox
+            setClickTab={setClickTab}
+            planList={val}
+            />
+        );
     });
   }
   else if (clickTab === 1) { //현재 없는 선택지
@@ -413,7 +442,7 @@ function TabContent({clickTab,setClickTab}) {
     </div>
     );
   }
-  else if (clickTab === 3) {
+  else if (clickTab === 3) { //----------------------Profile------------------------
     return <MyProfileBox />;
   }
   else if (clickTab === 10) { //-----------------------Write------------------------
@@ -508,20 +537,22 @@ function TabContent({clickTab,setClickTab}) {
 }
 
 
-
-
-
-// function Comp (){
-//   useEffect(()=>{
-//     axios.get(sdfsd,sdf)
-//   },[])
-//   return(sdf)
-// }
-
-function TabTopLine({clickTab}) {
+function TabTopLine({clickTab, planList}) {
 
   if (clickTab === 0) {
-    return <MyHomeTopLine />;
+    return (
+      <div className="projects-status">
+        <div className="item-status">
+          <span className="status-number">{planList.length}</span>
+          <span className="status-type">Total</span>
+        </div>
+
+        <div className="item-status">
+          <span className="status-number">0</span>
+          <span className="status-type">Upload</span>
+        </div>
+      </div>
+    )
   }
   else if (clickTab === 1) {
     return <div>Tab 2 TopLine</div>;
@@ -530,7 +561,7 @@ function TabTopLine({clickTab}) {
     return (
       <div className="projects-status">
         <div className="item-status">
-          <span className="status-number">4</span>
+          <span className="status-number">0</span>
           <span className="status-type">Total</span>
         </div>
       </div>

@@ -11,13 +11,7 @@ const Content = () => {
     //let navigate = useNavigate();
 
     let token = sessionStorage.getItem("token");
-
-    // let index = 0;
-    // let indexTwo = 0;
-    // console.log("더미데이터 : ",dummy.forumContent[index].reviewdata[indexTwo].star);
-
-
-
+    
     // let [list, setList] = useState('');
     
     // useEffect(()=>{
@@ -50,8 +44,8 @@ const Content = () => {
                     <FSearch/>
                     
                     <ul className="card__items_minCon">
-                        {dummy.forumContent.map((dummyData, index) => {
-                        return <ContentItem dummy={dummyData} keys={index}/>;
+                        {dummy.forumContent.map((dummyData, idx) => {
+                        return <ContentItem dummy={dummyData} keys={idx}/>;
                         })}
                     </ul>
                 </div>
