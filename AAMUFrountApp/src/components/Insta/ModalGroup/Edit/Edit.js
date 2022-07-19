@@ -3,16 +3,13 @@ import {Button} from "@mui/material";
 import axios from 'axios';
 import styled from 'styled-components';
 import $, { escapeSelector } from 'jquery';
-import SearchModal from './SearchModal'
+import SearchModal from '../Upload/SearchModal'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPaperPlane } from '@fortawesome/free-regular-svg-icons';
 import { Link, useNavigate } from 'react-router-dom';
-import Slider from "react-slick";
-import "../slick-theme.css";
-import "../slick.css";
 
 
-const Uploader = ({setsquare,setlist}) => {
+const Edit = ({setsquare,setlist}) => {
 let searchRef = useRef();
 let titleRef = useRef();
 let textareaRef = useRef();
@@ -27,50 +24,35 @@ const [hasText,setHasText] = useState(false);
 const [inputValue,setinputValue] = useState(''); 
 
 
-  //이미지 하나 업로드시
-  // const [image, setImage] = useState({//초기 이미지 세팅 및 변수
-  //   image_file: "",
-  //   preview_URL: "img/image.jpg",
-  // });
-
-  // let inputRef;
-  // const saveImage = (e) => {
-  //   e.preventDefault();
-  //   if(e.target.files[0]){
-  //     // 새로운 이미지를 올리면 createObjectURL()을 통해 생성한 기존 URL을 폐기
-  //     //URL.revokeObjectURL(image.preview_URL);
-  //     const preview_URL = URL.createObjectURL(e.target.files[0]);
-  //     setImage(() => (
-  //       {
-  //         image_file: e.target.files[0],
-  //         preview_URL: preview_URL
-  //       }
-  //     ))
-  //   }
-  // }
   
-  //이미지 다중 업로드 시
-  const [myImage,setMyImage] = useState([]);
-  const [myImagefile,setMyImageFile] = useState([]);
+  const [image, setImage] = useState({//초기 이미지 세팅 및 변수
+    image_file: "",
+    preview_URL: "img/image.jpg",
+  });
 
-  const addImage = e => {
-    const nowSelectImageList = e.target.files;//한번에 받은 파일 리스트(object)
-    const nowImageURLList = [...myImage];//현재 myImage복사하고
-    for (let i = 0; i < nowSelectImageList.length; i += 1){
-      //nowSelectImageList object를 i를 이용해서 돌리면서
-      const nowImageURL = URL.createObjectURL(nowSelectImageList[i]);
-      //미리보기 가능하게 변수화
-      nowImageURLList.push(nowImageURL);
-      //복사한 myImage에 추가
+  // function handleModal(e) {
+  //   e.stopPropagation();
+  //   if (e.target !== searchRef.current) setshowSearch(false);
+  // }
+  // window.addEventListener("click", handleModal);
+
+  
+
+  let inputRef;
+  const saveImage = (e) => {
+    e.preventDefault();
+    if(e.target.files[0]){
+      // 새로운 이미지를 올리면 createObjectURL()을 통해 생성한 기존 URL을 폐기
+      URL.revokeObjectURL(image.preview_URL);
+      const preview_URL = URL.createObjectURL(e.target.files[0]);
+      setImage(() => (
+        {
+          image_file: e.target.files[0],
+          preview_URL: preview_URL
+        }
+      ))
     }
-    setMyImage(nowImageURLList);
-    setMyImageFile(nowSelectImageList);
-
-    //myImage원본에 덮어씌우기
   }
-
-
-  //이미지 삭제 
   // const deleteFileImage = () =>{
   //   URL.revokeObjectURL(fileImage);
   //   setFileImage("");
@@ -87,14 +69,18 @@ const [inputValue,setinputValue] = useState('');
 
   const deleteImage = () => {// 이미지 삭제를 위해
     // createObjectURL()을 통해 생성한 기존 URL을 폐기
-    URL.revokeObjectURL(myImage);
+    URL.revokeObjectURL(image.preview_URL);
+    setImage({
+      image_file: "",
+      preview_URL: "img/image.jpg",
+    });
     setHide(false)
   }
 
   useEffect(()=> {
     // 컴포넌트가 언마운트되면 createObjectURL()을 통해 생성한 기존 URL을 폐기
     return () => {
-      URL.revokeObjectURL(myImage)
+      URL.revokeObjectURL(image.preview_URL)
     }
   }, [])
   // const sendImageToServer = async () => {
@@ -135,14 +121,6 @@ const [inputValue,setinputValue] = useState('');
       });
   }
 
-  const settings = {//이미지 슬라이드
-    dots: false,
-    infinite: false,
-    speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1
-  };
-
 
   function fn_checkByte(obj){//textarea입력한 글자 count 및 글자 수 제한
     const maxByte = 1000; //최대 100바이트
@@ -171,8 +149,6 @@ const [inputValue,setinputValue] = useState('');
             document.getElementById("nowByte").style.color = "green";
         }
     }
-
-    console.log('myImage',myImage)
   return (
   
     <Contents>  
@@ -187,7 +163,7 @@ const [inputValue,setinputValue] = useState('');
             {/* {showNext ?  */}
               <Nextbtn  
                       onClick={()=>{
-                        let temp= uploadFile(myImagefile)
+                        let temp= uploadFile(image)
                         gramEdit(temp,setShowWrite,titleRef,textareaRef,searchRef,search)
                         setsquare(false)
                         feedList(setlist)
@@ -208,8 +184,7 @@ const [inputValue,setinputValue] = useState('');
                     <label 
                       className="rweet_file_btn" 
                       onClick={ ()=>{setHide(!hide)} }
-                      htmlFor="input-file"      
-                      onChange={addImage}          
+                      htmlFor="input-file"                
                       >
                           {hide ?
                           null
@@ -224,21 +199,15 @@ const [inputValue,setinputValue] = useState('');
                     <input  
                         id="input-file"
                         type="file" 
-                        multiple
                         accept="image/*"
-                        onChange={addImage}
+                        onChange={saveImage}
                     // 클릭할 때 마다 file input의 value를 초기화 하지 않으면 버그가 발생할 수 있다
                     // 사진 등록을 두개 띄우고 첫번째에 사진을 올리고 지우고 두번째에 같은 사진을 올리면 그 값이 남아있음!
                         onClick={(e) => e.target.value = null}
                         // ref={refParam => inputRef = refParam}
                         style={{display: "none" , width:'100%',height:'100%'}}
                     />
-                   
-                    {/* <Slider {...settings}> */}
-                      {myImage.map((images,i)=>(
-                        <img className='divimage' alt="sample" src={images} setMyImage={setMyImage}/>
-                      ))}
-                    {/* </Slider> */}
+                    <img className='divimage' alt="sample" src={image.preview_URL}/>
                 </form>
                     {/* {showNext ?  */}
                     <div className='side'>
@@ -315,11 +284,9 @@ function feedList(setlist){//업로드 버튼 누르고 화면 새로고침
 
 
 
- function uploadFile(myImagefile){//이미지 업로드
+ function uploadFile(image){//이미지 업로드
   let formData = new FormData(); // formData 객체를 생성한다.
-  for (let i = 0; i < myImagefile.length; i++) { 
-    formData.append("multifiles", myImagefile[i]); // 반복문을 활용하여 파일들을 formData 객체에 추가한다
-  }
+  formData.append("multifiles", image.image_file)
   return formData;
 }
 
@@ -345,8 +312,7 @@ function gramEdit(temp,setShowWrite,titleRef,textareaRef,searchRef,search){//새
        { headers: {
               Authorization: `Bearer ${token}`,
               'Content-Type': 'multipart/form-data',
-            }
-        }
+            }}
 
       )
   .then((resp) => {
@@ -393,4 +359,4 @@ const Nextbtn = styled.button`
   font-size:13px;
   font-weight:bold;
 `
-export default Uploader;
+export default Edit;

@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import React, {  useRef, useState } from 'react'
-import Profile from './Profile';
-import MenuModal from './MenuModal';
+import Profile from '../Profile';
+import MenuModal from '../MenuModal';
 
 function Comment() {
     let menuRef = useRef();

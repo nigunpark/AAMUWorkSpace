@@ -2,10 +2,10 @@ import styled from "styled-components";
 import React, {  useEffect, useRef, useState } from 'react'
 import Profile from './ModalGroup/Profile';
 import MenuModal from './ModalGroup/MenuModal';
-import Comment from './ModalGroup/Comment';
+import Comment from './ModalGroup/Comment/Comment';
 import Slider from "react-slick";
-import "./ModalGroup/slick-theme.css";
-import "./ModalGroup/slick.css";
+import "./ModalGroup/Slider/slick.css";
+import "./ModalGroup/Slider/slick-theme.css";
 import dayjs from 'dayjs';
 
 function FeedSetting({val,setMyImage}) {
