@@ -14,7 +14,11 @@ import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { Alert, TextField } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { corrTimeSetObj } from "../../redux/store";
+import {
+  addWholeBlackBox,
+  corrTimeSetObj,
+  delAllWholeBb,
+} from "../../redux/store";
 const CreatePlanLeft = ({
   currPosition,
   fromWooJaeData,
@@ -52,7 +56,9 @@ const CreatePlanLeft = ({
     return { ["day" + (idx + 1)]: arr };
   });
 
-  console.log("fromWooJaeData:", fromWooJaeData);
+  function getTimes() {}
+
+  // console.log("fromWooJaeData:", fromWooJaeData);
   return (
     <div className="createPlanLeft">
       <div className="createPlanLeft__days">
@@ -143,8 +149,11 @@ function WholeSchedule({ currPosition, fromWooJaeData, setFromWooJaeData }) {
   let reduxState = useSelector((state) => {
     return state;
   });
-  const [forReRender, setForReRender] = useState(true);
-
+  let dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(delAllWholeBb([]));
+    console.log("11");
+  }, []);
   return (
     <div className="createPlanLeft__schedule">
       <div className="createPlanLeft__schedule-title">
@@ -164,8 +173,6 @@ function WholeSchedule({ currPosition, fromWooJaeData, setFromWooJaeData }) {
               key={index}
               fromWooJaeData={fromWooJaeData}
               setFromWooJaeData={setFromWooJaeData}
-              forReRender={forReRender}
-              setForReRender={setForReRender}
             />
           );
         })}
@@ -174,7 +181,7 @@ function WholeSchedule({ currPosition, fromWooJaeData, setFromWooJaeData }) {
   );
 }
 
-function Content({ index, fromWooJaeData, setForReRender, setFromWooJaeData }) {
+function Content({ index, fromWooJaeData, setFromWooJaeData }) {
   let reduxState = useSelector((state) => {
     return state;
   });
@@ -284,6 +291,30 @@ function Content({ index, fromWooJaeData, setForReRender, setFromWooJaeData }) {
     });
   };
 
+  function getDow(reduxState, i) {
+    switch (reduxState.monthNdate[0].dow + i) {
+      case 0:
+        return "일";
+
+      case 1:
+        return "월";
+
+      case 2:
+        return "화";
+
+      case 3:
+        return "수";
+
+      case 4:
+        return "목";
+
+      case 5:
+        return "금";
+
+      default:
+        return "토";
+    }
+  }
   return (
     <div className="createPlanLeft__schedule__content" ref={contentRef}>
       <select className="createPlanLeft__schedule__select" onChange={() => {}}>
@@ -295,7 +326,7 @@ function Content({ index, fromWooJaeData, setForReRender, setFromWooJaeData }) {
               selected={index + 1 === i + 1 ? true : false}
             >
               {i + 1}DAY {reduxState.monthNdate[0].month}월{" "}
-              {reduxState.monthNdate[0].date + i}일 수
+              {reduxState.monthNdate[0].date + i}일 {getDow(reduxState, i)}
             </option>
           );
         })}
@@ -382,8 +413,6 @@ function Content({ index, fromWooJaeData, setForReRender, setFromWooJaeData }) {
                   fromWooJaeData[index]["day" + (index + 1)][0].starttime =
                     newObj.time * 60 * 60 * 1000 + newObj.min * 60 * 1000;
                 }
-                setForReRender(false);
-                setForReRender(true);
               }}
             />
           </Stack>
@@ -429,6 +458,7 @@ function DetailSetting({
   let reduxState = useSelector((state) => {
     return state;
   });
+  let dispatch = useDispatch();
   const [upTime, setUpTime] = useState(0);
   const [downTime, setDownTime] = useState(0);
   const [memoBadge, setMemoBadge] = useState(false);
@@ -444,6 +474,12 @@ function DetailSetting({
       setDownTime(firstAccum + obj.atime / 1000 / 60);
       fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i + 1].starttime =
         firstAccum + obj.atime / 1000 / 60;
+      const forBlackBoxRedux = getTimes(
+        periodIndex,
+        firstAccum,
+        firstAccum + obj.atime / 1000 / 60
+      );
+      dispatch(addWholeBlackBox(forBlackBoxRedux));
     }
     if (i !== 0) {
       setUpTime(
@@ -457,6 +493,17 @@ function DetailSetting({
             1000 /
             60
       );
+      let forBlackBoxRedux = getTimes(
+        periodIndex,
+        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime +
+          obj.mtime / 1000 / 60,
+        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime +
+          obj.mtime / 1000 / 60 +
+          fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].atime /
+            1000 /
+            60
+      );
+      dispatch(addWholeBlackBox(forBlackBoxRedux));
       if (
         i !==
         fromWooJaeData[periodIndex]["day" + (periodIndex + 1)].length - 1
@@ -471,11 +518,47 @@ function DetailSetting({
             60;
       }
     }
+    // testArr.push({
+    //   st: Math.floor(upTime / 60)
+    //     .toString()
+    //     .padStart(2, "0"),
+    //   sm: Math.floor(upTime % 60)
+    //     .toString()
+    //     .padStart(2, "0"),
+    //   et: Math.floor(downTime / 60)
+    //     .toString()
+    //     .padStart(2, "0"),
+    //   em: Math.floor(downTime % 60)
+    //     .toString()
+    //     .padStart(2, "0"),
+    // });
+    // console.log("testArr", testArr);
+    // console.log("stRef", stRef.current.textContent);
+    // console.log("getTimesArr", getTimesArr);
   }, []);
-  // console.log(obj);
-  // if (obj.dto === null) return;
-  if (fromWooJaeData === undefined) return;
+  function getTimes(periodIndex, st, et) {
+    return {
+      day: periodIndex + 1,
+      stime: Math.floor(st / 60)
+        .toString()
+        .padStart(2, "0"),
+      smin: Math.floor(st % 60)
+        .toString()
+        .padStart(2, "0"),
+      etime: Math.floor(et / 60)
+        .toString()
+        .padStart(2, "0"),
+      emin: Math.floor(et % 60)
+        .toString()
+        .padStart(2, "0"),
+    };
+  }
+
+  if (fromWooJaeData === undefined)
+    // if (obj.dto === null) return;
+    return;
   if (obj === undefined) return;
+
   return (
     <div className="detailSetting__container" id={i}>
       <div className="movingTime">
@@ -666,6 +749,7 @@ function MemoArea({
   if (fromWooJaeData === undefined) return;
   if (Object.values(fromWooJaeData[periodIndex])[0][index] === undefined)
     return;
+
   return (
     <div className="memoArea" ref={memoRef}>
       <div className="memoArea__container">
