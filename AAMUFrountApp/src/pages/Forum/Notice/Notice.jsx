@@ -10,10 +10,7 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 
 const Notice = ({dummy}) => {
-
-    // console.log('이미지 더미 0 : ',dummy[0].imgs);
-    // console.log('이미지 더미 1 : ',dummy[1].imgs);
-
+    
   return (
     <div className='Notice'>
         <div className="swiper__container_Notice">
