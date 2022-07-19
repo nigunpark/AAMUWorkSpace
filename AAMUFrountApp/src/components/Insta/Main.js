@@ -15,6 +15,7 @@ function Main() {
           },
     })
     .then((resp) => {
+      console.log(resp.data)
       setlist(resp.data);
       })
       .catch((error) => {
