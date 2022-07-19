@@ -135,7 +135,7 @@ const DetailModal = ({setIsOpen, dummy}) => {
     <DetailContainer >
         <DetailOverlay>
             <DetailModalWrap>
-                <DetailTitle>여행경로</DetailTitle>
+                <div>여행경로</div>
                 <DetailTitle>
                     <span>
                         <div className="anim-icon star">
@@ -157,7 +157,36 @@ const DetailModal = ({setIsOpen, dummy}) => {
                         </div>
                     </span>
                 </DetailTitle>
-                <div style={{border:'1px solid black'}}>일자별 여행경로 보여줄 공간</div>
+
+                <Plan>
+                    <div style={{border:'1.5px solid #edf2f4'}}>
+                        <PlanDate><span>n 일차 20xx-xx-xx x요일</span></PlanDate>
+                        <DetailPlan>
+                            <PlanTime>00:00 ~ 00:00</PlanTime>
+                            <PlanRegion>제주공항</PlanRegion>
+
+                            <PlanTime>00:00 ~ 00:00</PlanTime>
+                            <PlanRegion>교원스위트호텔 제주</PlanRegion>
+                        </DetailPlan>
+                        <PlanDate><span>n 일차 20xx-xx-xx x요일</span></PlanDate>
+                        <DetailPlan>
+                            <PlanTime>00:00 ~ 00:00</PlanTime>
+                            <PlanRegion>제주공항</PlanRegion>
+
+                            <PlanTime>00:00 ~ 00:00</PlanTime>
+                            <PlanRegion>교원스위트호텔 제주</PlanRegion>
+                        </DetailPlan>
+                        <PlanDate><span>n 일차 20xx-xx-xx x요일</span></PlanDate>
+                        <DetailPlan>
+                            <PlanTime>00:00 ~ 00:00</PlanTime>
+                            <PlanRegion>제주공항</PlanRegion>
+
+                            <PlanTime>00:00 ~ 00:00</PlanTime>
+                            <PlanRegion>교원스위트호텔 제주</PlanRegion>
+                        </DetailPlan>
+                    </div>
+                    
+                </Plan>
 
                 <DetailContents>
                     <Notice dummy={dummy.imgsdata}/>
@@ -206,6 +235,7 @@ const DetailModal = ({setIsOpen, dummy}) => {
                 </DetailContents>
 
                 <div style={{border:'1px blue solid'}}>사용목적 미정 공간</div>
+
                 <DetailReview>
                     {//feedComments 에 담겨있을 댓글 값을 CommentList 컴포넌트에 담아서 가져오기
                     //CommentList 컴포넌트는 반복적으로 추가되는 사용자 댓글을 하나하나 담고있음
@@ -233,13 +263,46 @@ const DetailModal = ({setIsOpen, dummy}) => {
 
   )
 }
+const Plan = styled.div`
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+    &::-webkit-scrollbar{
+        display:none;
+    }
+`
+const PlanDate = styled.span`
+    width: 100%;
+    height: 50px;
+    font-size: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #edf2f4;
+    // border-radius: 8px;
+`
+const DetailPlan = styled.div`
+    width: 100%;
+    font-size: 20px;
+    margin-top: 3px;
+    // border: 1px red solid;
+    
+`
+const PlanTime = styled.div`
+
+`
+const PlanRegion = styled.div`
+    margin-top: 5px;
+    margin-bottom: 10px;
+`
+
 const Textarea = styled.div`
     position: relative;
     width: 99%;
     height: 320px;
     overflow: auto;
+    font-size: 20px;
     box-shadow: 0 0 0 2px #e9ebec, 0 0 0 11px #fcfdfe;
-    // border: solid 1px black
 `
 // position: fixed; 모달창 열리면 외부 스크롤바 안되게
 const DetailContainer = styled.div`
@@ -287,13 +350,11 @@ const DetailModalWrap = styled.div`
 const DetailTitle = styled.div`
     margin-top: 15px;
     margin-bottom: 10px;
-    height: 20%;
-
+    
     span{
         float: center;
         font-size: 1.5em;
         margin-left: 40px;
-        
     }
     div{
         margin-right: 25px;
@@ -333,7 +394,7 @@ const EditDelte = styled.button`
 const DetailContents = styled.div`
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: 380px 50px 50px;
+    grid-template-rows: 400px 50px 50px;
     gap: 5px;
 
     // overflow: auto;
