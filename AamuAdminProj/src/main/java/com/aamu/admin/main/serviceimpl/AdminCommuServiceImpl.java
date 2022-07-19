@@ -132,6 +132,16 @@ public class AdminCommuServiceImpl implements AdminCommuService {
 			return 0;
 	}
 	
+	/////////////////////////////////////////////////////////////////////
+		
+	//커뮤니티 통계
+	@Override
+	public Map commuTotal() {
+		Map map = new HashMap<>();
+		map.put("commuMonthTotal", dao.commuMonthTotal(map));
+		return map;
+	}
+	
 	
 	
 	

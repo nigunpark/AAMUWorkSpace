@@ -25,6 +25,10 @@ public interface AdminCommuService {
 	//글 삭제
 	int commuCommentDelete(Map map);
 	
+	/////////////////////////////////////////////////////////////////////
+	
+	//커뮤니티 통계
+	Map commuTotal();
 	
 
 }

@@ -48,6 +48,14 @@ public class AdminCommuDAO {
 		return template.delete("commuCommentDelete",map);
 	}
 	
+	////////////////////////////////////////////////////////////
+	public int commuMonthTotal(Map map) {
+		System.out.println("map:"+map); //없음
+		int affected=template.delete("commuMonthTotal",map);
+		System.out.println("affected:"+affected); //-1
+		return affected;
+	}
+	
 	
 
 }

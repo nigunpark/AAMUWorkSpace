@@ -39,7 +39,7 @@
 									<h4 class="card-title">베스트 글쓴이</h4>
 									<p class="card-description">
 										좋아요를 가장 많이 받은 순위
-										<code>1위~7위</code>
+										<code>1위~5위</code>
 									</p>
 									<div class="table-responsive">
 										<table class="table table-striped">
@@ -48,8 +48,8 @@
 													<th>순위</th>
 													<th>프로필사진</th>
 													<th>id</th>
-													<th>게시글 수</th>
 													<th>좋아요 수</th>
+													<th>게시글 수</th>
 													<th>가입일</th>
 												</tr>
 											</thead>
@@ -91,10 +91,10 @@
 		'use strict';
 		//월별 게시물 수
 		var data = {
-			labels : [ "1", "2", "3", "4", "5", "7", "8", "9", "10", "11", "12" ],
+			labels : [ "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12" ],
 			datasets : [ {
 				label : '# of Votes',
-				data : [ 10, 19, 3, 5, 2, 3, 30, 50, 20, 30, 100 ],
+				data : [ 0,0,0,0,0,0,${commuMonthTotal},0,0,0,0,0 ],
 				backgroundColor : [ 'rgba(255, 99, 132, 0.2)',
 						'rgba(54, 162, 235, 0.2)', 'rgba(255, 206, 86, 0.2)',
 						'rgba(75, 192, 192, 0.2)', 'rgba(153, 102, 255, 0.2)',

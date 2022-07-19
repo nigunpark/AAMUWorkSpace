@@ -1,6 +1,7 @@
 package com.aamu.admin.main.web;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -94,10 +95,14 @@ public class AdminCommuController {
 		return resultMap;
 	}
 	
-	//커뮤니티 세부통계
+	////////////////////////////////////////////////////////////////////
+	
+	//커뮤니티 통계
 	@RequestMapping("CommuStatistics.do")
-	public String commuStatistics() {
-		
+	public String commuStatistics(Model model) {
+		Map map = commuService.commuTotal();
+		System.out.println("commuMonthTotal:"+map.get("commuMonthTotal"));
+		model.addAttribute("commuMonthTotal",map.get("commuMonthTotal"));
 		return "commu/commuStatistics";
 	}
 	
