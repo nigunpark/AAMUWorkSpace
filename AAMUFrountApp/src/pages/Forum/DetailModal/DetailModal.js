@@ -345,6 +345,10 @@ const DetailModalWrap = styled.div`
     left: 50%;
     transform: translate(-50%, -50%);
     box-shadow: 0 0 0 10px #e9ebec, 0 0 0 11px #fcfdfe;
+
+    &::-webkit-scrollbar{
+        display:none;
+    }
 `
 
 const DetailTitle = styled.div`
