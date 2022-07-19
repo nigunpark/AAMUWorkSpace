@@ -38,7 +38,7 @@
 	
 	
 	<insert id="plannerInsert" parameterType="planDTO">
-		INSERT INTO routeboard VALUES(SEQ_PLA.NEXTVAL,#{title},SYSDATE,#{id},#{plannerDate})
+		INSERT INTO routeboard VALUES(SEQ_PLA.NEXTVAL,#{title},SYSDATE,#{id},#{plannerdate})
 		<selectKey keyProperty="rbn" resultType="int" order="AFTER">
 	    	SELECT SEQ_PLA.CURRVAL FROM DUAL
 	    </selectKey>
@@ -120,7 +120,7 @@
 	</select>
 	
 	<select id="getPlannerList" parameterType="String" resultType="planDTO">
-		SELECT p.*,r.* FROM routeboard p JOIN route r ON r.rbn = p.rbn WHERE p.id=#{id}
+		SELECT * FROM routeboard WHERE id=#{id}
 	</select>
 	
 	<select id="selectPlannerOne" parameterType="int" resultType="planDTO">

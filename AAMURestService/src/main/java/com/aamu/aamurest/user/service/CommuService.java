@@ -17,7 +17,7 @@ public interface CommuService<T> {
 	List commuSelectPhotoList(String lno);
 	
 	//글 목록용_좋아요 여부 뿌려주기
-	Boolean commuIsLike(Map map);
+	//Boolean commuIsLike(Map map);
 	
 	//글 생성용
 	int commuInsert(Map map);

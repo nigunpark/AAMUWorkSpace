@@ -303,9 +303,9 @@ public class MainController {
 	@GetMapping("/planner/selectList")
 	public List<PlannerDTO> selectPlannerList(@RequestParam String id){
 		
-		
+		System.out.println("id는"+id);
 		List<PlannerDTO> list = service.getPlannerList(id);
-		
+		System.out.println(list.get(0).getTitle());
 		
 		return list;
 	}

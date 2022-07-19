@@ -1,33 +1,37 @@
-import axios from 'axios';
-import React, { useEffect } from 'react'
+import React from 'react'
 
-const MyBox = ({setClickTab}) => {
+const MyHomeBox = ({setClickTab, planList}) => {
+    // console.log('잘 넘어왔나 :',planList);
+
+    const postDate = new Date(planList.routeDate);
+    // console.log('postDate :', postDate);
+
+    function dateFormat(date) {
+        let month = date.getMonth() + 1;
+        let day = date.getDate();
+
+        month = month >= 10 ? month : '0' + month;
+        day = day >= 10 ? day : '0' + day;
+
+        return date.getFullYear() + '-' + month + '-' + day;
+    };
+    // console.log('dateFormat(postDate)',dateFormat(postDate));
+
+    const randomNum = [1,2,3,4,5,6,7,8,9].length;
+    const imgNum = Math.floor(Math.random() * randomNum)+1;
+
+    // console.log('Math.floor(Math.random() * randomNum) :',Math.floor(Math.random() * randomNum)+1);
 
     const myTravel = () => {
-        let token = sessionStorage.getItem("token");
-    
-        axios.get('/planner/selectList',{
-            params:{
-                id:sessionStorage.getItem('token')
-            },
-            headers: {
-                Authorization: `Bearer ${token}`,
-            }
-        }).then((resp)=>{
-            
-            console.log('데이터 형태 : ',resp.data);
-        }).catch((error)=>{
-            console.log((error) => console.log("여행경로 가져오기 실패", error));
-        });
+        
     };
-
+    // transform: scale(1.07);
+    // project-box-wrapper 이거 css 703번 줄에 있음 &-wrapper 으로 검색
   return (
-    <div className="project-box-wrapper">
-        <div className="project-box"> {/*  style="background-color: #fee4cb;" */}
-            <div className="project-box-header">
-                {/* <span>December 10, 2020 저장일</span> */}
-
-                {/* <div className="more-wrapper">
+    <div className="project-box-wrapper">{/* style={{backgroundColor: '#fee4cb'}} */}
+        <div className="project-box" >
+            {/* <div className="project-box-header">
+                <div className="more-wrapper">
                     <button className="project-btn-more">
                         <svg 
                         xmlns="http://www.w3.org/2000/svg" 
@@ -41,26 +45,22 @@ const MyBox = ({setClickTab}) => {
                             <circle cx="12" cy="19" r="1" />
                         </svg>
                     </button>
-                </div> */}
-            </div>
+                </div>
+            </div> */}
 
             <div className="project-box-content-header">
-                <img className='MapImgSize' src='/images/img-3.jpg' style={{marginTop:'10px'}}/>
+                <img className='MapImgSize' src={'/images/img-'+imgNum+'.jpg'} style={{marginTop:'10px'}}/>
                 {/* 저장한 경로 */}
             </div>
 
             <div className="box-progress-wrapper">
                 <p className="box-progress-header" style={{marginTop:'10px',marginBottom:'10px'}}>
-                    여행 이름 : 여행이름
+                    여행 제목 : {planList.title}
                 </p>
                 <p className="box-progress-header" style={{marginBottom:'10px'}}>
-                    최종 수정 : 2022-07-12
+                    저장 날자 : {dateFormat(postDate)}
                 </p>
-                <p className="box-progress-header">여행 일시 : 2022-07-12 ~ 2022-07-16</p>
-                {/* <div className="box-progress-bar">
-                    <span className="box-progress"></span>
-                </div> */}
-                {/* <p className="box-progress-percentage">60%</p> */}
+                <p className="box-progress-header">{planList.plannerdate} (rbn :{planList.rbn})</p>
             </div>
 
             <div className="project-box-footer" style={{marginTop:'5px'}}>
@@ -70,14 +70,6 @@ const MyBox = ({setClickTab}) => {
                 <div className='detail-button'>
                     <button className="learn-more" type="button" style={{marginTop:'20px'}} onClick={myTravel}>일정보기</button>
                 </div>
-            </div>
-            <div className="project-box-footer" style={{marginTop:'5px'}}>
-                {/* <div className='detail-button'>
-                    <button className="learn-more" type="button">수정하기</button>
-                </div>
-                <div className='detail-button' style={{marginTop:'20px'}}>
-                    <button className="learn-more" type="button">삭제하기</button>
-                </div> */}
             </div>
         </div>
     </div>
@@ -108,4 +100,4 @@ const MyBox = ({setClickTab}) => {
     2 Days Left
     </div> */}
 
-export default MyBox
+export default MyHomeBox

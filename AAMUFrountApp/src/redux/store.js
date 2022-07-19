@@ -272,6 +272,21 @@ let joinData = createSlice({
 });
 export let { addStepOne } = joinData.actions;
 
+//엑셀다운시 도착시간 출발시간 담는 state
+let wholeBlackBox = createSlice({
+  name: "wholeBlackBox",
+  initialState: [],
+  reducers: {
+    addWholeBlackBox(state, action) {
+      state.push(action.payload);
+    },
+    delAllWholeBb(state, action) {
+      return action.payload;
+    },
+  },
+});
+export let { addWholeBlackBox, delAllWholeBb } = wholeBlackBox.actions;
+
 export default configureStore({
   reducer: {
     localNameForMarker: localNameForMarker.reducer,
@@ -290,6 +305,7 @@ export default configureStore({
     monthNdate: monthNdate.reducer,
     movingTime: movingTime.reducer,
     joinData: joinData.reducer,
+    wholeBlackBox: wholeBlackBox.reducer,
   },
   //planTripTime.js 168번줄쯤의 fullDate를 위한 serializable무시
   middleware: (getDefaultMiddleware) =>

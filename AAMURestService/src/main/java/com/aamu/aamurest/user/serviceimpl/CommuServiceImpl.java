@@ -21,13 +21,15 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 	@Override
 	public List<CommuDTO> commuSelectList(Map map) {
 		List<CommuDTO> lists=dao.commuSelectList(map);
-		List<CommuDTO> listLno = new Vector();
+		List<CommuDTO> returnLists = new Vector();
 		for(int i=0; i<lists.size(); i++) {
 			CommuDTO dto=lists.get(i);
 			map.put("lno", dto.getLno());
+			if(dao.commuLikeSelect(map)==1) dto.setIslike(true);
+			else dto.setIslike(false); 
+			returnLists.add(dto);
 		}
-		
-		return lists;
+		return returnLists;
 	}
 	
 	//글 목록용_댓글 하나 뿌려주기
@@ -43,12 +45,14 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 	}
 	
 	//글 목록용_좋아요 여부 뿌려주기
+	/*
 	@Override
 	public Boolean commuIsLike(Map map) {
+		System.out.println("(isLike)map:"+map);
 		int isLikeaffected=dao.commuLikeSelect(map);
 		if(isLikeaffected == 1) return true;
 		else return false;
-	}
+	}*/
 	
 	//글 생성용
 	@Override
@@ -64,7 +68,6 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 			photomap.put("lno", map.get("lno"));
 			photomap.put("photo", photo);
 			photoAffected+=dao.photoInsert(photomap);
-			System.out.println("(CommuServiceImpl)photoAffected:"+photoAffected);
 		}
 		//장소
 		System.out.println("(CommuServiceImpl)map.get(\"contentid\"):"+map.get("contentid"));

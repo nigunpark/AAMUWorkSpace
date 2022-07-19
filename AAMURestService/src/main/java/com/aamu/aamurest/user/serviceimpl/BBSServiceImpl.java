@@ -3,6 +3,7 @@ package com.aamu.aamurest.user.serviceimpl;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Vector;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,7 +27,15 @@ public class BBSServiceImpl implements BBSService{
 	//글 목록
 	@Override
 	public List<BBSDTO> bbsSelectList(Map map) {
-		return dao.bbsSelectList(map);
+		List<BBSDTO> bbsList = dao.bbsSelectList(map);
+		List<BBSDTO> returnList = new Vector<>();
+		for(BBSDTO dto:bbsList) {
+			int rbn = dto.getRbn();
+			dto.setPhoto(dao.bbsSelectPhotoList(rbn));
+			dto.setReviewList(dao.reviewList(rbn));
+			returnList.add(dto);
+		}
+		return returnList;
 	}
 	
 	//글 목록_사진 뿌려주기
@@ -97,10 +106,12 @@ public class BBSServiceImpl implements BBSService{
 	/*---------------------------------------------------*/
 	
 	//글 상세보기_모든 리뷰 보기
+	
 	@Override
 	public List<ReviewDTO> reviewList(int rbn) {
 		return dao.reviewList(rbn);
 	}
+	
 	
 	//리뷰 등록
 	@Override
@@ -130,11 +141,22 @@ public class BBSServiceImpl implements BBSService{
 	@Override
 	public int rateAvgInsert(Map map) {
 		
-		Double rateAvg = dao.ratingAvgInsert(map);	
+		Double rateAvg;
+		try {
+			rateAvg = BBSService.rateInsert(map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}	
 		
 		if(rateAvg == null) {
 			rateAvg = 0.0;
-		}		
+		}	
+		
+		ReviewDTO rbn = new ReviewDTO();
+		rbn.setId(rno);
+		rbn.setRatingAvg(ratingAvg);	
+		
+		replyMapper.updateRating(urd);			
 		
 	}*/
 
@@ -142,7 +164,6 @@ public class BBSServiceImpl implements BBSService{
 	public int rateAvgInsert(Map map) {
 		return 0;
 	}
-
 	
 }
 	

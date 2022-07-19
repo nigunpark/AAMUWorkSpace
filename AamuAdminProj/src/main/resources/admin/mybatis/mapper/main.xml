@@ -23,6 +23,10 @@
 		SELECT COUNT(*) FROM ${table} WHERE TO_CHAR(${column},'YYYY-MM-DD') = TO_CHAR(${day},'YYYY-MM-DD')
 	</select>
 	
+	<select id="selectWeekToString" parameterType="Map" resultType="int">
+		SELECT COUNT(*) FROM ${table} WHERE TO_CHAR(${column},'YYYY-MM-DD') = TO_DATE(#{day},'YYYY-MM-DD')
+	</select>
+	
 	<select id="selectUserPeriod" parameterType="Map" resultType="int">
 		SELECT COUNT(*) FROM users WHERE TO_CHAR(joindate,'YYYY-MM-DD') BETWEEN TO_CHAR(${start},'YYYY-MM-DD') AND TO_CHAR(${end},'YYYY-MM-DD')
 	</select>

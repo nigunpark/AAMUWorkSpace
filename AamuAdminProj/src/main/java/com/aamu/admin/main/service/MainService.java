@@ -12,6 +12,6 @@ public interface MainService {
 	Map placesTotalCount();
 	int selectEvent();
 	Map selectWeek();
-	List<Integer> selectStartEnd(Map map);
+	Map<String,List> selectStartEnd(Map map);
 
 }

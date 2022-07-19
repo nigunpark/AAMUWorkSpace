@@ -1,21 +1,19 @@
 import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import Notice from '../Notice/Notice'
-import useOutSideClick from './hook/useOutSideClick'
 import '../Board2/DetailButton.scss'
 import { Link } from 'react-router-dom'
 import { Rating } from '@mui/material'
 import axios from 'axios'
+import './BookMark.css';
 
 const DetailModal = ({setIsOpen, dummy}) => {
-
-    console.log('모달창에서 본 dummy 데이터 :', dummy.reviewdata);
 
     let [tempObj, setTempObj] = useState({review: "",
                                         reviewId: "",
                                         star: ""});
 
-    console.log('tempObj 인듯 : ', tempObj);
+    // console.log('tempObj 인듯 : ', tempObj);
 
     let [userName] = useState('ADMIN');
 
@@ -26,7 +24,7 @@ const DetailModal = ({setIsOpen, dummy}) => {
     let [feedComments, setFeedComments] = useState([]); // feedComments 댓글 리스트 저장
     let [isValid, setIsValid] = useState(false); // 댓글 게시가능여부 (유효성 검사)
 
-    console.log('저장됬는지 : ',feedComments);
+    // console.log('저장됬는지 : ',feedComments);
 
     useEffect(() => {
        
@@ -45,10 +43,6 @@ const DetailModal = ({setIsOpen, dummy}) => {
     },[])
     
 
-    
-    // console.log('ddd',feedComments);
-    // console.log('저장된 별점:',commentStar);
-
     let reviewPost = (e) => {
         
         // setTempObj((curr)=>{return {...curr, star:star, review:comment, reviewId:sessionStorage.getItem('token')}});
@@ -59,12 +53,8 @@ const DetailModal = ({setIsOpen, dummy}) => {
         // const copyFeedComments = [...feedComments];
         // const copyStar = [...commentStar];
 
-
-        // setStar 와 setComment 의 값이 입력할때마다 값이 변경됨
-        console.log('comment 추가됬나 확인 :',comment);
-        console.log('star 값 저장됬나 확인 :',star);
-
-
+        // console.log('comment 추가됬나 확인 :',comment);
+        // console.log('star 값 저장됬나 확인 :',star);
 
         // let token = sessionStorage.getItem("token");
 
@@ -138,24 +128,68 @@ const DetailModal = ({setIsOpen, dummy}) => {
         );
     };
 
+    // console.log('더미데이터 :', dummy.imgsdata);
+    const [bookMark, setBookMark] = useState(false);
 // ref={modalRef}
   return (
     <DetailContainer >
         <DetailOverlay>
             <DetailModalWrap>
-
+                <div>여행경로</div>
                 <DetailTitle>
-                    <span>{dummy.title}</span>
-                    <div className='detail-button'>
-                        {/* DetailButton.scss 주석 */}
-                        <button className="learn-more_exit" type="button" onClick={(e)=>{
-                             setIsOpen(false);                            
-                        }}>exit</button>
-                    </div>
+                    <span>
+                        <div className="anim-icon star">
+                            <input
+                                type="checkbox"
+                                id="star"
+                                onClick={(e)=>{
+                                    console.log('북마크 체크 여부 :',e.currentTarget.checked);
+                                }}/>
+                            <label for="star"></label>
+                        </div>
+
+                        {dummy.title}
+
+                        <div className='detail-button'>
+                            <button className="learn-more_exit" type="button" onClick={(e)=>{
+                                setIsOpen(false);                            
+                            }}>exit</button>
+                        </div>
+                    </span>
                 </DetailTitle>
 
+                <Plan>
+                    <div style={{border:'1.5px solid #edf2f4'}}>
+                        <PlanDate><span>n 일차 20xx-xx-xx x요일</span></PlanDate>
+                        <DetailPlan>
+                            <PlanTime>00:00 ~ 00:00</PlanTime>
+                            <PlanRegion>제주공항</PlanRegion>
+
+                            <PlanTime>00:00 ~ 00:00</PlanTime>
+                            <PlanRegion>교원스위트호텔 제주</PlanRegion>
+                        </DetailPlan>
+                        <PlanDate><span>n 일차 20xx-xx-xx x요일</span></PlanDate>
+                        <DetailPlan>
+                            <PlanTime>00:00 ~ 00:00</PlanTime>
+                            <PlanRegion>제주공항</PlanRegion>
+
+                            <PlanTime>00:00 ~ 00:00</PlanTime>
+                            <PlanRegion>교원스위트호텔 제주</PlanRegion>
+                        </DetailPlan>
+                        <PlanDate><span>n 일차 20xx-xx-xx x요일</span></PlanDate>
+                        <DetailPlan>
+                            <PlanTime>00:00 ~ 00:00</PlanTime>
+                            <PlanRegion>제주공항</PlanRegion>
+
+                            <PlanTime>00:00 ~ 00:00</PlanTime>
+                            <PlanRegion>교원스위트호텔 제주</PlanRegion>
+                        </DetailPlan>
+                    </div>
+                    
+                </Plan>
+
                 <DetailContents>
-                    <Notice dummy={dummy}/>
+                    <Notice dummy={dummy.imgsdata}/>
                     
                     <Textarea>
                         {dummy.content}
@@ -198,15 +232,16 @@ const DetailModal = ({setIsOpen, dummy}) => {
                             <button className="learn-more" type="button" disabled>리뷰를 작성하세요</button>
                         }
                     </div>
-                    
                 </DetailContents>
+
+                <div style={{border:'1px blue solid'}}>사용목적 미정 공간</div>
 
                 <DetailReview>
                     {//feedComments 에 담겨있을 댓글 값을 CommentList 컴포넌트에 담아서 가져오기
-                     //CommentList 컴포넌트는 반복적으로 추가되는 사용자 댓글을 하나하나 담고있음
-                     //userName 은 위에서 ADMIN 을 담은 값을,
-                     //userComment 는 feedComments 에 담겨있는 배열 담는다
-                     //stars 는 commentStar의 인덱스 번호에 맞는 별점 배열을 담는다
+                    //CommentList 컴포넌트는 반복적으로 추가되는 사용자 댓글을 하나하나 담고있음
+                    //userName 은 위에서 ADMIN 을 담은 값을,
+                    //userComment 는 feedComments 에 담겨있는 배열 담는다
+                    //stars 는 commentStar의 인덱스 번호에 맞는 별점 배열을 담는다
                         feedComments.map((commnetArr, idx)=>{
                             return(
                                 <CommentList
@@ -228,13 +263,46 @@ const DetailModal = ({setIsOpen, dummy}) => {
 
   )
 }
+const Plan = styled.div`
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+    &::-webkit-scrollbar{
+        display:none;
+    }
+`
+const PlanDate = styled.span`
+    width: 100%;
+    height: 50px;
+    font-size: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #edf2f4;
+    // border-radius: 8px;
+`
+const DetailPlan = styled.div`
+    width: 100%;
+    font-size: 20px;
+    margin-top: 3px;
+    // border: 1px red solid;
+    
+`
+const PlanTime = styled.div`
+
+`
+const PlanRegion = styled.div`
+    margin-top: 5px;
+    margin-bottom: 10px;
+`
+
 const Textarea = styled.div`
     position: relative;
     width: 99%;
     height: 320px;
     overflow: auto;
+    font-size: 20px;
     box-shadow: 0 0 0 2px #e9ebec, 0 0 0 11px #fcfdfe;
-    // border: solid 1px black
 `
 // position: fixed; 모달창 열리면 외부 스크롤바 안되게
 const DetailContainer = styled.div`
@@ -262,8 +330,11 @@ const DetailOverlay = styled.div`
 
 const DetailModalWrap = styled.div`
     display: grid;
-    width: 1050px;
+    grid-template-columns:300px 1000px;
+    border: 1px white solid;
+    
     height: 90%;
+    // height: 650px;
     overflow: auto;
 
     border-radius: 15px;
@@ -274,18 +345,20 @@ const DetailModalWrap = styled.div`
     left: 50%;
     transform: translate(-50%, -50%);
     box-shadow: 0 0 0 10px #e9ebec, 0 0 0 11px #fcfdfe;
+
+    &::-webkit-scrollbar{
+        display:none;
+    }
 `
 
 const DetailTitle = styled.div`
     margin-top: 15px;
     margin-bottom: 10px;
-    height: 20%;
-
+    
     span{
         float: center;
         font-size: 1.5em;
         margin-left: 40px;
-        
     }
     div{
         margin-right: 25px;
@@ -294,12 +367,11 @@ const DetailTitle = styled.div`
 
 const DetailReview = styled.div`
     margin: 0px 20px;
-    
     font-size: 18px;
 
     div{
         display: grid;
-        grid-template-columns:70px 200px 670px 30px 30px;
+        grid-template-columns:70px 200px 620px 30px 30px;
         margin-top: 2px;
         border-bottom: solid 1px #c3cff4;
     }
@@ -326,7 +398,7 @@ const EditDelte = styled.button`
 const DetailContents = styled.div`
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: 380px 50px 50px;
+    grid-template-rows: 400px 50px 50px;
     gap: 5px;
 
     // overflow: auto;
