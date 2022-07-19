@@ -9,6 +9,7 @@
 	<typeAliases>
 		<typeAlias type="com.aamu.admin.main.service.AdminCommuDTO" alias="adminCommuDTO"/>
 		<typeAlias type="com.aamu.admin.main.service.AdminCommuCommentDTO" alias="adminCommuCommentDTO"/>
+		<typeAlias type="com.aamu.admin.main.service.NoticeDTO" alias="NoticeDTO"/>
   	</typeAliases>
 	<mappers>
 		<mapper resource="admin/mybatis/mapper/main.xml" />
