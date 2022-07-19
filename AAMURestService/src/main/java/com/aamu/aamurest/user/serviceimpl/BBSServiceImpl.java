@@ -125,7 +125,7 @@ public class BBSServiceImpl implements BBSService{
 	public int rateInsert(Map map) {
 		return dao.ratingInsert(map);
 	}
-	
+	/*
 	//평점 평균 반영
 	@Override
 	public int rateAvgInsert(Map map) {
@@ -136,6 +136,11 @@ public class BBSServiceImpl implements BBSService{
 			rateAvg = 0.0;
 		}		
 		
+	}*/
+
+	@Override
+	public int rateAvgInsert(Map map) {
+		return 0;
 	}
 
 	
