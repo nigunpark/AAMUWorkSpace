@@ -58,7 +58,8 @@
 																</div>
 															</td>
 															<td>${record.nno}</td>
-															<td>${record.title}</td>
+															<td><a
+							href="<c:url value="/NoticeView.do?nno=${record.nno}&nowPage="/>">${record.title}</a></td>
 															<td>${record.id}</td>
 															<td>${record.noticedate}</td>
 															<td>${record.ncount}</td>

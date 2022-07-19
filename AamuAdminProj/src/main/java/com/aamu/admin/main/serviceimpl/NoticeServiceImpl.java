@@ -65,24 +65,33 @@ public class NoticeServiceImpl implements NoticeService {
 	public int noticeWrite(Map map) {
 		return dao.noticeWrite(map);
 	}
-	
+
+	@Override
+	public NoticeDTO selectOne(Map map) {
+		NoticeDTO record = dao.selectOne(map);
+		//줄바꿈 처리
+		record.setContent(record.getContent().replace("\r\n","<br/>"));
+		return record;
+	}
+
 	// 글 삭제
 	@Override
 	public int noticeDelete(Map map) {
 		int affected = 0;
-		List<String> lnolists = (List<String>) map.get("lno");
-		System.out.println(lnolists);
-		for (String lno : lnolists) {
-			Map lnoMap = new HashMap();
-			lnoMap.put("lno", lno);
-			System.out.println(lnoMap);
-			affected += dao.noticeDelete(lnoMap);
+		List<String> nnolists = (List<String>) map.get("nno");
+		System.out.println(nnolists);
+		for (String nno : nnolists) {
+			Map nnoMap = new HashMap();
+			nnoMap.put("nno", nno);
+			System.out.println(nnoMap);
+			affected += dao.noticeDelete(nnoMap);
 		}
-		if (affected == ((List) map.get("lno")).size()) {
+		if (affected == ((List) map.get("nno")).size()) {
 			return 1;
 		} else
 			return 0;
 	}
+
 
 
 

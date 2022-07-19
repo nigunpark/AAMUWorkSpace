@@ -31,9 +31,16 @@ public class NoticeDAO {
 		return template.update("noticeWrite",map);
 	}
 	
+	// 글 상세 보기
+	public NoticeDTO selectOne(Map map) {		
+		return template.selectOne("noticeSelectOne", map);
+	}
+	
 	//글 삭제
 	public int noticeDelete(Map map) {
 		return template.delete("noticeDelete",map);
 	}
+
+
 	
 }

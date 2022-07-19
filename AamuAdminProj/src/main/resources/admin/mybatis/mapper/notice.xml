@@ -23,11 +23,14 @@
 		SELECT COUNT(*) FROM Notice
 	</select>
 
-	<!-- 글 등록 -->
-	
 
-	
-	<insert parameterType="Map" id="noticeWrite">
+
+
+
+
+	<!-- 글 등록 -->
+
+	<insert id="noticeWrite" parameterType="Map">
 		INSERT INTO notice VALUES
 		(SEQ_NNO.NEXTVAL,
 		#{title},
@@ -36,6 +39,16 @@
 		DEFAULT,
 		#{id})
 	</insert>
+
+
+
+	<!-- 글 상세 보기 -->
+
+	<select id="noticeSelectOne" parameterType="Map"
+	resultType="NoticeDTO">
+		SELECT * FROM notice
+		WHERE nno=#{nno}
+	</select>
 
 	<!-- 글 삭제 -->
 	<delete id="noticeDelete" parameterType="Map">

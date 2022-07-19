@@ -15,7 +15,12 @@ public interface NoticeService {
 	// 글 등록
 	int noticeWrite(Map map);
 	
+
 	//글 삭제
 	int noticeDelete(Map map);
+	
+	// 글 상세 보기
+
+	NoticeDTO selectOne(Map map);
 	
 }
