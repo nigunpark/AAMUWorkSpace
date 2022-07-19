@@ -136,6 +136,7 @@ const ChangeDate = ({ period, appearCalendar, setAppearCalendar }) => {
   let sdy = period.startDate.getFullYear();
   let sdm = period.startDate.getMonth();
   let sdd = period.startDate.getDate();
+  let sdDoW = period.startDate.getDay();
 
   let edy = period.endDate.getFullYear();
   let edm = period.endDate.getMonth();
@@ -147,6 +148,7 @@ const ChangeDate = ({ period, appearCalendar, setAppearCalendar }) => {
       addMonthNDate({
         month: sdm + 1,
         date: sdd,
+        dow: sdDoW,
       })
     );
   }, [period]);
@@ -245,7 +247,6 @@ function PickedLocation({ local }) {
             onClick={(e) => {
               e.stopPropagation();
               dispatch(deletePickJangso(local));
-              console.log(timeVal);
               dispatch(timeSetter(-2));
               dispatch(minSetter(-0));
               dispatch(addArrInForJangso(local));
