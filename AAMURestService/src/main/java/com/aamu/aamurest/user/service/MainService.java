@@ -10,7 +10,7 @@ public interface MainService{
 
 	int plannerInsert(PlannerDTO dto);
 	
-	List<RouteDTO> selectRouteList(int rbn); 
+	PlannerDTO selectPlannerOne(int rbn); 
 	
 	List<AttractionDTO> selectPlacesList(Map map);
 
@@ -39,5 +39,7 @@ public interface MainService{
 	List<AttractionDTO> getRecentPlaceAll(Map map);
 	
 	double getRecentPlaceOne(Map map);
+	
+	List<PlannerDTO> getPlannerList(String id);
 	
 }

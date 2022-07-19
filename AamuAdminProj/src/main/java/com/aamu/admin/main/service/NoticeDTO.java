@@ -11,12 +11,13 @@ import lombok.Setter;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AdminCommuDTO {
-	private String lno;
-	private String ctitle;
+public class NoticeDTO {
+
+	private String nno;
 	private String id;
-	private java.sql.Date postdate;
-	private String rcount;
-	private String likecount;
+	private String title;
+	private String content;
+	private java.sql.Date noticedate;
+	private String ncount;
 	
 }

@@ -1,11 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import NotificationModal from "./ModalGroup/Notification";
-import SearchModal from "./ModalGroup/Search";
-import WriteModal from "./ModalGroup/UploadSecond/Upload"
-import ButtonGroup from './ModalGroup/UploadSecond/ButtonGroup';
+import SearchModal from "./ModalGroup/Search/Search";
+import WriteModal from "./ModalGroup//Upload/Upload"
+import ButtonGroup from './ModalGroup/Search/ButtonGroup';
 
-function User() {
+function User({setlist}) {
   const modalRef = useRef();
   const notimodalRef = useRef();
   const outside = useRef();
@@ -21,6 +21,10 @@ function User() {
     // if (e.target !== uploadmodalRef.current) setsquare(false);
   }
   window.addEventListener("click", handleModal);
+
+  const handleChange=(e)=>{
+    console.log(e.target.value);
+  }
   
   return (
     <div>
@@ -28,7 +32,7 @@ function User() {
         <ButtonGroup></ButtonGroup>
         <div className="search" onClick={() => { setsearch(!search); }} >
           <input type="text" className="search-bar"  placeholder="검색" 
-            ref={modalRef} />
+                 onChange={handleChange} ref={modalRef} />
           {search ? <SearchModal></SearchModal> : null}
         </div>
       </div>
@@ -74,7 +78,7 @@ function User() {
                 ref={outside} 
                 onClick={ (e) => { if(e.target == outside.current) setsquare(false) } }
                 />
-                  <WriteModal onClick={ () => setsquare(false) }></WriteModal>
+                  <WriteModal onClick={ () => setsquare(false) } setsquare={setsquare} setlist={setlist}/>
                 
               </Container>
           </>

@@ -2,8 +2,14 @@ package com.aamu.aamuandroidapp.data.api.repositories
 
 import android.util.Log
 import com.aamu.aamuandroidapp.data.api.AAMUApi
+import com.aamu.aamuandroidapp.data.api.response.AAMUPlaceResponse
 import com.aamu.aamuandroidapp.data.api.response.AAMUUserResponse
 import com.aamu.aamuandroidapp.data.api.userLogin
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 
 class AAMURepositoryImpl(
     private val aamuApi : AAMUApi
@@ -25,4 +31,34 @@ class AAMURepositoryImpl(
             return true
         return false
     }
+
+    override suspend fun getRecentPlace(
+        placey: Double,
+        placex: Double
+    ): Flow<List<AAMUPlaceResponse>> = flow {
+        val response  = aamuApi.getRecentPlace(placey,placex)
+        if(response.isSuccessful){
+            emit(response.body() ?: emptyList<AAMUPlaceResponse>())
+        }
+        else{
+            emit(emptyList<AAMUPlaceResponse>())
+        }
+    }.catch {
+        emit(emptyList<AAMUPlaceResponse>())
+    }.flowOn(Dispatchers.IO)
+
+    override suspend fun getRecentDiner(
+        placey: Double,
+        placex: Double
+    ): Flow<List<AAMUPlaceResponse>> = flow {
+        val response  = aamuApi.getRecentDiner(placey,placex)
+        if(response.isSuccessful){
+            emit(response.body() ?: emptyList<AAMUPlaceResponse>())
+        }
+        else{
+            emit(emptyList<AAMUPlaceResponse>())
+        }
+    }.catch {
+        emit(emptyList<AAMUPlaceResponse>())
+    }.flowOn(Dispatchers.IO)
 }

@@ -4,16 +4,26 @@ import React, { useState } from "react";
 import DetailModal from "../DetailModal/DetailModal";
 
 
-const ContentItem = ({ i }) => {
+const ContentItem = ({dummy, keys }) => {
 
-    const [value, setValue] = useState(2.5);
+    console.log("ContentItem dummy :",dummy.reviewdata);
+    console.log("keys : ",keys);
+
     const [isOpen, setIsOpen] = useState(false);
 
     const onClickModal = () =>{
         setIsOpen(true);
     };
 
-//<Link to="/review" className="card__item__link_minCon">
+    let add=0;
+    dummy.reviewdata.forEach((obj,i)=>{
+            console.log('11',typeof Number(obj.star))
+            add+=Number(obj.star)
+    })
+    console.log();
+
+    add = Math.round((add/dummy.reviewdata.length)*10)/10;
+
     return (
         <>
         <li className="card__item_minCon" onClick={onClickModal}>
@@ -21,25 +31,18 @@ const ContentItem = ({ i }) => {
                 <figure className="card__item__info_minCon">
                     <div className="card__item__img-container_minCon">
                         <img
-                            src={"/images/img-" + i + ".jpg"}
+                            src={dummy.imgsdata[0].imgs}
                             alt="카드이미지"
                             className="card__item__img_minCon"
                         />
                     </div>
                     <div className="card__item__rating_minCon">
-                        {/* <Rating
-                            name="simple-controlled"
-                            value={value}
-                            precision={0.5}
-                            onChange={(event, newValue) => {
-                            setValue(newValue);
-                            }}
-                        /> */}
-                        <img src='/images/star.jpg' style={{width:'30px'}}/>4.8
-                        <span className="idSpan_minCon" style={{marginLeft: 'auto'}}>kim**58님의 plan</span>
+                        <img src='/images/star.jpg' style={{width:'30px'}}/>{add}
+                        <span className="idSpan_minCon" style={{marginLeft: 'auto'}}>{dummy.id}님의 plan</span>
                     </div>
                     <div className="card__item__content_minCon">
-                        <h3>제주도 3박4일</h3> {/* 제목 */}
+                        <h3>{dummy.title}</h3> {/* 제목 */}
+
                         <p style={{fontSize: '12.5px', color: '#8e8e8e'}}>#tag</p>
                     </div>
                 </figure>
@@ -49,8 +52,10 @@ const ContentItem = ({ i }) => {
         {isOpen == true ? (
             <DetailModal
             setIsOpen={setIsOpen}
+            dummy={dummy}
             />
         ) : null}
+        
     </>
     
     )

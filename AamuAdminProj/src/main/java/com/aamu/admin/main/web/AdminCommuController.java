@@ -36,8 +36,6 @@ public class AdminCommuController {
 			@RequestParam(defaultValue = "1",required = false) int nowPage,
 			HttpServletRequest req,
 			Model model) {
-		
-		System.out.println("search:"+map.get("searchWorld"));
 		//현재 페이지를 맵에 저장
 		map.put(PagingUtil.NOW_PAGE, nowPage);
 		ListPagingData<AdminCommuDTO> listPagingData= commuService.commuSelectList(map, req, nowPage);

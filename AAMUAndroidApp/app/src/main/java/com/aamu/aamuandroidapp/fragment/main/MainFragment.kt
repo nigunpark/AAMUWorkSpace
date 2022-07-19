@@ -23,9 +23,9 @@ import meow.bottomnavigation.MeowBottomNavigation
 
 class MainFragment : Fragment() {
 
-    private lateinit var binding : FragmentMainBinding
+    private lateinit var binding: FragmentMainBinding
 
-    private lateinit var navControllerHost : NavController
+    private lateinit var navControllerHost: NavController
 
     private lateinit var permissionUtils: PermissionUtils
 
@@ -33,7 +33,8 @@ class MainFragment : Fragment() {
 
     private var permissions = arrayOf(
         Manifest.permission.ACCESS_FINE_LOCATION,
-        Manifest.permission.ACCESS_COARSE_LOCATION)
+        Manifest.permission.ACCESS_COARSE_LOCATION
+    )
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,16 +50,16 @@ class MainFragment : Fragment() {
         navControllerHost = Navigation.findNavController(view)
 
         binding.bottomNav.apply {
-            add(MeowBottomNavigation.Model(1,R.drawable.ic_home))
-            add(MeowBottomNavigation.Model(2,R.drawable.ic_explore))
-            add(MeowBottomNavigation.Model(3,R.drawable.ic_message))
-            add(MeowBottomNavigation.Model(4,R.drawable.ic_account))
+            add(MeowBottomNavigation.Model(1, R.drawable.ic_home))
+            add(MeowBottomNavigation.Model(2, R.drawable.ic_explore))
+            add(MeowBottomNavigation.Model(3, R.drawable.ic_message))
+            add(MeowBottomNavigation.Model(4, R.drawable.ic_account))
             show(1)
         }
         replace(HomeFragment())
 
-        binding.bottomNav.setOnClickMenuListener{
-            when (it.id){
+        binding.bottomNav.setOnClickMenuListener {
+            when (it.id) {
                 1 -> replace(HomeFragment())
                 2 -> replace(RouteBBSFragment())
                 3 -> replace(GramFragment())
@@ -66,20 +67,21 @@ class MainFragment : Fragment() {
             }
         }
 
-        permissionUtils = PermissionUtils(requireContext(), requireActivity(),permissions)
+        permissionUtils = PermissionUtils(requireContext(), requireActivity(), permissions)
 
         preferences = requireContext().getSharedPreferences("local", Context.MODE_PRIVATE)
 
-        val requestMultiplePermissions = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions())
-        { permissions ->
-            permissions.entries.forEach {
-                if(!it.value) {
-                    preferences.edit().putString("local", "N").commit()
-                    return@registerForActivityResult
+        val requestMultiplePermissions =
+            registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions())
+            { permissions ->
+                permissions.entries.forEach {
+                    if (!it.value) {
+                        preferences.edit().putString("local", "N").commit()
+                        return@registerForActivityResult
+                    }
+                    preferences.edit().putString("local", "Y").commit()
                 }
-                preferences.edit().putString("local", "Y").commit()
             }
-        }
         if (!permissionUtils.checkPermission()) {
             //권한 요청
             requestMultiplePermissions.launch(permissions)
@@ -89,8 +91,8 @@ class MainFragment : Fragment() {
 
     }
 
-    private fun replace(fragmet : Fragment){
+    private fun replace(fragmet: Fragment) {
         requireActivity().supportFragmentManager.beginTransaction()
-            .replace(binding.navMainFrame.id,fragmet).commit()
+            .replace(binding.navMainFrame.id, fragmet).commit()
     }
 }

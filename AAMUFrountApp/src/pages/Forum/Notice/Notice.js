@@ -8,10 +8,14 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css"; //basic
 import "swiper/css/navigation";
 import "swiper/css/pagination";
+import { Link } from 'react-router-dom';
 
 
 
-const Notice = () => {
+const Notice = ({dummy}) => {
+
+    console.log('이미지 파일', dummy.imgsdata.length);
+
   return (
     <div className='Notice'>
         <div className="swiper__container_Notice">
@@ -32,7 +36,48 @@ const Notice = () => {
                         pagination={{ clickable: true }}
                         scrollbar={{ draggable: true }}
                         >
-                        <SwiperSlide>
+                        {
+                            dummy.imgsdata.map((val, idx)=>{
+                                console.log('value : ',(val.imgs));
+
+                                <SwiperSlide>
+                                    <li className="swiper__item_Notice">
+                                        <Link to='/' className="swiper__item__link_Notice">
+                                            <figure
+                                                className="swiper__item__pic-wrap_Notice"
+                                                // data-category={props.label}
+                                                >
+                                                <img
+                                                    src={val.imgs}
+                                                    alt="travel image"
+                                                    className="swiper__item__img_Notice"
+                                                    />
+                                            </figure>
+                                        </Link>
+                                    </li>
+                                </SwiperSlide>
+                            })
+                        }
+                        
+                        {/* 
+                                <SwiperSlide>
+                                    <li className="swiper__item_Notice">
+                                        <Link to='/' className="swiper__item__link_Notice">
+                                            <figure
+                                                className="swiper__item__pic-wrap_Notice"
+                                                // data-category={props.label}
+                                                >
+                                                <img
+                                                    src='/images/img-2.jpg'
+                                                    alt="travel image"
+                                                    className="swiper__item__img_Notice"
+                                                    />
+                                            </figure>
+                                        </Link>
+                                    </li>
+                                </SwiperSlide>
+                         */}
+                        {/* <SwiperSlide>
                             <NoticeItem
                             src="/images/imageMap.png"
                             //text="Explore the hidden waterfall deep inside the Amazon Jungle"
@@ -40,6 +85,7 @@ const Notice = () => {
                             path="/"
                             />
                         </SwiperSlide>
+
                         <SwiperSlide>
                             <NoticeItem
                             src="/images/img-2.jpg"
@@ -48,6 +94,7 @@ const Notice = () => {
                             path="/"
                             />
                         </SwiperSlide>
+                        
                         <SwiperSlide>
                             <NoticeItem
                             src="/images/img-3.jpg"
@@ -56,14 +103,16 @@ const Notice = () => {
                             path="/"
                             />
                         </SwiperSlide>
+
                         <SwiperSlide>
                             <NoticeItem
-                            src="/images/profile.jpg"
+                            src="/images/woah.jpg"
                             //text="Explore the hidden waterfall deep inside the Amazon Jungle"
                             // label="Adventure"
                             path="/"
                             />
-                        </SwiperSlide>
+                        </SwiperSlide> */}
+                        
                     </Swiper>
                 </ul>
             </div>

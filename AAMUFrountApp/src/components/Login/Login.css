@@ -97,6 +97,12 @@
   color: red;
   font-size: 13px;
 }
+/* 
+.LoginTest {
+  background-image: url("/images/tropical.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+} */
 
 @keyframes heartbeat {
   0% {

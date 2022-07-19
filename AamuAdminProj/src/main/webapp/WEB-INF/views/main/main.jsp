@@ -73,7 +73,7 @@
                  	<div class="col-6 grid-margin stretch-card">
                       <div class="card">
                         <div class="card-body">
-                          <h4 class="card-title">사용자 활동</h4>
+                          <h4 class="card-title">사용자 활동(<a href="<c:url value="commuStat.do"/>" class="text-dark">커뮤니티</a>,<a href="<c:url value="bbsStat.do"/>" class="text-dark">게시판</a>)</h4>
                           <canvas id="linechart-multi"></canvas>
                         </div>
                       </div>
@@ -307,6 +307,7 @@ $(function() {
     	 console.log(endDate);
          if(startDate!=null){
         	 var dateData = JSON.stringify({start : startDate,end : endDate})
+        	 console.log("dateData:",dateData);
         	 $.ajax({
      			url:"<c:url value="userstatend.do"/>",
      			type:"post",

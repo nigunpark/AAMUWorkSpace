@@ -1,5 +1,5 @@
 .main {
-  background-color: #ebebeb;
+  background-color: #f3f3f3;
   display: grid;
   grid-template-columns: 200px auto 500px 200px;
   z-index: 2;
@@ -118,22 +118,19 @@
   grid-column: 2/4;
 
   .main-left {
-    flex-wrap: nowrap;
     position: relative;
-    margin: 68px 180px;
+    margin: 90px 200px;
     display: flex;
     grid-column: 2/3;
     justify-items: center;
-    width: 850px;
+    width: fit-content;
 
     .feeds-setting {
       //display: flex;
       width: 500px;
       border: 1px solid #dbdbdb;
-      margin-left: 30px;
-      margin-right: 50px;
-      margin-top: 32px;
-      margin-bottom: 15px;
+      margin-right: 220px;
+      margin-top: 12px;
       background-color: #fff;
       border-radius: 10px;
 
@@ -349,8 +346,7 @@
       }
       .profile-all {
         position: absolute;
-        top: 65px;
-        left: 275px;
+        left: 140px;
         transform: translate(-50%);
         background-color: #fff;
         box-shadow: 0 0 5px 1px rgba(var(--jb7, 0, 0, 0), 0.0975);
@@ -507,12 +503,13 @@
         align-items: center;
 
         >img{
-          max-width: 100%;
-          max-height: 100%;
+          width: 100%;
+          height: 90%;
         }
       }
       .contents{
-        width: 560px;
+        // -webkit-text-size-adjust: none;
+        width: 45%;
         height: 100%;
         display: flex;
         flex-direction: column;
@@ -522,20 +519,11 @@
         position: relative;
         display: flex;
         width: 100%;
-        height: 10%;
+        height: 8%;
         border-bottom: 1px solid #dbdbdb;
         flex-direction: row;
         align-items: center;
-
-        .location {
-          font-size: 10px;
-          color: #8e8e8e;
-  
-          &:hover {
-            text-decoration: underline;
-            cursor: pointer;
-          }
-        }
+        
         .search-contents {
           display: flex;
           flex-direction: row;
@@ -565,8 +553,8 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            width: 52px;
-            height: 52px;
+            width: 46px;
+            height: 46px;
             border-radius: 100%;
             background: radial-gradient(
               circle at bottom left,
@@ -576,9 +564,9 @@
           }
 
           img {
-            margin-bottom: 9px;
-            width: 46px;
-            height: 46px;
+            
+            width: 40px;
+            height: 40px;
             border: 2px solid #fff;
             border-radius: 100%;
           }
@@ -588,6 +576,7 @@
             border: 2px solid #fff;
             border-radius: 100%;
           }
+          
           p {
             margin-left: 9px;
           }
@@ -598,7 +587,7 @@
       .recommend {
         margin-top: 10px;
         width: 100%;
-        height: 60%;
+        height: 67%;
         overflow: auto;
         scroll-behavior: auto;
         border-style: none;
@@ -640,19 +629,28 @@
           .recommend-contents {
             display: flex;
             flex-direction: row;
-            align-items: center;
-            justify-content: flex-start;
+            
             width: 100%;
   
+            align-items: center;
             cursor: pointer;
-  
-  
-            > img {
+            .userimg{
               width: 37px;
+              height: 37px;
               border-radius: 50%;
+              margin-top: 13px;
+              margin-left: 15px;
               cursor: pointer;
-              margin-top: -5px;
-               margin-left: 15px;
+              align-self: flex-start;
+            }
+  
+            .likeimg {
+              width: 37px;
+              height: 37px;
+              border-radius: 50%;
+              margin-left: 15px;
+              cursor: pointer;
+
             }
   
             p {
@@ -660,13 +658,13 @@
             }
 
             i{
-              width: 10%;
+              margin-right: 15px;
               float: right;
             }
   
             .user-id {
               cursor: pointer;
-              font-size: 13px;
+              font-size: 13px ;
               font-weight: bold;
             }
   
@@ -682,7 +680,7 @@
         display: flex;
         flex-direction: column;
         width: 100%;
-        height: 20%;
+        height: 15%;
         margin-left: 15px;
 
         .feeds-icons {
@@ -690,7 +688,7 @@
           flex-direction: row;
           height: fit-content;          
           width: 100%;
-          font-size: 15px;
+          font-size: 13px;
 
           .heart-icon {
           margin-right: 18px;
@@ -710,7 +708,7 @@
           }
 
           .share-icon {
-            font-size: 14px;
+            font-size: 13px;
             margin-top: 1px;
             cursor: pointer;
             :hover {
@@ -719,11 +717,12 @@
           }
         }
         .likeCount{
-          margin-top: 20px;
-          margin-bottom: 20px;
+          margin-top: 10px;
+          font-size: 13px;
+          margin-bottom: 10px;
         }
         .postDate{
-          font-size: small;
+          font-size: 10px;
           color: #8e8e8e;
         }
         .comment {

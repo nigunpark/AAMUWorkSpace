@@ -318,12 +318,12 @@ function TabContent({clickTab,setClickTab}) {
   const [content, setContent] = useState("");
   const [tag, setTag] = useState("");
 
-  console.log('등록한 이미지:',showImages);
-  console.log('등록한 이미지 1:',showImages[0]);
-  console.log('등록한 이미지 2:',showImages[1]);
-  console.log('입력한 제목:',title);
-  console.log('입력한 내용:',content);
-  console.log('입력한 태그:',tag);
+  // console.log('등록한 이미지:',showImages);
+  // console.log('등록한 이미지 1:',showImages[0]);
+  // console.log('등록한 이미지 2:',showImages[1]);
+  // console.log('입력한 제목:',title);
+  // console.log('입력한 내용:',content);
+  // console.log('입력한 태그:',tag);
 
   let myImgs = showImages.map((showImages, imgIndex)=>{
     console.log('인덱스:',imgIndex,' 값:',showImages);
@@ -357,15 +357,15 @@ function TabContent({clickTab,setClickTab}) {
 
   let totalEdit = [1, 2, 3, 4];
 
-  if (clickTab === 0) {
+  if (clickTab === 0) {// 메인화면
     return totalEdit.map(() => {
       return <MyHomeBox setClickTab={setClickTab}/>;
     });
   }
-  else if (clickTab === 1) {
+  else if (clickTab === 1) { //현재 없는 선택지
     return <div>Tab 2 내용입니다.</div>;
   }
-  else if (clickTab === 2) {
+  else if (clickTab === 2) { //즐겨찾기
     return (
       <div className="project-box-wrapper">
         <div className="project-box">
@@ -394,7 +394,7 @@ function TabContent({clickTab,setClickTab}) {
             </div>
 
             <div className="box-progress-wrapper">
-                <p className="box-progress-header">Progress</p>
+                <p className="box-progress-header">제목</p>
                 <div className="box-progress-bar">
                     <span className="box-progress"></span>
                 </div>
@@ -492,11 +492,13 @@ function TabContent({clickTab,setClickTab}) {
 
       <div className="write-box">
         <div className='detail-button'>
-        {canSubmit() ? (
+        {
+        canSubmit() ? (
           <button className="learn-more" type="button" onClick={write}>공유하기</button>
           ) : (
             <button  type="button" disabled>사진과 내용을 모두 입력하세요😭</button>
-          )}
+          )
+        }
         </div>
       </div>
 

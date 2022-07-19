@@ -127,15 +127,11 @@ public class MainController {
 		int result = (int)Math.ceil(((double)list.size()-tripDay)/tripDay);
 		int index=0;
 		int count = 0;
-
 		/////////////////////////////
-		
-
 		if(list.size()-tripDay*2==1) {
 			list.get(list.size()-1).setDay(1);
 		}////////////////if
 		/////////////////////////////
-		
 		else {
 			while(true){
 				
@@ -190,13 +186,7 @@ public class MainController {
 									
 									if(low==resultxy) {
 										Collections.swap(list,j,tripDay*(count+1)+index);
-										/*
-										String uri = "http://127.0.0.1:5000/aamu?firstx="+list.get(count*tripDay+index).getDto().getMapx()+"firsty="
-												+list.get(count*tripDay+index).getDto().getMapy()+"second";
-										
-										ResponseEntity<KakaoReview> responseEntity = 
-												restTemplate.exchange(uri, HttpMethod.GET, null, KakaoReview.class);
-										*/
+	
 										break;} 
 								}
 							}
@@ -205,6 +195,18 @@ public class MainController {
 					}
 					if(tripDay*(count+1)+index<list.size() && list.get(tripDay*(count+1)+index).getDay()==0) {
 						list.get(tripDay*(count+1)+index).setDay(index+1);
+						/*
+						String uri = "http://127.0.0.1:5000/mvtm?firstx="+list.get(count*tripDay+index).getDto().getMapx()+"&firsty="
+								+list.get(count*tripDay+index).getDto().getMapy()+"&secondx="
+								+list.get(tripDay*(count+1)+index).getDto().getMapx()+"&secondy="
+								+list.get(tripDay*(count+1)+index).getDto().getMapy();
+						
+						ResponseEntity<Map> responseEntity = 
+								restTemplate.exchange(uri, HttpMethod.GET, null, Map.class);
+						long mtime = Long.parseLong(responseEntity.getBody().get("MVTM").toString())*1000*60;
+						list.get(tripDay*(count+1)+index).setMtime(mtime);
+						System.out.println(mtime);
+						*/
 						System.out.println(String.format("주소:%s, 세팅된 인덱스:%s, 세팅된 날짜:%s",list.get(tripDay*(count+1)+index).getDto().getTitle(),tripDay*(count+1)+index,list.get(tripDay*(count+1)+index).getDay()));
 					}
 					
@@ -292,19 +294,20 @@ public class MainController {
 		
 	}
 	@GetMapping("/planner/selectone")
-	public PlannerDTO selectPlannerOne(@RequestParam Map map) {
+	public PlannerDTO selectPlannerOne(@RequestParam int rbn) {
 		
-		PlannerDTO dto = new PlannerDTO();
-		List<RouteDTO> routes = new Vector<>();
-		int rbn = dto.getRbn();
-		
-		routes = service.selectRouteList(rbn);
-		for(RouteDTO route :routes) {
-		}
-		
-		dto.setRoute(routes);
+		PlannerDTO dto = service.selectPlannerOne(rbn);
 		
 		return dto;
+	}
+	@GetMapping("/planner/selectList")
+	public List<PlannerDTO> selectPlannerList(@RequestParam String id){
+		
+		
+		List<PlannerDTO> list = service.getPlannerList(id);
+		
+		
+		return list;
 	}
 	
 	@GetMapping("/info/places")
@@ -398,16 +401,14 @@ public class MainController {
 		
 		return lists;
 	}
-	@GetMapping("info/recentdiner")
+	@GetMapping("/info/recentdiner")
 	public List<AttractionDTO> getRecentDiner(@RequestParam Map map){
-		int radius = 100;
+		int radius = 1000;
 		int page = 1;
 		List<AttractionDTO> list = new Vector<>();
 		HttpHeaders header = new HttpHeaders();
 		header.add("Authorization", "KakaoAK "+kakaokey);
 		HttpEntity httpEntity = new HttpEntity(header);
-		System.out.println(map.get("placex"));
-		System.out.println(map.get("placey"));
 		
 		String uri="https://dapi.kakao.com/v2/local/search/category.json?y="+map.get("placey")
 		+"&x="+map.get("placex")
@@ -416,45 +417,48 @@ public class MainController {
 		ResponseEntity<KakaoKey> responseEntity = 
 				restTemplate.exchange(uri, HttpMethod.GET, httpEntity, KakaoKey.class);
 		List<Document> listDocument =  responseEntity.getBody().getDocuments();
-		if(listDocument.size()<10) {
-			radius +=1000;
-			System.out.println(radius);
-			uri="https://dapi.kakao.com/v2/local/search/category.json?y="+map.get("placey")
-			+"&x="+map.get("placex")
-			+"&radius="+radius+"&category_group_code=FD6&page="+page+"&sort=distance";
-
-			 responseEntity = 
-					restTemplate.exchange(uri, HttpMethod.GET, httpEntity, KakaoKey.class);
-			 listDocument =  responseEntity.getBody().getDocuments();
-		}
-		for(Document document:listDocument) {
-			System.out.println(listDocument.size());
-			
-			AttractionDTO dto = new AttractionDTO();
-			System.out.println(document.getRoadAddressName());
-			System.out.println(document.getPlaceName());
-			dto.setAddr(document.getRoadAddressName());
-			dto.setContenttypeid(39);
-			dto.setUrl(document.getPlaceUrl());
-			dto.setTel(document.getPhone());
-			dto.setTitle(document.getPlaceName());
-			dto.setMenu(document.getCategoryName());
-			dto.setMapx(Double.parseDouble(document.getX()));
-			dto.setMapy(Double.parseDouble(document.getY()));
-			
-			list.add(dto);
-			if(responseEntity.getBody().getMeta().getIsEnd()&&list.size()<50) {
-				page++;
+		while(true) {
+			if(listDocument.size()<10) {
+				radius +=1000;
+				System.out.println(radius);
 				uri="https://dapi.kakao.com/v2/local/search/category.json?y="+map.get("placey")
 				+"&x="+map.get("placex")
 				+"&radius="+radius+"&category_group_code=FD6&page="+page+"&sort=distance";
 
 				 responseEntity = 
 						restTemplate.exchange(uri, HttpMethod.GET, httpEntity, KakaoKey.class);
+				 listDocument =  responseEntity.getBody().getDocuments();
+				 if(listDocument.size()<10)continue;
 			}
-			if(!responseEntity.getBody().getMeta().getIsEnd() ||list.size()==50) break;
+			for(Document document:listDocument) {
+				
+				AttractionDTO dto = new AttractionDTO();
+				dto.setAddr(document.getRoadAddressName());
+				dto.setContenttypeid(39);
+				dto.setUrl(document.getPlaceUrl());
+				dto.setTel(document.getPhone());
+				dto.setTitle(document.getPlaceName());
+				dto.setMenu(document.getCategoryName());
+				dto.setMapx(Double.parseDouble(document.getX()));
+				dto.setMapy(Double.parseDouble(document.getY()));
+				
+				list.add(dto);
+
+				if(!responseEntity.getBody().getMeta().getIsEnd()&&list.size()==15*page) {
+
+					page++;
+					uri="https://dapi.kakao.com/v2/local/search/category.json?y="+map.get("placey")
+					+"&x="+map.get("placex")
+					+"&radius="+radius+"&category_group_code=FD6&page="+page+"&sort=distance";
+
+					 responseEntity = 
+							restTemplate.exchange(uri, HttpMethod.GET, httpEntity, KakaoKey.class);
+					 listDocument =  responseEntity.getBody().getDocuments();
+				}
+				
+			}
+			if(responseEntity.getBody().getMeta().getIsEnd() ||list.size()>50) break;
 		}
-		
 		
 		
 		return list;

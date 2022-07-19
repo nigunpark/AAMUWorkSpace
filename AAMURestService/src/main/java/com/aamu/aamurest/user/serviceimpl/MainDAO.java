@@ -45,11 +45,6 @@ public class MainDAO {
 		return template.insert("routeInsert",route);
 	}
 
-	public List<RouteDTO> selectRouteList(int rbn) {
-		
-		return template.selectList("selectRouteList",rbn);
-	}
-
 	public List<AttractionDTO> searchTwoPlace(Map map) {
 		
 		return template.selectList("searchTwoPlace", map);
@@ -114,7 +109,20 @@ public class MainDAO {
 		return template.selectOne("getRecentPlaceOne", map);
 	}
 
+	public List<PlannerDTO> getPlannerList(String id) {
 	
+		return template.selectList("getPlannerList", id);
+	}
+
+	public PlannerDTO selectPlannerOne(int rbn) {
+		
+		return template.selectOne("selectPlannerOne", rbn);
+	}
+
+	public List<RouteDTO> selectRouteList(int rbn) {
+		
+		return template.selectList("selectRouteList",rbn);
+	}
 
 
 }

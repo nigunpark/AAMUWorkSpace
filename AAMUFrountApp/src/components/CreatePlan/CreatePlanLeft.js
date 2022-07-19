@@ -27,7 +27,6 @@ const CreatePlanLeft = ({
   const [whichModal, setWhichModal] = useState("전체일정");
   const dayRef = useRef();
   const [temp, setTemp] = useState("");
-  const [sortedWholeList, setSortedWhoeList] = useState([]);
 
   useEffect(() => {
     setTemp(dayRef.current);
@@ -197,7 +196,8 @@ function Content({ index, fromWooJaeData, setForReRender, setFromWooJaeData }) {
   if (fromWooJaeData[index] === undefined) return;
 
   const handleDragStart = (e) => {
-    e.target.style.opacity = 0.5;
+    e.target.parentElement.parentElement.parentElement.style.opacity = 0.5;
+    console.log("e.target", e.target);
     sourceElement = e.target;
     // e.dataTransfer.effectAllowed = "move";
     e.dataTransfer.effectAllowed = "move";
@@ -210,10 +210,10 @@ function Content({ index, fromWooJaeData, setForReRender, setFromWooJaeData }) {
     e.dataTransfer.dropEffect = "move";
   };
   const handleDragEnter = (e) => {
-    e.target.classList.add("over");
+    e.target.parentElement.parentElement.parentElement.classList.add("over");
   };
   const handleDragLeave = (e) => {
-    e.target.classList.remove("over");
+    e.target.parentElement.parentElement.parentElement.classList.remove("over");
   };
   const handleDrop = (e, testRef) => {
     e.stopPropagation();
@@ -222,10 +222,10 @@ function Content({ index, fromWooJaeData, setForReRender, setFromWooJaeData }) {
       const list = sortedList.filter(
         (val, i) => i.toString() !== sourceElement.id
       );
-
+      console.log("sortedList(t)", sortedList);
       //지워지는 detail
       const removed = sortedList.filter(
-        (val, i) => i.toString() === sourceElement.id
+        (val, i) => val.id === Number(sourceElement.id)
       )[0];
       const dropedIt = sortedList.filter(
         (val, i) => val.id === Number(e.target.id)
@@ -239,7 +239,9 @@ function Content({ index, fromWooJaeData, setForReRender, setFromWooJaeData }) {
       // 마지막 detailing위에 놓았을 때 id+1안되도록
       if (insertAt >= list.length) {
         tempList = list.slice(0).concat(removed);
-        e.target.classList.remove("over");
+        e.target.parentElement.parentElement.parentElement.classList.remove(
+          "over"
+        );
         console.log("tempList(마지막위)", tempList);
       }
       //마지막detailing이 아닌 다른녀석 위에 놓았을 때
@@ -250,7 +252,9 @@ function Content({ index, fromWooJaeData, setForReRender, setFromWooJaeData }) {
         const newList = tempList.concat(list.slice(insertAt));
         tempList = [...newList];
         console.log("newList(다른위)", newList);
-        e.target.classList.remove("over");
+        e.target.parentElement.parentElement.parentElement.classList.remove(
+          "over"
+        );
       }
       setSortedList(tempList);
       setFromWooJaeData((current) => {
@@ -260,11 +264,11 @@ function Content({ index, fromWooJaeData, setForReRender, setFromWooJaeData }) {
       });
     }
     //drag당하는 녀석을 다시 자기위치에 놓았을 때
-    e.target.classList.remove("over");
+    e.target.parentElement.parentElement.parentElement.classList.remove("over");
   };
 
-  const handleDragEnd = (event) => {
-    event.target.style.opacity = 1;
+  const handleDragEnd = (e) => {
+    e.target.parentElement.parentElement.parentElement.style.opacity = 1;
   };
 
   const handleDelete = (e, testRef) => {
@@ -500,7 +504,7 @@ function DetailSetting({
               e.target.src = "/images/no-image.jpg";
             }}
             ref={testRef}
-            id={i}
+            id={obj.id}
             draggable="true"
             onDragStart={handleDragStart}
             onDragOver={handleDragOver}

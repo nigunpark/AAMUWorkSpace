@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import axios from "axios";
+
 const { kakao } = window;
 let markersArr = [];
 let polylineArr = [];
@@ -9,10 +10,12 @@ const CreatePlanMap = ({
   currPosition,
   fromWooJaeData,
   forDayLine,
+  setSavePlan,
 }) => {
   let [lat, setLat] = useState("");
   let [lng, setLng] = useState("");
   let [cMap, setCMap] = useState(null);
+
   const [mapLevel, setMapLevel] = useState(9);
   let cMapRef = useRef();
   let reduxState = useSelector((state) => {
@@ -46,7 +49,8 @@ const CreatePlanMap = ({
       }
     );
     setCMap(map);
-  }, []);
+    map.relayout();
+  }, [cMapRef]);
 
   //지도 줌 관련
   useEffect(() => {
@@ -206,35 +210,7 @@ const CreatePlanMap = ({
         <div>버튼버튼</div>
         <div
           onClick={() => {
-            let toWoo = [];
-            reduxState.tripPeriod.forEach((val, i) => {
-              Object.values(fromWooJaeData[i])[0].forEach((obj, idx) => {
-                toWoo.push(obj);
-              });
-            });
-            let token = sessionStorage.getItem("token");
-            axios
-              .post(
-                "/aamurest/planner/edit",
-                {
-                  title: `${currPosition} ${
-                    reduxState.tripPeriod.length - 1
-                  }박 ${reduxState.tripPeriod.length}일`,
-                  route: toWoo,
-                  id: sessionStorage.getItem("username"),
-                },
-                {
-                  headers: {
-                    Authorization: `Bearer ${token}`,
-                  },
-                }
-              )
-              .then((resp) => {
-                console.log(resp.data);
-              })
-              .catch((error) => {
-                console.log(error);
-              });
+            setSavePlan(true);
           }}
         >
           일정저장

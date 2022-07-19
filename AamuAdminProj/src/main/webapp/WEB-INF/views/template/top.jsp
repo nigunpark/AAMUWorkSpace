@@ -157,7 +157,7 @@
             </a>
             <div class="collapse" id="ui-basic">
               <ul class="nav flex-column sub-menu">
-                <li class="nav-item"> <a class="nav-link" href="#">공지사항</a></li>
+                <li class="nav-item"> <a class="nav-link" href="<c:url value="Notice.do"/>">공지사항</a></li>
                 <li class="nav-item"> <a class="nav-link" href="#">QnA</a></li>
               </ul>
             </div>
