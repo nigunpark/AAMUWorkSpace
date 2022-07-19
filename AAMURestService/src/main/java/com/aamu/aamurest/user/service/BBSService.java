@@ -46,5 +46,4 @@ public interface BBSService {
 	int rateAvgInsert(Map map);
 
 
-
 }

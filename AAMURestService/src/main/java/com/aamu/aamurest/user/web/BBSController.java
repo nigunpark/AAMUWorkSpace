@@ -44,11 +44,8 @@ public class BBSController {
 	
 	//글 목록
 	@GetMapping("/bbs/SelectList")
-	public List<BBSDTO> bbsSelectList(@RequestParam Map map){
+	public List<BBSDTO> bbsSelectList(@RequestParam Map map, HttpServletRequest req){
 		List<BBSDTO> list = bbsService.bbsSelectList(map);
-		for(BBSDTO dto : list) {
-			dto.setPhoto(bbsService.bbsSelectPhotoList(dto.getRbn()));
-		}
 		return list;
 	}
 	
@@ -106,6 +103,13 @@ public class BBSController {
 		return resultMap;
 		
 	}
+	/*
+	//리뷰 목록
+	@GetMapping("/review/SelectList")
+	public List<ReviewDTO> reviewSelectList(@RequestParam Map map){
+		List<ReviewDTO> list = bbsService.reviewList(map);
+		return list;
+	} */
 
 	//리뷰 등록
 	@PostMapping("/review/edit")
