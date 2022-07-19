@@ -31,6 +31,11 @@ public class CommuDAO {
 		return template.selectList("commuSelectPhotoList",lno);
 	}
 	
+	//글 목록용_lno리스트 얻어오기
+	public List commuSelectListLno(Map map) {
+		return template.selectList("commuSelectListLno",map);
+	}
+	
 	//글 생성용
 	public int commuInsert(Map map) {
 		return template.insert("commuInsert",map);
