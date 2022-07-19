@@ -6,16 +6,22 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import com.aamu.aamurest.user.service.BBSDTO;
 import com.aamu.aamurest.user.service.BBSService;
+import com.aamu.aamurest.user.service.PlannerDTO;
 import com.aamu.aamurest.user.service.ReviewDTO;
+import com.aamu.aamurest.user.service.RouteDTO;
 
 @Service
 public class BBSServiceImpl implements BBSService{
 	
 	@Autowired
 	private BBSDAO dao;
+	
+	@Autowired
+	private TransactionTemplate transactionTemplate;
 	
 	//글 목록
 	@Override
@@ -29,9 +35,9 @@ public class BBSServiceImpl implements BBSService{
 		return dao.bbsSelectPhotoList(rbn);
 	}
 	
-	//글 하나 선택
+	//글 상세보기
 	@Override
-	public BBSDTO bbsSelectOne(String rbn) {
+	public BBSDTO bbsSelectOne(int rbn) {
 		return dao.bbsSelectOne(rbn);
 	}
 		
@@ -56,6 +62,25 @@ public class BBSServiceImpl implements BBSService{
 		else
 			return 0;
 	}
+	/*transaction 처리중
+	//테마 등록
+	@Override
+	public int themeInsert(BBSDTO dto) {
+		int affected=0;
+		
+		affected = transactionTemplate.execute(tx->{
+			int insertTheme = dao.themeInsert(dto);
+			List<BBSDTO> themes = dto.themeid();
+			
+			for(BBSDTO theme:themes) {
+				theme.setRbn(dto.getRbn());
+				dao.themeInsert(theme);
+			}
+			return insertTheme;
+			
+		});
+		return affected;
+	} */
 	
 	//글 수정
 	@Override
@@ -73,8 +98,8 @@ public class BBSServiceImpl implements BBSService{
 	
 	//글 상세보기_모든 리뷰 보기
 	@Override
-	public List<ReviewDTO> reviewList(String rno) {
-		return dao.reviewList(rno);
+	public List<ReviewDTO> reviewList(int rbn) {
+		return dao.reviewList(rbn);
 	}
 	
 	//리뷰 등록
@@ -95,17 +120,24 @@ public class BBSServiceImpl implements BBSService{
 		return dao.reviewDelete(map);
 	}
 	
-	//평점 평균 구하기
+	//평점 반영
 	@Override
-	public Double getRatingAverage(int ratingavg) {
-		return dao.getRatingAverage(ratingavg);
+	public int rateInsert(Map map) {
+		return dao.ratingInsert(map);
 	}
 	
+	//평점 평균 반영
 	@Override
-	//평점 평균 반영하기
-	public int updateRating(ReviewDTO rate) {
-		return dao.updateRating(rate);
+	public int rateAvgInsert(Map map) {
+		
+		Double rateAvg = dao.ratingAvgInsert(map);	
+		
+		if(rateAvg == null) {
+			rateAvg = 0.0;
+		}		
+		
 	}
+
 	
 }
 	

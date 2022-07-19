@@ -24,4 +24,5 @@ public class BBSDTO {
 	private long atime; //머문시간
 	private long mtime; //이동시간
 	private List<ReviewDTO> reviewList;
+	
 }

@@ -73,6 +73,14 @@ public class BBSController {
 	
 	//글 하나 선택
 	@GetMapping("/bbs/SelectOne/{rbn}")
+	public BBSDTO bbsSelectOne(@PathVariable int rbn) {
+		BBSDTO dto=bbsService.bbsSelectOne(rbn);
+		//모든 리뷰 가져오기
+		dto.setReviewList(bbsService.reviewList(rbn));
+		//모든 사진 가져오기
+		dto.setPhoto(bbsService.bbsSelectPhotoList(rbn));
+		return dto;
+	}
 	
 	//글 수정
 	@PutMapping("/bbs/edit")
@@ -91,7 +99,42 @@ public class BBSController {
 	public Map bbsDelete(@RequestParam Map map) {
 		int bbsDeleteAffected=bbsService.bbsDelete(map);
 		Map resultMap = new HashMap();
-		if(bbsDeleteAffected==1) 
+		if(bbsDeleteAffected==1)
+			resultMap.put("result", "deleteSuccess");
+		else
+			resultMap.put("result", "deleteNotSuccess");
+		return resultMap;
+		
+	}
+
+	//리뷰 등록
+	@PostMapping("/review/edit")
+	public Map reviewInsert(@RequestParam Map map) {
+	int affected=bbsService.reviewInsert(map);
+	Map resultMap = new HashMap();
+	if(affected==1) resultMap.put("result", "insertSuccess");
+	else resultMap.put("result", "insertNotSuccess");
+	return resultMap;
+	}
+	
+	//리뷰 수정
+	@PutMapping("/review/edit")
+    public Map reviewUpdate(@RequestParam Map map) {
+		int reviewUpdateAffected=bbsService.reviewUpdate(map);
+		Map resultMap = new HashMap();
+		if(reviewUpdateAffected==1)
+			resultMap.put("result", "updateSuccess");
+		else
+			resultMap.put("result", "updateNotSuccess");
+		return resultMap;
+	}
+	
+	//리뷰 삭제
+	@DeleteMapping("/review/edit")
+	public Map reviewDelete(@RequestParam Map map) {
+		int reviewDeleteAffected=bbsService.reviewDelete(map);
+		Map resultMap = new HashMap();
+		if(reviewDeleteAffected==1) 
 			resultMap.put("result", "deleteSuccess");
 		else
 			resultMap.put("result", "deleteNotSuccess");
@@ -99,23 +142,7 @@ public class BBSController {
 		
 	}
 	
-	////글 상세보기_모든 리뷰 보기
-	@GetMapping("/review/SelectList/{rno}")
-	public BBSDTO bbsSelectOne(@PathVariable String rbn) {
-		BBSDTO dto=bbsService.bbsSelectOne(rbn);
-		//모든 리뷰 가져오기
-		dto.setReviewList(bbsService.reviewList(rbn));
-		return dto;
-	}
-	//리뷰 등록
-	@PostMapping("/review/edit")
-	public Map reviewInsert(@RequestParam Map map) {
-		return null;
-	}
-	
-	//리뷰 수정
-	
-	//리뷰 삭제
+	//평점 반영
 	
 	//평점 평균 반영
 	public double getRatingAverage(int rno) {

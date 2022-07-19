@@ -17,7 +17,7 @@
 	
 	<!-- 글 등록 -->
 	<insert id="bbsInsert" parameterType="map">
-		INSERT INTO routebbs VALUES (#{rbn},#{title},SYSDATE,#{content},1,1,#{id})
+		INSERT INTO routebbs VALUES (#{rbn},#{title},SYSDATE,#{content},#{themeid},#{rateavg},#{id})
 	<selectKey keyProperty="rbn" resultType="int" order="AFTER">
     	SELECT #{rbn} FROM DUAL
     </selectKey>
@@ -42,12 +42,12 @@
 	 
 	 <!-- 리뷰 등록 -->
 	 <insert id="reviewInsert" parameterType="map">
-	 	INSERT INTO ratereview VALUES (#{rbn},#{id},DEFAULT,#{review},SYSDATE,#{rno})
+	 	INSERT INTO ratereview VALUES (#{rbn},#{id},#{rate},#{review},SYSDATE,#{rno})
 	 </insert>
 	 
 	 <!-- 리뷰 수정 -->
 	 <update id="reviewUpdate" parameterType="map">
-	 	UPDATE ratereview SET title=#{title},content=#{content} WHERE rbn=#{rbn}
+	 	UPDATE ratereview SET rate=#{rate},review=#{review} WHERE rbn=#{rbn}
 	 </update>
 	 
 	 <!-- 리뷰 삭제 -->
@@ -55,14 +55,9 @@
 	 	DELETE FROM ratereview WHERE rno=#{rno}
 	 </delete>
 	 
-	 <!-- 평점 평균 구하기 -->
-	 <select id="getRatingAverage" resultType="double">
-	 SELECT avg(rating) from review where rno = #{rno}
-	 </select>
-	 
-	 <!-- 평점 평균 반영 -->
-	<update id="updateRating">
-	UPDATE ratereview set set rate = #{rate} where id = #{id}
+	<!-- 평점 평균 반영 -->
+	<update id="reviewUpdate">
+		UPDATE ratereview SET rateavg =#{rateavg} WHERE rbn=#{rbn}
 	</update>
-	
+		
 </mapper>
