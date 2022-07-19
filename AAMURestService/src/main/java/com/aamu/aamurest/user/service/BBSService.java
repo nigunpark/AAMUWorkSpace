@@ -40,15 +40,10 @@ public interface BBSService {
 	int reviewDelete(Map map);
 	
 	//평점 반영
-	int ratingInsert(Map map);
+	int rateInsert(Map map);
 	
 	//평점 평균 반영
-	int ratingAverageInsert(Map map);
-	
-	/*----------------------------------------------------*/
-	
-	//테마 등록
-	int themeInsert(BBSDTO dto);
+	int rateAvgInsert(Map map);
 
 
 

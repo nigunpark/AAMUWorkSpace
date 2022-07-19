@@ -122,20 +122,20 @@ public class BBSServiceImpl implements BBSService{
 	
 	//평점 반영
 	@Override
-	public int ratingInsert(Map map) {
+	public int rateInsert(Map map) {
 		return dao.ratingInsert(map);
 	}
 	
-	@Override
 	//평점 평균 반영
-	public int ratingAverageInsert(Map map) {
-		return dao.ratingAverageInsert(map);
-	}
-	
-	//테마 등록
 	@Override
-	public int themeInsert(BBSDTO dto) {
-		return dao.themeInsert(dto);
+	public int rateAvgInsert(Map map) {
+		
+		Double rateAvg = dao.ratingAvgInsert(map);	
+		
+		if(rateAvg == null) {
+			rateAvg = 0.0;
+		}		
+		
 	}
 
 	

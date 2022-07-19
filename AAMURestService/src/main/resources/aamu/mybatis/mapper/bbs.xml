@@ -42,17 +42,22 @@
 	 
 	 <!-- 리뷰 등록 -->
 	 <insert id="reviewInsert" parameterType="map">
-	 	INSERT INTO ratereview VALUES (#{rbn},#{id},DEFAULT,#{review},SYSDATE,#{rno})
+	 	INSERT INTO ratereview VALUES (#{rbn},#{id},#{rate},#{review},SYSDATE,#{rno})
 	 </insert>
 	 
 	 <!-- 리뷰 수정 -->
 	 <update id="reviewUpdate" parameterType="map">
-	 	UPDATE ratereview SET title=#{title},content=#{content} WHERE rbn=#{rbn}
+	 	UPDATE ratereview SET rate=#{rate},review=#{review} WHERE rbn=#{rbn}
 	 </update>
 	 
 	 <!-- 리뷰 삭제 -->
 	 <delete id="reviewDelete" parameterType="map">
 	 	DELETE FROM ratereview WHERE rno=#{rno}
 	 </delete>
-	
+	 
+	<!-- 평점 평균 반영 -->
+	<update id="reviewUpdate">
+		UPDATE ratereview SET rateavg =#{rateavg} WHERE rbn=#{rbn}
+	</update>
+		
 </mapper>

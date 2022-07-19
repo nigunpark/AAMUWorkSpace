@@ -81,8 +81,8 @@ public class BBSDAO {
 	}
 	
 	//평점 평균 반영
-	public int ratingAverageInsert(Map map) {
-		return template.insert("ratingAverageInsert",map);
+	public Double ratingAvgInsert(Map map) {
+		return template.insert("ratingAvgInsert",map);
 	}
 	
 	//테마

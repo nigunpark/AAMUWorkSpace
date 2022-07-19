@@ -99,9 +99,7 @@ public class BBSController {
 	public Map bbsDelete(@RequestParam Map map) {
 		int bbsDeleteAffected=bbsService.bbsDelete(map);
 		Map resultMap = new HashMap();
-		if(bbsDeleteAffected==1) 
-			
-			
+		if(bbsDeleteAffected==1)
 			resultMap.put("result", "deleteSuccess");
 		else
 			resultMap.put("result", "deleteNotSuccess");
@@ -112,12 +110,16 @@ public class BBSController {
 	//리뷰 등록
 	@PostMapping("/review/edit")
 	public Map reviewInsert(@RequestParam Map map) {
-		return null;
+	int affected=bbsService.reviewInsert(map);
+	Map resultMap = new HashMap();
+	if(affected==1) resultMap.put("result", "insertSuccess");
+	else resultMap.put("result", "insertNotSuccess");
+	return resultMap;
 	}
 	
 	//리뷰 수정
 	@PutMapping("/review/edit")
-    public Map ReviewUpdate(@RequestParam Map map) {
+    public Map reviewUpdate(@RequestParam Map map) {
 		int reviewUpdateAffected=bbsService.reviewUpdate(map);
 		Map resultMap = new HashMap();
 		if(reviewUpdateAffected==1)
