@@ -70,7 +70,7 @@
 	
 	<!-- 글 수정용 -->
 	<update id="commuUpdate" parameterType="Map">
-		UPDATE community SET ctitle=#{ctitle},content=#{content} WHERE lno=#{lno}
+		UPDATE community SET ctitle=#{ctitle},content=#{content} WHERE lno=#{ln
 	</update>
 	
 	<!-- 글 수정용_commuplace 수정 -->
