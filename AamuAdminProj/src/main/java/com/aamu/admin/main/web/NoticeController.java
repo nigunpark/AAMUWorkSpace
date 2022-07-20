@@ -65,11 +65,9 @@ public class NoticeController {
 			//@ModelAttribute("id") String id,
 			@RequestParam Map map, Model model) {
 		
-		System.out.println(map.get("nno"));
-		
 		//서비스 호출]
 		NoticeDTO record = noticeService.selectOne(map);
-		
+
 		//데이타 저장]		
 		model.addAttribute("record", record);
 		//뷰정보 반환]

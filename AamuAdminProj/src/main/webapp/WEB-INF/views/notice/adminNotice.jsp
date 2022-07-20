@@ -18,9 +18,12 @@
 
 									<div class="card-numberOfBoard">
 										총 게시글 수: ${totalCount}개
-										
-										<button class="delete btn btn-primary text-white me-0" style="float: right">삭제</button>
-										<a href="<c:url value="NoticeWrite.do"/>"><button class="write btn btn-primary text-white me-0" style="float: right">등록</button></a>
+
+										<button class="delete btn btn-primary text-white me-0"
+											style="float: right">삭제</button>
+										<a href="<c:url value="NoticeWrite.do"/>"><button
+												class="write btn btn-primary text-white me-0"
+												style="float: right">등록</button></a>
 									</div>
 
 									<div class="table-responsive text-center">
@@ -29,8 +32,10 @@
 												<tr>
 													<th class="col-1 ">
 														<div class="form-check form-check-flat mt-0">
-															<label class="form-check-label"> 
-																<input type="checkbox" class="form-check-input" aria-checked="false" id="chkAll"><i class="input-helper"></i>
+															<label class="form-check-label"> <input
+																type="checkbox" class="form-check-input"
+																aria-checked="false" id="chkAll"><i
+																class="input-helper"></i>
 															</label>
 														</div>
 													</th>
@@ -48,18 +53,21 @@
 													</tr>
 												</c:if>
 												<c:if test="${not isEmpty }">
-													<c:forEach var="record" items="${listPagingData.lists}" varStatus="loop">
+													<c:forEach var="record" items="${listPagingData.lists}"
+														varStatus="loop">
 														<tr>
 															<td>
 																<div class="form-check form-check-flat mt-0">
-																	<label class="form-check-label"> 
-																		<input name="RowCheck" type="checkbox" class="form-check-input" aria-checked="false" value="${record.nno}"> <i class="input-helper"></i>
+																	<label class="form-check-label"> <input
+																		name="RowCheck" type="checkbox"
+																		class="form-check-input" aria-checked="false"
+																		value="${record.nno}"> <i class="input-helper"></i>
 																	</label>
 																</div>
 															</td>
 															<td>${record.nno}</td>
 															<td><a
-							href="<c:url value="/NoticeView.do?nno=${record.nno}&nowPage="/>">${record.title}</a></td>
+																href="<c:url value="/NoticeView.do?nno=${record.nno}"/>">${record.title}</a></td>
 															<td>${record.id}</td>
 															<td>${record.noticedate}</td>
 															<td>${record.ncount}</td>
@@ -77,10 +85,14 @@
 						<!--예시 용 테이블-->
 						<!-- 검색 -->
 						<div class="row">
-							<form class="col-md-12 d-flex justify-content-center align-items-center" method="post" action="<c:url value="Notice.do"/>">
+							<form
+								class="col-md-12 d-flex justify-content-center align-items-center"
+								method="post" action="<c:url value="Notice.do"/>">
 								<div class="form-group row">
 									<div class="col-sm-12">
-										<select class="form-control background-color-secondary text-black" name="searchColumn">
+										<select
+											class="form-control background-color-secondary text-black"
+											name="searchColumn">
 											<option value="n.id">id</option>
 											<option value="title">제목</option>
 											<option value="content">내용</option>
@@ -89,12 +101,15 @@
 								</div>
 								<div class="form-group row">
 									<div class="col-sm-12">
-										<input type="text" class="form-control mx-2 my-2" placeholder="검색어를 입력하세요" name="searchWord" />
+										<input type="text" class="form-control mx-2 my-2"
+											placeholder="검색어를 입력하세요" name="searchWord" />
 									</div>
 								</div>
 								<div class="form-group row">
 									<div class="col-sm-12">
-										<input type="submit" class="btn btn-primary mx-3 my-2 text-white" value="검색" id="submit"/>
+										<input type="submit"
+											class="btn btn-primary mx-3 my-2 text-white" value="검색"
+											id="submit" />
 									</div>
 								</div>
 							</form>

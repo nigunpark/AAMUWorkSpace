@@ -28,12 +28,17 @@ public class NoticeDAO {
 	
 	// 글 등록
 	public int noticeWrite(Map map) {		
-		return template.update("noticeWrite",map);
+		return template.insert("noticeWrite",map);
 	}
 	
 	// 글 상세 보기
 	public NoticeDTO selectOne(Map map) {		
 		return template.selectOne("noticeSelectOne", map);
+	}
+
+	// 조회수
+	public int noticeCount(Map map) throws Exception {		
+		return template.update("noticeCount", map);
 	}
 	
 	//글 삭제
@@ -41,6 +46,4 @@ public class NoticeDAO {
 		return template.delete("noticeDelete",map);
 	}
 
-
-	
 }
