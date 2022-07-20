@@ -127,11 +127,15 @@ public class MainServiceImpl implements MainService{
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 		List<String> dateList = new Vector<>();
 		List<Integer> countList = new Vector<>();
+		List<Integer> commuList = new Vector<>();
+		List<Integer> bbsList = new Vector<>();
+		List<Integer> planList = new Vector<>();
+		List<Integer> usersList = new Vector<>();
 		try {
 			Date startday = formatter.parse(start);
 			Date endday = formatter.parse(end);
 			cal.setTime(endday);
-			cal.add(Calendar.DATE,1);
+			cal.add(Calendar.DATE,2);
 			end = formatter.format(cal.getTime());
 
 			cal.setTime(startday);
@@ -139,6 +143,10 @@ public class MainServiceImpl implements MainService{
 			start = formatter.format(cal.getTime());
 			//startday = formatter.parse(start);
 			int countUser =0;
+			int countBBS = 0;
+			int countCommu = 0;
+			int countPlan =0;
+			int usersCount =0;
 			while(!start.equals(end)){
 				System.out.println("보내는 날짜:"+start);
 				map.put("table", "users");
@@ -146,7 +154,20 @@ public class MainServiceImpl implements MainService{
 				//map.put("day", startday);
 				map.put("day", start);
 				countUser = dao.selectWeekToString(map);
+				map.put("table", "COMMUNITY");
+				map.put("column", "postdate");
+				countCommu = dao.selectWeekToString(map);
+				map.put("table", "routebbs");
+				countBBS = dao.selectWeekToString(map);
+				map.put("table", "routeboard");
+				map.put("column", "routedate");
+				countPlan = dao.selectWeekToString(map);
+				usersCount = dao.selectUsersToString(start);
+				usersList.add(usersCount);
 				countList.add(countUser);
+				commuList.add(countCommu);
+				bbsList.add(countBBS);
+				planList.add(countPlan);
 				start =start.substring(5);
 				dateList.add(start);
 				cal.add(Calendar.DATE,1);
@@ -157,19 +178,15 @@ public class MainServiceImpl implements MainService{
 				System.out.println("세팅된 날짜:"+start);
 		    }
 			
-			//endday = formatter.parse(end);
-			//map.put("day", endday);
-			map.put("day", end);
-			countUser = dao.selectWeekToString(map);
-			countList.add(countUser);
-			end = end.substring(5);
-			dateList.add(end);
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
 		map.put("countList", countList);
 		map.put("dateList", dateList);
-		
+		map.put("commuList",commuList );
+		map.put("bbsList",bbsList );
+		map.put("planList",planList );
+		map.put("usersList", usersList);
 		
 		return map;
 	}

@@ -452,7 +452,12 @@ public class MainServiceImpl implements MainService{
 	public PlannerDTO selectPlannerOne(int rbn) {
 		PlannerDTO dto = dao.selectPlannerOne(rbn);
 		List<RouteDTO>routes =  dao.selectRouteList(rbn);
-		dto.setRoute(routes);
+		List<RouteDTO> routes2 = new Vector<>();
+		for(RouteDTO route:routes) {
+			route.setDto(dao.selectOnePlace(route.getContentid()));
+			routes2.add(route);
+		}
+		dto.setRoute(routes2);
 		
 		return dto;
 	}

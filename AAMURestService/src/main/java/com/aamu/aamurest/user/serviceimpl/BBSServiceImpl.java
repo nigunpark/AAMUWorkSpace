@@ -30,17 +30,14 @@ public class BBSServiceImpl implements BBSService{
 	@Override
 	public List<BBSDTO> bbsSelectList() {
 		List<BBSDTO> bbsList = dao.bbsSelectList();
-		/*
 		List<BBSDTO> returnList = new Vector<>();
 		
 		for(BBSDTO dto:bbsList) {
 			int rbn = dto.getRbn();
-			dto.setPhoto(dao.bbsSelectPhotoList(rbn));
-			
 			dto.setReviewList(dao.reviewList(rbn));
 			returnList.add(dto);
-		}*/
-		return bbsList;
+		}
+		return returnList;
 	}
 	
 	//글 목록_사진 뿌려주기

@@ -33,6 +33,9 @@
 	<select id="selectUsers" parameterType="String" resultType="int">
 		SELECT COUNT(*) FROM users WHERE TO_CHAR(joindate,'YYYY-MM-DD') <![CDATA[<=]]> TO_CHAR(${day},'YYYY-MM-DD')
 	</select>
+	<select id="selectUsersToString" parameterType="String" resultType="int">
+		SELECT COUNT(*) FROM users WHERE TO_CHAR(joindate,'YYYY-MM-DD') <![CDATA[<=]]> TO_DATE(#{day},'YYYY-MM-DD')
+	</select>
 	<select id="selectDate" parameterType="String" resultType="String">
 		SELECT TO_CHAR(${day}, 'MM-DD') FROM dual
 	</select>

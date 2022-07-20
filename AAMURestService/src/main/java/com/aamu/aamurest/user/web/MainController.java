@@ -76,7 +76,9 @@ public class MainController {
 		int tripDay = list.get(0).getDay();
 		int setDay =0;
 		Map<String,Double> map=new HashMap<>();
-		
+		HttpHeaders header = new HttpHeaders();
+		header.add("Authorization", "KakaoAK "+kakaokey);
+		HttpEntity httpEntity = new HttpEntity<>(header);
 		for(int i=0;i<list.size();i++) {
 			int contentid = list.get(i).getContentid();
 			AttractionDTO placeInfo = service.selectOnePlace(contentid);
@@ -104,26 +106,6 @@ public class MainController {
 			}
 
 		}
-		/*
-		for(int i=0;i<tripDay;i++) {
-			
-			double hotelxy =list.get(i).getDto().getMapx()+list.get(i).getDto().getMapy();
-			double low = 0;
-			for(int k=tripDay;k<list.size();k++) {
-				
-				if(k+i==list.size()) break;
-				double xyResult = hotelxy-list.get(k+i).getDto().getMapx()+list.get(k+i).getDto().getMapy();
-				
-				if(low<xyResult) {
-					low=xyResult;
-					Collections.swap(list,tripDay+i,k+i);
-				}
-			}
-			
-			list.get(tripDay+i).setDay(i+1);
-
-		}//////////////////hotel most near place index change
-		*/
 		int result = (int)Math.ceil(((double)list.size()-tripDay)/tripDay);
 		int index=0;
 		int count = 0;
@@ -162,7 +144,6 @@ public class MainController {
 							map.put("secondy", list.get(k).getDto().getMapy());
 							
 							resultxy = service.getRecentPlaceOne(map);
-							System.out.println(String.format("비교장소:%s, 비교결과:%s",list.get(k).getDto().getTitle(),resultxy));
 							if(low>resultxy && tripDay*(count+1)+index<list.size()) {
 								
 								low=resultxy;
@@ -186,7 +167,7 @@ public class MainController {
 									
 									if(low==resultxy) {
 										Collections.swap(list,j,tripDay*(count+1)+index);
-	
+										
 										break;} 
 								}
 							}
@@ -196,18 +177,40 @@ public class MainController {
 					if(tripDay*(count+1)+index<list.size() && list.get(tripDay*(count+1)+index).getDay()==0) {
 						list.get(tripDay*(count+1)+index).setDay(index+1);
 						/*
-						String uri = "http://127.0.0.1:5000/mvtm?firstx="+list.get(count*tripDay+index).getDto().getMapx()+"&firsty="
+						String uri = "http://192.168.0.150:5000/mvtm?firstx="+list.get(count*tripDay+index).getDto().getMapx()+"&firsty="
 								+list.get(count*tripDay+index).getDto().getMapy()+"&secondx="
 								+list.get(tripDay*(count+1)+index).getDto().getMapx()+"&secondy="
 								+list.get(tripDay*(count+1)+index).getDto().getMapy();
-						
+								*/
+						/*
 						ResponseEntity<Map> responseEntity = 
 								restTemplate.exchange(uri, HttpMethod.GET, null, Map.class);
-						long mtime = Long.parseLong(responseEntity.getBody().get("MVTM").toString())*1000*60;
-						list.get(tripDay*(count+1)+index).setMtime(mtime);
-						System.out.println(mtime);
+						long mtime = Long.parseLong(responseEntity.getBody().get("MVTM").toString())*1000;
 						*/
-						System.out.println(String.format("주소:%s, 세팅된 인덱스:%s, 세팅된 날짜:%s",list.get(tripDay*(count+1)+index).getDto().getTitle(),tripDay*(count+1)+index,list.get(tripDay*(count+1)+index).getDay()));
+						/*
+						String uri = "https://apis-navi.kakaomobility.com/v1/directions?origin="+list.get(count*tripDay+index).getDto().getMapx()+","+list.get(count*tripDay+index).getDto().getMapy()+"&"
+								+ "destination="+list.get(tripDay*(count+1)+index).getDto().getMapx()+","+list.get(tripDay*(count+1)+index).getDto().getMapy()+"&"
+								+ "waypoints=&priority=RECOMMEND&car_fuel=GASOLINE&car_hipass=false&alternatives=false&road_details=false";
+						
+						ResponseEntity<Map> responseEntity = 
+								restTemplate.exchange(uri, HttpMethod.GET, httpEntity, Map.class);
+						System.out.println(responseEntity.getBody());
+						long mtime=0;
+						if(((Map)((List)responseEntity.getBody().get("routes")).get(0)).get("result_code").toString().equals("0"))
+							mtime = Long.parseLong(((Map)((List)((Map)((List)responseEntity.getBody().get("routes")).get(0)).get("sections")).get(0)).get("duration").toString())*1000;
+						
+						list.get(tripDay*(count+1)+index).setMtime(mtime);
+						*/
+						map.put("firstx", list.get(count*tripDay+index).getDto().getMapx());
+						map.put("firsty", list.get(count*tripDay+index).getDto().getMapy());
+						map.put("secondx",list.get(tripDay*(count+1)+index).getDto().getMapx());
+						map.put("secondy",list.get(tripDay*(count+1)+index).getDto().getMapy());
+						
+
+						long mtime = (long)(service.getRecentPlaceOne(map)*1000*60*1.5);
+
+						list.get(tripDay*(count+1)+index).setMtime(mtime);
+						
 					}
 					
 					setDay++;
@@ -303,9 +306,7 @@ public class MainController {
 	@GetMapping("/planner/selectList")
 	public List<PlannerDTO> selectPlannerList(@RequestParam String id){
 		
-		System.out.println("id는"+id);
 		List<PlannerDTO> list = service.getPlannerList(id);
-		System.out.println(list.get(0).getTitle());
 		
 		return list;
 	}

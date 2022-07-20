@@ -50,5 +50,8 @@ public class MainDAO {
 	
 		return template.selectOne("selectDate", day);
 	}
+	public int selectUsersToString(String day) {
+		return template.selectOne("selectUsersToString",day);
+	}
 
 }
