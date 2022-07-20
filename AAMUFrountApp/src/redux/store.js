@@ -256,11 +256,12 @@ let joinData = createSlice({
   initialState: {
     id: "",
     pwd: "",
-    gender: "",
-    email: "",
     name: "",
+    birth: "",
+    gender: "",
     phonenum: "",
-    addid: "",
+    email: "",
+    addr: "",
     self: "",
   },
   reducers: {
@@ -268,9 +269,12 @@ let joinData = createSlice({
       state.id = action.payload[0];
       state.pwd = action.payload[1];
     },
+    addStepTwo(state, action) {
+      state.name = action.payload;
+    },
   },
 });
-export let { addStepOne } = joinData.actions;
+export let { addStepOne, addStepTwo } = joinData.actions;
 
 //엑셀다운시 도착시간 출발시간 담는 state
 let wholeBlackBox = createSlice({
