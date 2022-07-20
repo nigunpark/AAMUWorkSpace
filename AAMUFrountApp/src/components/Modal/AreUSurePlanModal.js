@@ -4,7 +4,7 @@ const DimmedAuSContainer = styled.div`
   position: fixed;
   width: 100%;
   height: 100%;
-  z-index: 2000;
+  z-index: 1200;
   top: 0;
   left: 0;
   display: flex;
@@ -17,7 +17,7 @@ const DimmedSavePlanContainer = styled.div`
   position: fixed;
   width: 100%;
   height: 100%;
-  z-index: 2100;
+  z-index: 1227;
   top: 0;
   left: 0;
   display: flex;
@@ -33,7 +33,7 @@ const AuSModal = styled.div`
   height: 125px;
   padding: 30px 50px;
   border-radius: 5px;
-  z-index: 10;
+  z-index: 102;
 `;
 const AuSModal2 = styled.div`
   position: absolute;
@@ -42,7 +42,6 @@ const AuSModal2 = styled.div`
   height: 155px;
   padding: 30px 30px;
   border-radius: 5px;
-  z-index: 10;
 `;
 
 const SavePlanModal = styled.div`
@@ -55,6 +54,16 @@ const SavePlanModal = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+`;
+
+const ToEmailModal = styled.div`
+  position: relative;
+  background: white;
+  width: 400px;
+  height: 155px;
+  padding: 30px 30px;
+  border-radius: 5px;
+  z-index: 1300;
 `;
 
 const AusBtnContainer = styled.div`
@@ -95,4 +104,5 @@ export {
   AusBtnContainer,
   AuSBtn,
   SavePlanModal,
+  ToEmailModal,
 };

@@ -172,7 +172,7 @@ const login = (idRef, pwdRef, navigate, setShowValid) => {
     })
     .catch((error) => {
       console.log("error:", error);
-      // setShowValid(true);
+      setShowValid(true);
     });
 };
 
