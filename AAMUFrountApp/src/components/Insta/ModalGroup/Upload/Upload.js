@@ -17,7 +17,11 @@ import "swiper/css"; //basic
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import '../Upload/UploadSwiper.css';
+
+
 const Uploader = ({setsquare,setlist}) => {
+
+  
 let searchRef = useRef();
 let titleRef = useRef();
 let textareaRef = useRef();
@@ -185,10 +189,9 @@ const [inputValue,setinputValue] = useState('');
               <Nextbtn  
                       onClick={()=>{
                         let temp= uploadFile(myImagefile)
-                        gramEdit(temp,setShowWrite,titleRef,textareaRef,searchRef,search)
+                        gramEdit(temp,setlist,titleRef,textareaRef,searchRef,search)
                         setsquare(false)
                         feedList(setlist)
-                        // navigate('/Insta')
                       }}>
                        <FontAwesomeIcon icon={faPaperPlane}  size="2x" />
                 </Nextbtn>
@@ -219,34 +222,34 @@ const [inputValue,setinputValue] = useState('');
                                    <img className='divimage' alt="sample" src={images}/>
                              
                           ))}  */}
-                      <div className="swiperUi">
+              <div className="swiperUi">
                   <ul>
                     <Swiper
-                    className="swiperContainer"
-                    modules={[Navigation, Pagination, Scrollbar, A11y, Autoplay]}
-                    spaceBetween={10}
-                    slidesPerView={1}
-                    // navigation
-                    autoplay={{ delay: 2500 }}
-                    loop={true}
-                    pagination={{ clickable: true }}
-                    scrollbar={{ draggable: true }}
-                  >
-                    {myImage.map((image,i)=>{
-                      return(
-                      <SwiperSlide>
-                        <li>
-                        <img className='divimage' alt="sample" src={image}/>
-                        </li>
-                        {/* <img className='divimage' alt="sample" src='/images/bg1.png'/> */}
-                    </SwiperSlide>
-                      )
-                      
-                    })
-                    }      
-                  </Swiper>
+                      className="swiperContainer"
+                      modules={[Navigation, Pagination, Scrollbar, A11y, Autoplay]}
+                      spaceBetween={10}
+                      slidesPerView={1}
+                      // navigation
+                      autoplay={{ delay: 2500 }}
+                      loop={true}
+                      pagination={{ clickable: true }}
+                      scrollbar={{ draggable: true }}
+                    >
+                      {myImage.map((image,i)=>{
+                        return(
+                        <SwiperSlide>
+                          <li>
+                          <img className='divimage' alt="sample" src={image}/>
+                          </li>
+                          {/* <img className='divimage' alt="sample" src='/images/bg1.png'/> */}
+                      </SwiperSlide>
+                        )
+                        
+                      })
+                      }      
+                    </Swiper>
                   </ul>
-                  </div>   
+                </div>   
                   <label 
                       className="rweet_file_btn" 
                       onClick={ ()=>{setHide(!hide)} }
@@ -350,7 +353,7 @@ function feedList(setlist){//업로드 버튼 누르고 화면 새로고침
   return formData;
 }
 
-function gramEdit(temp,setShowWrite,titleRef,textareaRef,searchRef,search){//새 게시물 업로드를 위한 axios
+function gramEdit(temp,setlist,titleRef,textareaRef,searchRef,search){//새 게시물 업로드를 위한 axios
  let searched= search.find((val,i)=>{
     return val.TITLE===searchRef.current.value
   })
@@ -378,7 +381,7 @@ function gramEdit(temp,setShowWrite,titleRef,textareaRef,searchRef,search){//새
       )
   .then((resp) => {
     console.log(resp.data);
-    setShowWrite(resp.data);
+    // setlist(resp.data);
     
     })
     .catch((error) => {

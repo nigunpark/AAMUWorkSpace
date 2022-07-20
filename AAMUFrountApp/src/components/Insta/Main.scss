@@ -204,7 +204,7 @@
       }
 
       .feeds-contents {
-        margin: -10px 10px -5px;
+        margin: -15px 10px 5px;
 
         .feeds-icons {
           display: flex;
@@ -244,7 +244,8 @@
           display: flex;
           flex-direction: row;
           align-items: center;
-          margin-top: -10px;
+          margin-top: -15px;
+          margin-left: -6PX;
 
           img {
             width: 22px;
@@ -264,7 +265,7 @@
           }
         }
         .feeds-title {
-          .comment-id {
+          .userName {
             padding-top: 2px;
             padding-bottom: 2px;
             font-weight: bold;
@@ -274,23 +275,26 @@
             font-size: 14.5px;
           }
 
-          span .comment-id {
+          span .userName {
             font-weight: bold;
           }
         }
 
         .feeds-writing {
-          .comment-id {
+          display: flex;
+          flex-direction: row;
+          .id {
             padding-top: 2px;
             padding-bottom: 2px;
             font-weight: bold;
+            margin-right: 5px;
           }
 
           span {
             font-size: 14.5px;
           }
 
-          span .comment-id {
+          span .id {
             font-weight: bold;
           }
         }
@@ -495,14 +499,14 @@
         }
       }
       .previewPic{
-        background-color: #000000;
+        background-color: tran;
         width: 55%;
         height: 100%;
         display: flex;
         justify-content: center;
         align-items: center;
 
-        >img{
+        .main-image{
           width: 100%;
           height: 90%;
         }
@@ -1314,6 +1318,7 @@
     border-bottom:0.1px solid #c0c0c0;
     margin-top: 10px;
     width: 100%;
+    
     
     >input{
       position: relative;

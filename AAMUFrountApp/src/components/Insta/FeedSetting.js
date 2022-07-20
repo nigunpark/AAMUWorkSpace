@@ -127,7 +127,7 @@ function FeedSetting({val,setMyImage}) {
                     ref={commentRef} 
                     onClick={ (e) => { if(e.target == commentRef.current) setcommentModal(false) } }
                     >
-                        <Comment onClick={ () => setcommentModal(false) }></Comment>
+                        <Comment onClick={ () => setcommentModal(false)} val={val}></Comment>
                     </Overlay>
                 </Container1>
                 :null}
