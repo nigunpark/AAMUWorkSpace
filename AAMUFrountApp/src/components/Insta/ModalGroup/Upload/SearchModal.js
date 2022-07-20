@@ -33,7 +33,7 @@ function SearchModal({search, inputValue,setinputValue,setHasText}){
  const Searchengine = styled.div`
     position: absolute;
     width: 35%;
-    height: 10px;
+    height: 300px;
     background-color: transparent;
     right:10px;
     z-index: 9;
