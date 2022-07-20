@@ -2,14 +2,19 @@ import styled from "styled-components";
 import React, {  useRef, useState } from 'react'
 import Profile from '../Profile';
 import MenuModal from '../MenuModal';
+import axios from "axios";
+import "../Slider/slick.css";
+import "../Slider/slick-theme.css";
+import Swiper, { A11y, Autoplay, Navigation, Pagination, Scrollbar } from "swiper";
+import { SwiperSlide } from "swiper/react";
 
-function Comment() {
+function Comment({val}) {
     let menuRef = useRef();
     let profileRef = useRef();
     let commentRef = useRef();
     const [heart,setHeart] = useState(false);
     const [modalShow, setModalShow] = useState(false);
-    const [profileModal, setprofileModal] = useState(false);
+    
     const [commentHeart, setCommentHeart] = useState(false);
     
     function menuModalRef(e){
@@ -18,22 +23,73 @@ function Comment() {
     }
     window.addEventListener("click", menuModalRef);
 
+    const [comment, setcomment] = useState([]);
+    function commentModal(){
+       
+        let token = sessionStorage.getItem("token");
+        axios.get(`/aamurest/gram/SelectOne/${val.lno}`,{
+        headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        })
+        .then((resp) => {
+        console.log(resp.data);
+        setcomment(resp.data);
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+    }
 
+    const settings = {//이미지 슬라이드
+        dots: true,
+        infinite: false,
+        speed: 500,
+        slidesToShow: 1,
+        slidesToScroll: 1
+      };
+      
+console.log('photo',val.photo)
   return (
     // <ModalWrap>
         <Contents> 
-            <div className="previewPic">
-                <img src="img/v.jpg" alt="오류나면 나오는 메시지"/>
-
+            <div className="swiperUi">
+                <ul>
+                 <Swiper
+                    className="swiperContainer"
+                    modules={[Navigation, Pagination, Scrollbar, A11y, Autoplay]}
+                    spaceBetween={10}
+                    slidesPerView={1}
+                    // navigation
+                    autoplay={{ delay: 2500 }}
+                    loop={true}
+                    pagination={{ clickable: true }}
+                    scrollbar={{ draggable: true }}
+                  >
+                    {val.photo.map((image,i)=>{
+                      return(
+                      <SwiperSlide>
+                        <li>
+                        <img className='divimage' alt="sample" src={image}/>
+                        {/* <img className='divimage' alt="sample" src='/images/bg1.png'/> */}
+                        </li>
+                    </SwiperSlide>
+                      )
+                      
+                    })
+                    }      
+                  </Swiper>
+                  
+                </ul>
             </div>
             <div className="contents">
                 <div className="feeds-settingCom">  
                     <div className="search-contents">
                         <div className="gradient">
-                            <img src="img/b.jpg" alt="스토리 프로필 사진" />
+                        <img src="'/img/bk.jpg ' ?? '/images/user.jpg'" alt="프사" onError={(e)=>{e.target.src='/images/user.jpg'}}/> 
                         </div>
                         <div>
-                            <p className="user-id"><strong>jenny0305</strong></p>
+                            <p className="user-id"><strong>{sessionStorage.getItem('username')}</strong></p>
                         </div>
                     </div> 
                     <div className="dot1">
@@ -49,21 +105,11 @@ function Comment() {
                     <div className="recommend-down">
 
                         <div className="recommend-contents">
-                            <img className='userimg' src="./img/bk.jpg" alt="추사" />
+                        <img className="userimg" src="'/img/bk.jpg ' ?? '/images/user.jpg'" alt="프사" onError={(e)=>{e.target.src='/images/user.jpg'}}/> 
                             <div style={{display:'flex',flexDirection:'column',marginTop:'10px',marginLeft:'10px'}}>
                                 <div style={{display:'flex',flexDirection:'row',paddingRight:'15px'}}>
-                                    <p className="userName"><strong>0hyun0hyun</strong>
-                                                            퍼먹다 순삭한다는☕아포카토 맛집총정리16☕
-                                                            달달 쌉싸름 조합인데 말모말모ㅠ
-                                                            @@나랑 카페투어 갈 너 소환😚
-                                                            .
-                                                            .
-                                                            #미니마이즈 #그레이트커피 #몰또 #트라인커피
-                                                             #이치서울 #디퍼카페테리아 #쿰베오 #드로우에스프레소바 
-                                                             #타우니에스프레소바 #에스프레소부티크 #파이오니어커피 
-                                                             #롤링브루잉 #커피매터스 #어커성수 #카페코인 #아워레스프 
-                                                             #아포카토맛집 #아포카토 #커피맛집 #에스프레소바 #에스프레소 
-                                                             #오먹_맛집총정리 #일반 #포</p>
+                                    <p className="userName" ><strong style={{fontSize:'13px',marginRight:'5px'}}>{sessionStorage.getItem('username')}</strong>
+                                                             {val.content}</p>
                                     
                                 </div>
                                 <div style={{fontSize:'10px',color:'#a5a5a5',marginTop:'8px'}}>
@@ -140,8 +186,8 @@ function Comment() {
 
 const Contents = styled.div`
     position: absolute;
-    width: 70%;
-    height: 800px;
+    width: 75%;
+    height: 780px;
     left: 50%;
     top: 50%;
     background :white;

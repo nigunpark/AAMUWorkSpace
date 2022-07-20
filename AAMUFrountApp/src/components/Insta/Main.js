@@ -39,7 +39,7 @@ function Main() {
         <div className="main-left" style={{display:'flex',flexDirection:'column'}}>
         {
           list.map((val,i)=>{
-            return <FeedSetting val={val}/>
+            return <FeedSetting val={val} setlist={setlist}/>
           })
         }
         {/* <FeedSetting></FeedSetting> */}
