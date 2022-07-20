@@ -209,7 +209,8 @@ const CreatePlanMap = ({
         <div>수정저장</div>
         <div>버튼버튼</div>
         <div
-          onClick={() => {
+          onClick={(e) => {
+            e.stopPropagation();
             setSavePlan(true);
           }}
         >
