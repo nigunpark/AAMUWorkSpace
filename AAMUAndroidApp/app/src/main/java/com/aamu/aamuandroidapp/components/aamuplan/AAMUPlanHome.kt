@@ -33,9 +33,11 @@ import androidx.compose.ui.focus.focusTarget
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.focus.onFocusEvent
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.onPlaced
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.ViewModel
@@ -110,27 +112,28 @@ fun AAMUPlanHome(){
                 val pagerState: PagerState = run {
                     remember { PagerState(0, 0, lists.size - 1) }
                 }
-
-                LazyColumn(
-                    modifier = Modifier
-                        .width(70.dp)
-                        .background(color = amber200)
-                        .padding(top = 112.dp),
-                    state = lazyListState
-                ) {
-                    itemsIndexed(items = lists,
-                        itemContent = { index, list ->
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(16.dp)
-                            ) {
-                                androidx.compose.material.Text(text = "Item " + list.toString())
+                BoxWithConstraints {
+                    LazyColumn(
+                        modifier = Modifier
+                            .width(70.dp)
+                            .background(color = amber200)
+                            .padding(top = 112.dp),
+                        state = lazyListState
+                    ) {
+                        itemsIndexed(items = lists,
+                            itemContent = { index, list ->
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(16.dp)
+                                ) {
+                                    androidx.compose.material.Text(text = "Item " + list.toString())
+                                }
                             }
+                        )
+                        item {
+                            Spacer(modifier = Modifier.padding(top = maxHeight-70.dp))
                         }
-                    )
-                    item { 
-
                     }
                 }
                 Box(modifier = Modifier
