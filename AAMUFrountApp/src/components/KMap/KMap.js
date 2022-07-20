@@ -40,7 +40,7 @@ import { ContainerInValid, OverlayInValid } from "../Modal/InVaildModal.js";
 const { kakao } = window;
 let mainMarkers = [];
 let markers = [];
-let token = sessionStorage.getItem("token");
+let tempCoords;
 const KMap = ({
   currPosition,
   setTitleName,
@@ -103,6 +103,8 @@ const KMap = ({
       if (status === kakao.maps.services.Status.OK) {
         setLat(result[0].y);
         setLng(result[0].x);
+        let coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+        map.panTo(coords);
       }
     });
     //지도 최대레벨 제한
@@ -131,72 +133,78 @@ const KMap = ({
   useEffect(() => {
     let coords;
     let infowindow;
+
     if (kMap === null) return;
     let geocoder = new kakao.maps.services.Geocoder();
-    // 주소로 좌표를 검색합니다
-    geocoder.addressSearch(
-      reduxState.localNameForMarker.addr ?? currPosition,
-      (result, status) => {
-        // 정상적으로 검색이 완료됐으면
-        if (status === kakao.maps.services.Status.OK) {
-          coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-          kMap.panTo(coords);
+    if (reduxState.localNameForMarker.addr !== undefined) {
+      // 주소로 좌표를 검색합니다
+      geocoder.addressSearch(
+        reduxState.localNameForMarker.addr,
+        (result, status) => {
+          // 정상적으로 검색이 완료됐으면
+          if (status === kakao.maps.services.Status.OK) {
+            coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+            if (tempCoords !== coords) {
+              tempCoords = coords;
+              kMap.panTo(coords);
+            }
+          }
+
+          let iwContent =
+              '<div class="iwContent__wrap">' +
+              '    <div class="iwContent__info">' +
+              '        <div class="iwContent__title">' +
+              "            <h3>" +
+              (reduxState.localNameForMarker.title ?? currPosition) +
+              "</h3>" +
+              '            <div class="iwContent__close" onclick="closeOverlay()" title="닫기"></div>' +
+              "        </div>                                                                        " +
+              '         <div class="iwContent__body">' +
+              '            <div class="iwContent__desc">' +
+              '              <div class="iwContent__ellipsis">' +
+              (reduxState.localNameForMarker.addr ?? "") +
+              "</div>" +
+              '              <div class="iwContent__jibun iwContent__ellipsis">(우) 63309 (지번) 영평동 2181</div>' +
+              "<span class='iWContent__tel'>" +
+              (reduxState.localNameForMarker.tel ?? "") +
+              "</span>" +
+              '              <div style="display:flex"><a href="https://place.map.kakao.com/' +
+              reduxState.localNameForMarker.kakaokey +
+              '" target="_blank" class="iwContent__link"><span style="color:var(--skyblue);font-weight:bold">상세보기</span></a>&nbsp' +
+              '<a href="https://map.kakao.com/link/roadview/' +
+              reduxState.localNameForMarker.kakaokey +
+              '" target="_blank" class="iwContent__link"><span style="color:var(--skyblue);font-weight:bold">로드뷰</span></div><a/>' +
+              "           </div>" +
+              "        </div>" +
+              "    </div>    " +
+              "</div>",
+            // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
+            // iwPosition = new kakao.maps.LatLng(lat, lng), //인포윈도우 표시 위치입니다
+            iwRemoveable = true;
+          // removeable 속성을 ture 로 설정하면 인포윈도우를 닫을 수 있는 x버튼이 표시됩니다
+
+          // 인포윈도우를 생성하고 지도에 표시합니다
+          infowindow = new kakao.maps.InfoWindow({
+            content: iwContent,
+            removable: iwRemoveable,
+          });
+
+          mainMarker = new kakao.maps.Marker({
+            map: kMap,
+            position: coords,
+            clickable: true,
+          });
+
+          if (mainMarkers.length != 0) {
+            mainMarkers.pop().setMap(null);
+          }
+          mainMarkers.push(mainMarker);
+          kakao.maps.event.addListener(mainMarker, "click", function () {
+            infowindow.open(kMap, mainMarker);
+          });
         }
-
-        let iwContent =
-            '<div class="iwContent__wrap">' +
-            '    <div class="iwContent__info">' +
-            '        <div class="iwContent__title">' +
-            "            <h3>" +
-            (reduxState.localNameForMarker.title ?? currPosition) +
-            "</h3>" +
-            '            <div class="iwContent__close" onclick="closeOverlay()" title="닫기"></div>' +
-            "        </div>                                                                        " +
-            '         <div class="iwContent__body">' +
-            '            <div class="iwContent__desc">' +
-            '              <div class="iwContent__ellipsis">' +
-            (reduxState.localNameForMarker.addr ?? "") +
-            "</div>" +
-            '              <div class="iwContent__jibun iwContent__ellipsis">(우) 63309 (지번) 영평동 2181</div>' +
-            "<span class='iWContent__tel'>" +
-            (reduxState.localNameForMarker.tel ?? "") +
-            "</span>" +
-            '              <div style="display:flex"><a href="https://place.map.kakao.com/' +
-            reduxState.localNameForMarker.kakaokey +
-            '" target="_blank" class="iwContent__link"><span style="color:var(--skyblue);font-weight:bold">상세보기</span></a>&nbsp' +
-            '<a href="https://map.kakao.com/link/roadview/' +
-            reduxState.localNameForMarker.kakaokey +
-            '" target="_blank" class="iwContent__link"><span style="color:var(--skyblue);font-weight:bold">로드뷰</span></div><a/>' +
-            "           </div>" +
-            "        </div>" +
-            "    </div>    " +
-            "</div>",
-          // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
-          // iwPosition = new kakao.maps.LatLng(lat, lng), //인포윈도우 표시 위치입니다
-          iwRemoveable = true;
-        // removeable 속성을 ture 로 설정하면 인포윈도우를 닫을 수 있는 x버튼이 표시됩니다
-
-        // 인포윈도우를 생성하고 지도에 표시합니다
-        infowindow = new kakao.maps.InfoWindow({
-          content: iwContent,
-          removable: iwRemoveable,
-        });
-
-        mainMarker = new kakao.maps.Marker({
-          map: kMap,
-          position: coords,
-          clickable: true,
-        });
-
-        if (mainMarkers.length != 0) {
-          mainMarkers.pop().setMap(null);
-        }
-        mainMarkers.push(mainMarker);
-        kakao.maps.event.addListener(mainMarker, "click", function () {
-          infowindow.open(kMap, mainMarker);
-        });
-      }
-    );
+      );
+    }
 
     if (reduxState.arrForPickJangso.length !== 0) {
       let jangsoObj =
@@ -243,16 +251,14 @@ const KMap = ({
     if (kMap === null) return;
 
     kakao.maps.event.addListener(kMap, "zoom_changed", function () {
-      // console.log("token", token);
-      console.log("줌안");
-      let center = kMap.getCenter();
-      // 지도의 현재 레벨을 얻어옵니다
-      let level = kMap.getLevel();
-      // setMapLevel(level);
-      let newCoords = new kakao.maps.LatLng(center.getLat(), center.getLng());
-      zoomAxios(center.getLat(), center.getLng());
+      if (kMap.getLevel() <= 5) {
+        let center = kMap.getCenter();
+        // let level = kMap.getLevel();
+        // // setMapLevel(level);
+        // let newCoords = new kakao.maps.LatLng(center.getLat(), center.getLng());
+        zoomAxios(center.getLat(), center.getLng());
+      }
     });
-    // if (kMap === null) return;
   }, [handleWheel]);
 
   const zoomAxios = (placey, placex) => {
@@ -270,7 +276,14 @@ const KMap = ({
       })
       .then((resp) => {
         console.log(resp.data);
-        // dispatch(changeArrForJangso(resp.data));
+        let jangso = resp.data.filter((val, i) => {
+          return val.contenttypeid === 12;
+        });
+        let sukso = resp.data.filter((val, i) => {
+          return val.contenttypeid === 32;
+        });
+        dispatch(changeArrForJangso(jangso));
+        dispatch(changeArrForSukso(sukso));
       })
       .catch((error) => {
         console.log(error);
@@ -300,7 +313,7 @@ const KMap = ({
               setTitleName("추천숙소");
               dispatch(changeInfo("추천숙소"));
               setConWhichModal(true);
-              getCurrpositionHotel(currPosition, dispatch);
+              // getCurrpositionHotel(currPosition, dispatch);
             }}
           >
             추천숙소
@@ -758,78 +771,4 @@ function manufacData(data, reduxState) {
   });
 }
 
-function getCurrpositionHotel(currPosition, dispatch) {
-  let token = sessionStorage.getItem("token");
-  let areacode;
-  switch (currPosition) {
-    case "서울":
-      areacode = 1;
-      break;
-    case "인천":
-      areacode = 2;
-      break;
-    case "대전":
-      areacode = 3;
-      break;
-    case "대구":
-      areacode = 4;
-      break;
-    case "광주":
-      areacode = 5;
-      break;
-    case "부산":
-      areacode = 6;
-      break;
-    case "울산":
-      areacode = 7;
-      break;
-    case "세종":
-      areacode = 8;
-      break;
-    case "경기도":
-      areacode = 31;
-      break;
-    case "강원도":
-      areacode = 32;
-      break;
-    case "충청북도":
-      areacode = 33;
-      break;
-    case "충청남도":
-      areacode = 34;
-      break;
-    case "경상북도":
-      areacode = 35;
-      break;
-    case "경상남도":
-      areacode = 36;
-      break;
-    case "전라북도":
-      areacode = 37;
-      break;
-    case "전라남도":
-      areacode = 38;
-      break;
-    case "제주도":
-      areacode = 39;
-      break;
-  }
-  axios
-    .get("/aamurest/info/places", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      params: {
-        areacode: areacode,
-        contenttypeid: "32",
-      },
-    })
-    .then((resp) => {
-      dispatch(changeArrForSukso(resp.data));
-      // console.log(resp.data);
-    })
-    .catch((error) => {
-      console.log((error) => console.log("호텔가져오기 실패", error));
-    });
-}
 export default KMap;
