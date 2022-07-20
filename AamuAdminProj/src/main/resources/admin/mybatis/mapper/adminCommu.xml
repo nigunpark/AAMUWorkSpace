@@ -50,17 +50,14 @@
 	<!-- /////////////////////////////////////////////////////////////////// -->
 	
 	<!-- 커뮤니티 월별 통계 -->
-	<select id="commuMonthTotal" resultType="int" parameterMap="Map">
+	<select id="commuMonthTotal" resultType="int" parameterType="Map">
 		SELECT 
   		count(case when postdate between '2022-07-01' and '2022-08-01' then 1 end) monthCount
 		FROM community
 	</select>
 	
 	<!-- 커뮤니티 성별 비율 -->
-	<select id="femalePercent" resultType="int" parameterMap="Map">
-		select count(*) from community c join users u ON c.id = u.id where u.gender= #{gender}
-	</select>
-	<select id="malePercent" resultType="int" parameterMap="Map">
+	<select id="genderPercent" resultType="int" parameterType="Map">
 		select count(*) from community c join users u ON c.id = u.id where u.gender= #{gender}
 	</select>
 	
