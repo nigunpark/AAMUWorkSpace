@@ -101,8 +101,11 @@ public class AdminCommuController {
 	@RequestMapping("CommuStatistics.do")
 	public String commuStatistics(Model model) {
 		Map map = commuService.commuTotal();
+		//월별 게시물 수
 		System.out.println("commuMonthTotal:"+map.get("commuMonthTotal"));
 		model.addAttribute("commuMonthTotal",map.get("commuMonthTotal"));
+		//성별 게시물 수 
+		model.addAttribute("genderPercent",map.get("genderPercent"));
 		return "commu/commuStatistics";
 	}
 	

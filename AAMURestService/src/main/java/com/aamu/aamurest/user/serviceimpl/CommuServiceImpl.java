@@ -48,7 +48,6 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 	/*
 	@Override
 	public Boolean commuIsLike(Map map) {
-		System.out.println("(isLike)map:"+map);
 		int isLikeaffected=dao.commuLikeSelect(map);
 		if(isLikeaffected == 1) return true;
 		else return false;
@@ -62,7 +61,6 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 		//사진
 		int photoAffected=0;
 		List<String> lists= (List<String>) map.get("photolist");
-		System.out.println("(CommuServiceImpl)lists:"+lists);
 		for(String photo:lists) {
 			Map photomap = new HashMap();
 			photomap.put("lno", map.get("lno"));
@@ -70,7 +68,6 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 			photoAffected+=dao.photoInsert(photomap);
 		}
 		//장소
-		System.out.println("(CommuServiceImpl)map.get(\"contentid\"):"+map.get("contentid"));
 		if(map.get("contentid")!=null) {
 			int placeAffected=dao.placeInsert(map); 
 			if(placeAffected ==0) return 0; 
@@ -86,6 +83,12 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 	@Override
 	public List<Map> commuPlaceList(Map map) {
 		return dao.commuPlaceList(map);
+	}
+	
+	//글 생성용_방금 insert된 글 다시 보내기
+	@Override
+	public CommuDTO commuSelectAfterInsert() {
+		return dao.commuSelectAfterInsert();
 	}
 	
 	//글 하나 뿌려주는 용

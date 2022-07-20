@@ -49,11 +49,18 @@ public class AdminCommuDAO {
 	}
 	
 	////////////////////////////////////////////////////////////
+	//커뮤니티 통계
+	//월별 
 	public int commuMonthTotal(Map map) {
 		System.out.println("map:"+map); //없음
-		int affected=template.delete("commuMonthTotal",map);
+		int affected=template.selectOne("commuMonthTotal",map);
 		System.out.println("affected:"+affected); //-1
 		return affected;
+	}
+	
+	//성별 게시물 비율
+	public int genderPercent(Map map) {
+		return template.selectOne("genderPercent", map);
 	}
 	
 	
