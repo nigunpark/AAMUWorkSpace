@@ -14,6 +14,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { fa1, fa2, fa3, faHouse } from "@fortawesome/free-solid-svg-icons";
 import { useSelector } from "react-redux";
 import DaumPostcode from "react-daum-postcode";
+import { addStepTwo } from "../../redux/store.js";
 const JoinStep2 = () => {
   let joominGender = useRef();
   let nameRef = useRef();
@@ -349,6 +350,26 @@ const JoinStep2 = () => {
                       </div>
                     </div>
                   </div>
+                  {/* <div style={{ display: "flex", gap: ".5rem" }}>
+                    <span className="emailValid-transfer-btn">
+                      인증번호 전송
+                    </span>
+                    <div
+                      className="join__stepTwo-input-div"
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <input
+                        style={{ fontSize: "13px", marginLeft: "3px" }}
+                        type="text"
+                        size={20}
+                        onChange={() => {}}
+                      />
+                      <span className="emailValid-confirm-btn">확인</span>
+                    </div>
+                  </div> */}
                 </div>
                 <div className="join__stepTwo-content-container">
                   <div>
@@ -681,10 +702,41 @@ function validation(
       return;
     } else if (!regRex.test(emailAddrRef)) {
       // alert("이메일 형식에 맞게 입력해주세요");
+    } else {
+      let gender;
+      switch (joominGender.current.value) {
+        case 1:
+          gender = "남자";
+          break;
+        default:
+          gender = "여자";
+          break;
+      }
+      let phoneNum = `${phoneNumF.current.value}-${phoneNumS.current.value}-${phoneNumT.current.value}`;
+      let email = `${emailIdRef.current.value}@${emailAddrRef.current.value}`;
+      // dispatchEvent(
+      //   addStepTwo(
+      //     nameRef.current.value,
+      //     sJoominRef.current.value,
+      //     gender,
+      //     phoneNum,
+      //     email
+      //   )
+      // );
     }
   }
 }
-
+// nameRef,
+//   sJoominRef,
+//   joominGender,
+//   phoneNumF,
+//   phoneNumS,
+//   phoneNumT,
+//   emailIdRef,
+//   emailAddrRef,
+//   zoneCodeRef,
+//   addrRef,
+//   addrDetailRef
 function Copyright(props) {
   return (
     <Typography variant="body2" color="text.warning" align="center" {...props}>
