@@ -18,10 +18,12 @@
 	</select>
 	
 	<!-- 글 하나 선택 -->
-	<select id="bbsSelectOne" resultType="BBSDTO" parameterType="String">
-		SELECT rbbs.*,rr.*,t.* FROM routebbs rbbs
-		JOIN routebbs rbbs ON rb.rbn=rbbs.rbn
-		JOIN routeboard rb ON rbbs.rbn=rb.rbn
+	<select id="bbsSelectOne" parameterType="int" resultType="BBSDTO">
+		SELECT rbbs.*,rr.*,t.* 
+		FROM routebbs rbbs
+		JOIN routeboard rb ON  rbbs.rbn=rb.rbn
+        JOIN ratereview rr ON  rbbs.rbn=rr.rbn
+        JOIN theme t ON rbbs.themeid=t.themeid
 		WHERE rbbs.rbn=#{rbn}
 	</select>
 	
@@ -55,12 +57,18 @@
 	</select>
 	 <!-- 리뷰 등록 -->
 	 <insert id="reviewInsert" parameterType="map">
-	 	INSERT INTO ratereview VALUES (#{rbn},1,1,#{review},SYSDATE,1)
+	 	INSERT INTO ratereview VALUES (#{rbn},#{id},#{rate},#{review},SYSDATE,SEQ_REV.nextval)
+	 <selectKey keyProperty="rno" resultType="String" order="AFTER">
+    	SELECT #{rno} FROM DUAL
+     </selectKey>
 	 </insert>
 	 
 	 <!-- 리뷰 수정 -->
 	 <update id="reviewUpdate" parameterType="map">
-	 	UPDATE ratereview SET rate=#{rate},review=#{review} WHERE rbn=#{rbn}
+	 	UPDATE ratereview 
+	 	SET rate=#{rate},
+	 	    review=#{review} 
+	 	WHERE rno=#{rno}
 	 </update>
 	 
 	 <!-- 리뷰 삭제 -->

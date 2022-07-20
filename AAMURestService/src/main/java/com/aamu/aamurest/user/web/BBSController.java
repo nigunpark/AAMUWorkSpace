@@ -42,14 +42,14 @@ public class BBSController {
 	@Autowired
 	private CommonsMultipartResolver multipartResolver;
 	
-	//글 목록
+	//글 목록 <성공>
 	@GetMapping("/bbs/SelectList")
 	public List<BBSDTO> bbsSelectList(@RequestParam Map map, HttpServletRequest req){
 		List<BBSDTO> list = bbsService.bbsSelectList(map);
 		return list;
 	}
 	
-	//글 등록
+	//글 등록 <성공>
 	@PostMapping("/bbs/edit")
 	public Map bbsInsert(@RequestParam List<MultipartFile> multifiles, @RequestParam Map map, HttpServletRequest req) {
 		//서버의 물리적 경로 얻기
@@ -68,7 +68,7 @@ public class BBSController {
 		return resultMap;
 	}
 	
-	//글 하나 선택
+	//글 하나 선택 <성공>
 	@GetMapping("/bbs/SelectOne/{rbn}")
 	public BBSDTO bbsSelectOne(@PathVariable int rbn) {
 		BBSDTO dto=bbsService.bbsSelectOne(rbn);
@@ -79,7 +79,7 @@ public class BBSController {
 		return dto;
 	}
 	
-	//글 수정
+	//글 수정 <성공>
 	@PutMapping("/bbs/edit")
     public Map bbsUpdate(@RequestParam Map map) {
 		int bbsUpdateAffected=bbsService.bbsUpdate(map);
@@ -91,7 +91,7 @@ public class BBSController {
 		return resultMap;
 	}
 	
-	//글 삭제
+	//글 삭제 <성공>
 	@DeleteMapping("/bbs/edit")
 	public Map bbsDelete(@RequestParam Map map) {
 		int bbsDeleteAffected=bbsService.bbsDelete(map);
@@ -111,7 +111,7 @@ public class BBSController {
 		return list;
 	} */
 
-	//리뷰 등록
+	//리뷰 등록 <성공>
 	@PostMapping("/review/edit")
 	public Map reviewInsert(@RequestParam Map map) {
 	int affected=bbsService.reviewInsert(map);
@@ -121,7 +121,7 @@ public class BBSController {
 	return resultMap;
 	}
 	
-	//리뷰 수정
+	//리뷰 수정 <성공>
 	@PutMapping("/review/edit")
     public Map reviewUpdate(@RequestParam Map map) {
 		int reviewUpdateAffected=bbsService.reviewUpdate(map);
@@ -133,7 +133,7 @@ public class BBSController {
 		return resultMap;
 	}
 	
-	//리뷰 삭제
+	//리뷰 삭제 <성공>
 	@DeleteMapping("/review/edit")
 	public Map reviewDelete(@RequestParam Map map) {
 		int reviewDeleteAffected=bbsService.reviewDelete(map);
