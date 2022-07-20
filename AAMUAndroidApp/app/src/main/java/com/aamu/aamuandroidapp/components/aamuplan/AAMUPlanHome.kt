@@ -4,14 +4,19 @@ import android.content.Context
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.animation.core.AnimationState
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.animateScrollBy
+import androidx.compose.foundation.gestures.draggable
+import androidx.compose.foundation.gestures.rememberDraggableState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
@@ -26,16 +31,22 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Shapes
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.focus.focusTarget
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.focus.onFocusEvent
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
+import androidx.compose.ui.input.nestedscroll.NestedScrollSource
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.onPlaced
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.rememberNestedScrollInteropConnection
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -52,14 +63,31 @@ import kotlinx.coroutines.launch
 import net.daum.mf.map.api.MapPoint
 import net.daum.mf.map.api.MapView
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterialApi::class, ExperimentalComposeUiApi::class,
+    ExperimentalFoundationApi::class
+)
 @Composable
 fun AAMUPlanHome(){
     val context : Context = LocalContext.current
     val bottomSheetScaffoldState = rememberBottomSheetScaffoldState()
     val lazyListState = rememberLazyListState()
+    val lazyListState2 = rememberLazyListState()
 
     val coroutineScope = rememberCoroutineScope()
+
+    val nestedScrollConnection = remember {
+        object : NestedScrollConnection {
+            override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
+                coroutineScope.launch {
+                    lazyListState.animateScrollToItem(lazyListState.firstVisibleItemIndex)
+                    lazyListState2.animateScrollToItem(if(lazyListState.firstVisibleItemIndex-1<0) 0 else lazyListState.firstVisibleItemIndex-1)
+                }
+                return Offset.Zero
+            }
+        }
+    }
+
+
 //    val mapviewModel : AAMUPlanViewModel = viewModel(
 //        factory = AAMUPlanViewModelFactory(LocalContext.current)
 //    )
@@ -109,15 +137,13 @@ fun AAMUPlanHome(){
             lists.add(i)
         if(topbarhide.value) {
             if(bottomSheetScaffoldState.drawerState.isClosed) {
-                val pagerState: PagerState = run {
-                    remember { PagerState(0, 0, lists.size - 1) }
-                }
                 BoxWithConstraints {
                     LazyColumn(
                         modifier = Modifier
                             .width(70.dp)
                             .background(color = amber200)
-                            .padding(top = 112.dp),
+                            .padding(top = 112.dp)
+                            .nestedScroll(nestedScrollConnection),
                         state = lazyListState
                     ) {
                         itemsIndexed(items = lists,
@@ -136,12 +162,26 @@ fun AAMUPlanHome(){
                         }
                     }
                 }
-                Box(modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 56.dp)
-                    .height(56.dp)
-                    .background(amber500)) {
-                    androidx.compose.material.Text("Page : " + lazyListState.firstVisibleItemIndex)
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 56.dp)
+                        .height(56.dp)
+                        .background(amber500)
+                        .nestedScroll(nestedScrollConnection),
+                    state = lazyListState2
+                ) {
+                    itemsIndexed(items = lists,
+                        itemContent = { index, list ->
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(16.dp)
+                            ) {
+                                androidx.compose.material.Text("Item : " + list.toString())
+                            }
+                        }
+                    )
                 }
 
 
