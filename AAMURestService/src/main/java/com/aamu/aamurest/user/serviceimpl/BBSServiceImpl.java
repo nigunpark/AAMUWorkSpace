@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;
@@ -26,12 +28,12 @@ public class BBSServiceImpl implements BBSService{
 	
 	//글 목록
 	@Override
-	public List<BBSDTO> bbsSelectList(Map map) {
-		List<BBSDTO> bbsList = dao.bbsSelectList(map);
+	public List<BBSDTO> bbsSelectList() {
+		List<BBSDTO> bbsList = dao.bbsSelectList();
 		List<BBSDTO> returnList = new Vector<>();
+		
 		for(BBSDTO dto:bbsList) {
 			int rbn = dto.getRbn();
-			dto.setPhoto(dao.bbsSelectPhotoList(rbn));
 			dto.setReviewList(dao.reviewList(rbn));
 			returnList.add(dto);
 		}

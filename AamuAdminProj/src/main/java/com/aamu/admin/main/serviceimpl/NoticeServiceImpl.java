@@ -65,13 +65,21 @@ public class NoticeServiceImpl implements NoticeService {
 	public int noticeWrite(Map map) {
 		return dao.noticeWrite(map);
 	}
-
+	
+	
+	// 글 상세 보기
 	@Override
 	public NoticeDTO selectOne(Map map) {
 		NoticeDTO record = dao.selectOne(map);
 		//줄바꿈 처리
 		record.setContent(record.getContent().replace("\r\n","<br/>"));
 		return record;
+	}
+	
+	// 조회수
+	@Override
+	public int noticeCount(Map map) throws Exception {
+		return dao.noticeCount(map);
 	}
 
 	// 글 삭제
@@ -91,6 +99,8 @@ public class NoticeServiceImpl implements NoticeService {
 		} else
 			return 0;
 	}
+
+
 
 
 

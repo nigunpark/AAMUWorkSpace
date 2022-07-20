@@ -79,6 +79,12 @@ public class MainController {
 		return map;
 		
 	}
+	@GetMapping("adminbackup.do")
+	public String back() {
+		
+		
+		return"/back/backup";
+	}
 	
 	
 }

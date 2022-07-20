@@ -18,8 +18,8 @@ public class BBSDAO {
 	private SqlSessionTemplate template;
 	
 	//글 목록
-	public List<BBSDTO> bbsSelectList(Map map){
-		return template.selectList("bbsSelectList",map);
+	public List<BBSDTO> bbsSelectList(){
+		return template.selectList("bbsSelectList");
 	}
 	
 	//글 목록_사진 뿌려주기

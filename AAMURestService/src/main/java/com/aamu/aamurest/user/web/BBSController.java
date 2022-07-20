@@ -42,10 +42,19 @@ public class BBSController {
 	@Autowired
 	private CommonsMultipartResolver multipartResolver;
 	
-	//글 목록 <성공>
+	//글 목록
 	@GetMapping("/bbs/SelectList")
-	public List<BBSDTO> bbsSelectList(@RequestParam Map map, HttpServletRequest req){
-		List<BBSDTO> list = bbsService.bbsSelectList(map);
+	public List<BBSDTO> bbsSelectList(HttpServletRequest req){
+		List<BBSDTO> list = bbsService.bbsSelectList();
+		System.out.println("list:"+list);
+		for(BBSDTO dto:list) {
+			//모든 사진 가져오기
+			dto.setPhoto(FileUploadUtil.requestFilePath(bbsService.bbsSelectPhotoList(dto.getRbn()), "/resources/bbsUpload", req));
+			//dto.setPhoto(dao.bbsSelectPhotoList(rbn));
+			//모든 리뷰 가져오기
+			dto.setReviewList(bbsService.reviewList(dto.getRbn()));
+			
+		}
 		return list;
 	}
 	
@@ -68,14 +77,15 @@ public class BBSController {
 		return resultMap;
 	}
 	
-	//글 하나 선택 <성공>
+	//글 하나 선택
 	@GetMapping("/bbs/SelectOne/{rbn}")
-	public BBSDTO bbsSelectOne(@PathVariable int rbn) {
+	public BBSDTO bbsSelectOne(@PathVariable int rbn, HttpServletRequest req) {
 		BBSDTO dto=bbsService.bbsSelectOne(rbn);
 		//모든 리뷰 가져오기
 		dto.setReviewList(bbsService.reviewList(rbn));
 		//모든 사진 가져오기
-		dto.setPhoto(bbsService.bbsSelectPhotoList(rbn));
+		//dto.setPhoto(bbsService.bbsSelectPhotoList(rbn));
+		dto.setPhoto(FileUploadUtil.requestFilePath(bbsService.bbsSelectPhotoList(dto.getRbn()), "/resources/bbsUpload", req));
 		return dto;
 	}
 	
@@ -145,7 +155,8 @@ public class BBSController {
 		return resultMap;
 		
 	}
-	
+
+	/*
 	//평점 반영
 	
 	//평점 평균 반영
@@ -166,7 +177,6 @@ public class BBSController {
 	replyMapper.updateRating(urd);	
 	}*/
 	//평점 평균 
-		return 0;
-	}
+
 }
 	

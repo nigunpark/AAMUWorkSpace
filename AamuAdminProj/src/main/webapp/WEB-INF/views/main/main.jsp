@@ -279,7 +279,71 @@ $(function() {
 	   */
 	  var joinCount = ${join};
 	  var date =[];
+	  var bbs =${bbs};
+	  var commu =${commu};
+	  var planner =${planner};
 	  date=${date}
+	  var userCount=${usersWeek};
+  	  var options = {
+  		    scales: {
+  		      yAxes: [{
+  		        ticks: {
+  		          beginAtZero: true
+  		        }
+  		      }]
+  		    },
+  		    legend: {
+  		      display: true
+  		    },
+  		    elements: {
+  		      point: {
+  		        radius: 0
+  		      }
+  		    }
+
+  		  };
+  		  var options2 = {
+  				    scales: {
+  				      yAxes: [{
+  				        ticks: {
+  				          beginAtZero: true
+  				        }
+  				      }]
+  				    },
+  				    legend: {
+  				      display: false
+  				    },
+  				    elements: {
+  				      point: {
+  				        radius: 0
+  				      }
+  				    }
+
+  				  };
+  		  var multiAreaOptions = {
+  				    plugins: {
+  				      filler: {
+  				        propagate: true
+  				      }
+  				    },
+  				    elements: {
+  				      point: {
+  				        radius: 0
+  				      }
+  				    },
+  				    scales: {
+  				      xAxes: [{
+  				        gridLines: {
+  				          display: false
+  				        }
+  				      }],
+  				      yAxes: [{
+  				        gridLines: {
+  				          display: false
+  				        }
+  				      }]
+  				    }
+  				  }
 	  var start = $('#datepicker-popup').datepicker({
 	    	format: "yyyy-mm-dd",
 			endDate: '+0d',
@@ -307,7 +371,7 @@ $(function() {
      $("#datepicker-popup2").on("changeDate",function(e){
     	 var endDate = new Date(e.date.valueOf());
     	 console.log("두번째 startDate",startDate);
-    	 console.log(endDate);
+    	 console.log(endDate); 
          if(startDate!=null){
         	 var dateData = JSON.stringify({start : startDate,end : endDate})
         	 console.log("dateData:",dateData);
@@ -318,61 +382,14 @@ $(function() {
      			contentType:"application/json", //데이타 보낼 때
      			dataType: "json" //데이타 받을 때 
      		}).done(data=>{
-     			console.log(data);
      			date=data.dateList;
      			joinCount=data.countList;
-     			  var data = {
-     					    labels: date,
-     					    datasets: [{
-     					      label: '가입자 수',
-     					      data: joinCount,
-     					      backgroundColor: [
-     					        'rgba(255, 99, 132, 0.2)',
-     					        'rgba(54, 162, 235, 0.2)',
-     					        'rgba(255, 206, 86, 0.2)',
-     					        'rgba(75, 192, 192, 0.2)',
-     					        'rgba(153, 102, 255, 0.2)',
-     					        'rgba(255, 159, 64, 0.2)'
-     					      ],
-     					      borderColor: [
-     					        'rgba(255,99,132,1)',
-     					        'rgba(54, 162, 235, 1)',
-     					        'rgba(255, 206, 86, 1)',
-     					        'rgba(75, 192, 192, 1)',
-     					        'rgba(153, 102, 255, 1)',
-     					        'rgba(255, 159, 64, 1)'
-     					      ],
-     					      borderWidth: 1,
-     					      fill: true
-     					    }]
-     					  };
-     			 var options2 = {
-     				    scales: {
-     				      yAxes: [{
-     				        ticks: {
-     				          beginAtZero: true
-     				        }
-     				      }]
-     				    },
-     				    legend: {
-     				      display: false
-     				    },
-     				    elements: {
-     				      point: {
-     				        radius: 0
-     				      }
-     				    }
-
-     				  };
-     			 if ($("#barChart").length) {
-     			    var barChartCanvas = $("#barChart").get(0).getContext("2d");
-     			    // This will get the first returned node in the jQuery collection.
-     			    var barChart = new Chart(barChartCanvas, {
-     			      type: 'bar',
-     			      data: data,
-     			      options: options2
-     			    });
-     			  }
+     			commu=data.commuList;
+     			bbs=data.bbsList;
+     			plan=data.planList;
+     			barchart(date,'가입자 수',joinCount,options2,"#barChart");
+     			linechart(date,data.usersList,options);
+    			multilinechart(date,bbs,commu,planner,options);
      		}).fail(error=>{
      			console.log('삭제에러:',error);
      		});
@@ -380,134 +397,10 @@ $(function() {
      });
 
 	  'use strict';
-	  console.log("밖에서",date)
-	  
-	  var data = {
-	    labels: date,
-	    datasets: [{
-	      label: '가입자 수',
-	      data: joinCount,
-	      backgroundColor: [
-	        'rgba(255, 99, 132, 0.2)',
-	        'rgba(54, 162, 235, 0.2)',
-	        'rgba(255, 206, 86, 0.2)',
-	        'rgba(75, 192, 192, 0.2)',
-	        'rgba(153, 102, 255, 0.2)',
-	        'rgba(255, 159, 64, 0.2)'
-	      ],
-	      borderColor: [
-	        'rgba(255,99,132,1)',
-	        'rgba(54, 162, 235, 1)',
-	        'rgba(255, 206, 86, 1)',
-	        'rgba(75, 192, 192, 1)',
-	        'rgba(153, 102, 255, 1)',
-	        'rgba(255, 159, 64, 1)'
-	      ],
-	      borderWidth: 1,
-	      fill: true
-	    }]
-	  };
-	  var data2 = {
-	    labels: date,
-	    datasets: [{
-	      label: '총 회원수',
-	      data: ${usersWeek},
-	      borderWidth: 1,
-	      fill: true
-	    }]
-	  };
-	  var data3 = {
-			    labels: ["커뮤니티","게시판","플래너"],
-			    datasets: [{
-			      label: '등록된 글',
-			      data: [${commuCount},${bbsCount},${plannerCount}],
-			      backgroundColor: [
-			        'rgba(255, 99, 132, 0.2)',
-			        'rgba(54, 162, 235, 0.2)',
-			        'rgba(255, 206, 86, 0.2)',
-			        'rgba(75, 192, 192, 0.2)',
-			        'rgba(153, 102, 255, 0.2)',
-			        'rgba(255, 159, 64, 0.2)'
-			      ],
-			      borderColor: [
-			        'rgba(255,99,132,1)',
-			        'rgba(54, 162, 235, 1)',
-			        'rgba(255, 206, 86, 1)',
-			        'rgba(75, 192, 192, 1)',
-			        'rgba(153, 102, 255, 1)',
-			        'rgba(255, 159, 64, 1)'
-			      ],
-			      borderWidth: 1,
-			      fill: true
-			    }]
-			  };
-	  var multiLineData = {
-	    labels: date,
-	    datasets: [{
-	        label: '게시판',
-	        data: ${bbs},
-	        borderColor: [
-	          '#587ce4'
-	        ],
-	        borderWidth: 2,
-	        fill: false
-	      },
-	      {
-	        label: '커뮤니티',
-	        data: ${commu},
-	        borderColor: [
-	          '#ede190'
-	        ],
-	        borderWidth: 2,
-	        fill: false
-	      },
-	      {
-	        label: '플래너',
-	        data: ${planner},
-	        borderColor: [
-	          '#ede190'
-	        ],
-	        borderWidth: 2,
-	        fill: false
-		  }
-	    ]
-	  };
-	  var options = {
-	    scales: {
-	      yAxes: [{
-	        ticks: {
-	          beginAtZero: true
-	        }
-	      }]
-	    },
-	    legend: {
-	      display: true
-	    },
-	    elements: {
-	      point: {
-	        radius: 0
-	      }
-	    }
-
-	  };
-	  var options2 = {
-			    scales: {
-			      yAxes: [{
-			        ticks: {
-			          beginAtZero: true
-			        }
-			      }]
-			    },
-			    legend: {
-			      display: false
-			    },
-			    elements: {
-			      point: {
-			        radius: 0
-			      }
-			    }
-
-			  };
+	  barchart(date,'가입자 수',joinCount,options2,"#barChart");
+	  linechart(date,userCount,options);
+	  multilinechart(date,bbs,commu,planner,multiAreaOptions);
+	  barchart(["커뮤니티","게시판","플래너"],'등록된 글수',[${commuCount},${bbsCount},${plannerCount}],options2,"#barChart2");
 	  var doughnutPieData = {
 	    datasets: [{
 	      data: [30, 40, 30],
@@ -546,51 +439,6 @@ $(function() {
 
 	  
 	  // Get context with jQuery - using jQuery's .get() method.
-	  if ($("#barChart").length) {
-	    var barChartCanvas = $("#barChart").get(0).getContext("2d");
-	    // This will get the first returned node in the jQuery collection.
-	    var barChart = new Chart(barChartCanvas, {
-	      type: 'bar',
-	      data: data,
-	      options: options2
-	    });
-	  }
-	  if ($("#barChart2").length) {
-		    var barChartCanvas = $("#barChart2").get(0).getContext("2d");
-		    // This will get the first returned node in the jQuery collection.
-		    var barChart = new Chart(barChartCanvas, {
-		      type: 'bar',
-		      data: data3,
-		      options: options2
-		    });
-		  }
-	
-	  if ($("#lineChart").length) {
-	    var lineChartCanvas = $("#lineChart").get(0).getContext("2d");
-	    var lineChart = new Chart(lineChartCanvas, {
-	      type: 'line',
-	      data: data2,
-	      options: options
-	    });
-	  }
-
-	  if ($("#linechart-multi").length) {
-	    var multiLineCanvas = $("#linechart-multi").get(0).getContext("2d");
-	    var lineChart = new Chart(multiLineCanvas, {
-	      type: 'line',
-	      data: multiLineData,
-	      options: options
-	    });
-	  }
-
-	  if ($("#areachart-multi").length) {
-	    var multiAreaCanvas = $("#areachart-multi").get(0).getContext("2d");
-	    var multiAreaChart = new Chart(multiAreaCanvas, {
-	      type: 'line',
-	      data: multiAreaData,
-	      options: multiAreaOptions
-	    });
-	  }
 
 	  if ($("#pieChart").length) {
 	    var pieChartCanvas = $("#pieChart").get(0).getContext("2d");
@@ -618,7 +466,113 @@ $(function() {
 	      options: doughnutPieOptions
 	    });
 	  }
+	  if ($("#areachart-multi").length) {
+		    var multiAreaCanvas = $("#areachart-multi").get(0).getContext("2d");
+		    var multiAreaChart = new Chart(multiAreaCanvas, {
+		      type: 'line',
+		      data: multiAreaData,
+		      options: options
+		    });
+		  }
 	});
+	function barchart(date,label,count,options,barchart){
+		  var data = {
+				    labels: date,
+				    datasets: [{
+				      label: label,
+				      data: count,
+				      backgroundColor: [
+				        'rgba(255, 99, 132, 0.2)',
+				        'rgba(54, 162, 235, 0.2)',
+				        'rgba(255, 206, 86, 0.2)',
+				        'rgba(75, 192, 192, 0.2)',
+				        'rgba(153, 102, 255, 0.2)',
+				        'rgba(255, 159, 64, 0.2)'
+				      ],
+				      borderColor: [
+				        'rgba(255,99,132,1)',
+				        'rgba(54, 162, 235, 1)',
+				        'rgba(255, 206, 86, 1)',
+				        'rgba(75, 192, 192, 1)',
+				        'rgba(153, 102, 255, 1)',
+				        'rgba(255, 159, 64, 1)'
+				      ],
+				      borderWidth: 1,
+				      fill: true
+				    }]
+				  };
+		 if ($(barchart).length) {
+		    var barChartCanvas = $(barchart).get(0).getContext("2d");
+
+		    var barChart = new Chart(barChartCanvas, {
+		      type: 'bar',
+		      data: data,
+		      options: options
+		    });
+		  }
+	}
+	////////////////////////////////////////
+	function linechart(date,count,options){
+		var data = {
+			    labels: date,
+			    datasets: [{
+			      label: '총 회원수',
+			      data: count,
+			      borderWidth: 1,
+			      fill: true
+			    }]
+			  };
+		  if ($("#lineChart").length) {
+			    var lineChartCanvas = $("#lineChart").get(0).getContext("2d");
+			    var lineChart = new Chart(lineChartCanvas, {
+			      type: 'line',
+			      data: data,
+			      options: options
+			    });
+			  }
+		  }
+	////////////////////////////////////////////////////////
+	function multilinechart(date,count1,count2,count3,options){
+		  var multiLineData = {
+				    labels: date,
+				    datasets: [{
+				        label: '게시판',
+				        data: count1,
+				        borderColor: [
+				          '#587ce4'
+				        ],
+				        borderWidth: 2,
+				        fill: false
+				      },
+				      {
+				        label: '커뮤니티',
+				        data: count2,
+				        borderColor: [
+				          '#ede190'
+				        ],
+				        borderWidth: 2,
+				        fill: false
+				      },
+				      {
+				        label: '플래너',
+				        data: count3,
+				        borderColor: [
+				          '#ede190'
+				        ],
+				        borderWidth: 2,
+				        fill: false
+					  }
+				    ]
+				  };
+		  if ($("#linechart-multi").length) {
+			    var multiLineCanvas = $("#linechart-multi").get(0).getContext("2d");
+			    var lineChart = new Chart(multiLineCanvas, {
+			      type: 'line',
+			      data: multiLineData,
+			      options: options
+			    });
+			  }
+	}
 </script>
 </body>
 </html>
