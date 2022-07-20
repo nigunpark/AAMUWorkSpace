@@ -141,16 +141,14 @@ public class AdminCommuServiceImpl implements AdminCommuService {
 		//월별
 		map.put("commuMonthTotal", dao.commuMonthTotal(map));
 		
-		//성별
+		//성별 비율
 		map.put("gender", "여자");
-		System.out.println(map.get("gender"));
-		int femaleRecordCount=dao.genderPercent(map);
-		map.put("femaleRecordCount", femaleRecordCount);
-		map.put("gender", "남자");
-		int maleRecordCount=dao.genderPercent(map);
-		map.put("maleRecordCount", maleRecordCount);
 		
-		//femaleRecordCount
+		map.put("femaleRecordCount", dao.genderPercent(map));
+		map.put("gender", "남자");
+		map.put("maleRecordCount", dao.genderPercent(map));
+		
+		
 		
 		return map;
 	}

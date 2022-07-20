@@ -52,9 +52,7 @@ public class AdminCommuDAO {
 	//커뮤니티 통계
 	//월별 
 	public int commuMonthTotal(Map map) {
-		System.out.println("map:"+map); //없음
 		int affected=template.selectOne("commuMonthTotal",map);
-		System.out.println("affected:"+affected); //-1
 		return affected;
 	}
 	

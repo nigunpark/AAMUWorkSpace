@@ -105,7 +105,8 @@ public class AdminCommuController {
 		System.out.println("commuMonthTotal:"+map.get("commuMonthTotal"));
 		model.addAttribute("commuMonthTotal",map.get("commuMonthTotal"));
 		//성별 게시물 수 
-		model.addAttribute("genderPercent",map.get("genderPercent"));
+		model.addAttribute("femaleRecordCount",map.get("femaleRecordCount"));
+		model.addAttribute("maleRecordCount",map.get("maleRecordCount"));
 		return "commu/commuStatistics";
 	}
 	
