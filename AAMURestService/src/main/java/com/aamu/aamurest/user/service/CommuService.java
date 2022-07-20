@@ -25,6 +25,9 @@ public interface CommuService<T> {
 	//글 생성용_장소 뿌려주기
 	List<Map> commuPlaceList(Map map);
 	
+	//글 생성용_방금 insert된 글 다시 보내기
+	CommuDTO commuSelectAfterInsert();
+	
 	//글 하나 뿌려주는 용
 	CommuDTO commuSelectOne(String lno);
 	

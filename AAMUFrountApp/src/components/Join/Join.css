@@ -264,6 +264,33 @@
   border: 1px solid var(--skyblue);
 }
 
+.emailValid-transfer-btn {
+  background-color: var(--skyblue);
+  font-size: 12px;
+  border-radius: 5px;
+  width: 21%;
+  height: auto;
+  color: white;
+  padding: 5px;
+  cursor: pointer;
+  transition: 0.2s;
+  border: 1px solid var(--skyblue);
+}
+.emailValid-confirm-btn {
+  background-color: grey;
+  font-size: 12px;
+  border-radius: 5px;
+  width: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  /* padding: 1px; */
+  margin: 2px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
 .postCodeFind-btn:hover {
   color: var(--skyblue);
   border: 1px solid var(--skyblue);

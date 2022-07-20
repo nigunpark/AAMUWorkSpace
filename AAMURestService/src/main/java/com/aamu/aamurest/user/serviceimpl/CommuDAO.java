@@ -51,6 +51,11 @@ public class CommuDAO {
 		return template.selectList("commuPlaceList",map);
 	}
 	
+	//글 생성용_방금 insert된 글 다시 보내기
+	public CommuDTO commuSelectAfterInsert() {
+		return template.selectOne("commuSelectAfterInsert");
+	}
+	
 	//글 하나 뿌려주는 용
 	public CommuDTO commuSelectOne(String lno) {
 		return template.selectOne("commuSelectOne",lno);
@@ -123,7 +128,6 @@ public class CommuDAO {
 	
 	//글 좋아요취소_delete(likeboard테이블)
 	public int commuLikeDelete(Map map) {
-		System.out.println("(dao)map:"+map);
 		return template.delete("commuLikeDelete",map);
 	}
 	

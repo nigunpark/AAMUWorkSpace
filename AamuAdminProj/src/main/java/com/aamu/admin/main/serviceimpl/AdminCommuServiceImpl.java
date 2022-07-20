@@ -138,7 +138,20 @@ public class AdminCommuServiceImpl implements AdminCommuService {
 	@Override
 	public Map commuTotal() {
 		Map map = new HashMap<>();
+		//월별
 		map.put("commuMonthTotal", dao.commuMonthTotal(map));
+		
+		//성별
+		map.put("gender", "여자");
+		System.out.println(map.get("gender"));
+		int femaleRecordCount=dao.genderPercent(map);
+		map.put("femaleRecordCount", femaleRecordCount);
+		map.put("gender", "남자");
+		int maleRecordCount=dao.genderPercent(map);
+		map.put("maleRecordCount", maleRecordCount);
+		
+		//femaleRecordCount
+		
 		return map;
 	}
 	

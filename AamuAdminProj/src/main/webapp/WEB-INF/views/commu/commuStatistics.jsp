@@ -130,7 +130,7 @@
 		//성별 게시물 비율
 		var doughnutPieData = {
 			datasets : [ {
-				data : [ 70, 30 ],
+				data : [ 1, 2 ],
 				backgroundColor : [ 'rgba(153, 102, 255, 0.5)', 'rgba(255, 206, 86, 0.5)'],
 				borderColor : [ 'rgba(153, 102, 255, 1)', 'rgba(255, 206, 86, 1)'],
 			} ],
