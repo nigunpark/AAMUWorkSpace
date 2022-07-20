@@ -1,13 +1,22 @@
 package com.aamu.aamuandroidapp.components.aamuplan
 
+import android.content.Context
+import android.util.Log
+import android.widget.Toast
+import androidx.compose.animation.core.AnimationState
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.animateScrollBy
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
+import androidx.compose.material.DrawerValue
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.List
@@ -20,14 +29,21 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.focus.focusTarget
+import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.focus.onFocusEvent
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.onPlaced
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.aamu.aamuandroidapp.components.carousel.Pager
+import com.aamu.aamuandroidapp.components.carousel.PagerState
 import com.aamu.aamuandroidapp.ui.theme.amber200
+import com.aamu.aamuandroidapp.ui.theme.amber500
 import com.aamu.aamuandroidapp.ui.theme.orange700
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -37,13 +53,16 @@ import net.daum.mf.map.api.MapView
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun AAMUPlanHome(){
+    val context : Context = LocalContext.current
     val bottomSheetScaffoldState = rememberBottomSheetScaffoldState()
     val lazyListState = rememberLazyListState()
+
     val coroutineScope = rememberCoroutineScope()
 //    val mapviewModel : AAMUPlanViewModel = viewModel(
 //        factory = AAMUPlanViewModelFactory(LocalContext.current)
 //    )
     var topbarhide = remember { mutableStateOf(false) }
+    var drawerArrowDrawable = remember { mutableStateOf(false) }
     Box(modifier = Modifier.fillMaxSize()){
         BottomSheetScaffold(
             sheetElevation = 0.dp,
@@ -75,23 +94,28 @@ fun AAMUPlanHome(){
                 PlanBottomSheet()
             },
             drawerBackgroundColor = orange700,
-            drawerGesturesEnabled = topbarhide.value,
+            drawerGesturesEnabled = true,
             drawerContent = {
                 Spacer(modifier = Modifier.height(56.dp))
                 SideContent() },
             scaffoldState = bottomSheetScaffoldState,
-            sheetPeekHeight = 25.dp
+            sheetPeekHeight = 25.dp,
+
         )
         val lists : MutableList<Int> = arrayListOf()
         for(i : Int in 1..50)
             lists.add(i)
         if(topbarhide.value) {
             if(bottomSheetScaffoldState.drawerState.isClosed) {
+                val pagerState: PagerState = run {
+                    remember { PagerState(0, 0, lists.size - 1) }
+                }
+
                 LazyColumn(
                     modifier = Modifier
                         .width(70.dp)
                         .background(color = amber200)
-                        .padding(top = 56.dp),
+                        .padding(top = 112.dp),
                     state = lazyListState
                 ) {
                     itemsIndexed(items = lists,
@@ -105,7 +129,28 @@ fun AAMUPlanHome(){
                             }
                         }
                     )
+                    item { 
+
+                    }
                 }
+                Box(modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 56.dp)
+                    .height(56.dp)
+                    .background(amber500)) {
+                    androidx.compose.material.Text("Page : " + lazyListState.firstVisibleItemIndex)
+                }
+
+
+//                Pager(state = pagerState,
+//                    orientation = Orientation.Vertical,
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .height(112.dp).background(amber500)) {
+//                    val list=lists[commingPage]
+//                    val isSelected = pagerState.currentPage == commingPage
+//
+//                }
             }
             PlanDetails(bottomSheetScaffoldState,topbarhide,coroutineScope)
         }
