@@ -7,6 +7,8 @@ import { Rating } from '@mui/material'
 import axios from 'axios'
 import './BookMark.css';
 
+import dummyPlanner from '../DB/planner.json';
+
 const DetailModal = ({setIsOpen, dummy}) => {
 
     let [tempObj, setTempObj] = useState({review: "",
@@ -56,20 +58,20 @@ const DetailModal = ({setIsOpen, dummy}) => {
         // console.log('comment 추가됬나 확인 :',comment);
         // console.log('star 값 저장됬나 확인 :',star);
 
-        // let token = sessionStorage.getItem("token");
+        let token = sessionStorage.getItem("token");
 
-        // axios.post("",{
-        // comment: `${comment}`,
-        // star: `${star}`,
-        // id: sessionStorage.getItem('token')
+        axios.post("",{
+        comment: `${comment}`,
+        star: `${star}`,
+        id: sessionStorage.getItem('token')
 
-        // },{
-        // headers: {
-        //     Authorization: `Bearer ${token}`,
-        //     }
-        // }).then((res)=>{
-        //     setFeedComments(res.data);
-        // });
+        },{
+        headers: {
+            Authorization: `Bearer ${token}`,
+            }
+        }).then((res)=>{
+            setFeedComments(res.data);
+        });
 
         
 
@@ -130,12 +132,44 @@ const DetailModal = ({setIsOpen, dummy}) => {
 
     // console.log('더미데이터 :', dummy.imgsdata);
     const [bookMark, setBookMark] = useState(false);
+
+    let test = [1,2,3,4];
 // ref={modalRef}
   return (
     <DetailContainer >
         <DetailOverlay>
             <DetailModalWrap>
-                <div>여행경로</div>
+                <Plan>
+                    <PlanTitle>{dummyPlanner.title}</PlanTitle>
+                    {
+                        dummyPlanner.route.map((val, idx)=>{
+                            console.log('더미 플래너 :',val, '인덱스:',idx);
+                        })
+                    }
+                    <div style={{border:'1.5px solid #edf2f4'}}>
+                    {/*
+                    게시글 클릭시 게시글 작성자의 id (혹은 다른 값)를 키로 보내서
+                    해당 글에 대한 여행 경로 데이터를 가져와서 표시해줘야함
+                    */}
+                    {
+                        test.map((val, idx)=>{
+                            return (
+                            <DetailPlan>
+                                <PlanDate>{val} 일차 20xx-xx-xx x요일</PlanDate>
+                                <PlanTime>00:00 ~ 00:00</PlanTime>
+                                <PlanRegion>제주공항</PlanRegion>
+
+                                <PlanTime>00:00 ~ 00:00</PlanTime>
+                                <PlanRegion>교원스위트호텔 제주</PlanRegion>
+                            </DetailPlan>
+                            )
+                        })
+                    }
+                    
+                        
+                    </div>
+                </Plan>
+
                 <DetailTitle>
                     <span>
                         <div className="anim-icon star">
@@ -157,36 +191,6 @@ const DetailModal = ({setIsOpen, dummy}) => {
                         </div>
                     </span>
                 </DetailTitle>
-
-                <Plan>
-                    <div style={{border:'1.5px solid #edf2f4'}}>
-                        <PlanDate><span>n 일차 20xx-xx-xx x요일</span></PlanDate>
-                        <DetailPlan>
-                            <PlanTime>00:00 ~ 00:00</PlanTime>
-                            <PlanRegion>제주공항</PlanRegion>
-
-                            <PlanTime>00:00 ~ 00:00</PlanTime>
-                            <PlanRegion>교원스위트호텔 제주</PlanRegion>
-                        </DetailPlan>
-                        <PlanDate><span>n 일차 20xx-xx-xx x요일</span></PlanDate>
-                        <DetailPlan>
-                            <PlanTime>00:00 ~ 00:00</PlanTime>
-                            <PlanRegion>제주공항</PlanRegion>
-
-                            <PlanTime>00:00 ~ 00:00</PlanTime>
-                            <PlanRegion>교원스위트호텔 제주</PlanRegion>
-                        </DetailPlan>
-                        <PlanDate><span>n 일차 20xx-xx-xx x요일</span></PlanDate>
-                        <DetailPlan>
-                            <PlanTime>00:00 ~ 00:00</PlanTime>
-                            <PlanRegion>제주공항</PlanRegion>
-
-                            <PlanTime>00:00 ~ 00:00</PlanTime>
-                            <PlanRegion>교원스위트호텔 제주</PlanRegion>
-                        </DetailPlan>
-                    </div>
-                    
-                </Plan>
 
                 <DetailContents>
                     <Notice dummy={dummy.imgsdata}/>
@@ -234,7 +238,7 @@ const DetailModal = ({setIsOpen, dummy}) => {
                     </div>
                 </DetailContents>
 
-                <div style={{border:'1px blue solid'}}>사용목적 미정 공간</div>
+                {/* <div style={{border:'1px blue solid'}}>사용목적 미정 공간</div> */}
 
                 <DetailReview>
                     {//feedComments 에 담겨있을 댓글 값을 CommentList 컴포넌트에 담아서 가져오기
@@ -267,14 +271,19 @@ const Plan = styled.div`
     display: flex;
     flex-direction: column;
     overflow: auto;
+    grid-row: 1 / 4;
     &::-webkit-scrollbar{
         display:none;
     }
 `
+const PlanTitle = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+`
 const PlanDate = styled.span`
-    width: 100%;
     height: 50px;
-    font-size: 20px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -332,7 +341,6 @@ const DetailModalWrap = styled.div`
     display: grid;
     grid-template-columns:300px 1000px;
     border: 1px white solid;
-    
     height: 90%;
     // height: 650px;
     overflow: auto;
