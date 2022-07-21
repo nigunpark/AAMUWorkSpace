@@ -49,14 +49,12 @@ const CreatePlanLeft = ({
     val.id = i;
   });
 
-  fromWooJaeData = reduxState.tripPeriod.map((day, idx) => {
-    let arr = tempWholeArr.filter((val, i) => {
-      return val.day === idx + 1;
-    });
-    return { ["day" + (idx + 1)]: arr };
-  });
-
-  function getTimes() {}
+  // fromWooJaeData = reduxState.tripPeriod.map((day, idx) => {
+  //   let arr = tempWholeArr.filter((val, i) => {
+  //     return val.day === idx + 1;
+  //   });
+  //   return { ["day" + (idx + 1)]: arr };
+  // });
 
   // console.log("fromWooJaeData:", fromWooJaeData);
   return (
@@ -152,7 +150,6 @@ function WholeSchedule({ currPosition, fromWooJaeData, setFromWooJaeData }) {
   let dispatch = useDispatch();
   useEffect(() => {
     dispatch(delAllWholeBb([]));
-    console.log("11");
   }, []);
   return (
     <div className="createPlanLeft__schedule">
@@ -190,8 +187,12 @@ function Content({ index, fromWooJaeData, setFromWooJaeData }) {
   let contentRef = useRef();
   let sourceElement = null;
   const [showTimePicker, setShowTimePicker] = useState(false);
+  const [forReRender, setForReRender] = useState(0);
 
   useEffect(() => {
+    fromWooJaeData.forEach((val, i) => {
+      fromWooJaeData[index]["day" + (index + 1)][0].mtime = 0;
+    });
     // console.log("fromWooJaeData[index]", fromWooJaeData[index]);
     if (fromWooJaeData[index] !== undefined) {
       let newArr = [...fromWooJaeData[index]["day" + (index + 1)]];
@@ -435,6 +436,7 @@ function Content({ index, fromWooJaeData, setFromWooJaeData }) {
               handleDrop={handleDrop}
               handleDragEnd={handleDragEnd}
               handleDelete={handleDelete}
+              setForReRender={setForReRender}
             />
           );
         })}
@@ -454,6 +456,7 @@ function DetailSetting({
   handleDrop,
   handleDragEnd,
   handleDelete,
+  setForReRender,
 }) {
   let reduxState = useSelector((state) => {
     return state;
@@ -518,23 +521,6 @@ function DetailSetting({
             60;
       }
     }
-    // testArr.push({
-    //   st: Math.floor(upTime / 60)
-    //     .toString()
-    //     .padStart(2, "0"),
-    //   sm: Math.floor(upTime % 60)
-    //     .toString()
-    //     .padStart(2, "0"),
-    //   et: Math.floor(downTime / 60)
-    //     .toString()
-    //     .padStart(2, "0"),
-    //   em: Math.floor(downTime % 60)
-    //     .toString()
-    //     .padStart(2, "0"),
-    // });
-    // console.log("testArr", testArr);
-    // console.log("stRef", stRef.current.textContent);
-    // console.log("getTimesArr", getTimesArr);
   }, []);
   function getTimes(periodIndex, st, et) {
     return {
@@ -568,10 +554,11 @@ function DetailSetting({
           <input
             type="number"
             style={{ width: "37px" }}
-            defaultValue={obj.mtime / 1000 / 60}
+            defaultValue={Math.round(obj.mtime / 1000 / 60)}
             ref={mTimeRef}
             onChange={(e) => {
               obj.mtime = e.target.value * 1000 * 60;
+              setForReRender(e.target.value * 1000 * 60);
             }}
           />
           <span>분</span>
