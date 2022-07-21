@@ -40,7 +40,7 @@ public class NoticeController {
 		model.addAttribute("totalCount", noticeService.noticeGetTotalRecordCount(map));
 
 		// 뷰정보 반환
-		return "notice/adminNotice";
+		return "notice/noticeList";
 	}
 	
 	
@@ -49,10 +49,8 @@ public class NoticeController {
 	public String noticeView(
 			//@ModelAttribute("id") String id,
 			@RequestParam Map map, Model model) throws Exception {
-		
 	
 		noticeService.noticeCount(map);
-		
 	
 		//서비스 호출]
 		NoticeDTO record = noticeService.selectOne(map);
@@ -79,8 +77,6 @@ public class NoticeController {
 		return "redirect:/Notice.do";
 	}
 	
-	
-
 	
 	@GetMapping("NoticeEdit.do")
 	public String noticeEdit(@ModelAttribute("nno") String nno,@RequestParam Map map,Model model) throws Exception {

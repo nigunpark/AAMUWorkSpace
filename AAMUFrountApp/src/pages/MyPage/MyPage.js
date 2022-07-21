@@ -81,59 +81,8 @@ const MyPage = () => {
   }, [clickTab]);
   return (
     <div className="app-container">
-      <div className="app-header">
-        {/* <div className="app-header-left">
-        <span className="app-icon"></span>
-        <p className="app-name">Portfolio</p>
-          <svg 
-            xmlns="http://www.w3.org/2000/svg" 
-            width="20" height="20" fill="none" 
-            stroke="currentColor" strokeLinecap="round" 
-            strokeLinejoin="round" strokeWidth="2" 
-            className="feather feather-search" 
-            viewBox="0 0 24 24">
-            <defs></defs>
-             <svg
-              className="moon" 
-              fill="none" 
-              stroke="currentColor" strokeLinecap="round" 
-              strokeLinejoin="round" strokeWidth="2" 
-              width="24" height="24" viewBox="0 0 24 24">
-              <defs></defs>
-              <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
-              width="16" height="16" 
-              viewBox="0 0 24 24" fill="none" 
-              stroke="currentColor" 
-              strokeWidth="3" strokeLinecap="round" 
-              strokeLinejoin="round" class="feather feather-plus">
-              <line x1="12" y1="5" x2="12" y2="19" />
-              <line x1="5" y1="12" x2="19" y2="12" />
-            </svg>
-              xmlns="http://www.w3.org/2000/svg" 
-              width="24" height="24" 
-              viewBox="0 0 24 24" fill="none" 
-              stroke="currentColor" strokeWidth="2" 
-              strokeLinecap="round" strokeLinejoin="round" 
-              className="feather feather-bell">
-              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
-              <path d="M13.73 21a2 2 0 0 1-3.46 0" /></svg>
-
-               <button className="profile-btn">
-            <img src="/images/profile.jpg" />
-            <span>뚱이</span>
-          </button>
-        </div>
-            xmlns="http://www.w3.org/2000/svg"
-            width="20" height="20" 
-            viewBox="0 0 24 24" fill="none" 
-            stroke="currentColor" strokeWidth="2" 
-            strokeLinecap="round" strokeLinejoin="round" 
-            className="feather feather-message-circle">
-            <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
-          </svg>
-        </button> */}
-      </div>
-      {/* let [clickTab, setClickTab] = useState(0); */}
+      <div className="app-header"></div>
+      
       <div className="app-content">
         {/* <MySideBar/> 왼쪽 사이드바 */}
         <div className="app-sidebar">
@@ -241,7 +190,6 @@ const MyPage = () => {
         <div className="projects-section">
           <div className="projects-section-header">
             <Title clickTab={clickTab}/>
-            <p className="time">December, 12</p>
           </div>
           <div className="projects-section-line">
             {/* <MyHomeTopLine/> */}
@@ -295,7 +243,12 @@ const MyPage = () => {
 
 function Title({clickTab}){
   if (clickTab === 0) {
-    return <div className="projects-title">MyPage</div>;
+    return (
+      <>
+        <div className="projects-title">MyPage</div>
+        <p className="time">December, 12</p>
+      </>
+    );
   }
   else if (clickTab === 1) {
     return <div className="projects-title">MyPage</div>;
@@ -328,8 +281,8 @@ function TabContent({clickTab, setClickTab, planList}) {
       imageUrlLists.push(currentImageUrl);
     }
 
-    if (imageUrlLists.length > 5) { //사진 5개 제한
-      imageUrlLists = imageUrlLists.slice(0, 5);
+    if (imageUrlLists.length > 6) { //사진 6개 제한
+      imageUrlLists = imageUrlLists.slice(0, 6);
     }
 
     setShowImages(imageUrlLists);
@@ -342,14 +295,15 @@ function TabContent({clickTab, setClickTab, planList}) {
 
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [tag, setTag] = useState("");
+  const [tag, setTag] = useState();
+  let [writeTag, setWriteTag] = useState([]);
 
   // console.log('등록한 이미지:',showImages);
   // console.log('등록한 이미지 1:',showImages[0]);
   // console.log('등록한 이미지 2:',showImages[1]);
   // console.log('입력한 제목:',title);
   // console.log('입력한 내용:',content);
-  // console.log('입력한 태그:',tag);
+  console.log('입력한 태그:',tag);
 
   let myImgs = showImages.map((showImages, imgIndex)=>{
     console.log('인덱스:',imgIndex,' 값:',showImages);
@@ -361,13 +315,19 @@ function TabContent({clickTab, setClickTab, planList}) {
   
 
   const write = () => {
+
+    // 입력한 태그를 # 으로 잘라서 배열로 새로 저장함
+    setWriteTag(tag.split('#'));
+    writeTag.splice(0,1);
+    // console.log('writeTag : ',writeTag);
+
     let token = sessionStorage.getItem("token");
 
     axios.post("",{
       //저장한 여행경로 고유번호(고유아이디)값 추가해야함 (no 같은거)
       title: `${title}`,
       content: `${content}`,
-      tag: `${tag}`,
+      tag: `${writeTag}`,
       showImages:`${myImgs}`
 
     },{
@@ -376,12 +336,13 @@ function TabContent({clickTab, setClickTab, planList}) {
         }
     });
   };
+  
 
   const canSubmit = useCallback(() => {
     return content !== "" && title !== "";
   }, [title, content]);
 
-  if (clickTab === 0) {// 메인화면
+  if (clickTab === 10) {// 메인화면
     return planList.map((val, idx) => {
       return (
           <MyHomeBox
@@ -445,7 +406,7 @@ function TabContent({clickTab, setClickTab, planList}) {
   else if (clickTab === 3) { //----------------------Profile------------------------
     return <MyProfileBox />;
   }
-  else if (clickTab === 10) { //-----------------------Write------------------------
+  else if (clickTab === 0) { //-----------------------Write------------------------
     // const imgFileUpload = (fileBlob) => {
     //   const reader = new FileReader();
   
@@ -459,8 +420,33 @@ function TabContent({clickTab, setClickTab, planList}) {
     //   });
     // };
 
+    let test = [1,2,3,4];
+
     return (
     <div className="MyWrite-container">
+
+      <div className="write-box plan">
+        <div className="plan-title">여행경로</div>
+
+        <div style={{border:'1.5px solid #edf2f4'}}>
+          {
+            test.map((val, idx)=>{
+              return(
+                <div className="detail-plan">
+                  <span className="paln-date">{val} 일차 20xx-xx-xx x요일</span>
+                  <div>00:00 ~ 00:00</div>
+                  <div className="plan-region">제주공항</div>
+
+                  <div>00:00 ~ 00:00</div>
+                  <div className="plan-region">제주공항</div>
+                </div>
+              )
+            })
+          }
+        </div>
+
+      </div>
+
       <div className="write-box">
         <input
         onChange={(e)=>{
@@ -485,8 +471,16 @@ function TabContent({clickTab, setClickTab, planList}) {
         </label>
       </div>
 
-      <div className="write-box">
+      {/* <div className="write-box">
         <Imgs src='/images/imageMap.png'/>
+      </div> */}
+      <div className="write-box add-delete">
+        {showImages.map((image, id) => (
+          <Imgs
+            src={image}
+            alt={`${image}-${id}`}
+            onClick={() => handleDeleteImage(id)}/>
+        ))}
       </div>
 
       <div className="write-box writer">
@@ -509,7 +503,7 @@ function TabContent({clickTab, setClickTab, planList}) {
           value={tag}/>
       </div>
       
-      <div className="write-box add-delete">
+      {/* <div className="write-box add-delete">
         {showImages.map((image, id) => (
           <Imgs
             src={image}
@@ -517,7 +511,7 @@ function TabContent({clickTab, setClickTab, planList}) {
             onClick={() => handleDeleteImage(id)}/>
         ))}
         
-      </div>
+      </div> */}
 
       <div className="write-box">
         <div className='detail-button'>
@@ -525,7 +519,7 @@ function TabContent({clickTab, setClickTab, planList}) {
         canSubmit() ? (
           <button className="learn-more" type="button" onClick={write}>공유하기</button>
           ) : (
-            <button  type="button" disabled>사진과 내용을 모두 입력하세요😭</button>
+            <button  type="button" disabled>제목과 내용을 모두 입력하세요</button>
           )
         }
         </div>
@@ -550,6 +544,11 @@ function TabTopLine({clickTab, planList}) {
         <div className="item-status">
           <span className="status-number">0</span>
           <span className="status-type">Upload</span>
+        </div>
+
+        <div className="item-status">
+          <span className="status-number">0</span>
+          <span className="status-type">Point</span>
         </div>
       </div>
     )

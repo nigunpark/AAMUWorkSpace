@@ -60,7 +60,9 @@ const MyHomeBox = ({setClickTab, planList}) => {
                 <p className="box-progress-header" style={{marginBottom:'10px'}}>
                     저장 날자 : {dateFormat(postDate)}
                 </p>
-                <p className="box-progress-header">{planList.plannerdate} (rbn :{planList.rbn})</p>
+                <p className="box-progress-header">
+                    {planList.plannerdate} (rbn :{planList.rbn})
+                </p>
             </div>
 
             <div className="project-box-footer" style={{marginTop:'5px'}}>
@@ -75,29 +77,5 @@ const MyHomeBox = ({setClickTab, planList}) => {
     </div>
   )
 }
-
-{/* <div className="participants"> */}
-        {/* <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=2550&q=80" alt="participant"/>
-        <img src="https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?ixid=MXwxMjA3fDB8MHxzZWFyY2h8MTB8fG1hbnxlbnwwfHwwfA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=900&q=60" alt="participant"/>
-    
-        <button className="add-participant">
-        버튼 태그에 있던거  style="color: #ff942e;"
-            <svg 
-                xmlns="http://www.w3.org/2000/svg" 
-                width="12" height="12" 
-                viewBox="0 0 24 24" fill="none" 
-                stroke="currentColor" stroke-width="3" 
-                stroke-linecap="round" stroke-linejoin="round"
-                className="feather feather-plus">
-                <path d="M12 5v14M5 12h14" />
-            </svg>
-        </button> */}
-        
-    {/* </div> */}
-
-    {/* <div className="days-left">
-        style="color: #ff942e;"
-    2 Days Left
-    </div> */}
 
 export default MyHomeBox

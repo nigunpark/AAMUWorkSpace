@@ -268,7 +268,7 @@
   background-color: var(--skyblue);
   font-size: 12px;
   border-radius: 5px;
-  width: 21%;
+  width: auto;
   height: auto;
   color: white;
   padding: 5px;
@@ -277,7 +277,7 @@
   border: 1px solid var(--skyblue);
 }
 .emailValid-confirm-btn {
-  background-color: grey;
+  background-color: var(--skyblue);
   font-size: 12px;
   border-radius: 5px;
   width: 50px;

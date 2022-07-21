@@ -5,27 +5,26 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 public interface NoticeService {
-	
-	//전체 글 뿌려주기
-	ListPagingData<NoticeDTO> noticeSelectList(Map map,HttpServletRequest req,int nowPage);
-	
-	//전체 게시물 수 뿌려주기
-	int noticeGetTotalRecordCount(Map map);
-	
-	// 글 등록
-	int noticeWrite(Map map);
-	
-	// 글 상세 보기
-	NoticeDTO selectOne(Map map);
-	
 
-	//글 삭제
+	// 전체
+	ListPagingData<NoticeDTO> noticeSelectList(Map map, HttpServletRequest req, int nowPage);
+
+	// 게시물수
+	int noticeGetTotalRecordCount(Map map);
+
+	// 쓰기
+	int noticeWrite(Map map);
+
+	// 읽기
+	NoticeDTO selectOne(Map map);
+
+	// 삭제
 	int noticeDelete(Map map);
 
-	
+	// 조회수
 	int noticeCount(Map map) throws Exception;
 
+	// 수정
 	int noticeEdit(Map map) throws Exception;
 
-	
 }

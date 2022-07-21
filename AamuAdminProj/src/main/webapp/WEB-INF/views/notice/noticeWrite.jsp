@@ -27,7 +27,7 @@
 								
 								></textarea>
 							</div>
-							<button type="submit" class="btn btn-primary">등록</button>
+							<button type="submit" class="btn btn-primary text-white">등록</button>
 						</form>
 						<!--------------------- 내용의 끝 부분입니다------------------------------------>
 					</div>

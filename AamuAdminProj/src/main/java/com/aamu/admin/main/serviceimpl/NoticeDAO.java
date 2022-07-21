@@ -11,48 +11,50 @@ import com.aamu.admin.main.service.NoticeDTO;
 
 @Repository
 public class NoticeDAO {
-	
+
 	@Autowired
 	private SqlSessionTemplate template;
 
-	//전체 글 뿌려주기
-	public List<NoticeDTO> noticeSelectList(Map map){
-		List<NoticeDTO> records = template.selectList("noticeSelectList",map);
+	// 전체 글
+	public List<NoticeDTO> noticeSelectList(Map map) {
+		List<NoticeDTO> records = template.selectList("noticeSelectList", map);
 		return records;
 	}
-	
-	//글 전체 레코드수
+
+	// 게시물수
 	public int noticeGetTotalRecordCount(Map map) {
 		return template.selectOne("noticeGetTotalRecordCount", map);
 	}
-	
-	// 글 등록
-	public int noticeWrite(Map map) {		
-		return template.insert("noticeWrite",map);
+
+	// 쓰기
+	public int noticeWrite(Map map) {
+		return template.insert("noticeWrite", map);
 	}
-	
-	// 글 상세 보기
-	public NoticeDTO selectOne(Map map) {		
+
+	// 읽기
+	public NoticeDTO selectOne(Map map) {
 		return template.selectOne("noticeSelectOne", map);
 	}
 
 	// 조회수
-	public int noticeCount(Map map) throws Exception {		
+	public int noticeCount(Map map) throws Exception {
 		return template.update("noticeCount", map);
 	}
-	
-	//글 삭제
+
+	// 목록에서 삭제
 	public int noticeDelete(Map map) {
-		return template.delete("noticeDelete",map);
+		return template.delete("noticeDelete", map);
 	}
 
+	// 글에서 삭제
 	public int noticeViewDelete(Map map) {
-		return template.delete("noticeDelete",map);
-		
-	}
+		return template.delete("noticeDelete", map);
 
+	}
+	
+	// 수정
 	public int noticeEdit(Map map) throws Exception {
-		return template.update("noticeEdit",map);
+		return template.update("noticeEdit", map);
 	}
 
 }

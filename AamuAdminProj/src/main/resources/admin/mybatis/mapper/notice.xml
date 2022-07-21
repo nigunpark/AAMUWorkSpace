@@ -12,6 +12,9 @@
 		SELECT n. * FROM
 		Notice n
 		JOIN users u ON n.id=u.id
+		<if test="searchColumn != null">
+	  	 	WHERE ${searchColumn} LIKE '%' || #{searchWord} || '%' 
+	  	</if>  
 		ORDER BY nno DESC) T)
 		WHERE R BETWEEN
 		#{start} AND #{end}

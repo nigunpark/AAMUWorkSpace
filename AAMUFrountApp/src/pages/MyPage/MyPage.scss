@@ -608,10 +608,9 @@ button, a {
 
 .MyWrite-container{
   // border: solid 1px black;
-  width: 1000px;
   margin: auto;
   display: grid;
-  grid-template-columns: 70% 28%;
+  grid-template-columns: 300px 400px 300px;
   grid-template-rows: 35px 350px 50px;
   gap: 10px;
   
@@ -633,11 +632,44 @@ button, a {
   }
   &.add-delete{
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: 33% 33% 33%;
+    grid-row: 2 / 4;
+    //background-image: url("../../../public/images/no-image.jpg");
+    // border: solid 1px red;
   }
-  
+  &.plan{
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+    grid-row: 1 / 4;
+    &::-webkit-scrollbar{
+        display:none;
+    }
+  }
 }
+.plan-title{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.detail-plan{
+  width: 100%;
+  font-size: 20px;
+  margin-top: 3px;
+}
+.paln-date{
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #edf2f4;
+}
+.plan-region{
+  margin-top: 5px;
+  margin-bottom: 10px;
+}
+
 .wirte-title{
   width: 100%;
   height: 70%;
@@ -661,6 +693,7 @@ button, a {
   resize: none;
   font-size: 20px;
   border: none;
+  box-shadow: 0 0 0 2px #e9ebec, 0 0 0 11px #fcfdfe;
 }
 .tag-section{
   flex: 1;
@@ -674,8 +707,6 @@ button, a {
 .box-gab{
   height: 10px;
 }
-
-
 
 .project-box {
   --main-color-card: #dbf6fd;
