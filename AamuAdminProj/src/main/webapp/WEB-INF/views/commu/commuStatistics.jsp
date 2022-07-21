@@ -54,16 +54,23 @@
 												</tr>
 											</thead>
 											<tbody>
-												<tr>
-													<td>1위</td>
-													<td class="py-1"><img
-														src="../../images/faces/face1.jpg" alt="image" /></td>
-													<td>Herman Beck</td>
-
-													<td>100</td>
-													<td>1234</td>
-													<td>2022-07-12</td>
-												</tr>
+												<c:if test="${empty lists}" var="isEmpty">
+													<tr>
+														<td colspan="8">등록된 글이 없습니다.</td>
+													</tr>
+												</c:if>
+												<c:if test="${not isEmpty }">
+													<c:forEach var="record" items="${lists}" varStatus="loop">
+														<tr>
+															<td>1위</td>
+															<td class="py-1">{record.userprofile}</td>
+															<td>{record.id}</td>
+															<td>{record.likecount}</td>
+															<td>{record.rcount}</td>
+															<td>{record.joindate}</td>
+														</tr>
+													</c:forEach>
+												</c:if>
 											</tbody>
 										</table>
 									</div>

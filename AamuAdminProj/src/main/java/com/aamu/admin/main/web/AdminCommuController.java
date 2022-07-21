@@ -1,6 +1,7 @@
 package com.aamu.admin.main.web;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -107,6 +108,11 @@ public class AdminCommuController {
 		//성별 게시물 수 
 		model.addAttribute("femaleRecordCount",map.get("femaleRecordCount"));
 		model.addAttribute("maleRecordCount",map.get("maleRecordCount"));
+		
+		//베스트 글쓴이 
+		List<AdminCommuDTO> lists = commuService.bestUsersList();
+		model.addAttribute("lists",lists);
+		
 		return "commu/commuStatistics";
 	}
 	

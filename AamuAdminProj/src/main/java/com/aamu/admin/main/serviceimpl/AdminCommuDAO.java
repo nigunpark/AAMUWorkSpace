@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import com.aamu.admin.main.service.AdminCommuCommentDTO;
 import com.aamu.admin.main.service.AdminCommuDTO;
+import com.aamu.admin.main.service.UsersDTO;
 
 @Repository
 public class AdminCommuDAO {
@@ -61,6 +62,11 @@ public class AdminCommuDAO {
 		return template.selectOne("genderPercent", map);
 	}
 	
+	//베스트 글쓴이 
+	public List<AdminCommuDTO> bestUsersList(){
+		List<AdminCommuDTO> records= template.selectList("bestUsersList");
+		return records;
+	}
 	
 
 }

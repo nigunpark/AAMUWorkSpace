@@ -30,5 +30,8 @@ public interface AdminCommuService {
 	//커뮤니티 통계
 	Map commuTotal();
 	
+	//커뮤니티 통계_베스트 글쓴이
+	List<AdminCommuDTO> bestUsersList();
+	
 
 }

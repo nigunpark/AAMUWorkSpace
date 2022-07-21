@@ -156,6 +156,14 @@ public class AdminCommuServiceImpl implements AdminCommuService {
 		return map;
 	}
 	
+	//커뮤니티 통계_
+	@Override
+	public List<AdminCommuDTO> bestUsersList() {
+		//베스트 글쓴이 
+		List<AdminCommuDTO> lists=dao.bestUsersList();
+		return lists;
+	}
+	
 	
 	
 	
