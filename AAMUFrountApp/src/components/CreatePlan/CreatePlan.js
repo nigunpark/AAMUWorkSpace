@@ -4,12 +4,10 @@ import CreatePlanMap from "./CreatePlanMap";
 import CreatePlanLeft from "./CreatePlanLeft.js";
 import { faRectangleXmark, faX } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import emailjs from "@emailjs/browser";
 import {
   faCalendarPlus,
   faEnvelope,
   faFileExcel,
-  faXmarkCircle,
 } from "@fortawesome/free-regular-svg-icons";
 import {
   DimmedContainer,
@@ -21,13 +19,11 @@ import {
 import {
   AuSBtn,
   AusBtnContainer,
-  AuSModal,
   AuSModal2,
   DimmedAuSContainer,
   DimmedSavePlanContainer,
   SavePlanBtnContainer,
   SavePlanModal,
-  ToEmailModal,
 } from "../Modal/AreUSurePlanModal";
 import axios from "axios";
 import { useSelector } from "react-redux";
@@ -44,7 +40,7 @@ const CreatePlan = ({
   const [forDayLine, setForDayLine] = useState(0);
   const [savePlan, setSavePlan] = useState(false);
   const [auSure, setAuSure] = useState(false);
-
+  console.log("fromWooJaeData(CP)", fromWooJaeData);
   return (
     <div>
       {auSure && (
@@ -101,7 +97,6 @@ const SavePlan = ({ setSavePlan, fromWooJaeData, currPosition }) => {
     return state;
   });
   let navigate = useNavigate();
-  const [showEmail, setShowEmail] = useState(false);
   return (
     <DimmedAuSContainer>
       <SavePlanModal>
@@ -109,7 +104,6 @@ const SavePlan = ({ setSavePlan, fromWooJaeData, currPosition }) => {
           className="savePlan__close"
           icon={faX}
           onClick={(e) => {
-            console.log("123");
             e.stopPropagation();
             setSavePlan(false);
           }}
@@ -137,26 +131,7 @@ const SavePlan = ({ setSavePlan, fromWooJaeData, currPosition }) => {
             <FontAwesomeIcon icon={faFileExcel} className="savePlan__icon" />
             <span className="savePlan__comment">엑셀로 다운로드</span>
           </div>
-
-          <div
-            className="savePlan__icon-container"
-            onClick={(e) => {
-              e.stopPropagation();
-              setShowEmail(true);
-            }}
-          >
-            <FontAwesomeIcon icon={faEnvelope} className="savePlan__icon" />
-            <span className="savePlan__comment">이메일로 받기</span>
-          </div>
         </SavePlanBtnContainer>
-        {showEmail && (
-          <SendEmail
-            setShowEmail={setShowEmail}
-            currPosition={currPosition}
-            reduxState={reduxState}
-            fromWooJaeData={fromWooJaeData}
-          />
-        )}
       </SavePlanModal>
     </DimmedAuSContainer>
   );
@@ -169,6 +144,7 @@ const handleExcel = async (fromWooJaeData, reduxState, currPosition) => {
       xlData.push(obj);
     });
   });
+
   //x월x일~ x월x일 구하는 로직
   reduxState.tripPeriod.map((val, i) => {
     if (i === 0 || i === reduxState.tripPeriod.length - 1)
@@ -179,9 +155,6 @@ const handleExcel = async (fromWooJaeData, reduxState, currPosition) => {
       );
   });
 
-  // console.log("xlData", xlData);
-  // console.log("plannerDate", plannerDate);
-  // console.log("wholeBlackBox", reduxState.wholeBlackBox);
   const workBook = new ExcelJS.Workbook();
   const workSheet = workBook.addWorksheet("MyTravel"); // sheet 이름이 My Sheet
   //타이틀
@@ -259,11 +232,12 @@ const handleExcel = async (fromWooJaeData, reduxState, currPosition) => {
     let dayWholeBb = reduxState.wholeBlackBox.filter((val) => {
       return val.day === i + 1;
     });
-    // console.log("dayWholeBb", dayWholeBb);
+    console.log("dayWholeBb", dayWholeBb);
     let dayData = xlData.filter((val) => {
       return val.day === i + 1;
     });
-
+    console.log("xlData", xlData);
+    console.log("dayData", dayData);
     let data = [];
     dayWholeBb.forEach((val, idx) => {
       data.push({
@@ -285,145 +259,6 @@ const handleExcel = async (fromWooJaeData, reduxState, currPosition) => {
   const buffer = await workBook.xlsx.writeBuffer();
   const blob = new Blob([buffer], mimeType);
   saveAs(blob, "MyTravel.xlsx");
-};
-
-const SendEmail = ({
-  setShowEmail,
-  currPosition,
-  reduxState,
-  fromWooJaeData,
-}) => {
-  const [email, setEmail] = useState("");
-  const formRef = useRef();
-  const sendEmail = (e) => {
-    e.preventDefault();
-    emailjs
-      .sendForm(
-        "service_17j8i9s",
-        "template_pn5zcvu",
-        formRef.current,
-        "Zhz2yYsd_9ndmdpMr"
-      )
-      .then(
-        (result) => {
-          console.log(result.text);
-        },
-        (error) => {
-          console.log(error.text);
-        }
-      );
-  };
-
-  let xlData = [];
-  let plannerDate = [];
-  let dayWholeBb = [];
-  let dayData = [];
-  reduxState.tripPeriod.forEach((val, i) => {
-    Object.values(fromWooJaeData[i])[0].forEach((obj, idx) => {
-      xlData.push(obj);
-    });
-  });
-  //x월x일~ x월x일 구하는 로직
-  reduxState.tripPeriod.map((val, i) => {
-    if (i === 0 || i === reduxState.tripPeriod.length - 1)
-      plannerDate.push(
-        `${reduxState.monthNdate[0].month}월 ${
-          reduxState.monthNdate[0].date + i
-        }일 ${getDow(reduxState, i)}`
-      );
-  });
-  reduxState.tripPeriod.map((val, i) => {
-    dayWholeBb = reduxState.wholeBlackBox.filter((val) => {
-      return val.day === i + 1;
-    });
-    // console.log("dayWholeBb", dayWholeBb);
-    dayData = xlData.filter((val) => {
-      return val.day === i + 1;
-    });
-    console.log("dayWholeBb", dayWholeBb);
-    console.log("dayData", dayData);
-  });
-
-  console.log("xlData", xlData);
-  console.log("plannerDate", plannerDate);
-  // let message
-  <table>
-    {reduxState.tripPeriod.map((val, i) => {
-      return (
-        <>
-          <tr>
-            <td>DAY{i + 1}</td>
-          </tr>
-          <tr>
-            <td>도착시간</td>
-            <td>출발시간</td>
-            <td>장소</td>
-            <td>주소</td>
-            <td>메모</td>
-          </tr>
-          <tr>
-            {dayData.map((val, i) => {
-              return (
-                <>
-                  <td>
-                    {dayWholeBb[i].stime}:{dayWholeBb[i].smin}
-                  </td>
-                  <td>
-                    {dayWholeBb[i].etime}:{dayWholeBb[i].emin}
-                  </td>
-                  <td>{dayData[i].dto.title}</td>
-                  <td>{dayData[i].dto.addr}</td>
-                  <td>{dayData[i].comment ?? ""}</td>
-                </>
-              );
-            })}
-          </tr>
-        </>
-      );
-    })}
-  </table>;
-  return (
-    <ToEmailModal>
-      <h4>일정을 공유할 이메일을 입력해주세요</h4>
-      <FontAwesomeIcon
-        className="email__close"
-        icon={faX}
-        onClick={() => {
-          setShowEmail(false);
-        }}
-      />
-
-      <form ref={formRef} onSubmit={sendEmail} className="email__form">
-        <input
-          style={{ display: "none" }}
-          type="text"
-          name="travel_title"
-          defaultValue={`${currPosition} ${reduxState.tripPeriod - 1}박 ${
-            reduxState.tripPeriod
-          }일 여행일정 `}
-        />
-        <input
-          type="text"
-          name="user_name"
-          defaultValue={sessionStorage.getItem("username")}
-          style={{ display: "none" }}
-        />
-        <textarea name="message" style={{ display: "none" }} value={"메세지"} />
-        <input
-          // style={{ visibility: "hidden" }}
-          type="email"
-          name="user_email"
-          defaultValue={email}
-          onChange={(e) => {
-            setEmail(e.target.value);
-          }}
-        />
-        <button type="submit" className="email__form-btn">
-          전송
-        </button>
-      </form>
-    </ToEmailModal>
-  );
 };
 
 const AuSureModal = ({ setShowCratePlan, setAuSure }) => {
