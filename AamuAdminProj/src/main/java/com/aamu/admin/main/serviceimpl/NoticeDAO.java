@@ -46,4 +46,13 @@ public class NoticeDAO {
 		return template.delete("noticeDelete",map);
 	}
 
+	public int noticeViewDelete(Map map) {
+		return template.delete("noticeDelete",map);
+		
+	}
+
+	public int noticeEdit(Map map) throws Exception {
+		return template.update("noticeEdit",map);
+	}
+
 }
