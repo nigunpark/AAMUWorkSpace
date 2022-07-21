@@ -11,10 +11,16 @@ import { faUser } from "@fortawesome/free-regular-svg-icons";
 import "./Join.css";
 import { Typography } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
-import { fa1, fa2, fa3, faHouse } from "@fortawesome/free-solid-svg-icons";
-import { useSelector } from "react-redux";
+import {
+  fa1,
+  fa2,
+  fa3,
+  faCheck,
+  faHouse,
+  faX,
+} from "@fortawesome/free-solid-svg-icons";
 import DaumPostcode from "react-daum-postcode";
-import { addStepTwo } from "../../redux/store.js";
+import emailjs from "@emailjs/browser";
 const JoinStep2 = () => {
   let joominGender = useRef();
   let nameRef = useRef();
@@ -25,8 +31,8 @@ const JoinStep2 = () => {
   let phoneNumT = useRef();
   let phoneNumValidRef = useRef();
   let sJoominRef = useRef();
-  let emailIdRef = useRef();
-  let emailAddrRef = useRef();
+  let emailIdRef = useRef("");
+  let emailAddrRef = useRef("");
   let emailValidRef = useRef();
   let photoRef = useRef();
   let zoneCodeRef = useRef();
@@ -35,14 +41,12 @@ const JoinStep2 = () => {
   let addrRef = useRef();
   let introduceRef = useRef();
   let navigate = useNavigate();
-  let reduxState = useSelector((state) => {
-    return state;
-  });
 
   //   console.log(reduxState.joinData);
   const [address, setAddress] = useState("");
   const [zoneCode, setZoneCode] = useState("");
   const [isOpenPost, setIsOpenPost] = useState(false);
+  const [emailCk, setEmailCk] = useState(false);
   return (
     <div className="join__step-two">
       <Container>
@@ -290,86 +294,13 @@ const JoinStep2 = () => {
                   style={{ marginTop: "20px" }}
                   className="join__stepTwo-content-container"
                 >
-                  <div>
-                    <div style={{ display: "flex" }}>
-                      <span style={{ fontSize: "13px" }}>이메일</span>{" "}
-                      <span
-                        className="join__stepTwo-keyup-validSpan"
-                        ref={emailValidRef}
-                      >
-                        (이메일을 입력해주세요)
-                      </span>
-                    </div>
-                    <div
-                      style={{
-                        display: "flex",
-                        gap: "0.5rem",
-                      }}
-                    >
-                      <div className="join__stepTwo-email-input-div">
-                        <input
-                          style={{ fontSize: "15px", marginLeft: "3px" }}
-                          type="text"
-                          size={12}
-                          placeholder=""
-                          ref={emailIdRef}
-                          onChange={() => {
-                            emailValid(emailValidRef, emailIdRef, emailAddrRef);
-                          }}
-                        />
-                      </div>
-                      <span>@</span>
-                      <div className="join__stepTwo-email-input-div">
-                        <input
-                          style={{ fontSize: "15px", marginLeft: "3px" }}
-                          type="text"
-                          size={12}
-                          placeholder=""
-                          ref={emailAddrRef}
-                          onChange={() => {
-                            emailValid(emailValidRef, emailIdRef, emailAddrRef);
-                          }}
-                        />
-                      </div>
-                      <div style={{ display: "flex" }}>
-                        <div className="join__stepTwo-email-selector">
-                          <select
-                            onChange={(e) => {
-                              if (e.target.value === "직접입력")
-                                emailAddrRef.current.value = "";
-                              emailAddrRef.current.value = e.target.value;
-                            }}
-                          >
-                            <option>직접입력</option>
-                            <option>naver.com</option>
-                            <option>daum.net</option>
-                            <option>nate.com</option>
-                            <option>google.com</option>
-                          </select>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  {/* <div style={{ display: "flex", gap: ".5rem" }}>
-                    <span className="emailValid-transfer-btn">
-                      인증번호 전송
-                    </span>
-                    <div
-                      className="join__stepTwo-input-div"
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                      }}
-                    >
-                      <input
-                        style={{ fontSize: "13px", marginLeft: "3px" }}
-                        type="text"
-                        size={20}
-                        onChange={() => {}}
-                      />
-                      <span className="emailValid-confirm-btn">확인</span>
-                    </div>
-                  </div> */}
+                  <SendEmail
+                    emailIdRef={emailIdRef}
+                    emailAddrRef={emailAddrRef}
+                    emailValidRef={emailValidRef}
+                    emailCk={emailCk}
+                    setEmailCk={setEmailCk}
+                  />
                 </div>
                 <div className="join__stepTwo-content-container">
                   <div>
@@ -482,7 +413,8 @@ const JoinStep2 = () => {
                     emailAddrRef,
                     zoneCodeRef,
                     addrRef,
-                    addrDetailRef
+                    addrDetailRef,
+                    emailCk
                   );
                 }}
               >
@@ -507,6 +439,174 @@ const JoinStep2 = () => {
   );
 };
 
+const SendEmail = ({
+  emailIdRef,
+  emailAddrRef,
+  emailValidRef,
+
+  emailCk,
+  setEmailCk,
+}) => {
+  const formRef = useRef();
+  const userVNumRef = useRef();
+  const sendEmail = (e) => {
+    e.preventDefault();
+    emailjs
+      .sendForm(
+        "service_17j8i9s",
+        "template_pn5zcvu",
+        formRef.current,
+        "Zhz2yYsd_9ndmdpMr"
+      )
+      .then(
+        (result) => {
+          console.log(result.text);
+        },
+        (error) => {
+          console.log(error.text);
+        }
+      );
+  };
+  let number = Math.floor(Math.random() * 1000000) + 100000;
+  if (number > 1000000) number = number - 100000;
+  return (
+    <>
+      <div>
+        <div style={{ display: "flex" }}>
+          <span style={{ fontSize: "13px" }}>이메일</span>{" "}
+          <span className="join__stepTwo-keyup-validSpan" ref={emailValidRef}>
+            (이메일을 입력해주세요)
+          </span>
+        </div>
+        <div
+          style={{
+            display: "flex",
+            gap: "0.5rem",
+          }}
+        >
+          <div className="join__stepTwo-email-input-div">
+            <input
+              style={{ fontSize: "15px", marginLeft: "3px" }}
+              type="text"
+              size={12}
+              placeholder=""
+              ref={emailIdRef}
+              onChange={(e) => {
+                emailValid(emailValidRef, emailIdRef, emailAddrRef);
+                emailIdRef.current.value = e.target.value;
+              }}
+            />
+          </div>
+          <span>@</span>
+          <div className="join__stepTwo-email-input-div">
+            <input
+              style={{ fontSize: "15px", marginLeft: "3px" }}
+              type="text"
+              size={12}
+              placeholder=""
+              ref={emailAddrRef}
+              onChange={(e) => {
+                emailValid(emailValidRef, emailIdRef, emailAddrRef);
+                emailAddrRef.current.value = e.target.value;
+              }}
+            />
+          </div>
+          <div style={{ display: "flex" }}>
+            <div className="join__stepTwo-email-selector">
+              <select
+                onChange={(e) => {
+                  if (e.target.value === "직접입력") {
+                    emailValidRef.current.style.visibility = "visible";
+                    emailAddrRef.current.parentElement.style.borderColor =
+                      "grey";
+                    emailAddrRef.current.value = "";
+                  } else {
+                    emailValidRef.current.style.visibility = "hidden";
+                    emailAddrRef.current.parentElement.style.borderColor =
+                      "yellowGreen";
+                  }
+                  emailAddrRef.current.value = e.target.value;
+                }}
+              >
+                <option>직접입력</option>
+                <option>naver.com</option>
+                <option>daum.net</option>
+                <option>nate.com</option>
+                <option>google.com</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style={{ display: "flex", gap: ".5rem" }}>
+        <form ref={formRef} onSubmit={sendEmail} className="email__form">
+          <input
+            type="email"
+            name="user_email"
+            value={`${emailIdRef.current.value}@${emailAddrRef.current.value}`}
+            // value="kkm0938@naver.com"
+            style={{ display: "none" }}
+          />
+          <textarea name="message" value={number} style={{ display: "none" }} />
+          <button
+            type="submit"
+            className="emailValid-transfer-btn"
+            onClick={(e) => {
+              e.stopPropagation();
+              if (emailIdRef.current.value.trim().length === 0) {
+                e.preventDefault();
+                emailIdRef.current.parentElement.classList.add("validation");
+                setTimeout(() => {
+                  emailIdRef.current.parentElement.classList.remove(
+                    "validation"
+                  );
+                }, 1100);
+              } else if (emailAddrRef.current.value.trim().length === 0) {
+                e.preventDefault();
+                emailAddrRef.current.parentElement.classList.add("validation");
+                setTimeout(() => {
+                  emailAddrRef.current.parentElement.classList.remove(
+                    "validation"
+                  );
+                }, 1100);
+              }
+            }}
+          >
+            인증번호 전송
+          </button>
+        </form>
+        <div
+          className="join__stepTwo-input-div"
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+          }}
+        >
+          <input
+            style={{ fontSize: "13px", marginLeft: "3px" }}
+            type="text"
+            size={20}
+            ref={userVNumRef}
+            onChange={(e) => {
+              userVNumRef.current.value = e.target.value;
+            }}
+          />
+          <span
+            className="emailValid-confirm-btn"
+            onClick={() => {
+              if (userVNumRef.current.value == number) {
+                setEmailCk(true);
+              }
+            }}
+          >
+            {emailCk ? <FontAwesomeIcon icon={faCheck} /> : "확인"}
+          </span>
+        </div>
+      </div>
+    </>
+  );
+};
+
 const AddresApi = ({ setIsOpenPost, setAddress, setZoneCode }) => {
   const onCompletePost = (data) => {
     let fullAddr = data.address;
@@ -521,9 +621,7 @@ const AddresApi = ({ setIsOpenPost, setAddress, setZoneCode }) => {
       }
       fullAddr += extraAddr !== "" ? ` (${extraAddr})` : "";
     }
-    setAddress(fullAddr);
-    setZoneCode(data.zonecode);
-    console.log(data);
+
     setIsOpenPost(false);
   };
   const postCodeStyle = {
@@ -638,7 +736,8 @@ function validation(
   emailAddrRef,
   zoneCodeRef,
   addrRef,
-  addrDetailRef
+  addrDetailRef,
+  emailCk
 ) {
   if (nameRef.current.value.trim().length === 0) {
     nameRef.current.parentElement.classList.add("validation");
@@ -702,6 +801,8 @@ function validation(
       return;
     } else if (!regRex.test(emailAddrRef)) {
       // alert("이메일 형식에 맞게 입력해주세요");
+    } else if (!emailCk) {
+      alert("이메일 인증을 해주세요");
     } else {
       let gender;
       switch (joominGender.current.value) {
