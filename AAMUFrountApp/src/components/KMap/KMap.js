@@ -684,7 +684,7 @@ async function toWooJae(currPosition, reduxState, setFromWooJaeData) {
       atime: null,
     };
   });
-
+  // console.log("arr", arr);
   //사용자가 선택한 호텔을 우재한테 보내줄 data에 넣는 로직
   reduxState.saveDaysNPickedSuksoRedux.map((local, index) => {
     arr[
@@ -738,7 +738,9 @@ async function toWooJae(currPosition, reduxState, setFromWooJaeData) {
         },
       }
     );
+    console.log("resp.data", resp.data.route);
     let settedData = await manufacData(resp.data.route, reduxState);
+    console.log("settedData", settedData);
     await setFromWooJaeData(settedData);
   } catch (error) {
     console.log("error", error);
@@ -746,29 +748,53 @@ async function toWooJae(currPosition, reduxState, setFromWooJaeData) {
 }
 //일정생성버튼 눌렀을 시 우재한테 받은 데이터를 다시 가공하는 함수
 function manufacData(data, reduxState) {
-  let temp;
-
-  return reduxState.tripPeriod.map((val, periodIndex) => {
+  let final = [];
+  return reduxState.tripPeriod.map((val, tripPeriodI) => {
     let arr = data.filter((obj) => {
-      return obj.day === periodIndex + 1;
+      return obj.day === tripPeriodI + 1;
     });
-    // if (periodIndex !== reduxState.tripPeriod.length - 1) {
-    let newArr = { ...arr[0] };
-    newArr.starttime = 0;
-    arr.push(newArr);
-    if (periodIndex === reduxState.tripPeriod.length - 2) {
-      temp = { ...arr[arr.length - 1] };
+    // console.log("arr", arr);
+    if (tripPeriodI === 0) {
+      let newObj = { ...arr[0] };
+      newObj.starttime = 0;
+      arr.push(newObj);
     }
-    if (periodIndex === reduxState.tripPeriod.length - 1) {
+    if (tripPeriodI !== 0) {
+      arr.push(arr[0]);
+      let hotel = data.filter((obj) => {
+        return obj.day === tripPeriodI && obj.contenttypeid === 32;
+      })[0];
+      // console.log("hotel", hotel);
+      let temp = { ...hotel };
       temp.starttime = arr[0].starttime;
-      temp.day = arr[0].day;
+      temp.day = tripPeriodI + 1;
       arr.splice(0, 1, temp);
     }
-    arr = arr.filter((val, i) => {
-      return val.dto !== null;
-    });
-    return { ["day" + (periodIndex + 1)]: arr };
+    return { ["day" + (tripPeriodI + 1)]: arr };
   });
+
+  // let temp;
+  // return reduxState.tripPeriod.map((val, periodIndex) => {
+  //   let arr = data.filter((obj) => {
+  //     return obj.day === periodIndex + 1;
+  //   });
+  //   // if (periodIndex !== reduxState.tripPeriod.length - 1) {
+  //   let newArr = { ...arr[0] };
+  //   newArr.starttime = 0;
+  //   arr.push(newArr);
+  //   if (periodIndex === reduxState.tripPeriod.length - 2) {
+  //     temp = { ...arr[arr.length - 1] };
+  //   }
+  //   if (periodIndex === reduxState.tripPeriod.length - 1) {
+  //     temp.starttime = arr[0].starttime;
+  //     temp.day = arr[0].day;
+  //     arr.splice(0, 1, temp);
+  //   }
+  //   arr = arr.filter((val, i) => {
+  //     return val.dto !== null;
+  //   });
+  //   return { ["day" + (periodIndex + 1)]: arr };
+  // });
 }
 
 export default KMap;
