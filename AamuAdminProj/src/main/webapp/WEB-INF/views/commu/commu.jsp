@@ -14,7 +14,7 @@
 						<div class="col-lg-12 grid-margin stretch-card">
 							<div class="card">
 								<div class="card-body">
-									<h4 class="card-title">게시글 전체 리스트</h4>
+									<h4 class="card-title">커뮤니티 전체 리스트</h4>
 
 									<div class="card-numberOfBoard">
 										총 게시글 수: ${totalCount}개
@@ -144,21 +144,23 @@
     		alert("선택된 글이 없습니다.");
     	}
     	else{
-    		confirm("정말 삭제하시겠습니까?");
-    		var jsonString = JSON.stringify({lno : lnoArr})
-    		$.ajax({
-       			url:"<c:url value="CommuDelete.do"/>",
-       			type:"post",
-       			data: jsonString,
-       			contentType:"application/json", //데이타 보낼 때
-       			dataType: "json" //데이타 받을 때 
-       		}).done(data=>{
-       			console.log('삭제성공:',data);
-       			location.replace("Commu.do");
-       			
-       		}).fail(error=>{
-       			console.log('삭제에러:',error);
-       		});
+    		if(confirm("정말 삭제하시겠습니까?")){
+    			var jsonString = JSON.stringify({lno : lnoArr})
+        		$.ajax({
+           			url:"<c:url value="CommuDelete.do"/>",
+           			type:"post",
+           			data: jsonString,
+           			contentType:"application/json", //데이타 보낼 때
+           			dataType: "json" //데이타 받을 때 
+           		}).done(data=>{
+           			console.log('삭제성공:',data);
+           			location.replace("Commu.do");
+           			
+           		}).fail(error=>{
+           			console.log('삭제에러:',error);
+           		});
+    		}///////if 삭제하시겠습니까?
+    		
     	}//////else
     });
     
