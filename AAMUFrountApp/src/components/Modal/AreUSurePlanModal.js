@@ -47,7 +47,7 @@ const AuSModal2 = styled.div`
 const SavePlanModal = styled.div`
   position: relative;
   background: white;
-  width: 640px;
+  width: 500px;
   height: 340px;
   padding: 30px 50px;
   border-radius: 5px;
