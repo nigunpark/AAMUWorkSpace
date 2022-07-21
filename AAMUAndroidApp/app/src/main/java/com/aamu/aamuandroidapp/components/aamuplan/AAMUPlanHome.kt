@@ -75,7 +75,7 @@ fun AAMUPlanHome(){
             drawerBackgroundColor = orange700,
             drawerGesturesEnabled = true,
             drawerContent = {
-                Spacer(modifier = Modifier.height(56.dp))
+                Spacer(modifier = Modifier.height(WindowInsets.statusBars.asPaddingValues().calculateTopPadding()+56.dp))
                 SideContent() },
             scaffoldState = bottomSheetScaffoldState,
             sheetPeekHeight = 25.dp,

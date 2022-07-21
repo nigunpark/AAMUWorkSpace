@@ -18,10 +18,13 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.layout.Layout
+import androidx.compose.ui.layout.MeasurePolicy
 import androidx.compose.ui.unit.dp
 import com.aamu.aamuandroidapp.components.aamuplan.AAMUPlanViewModel
 import com.aamu.aamuandroidapp.ui.theme.amber200
 import com.aamu.aamuandroidapp.ui.theme.amber500
+import com.aamu.aamuandroidapp.ui.theme.amber700
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -34,17 +37,24 @@ fun PlanDetails(
     coroutineScope: CoroutineScope
 ){
     PlanListScroll(scaffoldState,coroutineScope)
-    TopAppBar() {
-        Column(Modifier.statusBarsPadding()) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                IconButton(onClick = {
-                    coroutineScope.launch { scaffoldState.drawerState.close() }
-                    topbarhide.value = false
-                }) {
-                    Icon(Icons.Filled.ArrowBack, null)
-                }
-                Text(text = "ㅎㅇㅎ")
+    Surface(elevation = 1.dp) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(WindowInsets.statusBars.asPaddingValues().calculateTopPadding()+56.dp)
+                .background(color = amber700),
+        )
+        Row(modifier = Modifier
+            .padding(start = 3.dp)
+            .statusBarsPadding()
+            , verticalAlignment = Alignment.CenterVertically) {
+            IconButton(onClick = {
+                coroutineScope.launch { scaffoldState.drawerState.close() }
+                topbarhide.value = false
+            }) {
+                Icon(Icons.Filled.ArrowBack, null)
             }
+            Text(text = "ㅎㅇㅎ")
         }
     }
 }
@@ -72,6 +82,7 @@ fun PlanListScroll(
                         lazyListState.animateScrollToItem(lazyListState.firstVisibleItemIndex)
                         lazyListState2.animateScrollToItem(lazyListState.firstVisibleItemIndex)
                     }
+
                 }
                 return super.onPreScroll(available, source)
             }
@@ -82,8 +93,7 @@ fun PlanListScroll(
             ): Offset {
                 coroutineScope.launch {
                     lazyListState2.scrollToItem(lazyListState.firstVisibleItemIndex,lazyListState.firstVisibleItemScrollOffset)
-                    Log.i("com.aamu.aamu","ScrollOffset"+lazyListState.firstVisibleItemScrollOffset.toString())
-                    Log.i("com.aamu.aamu","ItemIndex"+lazyListState.firstVisibleItemIndex.toString())
+
                 }
                 return super.onPostScroll(consumed, available, source)
             }
@@ -95,7 +105,7 @@ fun PlanListScroll(
                 modifier = Modifier
                     .width(90.dp)
                     .background(color = amber200)
-                    .padding(top = 112.dp)
+                    .padding(top = WindowInsets.statusBars.asPaddingValues().calculateTopPadding()+112.dp)
                     .nestedScroll(nestedScrollConnection),
                 state = lazyListState
             ) {
@@ -119,7 +129,7 @@ fun PlanListScroll(
         LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 56.dp)
+                .padding(top = WindowInsets.statusBars.asPaddingValues().calculateTopPadding()+56.dp)
                 .height(56.dp)
                 .background(amber500)
                 .nestedScroll(nestedScrollConnection),
