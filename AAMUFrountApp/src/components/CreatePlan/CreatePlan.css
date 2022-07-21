@@ -41,29 +41,6 @@
 .savePlan__close:hover {
   color: var(--orange);
 }
-.email__form {
-  /* border: 1px solid red; */
-  margin-top: 20px;
-  /* height: 100%; */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 5px;
-}
-
-.email__form input {
-  border: 1px solid grey;
-  border-radius: 5px;
-  height: 30px;
-  width: 85%;
-}
-
-.email__form-btn {
-  padding: 5px;
-  background-color: var(--orange);
-  color: white;
-  border-radius: 5px;
-}
 .email__close {
   position: absolute;
   right: 12px;
