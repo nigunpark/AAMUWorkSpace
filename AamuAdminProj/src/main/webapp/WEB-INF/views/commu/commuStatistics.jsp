@@ -61,13 +61,14 @@
 												</c:if>
 												<c:if test="${not isEmpty }">
 													<c:forEach var="record" items="${lists}" varStatus="loop">
+														<c:set var="i" value="${i+1}"/>
 														<tr>
-															<td>1위</td>
-															<td class="py-1">{record.userprofile}</td>
-															<td>{record.id}</td>
-															<td>{record.likecount}</td>
-															<td>{record.rcount}</td>
-															<td>{record.joindate}</td>
+															<td>${i}위</td>
+															<td class="py-1">${record.userprofile}</td>
+															<td>${record.id}</td>
+															<td>${record.likecount}</td>
+															<td>${record.rcount}</td>
+															<td>${record.joindate}</td>
 														</tr>
 													</c:forEach>
 												</c:if>
