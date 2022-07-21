@@ -149,21 +149,23 @@
     		alert("선택된 글이 없습니다.");
     	}
     	else{
-    		confirm("정말 삭제하시겠습니까?");
-    		var jsonString = JSON.stringify({cno : cnoArr})
-    		$.ajax({
-       			url:"<c:url value="CommuCommentDelete.do"/>",
-       			type:"post",
-       			data: jsonString,
-       			contentType:"application/json", //데이타 보낼 때
-       			dataType: "json" //데이타 받을 때 
-       		}).done(data=>{
-       			console.log('삭제성공:',data);
-       			location.replace("CommuComment.do");
-       			
-       		}).fail(error=>{
-       			console.log('삭제에러:',error);
-       		});
+    		if(confirm("정말 삭제하시겠습니까?")){
+    			var jsonString = JSON.stringify({cno : cnoArr})
+        		$.ajax({
+           			url:"<c:url value="CommuCommentDelete.do"/>",
+           			type:"post",
+           			data: jsonString,
+           			contentType:"application/json", //데이타 보낼 때
+           			dataType: "json" //데이타 받을 때 
+           		}).done(data=>{
+           			console.log('삭제성공:',data);
+           			location.replace("CommuComment.do");
+           			
+           		}).fail(error=>{
+           			console.log('삭제에러:',error);
+           		});
+    		}
+    		
     	}//////else
     });
   </script>

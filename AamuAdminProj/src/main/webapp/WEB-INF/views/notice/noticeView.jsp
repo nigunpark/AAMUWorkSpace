@@ -42,6 +42,18 @@
 								</tr>
 							</tbody>
 						</table>
+
+						<!-- 수정/삭제/목록 컨트롤 버튼 -->
+						<div class="text-center">
+
+
+			<a href="<c:url value="NoticeEdit.do?nno=${record.nno}"/>" class="btn btn-success">수정</a>
+			<a href="javascript:noticeDelete(${record.nno})" class="delete btn btn-success">삭제</a> 
+			<a href="<c:url value="Notice.do?nowPage=${param.nowPage}"/>" class="btn btn-success">목록</a>
+
+
+						</div>
+
 						<!--------------------- 내용의 끝 부분입니다------------------------------------>
 					</div>
 				</div>
@@ -52,6 +64,17 @@
 	<!--main-panel-->
 </div>
 
+
+<script>
+
+//메모글 삭제
+function noticeDelete(key){
+	if(confirm("삭제 할래요?")){
+		location.replace("<c:url value="NoticeViewDelete.do?nno="/>"+key);
+	}
+}
+
+</script>
 
 </body>
 </html>

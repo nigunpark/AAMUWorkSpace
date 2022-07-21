@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import com.aamu.admin.main.service.ListPagingData;
 import com.aamu.admin.main.service.NoticeDTO;
@@ -67,6 +68,12 @@ public class NoticeServiceImpl implements NoticeService {
 	}
 	
 	
+	@Override
+	public int noticeEdit(Map map) throws Exception {		
+		return dao.noticeEdit(map);
+	}
+
+	
 	// 글 상세 보기
 	@Override
 	public NoticeDTO selectOne(Map map) {
@@ -101,7 +108,11 @@ public class NoticeServiceImpl implements NoticeService {
 	}
 
 
-
+	public int noticeViewDelete(Map map) {
+		
+		return dao.noticeViewDelete(map);
+			
+	}
 
 
 

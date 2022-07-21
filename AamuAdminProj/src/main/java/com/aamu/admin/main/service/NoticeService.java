@@ -25,5 +25,7 @@ public interface NoticeService {
 	
 	int noticeCount(Map map) throws Exception;
 
+	int noticeEdit(Map map) throws Exception;
+
 	
 }

@@ -5,7 +5,6 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,7 +18,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.aamu.admin.main.service.ListPagingData;
 import com.aamu.admin.main.service.NoticeDTO;
-import com.aamu.admin.main.service.NoticeService;
 import com.aamu.admin.main.service.PagingUtil;
 import com.aamu.admin.main.serviceimpl.NoticeServiceImpl;
 
@@ -46,6 +44,28 @@ public class NoticeController {
 	}
 	
 	
+	//상세보기]
+	@RequestMapping("NoticeView.do")
+	public String noticeView(
+			//@ModelAttribute("id") String id,
+			@RequestParam Map map, Model model) throws Exception {
+		
+	
+		noticeService.noticeCount(map);
+		
+	
+		//서비스 호출]
+		NoticeDTO record = noticeService.selectOne(map);
+		
+		//데이타 저장]		
+		model.addAttribute("record", record);
+		//뷰정보 반환]
+		return "notice/noticeView";
+	}///////////////////////
+	
+	
+	
+	
 	// 글 등록
 	@GetMapping("NoticeWrite.do")
 	public String noticeWrite() throws Exception {
@@ -59,21 +79,30 @@ public class NoticeController {
 		return "redirect:/Notice.do";
 	}
 	
-	//상세보기]
-	@RequestMapping("NoticeView.do")
-	public String noticeView(
-			//@ModelAttribute("id") String id,
-			@RequestParam Map map, Model model) {
+	
+
+	
+	@GetMapping("NoticeEdit.do")
+	public String noticeEdit(@ModelAttribute("nno") String nno,@RequestParam Map map,Model model) throws Exception {
 		
 		//서비스 호출]
-		NoticeDTO record = noticeService.selectOne(map);
-
+		NoticeDTO record= noticeService.selectOne(map);
+		
+		record.setContent(record.getContent().replace("<br/>","\r\n"));
+		
 		//데이타 저장]		
 		model.addAttribute("record", record);
 		//뷰정보 반환]
-		return "notice/noticeView";
+		return "notice/noticeEdit";
 	}///////////////////////
 	
+	@PostMapping("NoticeEdit.do")
+	public String noticeEdit(@ModelAttribute("nno") String nno,@RequestParam Map map) throws Exception {
+		//서비스 호출]		
+		noticeService.noticeEdit(map);
+		//뷰정보 반환]-목록을 처리하는 컨트롤러로 이동
+		return "redirect:/NoticeView.do";
+	}/////////////////////////
 	
 
 	// 글 삭제
@@ -90,5 +119,16 @@ public class NoticeController {
 			resultMap.put("result", "NotSuccess");
 		return resultMap;
 	}
+	
+	
+	@GetMapping("NoticeViewDelete.do")
+	public String delete(@ModelAttribute("nno") String nno,@RequestParam Map map) {
+		
+		noticeService.noticeViewDelete(map);
+		
+		return "redirect:/Notice.do";
+	}/////////////////////////
+	
+	
 
 }

@@ -67,7 +67,7 @@
 															</td>
 															<td>${record.nno}</td>
 															<td><a
-																href="<c:url value="/NoticeView.do?nno=${record.nno}"/>">${record.title}</a></td>
+																href="<c:url value="/NoticeView.do?nno=${record.nno}&nowPage="/><c:out value="${param.nowPage}" default="1"/>">${record.title}</a></td>
 															<td>${record.id}</td>
 															<td>${record.noticedate}</td>
 															<td>${record.ncount}</td>
@@ -161,7 +161,8 @@
     		alert("선택된 글이 없습니다.");
     	}
     	else{
-    		confirm("정말 삭제하시겠습니까?");
+    		if (confirm("정말 삭제하시겠습니까?")){
+    		
     		var jsonString = JSON.stringify({nno : nnoArr})
     		$.ajax({
        			url:"<c:url value="NoticeDelete.do"/>",
@@ -176,6 +177,9 @@
        		}).fail(error=>{
        			console.log('삭제에러:',error);
        		});
+    		
+    		} else return false;
+    		
     	}//////else
     });
     
