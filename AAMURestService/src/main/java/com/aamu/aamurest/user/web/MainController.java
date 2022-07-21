@@ -109,131 +109,148 @@ public class MainController {
 		int result = (int)Math.ceil(((double)list.size()-tripDay)/tripDay);
 		int index=0;
 		int count = 0;
+		long mtime=0;
 		/////////////////////////////
-		if(list.size()-tripDay*2==1) {
-			list.get(list.size()-1).setDay(1);
-		}////////////////if
-		/////////////////////////////
-		else {
-			while(true){
-				
-				if(count<result) {
-					/*
-					double standardx = list.get(count*tripDay+index).getDto().getMapx();
-					double standardy = list.get(count*tripDay+index).getDto().getMapy();
-					*/
-					map.put("firstx", list.get(count*tripDay+index).getDto().getMapx());
-					map.put("firsty", list.get(count*tripDay+index).getDto().getMapy());
-					//System.out.println("기준장소:"+list.get(count*tripDay+index).getDto().getTitle());
-					double low = Integer.MAX_VALUE;
-					//double attrx =0;
-					//double attry =0;
-					double resultxy=0;
-					for(int k=tripDay;k<list.size();k++) {
+		while(true){
+			
+			if(count<result) {
+				/*
+				double standardx = list.get(count*tripDay+index).getDto().getMapx();
+				double standardy = list.get(count*tripDay+index).getDto().getMapy();
+				*/
+				map.put("firstx", list.get(count*tripDay+index).getDto().getMapx());
+				map.put("firsty", list.get(count*tripDay+index).getDto().getMapy());
+				//System.out.println("기준장소:"+list.get(count*tripDay+index).getDto().getTitle());
+				double low = Integer.MAX_VALUE;
+				//double attrx =0;
+				//double attry =0;
+				double resultxy=0;
+				for(int k=tripDay;k<list.size();k++) {
+					
+					if(list.get(k).getDay()==0) {
 						
-						if(list.get(k).getDay()==0) {
-							
-							//System.out.println(k);
-							/*
-							attrx = list.get(k).getDto().getMapx();
-							attry = list.get(k).getDto().getMapy();
-							resultxy = Math.sqrt(Math.pow(Math.abs(standardx-attrx),2)+Math.pow(Math.abs(standardy-attry),2));
-							*/
-							
-							map.put("secondx", list.get(k).getDto().getMapx());
-							map.put("secondy", list.get(k).getDto().getMapy());
-							
-							resultxy = service.getRecentPlaceOne(map);
-							if(low>resultxy && tripDay*(count+1)+index<list.size()) {
-								
-								low=resultxy;
-								
-								
-								//System.out.println("low:"+low);
-								//System.out.println(String.format("swap할 인덱스 tripday:%s,index:%s,주소:%s",tripDay*(count+1)+index,k,list.get(k).getDto().getTitle()));
-								
-							}
-				
-						}
-						if(k==list.size()-1) {
-							for(int j=tripDay;j<list.size();j++) {
-								//attrx = list.get(j).getDto().getMapx();
-								//attry = list.get(j).getDto().getMapy();
-								//resultxy = Math.sqrt(Math.pow(Math.abs(standardx-attrx),2)+Math.pow(Math.abs(standardy-attry),2));
-								if(j!=count*tripDay+index) {
-									map.put("secondx", list.get(j).getDto().getMapx());
-									map.put("secondy", list.get(j).getDto().getMapy());
-									resultxy = service.getRecentPlaceOne(map);
-									
-									if(low==resultxy) {
-										Collections.swap(list,j,tripDay*(count+1)+index);
-										
-										break;} 
-								}
-							}
-						}
+						//System.out.println(k);
+						/*
+						attrx = list.get(k).getDto().getMapx();
+						attry = list.get(k).getDto().getMapy();
+						resultxy = Math.sqrt(Math.pow(Math.abs(standardx-attrx),2)+Math.pow(Math.abs(standardy-attry),2));
+						*/
 						
+						map.put("secondx", list.get(k).getDto().getMapx());
+						map.put("secondy", list.get(k).getDto().getMapy());
+						
+						resultxy = service.getRecentPlaceOne(map);
+						if(low>resultxy && tripDay*(count+1)+index<list.size()) {
+							
+							low=resultxy;
+							
+							
+							//System.out.println("low:"+low);
+							//System.out.println(String.format("swap할 인덱스 tripday:%s,index:%s,주소:%s",tripDay*(count+1)+index,k,list.get(k).getDto().getTitle()));
+							
+						}
+			
 					}
-					if(tripDay*(count+1)+index<list.size() && list.get(tripDay*(count+1)+index).getDay()==0) {
-						list.get(tripDay*(count+1)+index).setDay(index+1);
-						/*
-						String uri = "http://192.168.0.150:5000/mvtm?firstx="+list.get(count*tripDay+index).getDto().getMapx()+"&firsty="
-								+list.get(count*tripDay+index).getDto().getMapy()+"&secondx="
-								+list.get(tripDay*(count+1)+index).getDto().getMapx()+"&secondy="
-								+list.get(tripDay*(count+1)+index).getDto().getMapy();
-								*/
-						/*
-						ResponseEntity<Map> responseEntity = 
-								restTemplate.exchange(uri, HttpMethod.GET, null, Map.class);
-						long mtime = Long.parseLong(responseEntity.getBody().get("MVTM").toString())*1000;
-						*/
-						/*
-						String uri = "https://apis-navi.kakaomobility.com/v1/directions?origin="+list.get(count*tripDay+index).getDto().getMapx()+","+list.get(count*tripDay+index).getDto().getMapy()+"&"
-								+ "destination="+list.get(tripDay*(count+1)+index).getDto().getMapx()+","+list.get(tripDay*(count+1)+index).getDto().getMapy()+"&"
-								+ "waypoints=&priority=RECOMMEND&car_fuel=GASOLINE&car_hipass=false&alternatives=false&road_details=false";
+					if(k==list.size()-1) {
+						for(int j=tripDay;j<list.size();j++) {
+							//attrx = list.get(j).getDto().getMapx();
+							//attry = list.get(j).getDto().getMapy();
+							//resultxy = Math.sqrt(Math.pow(Math.abs(standardx-attrx),2)+Math.pow(Math.abs(standardy-attry),2));
+							if(j!=count*tripDay+index) {
+								map.put("secondx", list.get(j).getDto().getMapx());
+								map.put("secondy", list.get(j).getDto().getMapy());
+								resultxy = service.getRecentPlaceOne(map);
+								
+								if(low==resultxy) {
+									Collections.swap(list,j,tripDay*(count+1)+index);
+									
+									break;} 
+							}
+						}
+					}
+					
+				}
+				if(tripDay*(count+1)+index<list.size() && list.get(tripDay*(count+1)+index).getDay()==0) {
+					list.get(tripDay*(count+1)+index).setDay(index+1);
+					/*
+					String uri = "http://192.168.0.150:5000/mvtm?firstx="+list.get(count*tripDay+index).getDto().getMapx()+"&firsty="
+							+list.get(count*tripDay+index).getDto().getMapy()+"&secondx="
+							+list.get(tripDay*(count+1)+index).getDto().getMapx()+"&secondy="
+							+list.get(tripDay*(count+1)+index).getDto().getMapy();
+							*/
+					/*
+					ResponseEntity<Map> responseEntity = 
+							restTemplate.exchange(uri, HttpMethod.GET, null, Map.class);
+					long mtime = Long.parseLong(responseEntity.getBody().get("MVTM").toString())*1000;
+					*/
+					/*
+					String uri = "https://apis-navi.kakaomobility.com/v1/directions?origin="+list.get(count*tripDay+index).getDto().getMapx()+","+list.get(count*tripDay+index).getDto().getMapy()+"&"
+							+ "destination="+list.get(tripDay*(count+1)+index).getDto().getMapx()+","+list.get(tripDay*(count+1)+index).getDto().getMapy()+"&"
+							+ "waypoints=&priority=RECOMMEND&car_fuel=GASOLINE&car_hipass=false&alternatives=false&road_details=false";
+					
+					ResponseEntity<Map> responseEntity = 
+							restTemplate.exchange(uri, HttpMethod.GET, httpEntity, Map.class);
+					System.out.println(responseEntity.getBody());
+					long mtime=0;
+					if(((Map)((List)responseEntity.getBody().get("routes")).get(0)).get("result_code").toString().equals("0"))
+						mtime = Long.parseLong(((Map)((List)((Map)((List)responseEntity.getBody().get("routes")).get(0)).get("sections")).get(0)).get("duration").toString())*1000;
+					
+					list.get(tripDay*(count+1)+index).setMtime(mtime);
+					*/
+					if(count==0 && index!=0) {
+						map.put("firstx", list.get(count*tripDay+index-1).getDto().getMapx());
+						map.put("firsty", list.get(count*tripDay+index-1).getDto().getMapy());
+						map.put("secondx",list.get(tripDay*(count+1)+index).getDto().getMapx());
+						map.put("secondy",list.get(tripDay*(count+1)+index).getDto().getMapy());
 						
-						ResponseEntity<Map> responseEntity = 
-								restTemplate.exchange(uri, HttpMethod.GET, httpEntity, Map.class);
-						System.out.println(responseEntity.getBody());
-						long mtime=0;
-						if(((Map)((List)responseEntity.getBody().get("routes")).get(0)).get("result_code").toString().equals("0"))
-							mtime = Long.parseLong(((Map)((List)((Map)((List)responseEntity.getBody().get("routes")).get(0)).get("sections")).get(0)).get("duration").toString())*1000;
-						
+						mtime = (long)(service.getRecentPlaceOne(map)*1000*60*1.5);
 						list.get(tripDay*(count+1)+index).setMtime(mtime);
-						*/
+					}
+					
+					else if(count==result-1) {
+						map.put("firstx",list.get(tripDay*(count+1)+index).getDto().getMapx());
+						map.put("firsty",list.get(tripDay*(count+1)+index).getDto().getMapy());
+						map.put("secondx", list.get(index).getDto().getMapx());
+						map.put("secondy", list.get(index).getDto().getMapy());
+						
+						mtime = (long)(service.getRecentPlaceOne(map)*1000*60*1.5);
+						
+						list.get(index).setMtime(mtime);	
+					}
+					else{
 						map.put("firstx", list.get(count*tripDay+index).getDto().getMapx());
 						map.put("firsty", list.get(count*tripDay+index).getDto().getMapy());
 						map.put("secondx",list.get(tripDay*(count+1)+index).getDto().getMapx());
 						map.put("secondy",list.get(tripDay*(count+1)+index).getDto().getMapy());
+	
+						mtime = (long)(service.getRecentPlaceOne(map)*1000*60*1.5);
 						
-
-						long mtime = (long)(service.getRecentPlaceOne(map)*1000*60*1.5);
-
 						list.get(tripDay*(count+1)+index).setMtime(mtime);
-						
-					}
-					
-					setDay++;
-					
-					count++;
-					
-				}
-				else {
-					count=0;
-					//System.out.println("index"+index);
-					if(index<tripDay) {
-						index++;
 					}
 
-					continue;
-					
-					
-				}//////////
-			//System.out.println(setDay);
-			//System.out.println(list.size()-1);
-			if(setDay==list.size()) break;
-			}////////////for attr most near place
-		}
+				}
+				
+				setDay++;
+				
+				count++;
+				
+			}
+			else {
+				count=0;
+				//System.out.println("index"+index);
+				if(index<tripDay) {
+					index++;
+				}
+
+				continue;
+				
+				
+			}//////////
+		//System.out.println(setDay);
+		//System.out.println(list.size()-1);
+		if(setDay==list.size()) break;
+		}////////////for attr most near place
+	
 		/*
 
 
@@ -355,15 +372,16 @@ public class MainController {
 		}
 		/*
 		for(AttractionDTO dto:list) {
-			
+			System.out.println(dto.getKakaokey());
 			if(dto.getKakaokey()!=null) {
-				String uri = "http://127.0.0.1:5000/aamu?map="+dto.getKakaokey();
+				String uri = "http://192.168.0.19:5000/review?map="+dto.getKakaokey();
 				
-				ResponseEntity<KakaoReview> responseEntity = 
-						restTemplate.exchange(uri, HttpMethod.GET, null, KakaoReview.class);
+				ResponseEntity<List> responseEntity = 
+						restTemplate.exchange(uri, HttpMethod.GET, null, List.class);
+				System.out.println((Map)responseEntity.getBody().get(0));
+				dto.setStar(Double.parseDouble(((Map)((Map)responseEntity.getBody().get(0)).get("basic_info")).get("star").toString()));
 				
 				
-				dto.setStar(responseEntity.getBody().getBasicInfo().getStar());
 				list.add(dto);
 			}
 			
