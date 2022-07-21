@@ -7,6 +7,8 @@ import Slider from "react-slick";
 import "./ModalGroup/Slider/slick.css";
 import "./ModalGroup/Slider/slick-theme.css";
 import dayjs from 'dayjs';
+import { confirmAlert } from 'react-confirm-alert'; // Import
+import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 
 function FeedSetting({val,setMyImage}) {
     let menuRef = useRef();
@@ -58,9 +60,7 @@ function FeedSetting({val,setMyImage}) {
             </div>
         )
     }
-    function islike(){
-        
-    }
+   
   return (
 <div>
     <div className="feeds-setting">  
@@ -125,7 +125,7 @@ function FeedSetting({val,setMyImage}) {
                 <Container1>
                     <Overlay
                     ref={commentRef} 
-                    onClick={ (e) => { if(e.target == commentRef.current) setcommentModal(false) } }
+                    onClick={ (e) => { if(e.target == commentRef.current) setcommentModal(false)  }}
                     >
                         <Comment onClick={ () => setcommentModal(false)} val={val}></Comment>
                     </Overlay>
