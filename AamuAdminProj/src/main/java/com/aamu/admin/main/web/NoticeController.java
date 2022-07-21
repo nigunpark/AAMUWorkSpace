@@ -40,7 +40,7 @@ public class NoticeController {
 		model.addAttribute("totalCount", noticeService.noticeGetTotalRecordCount(map));
 
 		// 뷰정보 반환
-		return "notice/adminNotice";
+		return "notice/noticeList";
 	}
 	
 	

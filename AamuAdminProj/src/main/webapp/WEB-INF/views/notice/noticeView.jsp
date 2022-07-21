@@ -44,13 +44,14 @@
 						</table>
 
 						<!-- 수정/삭제/목록 컨트롤 버튼 -->
-						<div class="text-center">
+						<div class="text-center mt-4">
 
-
-			<a href="<c:url value="NoticeEdit.do?nno=${record.nno}"/>" class="btn btn-success">수정</a>
-			<a href="javascript:noticeDelete(${record.nno})" class="delete btn btn-success">삭제</a> 
-			<a href="<c:url value="Notice.do?nowPage=${param.nowPage}"/>" class="btn btn-success">목록</a>
-
+							<a href="<c:url value="NoticeEdit.do?nno=${record.nno}"/>"
+								class="btn btn-success">수정</a> <a
+								href="javascript:noticeDelete(${record.nno})"
+								class="delete btn btn-success">삭제</a> <a
+								href="<c:url value="Notice.do?nowPage="/><c:out value="${param.nowPage}" default="1"/>"
+								class="btn btn-success">목록</a>
 
 						</div>
 

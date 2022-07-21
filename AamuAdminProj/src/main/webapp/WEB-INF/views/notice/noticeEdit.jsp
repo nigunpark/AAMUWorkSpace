@@ -26,7 +26,7 @@
 								 placeholder="내용을 입력하세요." onkeydown="resize(this)" onkeyup="resize(this)">${record.content }</textarea>
 							</div>
 							
-							<button type="submit" class="btn btn-primary">등록</button>
+							<button type="submit" class="btn btn-primary text-white">등록</button>
 						</form>
 						<!--------------------- 내용의 끝 부분입니다------------------------------------>
 					</div>

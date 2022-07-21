@@ -60,29 +60,27 @@ public class NoticeServiceImpl implements NoticeService {
 	public int noticeGetTotalRecordCount(Map map) {
 		return dao.noticeGetTotalRecordCount(map);
 	}
-	
+
 	// 글 등록
 	@Override
 	public int noticeWrite(Map map) {
 		return dao.noticeWrite(map);
 	}
-	
-	
+
 	@Override
-	public int noticeEdit(Map map) throws Exception {		
+	public int noticeEdit(Map map) throws Exception {
 		return dao.noticeEdit(map);
 	}
 
-	
 	// 글 상세 보기
 	@Override
 	public NoticeDTO selectOne(Map map) {
 		NoticeDTO record = dao.selectOne(map);
-		//줄바꿈 처리
-		record.setContent(record.getContent().replace("\r\n","<br/>"));
+		// 줄바꿈 처리
+		record.setContent(record.getContent().replace("\r\n", "<br/>"));
 		return record;
 	}
-	
+
 	// 조회수
 	@Override
 	public int noticeCount(Map map) throws Exception {
@@ -107,13 +105,10 @@ public class NoticeServiceImpl implements NoticeService {
 			return 0;
 	}
 
-
 	public int noticeViewDelete(Map map) {
-		
+
 		return dao.noticeViewDelete(map);
-			
+
 	}
-
-
 
 }

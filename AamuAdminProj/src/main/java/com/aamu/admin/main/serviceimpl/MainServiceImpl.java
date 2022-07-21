@@ -15,14 +15,14 @@ import org.springframework.stereotype.Service;
 import com.aamu.admin.main.service.MainService;
 
 @Service
-public class MainServiceImpl implements MainService{
-	
+public class MainServiceImpl implements MainService {
+
 	@Autowired
 	private MainDAO dao;
-	
+
 	@Override
 	public int usersTotalCount() {
-		
+
 		return dao.usersTotalCount();
 	}
 
@@ -36,56 +36,54 @@ public class MainServiceImpl implements MainService{
 
 	@Override
 	public Map placesTotalCount() {
-		
+
 		Map map = new HashMap<>();
-		
+
 		map.put("places", "placesinfo");
 		map.put("attraction", dao.placesTotalCount(map));
-		
+
 		map.put("places", "hotelinfo");
 		map.put("hotel", dao.placesTotalCount(map));
-		
+
 		map.put("places", "dinerinfo");
 		map.put("diner", dao.placesTotalCount(map));
-		
+
 		map.put("event", dao.selectEvent());
-		
+
 		map.put("places", "COMMUNITY");
 		map.put("commuCount", dao.placesTotalCount(map));
-		
+
 		map.put("places", "routebbs");
 		map.put("bbsCount", dao.placesTotalCount(map));
-		
+
 		map.put("places", "routeboard");
 		map.put("plannerCount", dao.placesTotalCount(map));
-		
-		map.put("places","places");
+
+		map.put("places", "places");
 		map.put("places", dao.placesTotalCount(map));
-		
+
 		return map;
 	}
 
 	@Override
 	public int selectEvent() {
-		
+
 		return dao.selectEvent();
 	}
 
-
-
 	@Override
 	public Map selectWeek() {
-		
+
 		Map map = new HashMap<>();
-		
+
 		List join = new Vector<>();
 		List date = new Vector<>();
 		List users = new Vector<>();
 		List commu = new Vector<>();
 		List bbs = new Vector<>();
 		List planner = new Vector<>();
-		for(int i=6;i>=0;i--) {
-			String day = "sysdate-"+i;
+		for (int i = 6; i >= 0; i--) {
+			String day = "sysdate-" + i;
 			int userCount = dao.selectUsers(day);
 			map.put("table", "users");
 			map.put("column", "joindate");
@@ -99,8 +97,8 @@ public class MainServiceImpl implements MainService{
 			map.put("table", "routeboard");
 			map.put("column", "routedate");
 			int countPlanner = dao.selectWeek(map);
-			String days =  "\""+dao.selectDate(day)+"\"";
-			
+			String days = "\"" + dao.selectDate(day) + "\"";
+
 			users.add(userCount);
 			date.add(days);
 			join.add(countJoin);
@@ -111,7 +109,7 @@ public class MainServiceImpl implements MainService{
 
 		map.put("userWeek", users);
 		map.put("date", date);
-		map.put("join",join);
+		map.put("join", join);
 		map.put("commu", commu);
 		map.put("bbs", bbs);
 		map.put("planner", planner);
@@ -119,9 +117,9 @@ public class MainServiceImpl implements MainService{
 	}
 
 	@Override
-	public Map<String,List> selectStartEnd(Map map) {
+	public Map<String, List> selectStartEnd(Map map) {
 		Calendar cal = Calendar.getInstance();
-		
+
 		String start = map.get("start").toString().split("T15")[0];
 		String end = map.get("end").toString().split("T15")[0];
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
@@ -135,23 +133,23 @@ public class MainServiceImpl implements MainService{
 			Date startday = formatter.parse(start);
 			Date endday = formatter.parse(end);
 			cal.setTime(endday);
-			cal.add(Calendar.DATE,2);
+			cal.add(Calendar.DATE, 2);
 			end = formatter.format(cal.getTime());
 
 			cal.setTime(startday);
-			cal.add(Calendar.DATE,1);
+			cal.add(Calendar.DATE, 1);
 			start = formatter.format(cal.getTime());
-			//startday = formatter.parse(start);
-			int countUser =0;
+			// startday = formatter.parse(start);
+			int countUser = 0;
 			int countBBS = 0;
 			int countCommu = 0;
-			int countPlan =0;
-			int usersCount =0;
-			while(!start.equals(end)){
-				System.out.println("보내는 날짜:"+start);
+			int countPlan = 0;
+			int usersCount = 0;
+			while (!start.equals(end)) {
+				System.out.println("보내는 날짜:" + start);
 				map.put("table", "users");
 				map.put("column", "joindate");
-				//map.put("day", startday);
+				// map.put("day", startday);
 				map.put("day", start);
 				countUser = dao.selectWeekToString(map);
 				map.put("table", "COMMUNITY");
@@ -168,28 +166,26 @@ public class MainServiceImpl implements MainService{
 				commuList.add(countCommu);
 				bbsList.add(countBBS);
 				planList.add(countPlan);
-				start =start.substring(5);
+				start = start.substring(5);
 				dateList.add(start);
-				cal.add(Calendar.DATE,1);
-				start= formatter.format(cal.getTime());
-				//startday = formatter.parse(start);
-				
-	
-				System.out.println("세팅된 날짜:"+start);
-		    }
-			
+				cal.add(Calendar.DATE, 1);
+				start = formatter.format(cal.getTime());
+				// startday = formatter.parse(start);
+
+				System.out.println("세팅된 날짜:" + start);
+			}
+
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
 		map.put("countList", countList);
 		map.put("dateList", dateList);
-		map.put("commuList",commuList );
-		map.put("bbsList",bbsList );
-		map.put("planList",planList );
+		map.put("commuList", commuList);
+		map.put("bbsList", bbsList);
+		map.put("planList", planList);
 		map.put("usersList", usersList);
-		
+
 		return map;
 	}
-	
-	
+
 }

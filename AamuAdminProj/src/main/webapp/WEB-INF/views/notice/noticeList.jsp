@@ -26,8 +26,8 @@
 												style="float: right">등록</button></a>
 									</div>
 
-									<div class="table-responsive text-center">
-										<table class="table text-center">
+									<div class="notice-table table-responsive text-center">
+										<table class="table text-center ">
 											<thead>
 												<tr>
 													<th class="col-1 ">
@@ -40,7 +40,7 @@
 														</div>
 													</th>
 													<th class="col-1">글번호</th>
-													<th>제목</th>
+													<th >제목</th>
 													<th class="col-1">ID</th>
 													<th class="col-1">작성일</th>
 													<th class="col-1">조회수</th>
@@ -125,6 +125,11 @@
 	<!--main-panel-->
 </div>
 
+<style>
+
+.notice-table {width: 100%;}
+
+</style>
 
 <script>
   	//체크박스 
