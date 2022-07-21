@@ -21,16 +21,12 @@ const MyProfileBox = () => {
                     <h5>비밀번호: <input type='password' placeholder='기존 비밀번호'/></h5>
                 </p>
                 </div>
-                {/* <p className="box-content-subheader">Prototyping</p> */}
             </div>
 
             <div className="box-progress-wrapper">
-                {/* <p className="box-progress-header">Progress</p> */}
                 <div className="box-progress-bar">
                     <span className="box-progress"></span>
-                    {/* 스팬 테그에 있던거  style="width: 60%; background-color: #ff942e" */}
                 </div>
-                {/* <p className="box-progress-percentage">60%</p> */}
             </div>
 
             <div className="project-box-footer">
@@ -39,11 +35,6 @@ const MyProfileBox = () => {
                         <button className="learn-more" type="button">회원탈퇴</button>
                     </div>
                 </div>
-
-                {/* <div className="days-left">
-                 style="color: #ff942e;"
-                    
-                </div> */}
                 <div className='detail-button'>
                     <button className="learn-more" type="button">저장</button>
                 </div>
