@@ -4,6 +4,7 @@ import NotificationModal from "./ModalGroup/Notification";
 import SearchModal from "./ModalGroup/Search/Search";
 import WriteModal from "./ModalGroup/Upload/Upload"
 import ButtonGroup from './ModalGroup/Search/ButtonGroup';
+import { confirmAlert } from "react-confirm-alert";
 
 function User({setlist}) {
   const modalRef = useRef();
@@ -25,7 +26,22 @@ function User({setlist}) {
   const handleChange=(e)=>{
     console.log(e.target.value);
   }
-  
+  const submit = () => {
+    confirmAlert({
+      title: '게시물을 삭제하시겠어요?',
+      message: '지금 나가면 수정 내용이 저장되지 않습니다.',
+      buttons: [
+        {
+          label: '삭제',
+          onClick: () => {setsquare(false)}
+          
+        },
+        {
+          label: '취소'
+        }
+      ]
+    });
+  };
   return (
     <div>
       <div className="userSearch">
@@ -76,7 +92,7 @@ function User({setlist}) {
               <Container>
                 <Overlay
                 ref={outside} 
-                onClick={ (e) => { if(e.target == outside.current) setsquare(false) } }
+                onClick={ () => { submit() } }
                 />
                   <WriteModal onClick={ () => setsquare(false) } setsquare={setsquare} setlist={setlist}/>
                 
