@@ -53,17 +53,14 @@ def review():
 
     if comment_data['comment']['kamapComntcnt'] == 0:
 
-        aamu_total = []
         aamu_none = None
 
         total_data = {
             'basic_info' : aamu_basic,
             'comment_info' : aamu_none
         }
-
-        aamu_total.append(total_data)
             
-        return json.dumps(aamu_total, ensure_ascii=False)
+        return json.dumps(total_data, ensure_ascii=False), 200, {'Content-Type':'application/json'}
 
     else:
 
@@ -89,16 +86,12 @@ def review():
 
                 aamu_comment.append(aamu_data)
 
-                aamu_total = []
-                
                 total_data = {
                     'basic_info' : aamu_basic,
                     'comment_info' : aamu_comment
                 }
 
-                aamu_total.append(total_data)                
-                
-        return json.dumps(aamu_total, ensure_ascii=False), 200, {'Content-Type':'application/json'}
+        return json.dumps(total_data, ensure_ascii=False), 200, {'Content-Type':'application/json'}
 
 @app.route("/mvtm", methods=["GET"])
 
