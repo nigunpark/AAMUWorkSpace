@@ -178,28 +178,6 @@ const Uploader = ({ setsquare, setlist }) => {
   }
 
   return (
-<<<<<<< HEAD
-    <Contents>
-      <FirstLine>
-        <Deletebtn variant="contained" onClick={deleteImage}>
-          <i className="fa-solid fa-arrow-left"></i>
-        </Deletebtn>
-        <div className="newPosting">
-          <h2>새 게시물 만들기</h2>
-        </div>
-        {/* {showNext ?  */}
-        <Nextbtn
-          onClick={() => {
-            let temp = uploadFile(myImagefile);
-            gramEdit(temp, setlist, titleRef, textareaRef, searchRef, search);
-            setsquare(false);
-            feedList(setlist);
-          }}
-        >
-          <FontAwesomeIcon icon={faPaperPlane} size="2x" />
-        </Nextbtn>
-        {/* {
-=======
   
     <Contents>  
         <FirstLine>
@@ -222,7 +200,6 @@ const Uploader = ({ setsquare, setlist }) => {
                        <FontAwesomeIcon icon={faPaperPlane}  size="2x" />
                 </Nextbtn>
               {/* {
->>>>>>> insta
                 showNext && navigate('/Insta')
                 //  window.location.reload(window.location.href)
               } */}
@@ -248,50 +225,6 @@ const Uploader = ({ setsquare, setlist }) => {
                                    <img className='divimage' alt="sample" src={images}/>
                              
                           ))}  */}
-<<<<<<< HEAD
-          <div className="swiperUi">
-            <ul>
-              <Swiper
-                className="swiperContainer"
-                modules={[Navigation, Pagination, Scrollbar, A11y, Autoplay]}
-                spaceBetween={10}
-                slidesPerView={1}
-                // navigation
-                autoplay={{ delay: 2500 }}
-                loop={true}
-                pagination={{ clickable: true }}
-                scrollbar={{ draggable: true }}
-              >
-                {myImage.map((image, i) => {
-                  return (
-                    <SwiperSlide>
-                      <li>
-                        <img className="divimage" alt="sample" src={image} />
-                      </li>
-                      {/* <img className='divimage' alt="sample" src='/images/bg1.png'/> */}
-                    </SwiperSlide>
-                  );
-                })}
-              </Swiper>
-            </ul>
-          </div>
-          <label
-            className="rweet_file_btn"
-            onClick={() => {
-              setHide(!hide);
-            }}
-            htmlFor="input-file"
-            onChange={addImage}
-          >
-            {hide ? null : (
-              <Button type="primary" variant="contained">
-                {/* onClick={() => inputRef.click()} */}
-                컴퓨터에서 선택
-              </Button>
-            )}
-          </label>
-        </form>
-=======
               <div className="previewPic1">
                   <ul>
                     <Swiper
@@ -392,11 +325,9 @@ const Uploader = ({ setsquare, setlist }) => {
                   {/* // :null} */}
                   </Body>
                   {/* {show?<SearchModal search={search}/>:null} */}
-        </Contents>
->>>>>>> insta
-
+        {/* </Contents>
         {/* {showNext ?  */}
-        <div className="side">
+        {/* <div className="side">
           <div className="title-profile">
             <img
               src="'/img/bk.jpg ' ?? '/images/user.jpg'"
@@ -477,11 +408,11 @@ const Uploader = ({ setsquare, setlist }) => {
           </div>
         </div>
         {/* // :null} */}
-      </Body>
+      {/* </Body> */}
       {/* {show?<SearchModal search={search}/>:null} */}
     </Contents>
   );
-};
+}; 
 
 function feedList(setlist) {
   //업로드 버튼 누르고 화면 새로고침
@@ -531,19 +462,6 @@ function gramEdit(temp, setlist, titleRef, textareaRef, searchRef, search) {
       //   ctitle: titleRef.current.value,
       //   content: textareaRef.current.value,
       //   contentid:searched.CONTENTID
-<<<<<<< HEAD
-      // },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "multipart/form-data",
-        },
-      }
-    )
-    .then((resp) => {
-      console.log(resp.data);
-      // setlist(resp.data);
-=======
       // },  
        { headers: {
               Authorization: `Bearer ${token}`,
@@ -556,7 +474,6 @@ function gramEdit(temp, setlist, titleRef, textareaRef, searchRef, search) {
     console.log(resp.data);
     setlist(resp.data);
     
->>>>>>> insta
     })
     .catch((error) => {
       console.log(error);
