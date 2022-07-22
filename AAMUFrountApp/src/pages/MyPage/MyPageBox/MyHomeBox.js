@@ -1,10 +1,10 @@
 import React from 'react'
 
 const MyHomeBox = ({setClickTab, planList}) => {
-    // console.log('잘 넘어왔나 :',planList);
+
+    console.log('잘 넘어왔나 :',planList);
 
     const postDate = new Date(planList.routeDate);
-    // console.log('postDate :', postDate);
 
     function dateFormat(date) {
         let month = date.getMonth() + 1;
@@ -15,12 +15,9 @@ const MyHomeBox = ({setClickTab, planList}) => {
 
         return date.getFullYear() + '-' + month + '-' + day;
     };
-    // console.log('dateFormat(postDate)',dateFormat(postDate));
 
-    const randomNum = [1,2,3,4,5,6,7,8,9].length;
-    const imgNum = Math.floor(Math.random() * randomNum)+1;
-
-    // console.log('Math.floor(Math.random() * randomNum) :',Math.floor(Math.random() * randomNum)+1);
+    // const randomNum = [1,2,3,4,5,6,7,8,9].length;
+    // const imgNum = Math.floor(Math.random() * randomNum)+1;
 
     const myTravel = () => {
         
@@ -49,7 +46,8 @@ const MyHomeBox = ({setClickTab, planList}) => {
             </div> */}
 
             <div className="project-box-content-header">
-                <img className='MapImgSize' src={'/images/img-'+imgNum+'.jpg'} style={{marginTop:'10px'}}/>
+                {/* '/images/img-'+imgNum+'.jpg' */}
+                <img className='MapImgSize' src={planList.smallImage} style={{marginTop:'10px'}}/>
                 {/* 저장한 경로 */}
             </div>
 
