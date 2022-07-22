@@ -25,7 +25,7 @@ function App() {
   const [whereUrl, setWhereUrl] = useState(false);
 
   const handleScroll = () => {
-    if (window.scrollY > 990 && window.scrollY < 1780) setScrollNav(true);
+    if (window.scrollY > 950 && window.scrollY < 2500) setScrollNav(true);
     else setScrollNav(false);
   };
 
