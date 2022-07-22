@@ -306,7 +306,7 @@ function TabContent({clickTab, setClickTab, planList}) {
   // console.log('등록한 이미지 2:',showImages[1]);
   // console.log('입력한 제목:',title);
   // console.log('입력한 내용:',content);
-  // console.log('입력한 태그:',tag);
+  console.log('입력한 태그:',tag);
 
   let myImgs = showImages.map((showImages, imgIndex)=>{
     console.log('인덱스:',imgIndex,' 값:',showImages);
@@ -315,37 +315,11 @@ function TabContent({clickTab, setClickTab, planList}) {
   });
   // console.log('저장된 myImgs:',myImgs);
 
-  
-
-  const write = () => {
-
-    // 입력한 태그를 # 으로 잘라서 배열로 새로 저장함
-    setWriteTag(tag.split('#'));
-    writeTag.splice(0,1);
-    // console.log('writeTag : ',writeTag);
-
-    let token = sessionStorage.getItem("token");
-
-    axios.post("",{
-      //저장한 여행경로 고유번호(고유아이디)값 추가해야함 (no 같은거)
-      title: `${title}`,
-      content: `${content}`,
-      tag: `${writeTag}`,
-      showImages:`${myImgs}`
-
-    },{
-      headers: {
-        Authorization: `Bearer ${token}`,
-        }
-    });
-  };
-  
-
   const canSubmit = useCallback(() => {
     return content !== "" && title !== "";
   }, [title, content]);
 
-  if (clickTab === 0) {// 홈
+  if (clickTab === 10) {// 홈
     return planList.map((val, idx) => {
       return (
           <MyHomeBox
@@ -409,7 +383,7 @@ function TabContent({clickTab, setClickTab, planList}) {
   else if (clickTab === 3) { //----------------------프로필------------------------
     return <MyProfileBox />;
   }
-  else if (clickTab === 10) { //-----------------------글작성------------------------
+  else if (clickTab === 0) { //-----------------------글작성------------------------
     // const imgFileUpload = (fileBlob) => {
     //   const reader = new FileReader();
   
@@ -505,24 +479,19 @@ function TabContent({clickTab, setClickTab, planList}) {
           placeholder="#tag"
           value={tag}/>
       </div>
-      
-      {/* <div className="write-box add-delete">
-        {showImages.map((image, id) => (
-          <Imgs
-            src={image}
-            alt={`${image}-${id}`}
-            onClick={() => handleDeleteImage(id)}/>
-        ))}
-        
-      </div> */}
 
       <div className="write-box" style={{textAlign: 'end'}}>
         {/* <div className='detail-button'> */}
         {
         canSubmit() ? (
-          <button style={{
-            color:'black'
-          }} className="navbar-btn" type="button" onClick={write}>공유하기</button>
+          <button
+            style={{color:'black'}}
+            className="navbar-btn"
+            type="button"
+            onClick={()=>{
+              let write = uploadFile(showImages);
+              bordWrite(write, title, content, tag, writeTag, setWriteTag);
+            }}>공유하기</button>
           ) : (
             <button  type="button" disabled>제목과 내용을 모두 입력하세요</button>
           )
@@ -533,7 +502,64 @@ function TabContent({clickTab, setClickTab, planList}) {
     </div>
     );
   }
+};
+function uploadFile(showImages){//이미지 업로드
+  let formData = new FormData(); // formData 객체를 생성한다.
+  for (let i = 0; i < showImages.length; i++) { 
+    formData.append("writeImg", showImages[i]); // 반복문을 활용하여 파일들을 formData 객체에 추가한다
+  }
+  return formData;
+};
+function bordWrite(write, title, content, tag, writeTag, setWriteTag){
+
+  setWriteTag(tag.split('#'));
+  writeTag.splice(0,1);
+  // console.log('writeTag :', writeTag);
+
+  write.append('id', sessionStorage.getItem('username'));
+  write.append('title', title);
+  write.append('content', content);
+  write.append('writeTag', writeTag);
+  //키값은 백이랑 얘기해서 조정해야함
+
+  let token = sessionStorage.getItem("token");
+  axios.post('',write, {
+      headers: {
+              Authorization: `Bearer ${token}`,
+              'Content-Type': 'multipart/form-data',
+          }
+      }
+  )
+  .then((resp) => {
+      console.log(resp.data);
+  })
+  .catch((error) => {
+      console.log(error);
+  });
 }
+
+// const write = () => {
+
+//   // 입력한 태그를 # 으로 잘라서 배열로 새로 저장함
+//   setWriteTag(tag.split('#'));
+//   writeTag.splice(0,1);
+//   // console.log('writeTag : ',writeTag);
+
+//   let token = sessionStorage.getItem("token");
+
+//   axios.post("",{
+//     //저장한 여행경로 고유번호(고유아이디)값 추가해야함 (no 같은거)
+//     title: `${title}`,
+//     content: `${content}`,
+//     tag: `${writeTag}`,
+//     showImages:`${myImgs}`
+
+//   },{
+//     headers: {
+//       Authorization: `Bearer ${token}`,
+//       }
+//   });
+// };
 
 
 function TabTopLine({clickTab, planList}) {
