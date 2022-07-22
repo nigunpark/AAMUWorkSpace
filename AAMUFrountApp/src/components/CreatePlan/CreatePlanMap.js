@@ -22,35 +22,29 @@ const CreatePlanMap = ({
     return state;
   });
   useEffect(() => {
-    let mapContainer = cMapRef.current, // 지도를 표시할 div
-      mapOption = {
-        center: new kakao.maps.LatLng(lat, lng), // 지도의 중심좌표
-        level: mapLevel, // 지도의 확대 레벨
-      };
-    let map = new kakao.maps.Map(mapContainer, mapOption);
-    // if (cMap != null) {
-    //   // map = new kakao.maps.Map(mapContainer, mapOption);
-    //   map = cMap; // 지도를 생성합니다
-    // } else {
-    //   map = new kakao.maps.Map(mapContainer, mapOption);
-    // }
+    let map;
+    let mapOption = {
+      center: new kakao.maps.LatLng(lat, lng), // 지도의 중심좌표
+      level: mapLevel, // 지도의 확대 레벨
+    };
+    map = new kakao.maps.Map(cMapRef.current, mapOption);
+
+    console.log(lat, lng);
     let geocoder = new kakao.maps.services.Geocoder();
     // 주소로 좌표를 검색합니다
-    geocoder.addressSearch(
-      reduxState.localNameForMarker.addr ?? currPosition,
-      (result, status) => {
-        // 정상적으로 검색이 완료됐으면
-        if (status === kakao.maps.services.Status.OK) {
-          let coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-          setLat(result[0].y);
-          setLng(result[0].x);
-          map.panTo(coords);
-        }
+    geocoder.addressSearch(currPosition, (result, status) => {
+      // 정상적으로 검색이 완료됐으면
+      if (status === kakao.maps.services.Status.OK) {
+        let coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+        setLat(result[0].y);
+        setLng(result[0].x);
+        map.panTo(coords);
       }
-    );
+    });
+    map.setMaxLevel(10);
     setCMap(map);
     map.relayout();
-  }, [cMapRef]);
+  }, []);
 
   //지도 줌 관련
   useEffect(() => {
