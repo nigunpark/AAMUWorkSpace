@@ -1,4 +1,3 @@
-from asyncio.windows_events import NULL
 from waitress import serve
 from flask import Flask, request
 
@@ -28,8 +27,6 @@ def review():
     comment_res = requests.get(comment_url)
     comment_text = comment_res.text
     comment_data = json.loads(comment_text)
-
- 
 
     if comment_data['comment']['kamapComntcnt'] != 0:
 
