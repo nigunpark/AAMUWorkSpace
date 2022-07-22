@@ -19,5 +19,5 @@ public class AdminCommuDTO {
 	private String rcount;
 	private String likecount;
 	private String userprofile;
-	private String joindate;
+	private java.sql.Date joindate;
 }

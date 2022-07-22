@@ -1,10 +1,12 @@
 package com.aamu.aamurest.user.serviceimpl;
 
+import java.util.HashMap;
 import java.util.List;
 
 import java.util.Map;
 import java.util.Vector;
 
+import org.apache.http.entity.ContentType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;
@@ -248,7 +250,22 @@ public class MainServiceImpl implements MainService{
 ///////////////////////////////////////////////////search place impl
 	@Override
 	public List<AttractionDTO> searchTwoPlace(Map map) {
-		
+
+		switch(map.get("contenttypeid").toString()) {
+		case "12":
+		case "28":
+			map.put("searchtable", "placesinfo");
+			break;
+		case "15":
+			map.put("searchtable", "eventinfo");
+			break;
+		case "32":
+			map.put("searchtable", "hotelinfo");
+			break;
+		case "39":
+			map.put("searchtable", "dinerinfo");
+			break;
+		}
 		return dao.searchTwoPlace(map);
 	}
 
@@ -389,14 +406,20 @@ public class MainServiceImpl implements MainService{
 	
 	@Override
 	public int deletePlanner(int rbn) {
-		
-		return dao.deletePlanner(rbn);
+		int affected=0;
+		Map map = new HashMap<>();
+		affected = transactionTemplate.execute(tx->{
+				
+				map.put("table", "route");
+				map.put("rbn", rbn);
+				dao.deletePlanner(map);
+				
+				map.put("table", "routeboard");
+				return dao.deletePlanner(map);
+			});
+		return affected;
 	}
-	@Override
-	public int deleteRoute(int rbn) {
-		
-		return dao.deleteRoute(rbn);
-	}
+
 	@Override
 	public List<AttractionDTO> getRecentPlaceAll(Map map) {
 		List<AttractionDTO> lists = dao.getRecentPlaceAll(map);
@@ -440,11 +463,32 @@ public class MainServiceImpl implements MainService{
 	public List<PlannerDTO> getPlannerList(String id) {
 		List<PlannerDTO> list = dao.getPlannerList(id);
 		List<PlannerDTO> returnList = new Vector<>();
-		
+		int index = 1;
+		int day =0;
 		for(PlannerDTO dto:list) {
-			dto.setRoute(dao.selectRouteList(dto.getRbn()));;
+			List<RouteDTO> routes = dao.selectRouteList(dto.getRbn());
+			dto.setRoute(routes);
+			for(RouteDTO route:routes) {
+				route.setDto(dao.selectOnePlace(route.getContentid()));
+				route.getDto().getSmallimage();
+
+				if(route.getDto().getContenttypeid()==12&&index==1) {
+
+					dto.setSmallImage(route.getDto().getSmallimage());
+					index++;
+					day = route.getDay();
+				}
+				if(route.getDto().getContenttypeid()==12&&day<route.getDay()) {
+					index--;
+				}
+				route.setDto(null);
+				index=1;
+				day=0;
+			}
+			dto.setRoute(null);
 			returnList.add(dto);
 		}
+		
 		
 		return returnList;
 	}
@@ -460,6 +504,11 @@ public class MainServiceImpl implements MainService{
 		dto.setRoute(routes2);
 		
 		return dto;
+	}
+	@Override
+	public List<AttractionDTO> selectMainPlaceList() {
+		
+		return dao.selectMainPlaceList();
 	}
 
 

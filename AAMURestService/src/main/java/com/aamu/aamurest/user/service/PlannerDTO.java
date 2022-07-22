@@ -3,6 +3,7 @@ package com.aamu.aamurest.user.service;
 import java.util.Date;
 
 import java.util.List;
+import java.util.Map;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -16,6 +17,7 @@ public class PlannerDTO {
 	private String id;
 	private Date routeDate;
 	private String plannerdate;
-	
+	private Map<String,List<RouteDTO>> routeMap=null;
+	private String smallImage;
 	
 }

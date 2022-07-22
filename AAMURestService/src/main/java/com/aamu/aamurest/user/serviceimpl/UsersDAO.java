@@ -14,9 +14,9 @@ public class UsersDAO {
 	@Autowired
 	SqlSessionTemplate template;
 	
-	public int joinUser(UsersDTO dto) {
+	public int joinUser(Map map) {
 	
-		return template.insert("joinUser",dto);
+		return template.insert("joinUser",map);
 	}
 
 	public UsersDTO selectOneUser(Map map) {

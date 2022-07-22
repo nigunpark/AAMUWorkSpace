@@ -46,7 +46,7 @@ public class MainDAO {
 	}
 
 	public List<AttractionDTO> searchTwoPlace(Map map) {
-		
+
 		return template.selectList("searchTwoPlace", map);
 	}
 	///////////////////////////////////////////////////serchdao
@@ -84,9 +84,9 @@ public class MainDAO {
 		return template.update("updatePlanner", dto);
 	}
 
-	public int deletePlanner(int rbn) {
+	public int deletePlanner(Map map) {
 		
-		return template.delete("deletePlanner",rbn);
+		return template.delete("deletePlanner",map);
 	}
 
 	public int deleteRoute(int rbn) {
@@ -122,6 +122,10 @@ public class MainDAO {
 	public List<RouteDTO> selectRouteList(int rbn) {
 		
 		return template.selectList("selectRouteList",rbn);
+	}
+
+	public List<AttractionDTO> selectMainPlaceList() {
+		return template.selectList("selectMainPlaceList");
 	}
 
 

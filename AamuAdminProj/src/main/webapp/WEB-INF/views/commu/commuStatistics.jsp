@@ -49,7 +49,7 @@
 													<th>프로필사진</th>
 													<th>id</th>
 													<th>좋아요 수</th>
-													<th>게시글 수</th>
+													<th>댓글 수</th>
 													<th>가입일</th>
 												</tr>
 											</thead>

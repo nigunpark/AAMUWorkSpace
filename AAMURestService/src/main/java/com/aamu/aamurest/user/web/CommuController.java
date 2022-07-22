@@ -42,9 +42,12 @@ public class CommuController {
 	@Autowired
 	private CommonsMultipartResolver multipartResolver;
 	
+	
+
 	//글 목록용
 	@GetMapping("/gram/selectList")
 	public List<CommuDTO> commuSelectList(@RequestParam Map map, HttpServletRequest req){
+		//List<CommuDTO> list();
 		//list=글 목록들
 		List<CommuDTO> list = commuService.commuSelectList(map);
 		for(CommuDTO dto : list) {//글 목록들 list에서 하나씩 꺼내서 dto에 담는다
@@ -57,7 +60,8 @@ public class CommuController {
 		return list;
 	}////////////////commuSelectList
 	
-	
+
+
 	//글 생성용
 	@PostMapping(value="/gram/edit")
 	public List<CommuDTO> commuInsert(@RequestParam List<MultipartFile> multifiles, @RequestParam Map map, HttpServletRequest req) {
@@ -109,7 +113,7 @@ public class CommuController {
 	
 	//글 수정용
 	@PutMapping("/gram/edit/{id}")
-	public Map commuUpdate(@PathVariable String id,@RequestParam Map map) {
+	public Map commuUpdate(@PathVariable String id,@RequestBody Map map) {
 		int commuUpdateAffected=commuService.commuUpdate(map);
 		//commuplace에 contentid수정
 		int commuPlaceUpdateAffected=commuService.commuPlaceUpdate(map);
@@ -135,20 +139,24 @@ public class CommuController {
 	
 	//댓글 생성용
 	@PostMapping("/gram/comment/edit")
-	public CommuCommentDTO commuCommentInsert(@RequestParam Map map) {
+	public List<CommuDTO> commuCommentInsert(@RequestBody Map map, HttpServletRequest req) {
+		System.out.println("댓글생성 map:"+map);
 		int commuCommentAffected=commuService.commuCommentInsert(map);
 		int RcPlusAffected=commuService.commuRcPlusUpdate(map);
-		//방금 입력한 댓글 뿌려주기
-		CommuCommentDTO dto=commuService.commuCommentSelectOne((String)map.get("lno"));
-		if(commuCommentAffected == 1 && RcPlusAffected ==1)
-			return dto;
-		else
-			return null;
+		//list=글 목록들
+		List<CommuDTO> list = commuService.commuSelectList(map);
+		for(CommuDTO dto : list) {//글 목록들 list에서 하나씩 꺼내서 dto에 담는다
+			//코멘트 셋팅
+			dto.setCommuComment(commuService.commuCommentSelectOne(dto.getLno()));
+			//포토 셋팅
+			dto.setPhoto(FileUploadUtil.requestFilePath(commuService.commuSelectPhotoList(dto.getLno()), "/resources/commuUpload", req));
+		}/////for
+		return list;
 	}
 	
 	//댓글 수정용
 	@PutMapping("/gram/comment/edit")
-	public Map commuCommentUpdate(@RequestParam Map map) {
+	public Map commuCommentUpdate(@RequestBody Map map) {
 		System.out.println("(cc)map:"+map);
 		int commuCommentUpdateAffected=commuService.commuCommentUpdate(map);
 		Map resultMap = new HashMap();
@@ -171,9 +179,11 @@ public class CommuController {
 		return resultMap;
 	}
 	
-	//글 좋아요
+	//글 좋아요 누르기 전체리스트
+	/*
 	@GetMapping("/gram/like")
 	public List<CommuDTO> commuLike(@RequestParam Map map, HttpServletRequest req) {
+		System.out.println("라이크 map:"+map);
 		int affected=commuService.commuLike(map);
 		//community테이블의 selectone likecount
 		int likecount=commuService.commuLikecountSelect(map);
@@ -190,6 +200,26 @@ public class CommuController {
 			return list;
 		}
 		else return null;
+	}
+	*/
+	//글 좋아요 누르기
+	@GetMapping("/gram/like")
+	public Map commuLike(@RequestParam Map map) {
+		Boolean affected=commuService.commuLike(map);
+		//community테이블의 selectone likecount
+		int likecount=commuService.commuLikecountSelect(map);
+		Map resultMap = new HashMap();
+		if(affected==true) {
+			resultMap.put("isLike", true);
+			resultMap.put("likecount", likecount);
+			resultMap.put("lno", map.get("lno"));
+		}
+		else {
+			resultMap.put("isLike", false);
+			resultMap.put("likecount", likecount);
+			resultMap.put("lno", map.get("lno"));
+		}
+		return resultMap;
 	}
 	
 

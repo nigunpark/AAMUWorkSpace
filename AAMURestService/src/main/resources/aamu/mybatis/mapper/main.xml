@@ -24,6 +24,10 @@
 		</choose>
 	</insert>
 	
+	<select id="selectMainPlaceList" resultType="attrDTO">
+		SELECT * FROM places <![CDATA[rownum<=5]]>
+	</select>
+	
 	<select id="selectPlacesList" parameterType="Map" resultType="attrDTO">
 		SELECT p.*,i.* FROM places p JOIN ${selecttable} i ON p.contentid=i.contentid WHERE p.areacode=#{areacode} AND p.contenttypeid=#{contenttypeid} AND <![CDATA[rownum<=100]]>
 	</select>
@@ -53,11 +57,8 @@
 	 	UPDATE routeboard SET title=#{title} WHERE rbn=#{rbn}
 	</update>
 
-	<delete id="deletePlanner" parameterType="int">
-		DELETE FROM routeboard WHERE rbn=#{rbn}
-	</delete>
-	<delete id="deleteRoute" parameterType="int">
-		DELETE FROM route WHERE rbn=#{rbn}
+	<delete id="deletePlanner" parameterType="Map">
+		DELETE FROM ${table} WHERE rbn=#{rbn}
 	</delete>
 	
 	<select id="selectOnePlace" parameterType="int" resultType="attrDTO">
@@ -65,11 +66,11 @@
 	</select>
 	
 	<select id="searchTwoPlace" parameterType="Map" resultType="attrDTO">
-		SELECT * FROM ${searchtable} WHERE ${searchcolumn} LIKE '%'||#{searchword}||'%' or #{searchcolumn2} LIKE '%'||#{searchword2}||'%'
+		SELECT p.*,i.* FROM places p JOIN ${searchtable} i ON i.contentid = p.contentid WHERE p.areacode=#{areacode} AND p.title LIKE '%'||#{searchword}||'%' or p.areacode=#{areacode} AND p.addr LIKE '%'||#{searchword}||'%'
 	</select>
 	
 	<select id="searchOnePlace" parameterType="Map" resultType="attrDTO">
-		SELECT * FROM ${searchtable} WHERE ${searchcolumn} LIKE '%'||#{searchword}||'%'
+		SELECT p.*,i.* FROM places p JOIN ${searchtable} i ON i.contentid = p.contentid WHERE ${searchcolumn} LIKE '%'||#{searchword}||'%'
 	</select>
 	
 	<update id="updatePlaces" parameterType="Map">

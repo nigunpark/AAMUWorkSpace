@@ -14,9 +14,9 @@ public class UsersServiceImpl implements UsersService{
 	private UsersDAO dao;
 	
 	@Override
-	public int joinUser(UsersDTO dto) {
+	public int joinUser(Map map) {
 		
-		return dao.joinUser(dto);
+		return dao.joinUser(map);
 	}
 
 	@Override

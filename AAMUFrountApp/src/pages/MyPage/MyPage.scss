@@ -5,7 +5,7 @@
 }
 
 :root {
-  --app-container: #f3f6fd;
+  --app-container: #f3f6fd; //뒷 배경 연하늘색
   --main-color: #1f1c2e;
   --secondary-color: #4A4A4A;
   --link-color: #1f1c2e;
@@ -81,7 +81,6 @@ button, a {
     background-color: var(--app-container);
     transition: .2s;
     max-width: 1800px;
-    
     button, input, optgroup, select, textarea {
       font-family: 'DM Sans', sans-serif;
     }
@@ -543,13 +542,14 @@ button, a {
       border-radius: 10px;
       position: relative;
       box-shadow: 0 2px 6px 0 rgba(136,148,171,.2),0 24px 20px -24px rgba(71,82,107,.1);
-      
+      transition: 0.1s;
       * {
         margin-right: 5px;
       }
+      
     }
     .project-box:hover{
-      transform: scale(1.07);
+      transform: scale(1.02);
     }
     
     .more-wrapper {
@@ -611,14 +611,14 @@ button, a {
   margin: auto;
   display: grid;
   grid-template-columns: 300px 400px 300px;
-  grid-template-rows: 35px 350px 50px;
+  grid-template-rows: 40px 350px 50px;
   gap: 10px;
   
 }
 .write-box{
   // border: solid 1px red;
   // font-size: 40px;
-  // text-align: center;
+  // text-align: end;
 
   &.picture{
     display: flex;
@@ -633,7 +633,7 @@ button, a {
   &.add-delete{
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: 33% 33% 33%;
+    grid-template-rows: 135px 135px 135px;
     grid-row: 2 / 4;
     //background-image: url("../../../public/images/no-image.jpg");
     // border: solid 1px red;
@@ -647,6 +647,11 @@ button, a {
         display:none;
     }
   }
+}
+.write-back{
+  background-size: cover;
+  background-image: url("../../../public/images/no-image.jpg");
+  background-repeat: no-repeat;
 }
 .plan-title{
   display: flex;
@@ -686,7 +691,17 @@ button, a {
   margin-top: 10px;
   float: right;
   font-weight: bold;
+  cursor: pointer;
+  background-color: transparent;
+  border-radius: 0.5rem;
+  padding: 0 1em;
 }
+.write-picture-label:hover{
+  // border: none;
+  transition: 0.2s;
+  background: var(--mainColor);
+}
+
 .write-section{
   flex: 5;
   overflow: auto;
