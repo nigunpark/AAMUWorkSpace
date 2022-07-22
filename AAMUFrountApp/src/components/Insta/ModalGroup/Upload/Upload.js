@@ -72,6 +72,11 @@ const [inputValue,setinputValue] = useState('');
       nowImageURLList.push(nowImageURL);
       //복사한 myImage에 추가
     }
+    if(nowImageURLList.length > 5){
+      alert('사진은 5장 이하로만 가능합니다!')
+      setHide(false)
+      nowImageURLList=nowImageURLList.slice(0,5);
+    }
     setMyImage(nowImageURLList);
     setMyImageFile(nowSelectImageList);
 
@@ -189,6 +194,7 @@ const [inputValue,setinputValue] = useState('');
               <Nextbtn  
                       onClick={()=>{
                         let temp= uploadFile(myImagefile)
+                        console.log('temp',temp);
                         gramEdit(temp,setlist,titleRef,textareaRef,searchRef,search)
                         setsquare(false)
                         feedList(setlist)
@@ -222,10 +228,10 @@ const [inputValue,setinputValue] = useState('');
                                    <img className='divimage' alt="sample" src={images}/>
                              
                           ))}  */}
-              <div className="swiperUi">
+              <div className="previewPic1">
                   <ul>
                     <Swiper
-                      className="swiperContainer"
+                      className="swiperContainer1"
                       modules={[Navigation, Pagination, Scrollbar, A11y, Autoplay]}
                       spaceBetween={10}
                       slidesPerView={1}
@@ -239,7 +245,7 @@ const [inputValue,setinputValue] = useState('');
                         return(
                         <SwiperSlide>
                           <li>
-                          <img className='divimage' alt="sample" src={image}/>
+                          <img className='divimage1' alt="sample" src={image}/>
                           </li>
                           {/* <img className='divimage' alt="sample" src='/images/bg1.png'/> */}
                       </SwiperSlide>
@@ -381,7 +387,7 @@ function gramEdit(temp,setlist,titleRef,textareaRef,searchRef,search){//새 게�
       )
   .then((resp) => {
     console.log(resp.data);
-    // setlist(resp.data);
+    setlist(resp.data);
     
     })
     .catch((error) => {
