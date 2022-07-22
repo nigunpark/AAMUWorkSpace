@@ -66,6 +66,11 @@ public class CommuDAO {
 		return template.selectList("commuCommentList",lno);
 	}
 	
+	//글 하나 뿌려주는 용_프로필 뿌려주기
+	public String commuSelectUserProf(String id) {
+		return template.selectOne("commuSelectUserProf",id);
+	}
+	
 	//글 수정용
 	public int commuUpdate(Map map) {
 		return template.update("commuUpdate",map);
@@ -77,8 +82,8 @@ public class CommuDAO {
 	}
 	
 	//글 삭제용
-	public int commuDelete(String lno) {
-		return template.delete("commuDelete",lno);
+	public int commuDelete(Map map) {
+		return template.delete("commuDelete",map);
 	}
 	
 	//댓글 생성용

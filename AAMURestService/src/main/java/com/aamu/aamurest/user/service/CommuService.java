@@ -25,8 +25,8 @@ public interface CommuService<T> {
 	//글 생성용_장소 뿌려주기
 	List<Map> commuPlaceList(Map map);
 	
-	//글 생성용_방금 insert된 글 다시 보내기
-	CommuDTO commuSelectAfterInsert();
+	//글 생성용_방금 insert된 글 다시 보내기 안쓰나?
+	//CommuDTO commuSelectAfterInsert();
 	
 	//글 하나 뿌려주는 용
 	CommuDTO commuSelectOne(String lno);
@@ -34,11 +34,14 @@ public interface CommuService<T> {
 	//글 하나 뿌려주는 용_모든 댓글 뿌려주기
 	List<CommuCommentDTO> commuCommentList(String lno);
 	
+	//글 하나 뿌려주는용
+	String commuSelectUserProf(String id);
+	
 	//글 수정용
 	int commuUpdate(Map map);
 	
-	//글 수정용_commuplace 수정
-	int commuPlaceUpdate(Map map);
+	//글 수정용_commuplace 수정 **위에랑 합침
+	//int commuPlaceUpdate(Map map);
 	
 	//글 삭제용
 	int commuDelete(String lno);

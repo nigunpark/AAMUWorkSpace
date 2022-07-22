@@ -60,7 +60,10 @@
 	
 	<!-- 글 하나 뿌려주는 용-->
 	<select id="commuSelectOne" resultType="commuDTO" parameterType="String">
-		SELECT c.*,cp.contentid,p.title FROM community c JOIN commuplace cp ON c.lno=cp.lno JOIN places p ON cp.contentid=p.contentid WHERE c.lno=#{lno}
+		SELECT c.*,cp.contentid,p.title FROM community c
+		JOIN commuplace cp ON c.lno=cp.lno 
+		JOIN places p ON cp.contentid=p.contentid 
+		WHERE c.lno=#{lno}
 	</select>
 	
 	<!-- 글 하나 뿌려주는 용_모든 댓글 뿌려주기-->
@@ -68,9 +71,14 @@
 		SELECT * FROM commucomment WHERE lno=#{lno}
 	</select>
 	
+	<!-- 글 하나 뿌려주는 용_프로필 뿌려주기 -->
+	<select id="commuSelectUserProf" parameterType="String" resultType="String">
+		SELECT u.userprofile from commucomment cc join users u on cc.id=u.id where u.id=#{id}
+	</select>
+	
 	<!-- 글 수정용 -->
 	<update id="commuUpdate" parameterType="Map">
-		UPDATE community SET ctitle=#{ctitle},content=#{content} WHERE lno=#{ln
+		UPDATE community SET ctitle=#{ctitle},content=#{content} WHERE lno=#{lno}
 	</update>
 	
 	<!-- 글 수정용_commuplace 수정 -->
@@ -79,8 +87,8 @@
 	</update>
 	
 	<!-- 글 삭제용 -->
-	<delete id="commuDelete" parameterType="String">
-		DELETE FROM community WHERE lno=#{lno}
+	<delete id="commuDelete" parameterType="Map">
+		DELETE FROM ${table} WHERE lno=#{lno}
 	</delete>
 	
 	<!-- 댓글 생성용 -->

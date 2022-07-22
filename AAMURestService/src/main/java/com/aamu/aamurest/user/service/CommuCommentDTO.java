@@ -19,4 +19,5 @@ public class CommuCommentDTO {
 	private String lno;
 	private String reply;
 	private java.sql.Date replydate;
+	public String userprofile;
 }

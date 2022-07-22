@@ -7,6 +7,7 @@ import java.util.Vector;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import com.aamu.aamurest.user.service.CommuCommentDTO;
 import com.aamu.aamurest.user.service.CommuDTO;
@@ -16,6 +17,9 @@ import com.aamu.aamurest.user.service.CommuService;
 public class CommuServiceImpl implements CommuService<CommuDTO>{
 	@Autowired
 	private CommuDAO dao;
+	
+	@Autowired
+	private TransactionTemplate transactionTemplate;
 	
 	//글 목록용
 	@Override
@@ -86,15 +90,21 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 	}
 	
 	//글 생성용_방금 insert된 글 다시 보내기
+	/* 안쓰나?
 	@Override
 	public CommuDTO commuSelectAfterInsert() {
 		return dao.commuSelectAfterInsert();
 	}
+	*/
 	
 	//글 하나 뿌려주는 용
 	@Override
 	public CommuDTO commuSelectOne(String lno) {
-		return dao.commuSelectOne(lno);
+		CommuDTO dto=dao.commuSelectOne(lno);
+		List<CommuCommentDTO> list=dao.commuCommentList(lno);
+		System.out.println("(셀렉트원)list:"+dto);
+		dto.setCommuCommentList(list);
+		return dto;
 	}
 	
 	//글 하나 뿌려주는 용_모든 댓글 뿌려주기
@@ -102,23 +112,55 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 	public List<CommuCommentDTO> commuCommentList(String lno) {
 		return dao.commuCommentList(lno);
 	}
+	
+	//글 하나 뿌려주는 용_프로필 뿌려주기
+	@Override
+	public String commuSelectUserProf(String id) {
+		return dao.commuSelectUserProf(id);
+	}
+	
 
-	//글 수정용
+	//글 수정용 트랜잭션확인
 	@Override
 	public int commuUpdate(Map map) {
-		return dao.commuUpdate(map);
+		int affected=0;
+		affected = transactionTemplate.execute(tx->{
+			int affectedCommuUpdate=dao.commuUpdate(map);
+			dao.commuPlaceUpdate(map);
+			return affectedCommuUpdate;
+			
+		});
+		return affected;
+		
 	}
 	
 	//글 수정용_commuplace 수정
+	/* 위에랑 합침
 	@Override
 	public int commuPlaceUpdate(Map map) {
 		return dao.commuPlaceUpdate(map);
-	}
+	}*/
 	
 	//글 삭제용
 	@Override
 	public int commuDelete(String lno) {
-		return dao.commuDelete(lno);
+		int affected=0;
+		Map map = new HashMap<>();
+		affected = transactionTemplate.execute(tx->{
+			map.put("table", "commucomment");
+			map.put("lno", lno);
+			dao.commuDelete(map);
+			
+			map.put("table", "commuphoto");
+			dao.commuDelete(map);
+			
+			map.put("table", "commuplace");
+			dao.commuDelete(map);
+			
+			map.put("table", "likeboard");
+			return dao.commuDelete(map);
+		});
+		return affected;
 	}
 	
 	//댓글 생성용

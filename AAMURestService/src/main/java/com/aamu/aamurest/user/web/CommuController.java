@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -62,7 +63,8 @@ public class CommuController {
 	
 
 
-	//글 생성용
+	//글 생성용: 리스트 ver
+	/*
 	@PostMapping(value="/gram/edit")
 	public List<CommuDTO> commuInsert(@RequestParam List<MultipartFile> multifiles, @RequestParam Map map, HttpServletRequest req) {
 		//서버의 물리적 경로 얻기
@@ -74,10 +76,6 @@ public class CommuController {
 		} catch (IllegalStateException | IOException e) {e.printStackTrace();}
 		
 		int affected=commuService.commuInsert(map);
-		//방금 insert된 게시물 dto로 보내기
-		//CommuDTO dto = commuService.commuSelectAfterInsert();
-		//포토 셋팅
-		//dto.setPhoto(FileUploadUtil.requestFilePath(commuService.commuSelectPhotoList(dto.getLno()), "/resources/commuUpload", req));
 		List<CommuDTO> list = commuService.commuSelectList(map);
 		for(CommuDTO dto : list) {//글 목록들 list에서 하나씩 꺼내서 dto에 담는다
 			//코멘트 셋팅
@@ -86,11 +84,34 @@ public class CommuController {
 			dto.setPhoto(FileUploadUtil.requestFilePath(commuService.commuSelectPhotoList(dto.getLno()), "/resources/commuUpload", req));
 		}/////for
 		return list;
-		//Map resultMap = new HashMap();
-		//if(affected==1) resultMap.put("result", "insertSuccess");
-		//else resultMap.put("result", "insertNotSuccess");
-		//return resultMap;
-	}////////////////////////////commuInsert
+	}////////////////////////////
+	*/
+	
+	//글 생성용: true false
+	@PostMapping(value="/gram/edit")
+	public Map commuInsert(@RequestParam List<MultipartFile> multifiles, @RequestParam Map map, HttpServletRequest req) {
+		//서버의 물리적 경로 얻기
+		String path=req.getSession().getServletContext().getRealPath("/resources/commuUpload");
+		Map resultMap = new HashMap();
+		
+		try {
+			List<String> uploads= FileUploadUtil.fileProcess(multifiles, path);
+			map.put("photolist", uploads);
+		} catch (IllegalStateException | IOException e) {e.printStackTrace();}
+		
+		int affected=commuService.commuInsert(map);
+		List<CommuDTO> list = commuService.commuSelectList(map);
+		for(CommuDTO dto : list) {//글 목록들 list에서 하나씩 꺼내서 dto에 담는다
+			//코멘트 셋팅
+			dto.setCommuComment(commuService.commuCommentSelectOne(dto.getLno()));
+			//포토 셋팅
+			dto.setPhoto(FileUploadUtil.requestFilePath(commuService.commuSelectPhotoList(dto.getLno()), "/resources/commuUpload", req));
+		}/////for
+		if(affected==1) resultMap.put("isSuccess", true);
+		else resultMap.put("isSuccess", false);
+		return resultMap;
+		
+	}////////////////////////////
 	
 	//글 생성용_장소 뿌려주기
 	@GetMapping("/gram/place/selectList")
@@ -104,24 +125,45 @@ public class CommuController {
 	public CommuDTO commuSelectOne(@PathVariable String lno, HttpServletRequest req) {
 		System.out.println("셀렉트원lno:"+lno);
 		CommuDTO dto=commuService.commuSelectOne(lno);
-		//모든 댓글 가져오기
-		dto.setCommuCommentList(commuService.commuCommentList(lno));
 		//모든 사진 가져오기
 		dto.setPhoto(FileUploadUtil.requestFilePath(commuService.commuSelectPhotoList(dto.getLno()), "/resources/commuUpload", req));
+		//모든 댓글 가져오기
+		List<CommuCommentDTO> commentDtos=commuService.commuCommentList(lno);
+		//dto.setCommuCommentList(commentDtos);
+		for(CommuCommentDTO commentDto:commentDtos) {
+			commentDto.setUserprofile(FileUploadUtil.requestOneFile(commuService.commuSelectUserProf(dto.getId()), "/resources/commuUpload", req));
+		}
+		
+		//프로필 사진 가져오기
+		
+		
 		return dto;
 	}
 	
-	//글 수정용
-	@PutMapping("/gram/edit/{id}")
-	public Map commuUpdate(@PathVariable String id,@RequestBody Map map) {
-		int commuUpdateAffected=commuService.commuUpdate(map);
-		//commuplace에 contentid수정
-		int commuPlaceUpdateAffected=commuService.commuPlaceUpdate(map);
-		Map resultMap = new HashMap();
-		if(commuUpdateAffected==1 && commuPlaceUpdateAffected==1) 
-			resultMap.put("result", "updateSuccess");
-		else 
-			resultMap.put("result", "updateNotSuccess");
+	//글 수정용: List ver
+	/*
+	@PutMapping("/gram/edit")
+	public List<CommuDTO> commuUpdate(@RequestBody Map map, HttpServletRequest req) { 
+		int affected=commuService.commuUpdate(map);
+		
+		//글 목록 뿌려주기 
+		List<CommuDTO> lists=commuSelectList(map, req);
+		
+		if(affected==1) return lists;
+		else return null;
+	}
+	*/
+	
+	//글 수정용: Map ver
+	@PutMapping("/gram/edit")
+	public Map commuUpdate(@RequestBody Map map, HttpServletRequest req) { 
+		int affected=commuService.commuUpdate(map);
+		Map resultMap = new HashMap<> ();
+		//글 목록 뿌려주기 
+		List<CommuDTO> lists=commuSelectList(map, req);
+		
+		if(affected==1) resultMap.put("isSuccess", true);
+		else resultMap.put("isSuccess", false); 
 		return resultMap;
 	}
 	

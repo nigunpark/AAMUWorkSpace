@@ -28,7 +28,6 @@ public class CommuDTO {
 	public CommuCommentDTO commuComment;
 	public List<CommuCommentDTO> commuCommentList;
 	public List<String> photo;
-	public List<byte[]> photobyte;
 	public String contentid;
 	public String title;
 }
