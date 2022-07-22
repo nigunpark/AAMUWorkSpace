@@ -37,7 +37,7 @@ fun Activity.setStatusBarOrigin() {
         WindowInsetsControllerCompat(this.window , window.decorView).show(WindowInsetsCompat.Type.navigationBars())
     }
 }
-private lateinit var contextL : Context
+lateinit var contextL : Context
 fun setContextapp(context: Context){
     contextL = context
 }

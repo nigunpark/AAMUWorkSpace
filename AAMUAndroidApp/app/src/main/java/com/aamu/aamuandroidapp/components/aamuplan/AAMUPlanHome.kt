@@ -26,6 +26,7 @@ import com.aamu.aamuandroidapp.components.aamuplan.PlanDetails.SideContent
 import com.aamu.aamuandroidapp.ui.theme.orange700
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import net.daum.mf.map.api.MapPoint
 import net.daum.mf.map.api.MapView
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalComposeUiApi::class,
@@ -38,9 +39,9 @@ fun AAMUPlanHome(){
 
     val coroutineScope = rememberCoroutineScope()
 
-//    val mapviewModel : AAMUPlanViewModel = viewModel(
-//        factory = AAMUPlanViewModelFactory(LocalContext.current)
-//    )
+    val mapviewModel : AAMUPlanViewModel = viewModel(
+        factory = AAMUPlanViewModelFactory(LocalContext.current)
+    )
     var topbarhide = remember { mutableStateOf(false) }
     Box(modifier = Modifier.fillMaxSize()){
         BottomSheetScaffold(
@@ -49,23 +50,23 @@ fun AAMUPlanHome(){
             content = {
                 Box(contentAlignment = Alignment.Center) {
                     Box(modifier = Modifier.fillMaxSize()) {
-//                        KakaoMap(mapView = mapviewModel.mapView, PlanListener())
+                        KakaoMap(mapView = mapviewModel.mapView, PlanListener())
                     }
                     if(!topbarhide.value) {
-//                    ActionButton(mapviewModel,
-//                        Modifier
-//                            .statusBarsPadding()
-//                            .align(Alignment.TopEnd),
-//                        topbarhide,
-//                        bottomSheetScaffoldState,
-//                        coroutineScope)
-                        ActionButton(
-                            Modifier
-                                .statusBarsPadding()
-                                .align(Alignment.TopEnd),
-                            topbarhide,
-                            bottomSheetScaffoldState,
-                            coroutineScope)
+                    ActionButton(mapviewModel,
+                        Modifier
+                            .statusBarsPadding()
+                            .align(Alignment.TopEnd),
+                        topbarhide,
+                        bottomSheetScaffoldState,
+                        coroutineScope)
+//                        ActionButton(
+//                            Modifier
+//                                .statusBarsPadding()
+//                                .align(Alignment.TopEnd),
+//                            topbarhide,
+//                            bottomSheetScaffoldState,
+//                            coroutineScope)
                     }
                 }
             },
@@ -132,7 +133,7 @@ fun PlanBottomSheet(){
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun ActionButton(
-//    mapviewModel : AAMUPlanViewModel,
+    mapviewModel : AAMUPlanViewModel,
     modifier: Modifier,
     topbarhide : MutableState<Boolean>,
     bottomSheetScaffoldState: BottomSheetScaffoldState,
@@ -143,6 +144,7 @@ fun ActionButton(
             onClick = {
 //                mapviewModel.mapView.currentLocationTrackingMode=MapView.CurrentLocationTrackingMode.TrackingModeOff
 //                mapviewModel.getRcentPlaces()
+                mapviewModel.getPlannerSelectOne(33)
                 topbarhide.value = true
                 coroutineScope.launch { bottomSheetScaffoldState.drawerState.open() }
             },
