@@ -1,4 +1,4 @@
-import {useEffect, useRef, useState} from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {Button} from "@mui/material";
 import axios from 'axios';
 import styled from 'styled-components';
@@ -6,10 +6,22 @@ import $, { escapeSelector } from 'jquery';
 import SearchModal from '../Upload/SearchModal'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPaperPlane } from '@fortawesome/free-regular-svg-icons';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom'; 
+ import Slider from "react-slick";
+ import '../Slider/slick-theme.css'
+ import '../Slider/slick.css'
+import { SwiperSlide,Swiper } from 'swiper/react';
+import SwipersItem from '../../Swipers/SwipersItem';
+import  { A11y, Autoplay, Navigation, Pagination, Scrollbar } from 'swiper';
+import "swiper/css"; //basic
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import '../Upload/UploadSwiper.css';
 
 
 const Edit = ({setsquare,setlist}) => {
+
+  
 let searchRef = useRef();
 let titleRef = useRef();
 let textareaRef = useRef();
@@ -24,35 +36,55 @@ const [hasText,setHasText] = useState(false);
 const [inputValue,setinputValue] = useState(''); 
 
 
-  
-  const [image, setImage] = useState({//초기 이미지 세팅 및 변수
-    image_file: "",
-    preview_URL: "img/image.jpg",
-  });
+  //이미지 하나 업로드시
+  // const [image, setImage] = useState({//초기 이미지 세팅 및 변수
+  //   image_file: "",
+  //   preview_URL: "img/image.jpg",
+  // });
 
-  // function handleModal(e) {
-  //   e.stopPropagation();
-  //   if (e.target !== searchRef.current) setshowSearch(false);
+  // let inputRef;
+  // const saveImage = (e) => {
+  //   e.preventDefault();
+  //   if(e.target.files[0]){
+  //     // 새로운 이미지를 올리면 createObjectURL()을 통해 생성한 기존 URL을 폐기
+  //     //URL.revokeObjectURL(image.preview_URL);
+  //     const preview_URL = URL.createObjectURL(e.target.files[0]);
+  //     setImage(() => (
+  //       {
+  //         image_file: e.target.files[0],
+  //         preview_URL: preview_URL
+  //       }
+  //     ))
+  //   }
   // }
-  // window.addEventListener("click", handleModal);
-
   
+  //이미지 다중 업로드 시
+  const [myImage,setMyImage] = useState([]);
+  const [myImagefile,setMyImageFile] = useState([]);
 
-  let inputRef;
-  const saveImage = (e) => {
-    e.preventDefault();
-    if(e.target.files[0]){
-      // 새로운 이미지를 올리면 createObjectURL()을 통해 생성한 기존 URL을 폐기
-      URL.revokeObjectURL(image.preview_URL);
-      const preview_URL = URL.createObjectURL(e.target.files[0]);
-      setImage(() => (
-        {
-          image_file: e.target.files[0],
-          preview_URL: preview_URL
-        }
-      ))
+  const addImage = e => {
+    const nowSelectImageList = e.target.files;//한번에 받은 파일 리스트(object)
+    const nowImageURLList = [...myImage];//현재 myImage복사하고
+    for (let i = 0; i < nowSelectImageList.length; i += 1){
+      //nowSelectImageList object를 i를 이용해서 돌리면서
+      const nowImageURL = URL.createObjectURL(nowSelectImageList[i]);
+      //미리보기 가능하게 변수화
+      nowImageURLList.push(nowImageURL);
+      //복사한 myImage에 추가
     }
+    if(nowImageURLList.length > 5){
+      alert('사진은 5장 이하로만 가능합니다!')
+      setHide(false)
+      nowImageURLList=nowImageURLList.slice(0,5);
+    }
+    setMyImage(nowImageURLList);
+    setMyImageFile(nowSelectImageList);
+
+    //myImage원본에 덮어씌우기
   }
+
+
+  //이미지 삭제 
   // const deleteFileImage = () =>{
   //   URL.revokeObjectURL(fileImage);
   //   setFileImage("");
@@ -69,18 +101,15 @@ const [inputValue,setinputValue] = useState('');
 
   const deleteImage = () => {// 이미지 삭제를 위해
     // createObjectURL()을 통해 생성한 기존 URL을 폐기
-    URL.revokeObjectURL(image.preview_URL);
-    setImage({
-      image_file: "",
-      preview_URL: "img/image.jpg",
-    });
+    setMyImage([]);
+    URL.revokeObjectURL(myImage);
     setHide(false)
   }
 
   useEffect(()=> {
     // 컴포넌트가 언마운트되면 createObjectURL()을 통해 생성한 기존 URL을 폐기
     return () => {
-      URL.revokeObjectURL(image.preview_URL)
+      URL.revokeObjectURL(myImage)
     }
   }, [])
   // const sendImageToServer = async () => {
@@ -98,7 +127,6 @@ const [inputValue,setinputValue] = useState('');
   //   }
   // }
 
- 
 
   function searchWord(e,setSearch){//위치 지정을 위한 백에게 받는 axios
     let val = e.target.value
@@ -120,7 +148,6 @@ const [inputValue,setinputValue] = useState('');
         console.log(error);
       });
   }
-
 
   function fn_checkByte(obj){//textarea입력한 글자 count 및 글자 수 제한
     const maxByte = 1000; //최대 100바이트
@@ -149,6 +176,9 @@ const [inputValue,setinputValue] = useState('');
             document.getElementById("nowByte").style.color = "green";
         }
     }
+   
+  
+ 
   return (
   
     <Contents>  
@@ -163,11 +193,11 @@ const [inputValue,setinputValue] = useState('');
             {/* {showNext ?  */}
               <Nextbtn  
                       onClick={()=>{
-                        let temp= uploadFile(image)
-                        gramEdit(temp,setShowWrite,titleRef,textareaRef,searchRef,search)
+                        let temp= uploadFile(myImagefile)
+                        console.log('temp',temp);
+                        gramEdit(temp,setlist,titleRef,textareaRef,searchRef,search)
                         setsquare(false)
                         feedList(setlist)
-                        // navigate('/Insta')
                       }}>
                        <FontAwesomeIcon icon={faPaperPlane}  size="2x" />
                 </Nextbtn>
@@ -181,39 +211,75 @@ const [inputValue,setinputValue] = useState('');
         </FirstLine>
             <Body>           
                 <form className='picfileframe' encType='multipart/form-data'>
-                    <label 
-                      className="rweet_file_btn" 
-                      onClick={ ()=>{setHide(!hide)} }
-                      htmlFor="input-file"                
-                      >
-                          {hide ?
-                          null
-                          :
-                          <Button 
-                              type="primary" 
-                              variant="contained" >
-                               {/* onClick={() => inputRef.click()} */}
-                              컴퓨터에서 선택
-                          </Button>}
-                    </label>
+               
                     <input  
                         id="input-file"
                         type="file" 
+                        multiple
                         accept="image/*"
-                        onChange={saveImage}
+                        onChange={addImage}
                     // 클릭할 때 마다 file input의 value를 초기화 하지 않으면 버그가 발생할 수 있다
                     // 사진 등록을 두개 띄우고 첫번째에 사진을 올리고 지우고 두번째에 같은 사진을 올리면 그 값이 남아있음!
                         onClick={(e) => e.target.value = null}
                         // ref={refParam => inputRef = refParam}
                         style={{display: "none" , width:'100%',height:'100%'}}
                     />
-                    <img className='divimage' alt="sample" src={image.preview_URL}/>
-                </form>
+                       {/* {myImage.map((images,i)=>(
+                                   <img className='divimage' alt="sample" src={images}/>
+                             
+                          ))}  */}
+              <div className="previewPic1">
+                  <ul>
+                    <Swiper
+                      className="swiperContainer1"
+                      modules={[Navigation, Pagination, Scrollbar, A11y, Autoplay]}
+                      spaceBetween={10}
+                      slidesPerView={1}
+                      // navigation
+                      autoplay={{ delay: 2500 }}
+                      loop={true}
+                      pagination={{ clickable: true }}
+                      scrollbar={{ draggable: true }}
+                    >
+                      {myImage.map((image,i)=>{
+                        return(
+                        <SwiperSlide>
+                          <li>
+                          <img className='divimage1' alt="sample" src={image}/>
+                          </li>
+                          {/* <img className='divimage' alt="sample" src='/images/bg1.png'/> */}
+                      </SwiperSlide>
+                        )
+                        
+                      })
+                      }      
+                    </Swiper>
+                  </ul>
+                </div>   
+                  <label 
+                      className="rweet_file_btn" 
+                      onClick={ ()=>{setHide(!hide)} }
+                      htmlFor="input-file"      
+                      onChange={addImage}          
+                      >
+                          {hide ?
+                          null
+                          :
+                          <Button 
+                            
+                              type="primary" 
+                              variant="contained" >
+                               {/* onClick={() => inputRef.click()} */}
+                              컴퓨터에서 선택
+                          </Button>}
+                    </label>    
+                </form> 
+                
                     {/* {showNext ?  */}
                     <div className='side'>
                       <div className="title-profile">
-                          <img src="./img/bk.jpg" alt="프사" />                
-                          <span>eyesmag</span> 
+                          <img src="'/img/bk.jpg ' ?? '/images/user.jpg'" alt="프사" onError={(e)=>{e.target.src='/images/user.jpg'}}/>                
+                          <span>{sessionStorage.getItem('username')}</span> 
                       </div>
                       <div>
                         <span style={{fontWeight:'bold', marginLeft:'10px'}}>제목 : </span>
@@ -256,7 +322,8 @@ const [inputValue,setinputValue] = useState('');
                             setinputValue={setinputValue}/>
                                             : null}
                         <i className="fa-solid fa-location-dot"></i>
-                      </div>                
+                      </div>     
+                             
                   </div>
                   {/* // :null} */}
                   </Body>
@@ -284,13 +351,15 @@ function feedList(setlist){//업로드 버튼 누르고 화면 새로고침
 
 
 
- function uploadFile(image){//이미지 업로드
+ function uploadFile(myImagefile){//이미지 업로드
   let formData = new FormData(); // formData 객체를 생성한다.
-  formData.append("multifiles", image.image_file)
+  for (let i = 0; i < myImagefile.length; i++) { 
+    formData.append("multifiles", myImagefile[i]); // 반복문을 활용하여 파일들을 formData 객체에 추가한다
+  }
   return formData;
 }
 
-function gramEdit(temp,setShowWrite,titleRef,textareaRef,searchRef,search){//새 게시물 업로드를 위한 axios
+function gramEdit(temp,setlist,titleRef,textareaRef,searchRef,search){//새 게시물 업로드를 위한 axios
  let searched= search.find((val,i)=>{
     return val.TITLE===searchRef.current.value
   })
@@ -312,18 +381,27 @@ function gramEdit(temp,setShowWrite,titleRef,textareaRef,searchRef,search){//새
        { headers: {
               Authorization: `Bearer ${token}`,
               'Content-Type': 'multipart/form-data',
-            }}
+            }
+        }
 
       )
   .then((resp) => {
     console.log(resp.data);
-    setShowWrite(resp.data);
+    setlist(resp.data);
     
     })
     .catch((error) => {
       console.log(error);
     });
   }
+
+
+  const SliderContainer = styled.div`
+  margin: 0 auto;
+  margin-bottom: 2em;
+  display: flex; // 이미지들을 가로로 나열합니다.
+`;
+
 
 const Contents = styled.div`
   position: relative;
@@ -337,6 +415,7 @@ const Contents = styled.div`
   display:flex;
   flex-direction:column;
   border-radius:7px;
+  z-index: 11;
 `
 
 const FirstLine = styled.div`
@@ -359,4 +438,7 @@ const Nextbtn = styled.button`
   font-size:13px;
   font-weight:bold;
 `
+const Center = styled.div`
+  text-align: center;
+`;
 export default Edit;
