@@ -43,12 +43,6 @@ const CreatePlan = ({
   console.log("fromWooJaeData(CP)", fromWooJaeData);
   return (
     <div>
-      {auSure && (
-        <AuSureModal
-          setShowCratePlan={setShowCratePlan}
-          setAuSure={setAuSure}
-        />
-      )}
       <DimmedContainer>
         <Modal>
           <TitleBar>
@@ -68,7 +62,12 @@ const CreatePlan = ({
               setFromWooJaeData={setFromWooJaeData}
               setForDayLine={setForDayLine}
             />
-
+            {auSure && (
+              <AuSureModal
+                setShowCratePlan={setShowCratePlan}
+                setAuSure={setAuSure}
+              />
+            )}
             <CreatePlanMap
               // showCreatePlan={showCreatePlan}
               setSavePlan={setSavePlan}
@@ -78,7 +77,7 @@ const CreatePlan = ({
             />
           </Contents>
         </Modal>
-        {savePlan && (
+        {/* {savePlan && (
           <SavePlan
             auSure={auSure}
             setAuSure={setAuSure}
@@ -86,7 +85,7 @@ const CreatePlan = ({
             fromWooJaeData={fromWooJaeData}
             currPosition={currPosition}
           />
-        )}
+        )} */}
       </DimmedContainer>
     </div>
   );
