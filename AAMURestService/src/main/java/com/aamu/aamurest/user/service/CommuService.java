@@ -58,8 +58,11 @@ public interface CommuService<T> {
 	//댓글 삭제용_Rcount -1
 	int commuRcMinusUpdate(Map map);
 	
+	//글 좋아요 전체리스트
+	//int commuLike(Map map);
+	
 	//글 좋아요
-	int commuLike(Map map);
+	Boolean commuLike(Map map);
 	
 	//글 좋아요_selectOne(community테이블의 likecount)
 	int commuLikecountSelect(Map map); 
