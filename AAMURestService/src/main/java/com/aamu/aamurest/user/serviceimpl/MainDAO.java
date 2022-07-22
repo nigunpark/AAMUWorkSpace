@@ -46,7 +46,7 @@ public class MainDAO {
 	}
 
 	public List<AttractionDTO> searchTwoPlace(Map map) {
-		
+
 		return template.selectList("searchTwoPlace", map);
 	}
 	///////////////////////////////////////////////////serchdao

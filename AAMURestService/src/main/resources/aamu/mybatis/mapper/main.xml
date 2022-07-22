@@ -65,11 +65,11 @@
 	</select>
 	
 	<select id="searchTwoPlace" parameterType="Map" resultType="attrDTO">
-		SELECT * FROM ${searchtable} WHERE ${searchcolumn} LIKE '%'||#{searchword}||'%' or #{searchcolumn2} LIKE '%'||#{searchword2}||'%'
+		SELECT p.*,i.* FROM places p JOIN ${searchtable} i ON i.contentid = p.contentid WHERE p.areacode=#{areacode} AND p.title LIKE '%'||#{searchword}||'%' or p.areacode=#{areacode} AND p.addr LIKE '%'||#{searchword}||'%'
 	</select>
 	
 	<select id="searchOnePlace" parameterType="Map" resultType="attrDTO">
-		SELECT * FROM ${searchtable} WHERE ${searchcolumn} LIKE '%'||#{searchword}||'%'
+		SELECT p.*,i.* FROM places p JOIN ${searchtable} i ON i.contentid = p.contentid WHERE ${searchcolumn} LIKE '%'||#{searchword}||'%'
 	</select>
 	
 	<update id="updatePlaces" parameterType="Map">

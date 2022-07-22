@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.Vector;
 
 import javax.swing.event.ListSelectionEvent;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
@@ -313,11 +315,42 @@ public class MainController {
 		return routeList;
 		
 	}
+	@PostMapping("/planner/mapdata")
+	public PlannerDTO plannerMapData(@RequestBody PlannerDTO dto) {
+	
+		return dto;
+	}
 	@GetMapping("/planner/selectone")
 	public PlannerDTO selectPlannerOne(@RequestParam int rbn) {
 		
 		PlannerDTO dto = service.selectPlannerOne(rbn);
 		
+		return dto;
+	}
+
+	@GetMapping("/planner/selectonemap")
+	public PlannerDTO selectMapPlannerOne(@RequestParam int rbn){
+
+		Map<String,List<RouteDTO>> map = new TreeMap<>();
+		PlannerDTO dto = service.selectPlannerOne(rbn);
+
+		List<RouteDTO> routes =  dto.getRoute();
+		int max= 0 ;
+		for(RouteDTO route : routes) {
+			if(max<route.getDay()) 
+				max=route.getDay();	
+		}
+		for(int i=1;i<=max;i++) 
+			map.put("day"+i, new Vector<>());
+			
+		
+		for(RouteDTO route : routes) 
+			((List<RouteDTO>)map.get("day"+route.getDay())).add(route);		
+		
+		
+
+		dto.setRouteMap(map);
+		dto.setRoute(null);
 		return dto;
 	}
 	@GetMapping("/planner/selectList")
@@ -376,13 +409,12 @@ public class MainController {
 			if(dto.getKakaokey()!=null) {
 				String uri = "http://192.168.0.19:5000/review?map="+dto.getKakaokey();
 				
-				ResponseEntity<List> responseEntity = 
-						restTemplate.exchange(uri, HttpMethod.GET, null, List.class);
-				System.out.println((Map)responseEntity.getBody().get(0));
-				dto.setStar(Double.parseDouble(((Map)((Map)responseEntity.getBody().get(0)).get("basic_info")).get("star").toString()));
+				ResponseEntity<KakaoReview> responseEntity = 
+						restTemplate.exchange(uri, HttpMethod.GET, null, KakaoReview.class);
+				System.out.println(responseEntity.getBody().getBasicInfo().getStar());
+				dto.setStar(responseEntity.getBody().getBasicInfo().getStar());
 				
-				
-				list.add(dto);
+			
 			}
 			
 		}
@@ -395,7 +427,7 @@ public class MainController {
 		KakaoReview kakaReview = new KakaoReview();
 		if(kakaoKey!=null) {
 			
-			String uri = "http://127.0.0.1:5000/aamu?map="+kakaoKey;
+			String uri = "http://192.168.0.19:5000/review?map="+kakaoKey;
 			
 			ResponseEntity<KakaoReview> responseEntity = 
 					restTemplate.exchange(uri, HttpMethod.GET, null, KakaoReview.class);
@@ -407,7 +439,7 @@ public class MainController {
 	
 	@GetMapping("/info/search")
 	public List<AttractionDTO> search(@RequestParam Map map){
-		
+
 		List<AttractionDTO> lists =service.searchTwoPlace(map);
 		
 		return lists;

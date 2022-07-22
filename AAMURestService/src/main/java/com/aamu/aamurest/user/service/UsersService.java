@@ -3,7 +3,7 @@ package com.aamu.aamurest.user.service;
 import java.util.Map;
 
 public interface UsersService {
-	int joinUser(UsersDTO dto);
+	int joinUser(Map map);
 	
 	UsersDTO selectOneUser(Map map);
 	
