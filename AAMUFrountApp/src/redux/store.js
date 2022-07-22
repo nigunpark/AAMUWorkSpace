@@ -84,9 +84,12 @@ let arrForSukso = createSlice({
     changeArrForSukso(state, action) {
       return action.payload;
     },
+    addArrForSukso(state, action) {
+      state = state.unshift(action.payload);
+    },
   },
 });
-export let { changeArrForSukso } = arrForSukso.actions;
+export let { changeArrForSukso, addArrForSukso } = arrForSukso.actions;
 
 //숙소와 장소모달중 어떤 것을 보여줄지
 let showWhichModal = createSlice({
@@ -270,7 +273,13 @@ let joinData = createSlice({
       state.pwd = action.payload[1];
     },
     addStepTwo(state, action) {
-      state.name = action.payload;
+      state.name = action.payload[0];
+      state.birth = action.payload[1];
+      state.gender = action.payload[2];
+      state.phonenum = action.payload[3];
+      state.email = action.payload[4];
+      state.addr = action.payload[5];
+      state.self = action.payload[6];
     },
   },
 });
