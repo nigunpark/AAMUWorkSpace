@@ -1,10 +1,17 @@
-import math
+from asyncio.windows_events import NULL
+from waitress import serve
 from flask import Flask, request
-import json
 
+import logging
+import json
+import math
 import requests
 
 app = Flask(__name__)
+
+logging.basicConfig(level=logging.DEBUG)
+log = logging.getLogger('werkzeug')
+log.setLevel(logging.ERROR)
 
 @app.route("/review", methods=["GET"])
 
@@ -22,17 +29,24 @@ def review():
     comment_text = comment_res.text
     comment_data = json.loads(comment_text)
 
+ 
+
     if comment_data['comment']['kamapComntcnt'] != 0:
 
         page_num = math.ceil(comment_data['comment']['kamapComntcnt'] / 5)
 
-        kakao_comment=[]
-        for page_list in range(page_num):
-            comment_list_url = 'https://place.map.kakao.com/commentlist/v/'+str(map)+'/'+f'{page_list+1}'
-            comment_list_res = requests.get(comment_list_url)
-            comment_list_text = comment_list_res.text
-            comment_list_data = json.loads(comment_list_text)
-            kakao_comment.append(comment_list_data)
+        try:
+
+            kakao_comment=[]
+            for page_list in range(page_num):
+                comment_list_url = 'https://place.map.kakao.com/commentlist/v/'+str(map)+'/'+f'{page_list+1}'
+                comment_list_res = requests.get(comment_list_url)
+                comment_list_text = comment_list_res.text
+                comment_list_data = json.loads(comment_list_text)
+                kakao_comment.append(comment_list_data)
+
+        except KeyError:
+            ''
 
     aamu_basic_info = basic_data['basicInfo']
 
@@ -120,4 +134,4 @@ def mvtm():
     return json.dumps(mvtime, ensure_ascii=False), 200, {'Content-Type':'application/json'}
 
 if __name__ == '__main__':
-    app.run(host = '0.0.0.0', port = 5000, debug = False)
+    serve(app, host = '0.0.0.0', port = 5000)
