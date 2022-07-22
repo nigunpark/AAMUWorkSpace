@@ -68,6 +68,11 @@ const Uploader = ({ setsquare, setlist }) => {
       nowImageURLList.push(nowImageURL);
       //복사한 myImage에 추가
     }
+    if(nowImageURLList.length > 5){
+      alert('사진은 5장 이하로만 가능합니다!')
+      setHide(false)
+      nowImageURLList=nowImageURLList.slice(0,5);
+    }
     setMyImage(nowImageURLList);
     setMyImageFile(nowSelectImageList);
 
@@ -173,6 +178,7 @@ const Uploader = ({ setsquare, setlist }) => {
   }
 
   return (
+<<<<<<< HEAD
     <Contents>
       <FirstLine>
         <Deletebtn variant="contained" onClick={deleteImage}>
@@ -193,6 +199,30 @@ const Uploader = ({ setsquare, setlist }) => {
           <FontAwesomeIcon icon={faPaperPlane} size="2x" />
         </Nextbtn>
         {/* {
+=======
+  
+    <Contents>  
+        <FirstLine>
+            <Deletebtn 
+                variant="contained" onClick={deleteImage} > 
+                <i className="fa-solid fa-arrow-left"></i>
+            </Deletebtn> 
+            <div className='newPosting'>
+                <h2>새 게시물 만들기</h2>
+            </div>
+            {/* {showNext ?  */}
+              <Nextbtn  
+                      onClick={()=>{
+                        let temp= uploadFile(myImagefile)
+                        console.log('temp',temp);
+                        gramEdit(temp,setlist,titleRef,textareaRef,searchRef,search)
+                        setsquare(false)
+                        feedList(setlist)
+                      }}>
+                       <FontAwesomeIcon icon={faPaperPlane}  size="2x" />
+                </Nextbtn>
+              {/* {
+>>>>>>> insta
                 showNext && navigate('/Insta')
                 //  window.location.reload(window.location.href)
               } */}
@@ -218,6 +248,7 @@ const Uploader = ({ setsquare, setlist }) => {
                                    <img className='divimage' alt="sample" src={images}/>
                              
                           ))}  */}
+<<<<<<< HEAD
           <div className="swiperUi">
             <ul>
               <Swiper
@@ -260,6 +291,109 @@ const Uploader = ({ setsquare, setlist }) => {
             )}
           </label>
         </form>
+=======
+              <div className="previewPic1">
+                  <ul>
+                    <Swiper
+                      className="swiperContainer1"
+                      modules={[Navigation, Pagination, Scrollbar, A11y, Autoplay]}
+                      spaceBetween={10}
+                      slidesPerView={1}
+                      // navigation
+                      autoplay={{ delay: 2500 }}
+                      loop={true}
+                      pagination={{ clickable: true }}
+                      scrollbar={{ draggable: true }}
+                    >
+                      {myImage.map((image,i)=>{
+                        return(
+                        <SwiperSlide>
+                          <li>
+                          <img className='divimage1' alt="sample" src={image}/>
+                          </li>
+                          {/* <img className='divimage' alt="sample" src='/images/bg1.png'/> */}
+                      </SwiperSlide>
+                        )
+                        
+                      })
+                      }      
+                    </Swiper>
+                  </ul>
+                </div>   
+                  <label 
+                      className="rweet_file_btn" 
+                      onClick={ ()=>{setHide(!hide)} }
+                      htmlFor="input-file"      
+                      onChange={addImage}          
+                      >
+                          {hide ?
+                          null
+                          :
+                          <Button 
+                            
+                              type="primary" 
+                              variant="contained" >
+                               {/* onClick={() => inputRef.click()} */}
+                              컴퓨터에서 선택
+                          </Button>}
+                    </label>    
+                </form> 
+                
+                    {/* {showNext ?  */}
+                    <div className='side'>
+                      <div className="title-profile">
+                          <img src="'/img/bk.jpg ' ?? '/images/user.jpg'" alt="프사" onError={(e)=>{e.target.src='/images/user.jpg'}}/>                
+                          <span>{sessionStorage.getItem('username')}</span> 
+                      </div>
+                      <div>
+                        <span style={{fontWeight:'bold', marginLeft:'10px'}}>제목 : </span>
+                        <input ref={titleRef} type="text" placeholder="제목을 입력하세요"/>
+                      </div>
+                      <div>
+                        <textarea 
+                          ref={textareaRef}
+                          className="form-control" 
+                          id="textArea_byteLimit" 
+                          name="textArea_byteLimit" 
+                          onKeyUp={(e)=>fn_checkByte(e)}
+                          rows="8" 
+                          placeholder="문구입력..." 
+                          style={{border:'none',resize: 'none',
+                              fontSize: '16px',fontFamily:'normal',
+                              outline: 'none',paddingTop:'5px' ,
+                              marginLeft:'10px',width:'90%',position:'relative'}}>
+                        </textarea>    
+                      </div>
+                      <div style={{borderBottom:'0.1px solid #c0c0c0',width:'97%',height:'27px'}}>
+                        <sup style={{float:'right',paddingRight:'15px',color:'#c0c0c0'}}>(<span id="nowByte">0</span>/1000bytes)</sup>
+                      </div>                
+                      <div className='uploadLocation' 
+                             onClick={()=>{setshowSearch(!showSearch)}}
+                       >
+                        <input 
+                            onKeyUp={(e)=>searchWord(e,setSearch)}
+                            value={inputValue}
+                            onChange={(e)=>{setinputValue(e.target.value)
+                              setHasText(true)
+                            }}
+                            placeholder="위치 추가" 
+                            type="text"
+                            ref={searchRef}/>
+                            {hasText ? 
+                            <SearchModal search={search} 
+                            inputValue={inputValue}
+                            setHasText={setHasText}
+                            setinputValue={setinputValue}/>
+                                            : null}
+                        <i className="fa-solid fa-location-dot"></i>
+                      </div>     
+                             
+                  </div>
+                  {/* // :null} */}
+                  </Body>
+                  {/* {show?<SearchModal search={search}/>:null} */}
+        </Contents>
+>>>>>>> insta
 
         {/* {showNext ?  */}
         <div className="side">
@@ -397,6 +531,7 @@ function gramEdit(temp, setlist, titleRef, textareaRef, searchRef, search) {
       //   ctitle: titleRef.current.value,
       //   content: textareaRef.current.value,
       //   contentid:searched.CONTENTID
+<<<<<<< HEAD
       // },
       {
         headers: {
@@ -408,6 +543,20 @@ function gramEdit(temp, setlist, titleRef, textareaRef, searchRef, search) {
     .then((resp) => {
       console.log(resp.data);
       // setlist(resp.data);
+=======
+      // },  
+       { headers: {
+              Authorization: `Bearer ${token}`,
+              'Content-Type': 'multipart/form-data',
+            }
+        }
+
+      )
+  .then((resp) => {
+    console.log(resp.data);
+    setlist(resp.data);
+    
+>>>>>>> insta
     })
     .catch((error) => {
       console.log(error);
