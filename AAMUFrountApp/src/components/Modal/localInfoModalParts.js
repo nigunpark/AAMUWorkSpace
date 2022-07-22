@@ -8,6 +8,17 @@ to{
   transfrom:none;
 }
 `;
+
+const reviewSlide = keyframes`
+0% {
+  transform: translateY(-10px);
+  opacity: 0;
+}
+100% {
+  transform: translateY(0);
+  opacity: 1;
+}
+`;
 //LIM = LocalInfoModal
 const ContainerLim = styled.div`
   position: fixed;
@@ -88,6 +99,16 @@ const BodyLim = styled.div`
   padding: 13px;
 `;
 
+const Review = styled.div`
+  width: 900px;
+  height: 130px;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 5px;
+  transition: 0.1s;
+  overflow: auto;
+  animation: ${reviewSlide} 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+`;
+
 export {
   ContainerLim,
   ContentsLim,
@@ -96,4 +117,5 @@ export {
   CloseLim,
   BodyLim,
   ImgLim,
+  Review,
 };
