@@ -21,6 +21,8 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import DaumPostcode from "react-daum-postcode";
 import emailjs from "@emailjs/browser";
+import { addStepTwo } from "../../redux/store.js";
+import { useSelector, useDispatch } from "react-redux";
 const JoinStep2 = () => {
   let joominGender = useRef();
   let nameRef = useRef();
@@ -41,12 +43,17 @@ const JoinStep2 = () => {
   let addrRef = useRef();
   let introduceRef = useRef();
   let navigate = useNavigate();
-
-  //   console.log(reduxState.joinData);
+  let reduxState = useSelector((state) => {
+    return state;
+  });
+  let dispatch = useDispatch();
+  console.log(reduxState.joinData);
   const [address, setAddress] = useState("");
   const [zoneCode, setZoneCode] = useState("");
   const [isOpenPost, setIsOpenPost] = useState(false);
   const [emailCk, setEmailCk] = useState(false);
+  const [eId, setEId] = useState("");
+  const [eAddr, setEAddr] = useState("");
   return (
     <div className="join__step-two">
       <Container>
@@ -155,6 +162,7 @@ const JoinStep2 = () => {
                             }}
                             type="text"
                             size={12}
+                            maxLength={6}
                             placeholder=""
                             ref={sJoominRef}
                             onChange={() => {
@@ -300,6 +308,10 @@ const JoinStep2 = () => {
                     emailValidRef={emailValidRef}
                     emailCk={emailCk}
                     setEmailCk={setEmailCk}
+                    eId={eId}
+                    setEId={setEId}
+                    eAddr={eAddr}
+                    setEAddr={setEAddr}
                   />
                 </div>
                 <div className="join__stepTwo-content-container">
@@ -414,7 +426,9 @@ const JoinStep2 = () => {
                     zoneCodeRef,
                     addrRef,
                     addrDetailRef,
-                    emailCk
+                    emailCk,
+                    introduceRef,
+                    dispatch
                   );
                 }}
               >
@@ -443,9 +457,12 @@ const SendEmail = ({
   emailIdRef,
   emailAddrRef,
   emailValidRef,
-
   emailCk,
   setEmailCk,
+  eId,
+  setEId,
+  eAddr,
+  setEAddr,
 }) => {
   const formRef = useRef();
   const userVNumRef = useRef();
@@ -469,6 +486,7 @@ const SendEmail = ({
   };
   let number = Math.floor(Math.random() * 1000000) + 100000;
   if (number > 1000000) number = number - 100000;
+
   return (
     <>
       <div>
@@ -493,7 +511,8 @@ const SendEmail = ({
               ref={emailIdRef}
               onChange={(e) => {
                 emailValid(emailValidRef, emailIdRef, emailAddrRef);
-                emailIdRef.current.value = e.target.value;
+
+                setEId(e.target.value);
               }}
             />
           </div>
@@ -507,7 +526,7 @@ const SendEmail = ({
               ref={emailAddrRef}
               onChange={(e) => {
                 emailValid(emailValidRef, emailIdRef, emailAddrRef);
-                emailAddrRef.current.value = e.target.value;
+                setEAddr(e.target.value);
               }}
             />
           </div>
@@ -543,7 +562,8 @@ const SendEmail = ({
           <input
             type="email"
             name="user_email"
-            value={`${emailIdRef.current.value}@${emailAddrRef.current.value}`}
+            // value={`${emailIdRef.current.value}@${emailAddrRef.current.value}`}
+            value={eId + "@" + eAddr}
             // value="kkm0938@naver.com"
             style={{ display: "none" }}
           />
@@ -621,8 +641,9 @@ const AddresApi = ({ setIsOpenPost, setAddress, setZoneCode }) => {
       }
       fullAddr += extraAddr !== "" ? ` (${extraAddr})` : "";
     }
-
     setIsOpenPost(false);
+    setAddress(fullAddr);
+    setZoneCode(data.zonecode);
   };
   const postCodeStyle = {
     display: "block",
@@ -737,7 +758,9 @@ function validation(
   zoneCodeRef,
   addrRef,
   addrDetailRef,
-  emailCk
+  emailCk,
+  introduceRef,
+  dispatch
 ) {
   if (nameRef.current.value.trim().length === 0) {
     nameRef.current.parentElement.classList.add("validation");
@@ -815,15 +838,18 @@ function validation(
       }
       let phoneNum = `${phoneNumF.current.value}-${phoneNumS.current.value}-${phoneNumT.current.value}`;
       let email = `${emailIdRef.current.value}@${emailAddrRef.current.value}`;
-      // dispatchEvent(
-      //   addStepTwo(
-      //     nameRef.current.value,
-      //     sJoominRef.current.value,
-      //     gender,
-      //     phoneNum,
-      //     email
-      //   )
-      // );
+      let addr = `${zoneCodeRef.current.value}/${addrRef.current.value}/${addrDetailRef.current.value}`;
+      dispatch(
+        addStepTwo([
+          nameRef.current.value,
+          sJoominRef.current.value,
+          gender,
+          phoneNum,
+          email,
+          addr,
+          introduceRef.current.value,
+        ])
+      );
     }
   }
 }
