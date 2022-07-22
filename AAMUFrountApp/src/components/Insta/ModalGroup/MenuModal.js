@@ -1,15 +1,18 @@
 import { red } from '@mui/material/colors';
 import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
+import Edit from './Edit/Edit'
 
 const Modal = ({setIsOpen}) => {
-
-    const [value, setValue] = useState(2.5);
+    let menuRef = useRef();
+    const [goEdit, setgoEdit] = useState(false);
+    const [commentModal, setcommentModal] = useState(false);
 
     const handleClose = () => {
         setIsOpen(false);
     };
 
+   
     useEffect(() => {
         const $body = document.querySelector("body");
         $body.style.overflow= "hidden";
@@ -19,12 +22,24 @@ const Modal = ({setIsOpen}) => {
             );
     }, []);
 
+    function menuModalRef(e){//메뉴 모달 나왔을때 주변 눌러도 꺼지게 만들기
+        e.stopPropagation();
+        if (e.target != menuRef.current) setgoEdit(false);
+    }
+    
+    window.addEventListener("click", menuModalRef);
+    
   return (
     <Container >
-        <Overlay>
+        <Overlay
+        ref={menuRef} 
+        onClick={ (e) => { if(e.target == menuRef.current) setcommentModal(false)  }}>
             <ModalWrap >
                 <Contents>
-                        <Button type="button" className='edit'>수정하기</Button>
+                        <Button type="button" className='edit' onClick={()=>{setgoEdit(!goEdit)}}>수정하기</Button>
+                        {
+                            goEdit ? <Edit/> :null
+                        }
                         <Button type="button" className='delete'>삭제하기</Button>
                         <Button type="button" className='cancel'>취소하기</Button>    
                                   
