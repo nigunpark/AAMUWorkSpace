@@ -19,9 +19,11 @@ const MainPage = () => {
   let { currPosition } = useParams();
   const [showCreatePlan, setShowCratePlan] = useState(false);
   const [fromWooJaeData, setFromWooJaeData] = useState([]);
+  const [areaCode, setAreaCode] = useState(0);
+  const [forSearchTypeId, setForSearchTypeId] = useState(12);
   let dispatch = useDispatch();
   useEffect(() => {
-    getCurrpositionLocal(currPosition, dispatch);
+    getCurrpositionLocal(currPosition, dispatch, setAreaCode);
     getCurrpositionHotel(currPosition, dispatch);
     dispatch(deleteAllPickJanso([]));
     dispatch(delAllSaveDaysRedux([]));
@@ -35,12 +37,16 @@ const MainPage = () => {
         setConWhichModal={setConWhichModal}
         setShowCratePlan={setShowCratePlan}
         setFromWooJaeData={setFromWooJaeData}
+        setForSearchTypeId={setForSearchTypeId}
       />
 
       <RightRecommandSide
         setTitleName={setTitleName}
         titleName={titleName}
         conWhichModal={conWhichModal}
+        areaCode={areaCode}
+        forSearchTypeId={forSearchTypeId}
+        setForSearchTypeId={setForSearchTypeId}
       />
       {showCreatePlan ? (
         <CreatePlan
@@ -55,7 +61,7 @@ const MainPage = () => {
   );
 };
 
-function getCurrpositionLocal(currPosition, dispatch) {
+function getCurrpositionLocal(currPosition, dispatch, setAreaCode) {
   let token = sessionStorage.getItem("token");
   let areacode;
   switch (currPosition) {
@@ -111,6 +117,7 @@ function getCurrpositionLocal(currPosition, dispatch) {
       areacode = 39;
       break;
   }
+  setAreaCode(areacode);
   axios
     .get("/aamurest/info/places", {
       headers: {
