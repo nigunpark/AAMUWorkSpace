@@ -6,6 +6,7 @@ const IntroPart = () => {
   return (
     <div className="introPart-container">
       <video src="/images/video/video2.mp4" autoPlay loop muted />
+      {/* <video src="/images/video/howTo.mp4" autoPlay loop muted /> */}
       <h1>손끝에서 시작하는 당신의 여행</h1>
       <p>What are you waiting?</p>
       <div className="introPart-btn">
