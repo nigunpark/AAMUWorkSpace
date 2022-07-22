@@ -319,7 +319,7 @@ function TabContent({clickTab, setClickTab, planList}) {
     return content !== "" && title !== "";
   }, [title, content]);
 
-  if (clickTab === 10) {// 홈
+  if (clickTab === 0) {// 홈
     return planList.map((val, idx) => {
       return (
           <MyHomeBox
@@ -383,7 +383,7 @@ function TabContent({clickTab, setClickTab, planList}) {
   else if (clickTab === 3) { //----------------------프로필------------------------
     return <MyProfileBox />;
   }
-  else if (clickTab === 0) { //-----------------------글작성------------------------
+  else if (clickTab === 10) { //-----------------------글작성------------------------
     // const imgFileUpload = (fileBlob) => {
     //   const reader = new FileReader();
   
