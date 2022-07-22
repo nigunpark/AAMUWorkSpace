@@ -8,7 +8,7 @@ const Cards = () => {
       <div className="card__container">
         <div className="card__wrapper">
           <h1 className="card__title">
-            당신도 이제는 여행 Creator<span>!</span>
+            당신도 이제는 여행 Creator<span> !</span>
           </h1>
           <p className="card__desc">
             자신만의 여행계획을 세우고 남들과 공유해봐

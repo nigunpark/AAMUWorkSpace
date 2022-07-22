@@ -1,6 +1,7 @@
 package com.aamu.aamuandroidapp.components.aamuplan
 
 import android.content.Context
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.compose.ui.platform.ComposeView
@@ -13,9 +14,12 @@ import com.aamu.aamuandroidapp.R
 import com.aamu.aamuandroidapp.data.api.AAMUDIGraph
 import com.aamu.aamuandroidapp.data.api.repositories.AAMURepository
 import com.aamu.aamuandroidapp.data.api.response.AAMUPlaceResponse
+import com.aamu.aamuandroidapp.data.api.response.AAMUPlannerSelectOne
+import com.aamu.aamuandroidapp.data.api.response.Place
 import com.aamu.aamuandroidapp.fragment.main.planner.PlannerFragment
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.plus
 import net.daum.mf.map.api.CalloutBalloonAdapter
 import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
@@ -35,6 +39,9 @@ class AAMUPlanViewModel(context : Context) : ViewModel(), MapView.POIItemEventLi
 
     val recentPlaces = MutableLiveData<List<AAMUPlaceResponse>>()
     val errorLiveData = MutableLiveData<String>()
+    val plannerSelectOne = MutableLiveData<AAMUPlannerSelectOne>()
+    val planners = MutableLiveData<MutableList<Place>>()
+
     init {
         mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord("103.8198".toDouble(), "1.3521".toDouble()), true)
         mapView.setZoomLevel(5, true)
@@ -68,6 +75,30 @@ class AAMUPlanViewModel(context : Context) : ViewModel(), MapView.POIItemEventLi
                 mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(recentPlace.mapy!!,recentPlace.mapx!!), true)
             }
         }
+    }
+
+    fun getPlannerSelectOne(rbn : Int) = viewModelScope.launch {
+        aamuRepository.getPlannerSelectOne(rbn)
+            .collect {selectOne ->
+                if (selectOne.rbn != null){
+                    plannerSelectOne.value = selectOne
+                    selectOne.let {
+                        val keys = it.routeMap?.keys
+                        val tempPlanner = ArrayList<Place>(emptyList())
+                        for (key in keys!!){
+                            for( place in it.routeMap!!.get(key)!!){
+                                tempPlanner.add(place!!)
+                            }
+                        }
+                        planners.value = tempPlanner
+                    }
+                }
+                else{
+                    errorLiveData.value = "Failed to PlannerSelectOne"
+                    Toast.makeText(context,"Failed to PlannerSelectOne",Toast.LENGTH_LONG)
+                }
+            }
+
     }
 
     override fun onPOIItemSelected(mapView: MapView?, mapPOIItem: MapPOIItem?) {

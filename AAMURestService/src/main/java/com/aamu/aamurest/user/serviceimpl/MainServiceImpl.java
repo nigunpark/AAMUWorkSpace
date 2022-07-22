@@ -419,11 +419,7 @@ public class MainServiceImpl implements MainService{
 			});
 		return affected;
 	}
-	@Override
-	public int deleteRoute(int rbn) {
-		
-		return dao.deleteRoute(rbn);
-	}
+
 	@Override
 	public List<AttractionDTO> getRecentPlaceAll(Map map) {
 		List<AttractionDTO> lists = dao.getRecentPlaceAll(map);
@@ -508,6 +504,11 @@ public class MainServiceImpl implements MainService{
 		dto.setRoute(routes2);
 		
 		return dto;
+	}
+	@Override
+	public List<AttractionDTO> selectMainPlaceList() {
+		
+		return dao.selectMainPlaceList();
 	}
 
 

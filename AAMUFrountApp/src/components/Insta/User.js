@@ -2,11 +2,11 @@ import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import NotificationModal from "./ModalGroup/Notification";
 import SearchModal from "./ModalGroup/Search/Search";
-import WriteModal from "./ModalGroup/Upload/Upload"
-import ButtonGroup from './ModalGroup/Search/ButtonGroup';
+import WriteModal from "./ModalGroup/Upload/Upload";
+import ButtonGroup from "./ModalGroup/Search/ButtonGroup";
 import { confirmAlert } from "react-confirm-alert";
 
-function User({setlist}) {
+function User({ setlist }) {
   const modalRef = useRef();
   const notimodalRef = useRef();
   const outside = useRef();
@@ -23,32 +23,43 @@ function User({setlist}) {
   }
   window.addEventListener("click", handleModal);
 
-  const handleChange=(e)=>{
+  const handleChange = (e) => {
     console.log(e.target.value);
-  }
+  };
   const submit = () => {
     confirmAlert({
-      title: '게시물을 삭제하시겠어요?',
-      message: '지금 나가면 수정 내용이 저장되지 않습니다.',
+      title: "게시물을 삭제하시겠어요?",
+      message: "지금 나가면 수정 내용이 저장되지 않습니다.",
       buttons: [
         {
-          label: '삭제',
-          onClick: () => {setsquare(false)}
-          
+          label: "삭제",
+          onClick: () => {
+            setsquare(false);
+          },
         },
         {
-          label: '취소'
-        }
-      ]
+          label: "취소",
+        },
+      ],
     });
   };
   return (
     <div>
       <div className="userSearch">
         <ButtonGroup></ButtonGroup>
-        <div className="search" onClick={() => { setsearch(!search); }} >
-          <input type="text" className="search-bar"  placeholder="검색" 
-                 onChange={handleChange} ref={modalRef} />
+        <div
+          className="search"
+          onClick={() => {
+            setsearch(!search);
+          }}
+        >
+          <input
+            type="text"
+            className="search-bar"
+            placeholder="검색"
+            onChange={handleChange}
+            ref={modalRef}
+          />
           {search ? <SearchModal></SearchModal> : null}
         </div>
       </div>
@@ -58,56 +69,64 @@ function User({setlist}) {
           <p className="user-id">0hyun0hyun</p>
           <p className="user-name">김영현</p>
         </div>
-        
-        <div className="notifi" onClick={() => { setHeart(!heart); }}>        
-          <div  className="heart" >
+
+        <div
+          className="notifi"
+          onClick={() => {
+            setHeart(!heart);
+          }}
+        >
+          <div className="heart">
             {heart ? (
-              <i  className=" fa-solid fa-heart fa-2x"  
-                  ref={notimodalRef}              
-                  style={{ color: "black" }}                 
-                  >
+              <i
+                className=" fa-solid fa-heart fa-2x"
+                ref={notimodalRef}
+                style={{ color: "black" }}
+              >
                 <NotificationModal></NotificationModal>
               </i>
-            ) : ( 
-            <i  className="fa-regular fa-heart fa-2x" ></i>
+            ) : (
+              <i className="fa-regular fa-heart fa-2x"></i>
             )}
-            
-         </div>
-          
-          
+          </div>
         </div>
         {/* <div className="post-icon">
         </div>  */}
         {square ? (
           <>
+            <div className="post-icon">
+              <i
+                className=" fa-solid fa-square-plus fa-2x"
+                onClick={() => {
+                  setsquare(!square);
+                }}
+                style={{ color: "black" }}
+              ></i>
+            </div>
+            <Container>
+              <Overlay
+                ref={outside}
+                onClick={() => {
+                  submit();
+                }}
+              />
+              <WriteModal
+                onClick={() => setsquare(false)}
+                setsquare={setsquare}
+                setlist={setlist}
+              />
+            </Container>
+          </>
+        ) : (
           <div className="post-icon">
             <i
-              className=" fa-solid fa-square-plus fa-2x"
+              className=" fa-regular fa-square-plus fa-2x"
               onClick={() => {
                 setsquare(!square);
               }}
-              style={{ color: "black" }}
-            >
-            </i></div>
-              <Container>
-                <Overlay
-                ref={outside} 
-                onClick={ () => { submit() } }
-                />
-                  <WriteModal onClick={ () => setsquare(false) } setsquare={setsquare} setlist={setlist}/>
-                
-              </Container>
-          </>
-          ) : (
-            <div className="post-icon">
-            <i
-            className=" fa-regular fa-square-plus fa-2x"
-              onClick={() => {
-                setsquare(!square);
-              }}
-            ></i></div>
-          )}    
-        
+            ></i>
+          </div>
+        )}
       </div>
 
       <div className="recommend">
@@ -197,25 +216,24 @@ function User({setlist}) {
 }
 
 const Container = styled.div`
-    position: fixed;
-    width: 100%;
-    height: 100%;
-   
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-`
+  position: fixed;
+  width: 100%;
+  height: 100%;
+
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
 const Overlay = styled.div`
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    z-index: 10;
-    background-color: rgba(0, 0, 0, 0.6);
-`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  background-color: rgba(0, 0, 0, 0.6);
+`;
 
-export default User
-
+export default User;

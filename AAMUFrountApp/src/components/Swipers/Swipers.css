@@ -4,13 +4,13 @@
   background: #fff;
 }
 
-.swiper__title{
+.swiper__title {
   text-align: left;
   font-size: 50px;
   color: var(--orange);
   /* text-shadow: 0 0.5px 0.5px var(--gray) */
 }
-.swiper__desc{
+.swiper__desc {
   font-size: 20px;
   font-weight: bold;
   margin-top: 10px;
@@ -18,13 +18,10 @@
 }
 
 .swiper__container {
-/* display: flex;
-justify-content: space-between;
-align-items: center; */
   max-width: 1200px;
   width: 90%;
   margin: 0 auto;
-} 
+}
 
 .swiper__wrapper {
   position: relative;

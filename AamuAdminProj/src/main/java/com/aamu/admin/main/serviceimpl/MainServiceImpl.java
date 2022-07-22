@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.aamu.admin.main.service.MainService;
+import com.aamu.admin.main.service.api.AttractionDTO;
 
 @Service
 public class MainServiceImpl implements MainService {
@@ -186,6 +187,18 @@ public class MainServiceImpl implements MainService {
 		map.put("usersList", usersList);
 
 		return map;
+	}
+
+	@Override
+	public int placeInsert(AttractionDTO dto) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int checkPlace(Map map) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 }

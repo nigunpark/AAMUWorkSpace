@@ -12,6 +12,8 @@ public interface MainService{
 	
 	PlannerDTO selectPlannerOne(int rbn); 
 	
+	List<AttractionDTO> selectMainPlaceList();
+	
 	List<AttractionDTO> selectPlacesList(Map map);
 
 	List<AttractionDTO> selectAttrSigungu(Map map);
@@ -34,12 +36,12 @@ public interface MainService{
 
 	int deletePlanner(int rbn);
 
-	int deleteRoute(int rbn);
 
 	List<AttractionDTO> getRecentPlaceAll(Map map);
 	
 	double getRecentPlaceOne(Map map);
 	
 	List<PlannerDTO> getPlannerList(String id);
+	
 	
 }

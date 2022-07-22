@@ -1,6 +1,7 @@
 package com.aamu.aamurest.user.web;
 
 import java.text.SimpleDateFormat;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -513,6 +514,17 @@ public class MainController {
 		
 		
 		return list;
+	}
+	@GetMapping("/main/mainelement")
+	public Map<String,Map<String,List>> mainElement(){
+		
+		Map<String,Map<String,List>> map = new HashMap<>();
+		Map<String,List> mapElement = new HashMap<>();
+		List<AttractionDTO> list = service.selectMainPlaceList();
+		mapElement.put("places", list);
+		
+		return map;
+		
 	}
 	
 

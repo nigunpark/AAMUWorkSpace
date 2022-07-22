@@ -1,6 +1,5 @@
 package com.aamu.aamuandroidapp.components.aamuplan.PlanDetails
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -9,21 +8,26 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.layout.Layout
-import androidx.compose.ui.layout.MeasurePolicy
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.aamu.aamuandroidapp.components.aamuplan.AAMUPlanViewModel
-import com.aamu.aamuandroidapp.ui.theme.amber200
-import com.aamu.aamuandroidapp.ui.theme.amber500
+import com.aamu.aamuandroidapp.components.aamuplan.AAMUPlanViewModelFactory
+import com.aamu.aamuandroidapp.components.aamuplan.PlanItems.PlanListVerticalItem
+import com.aamu.aamuandroidapp.components.aamuplan.PlanItems.PlanListWidthItem
+import com.aamu.aamuandroidapp.data.DemoDataProvider
+import com.aamu.aamuandroidapp.data.api.response.AAMUPlannerSelectOne
+import com.aamu.aamuandroidapp.data.api.response.Place
 import com.aamu.aamuandroidapp.ui.theme.amber700
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -41,7 +45,11 @@ fun PlanDetails(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(WindowInsets.statusBars.asPaddingValues().calculateTopPadding()+56.dp)
+                .height(
+                    WindowInsets.statusBars
+                        .asPaddingValues()
+                        .calculateTopPadding() + 56.dp
+                )
                 .background(color = amber700),
         )
         Row(modifier = Modifier
@@ -65,24 +73,22 @@ fun PlanListScroll(
     scaffoldState : BottomSheetScaffoldState,
     coroutineScope: CoroutineScope
 ){
-    val lists : MutableList<Int> = arrayListOf()
-    for(i : Int in 1..50)
-        lists.add(i)
+    val mapviewModel : AAMUPlanViewModel = viewModel(
+        factory = AAMUPlanViewModelFactory(LocalContext.current)
+    )
+
+    val planners by mapviewModel.planners.observeAsState(emptyList())
+    val plannerSelectOne by mapviewModel.plannerSelectOne.observeAsState()
+
     val lazyListState = rememberLazyListState()
     val lazyListState2 = rememberLazyListState()
+    var selectedIndex by remember{mutableStateOf(-1)}
     val nestedScrollConnection = remember {
         object : NestedScrollConnection {
             override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
                 coroutineScope.launch {
-                    if(lazyListState.firstVisibleItemIndex <= 0){
-                        lazyListState.animateScrollToItem(0)
-                        lazyListState2.animateScrollToItem(0)
-                    }
-                    else {
-                        lazyListState.animateScrollToItem(lazyListState.firstVisibleItemIndex)
-                        lazyListState2.animateScrollToItem(lazyListState.firstVisibleItemIndex)
-                    }
-
+                    lazyListState.scrollToItem(lazyListState.firstVisibleItemIndex)
+                    lazyListState2.animateScrollToItem(lazyListState.firstVisibleItemIndex)
                 }
                 return super.onPreScroll(available, source)
             }
@@ -101,60 +107,59 @@ fun PlanListScroll(
     }
     if(scaffoldState.drawerState.isClosed) {
         BoxWithConstraints {
-            LazyColumn(
-                modifier = Modifier
-                    .width(90.dp)
-                    .background(color = amber200)
-                    .padding(top = WindowInsets.statusBars.asPaddingValues().calculateTopPadding()+112.dp)
-                    .nestedScroll(nestedScrollConnection),
-                state = lazyListState
-            ) {
-
-                itemsIndexed(items = lists,
-                    itemContent = { index, list ->
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(16.dp)
-                        ) {
-                            Text(text = "Item : " + list.toString())
+            Surface(elevation = 3.dp) {
+                LazyColumn(
+                    modifier = Modifier
+                        .width(64.dp)
+                        .padding(
+                            top = WindowInsets.statusBars
+                                .asPaddingValues()
+                                .calculateTopPadding() + 112.dp
+                        )
+                        .nestedScroll(nestedScrollConnection)
+                        .background(Color.White),
+                    state = lazyListState,
+                ) {
+                    itemsIndexed(items = planners,
+                        itemContent = { index, planner ->
+                            PlanListVerticalItem(planner, index,selectedIndex,lazyListState,lazyListState2,coroutineScope)
                         }
+                    )
+                    item {
+                        Spacer(modifier = Modifier.padding(top = maxHeight - 50.dp))
                     }
-                )
-                item {
-                    Spacer(modifier = Modifier.padding(top = maxHeight-50.dp))
                 }
             }
         }
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = WindowInsets.statusBars.asPaddingValues().calculateTopPadding()+56.dp)
-                .height(56.dp)
-                .background(amber500)
-                .nestedScroll(nestedScrollConnection),
-            state = lazyListState2
-        ) {
-            item {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp)
-                ) {
-                    Text(text = "Item : " + 0)
-                }
-            }
-            itemsIndexed(items = lists,
-                itemContent = { index, list ->
+        Surface(elevation = 3.dp) {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        top = WindowInsets.statusBars
+                            .asPaddingValues()
+                            .calculateTopPadding() + 56.dp
+                    )
+                    .height(64.dp)
+                    .nestedScroll(nestedScrollConnection)
+                    .background(Color.White),
+                state = lazyListState2
+            ) {
+                item {
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(16.dp)
                     ) {
-                        Text("Item : " + list.toString())
+                        Text(text = "Item : " + 0)
                     }
                 }
-            )
+                itemsIndexed(items = planners,
+                    itemContent = { index, planner ->
+                        PlanListWidthItem(planner, index)
+                    }
+                )
+            }
         }
     }
 }

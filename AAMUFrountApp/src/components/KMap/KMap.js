@@ -47,6 +47,7 @@ const KMap = ({
   setConWhichModal,
   setShowCratePlan,
   setFromWooJaeData,
+  setForSearchTypeId,
 }) => {
   let [lat, setLat] = useState("");
   let [lng, setLng] = useState("");
@@ -309,11 +310,12 @@ const KMap = ({
         <div id="roadview" style={{ width: "100%", height: "99vh" }}></div>
         <div className="kmap__right-btn__container">
           <div
-            onClick={() => {
+            onClick={(e) => {
+              e.stopPropagation();
               setTitleName("추천숙소");
               dispatch(changeInfo("추천숙소"));
               setConWhichModal(true);
-              // getCurrpositionHotel(currPosition, dispatch);
+              setForSearchTypeId(32);
             }}
           >
             추천숙소
@@ -324,6 +326,7 @@ const KMap = ({
               setTitleName("추천장소");
               dispatch(changeInfo("추천장소"));
               setConWhichModal(false);
+              setForSearchTypeId(12);
             }}
           >
             추천장소
@@ -375,6 +378,7 @@ const KMap = ({
                   className="slide-in-left-personal pickedTransport personal"
                   ref={personalRef}
                   onClick={(e) => {
+                    e.stopPropagation();
                     dispatch(changePickedTransport("personal"));
                     whichTransport(e);
                   }}
@@ -456,7 +460,8 @@ const KMap = ({
       {(showAlert || showAlertTime) && (
         <ContainerInValid>
           <OverlayInValid
-            onClick={() => {
+            onClick={(e) => {
+              e.stopPropagation();
               setShowAlert(false);
               setAlertTime(false);
             }}
@@ -476,7 +481,8 @@ const KMap = ({
             <FontAwesomeIcon
               icon={faCircleXmark}
               className="alert_X"
-              onClick={() => {
+              onClick={(e) => {
+                e.stopPropagation();
                 setShowAlert(false);
                 setAlertTime(false);
               }}
@@ -505,7 +511,8 @@ function AreUSurePlan({
           <h4>일정을 생성하시겠습니까?</h4>
           <AusBtnContainer>
             <AuSBtn
-              onClick={() => {
+              onClick={(e) => {
+                e.stopPropagation();
                 toWooJae(currPosition, reduxState, setFromWooJaeData);
                 setShowAuSModal(false);
                 setShowCratePlan(true);
@@ -514,7 +521,8 @@ function AreUSurePlan({
               확인
             </AuSBtn>
             <AuSBtn
-              onClick={() => {
+              onClick={(e) => {
+                e.stopPropagation();
                 setShowAuSModal(false);
               }}
             >
@@ -538,14 +546,16 @@ function RegisterModal({
   return (
     <ContainerLoRegi>
       <OverlayLoRegi
-        onClick={() => {
+        onClick={(e) => {
+          e.stopPropagation();
           setAppearRegisterModal(false);
           setShowFillMes(false);
         }}
       />
       <ContentsLoRegi>
         <CloseLoRegi
-          onClick={() => {
+          onClick={(e) => {
+            e.stopPropagation();
             setAppearRegisterModal(false);
             setShowFillMes(false);
           }}
@@ -619,6 +629,7 @@ function RegisterModal({
             <button
               className="registerModal__search-btn"
               onClick={(e) => {
+                e.stopPropagation();
                 e.preventDefault();
                 if (jangsoName.length === 0) {
                   setShowFillMes(true);

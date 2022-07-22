@@ -4,14 +4,26 @@ import {
   faLocationDot,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Search from "../Search/Search";
 import SearchedLocation from "../SearchedLocation/SearchedLocation";
 import "./RightRecommandSide.css";
-import { changeInfo } from "../../redux/store";
+import {
+  addArrForSukso,
+  addArrInForJangso,
+  changeInfo,
+} from "../../redux/store";
 import SearchedSukso from "../SearchedLocation/SearchedSukso";
-const RightRecommandSide = ({ titleName, setTitleName, conWhichModal }) => {
+import { faX } from "@fortawesome/free-solid-svg-icons";
+const RightRecommandSide = ({
+  titleName,
+  setTitleName,
+  conWhichModal,
+  areaCode,
+  forSearchTypeId,
+  setForSearchTypeId,
+}) => {
   let reduxState = useSelector((state) => {
     return state;
   });
@@ -29,16 +41,70 @@ const RightRecommandSide = ({ titleName, setTitleName, conWhichModal }) => {
       jangsoRef.current.classList.add("rps__type-btn-picked");
     }
   }, [conWhichModal]);
+
+  const [searchedData, setSearchedData] = useState([]);
+  const [showSearchedData, setShowSearchedData] = useState(false);
+
   return (
     <div className="RightRecommandSide">
-      <div>
-        <Search />
+      <div style={{ position: "relative" }}>
+        <Search
+          setSearchedData={setSearchedData}
+          areaCode={areaCode}
+          forSearchTypeId={forSearchTypeId}
+          showSearchedData={showSearchedData}
+          setShowSearchedData={setShowSearchedData}
+        />
+        {showSearchedData && (
+          <div
+            className="searchedResult__container"
+            style={{
+              width: "100%",
+              height: "auto",
+              boxShadow: "var(--shadow)",
+            }}
+          >
+            <div className="searchedResult">
+              {searchedData.map((val, i) => {
+                return (
+                  <div
+                    key={i}
+                    className="searchedOne"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (val.contenttypeid === 12) {
+                        dispatch(addArrInForJangso(val));
+                      } else {
+                        dispatch(addArrForSukso(val));
+                      }
+                      setShowSearchedData(false);
+                    }}
+                  >
+                    {val.title}
+                  </div>
+                );
+              })}
+            </div>
+            <div
+              className="searched__xIcon"
+              onClick={(e) => {
+                e.stopPropagation();
+                setShowSearchedData(false);
+              }}
+            >
+              <FontAwesomeIcon icon={faX} style={{ fontSize: "15px" }} />
+            </div>
+          </div>
+        )}
       </div>
+
       <div className="rightRecommandSide__span__container">
         <span
           ref={suksoRef}
           className="rightRecommandSide__span sukbak"
           onClick={(e) => {
+            e.stopPropagation();
+            setForSearchTypeId(32);
             toggleBtn(e);
             setTitleName("숙소");
             dispatch(changeInfo("숙소"));
@@ -55,6 +121,8 @@ const RightRecommandSide = ({ titleName, setTitleName, conWhichModal }) => {
           ref={jangsoRef}
           className="rightRecommandSide__span jangso rps__type-btn-picked"
           onClick={(e) => {
+            e.stopPropagation();
+            setForSearchTypeId(12);
             toggleBtn(e);
             setTitleName("장소");
             dispatch(changeInfo("장소"));
@@ -78,6 +146,7 @@ const RightRecommandSide = ({ titleName, setTitleName, conWhichModal }) => {
             kindOfInfo={reduxState.kindOfInfo}
             arrForJangso={reduxState.arrForJangso}
             arrForSukso={reduxState.arrForSukso}
+            searchedData={searchedData}
           />
         </div>
       </div>
@@ -97,7 +166,12 @@ function RightSideTitle({ titleName }) {
   }
 }
 
-function RightSideInfo({ kindOfInfo, arrForJangso, arrForSukso }) {
+function RightSideInfo({
+  kindOfInfo,
+  arrForJangso,
+  arrForSukso,
+  searchedData,
+}) {
   switch (kindOfInfo) {
     case "추천장소":
       return (
@@ -117,13 +191,13 @@ function RightSideInfo({ kindOfInfo, arrForJangso, arrForSukso }) {
         </>
       );
     case "숙소":
-      return <RightSideModal />;
+      return <RightSideModal searchedData={searchedData} />;
     case "장소":
-      return <RightSideModal />;
+      return <RightSideModal searchedData={searchedData} />;
   }
 }
 
-function RightSideModal() {
+function RightSideModal({ searchedData }) {
   return (
     <div className="rightSideModal">
       <FontAwesomeIcon icon={faLocation} className="rightSideModal_icon" />

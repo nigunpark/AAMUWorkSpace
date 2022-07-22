@@ -1,6 +1,7 @@
 package com.aamu.aamuandroidapp.data.api.repositories
 
 import com.aamu.aamuandroidapp.data.api.response.AAMUPlaceResponse
+import com.aamu.aamuandroidapp.data.api.response.AAMUPlannerSelectOne
 import kotlinx.coroutines.flow.Flow
 
 interface AAMURepository {
@@ -8,4 +9,5 @@ interface AAMURepository {
     suspend fun isok() : Boolean
     suspend fun getRecentPlace(placey : Double,placex : Double) : Flow<List<AAMUPlaceResponse>>
     suspend fun getRecentDiner(placey : Double,placex : Double) : Flow<List<AAMUPlaceResponse>>
+    suspend fun getPlannerSelectOne(rbn : Int) : Flow<AAMUPlannerSelectOne>
 }

@@ -1,4 +1,8 @@
-import { faCircleInfo, faPlus } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCircleInfo,
+  faPlus,
+  faStar,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useRef, useState } from "react";
 import "./SearchedLocation.css";
@@ -9,6 +13,7 @@ import {
   CloseLim,
   BodyLim,
   ImgLim,
+  Review,
 } from "../Modal/localInfoModalParts.js";
 import { useDispatch } from "react-redux";
 //redux에서 localNameForMarker(마커찍기위한 장소이름) 변경함수
@@ -19,9 +24,11 @@ import {
   deleteArrInJangso,
   timeSetter,
 } from "../../redux/store.js";
+import axios from "axios";
 
 const SearchedLocation = ({ local }) => {
   const [locaInfoModal, setLocaInfoModal] = useState(false);
+  const [showReview, setShowReview] = useState(false);
   let dispatch = useDispatch();
   let localContainer = useRef();
   return (
@@ -78,6 +85,8 @@ const SearchedLocation = ({ local }) => {
           setLocaInfoModal={setLocaInfoModal}
           local={local}
           localContainer={localContainer}
+          setShowReview={setShowReview}
+          showReview={showReview}
         />
       )}
     </>
@@ -89,6 +98,8 @@ function LocalInfoModal({
   setLocaInfoModal,
   local,
   localContainer,
+  setShowReview,
+  showReview,
 }) {
   let dispatch = useDispatch();
 
@@ -108,7 +119,7 @@ function LocalInfoModal({
           />
         </ImgLim>
         <BodyLim>
-          <h4>{local.title}</h4>
+          <h4>{`${local.title}(별점)`}</h4>
           <div className="localInfo__container">
             <div className="localInfo">
               <ul className="localInfo-ul">
@@ -172,7 +183,15 @@ function LocalInfoModal({
           </ul>
         </div>
         <div className="localInfo-btn">
-          <span>리뷰보기</span>
+          <span
+            onClick={(e) => {
+              e.stopPropagation();
+              setShowReview(!showReview);
+              getReview();
+            }}
+          >
+            리뷰보기
+          </span>
           <span
             onClick={(e) => {
               e.stopPropagation();
@@ -186,9 +205,100 @@ function LocalInfoModal({
             목록에 추가
           </span>
         </div>
+        {showReview && (
+          <Review>
+            <div className="review__container">
+              <div className="review__info">
+                <div>
+                  <FontAwesomeIcon
+                    icon={faStar}
+                    style={{ marginRight: "8px", color: "gold" }}
+                  />
+                  <span>4.5</span>
+                </div>
+                <p>좋았어요</p>
+                <span
+                  style={{
+                    fontSize: "13px",
+                    display: "flex",
+                    justifyContent: "center",
+                  }}
+                >
+                  kim1111
+                </span>
+              </div>
+            </div>
+            <div className="review__container">
+              <div className="review__info">
+                <div>
+                  <FontAwesomeIcon
+                    icon={faStar}
+                    style={{ marginRight: "8px", color: "gold" }}
+                  />
+                  <span>4.5</span>
+                </div>
+                <p>좋았어요</p>
+                <span
+                  style={{
+                    fontSize: "13px",
+                    display: "flex",
+                    justifyContent: "center",
+                  }}
+                >
+                  kim1111
+                </span>
+              </div>
+            </div>
+            <div className="review__container">
+              <div className="review__info">
+                <div>
+                  <FontAwesomeIcon
+                    icon={faStar}
+                    style={{ marginRight: "8px", color: "gold" }}
+                  />
+                  <span>4.5</span>
+                </div>
+                <p>좋았어요</p>
+                <span
+                  style={{
+                    fontSize: "13px",
+                    display: "flex",
+                    justifyContent: "center",
+                  }}
+                >
+                  kim1111
+                </span>
+              </div>
+            </div>
+            <div className="review__container">
+              <div className="review__info">
+                <div>
+                  <FontAwesomeIcon
+                    icon={faStar}
+                    style={{ marginRight: "8px", color: "gold" }}
+                  />
+                  <span>4.5</span>
+                </div>
+                <p>좋았어요</p>
+                <span
+                  style={{
+                    fontSize: "13px",
+                    display: "flex",
+                    justifyContent: "center",
+                  }}
+                >
+                  kim1111
+                </span>
+              </div>
+            </div>
+          </Review>
+        )}
       </ContentsLim>
     </ContainerLim>
   );
 }
 
+function getReview() {
+  // axios.get('/aamurest/info/review',{})
+}
 export default SearchedLocation;

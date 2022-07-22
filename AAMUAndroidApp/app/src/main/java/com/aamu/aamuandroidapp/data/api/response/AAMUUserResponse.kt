@@ -1,12 +1,12 @@
 package com.aamu.aamuandroidapp.data.api.response
 
 data class AAMUUserResponse(
-    val member : Member,
-    val token : String
+    var member : Member,
+    var token : String
 )
 
 data class Member(
-    val username : String,
-    val password : String,
-    val authority : String
+    var username : String,
+    var password : String,
+    var authority : String
 )

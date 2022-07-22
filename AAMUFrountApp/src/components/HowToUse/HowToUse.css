@@ -1,0 +1,33 @@
+.howToUse__title {
+  text-align: left;
+  font-size: 50px;
+  color: var(--orange);
+}
+.HowToUse {
+  background: white;
+}
+
+.howToUse__desc {
+  font-size: 20px;
+  font-weight: bold;
+  margin-top: 10px;
+  letter-spacing: 4px;
+  margin-bottom: 20px;
+}
+.howToUse__container {
+  max-width: 1200px;
+  height: 90%;
+  margin: 0 auto;
+  padding: 100px 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.howToUse__wrapper {
+  width: 900px;
+  height: 500px;
+  z-index: 120;
+  display: flex;
+  justify-content: center;
+}

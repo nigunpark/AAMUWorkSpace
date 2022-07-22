@@ -3,13 +3,11 @@ package com.aamu.aamuandroidapp.data.api.repositories
 import android.util.Log
 import com.aamu.aamuandroidapp.data.api.AAMUApi
 import com.aamu.aamuandroidapp.data.api.response.AAMUPlaceResponse
+import com.aamu.aamuandroidapp.data.api.response.AAMUPlannerSelectOne
 import com.aamu.aamuandroidapp.data.api.response.AAMUUserResponse
 import com.aamu.aamuandroidapp.data.api.userLogin
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.*
 
 class AAMURepositoryImpl(
     private val aamuApi : AAMUApi
@@ -26,7 +24,6 @@ class AAMURepositoryImpl(
 
     override suspend fun isok(): Boolean {
         val response = aamuApi.isok()
-        Log.i("com.aamu.aamu","response.isSuccessful : "+response.code()+" response body : " + response.body())
         if(response.isSuccessful)
             return true
         return false
@@ -60,5 +57,18 @@ class AAMURepositoryImpl(
         }
     }.catch {
         emit(emptyList<AAMUPlaceResponse>())
+    }.flowOn(Dispatchers.IO)
+
+    override suspend fun getPlannerSelectOne(rbn: Int): Flow<AAMUPlannerSelectOne> = flow<AAMUPlannerSelectOne> {
+        val response = aamuApi.getPlannerSelectOne(rbn)
+
+        if (response.isSuccessful){
+            emit(response.body() ?: AAMUPlannerSelectOne(null,null,null,null,null,null,null,null))
+        }
+        else{
+            emit(AAMUPlannerSelectOne(null,null,null,null,null,null,null,null))
+        }
+    }.catch {
+        emit(AAMUPlannerSelectOne(null,null,null,null,null,null,null,null))
     }.flowOn(Dispatchers.IO)
 }

@@ -9,27 +9,68 @@ import "./ModalGroup/Slider/slick-theme.css";
 import dayjs from 'dayjs';
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
-
-function FeedSetting({val,setMyImage}) {
+import axios from "axios";
+import { Link } from "react-router-dom";
+function FeedSetting({val,setlist,forReRender, setForReRender}) {
+    
     let menuRef = useRef();
     let profileRef = useRef();
     let commentRef = useRef();
+    
     const [heart,setHeart] = useState(false);
    
     const [modalShow, setModalShow] = useState(false);
     const [profileModal, setprofileModal] = useState(false);
     const [commentModal, setcommentModal] = useState(false);
-
     let [userName] = useState('hacker');
     let [comment, setComment] = useState('');
     let [feedComments, setfeedComments] = useState([]); 
     let [isValid, setisValid] = useState(false); 
+    // function uploadReply(replyUp){//이미지 업로드
+    //     let formData = new FormData(); // formData 객체를 생성한다.
+    //       formData.append("reply", replyUp[0]); // 반복문을 활용하여 파일들을 formData 객체에 추가한다
+     
+    //     return formData;
+    //   }
 
-    let post = e => {//유효성 검사를 통과하고 게시버튼 클릭시 발생하는 함수
-        const copyFeedComments = [...feedComments];//feedComments에 담겨있던 댓글 받아옴
-        copyFeedComments.push(comment);//copyFeedComments에 있는 기존 댓글에 push하기 위함 
-        setfeedComments(copyFeedComments);//copyFeedComments 담겨있을 comment를 setfeedComments로 변경
-        setComment('');//사용자 댓글창을 빈 댓글 창으로 초기화
+    function post(comment,setfeedComments){//유효성 검사를 통과하고 게시버튼 클릭시 발생하는 함수
+        feedComments = val.commuComment;
+        // console.log('id',sessionStorage.getItem('username'))
+        // console.log('lno',val.lno)
+        //    console.log('comment(11)',comment)
+        // const copyFeedComments = [...feedComments];//feedComments에 담겨있던 댓글 받아옴
+        // copyFeedComments.push(comment);//copyFeedComments에 있는 기존 댓글에 push하기 위함 
+        // setfeedComments(copyFeedComments);//copyFeedComments 담겨있을 comment를 setfeedComments로 변경
+        
+
+        // temp.append('id',sessionStorage.getItem('username'))
+        // temp.append('reply',replyRef.current.value)
+        // temp.append('lno',val.lno)
+
+        let token = sessionStorage.getItem("token");
+        axios.post('/aamurest/gram/comment/edit',
+        {
+            id:sessionStorage.getItem('username'),
+            reply:comment,
+            lno:val.lno,
+             }
+             ,            
+            { headers: {
+                    Authorization: `Bearer ${token}`,
+                }
+            }
+
+        )
+        .then((resp) => {       
+            console.log('resp.data',resp.data)     
+            setfeedComments(resp.data);
+            
+            })
+            .catch((error) => {
+            console.log(error);
+            });
+
+            setComment('');//사용자 댓글창을 빈 댓글 창으로 초기화
     };
 
 
@@ -42,6 +83,7 @@ function FeedSetting({val,setMyImage}) {
       };
       
 
+
     function menuModalRef(e){//메뉴 모달 나왔을때 주변 눌러도 꺼지게 만들기
         e.stopPropagation();
         if (e.target != menuRef.current) setModalShow(false);
@@ -49,18 +91,43 @@ function FeedSetting({val,setMyImage}) {
     
     window.addEventListener("click", menuModalRef);
     
-    const CommentList = props => {
+    let CommentList = ({val}) => {
         return(
-            <div className = 'userCommentBox'>
-                <p className="userName">{props.userName}</p>
-                <div className="userCommnet">{props.userComment}</div>
-                <p className="userHeart">
-                    {/* <FaHeart/> */}
-                </p>
+            <div className = 'writing'>
+                <span className="id">{val.commuComment==null?null:val.commuComment.id}</span>
+                <span>{val.commuComment==null?null:val.commuComment.reply}</span>
             </div>
         )
     }
+
+    let heartRef = useRef();
+    let [fHeart, setfHeart] = useState([]);
    
+    function fillLike(setForReRender,forReRender){//백이랑 인스타 리스드를 뿌려주기 위한 axios
+        
+        let token = sessionStorage.getItem("token");
+        axios.get('/aamurest/gram/like',{
+          headers: {
+                Authorization: `Bearer ${token}`,
+              },
+              params:{
+                lno:parseInt(val.lno),
+                id:sessionStorage.getItem('username')
+              }
+        })
+        .then((resp) => {
+          console.log(resp.data)
+          val.islike=resp.data.isLike
+          val.likecount=resp.data.likecount
+          setForReRender(!forReRender)
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
+    
+      
+
   return (
 <div>
     <div className="feeds-setting">  
@@ -99,7 +166,7 @@ function FeedSetting({val,setMyImage}) {
     <div className="location">
         <p>{val.title}</p>
     </div>
-        <Slider {...settings}>
+        <Slider {...settings} >
             {val.photo.map((image,i)=>(
                 <div className="container">
                     <img src={image}
@@ -111,10 +178,15 @@ function FeedSetting({val,setMyImage}) {
         </Slider>
 
     <div className="feeds-contents">
-        <div className="feeds-icons">
-            <div className='heart-icon'>
-                {val.islike ?<i className="fa-solid fa-heart fa-2x"onClick={()=>{}} style={{color:'red'}} />
-                :<i className="fa-regular fa-heart fa-2x"  onClick={()=>{}}></i>}
+        <div className="feeds-icons" >
+            <div className='heart-icon' 
+                 onClick={(e)=>{
+                     e.stopPropagation();
+                     fillLike(setfHeart,setForReRender,forReRender)}}>
+                {val.islike?
+                <i className="fa-solid fa-heart fa-2x"  style={{color:'red'}}></i>
+                :<i className="fa-regular fa-heart fa-2x"></i>}
+                
             </div>
             <div>
                 <div className="talk-icon">
@@ -127,7 +199,7 @@ function FeedSetting({val,setMyImage}) {
                     ref={commentRef} 
                     onClick={ (e) => { if(e.target == commentRef.current) setcommentModal(false)  }}
                     >
-                        <Comment onClick={ () => setcommentModal(false)} val={val}></Comment>
+                        <Comment onClick={ () => {setcommentModal(false)}} val={val} forReRender={forReRender} setForReRender={setForReRender}></Comment>
                     </Overlay>
                 </Container1>
                 :null}
@@ -144,31 +216,35 @@ function FeedSetting({val,setMyImage}) {
         </div>
         <div className="feeds-like">
             <span><span className="like-bold"><strong>좋아요</strong></span>
-            <span className="like-bold"> {val.likecount}명</span>이 좋아합니다</span>
+            <span className="like-bold"> {val.likecount}개</span></span>
         </div>
         <div className="feeds-title">
-            <span className="comment-id">제목 : </span>
+            <span className="userName">제목 </span>
             <span>
                 {val.ctitle}
                 </span>
         </div>
         <div className="feeds-writing">
-            <span className="comment-id">
+            <span className="id">
                 {val.id} 
                 </span>
                 <span> 
                     {val.content}
                 </span>
         </div>
-        <div className="feeds-writing">
+        {/* <div className="feeds-writing">
             <span className="comment-id">
                 {val.commuComment==null?"":val.commuComment.id}
                 </span>
             <span>
                 {val.commuComment==null?"":val.commuComment.reply}
                 </span>
-        </div>
+        </div> */}
+
         {
+          <CommentList val={val}/>
+        }
+        {/* {
             feedComments.map((commentArr,i)=>{//feedComments에 담겨있을 댓글 값을 CommentList 컴포넌트에 담아서 가져온다
                 return(
                     <CommentList//CommentList 컴포넌트는 반복적으로 추가되는 사용자 댓글 하나하나를 담고있는 박스
@@ -178,7 +254,7 @@ function FeedSetting({val,setMyImage}) {
                     />
                 );
             })
-        }
+        } */}
         <div className="feeds-comment">
         </div>
         <span className="time">
@@ -187,10 +263,12 @@ function FeedSetting({val,setMyImage}) {
     </div>
     <div className="comment">
         <input type="text"
+                // ref={replyRef}
                 className="inputComment" 
                 placeholder="댓글 달기..."
                 onChange={(e)=>{
                     setComment(e.target.value);//댓글 창의 상태가 변할때마다 setComment를 통해 comment값을 바꿔준다
+                    
                 }}
                 onKeyUp={(e)=>{
                     e.target.value.length > 0//사용자가 키를 눌렀다 떼었을때 길이가 0을 넘는 값인지 유효성 검사 결과 값을 담는다
@@ -206,7 +284,10 @@ function FeedSetting({val,setMyImage}) {
                     ? 'submitCommentActive'
                     : 'submitCommentInactive'
                 }
-                onClick={post}//클릭하면 위서 선언한 post함수를 실행하여 feedComments에 담겨서 re-rendering 된 댓글창을 확인할 수 있다
+                onClick={()=>{
+                    post(comment,setfeedComments)
+                    feedList(setlist)
+                   } }//클릭하면 위서 선언한 post함수를 실행하여 feedComments에 담겨서 re-rendering 된 댓글창을 확인할 수 있다
                 disabled={isValid ? false : true}//사용자가 아무것도 입력하지 않았을 경우 게시를 할 수 없도록
                 type="button" >
                     게시
@@ -219,6 +300,21 @@ function FeedSetting({val,setMyImage}) {
   )
   
 }
+function feedList(setlist){//업로드 버튼 누르고 화면 새로고침
+    let token = sessionStorage.getItem("token");
+    axios.get('/aamurest/gram/selectList',{
+      headers: {
+            Authorization: `Bearer ${token}`,
+          },
+    })
+    .then((resp) => {
+      setlist(resp.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+  
 
 const Container1 = styled.div`
 position: fixed;

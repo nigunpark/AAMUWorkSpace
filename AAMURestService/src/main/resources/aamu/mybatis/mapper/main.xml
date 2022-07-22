@@ -24,6 +24,10 @@
 		</choose>
 	</insert>
 	
+	<select id="selectMainPlaceList" resultType="attrDTO">
+		SELECT * FROM places <![CDATA[rownum<=5]]>
+	</select>
+	
 	<select id="selectPlacesList" parameterType="Map" resultType="attrDTO">
 		SELECT p.*,i.* FROM places p JOIN ${selecttable} i ON p.contentid=i.contentid WHERE p.areacode=#{areacode} AND p.contenttypeid=#{contenttypeid} AND <![CDATA[rownum<=100]]>
 	</select>

@@ -204,17 +204,18 @@
       }
 
       .feeds-contents {
-        margin: -15px 10px 5px;
+        margin: -15px 15px 10px;
 
         .feeds-icons {
           display: flex;
-          width: 30px;
-          height: 50px;
-          margin-top: 17px;
-          font-size: 15px;
+          width: 100%;
+          height: 100%;
+          margin-top: 20px;
+          font-size: 13px;
+          
 
           .heart-icon {
-           margin-right: 18px;
+           margin-right: 20px;
            cursor: pointer;
            :hover {
              color: #adadad;
@@ -222,7 +223,7 @@
           }
 
           .talk-icon {
-            margin-right: 16px;
+            margin-right: 20px;
             cursor: pointer;
             :hover {
               color: #adadad;
@@ -231,8 +232,8 @@
           }
 
           .share-icon {
-            font-size: 14px;
-            margin-top: 1px;
+            font-size: 12px;
+            margin-top: 2px;
             cursor: pointer;
             :hover {
               color: #adadad;
@@ -244,7 +245,6 @@
           display: flex;
           flex-direction: row;
           align-items: center;
-          margin-top: -15px;
           margin-left: -6PX;
 
           img {
@@ -262,6 +262,7 @@
 
           span .like-bold {
             font-weight: bold;
+            margin-bottom: 10px;
           }
         }
         .feeds-title {
@@ -272,7 +273,7 @@
           }
 
           span {
-            font-size: 14.5px;
+            font-size: 13.5px;
           }
 
           span .userName {
@@ -283,6 +284,8 @@
         .feeds-writing {
           display: flex;
           flex-direction: row;
+          margin-bottom: 10px;
+
           .id {
             padding-top: 2px;
             padding-bottom: 2px;
@@ -291,7 +294,7 @@
           }
 
           span {
-            font-size: 14.5px;
+            font-size: 13.5px;
           }
 
           span .id {
@@ -299,6 +302,23 @@
           }
         }
 
+        .writing {
+          display: flex;
+          flex-direction: row;
+          .id {
+            font-weight: bold;
+            margin-right: 5px;
+          }
+
+          span {
+            font-size: 12.5px;
+          }
+
+          span .id {
+            font-weight: bold;
+          }
+        }
+        
         .feeds-comment {
           margin-top: 3px;
 
@@ -309,7 +329,7 @@
           }
 
           span {
-            font-size: 14.5px;
+            font-size: 12.5px;
           }
         }
 
@@ -498,19 +518,7 @@
           }
         }
       }
-      .previewPic{
-        background-color: tran;
-        width: 55%;
-        height: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-
-        .main-image{
-          width: 100%;
-          height: 90%;
-        }
-      }
+      
       .contents{
         // -webkit-text-size-adjust: none;
         width: 45%;
@@ -642,7 +650,7 @@
               width: 37px;
               height: 37px;
               border-radius: 50%;
-              margin-top: 13px;
+              margin-top: 8px;
               margin-left: 15px;
               cursor: pointer;
               align-self: flex-start;
@@ -653,6 +661,7 @@
               height: 37px;
               border-radius: 50%;
               margin-left: 15px;
+              margin-top: 8px;
               cursor: pointer;
 
             }
@@ -1266,7 +1275,7 @@
   }
   .picfileframe{    
     position: relative;
-    width: 100%;
+    width: 65%;
     height: 100%;
     display: flex;
     justify-content: center;

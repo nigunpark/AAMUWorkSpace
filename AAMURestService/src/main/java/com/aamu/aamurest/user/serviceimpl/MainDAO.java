@@ -124,5 +124,9 @@ public class MainDAO {
 		return template.selectList("selectRouteList",rbn);
 	}
 
+	public List<AttractionDTO> selectMainPlaceList() {
+		return template.selectList("selectMainPlaceList");
+	}
+
 
 }

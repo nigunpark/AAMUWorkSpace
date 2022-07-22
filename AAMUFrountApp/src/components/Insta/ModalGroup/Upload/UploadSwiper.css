@@ -34,11 +34,19 @@ align-items: center; */
 
 .swiperUi {
   position: relative;
-  width:100%;
+  width:65%;
   height: 100%;
 
 }
+.previewPic1{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
+ 
+}
 .swiperContainer{
   position: absolute;
   width: 100%;
@@ -46,6 +54,20 @@ align-items: center; */
 }
 
 .divimage{
+  width: 100%;
+  position: absolute;
+  height: 100%;
+  border-radius:  7px 0 0 7px;   
+}
+.swiperContainer1{
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  right: 1px;
+  bottom: 0px;
+}
+
+.divimage1{
   width: 100%;
   position: absolute;
   height: 100%;
