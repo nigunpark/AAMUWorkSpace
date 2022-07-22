@@ -53,11 +53,8 @@
 	 	UPDATE routeboard SET title=#{title} WHERE rbn=#{rbn}
 	</update>
 
-	<delete id="deletePlanner" parameterType="int">
-		DELETE FROM routeboard WHERE rbn=#{rbn}
-	</delete>
-	<delete id="deleteRoute" parameterType="int">
-		DELETE FROM route WHERE rbn=#{rbn}
+	<delete id="deletePlanner" parameterType="Map">
+		DELETE FROM ${table} WHERE rbn=#{rbn}
 	</delete>
 	
 	<select id="selectOnePlace" parameterType="int" resultType="attrDTO">

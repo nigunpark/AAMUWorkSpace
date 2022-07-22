@@ -84,9 +84,9 @@ public class MainDAO {
 		return template.update("updatePlanner", dto);
 	}
 
-	public int deletePlanner(int rbn) {
+	public int deletePlanner(Map map) {
 		
-		return template.delete("deletePlanner",rbn);
+		return template.delete("deletePlanner",map);
 	}
 
 	public int deleteRoute(int rbn) {

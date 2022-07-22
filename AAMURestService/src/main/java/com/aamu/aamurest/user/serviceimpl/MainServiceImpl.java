@@ -1,5 +1,6 @@
 package com.aamu.aamurest.user.serviceimpl;
 
+import java.util.HashMap;
 import java.util.List;
 
 import java.util.Map;
@@ -405,8 +406,18 @@ public class MainServiceImpl implements MainService{
 	
 	@Override
 	public int deletePlanner(int rbn) {
-		
-		return dao.deletePlanner(rbn);
+		int affected=0;
+		Map map = new HashMap<>();
+		affected = transactionTemplate.execute(tx->{
+				
+				map.put("table", "route");
+				map.put("rbn", rbn);
+				dao.deletePlanner(map);
+				
+				map.put("table", "routeboard");
+				return dao.deletePlanner(map);
+			});
+		return affected;
 	}
 	@Override
 	public int deleteRoute(int rbn) {
