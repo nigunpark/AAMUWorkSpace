@@ -35,19 +35,19 @@ const MyPage = () => {
           }
       }).then((resp)=>{
           setPlanList(resp.data);
-          console.log('데이터 확인 : ',resp.data);
+          // console.log('데이터 확인 : ',resp.data);
       }).catch((error)=>{
           console.log((error) => console.log("여행경로 가져오기 실패", error));
       });
       
   },[]);
 
-  console.log('받아온 데이터 저장 확인 :',planList);
+  // console.log('받아온 데이터 저장 확인 :',planList);
 
   useEffect(() => {
     if (clickTab === 0) {
       home.current.classList.add("active");
-      // two.current.classList.remove("active");
+      two.current.classList.remove("active");
       three.current.classList.remove("active");
       setting.current.classList.remove("active");
 
@@ -56,13 +56,16 @@ const MyPage = () => {
     }
     else if (clickTab === 1) {
       home.current.classList.remove("active");
-      // two.current.classList.add("active");
+      two.current.classList.add("active");
       three.current.classList.remove("active");
       setting.current.classList.remove("active");
+
+      homeBox.current.classList.remove("jsListView");
+      homeBox.current.classList.add("jsGridView");
     }
     else if (clickTab === 2) {
       home.current.classList.remove("active");
-      // two.current.classList.remove("active");
+      two.current.classList.remove("active");
       three.current.classList.add("active");
       setting.current.classList.remove("active");
 
@@ -71,12 +74,12 @@ const MyPage = () => {
     }
     else if (clickTab === 3)  {
       home.current.classList.remove("active");
-      // two.current.classList.remove("active");
+      two.current.classList.remove("active");
       three.current.classList.remove("active");
       setting.current.classList.add("active");
 
       homeBox.current.classList.remove("jsListView");
-      homeBox.current.classList.add("jsGridView");
+      homeBox.current.classList.remove("jsGridView");
     }
   }, [clickTab]);
   return (
@@ -110,7 +113,7 @@ const MyPage = () => {
             </svg>
           </button>
           
-          {/* <button
+          <button
             ref={two}
             className="app-sidebar-link"
             onClick={() => {
@@ -132,7 +135,7 @@ const MyPage = () => {
               <defs />
               <path d="M21.21 15.89A10 10 0 118 2.83M22 12A10 10 0 0012 2v10z" />
             </svg>
-          </button> */}
+          </button>
 
           <button
             ref={three}
@@ -241,7 +244,7 @@ const MyPage = () => {
 
 
 
-function Title({clickTab}){
+function Title({clickTab}){ //타이틀
   if (clickTab === 0) {
     return (
       <>
@@ -251,7 +254,7 @@ function Title({clickTab}){
     );
   }
   else if (clickTab === 1) {
-    return <div className="projects-title">MyPage</div>;
+    return <div className="projects-title">Insta</div>;
   }
   else if (clickTab === 2) {
     return <div className="projects-title">즐겨찾기</div>;
@@ -303,7 +306,7 @@ function TabContent({clickTab, setClickTab, planList}) {
   // console.log('등록한 이미지 2:',showImages[1]);
   // console.log('입력한 제목:',title);
   // console.log('입력한 내용:',content);
-  console.log('입력한 태그:',tag);
+  // console.log('입력한 태그:',tag);
 
   let myImgs = showImages.map((showImages, imgIndex)=>{
     console.log('인덱스:',imgIndex,' 값:',showImages);
@@ -342,7 +345,7 @@ function TabContent({clickTab, setClickTab, planList}) {
     return content !== "" && title !== "";
   }, [title, content]);
 
-  if (clickTab === 10) {// 메인화면
+  if (clickTab === 0) {// 홈
     return planList.map((val, idx) => {
       return (
           <MyHomeBox
@@ -352,7 +355,7 @@ function TabContent({clickTab, setClickTab, planList}) {
         );
     });
   }
-  else if (clickTab === 1) { //현재 없는 선택지
+  else if (clickTab === 1) { //인스타
     return <div>Tab 2 내용입니다.</div>;
   }
   else if (clickTab === 2) { //즐겨찾기
@@ -403,10 +406,10 @@ function TabContent({clickTab, setClickTab, planList}) {
     </div>
     );
   }
-  else if (clickTab === 3) { //----------------------Profile------------------------
+  else if (clickTab === 3) { //----------------------프로필------------------------
     return <MyProfileBox />;
   }
-  else if (clickTab === 0) { //-----------------------Write------------------------
+  else if (clickTab === 10) { //-----------------------글작성------------------------
     // const imgFileUpload = (fileBlob) => {
     //   const reader = new FileReader();
   
@@ -460,28 +463,28 @@ function TabContent({clickTab, setClickTab, planList}) {
       </div>
 
       <div className="write-box">
-        <input
-          multiple
-          className="write-picture-input"
-          type='file' id='upload'
-          onChange={handleAddImages}
-          onClick={(e)=>e.target.value = null}/>
-        <label className="write-picture-label" for='upload'>
-        File Upload
-        </label>
+          <input
+            multiple
+            className="write-picture-input"
+            type='file' id='upload'
+            onChange={handleAddImages}
+            onClick={(e)=>e.target.value = null}/>
+          <label className="write-picture-label" for='upload'>
+            Img Upload
+          </label>
       </div>
 
       {/* <div className="write-box">
         <Imgs src='/images/imageMap.png'/>
       </div> */}
-      <div className="write-box add-delete">
-        {showImages.map((image, id) => (
-          <Imgs
-            src={image}
-            alt={`${image}-${id}`}
-            onClick={() => handleDeleteImage(id)}/>
-        ))}
-      </div>
+        <div className="write-box add-delete">
+          {showImages.map((image, id) => (
+            <Imgs
+              src={image}
+              alt={`${image}-${id}`}
+              onClick={() => handleDeleteImage(id)}/>
+          ))}
+        </div>
 
       <div className="write-box writer">
         <textarea
@@ -513,16 +516,18 @@ function TabContent({clickTab, setClickTab, planList}) {
         
       </div> */}
 
-      <div className="write-box">
-        <div className='detail-button'>
+      <div className="write-box" style={{textAlign: 'end'}}>
+        {/* <div className='detail-button'> */}
         {
         canSubmit() ? (
-          <button className="learn-more" type="button" onClick={write}>공유하기</button>
+          <button style={{
+            color:'black'
+          }} className="navbar-btn" type="button" onClick={write}>공유하기</button>
           ) : (
             <button  type="button" disabled>제목과 내용을 모두 입력하세요</button>
           )
         }
-        </div>
+        {/* </div> */}
       </div>
 
     </div>
@@ -532,7 +537,7 @@ function TabContent({clickTab, setClickTab, planList}) {
 
 
 function TabTopLine({clickTab, planList}) {
-
+  //서브 타이틀
   if (clickTab === 0) {
     return (
       <div className="projects-status">
@@ -554,7 +559,7 @@ function TabTopLine({clickTab, planList}) {
     )
   }
   else if (clickTab === 1) {
-    return <div>Tab 2 TopLine</div>;
+    return <div></div>;
   }
   else if (clickTab === 2) {
     return (
