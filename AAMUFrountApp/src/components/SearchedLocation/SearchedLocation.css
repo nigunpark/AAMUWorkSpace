@@ -164,6 +164,23 @@
   height: 100%;
 }
 
+.review__container {
+  display: flex;
+  flex-direction: column;
+  padding: 5px;
+}
+
+.review__info {
+  display: grid;
+  align-items: center;
+  grid-template-columns: 10% auto 20%;
+  gap: 1rem;
+  background-color: var(--blueWhite);
+  border-radius: 5px;
+  padding: 5px;
+  box-shadow: var(--lightShadow);
+}
+
 @keyframes slide-out-left {
   0% {
     transform: translateX(0);
