@@ -7,6 +7,7 @@ import axios from "axios";
 function Main() {
 
   const [list,setlist] = useState([]);
+  const [forReRender, setForReRender] = useState(false)
   function feedList(){//백이랑 인스타 리스드를 뿌려주기 위한 axios
     let token = sessionStorage.getItem("token");
     axios.get('/aamurest/gram/selectList',{
@@ -39,7 +40,7 @@ function Main() {
         <div className="main-left" style={{display:'flex',flexDirection:'column'}}>
         {
           list.map((val,i)=>{
-            return <FeedSetting val={val} setlist={setlist}/>
+            return <FeedSetting val={val} setlist={setlist} forReRender={forReRender} setForReRender={setForReRender} />
           })
         }
         {/* <FeedSetting></FeedSetting> */}
