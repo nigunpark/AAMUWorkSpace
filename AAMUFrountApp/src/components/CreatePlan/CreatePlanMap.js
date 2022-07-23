@@ -6,7 +6,6 @@ const { kakao } = window;
 let markersArr = [];
 let polylineArr = [];
 const CreatePlanMap = ({
-  showCreatePlan,
   currPosition,
   fromWooJaeData,
   forDayLine,
@@ -28,19 +27,20 @@ const CreatePlanMap = ({
       level: mapLevel, // 지도의 확대 레벨
     };
     map = new kakao.maps.Map(cMapRef.current, mapOption);
-
-    console.log(lat, lng);
     let geocoder = new kakao.maps.services.Geocoder();
     // 주소로 좌표를 검색합니다
-    geocoder.addressSearch(currPosition, (result, status) => {
-      // 정상적으로 검색이 완료됐으면
-      if (status === kakao.maps.services.Status.OK) {
-        let coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-        setLat(result[0].y);
-        setLng(result[0].x);
-        map.panTo(coords);
+    geocoder.addressSearch(
+      reduxState.saveDaysNPickedSuksoRedux[0].addr,
+      (result, status) => {
+        // 정상적으로 검색이 완료됐으면
+        if (status === kakao.maps.services.Status.OK) {
+          let coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+          setLat(result[0].y);
+          setLng(result[0].x);
+          map.panTo(coords);
+        }
       }
-    });
+    );
     map.setMaxLevel(10);
     setCMap(map);
     map.relayout();
@@ -59,9 +59,10 @@ const CreatePlanMap = ({
       cMap.setCenter(newCoords);
     });
   }, []);
-
+  console.log("fromWooJaeData(map)", fromWooJaeData);
   useEffect(() => {
     if (cMap === null) return;
+    // if(fromWooJaeData)
     let linePath = [];
     let forMarkers = [];
     const colors = [
