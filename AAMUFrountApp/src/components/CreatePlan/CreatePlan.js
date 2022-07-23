@@ -6,7 +6,6 @@ import { faRectangleXmark, faX } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCalendarPlus,
-  faEnvelope,
   faFileExcel,
 } from "@fortawesome/free-regular-svg-icons";
 import {
@@ -32,7 +31,6 @@ import { saveAs } from "file-saver";
 import * as ExcelJS from "exceljs";
 const CreatePlan = ({
   setShowCratePlan,
-  showCreatePlan,
   currPosition,
   fromWooJaeData,
   setFromWooJaeData,
@@ -40,7 +38,6 @@ const CreatePlan = ({
   const [forDayLine, setForDayLine] = useState(0);
   const [savePlan, setSavePlan] = useState(false);
   const [auSure, setAuSure] = useState(false);
-  console.log("fromWooJaeData(CP)", fromWooJaeData);
   return (
     <div>
       <DimmedContainer>
@@ -69,7 +66,6 @@ const CreatePlan = ({
               />
             )}
             <CreatePlanMap
-              // showCreatePlan={showCreatePlan}
               setSavePlan={setSavePlan}
               currPosition={currPosition}
               fromWooJaeData={fromWooJaeData}
@@ -77,7 +73,7 @@ const CreatePlan = ({
             />
           </Contents>
         </Modal>
-        {/* {savePlan && (
+        {savePlan && (
           <SavePlan
             auSure={auSure}
             setAuSure={setAuSure}
@@ -85,7 +81,7 @@ const CreatePlan = ({
             fromWooJaeData={fromWooJaeData}
             currPosition={currPosition}
           />
-        )} */}
+        )}
       </DimmedContainer>
     </div>
   );
@@ -231,12 +227,11 @@ const handleExcel = async (fromWooJaeData, reduxState, currPosition) => {
     let dayWholeBb = reduxState.wholeBlackBox.filter((val) => {
       return val.day === i + 1;
     });
-    console.log("dayWholeBb", dayWholeBb);
+
     let dayData = xlData.filter((val) => {
       return val.day === i + 1;
     });
-    console.log("xlData", xlData);
-    console.log("dayData", dayData);
+
     let data = [];
     dayWholeBb.forEach((val, idx) => {
       data.push({
@@ -303,7 +298,7 @@ const savePlan = (reduxState, currPosition, fromWooJaeData, navigate) => {
         }일 ${getDow(reduxState, i)}`
       );
   });
-  // console.log("plannerDate", plannerDate);
+  console.log("toWoo", toWoo);
   let token = sessionStorage.getItem("token");
   axios
     .post(
