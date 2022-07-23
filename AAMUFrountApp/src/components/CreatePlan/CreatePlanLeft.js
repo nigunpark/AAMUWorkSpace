@@ -19,6 +19,7 @@ import {
   corrTimeSetObj,
   delAllWholeBb,
 } from "../../redux/store";
+import axios from "axios";
 const CreatePlanLeft = ({
   currPosition,
   fromWooJaeData,
@@ -49,14 +50,7 @@ const CreatePlanLeft = ({
     val.id = i;
   });
 
-  // fromWooJaeData = reduxState.tripPeriod.map((day, idx) => {
-  //   let arr = tempWholeArr.filter((val, i) => {
-  //     return val.day === idx + 1;
-  //   });
-  //   return { ["day" + (idx + 1)]: arr };
-  // });
-
-  // console.log("fromWooJaeData:", fromWooJaeData);
+  console.log("fromWooJaeData", fromWooJaeData);
   return (
     <div className="createPlanLeft">
       <div className="createPlanLeft__days">
@@ -163,7 +157,7 @@ function WholeSchedule({ currPosition, fromWooJaeData, setFromWooJaeData }) {
         </div>
       </div>
       <div className="createPlanLeft__schedule__content-container">
-        {reduxState.tripPeriod.map((val, index) => {
+        {fromWooJaeData.map((val, index) => {
           return (
             <Content
               index={index}
@@ -187,8 +181,6 @@ function Content({ index, fromWooJaeData, setFromWooJaeData }) {
   let contentRef = useRef();
   let sourceElement = null;
   const [showTimePicker, setShowTimePicker] = useState(false);
-  const [forReRender, setForReRender] = useState(0);
-
   useEffect(() => {
     fromWooJaeData.forEach((val, i) => {
       fromWooJaeData[index]["day" + (index + 1)][0].mtime = 0;
@@ -205,7 +197,7 @@ function Content({ index, fromWooJaeData, setFromWooJaeData }) {
 
   const handleDragStart = (e) => {
     e.target.parentElement.parentElement.parentElement.style.opacity = 0.5;
-    console.log("e.target", e.target);
+
     sourceElement = e.target;
     // e.dataTransfer.effectAllowed = "move";
     e.dataTransfer.effectAllowed = "move";
@@ -230,7 +222,7 @@ function Content({ index, fromWooJaeData, setFromWooJaeData }) {
       const list = sortedList.filter(
         (val, i) => i.toString() !== sourceElement.id
       );
-      console.log("sortedList(t)", sortedList);
+
       //지워지는 detail
       const removed = sortedList.filter(
         (val, i) => val.id === Number(sourceElement.id)
@@ -250,7 +242,6 @@ function Content({ index, fromWooJaeData, setFromWooJaeData }) {
         e.target.parentElement.parentElement.parentElement.classList.remove(
           "over"
         );
-        console.log("tempList(마지막위)", tempList);
       }
       //마지막detailing이 아닌 다른녀석 위에 놓았을 때
       else if (insertAt < list.length) {
@@ -259,7 +250,7 @@ function Content({ index, fromWooJaeData, setFromWooJaeData }) {
         //놓아짐 당했던 녀석 이후에 있던녀석들과 다시 합치기
         const newList = tempList.concat(list.slice(insertAt));
         tempList = [...newList];
-        console.log("newList(다른위)", newList);
+
         e.target.parentElement.parentElement.parentElement.classList.remove(
           "over"
         );
@@ -318,12 +309,118 @@ function Content({ index, fromWooJaeData, setFromWooJaeData }) {
   }
   return (
     <div className="createPlanLeft__schedule__content" ref={contentRef}>
-      <select className="createPlanLeft__schedule__select" onChange={() => {}}>
+      <select
+        className="createPlanLeft__schedule__select"
+        onChange={(e) => {
+          let newWooJaeData = [...fromWooJaeData];
+          newWooJaeData.map((val, i) => {
+            //바꾸고싶은 날짜를 선택했을 때
+            if (index === 0) {
+              if (Object.keys(val)[0] === e.target.value) {
+                let originDay = Object.keys(newWooJaeData[index])[0]; //day1
+                let newOne = newWooJaeData.splice(i, 1); //{day2 : array}
+                let newDay = Object.keys(newOne[0])[0]; //day2
+                newWooJaeData.splice(index, 0, newOne[0]);
+                newWooJaeData.map((val, idx) => {
+                  if (Object.keys(val)[0] === newDay) {
+                    Object.values(val)[0].forEach((obj) => {
+                      obj.day = parseInt(
+                        originDay.substring(
+                          originDay.indexOf("y") + 1,
+                          originDay.indexOf("y") + 2
+                        )
+                      );
+                    });
+                  }
+                  if (Object.keys(val)[0] === originDay) {
+                    Object.values(val)[0].forEach((obj) => {
+                      obj.day = parseInt(
+                        newDay.substring(
+                          newDay.indexOf("y") + 1,
+                          newDay.indexOf("y") + 2
+                        )
+                      );
+                    });
+                  }
+                });
+              }
+            }
+          });
+          newWooJaeData.map((val, i) => {
+            if (i === 0) {
+              Object.values(newWooJaeData[0])[0][0] = Object.values(
+                newWooJaeData[0]
+              )[0][newWooJaeData.length];
+            } else {
+              if (i === 1) {
+                Object.values(newWooJaeData[i])[0][0] = {
+                  ...Object.values(newWooJaeData[0])[0][0],
+                };
+                Object.values(newWooJaeData[i])[0][0].day = i + 1;
+              } else {
+                Object.values(newWooJaeData[i])[0][0] = {
+                  ...Object.values(newWooJaeData[i - 1])[0][
+                    Object.values(newWooJaeData[i - 1])[0].length - 1
+                  ],
+                };
+                Object.values(newWooJaeData[i])[0][0].day = i + 1;
+              }
+            }
+          });
+
+          // console.log("what", what);
+          // console.log("newWooJaeData", newWooJaeData);
+          let editData = [];
+          newWooJaeData.map((val, i) => {
+            Object.values(val)[0].map((obj, i) => {
+              editData.push(obj);
+            });
+          });
+
+          console.log("editData", editData);
+          let token = sessionStorage.getItem("token");
+          axios
+            .post(
+              "/aamurest/planner/change",
+              {
+                route: editData,
+              },
+              {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+              }
+            )
+            .then((resp) => {
+              console.log("resp.data.routeMap[0]", resp.data.routeMap);
+              let keys = [];
+              Object.keys(resp.data.routeMap).forEach((val) => {
+                keys.push(val);
+              });
+              let values = [];
+              Object.values(resp.data.routeMap).forEach((val) => {
+                values.push(val);
+              });
+              let tempArr = [];
+              // tempArr.push(resp.data.routeMap);
+              values[values.length - 1].pop();
+              keys.map((val, idx) => {
+                tempArr.push({ [val]: values[idx] });
+              });
+
+              setFromWooJaeData(tempArr);
+              // console.log("tempArr", tempArr);
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        }}
+      >
         {reduxState.tripPeriod.map((val, i) => {
           return (
             <option
               key={i}
-              defaultValue=""
+              value={`day${i + 1}`}
               selected={index + 1 === i + 1 ? true : false}
             >
               {i + 1}DAY {reduxState.monthNdate[0].month}월{" "}
@@ -436,7 +533,6 @@ function Content({ index, fromWooJaeData, setFromWooJaeData }) {
               handleDrop={handleDrop}
               handleDragEnd={handleDragEnd}
               handleDelete={handleDelete}
-              setForReRender={setForReRender}
             />
           );
         })}
@@ -456,7 +552,6 @@ function DetailSetting({
   handleDrop,
   handleDragEnd,
   handleDelete,
-  setForReRender,
 }) {
   let reduxState = useSelector((state) => {
     return state;
@@ -558,7 +653,6 @@ function DetailSetting({
             ref={mTimeRef}
             onChange={(e) => {
               obj.mtime = e.target.value * 1000 * 60;
-              setForReRender(e.target.value * 1000 * 60);
             }}
           />
           <span>분</span>
