@@ -54,8 +54,14 @@ public class CommuController {
 		for(CommuDTO dto : list) {//글 목록들 list에서 하나씩 꺼내서 dto에 담는다
 			//코멘트 셋팅
 			dto.setCommuComment(commuService.commuCommentSelectOne(dto.getLno()));
+			//코멘트의 프로필 셋팅
+			CommuCommentDTO commentdto=dto.getCommuComment();
+			if(commentdto!=null)
+				commentdto.setUserprofile(FileUploadUtil.requestOneFile(commuService.commuSelectUserProf(commentdto.getId()), "/resources/commuUpload", req));
 			//포토 셋팅
 			dto.setPhoto(FileUploadUtil.requestFilePath(commuService.commuSelectPhotoList(dto.getLno()), "/resources/commuUpload", req));
+			//글쓴이-프로필 사진 가져와서 dto에 셋팅
+			dto.setUserprofile(FileUploadUtil.requestOneFile(commuService.commuSelectUserProf(dto.getId()), "/resources/commuUpload", req));
 		}/////for
 		
 		return list;
@@ -125,17 +131,18 @@ public class CommuController {
 	public CommuDTO commuSelectOne(@PathVariable String lno, HttpServletRequest req) {
 		System.out.println("셀렉트원lno:"+lno);
 		CommuDTO dto=commuService.commuSelectOne(lno);
-		//모든 사진 가져오기
+		//모든 사진 가져와서 dto에 셋팅
 		dto.setPhoto(FileUploadUtil.requestFilePath(commuService.commuSelectPhotoList(dto.getLno()), "/resources/commuUpload", req));
+		//글쓴이-프로필 사진 가져와서 dto에 셋팅
+		dto.setUserprofile(FileUploadUtil.requestOneFile(commuService.commuSelectUserProf(dto.getId()), "/resources/commuUpload", req));
 		//모든 댓글 가져오기
-		List<CommuCommentDTO> commentDtos=commuService.commuCommentList(lno);
-		//dto.setCommuCommentList(commentDtos);
-		for(CommuCommentDTO commentDto:commentDtos) {
-			commentDto.setUserprofile(FileUploadUtil.requestOneFile(commuService.commuSelectUserProf(dto.getId()), "/resources/commuUpload", req));
+		List<CommuCommentDTO> commentList=commuService.commuCommentList(lno);
+		//댓글-프로필 사진 가져와서 dto에 셋팅
+		for(CommuCommentDTO commentDto:commentList) {
+			//System.out.println(commuService.commuSelectUserProf(commentDto.getId()));
+			commentDto.setUserprofile(FileUploadUtil.requestOneFile(commuService.commuSelectUserProf(commentDto.getId()), "/resources/commuUpload", req));
 		}
-		
-		//프로필 사진 가져오기
-		
+		dto.setCommuCommentList(commentList);
 		
 		return dto;
 	}
@@ -170,16 +177,14 @@ public class CommuController {
 	//글 삭제용
 	@DeleteMapping("/gram/edit/{lno}")
 	public Map commuDelete(@PathVariable String lno) {
-		int commuDeleteAffected=commuService.commuDelete(lno);
-		Map map = new HashMap();
-		if(commuDeleteAffected == 1)
-			map.put("result", "deleteSuccess");
-		else
-			map.put("result", "deleteNotSuccess");
+		int affected=commuService.commuDelete(lno);
+		Map map = new HashMap<> ();
+		if(affected == 1) map.put("isSuccess", true);
+		else map.put("isSuccess", false);
 		return map;
 	}
 	
-	//댓글 생성용
+	//댓글 생성용 -
 	@PostMapping("/gram/comment/edit")
 	public List<CommuDTO> commuCommentInsert(@RequestBody Map map, HttpServletRequest req) {
 		System.out.println("댓글생성 map:"+map);

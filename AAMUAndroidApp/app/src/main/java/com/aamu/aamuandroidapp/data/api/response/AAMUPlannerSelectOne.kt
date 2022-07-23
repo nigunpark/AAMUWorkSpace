@@ -3,24 +3,24 @@ package com.aamu.aamuandroidapp.data.api.response
 import java.util.*
 
 data class AAMUPlannerSelectOne(
-    var title : String?,
-    var rbn : Int?,
-    var route : Objects?,
-    var id : String?,
-    var routeDate: Long?,
-    var plannerdate : String?,
-    var routeMap : Map<String?,List<Place?>?>?,
-    var smallImage : String?
+    var title : String? = null,
+    var rbn : Int? = null,
+    var route : Objects? = null,
+    var id : String? = null,
+    var routeDate: Long? = null,
+    var plannerdate : String? = null,
+    var routeMap : Map<String?,List<Place?>?>? = null,
+    var smallImage : String? = null
 )
 data class Place(
-    var rbn : Int?,
-    var contentid : Int?,
-    var contenttypeid : Int?,
-    var starttime : Int?,
-    var dto : AAMUPlaceResponse?,
-    var day : Int?,
-    var atime : Int?,
-    var mtime : Int?,
-    var endtime : Int?,
-    var comment : String?
+    var rbn : Int? = null,
+    var contentid : Int? = null,
+    var contenttypeid : Int? = null,
+    var starttime : Int? = null,
+    var dto : AAMUPlaceResponse? = null,
+    var day : Int? = null,
+    var atime : Int? = null,
+    var mtime : Int? = null,
+    var endtime : Int? = null,
+    var comment : String? = null
 )

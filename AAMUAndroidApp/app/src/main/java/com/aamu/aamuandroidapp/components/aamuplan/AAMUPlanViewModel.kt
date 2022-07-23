@@ -77,6 +77,20 @@ class AAMUPlanViewModel(context : Context) : ViewModel(), MapView.POIItemEventLi
         }
     }
 
+    fun setMarker(title : String , contentid : Int , mapy : Double , mapx : Double){
+        mapView.removeAllPOIItems()
+        val mCustomMarker :MapPOIItem =MapPOIItem()
+        mCustomMarker.itemName = title
+        mCustomMarker.tag = contentid
+        mCustomMarker.mapPoint = MapPoint.mapPointWithGeoCoord(mapy,mapx)
+        mCustomMarker.showAnimationType = MapPOIItem.ShowAnimationType.SpringFromGround
+        mCustomMarker.markerType = MapPOIItem.MarkerType.RedPin
+
+        mapView.addPOIItem(mCustomMarker)
+        mapView.selectPOIItem(mCustomMarker, false)
+        mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(mapy,mapx), true)
+    }
+
     fun getPlannerSelectOne(rbn : Int) = viewModelScope.launch {
         aamuRepository.getPlannerSelectOne(rbn)
             .collect {selectOne ->
@@ -86,6 +100,7 @@ class AAMUPlanViewModel(context : Context) : ViewModel(), MapView.POIItemEventLi
                         val keys = it.routeMap?.keys
                         val tempPlanner = ArrayList<Place>(emptyList())
                         for (key in keys!!){
+                            tempPlanner.add(Place(dto = AAMUPlaceResponse(title = "${key}")))
                             for( place in it.routeMap!!.get(key)!!){
                                 tempPlanner.add(place!!)
                             }

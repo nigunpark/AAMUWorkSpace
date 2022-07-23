@@ -73,7 +73,7 @@
 	
 	<!-- 글 하나 뿌려주는 용_프로필 뿌려주기 -->
 	<select id="commuSelectUserProf" parameterType="String" resultType="String">
-		SELECT u.userprofile from commucomment cc join users u on cc.id=u.id where u.id=#{id}
+		SELECT userprofile from users where id=#{id}
 	</select>
 	
 	<!-- 글 수정용 -->
