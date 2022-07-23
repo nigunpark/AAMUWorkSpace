@@ -83,7 +83,6 @@ const KMap = ({
   //지도 레벨 state
   const [mapLevel, setMapLevel] = useState(9);
   const [kMap, setKMap] = useState(null);
-  // const [markers, setMarkers] = useState([1]);
   const [showAlert, setShowAlert] = useState(false);
   const [showAlertTime, setAlertTime] = useState(false);
   //-------------------------------------------------------------------------
@@ -252,7 +251,7 @@ const KMap = ({
     if (kMap === null) return;
 
     kakao.maps.event.addListener(kMap, "zoom_changed", function () {
-      if (kMap.getLevel() <= 5) {
+      if (kMap.getLevel() <= 6) {
         let center = kMap.getCenter();
         // let level = kMap.getLevel();
         // // setMapLevel(level);
@@ -276,7 +275,7 @@ const KMap = ({
         },
       })
       .then((resp) => {
-        console.log(resp.data);
+        // console.log(resp.data);
         let jangso = resp.data.filter((val, i) => {
           return val.contenttypeid === 12;
         });
@@ -749,9 +748,7 @@ async function toWooJae(currPosition, reduxState, setFromWooJaeData) {
         },
       }
     );
-    console.log("resp.data", resp.data.route);
     let settedData = await manufacData(resp.data.route, reduxState);
-    console.log("settedData", settedData);
     await setFromWooJaeData(settedData);
   } catch (error) {
     console.log("error", error);
