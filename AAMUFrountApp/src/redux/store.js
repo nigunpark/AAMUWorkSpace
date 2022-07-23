@@ -259,6 +259,7 @@ let joinData = createSlice({
   initialState: {
     id: "",
     pwd: "",
+    img: "",
     name: "",
     birth: "",
     gender: "",
@@ -280,6 +281,7 @@ let joinData = createSlice({
       state.email = action.payload[4];
       state.addr = action.payload[5];
       state.self = action.payload[6];
+      state.img = action.payload[7];
     },
   },
 });
