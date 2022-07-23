@@ -15,17 +15,18 @@
 							<div class="card">
 								<div class="card-body">
 								<div class="card-numberOfBoard">
-										<button class="btn btn-primary text-white me-0" style="float: right">데이터 백업</button>
+										<button class="btn btn-primary text-white me-0" style="float: right" id="backup">데이터 백업</button>
+										<button class="btn btn-primary text-white me-0" style="float: right" id="save">데이터 저장</button>
 									</div>
 									<h4 class="card-title">게시글 전체 리스트</h4>
 									<div class="table-responsive text-center">
 										<table class="table text-center">
 											<thead>
 												<tr>
-													<th class="col-2">ID</th>
+													<th class="col-2">지역</th>
 													<th>장소명</th>
 													<th class="col-4">주소</th>
-													<th class="col-1">장소 타입</th>
+													<th class="col-1">타입 코드</th>
 													<th class="col-1">지역 코드</th>										
 												</tr>
 											</thead>
@@ -99,7 +100,16 @@
 
 
 <script>
- 
+$('#backup').click(function(){
+	$.ajax({
+		url:"<c:url value="placesbackup.do"/>",
+		type:"get",
+		dataType: "json"
+	})
+});
+$('#save').click(function(){
+	
+});
     
   </script>
 </body>

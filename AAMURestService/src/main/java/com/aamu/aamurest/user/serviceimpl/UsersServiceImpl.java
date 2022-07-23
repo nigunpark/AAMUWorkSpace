@@ -4,6 +4,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import com.aamu.aamurest.user.service.UsersDTO;
 import com.aamu.aamurest.user.service.UsersService;
@@ -12,11 +13,16 @@ import com.aamu.aamurest.user.service.UsersService;
 public class UsersServiceImpl implements UsersService{
 	@Autowired
 	private UsersDAO dao;
-	
+	@Autowired
+	private TransactionTemplate transactionTemplate;
 	@Override
 	public int joinUser(Map map) {
-		
-		return dao.joinUser(map);
+		int affected = 0; 
+		affected = transactionTemplate.execute(tx->{
+			dao.joinUser(map);
+			return dao.insertAuth(map);
+		});
+		return affected;
 	}
 
 	@Override
@@ -26,9 +32,9 @@ public class UsersServiceImpl implements UsersService{
 	}
 
 	@Override
-	public int updateUser(UsersDTO dto) {
+	public int updateUser(Map map) {
 
-		return dao.updateUser(dto);
+		return dao.updateUser(map);
 	}
 
 	@Override

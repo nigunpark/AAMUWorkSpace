@@ -29,8 +29,9 @@ public class UserController {
 	private UsersService service;
 	
 	
-	@PostMapping("/users/insert")
+	@PostMapping("/users/edit")
 	public int join(@RequestParam Map map,@RequestParam MultipartFile userprofile,HttpServletRequest req) throws IllegalStateException, IOException {
+
 		int affected=0;
 		String path = req.getSession().getServletContext().getRealPath("/resources/userUpload");
 		String photo = FileUploadUtil.oneFile(userprofile, path);
@@ -41,7 +42,20 @@ public class UserController {
 		
 		return affected;
 	}
-	
+	@PutMapping("/users/edit")
+	public int updateUser(@RequestParam Map map,@RequestParam MultipartFile userprofile,HttpServletRequest req) throws IllegalStateException, IOException {
+
+		int affected=0;
+		String path = req.getSession().getServletContext().getRealPath("/resources/userUpload");
+		UsersDTO dto = service.selectOneUser(map);
+		File oldFile = new File(FileUploadUtil.requestOneFile(dto.getUserprofile(), path, req));
+		oldFile.delete();
+		String photo = FileUploadUtil.oneFile(userprofile, path);
+		map.put("userprofile",photo);
+		affected = service.updateUser(map);
+		
+		return affected;
+	}
 	@GetMapping("/users/selectone")
 	public UsersDTO selectOneUser(@RequestParam Map map,HttpServletRequest req) {
 		
@@ -52,15 +66,6 @@ public class UserController {
 		return dto;
 	}
 	
-	
-	@PutMapping("/users/update")
-	public int updateUser(@RequestBody UsersDTO dto) {
-		int affected=0;
-		
-		affected = service.updateUser(dto);
-		
-		return affected;
-	}
 	@GetMapping("/users/checkid")
 	public int checkId(@RequestParam String id) {
 		System.out.println(id);

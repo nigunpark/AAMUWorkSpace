@@ -17,12 +17,15 @@
 	<insert id="joinUser" parameterType="Map">
 		INSERT INTO users VALUES(#{id},#{email},#{pwd},#{name},#{gender},#{phonenum},#{addrid},#{self},SYSDATE,#{userprofile})
 	</insert>
+	<insert id="insertAuth" parameterType="Map">
+		INSERT INTO AUTHORITY_SECURITY VALUES(#{id},default,default)
+	</insert>
 	
 	<select id="selectOneUser" parameterType="Map" resultType="usersDTO">
 		SELECT * FROM users WHERE id=#{id}
 	</select>
 	
-	<update id="updateUser" parameterType="usersDTO">
+	<update id="updateUser" parameterType="Map">
 		UPDATE users SET email=#{email},pwd=#{pwd},name=#{name},gender=#{gender},phonenum=#{phonenum},addrid=#{addrid},self=#{self},userprofile=#{userprofile} WHERE id=#{id}
 	</update>
 	<select id="checkId" parameterType="String" resultType="int">

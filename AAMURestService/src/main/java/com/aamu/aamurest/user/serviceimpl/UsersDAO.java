@@ -24,14 +24,19 @@ public class UsersDAO {
 		return template.selectOne("selectOneUser",map);
 	}
 
-	public int updateUser(UsersDTO dto) {
+	public int updateUser(Map map) {
 		
-		return template.update("updateUser",dto);
+		return template.update("updateUser",map);
 	}
 
 	public int checkId(String id) {
 		
 		return template.selectOne("checkId",id);
+	}
+
+	public int insertAuth(Map map) {
+	
+		return template.insert("insertAuth", map);
 	}
 
 }

@@ -25,7 +25,7 @@
 	</insert>
 	
 	<select id="selectMainPlaceList" resultType="attrDTO">
-		SELECT * FROM places <![CDATA[rownum<=5]]>
+		SELECT * FROM places WHERE <![CDATA[rownum<=5]]>
 	</select>
 	
 	<select id="selectPlacesList" parameterType="Map" resultType="attrDTO">

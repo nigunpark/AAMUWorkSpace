@@ -37,7 +37,7 @@ import com.aamu.admin.main.service.api.Places;
 import com.aamu.admin.main.service.api.Places.Item;
 
 @Controller
-@PropertySource("classpath:aamu/resources/api.properties")
+@PropertySource("classpath:admin/resources/api.properties")
 public class MainController {
 	
 	@Autowired
@@ -85,7 +85,7 @@ public class MainController {
 		
 		model.addAttribute("users",service.usersTotalCount());
 		model.addAttribute("todayUsers", service.usersTodayCount());
-		
+		model.addAttribute("date",chartMap.get("date"));
 		model.addAttribute("usersWeek",chartMap.get("userWeek"));
 
 		return "/main/statistics";
@@ -101,7 +101,6 @@ public class MainController {
 	}
 	@GetMapping("adminbackup.do")
 	public String back() {
-		
 		
 		return"/back/backup";
 	}

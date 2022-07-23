@@ -316,11 +316,7 @@ public class MainController {
 		return routeList;
 		
 	}
-	@PostMapping("/planner/mapdata")
-	public PlannerDTO plannerMapData(@RequestBody PlannerDTO dto) {
 	
-		return dto;
-	}
 	@GetMapping("/planner/selectone")
 	public PlannerDTO selectPlannerOne(@RequestParam int rbn) {
 		
@@ -360,6 +356,60 @@ public class MainController {
 		List<PlannerDTO> list = service.getPlannerList(id);
 		
 		return list;
+	}
+	@PostMapping("/planner/change")
+	public PlannerDTO plannerChange(@RequestBody PlannerDTO dto) {
+		Map<String,List<RouteDTO>> routeMap = new TreeMap<>();
+
+		List<RouteDTO> routes =  dto.getRoute();
+		int max= 0 ;
+		for(RouteDTO route : routes) {
+			if(max<route.getDay()) 
+				max=route.getDay();	
+		}
+		for(int i=1;i<=max;i++) 
+			routeMap.put("day"+i, new Vector<>());
+			
+		
+		for(RouteDTO route : routes) 
+			((List<RouteDTO>)routeMap.get("day"+route.getDay())).add(route);		
+		
+		dto.setRouteMap(routeMap);
+		
+		int day = routeMap.size();
+		long mtime=0;
+		Map<String,Double> map = new HashMap<String, Double>();
+		for(int i=1;i<=day;i++) {
+			List<RouteDTO> list = (List)dto.getRouteMap().get("day"+i);
+			int place = list.size();
+			for(int k=0;k<place;k++) {
+				/*
+				if(i==1 && list.size()<place) list.add(list.get(0));
+				if(i==1 && k==place-1) {
+					if(list.get(k).getContentid()!=list.get(0).getContentid()) {
+						RouteDTO route = list.get(k);
+						route = list.get(0);
+					}
+				}
+				else if(i!=1 && i!=day) {
+					int minus = i-1;
+					(List)dto.getRouteMap().get("day"+minus)
+				}
+				else if(i==day)
+				*/
+				if(k>0) {
+					map.put("firstx", list.get(k-1).getDto().getMapx());
+					map.put("firsty", list.get(k-1).getDto().getMapy());
+					map.put("secondx",list.get(k).getDto().getMapx());
+					map.put("secondy",list.get(k).getDto().getMapy());
+					
+					mtime = (long)(service.getRecentPlaceOne(map)*1000*60*1.5);
+					list.get(k).setMtime(mtime);
+				}
+			}
+		}
+		
+		return dto;
 	}
 	
 	@GetMapping("/info/places")
@@ -522,10 +572,12 @@ public class MainController {
 		Map<String,List> mapElement = new HashMap<>();
 		List<AttractionDTO> list = service.selectMainPlaceList();
 		mapElement.put("places", list);
+		map.put("placesInfo", mapElement );
 		
 		return map;
 		
 	}
+
 	
 
 }
