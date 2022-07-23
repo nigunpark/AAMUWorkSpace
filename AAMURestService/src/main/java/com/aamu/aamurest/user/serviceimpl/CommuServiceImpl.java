@@ -120,7 +120,7 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 	}
 	
 
-	//글 수정용 트랜잭션확인
+	//글 수정용 트랜잭션확인해야됨
 	@Override
 	public int commuUpdate(Map map) {
 		int affected=0;
@@ -158,6 +158,9 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 			dao.commuDelete(map);
 			
 			map.put("table", "likeboard");
+			dao.commuDelete(map);
+			
+			map.put("table", "community");
 			return dao.commuDelete(map);
 		});
 		return affected;
