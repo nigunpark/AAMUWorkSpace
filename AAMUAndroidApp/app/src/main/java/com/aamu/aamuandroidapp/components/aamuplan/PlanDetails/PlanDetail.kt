@@ -105,6 +105,21 @@ fun PlanListScroll(
             }
         }
     }
+    var mapMakerIndex : Int = if(lazyListState2.firstVisibleItemIndex-1 >= 0) lazyListState2.firstVisibleItemIndex-1 else 0
+    if (planners.size != 0
+        && planners.get(mapMakerIndex) != null) {
+        if (planners[mapMakerIndex].dto?.mapx != null
+            && planners[mapMakerIndex].dto?.mapy != null
+        ) {
+            mapviewModel.setMarker(
+                planners[mapMakerIndex].dto?.title!!,
+                planners[mapMakerIndex].dto?.contentid!!,
+                planners[mapMakerIndex].dto?.mapy!!,
+                planners[mapMakerIndex].dto?.mapx!!
+            )
+        }
+    }
+
     if(scaffoldState.drawerState.isClosed) {
         BoxWithConstraints {
             Surface(elevation = 3.dp) {
@@ -118,6 +133,7 @@ fun PlanListScroll(
                         )
                         .nestedScroll(nestedScrollConnection)
                         .background(Color.White),
+                    contentPadding = PaddingValues(5.dp),
                     state = lazyListState,
                 ) {
                     itemsIndexed(items = planners,
@@ -143,15 +159,18 @@ fun PlanListScroll(
                     .height(64.dp)
                     .nestedScroll(nestedScrollConnection)
                     .background(Color.White),
-                state = lazyListState2
+                state = lazyListState2,
+                contentPadding = PaddingValues(5.dp)
             ) {
                 item {
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(16.dp)
+                            .height(55.dp),
+                        Arrangement.Center,
+                        Alignment.CenterVertically
                     ) {
-                        Text(text = "Item : " + 0)
+                        Text(text = "여행출발하기")
                     }
                 }
                 itemsIndexed(items = planners,

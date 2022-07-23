@@ -101,6 +101,7 @@ fun KakaoMap(
     {mapView->
         mapView.setCurrentLocationEventListener(eventListener)
         mapView.currentLocationTrackingMode=MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeading
+        mapView.currentLocationTrackingMode=MapView.CurrentLocationTrackingMode.TrackingModeOff
     }
 }
 
@@ -144,7 +145,7 @@ fun ActionButton(
             onClick = {
 //                mapviewModel.mapView.currentLocationTrackingMode=MapView.CurrentLocationTrackingMode.TrackingModeOff
 //                mapviewModel.getRcentPlaces()
-                mapviewModel.getPlannerSelectOne(33)
+                mapviewModel.getPlannerSelectOne(32)
                 topbarhide.value = true
                 coroutineScope.launch { bottomSheetScaffoldState.drawerState.open() }
             },
