@@ -17,12 +17,12 @@ import {
   fa3,
   faCheck,
   faHouse,
-  faX,
 } from "@fortawesome/free-solid-svg-icons";
 import DaumPostcode from "react-daum-postcode";
 import emailjs from "@emailjs/browser";
 import { addStepTwo } from "../../redux/store.js";
 import { useSelector, useDispatch } from "react-redux";
+import axios from "axios";
 const JoinStep2 = () => {
   let joominGender = useRef();
   let nameRef = useRef();
@@ -54,6 +54,8 @@ const JoinStep2 = () => {
   const [emailCk, setEmailCk] = useState(false);
   const [eId, setEId] = useState("");
   const [eAddr, setEAddr] = useState("");
+  const [imageFile, setImageFile] = useState([]);
+  console.log("imageFile", imageFile);
   return (
     <div className="join__step-two">
       <Container>
@@ -91,22 +93,25 @@ const JoinStep2 = () => {
                         src="/images/no-image.jpg"
                       />
                     </div>
-                    <input
-                      id="photo"
-                      type="file"
-                      onChange={(e) => {
-                        if (e.target.files && e.target.files[0]) {
-                          let reader = new FileReader();
-                          reader.onload = function (e) {
-                            photoRef.current.src = e.target.result;
-                          };
-                          reader.readAsDataURL(e.target.files[0]);
-                        } else {
-                          photoRef.current.src = "";
-                        }
-                      }}
-                      style={{ display: "none" }}
-                    />
+                    <form encType="multipart/form-data">
+                      <input
+                        id="photo"
+                        type="file"
+                        onChange={(e) => {
+                          if (e.target.files && e.target.files[0]) {
+                            let reader = new FileReader();
+                            reader.onload = function (e) {
+                              photoRef.current.src = e.target.result;
+                            };
+                            reader.readAsDataURL(e.target.files[0]);
+                            setImageFile(addImage(e));
+                          } else {
+                            photoRef.current.src = "";
+                          }
+                        }}
+                        style={{ display: "none" }}
+                      />
+                    </form>
                   </div>
                   <div className="join__stepTwo-input-wrap">
                     <div>
@@ -428,7 +433,10 @@ const JoinStep2 = () => {
                     addrDetailRef,
                     emailCk,
                     introduceRef,
-                    dispatch
+                    dispatch,
+                    imageFile,
+                    reduxState,
+                    imageFile
                   );
                 }}
               >
@@ -627,6 +635,13 @@ const SendEmail = ({
   );
 };
 
+const addImage = (e) => {
+  // const nowImageURL = URL.createObjectURL(e.target.files[0]);
+  let formData = new FormData();
+  formData.append("userprofile", e.target.files[0]);
+  return formData;
+};
+
 const AddresApi = ({ setIsOpenPost, setAddress, setZoneCode }) => {
   const onCompletePost = (data) => {
     let fullAddr = data.address;
@@ -760,7 +775,9 @@ function validation(
   addrDetailRef,
   emailCk,
   introduceRef,
-  dispatch
+  dispatch,
+  imageFile,
+  reduxState
 ) {
   if (nameRef.current.value.trim().length === 0) {
     nameRef.current.parentElement.classList.add("validation");
@@ -838,7 +855,9 @@ function validation(
       }
       let phoneNum = `${phoneNumF.current.value}-${phoneNumS.current.value}-${phoneNumT.current.value}`;
       let email = `${emailIdRef.current.value}@${emailAddrRef.current.value}`;
-      let addr = `${zoneCodeRef.current.value}/${addrRef.current.value}/${addrDetailRef.current.value}`;
+      // let addr = `${zoneCodeRef.current.value}/${addrRef.current.value}/${addrDetailRef.current.value}`;
+      let addr = `${zoneCodeRef.current.value}`;
+
       dispatch(
         addStepTwo([
           nameRef.current.value,
@@ -848,8 +867,33 @@ function validation(
           email,
           addr,
           introduceRef.current.value,
+          imageFile,
         ])
       );
+      let temp = imageFile;
+      temp.append("id", reduxState.joinData.id);
+      temp.append("email", email);
+      temp.append("pwd", reduxState.joinData.pwd);
+      temp.append("name", nameRef.current.value);
+      temp.append("gender", gender);
+      temp.append("phonenum", phoneNum);
+      temp.append("addrid", addr);
+      temp.append("self", introduceRef.current.value);
+      temp.append("userprofile", introduceRef.current.value);
+      let token = sessionStorage.getItem("token");
+      axios
+        .post("/aamurest/users/edit", temp, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        .then((resp) => {
+          console.log(resp.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
   }
 }
