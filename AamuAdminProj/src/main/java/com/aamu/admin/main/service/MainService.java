@@ -19,5 +19,6 @@ public interface MainService {
 	Map<String,List> selectStartEnd(Map map);
 	int placeInsert(AttractionDTO dto);
 	int checkPlace(Map map);
+	Map countAllPlaces();
 
 }

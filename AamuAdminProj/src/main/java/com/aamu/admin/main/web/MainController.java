@@ -101,7 +101,7 @@ public class MainController {
 	}
 	@GetMapping("adminbackup.do")
 	public String back() {
-		
+		Map map = service.countAllPlaces();
 		return"/back/backup";
 	}
 	@GetMapping("placesbackup.do")

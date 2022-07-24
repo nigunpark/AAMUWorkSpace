@@ -39,4 +39,10 @@
 	<select id="selectDate" parameterType="String" resultType="String">
 		SELECT TO_CHAR(${day}, 'MM-DD') FROM dual
 	</select>
+	<select id="countAllPlaces" parameterType="Map" resultType="int">
+		SELECT count(*) FROM places WHERE areacode=#{areacode} and contenttypeid=#{contenttypeid} 	
+		<if test='contenttypeid="12"'>
+			or contenttypeid='28'
+		</if>
+	</select>
 </mapper>

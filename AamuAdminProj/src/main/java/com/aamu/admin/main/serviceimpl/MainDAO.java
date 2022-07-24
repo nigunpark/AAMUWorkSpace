@@ -54,4 +54,9 @@ public class MainDAO {
 		return template.selectOne("selectUsersToString",day);
 	}
 
+	public int countAllPlaces(Map map) {
+		
+		return template.selectOne("countAllPlaces",map);
+	}
+
 }

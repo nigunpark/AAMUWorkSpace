@@ -201,4 +201,14 @@ public class MainServiceImpl implements MainService {
 		return 0;
 	}
 
+	@Override
+	public Map countAllPlaces() {
+		Map map = new HashMap();
+		
+		map.put("areacode", 1);
+		map.put("contenttypeid", 12);
+		map.put("seoulattrcount" ,dao.countAllPlaces(map));
+		return null;
+	}
+
 }

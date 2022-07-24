@@ -34,4 +34,5 @@ public class AttractionDTO {
 	private String eventtime;
 	private long atime = 2*1000*60*60;
 	private String table;
+	private int count;
 }
