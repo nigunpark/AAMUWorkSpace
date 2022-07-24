@@ -28,6 +28,6 @@ public class QNADTO {
 	private String title;
 	private String content;
 	private String qcount;
-	private java.sql.Date noticedate;
+	private java.sql.Date qdate;
 
 }

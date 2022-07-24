@@ -5,4 +5,49 @@
 <mapper namespace="admin.mybatis.mapper.qna">
 
 
+
+
+	<!-- 전체 글 뿌려주기 -->
+	<select id="qnaSelectList" parameterType="Map"
+		resultType="QNADTO">
+		SELECT * FROM
+		(SELECT T.*, ROWNUM R FROM (
+		SELECT q. * FROM
+		QNA q
+		JOIN users u ON q.id=u.id
+		<if test="searchColumn != null">
+	  	 	WHERE ${searchColumn} LIKE '%' || #{searchWord} || '%' 
+	  	</if>  
+		ORDER BY qno DESC) T)
+		WHERE R BETWEEN
+		#{start} AND #{end}
+	</select>
+
+	<!-- 전체 글 레코드수 -->
+	<select id="qnaGetTotalRecordCount" parameterType="Map"
+		resultType="int">
+		SELECT COUNT(*) FROM qna
+	</select>
+
+	<!-- 글 상세 보기 -->
+
+	<select id="qnaSelectOne" parameterType="Map"
+		resultType="QNADTO">
+		SELECT * FROM qna
+		WHERE qno=#{qno}
+	</select>
+
+	<!-- 조회수 올리기 -->
+	<update id="qnaCount" parameterType="Map">
+		update qna set qcount
+		= qcount + 1 where qno=#{qno}
+	</update>
+
+	<!-- 글 삭제 -->
+	<delete id="qnaDelete" parameterType="Map">
+		DELETE qna WHERE
+		qno =
+		#{qno}
+	</delete>
+
 </mapper>
