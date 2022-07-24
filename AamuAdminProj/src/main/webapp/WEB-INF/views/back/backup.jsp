@@ -15,8 +15,7 @@
 							<div class="card">
 								<div class="card-body">
 								<div class="card-numberOfBoard">
-										<button class="btn btn-primary text-white me-0" style="float: right" id="backup">데이터 백업</button>
-										<button class="btn btn-primary text-white me-0" style="float: right" id="save">데이터 저장</button>
+										<button class="btn btn-primary text-white me-0" style="float: right" id="backup">저장</button>
 									</div>
 									<h4 class="card-title">여행지 리스트</h4>
 									<div class="table-responsive text-center">
@@ -25,7 +24,8 @@
 												<tr>
 													<th>지역</th>
 													<th>장소 타입</th>
-													<th>카운트</th>									
+													<th>카운트</th>
+													<th class="col-1">데이터 백업</th>								
 												</tr>
 											</thead>
 											<tbody>
@@ -39,7 +39,13 @@
 														<tr>
 															<td>${record.area}</td>
 															<td>${record.contenttype}</td>
-															<td>${record.count}</td>
+															<c:if test="${record.count eq '0' }" var="isZero">
+																	<td class="text-danger font-weight-bold"><h6>${record.count}</h6></td>
+															</c:if>
+															<c:if test="${not isZero }">
+															<td class="font-weight-bold">${record.count}</td>
+															</c:if>
+															<td><button class="btn btn-primary text-white me-0" id="backup">데이터 백업</button></td>
 														</tr>
 													</c:forEach>
 												</c:if>

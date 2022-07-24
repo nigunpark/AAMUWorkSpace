@@ -118,7 +118,7 @@ public class MainController {
 		return"/back/backup";
 	}
 	@GetMapping("placesbackup.do")
-	public List<AttractionDTO> info2(@RequestParam Map map) {
+	public String info2(@RequestParam Map map) {
 		String area = map.get("areacode").toString();
 		String contentTypeId = map.get("contenttypeid").toString();
 
@@ -345,7 +345,7 @@ public class MainController {
 		resultMap.put("result", affected+"count success");
 
 
-		return list;
+		return"/back/backupcomplete";
 	}
 	
 	

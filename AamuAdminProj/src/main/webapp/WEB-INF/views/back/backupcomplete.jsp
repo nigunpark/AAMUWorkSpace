@@ -26,27 +26,26 @@
 											<thead>
 												<tr>
 													<th class="col-1">장소 번호</th>
+													<th>주소</th>
+													<th class="col-4">장소명</th>		
 													<th class="col-1">지역 번호</th>
 													<th class="col-1">타입 번호</th>
-													<th>주소</th>
-													<th class="col-4">장소명</th>
-													<th class="col-1">좋아요수</th>								
+					
 												</tr>
 											</thead>
 											<tbody>
 												<c:if test="${empty placelist.lists }" var="isEmpty">
 													<tr>
-														<td colspan="8">받은 데이터가 없습니다.</td>
+														<td colspan="8">데이터가 없습니다.</td>
 													</tr>
 												</c:if>
 												<c:if test="${not isEmpty }">
 													<c:forEach var="record" items="${placelist.lists}" varStatus="loop">
 														<tr>
+															<td>${record.contentid}</td>
+															<td>${record.addr}</td>
+															<td>${record.title}</td>
 															<td>${record.areacode}</td>
-															<td>${record.contenttype}</td>
-															<td>${record.count}</td>
-															<td>${record.contenttype}</td>
-															<td>${record.count}</td>
 															<td>${record.contenttype}</td>
 														</tr>
 													</c:forEach>
@@ -70,13 +69,6 @@
 
 
 <script>
-$('#backup').click(function(){
-	$.ajax({
-		url:"<c:url value="placesbackup.do"/>",
-		type:"get",
-		dataType: "json"
-	})
-});
 $('#save').click(function(){
 	
 });
