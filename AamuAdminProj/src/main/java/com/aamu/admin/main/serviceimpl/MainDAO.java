@@ -66,4 +66,9 @@ public class MainDAO {
 		return template.insert("placeInsert",dto);
 	}
 
+	public int checkPlace(Map map) {
+		
+		return template.selectOne("checkPlace", map);
+	}
+
 }

@@ -45,4 +45,27 @@
 			or areacode=#{areacode} and contenttypeid='28'
 		</if>
 	</select>
+	<select id="checkPlace" parameterType="Map" resultType="int">
+		SELECT count(*) FROM ${table} WHERE contentid=#{contentid}
+	</select>
+	<insert id="placeInsert" parameterType="attrDTO">
+		INSERT INTO ${table} 
+		<choose>
+			<when test='table=="places"'>
+			VALUES(#{contentid},#{areacode},#{contenttypeid},#{sigungucode},#{title},#{addr},#{bigimage},#{smallimage},#{mapx},#{mapy},#{kakaokey},#{tel},#{url})
+			</when>
+			<when test='table=="placesinfo"'>
+			VALUES(#{contentid},#{resttime},#{playtime},#{park})	
+			</when>
+			<when test='table=="hotelinfo"'>
+			VALUES(#{contentid},#{checkin},#{checkout})	
+			</when>
+			<when test='table=="dinerinfo"'>
+			VALUES(#{contentid},#{menu})
+			</when>
+			<when test='table=="eventinfo"'>
+			VALUES(#{contentid},TO_DATE(#{eventstart},'YYYY-MM-DD'),TO_DATE(#{eventend},'YYYY-MM-DD'),#{charge},#{eventtime})
+			</when>
+		</choose>
+	</insert>
 </mapper>

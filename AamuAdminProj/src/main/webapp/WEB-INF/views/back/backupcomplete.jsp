@@ -19,7 +19,7 @@
 									</div>
 									<h4 class="card-title">여행지 리스트</h4>
 									<div class="card-numberOfBoard">
-										데이터 수: ${totalCount}개
+										데이터 수: ${totalcount}개
 									</div>
 									<div class="table-responsive text-center">
 										<table class="table text-center">
@@ -34,19 +34,19 @@
 												</tr>
 											</thead>
 											<tbody>
-												<c:if test="${empty placelist.lists }" var="isEmpty">
+												<c:if test="${empty placelist}" var="isEmpty">
 													<tr>
 														<td colspan="8">데이터가 없습니다.</td>
 													</tr>
 												</c:if>
 												<c:if test="${not isEmpty }">
-													<c:forEach var="record" items="${placelist.lists}" varStatus="loop">
+													<c:forEach var="record" items="${placelist}" varStatus="loop">
 														<tr>
 															<td>${record.contentid}</td>
 															<td>${record.addr}</td>
 															<td>${record.title}</td>
 															<td>${record.areacode}</td>
-															<td>${record.contenttype}</td>
+															<td>${record.contenttypeid}</td>
 														</tr>
 													</c:forEach>
 												</c:if>

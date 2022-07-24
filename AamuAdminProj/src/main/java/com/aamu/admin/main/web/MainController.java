@@ -343,7 +343,7 @@ public class MainController {
 
 		}
 		model.addAttribute("placelist", list);
-
+		model.addAttribute("totalcount", list.size());
 
 		return"/back/backupcomplete";
 	}

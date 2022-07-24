@@ -205,14 +205,163 @@ public class MainServiceImpl implements MainService {
 
 	@Override
 	public int placeInsert(AttractionDTO dto) {
-		
+		String url = dto.getUrl();
+		String resultUrl =null;
+		if(url!=null) {
+			if(url.contains("\"")) {
+				dto.setUrl(url.split("\"")[1]);
+				
+				resultUrl = dto.getUrl();
+				if(!resultUrl.contains("http")) {
+					if(resultUrl.contains("href=\"")) {
+						resultUrl = url.split("href=\"")[1];
+						dto.setUrl(resultUrl.split("\"")[0]);
+					}
+					else if(url.contains("href=")) {
+						resultUrl = url.split("href=")[1];
+						dto.setUrl(resultUrl.split("\"")[0]);
+						
+					}
+					else {
+						dto.setUrl(url.split("\"")[2]);
+					}
+					
+					resultUrl = dto.getUrl();
+				}
+			}
+			else {
+				resultUrl = url;
+				dto.setUrl(resultUrl);
+			}
+			
+		}
+		if(dto.getMapx()>999 || dto.getMapy()>999) {
+			dto.setMapx(0);
+			dto.setMapy(0);
+		}
+		String tel = dto.getTel();
+		if(tel!=null) {
+			if(tel.contains("<br />")) {
+				tel = tel.replace("<br />", "\r\n");
+			}
+			else if(tel.contains("<br/>")){
+				tel = tel.replace("<br/>", "\r\n");
+			}
+			else if(tel.contains("<br>")){
+				tel = tel.replace("<br>", "\r\n");
+			}
+			dto.setTel(tel);
+			if(tel.length()>100) {
+				dto.setTel("");
+			}
+		}
+		////////////////////////////////////////////////////////////////////////////
+		if(dto.getContenttypeid()==12||dto.getContenttypeid()==28||dto.getContenttypeid()==39) {
+			String playtime = dto.getPlaytime();
+			String resttime = dto.getResttime();
+			if(playtime!=null) {
+				if(playtime.contains("<br />")) {
+					playtime = playtime.replace("<br />", "\r\n");
+				}
+				else if(playtime.contains("<br/>")){
+					playtime = playtime.replace("<br/>", "\r\n");
+				}
+				else if(playtime.contains("<br>")){
+					playtime = playtime.replace("<br>", "\r\n");
+				}
+				dto.setPlaytime(playtime);
+			}
+			if(resttime!=null) {
+				if(resttime.contains("<br />")) {
+					resttime = resttime.replace("<br />", "\r\n");
+				}
+				else if(resttime.contains("<br/>")){
+					resttime = resttime.replace("<br/>", "\r\n");
+				}
+				else if(resttime.contains("<br>")){
+					resttime.replace("<br>", "\r\n");
+				}
+				dto.setResttime(resttime);
+			}
+		}///////////////////////////////////////////////////////////////////////////////////
+		else if(dto.getContenttypeid()==32) {
+			String checkin = dto.getCheckin();
+			String checkout =dto.getCheckout();
+			if(checkin!=null) {
+				if(checkin.contains("<br />")) {
+					checkin = checkin.replace("<br />", "\r\n");
+				}
+				else if(checkin.contains("<br/>")){
+					checkin = checkin.replace("<br/>", "\r\n");
+				}
+				else if(checkin.contains("<br>")){
+					checkin = checkin.replace("<br>", "\r\n");
+				}
+				dto.setCheckin(checkin);
+			}
+			if(checkout!=null) {
+				if(checkout.contains("<br />")) {
+					checkout = checkout.replace("<br />", "\r\n");
+				}
+				else if(checkout.contains("<br/>")){
+					checkout = checkout.replace("<br/>", "\r\n");
+				}
+				else if(checkout.contains("<br>")){
+					checkout = checkout.replace("<br>", "\r\n");
+				}
+				dto.setCheckout(checkout);
+			}
+		}
+		////////////////////////////////////////////////////////////////////////////////////////
+		else if(dto.getContenttypeid()==15) {
+			/*
+			String start = dto.getEventstart();
+			String end = dto.getEventend();
+			start = start.substring(0, 4) +"-"+start.substring(4, 6)+"-"+start.substring(6,8);
+			end = end.substring(0, 4) +"-"+end.substring(4, 6)+"-"+end.substring(6,8);
+			dto.setEventstart(start);
+			dto.setEventend(end);
+			System.out.println(dto.getEventstart());
+			System.out.println(dto.getEventend());
+			*/
+			String eventTime = dto.getEventtime();
+			if(eventTime!=null) {
+				if(eventTime.contains("<br>")) {
+					eventTime = eventTime.replace("<br>", "\r\n");
+				}
+				else if(eventTime.contains("<br />")) {
+					eventTime = eventTime.replace("<br />", "\r\n");
+				}
+				else if(eventTime.contains("<br/>")){
+					eventTime = eventTime.replace("<br/>", "\r\n");
+				}
+				dto.setEventtime(eventTime);
+			}
+			String charge = dto.getCharge();
+			if(charge!=null) {
+				if(charge.contains("<br>")) {
+					charge = charge.replace("<br>", "\r\n");
+					
+				}
+				else if(charge.contains("<br />")) {
+					charge = charge.replace("<br />", "\r\n");
+				}
+				else if(charge.contains("<br/>")){
+					charge = charge.replace("<br/>", "\r\n");
+				}
+				if(charge.length()>100) {
+					charge = dto.getUrl();
+				}
+				dto.setCharge(charge);
+			}
+		}//////////////////////////////////////////////////////////////////////
 		return dao.placeInsert(dto);
 	}
 
 	@Override
 	public int checkPlace(Map map) {
-		// TODO Auto-generated method stub
-		return 0;
+		
+		return dao.checkPlace(map);
 	}
 
 	@Override
