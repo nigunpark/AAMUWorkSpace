@@ -25,6 +25,7 @@ import com.aamu.aamuandroidapp.components.aamuplan.AAMUPlanViewModel
 import com.aamu.aamuandroidapp.components.aamuplan.AAMUPlanViewModelFactory
 import com.aamu.aamuandroidapp.components.aamuplan.PlanItems.PlanListVerticalItem
 import com.aamu.aamuandroidapp.components.aamuplan.PlanItems.PlanListWidthItem
+import com.aamu.aamuandroidapp.components.aamuplan.PlanItems.PlanMove
 import com.aamu.aamuandroidapp.data.DemoDataProvider
 import com.aamu.aamuandroidapp.data.api.response.AAMUPlannerSelectOne
 import com.aamu.aamuandroidapp.data.api.response.Place
@@ -35,12 +36,26 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun PlanDetails(
-//    mapviewModel : AAMUPlanViewModel,
+    mapviewModel : AAMUPlanViewModel,
+    modifierBottom : Modifier,
     scaffoldState : BottomSheetScaffoldState,
     topbarhide : MutableState<Boolean>,
+    startMove : MutableState<Boolean>,
     coroutineScope: CoroutineScope
 ){
-    PlanListScroll(scaffoldState,coroutineScope)
+    val plannerSelectOne by mapviewModel.plannerSelectOne.observeAsState()
+
+    if(scaffoldState.drawerState.isClosed && !startMove.value) {
+        PlanListScroll(mapviewModel, coroutineScope, startMove)
+    }
+    if(startMove.value){
+        Box(modifier = modifierBottom
+            .padding(bottom = 50.dp, start = 30.dp, end = 30.dp)
+            .fillMaxWidth()
+            .height(120.dp)){
+            PlanMove(mapviewModel)
+        }
+    }
     Surface(elevation = 1.dp) {
         Box(
             modifier = Modifier
@@ -59,36 +74,32 @@ fun PlanDetails(
             IconButton(onClick = {
                 coroutineScope.launch { scaffoldState.drawerState.close() }
                 topbarhide.value = false
+                startMove.value = false
             }) {
                 Icon(Icons.Filled.ArrowBack, null)
             }
-            Text(text = "ㅎㅇㅎ")
+            Text(text = plannerSelectOne?.title?:"")
         }
     }
 }
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun PlanListScroll(
-    scaffoldState : BottomSheetScaffoldState,
-    coroutineScope: CoroutineScope
+    mapviewModel : AAMUPlanViewModel,
+    coroutineScope: CoroutineScope,
+    startMove : MutableState<Boolean>
 ){
-    val mapviewModel : AAMUPlanViewModel = viewModel(
-        factory = AAMUPlanViewModelFactory(LocalContext.current)
-    )
-
     val planners by mapviewModel.planners.observeAsState(emptyList())
-    val plannerSelectOne by mapviewModel.plannerSelectOne.observeAsState()
 
     val lazyListState = rememberLazyListState()
-    val lazyListState2 = rememberLazyListState()
+    val lazyListStateVertical = rememberLazyListState()
     var selectedIndex by remember{mutableStateOf(-1)}
     val nestedScrollConnection = remember {
         object : NestedScrollConnection {
             override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
                 coroutineScope.launch {
                     lazyListState.scrollToItem(lazyListState.firstVisibleItemIndex)
-                    lazyListState2.animateScrollToItem(lazyListState.firstVisibleItemIndex)
+                    lazyListStateVertical.animateScrollToItem(lazyListState.firstVisibleItemIndex)
                 }
                 return super.onPreScroll(available, source)
             }
@@ -98,14 +109,14 @@ fun PlanListScroll(
                 source: NestedScrollSource
             ): Offset {
                 coroutineScope.launch {
-                    lazyListState2.scrollToItem(lazyListState.firstVisibleItemIndex,lazyListState.firstVisibleItemScrollOffset)
+                    lazyListStateVertical.scrollToItem(lazyListState.firstVisibleItemIndex,lazyListState.firstVisibleItemScrollOffset)
 
                 }
                 return super.onPostScroll(consumed, available, source)
             }
         }
     }
-    var mapMakerIndex : Int = if(lazyListState2.firstVisibleItemIndex-1 >= 0) lazyListState2.firstVisibleItemIndex-1 else 0
+    var mapMakerIndex : Int = if(lazyListStateVertical.firstVisibleItemIndex-1 >= 0) lazyListStateVertical.firstVisibleItemIndex-1 else 0
     if (planners.size != 0
         && planners.get(mapMakerIndex) != null) {
         if (planners[mapMakerIndex].dto?.mapx != null
@@ -120,65 +131,67 @@ fun PlanListScroll(
         }
     }
 
-    if(scaffoldState.drawerState.isClosed) {
-        BoxWithConstraints {
-            Surface(elevation = 3.dp) {
-                LazyColumn(
-                    modifier = Modifier
-                        .width(64.dp)
-                        .padding(
-                            top = WindowInsets.statusBars
-                                .asPaddingValues()
-                                .calculateTopPadding() + 112.dp
-                        )
-                        .nestedScroll(nestedScrollConnection)
-                        .background(Color.White),
-                    contentPadding = PaddingValues(5.dp),
-                    state = lazyListState,
-                ) {
-                    itemsIndexed(items = planners,
-                        itemContent = { index, planner ->
-                            PlanListVerticalItem(planner, index,selectedIndex,lazyListState,lazyListState2,coroutineScope)
-                        }
-                    )
-                    item {
-                        Spacer(modifier = Modifier.padding(top = maxHeight - 50.dp))
-                    }
-                }
-            }
-        }
+    BoxWithConstraints {
         Surface(elevation = 3.dp) {
             LazyColumn(
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .width(64.dp)
                     .padding(
                         top = WindowInsets.statusBars
                             .asPaddingValues()
-                            .calculateTopPadding() + 56.dp
+                            .calculateTopPadding() + 112.dp
                     )
-                    .height(64.dp)
                     .nestedScroll(nestedScrollConnection)
                     .background(Color.White),
-                state = lazyListState2,
+                state = lazyListState,
                 contentPadding = PaddingValues(5.dp)
             ) {
-                item {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(55.dp),
-                        Arrangement.Center,
-                        Alignment.CenterVertically
-                    ) {
-                        Text(text = "여행출발하기")
-                    }
-                }
                 itemsIndexed(items = planners,
                     itemContent = { index, planner ->
-                        PlanListWidthItem(planner, index)
+                        Spacer(modifier = Modifier.padding(bottom = 5.dp))
+                        PlanListVerticalItem(planner, index,selectedIndex,lazyListState,lazyListStateVertical,coroutineScope)
+                        Spacer(modifier = Modifier.padding(bottom = 5.dp))
                     }
                 )
+                item {
+                    Spacer(modifier = Modifier.padding(top = maxHeight - 50.dp))
+                }
             }
+        }
+    }
+    Surface(elevation = 3.dp) {
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(
+                    top = WindowInsets.statusBars
+                        .asPaddingValues()
+                        .calculateTopPadding() + 56.dp
+                )
+                .height(64.dp)
+                .nestedScroll(nestedScrollConnection)
+                .background(Color.White),
+            state = lazyListStateVertical,
+            contentPadding = PaddingValues(5.dp)
+        ) {
+            item {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(55.dp),
+                    Arrangement.Center,
+                    Alignment.CenterVertically
+                ) {
+                    Text(text = "여행출발하기")
+                }
+                Spacer(modifier = Modifier.padding(bottom = 5.dp))
+            }
+            itemsIndexed(items = planners,
+                itemContent = { index, planner ->
+                    PlanListWidthItem(mapviewModel,planner, index,startMove)
+                    Spacer(modifier = Modifier.padding(bottom = 5.dp))
+                }
+            )
         }
     }
 }

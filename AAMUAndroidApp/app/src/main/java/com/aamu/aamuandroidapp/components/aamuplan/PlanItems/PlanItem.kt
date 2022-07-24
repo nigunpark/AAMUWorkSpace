@@ -10,9 +10,11 @@ import androidx.compose.material.Surface
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -20,11 +22,14 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
+import com.aamu.aamuandroidapp.R
+import com.aamu.aamuandroidapp.components.aamuplan.AAMUPlanViewModel
 import com.aamu.aamuandroidapp.data.api.response.Place
 import com.aamu.aamuandroidapp.ui.theme.amber200
 import com.aamu.aamuandroidapp.ui.theme.typography
@@ -33,7 +38,7 @@ import kotlinx.coroutines.launch
 
 
 @Composable
-fun PlanListWidthItem(planner: Place, itemIndex: Int) {
+fun PlanListWidthItem(mapviewModel : AAMUPlanViewModel, planner: Place, itemIndex: Int,startMove : MutableState<Boolean>) {
     Row(
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -57,7 +62,7 @@ fun PlanListWidthItem(planner: Place, itemIndex: Int) {
             Image(
                 painter = rememberAsyncImagePainter(
                     model = ImageRequest.Builder(LocalContext.current)
-                        .data(planner.dto?.smallimage)
+                        .data(planner.dto?.smallimage?:R.drawable.no_image)
                         .crossfade(true)
                         .build(),
                     contentScale = ContentScale.Crop
@@ -86,26 +91,30 @@ fun PlanListWidthItem(planner: Place, itemIndex: Int) {
                     overflow = TextOverflow.Ellipsis
                 )
             }
-            Icon(
-                imageVector = Icons.Default.MoreVert,
-                contentDescription = null,
-                tint = Color.LightGray,
-                modifier = Modifier.padding(4.dp)
-            )
+            IconButton(onClick = {
+                mapviewModel.getPlanMove(planner)
+                startMove.value = true
+            }) {
+                Icon(
+                    painter = painterResource(R.drawable.blue_pin_icon),
+                    contentDescription = "Localized description",
+                    tint = Color.Unspecified
+                )
+            }
         }
     }
 }
 
 
 @Composable
-fun PlanListVerticalItem(planner: Place, itemIndex: Int, selectedIndex: Int,lazyListState : LazyListState,lazyListState2 : LazyListState,coroutineScope: CoroutineScope) {
+fun PlanListVerticalItem(planner: Place, itemIndex: Int, selectedIndex: Int,lazyListState : LazyListState,lazyListStateVertical : LazyListState,coroutineScope: CoroutineScope) {
     Row(
         modifier = Modifier.selectable(
             selected = selectedIndex == itemIndex,
             onClick = {
                 coroutineScope.launch {
                     lazyListState.scrollToItem(itemIndex+1)
-                    lazyListState2.scrollToItem(itemIndex+1)
+                    lazyListStateVertical.scrollToItem(itemIndex+1)
                 }
             }
         ),
@@ -133,7 +142,7 @@ fun PlanListVerticalItem(planner: Place, itemIndex: Int, selectedIndex: Int,lazy
                 Image(
                     painter = rememberAsyncImagePainter(
                         model = ImageRequest.Builder(LocalContext.current)
-                            .data(planner.dto?.smallimage)
+                            .data(planner.dto?.smallimage?:R.drawable.no_image)
                             .crossfade(true)
                             .build(),
                         contentScale = ContentScale.Crop
@@ -141,7 +150,8 @@ fun PlanListVerticalItem(planner: Place, itemIndex: Int, selectedIndex: Int,lazy
                     contentDescription = null,
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
-                        .size(55.dp).clip(CircleShape),
+                        .size(55.dp)
+                        .clip(CircleShape),
                 )
             }
         }

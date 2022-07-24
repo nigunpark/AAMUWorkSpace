@@ -23,15 +23,14 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.aamu.aamuandroidapp.components.aamuplan.PlanDetails.PlanDetails
 import com.aamu.aamuandroidapp.components.aamuplan.PlanDetails.SideContent
+import com.aamu.aamuandroidapp.components.aamuplan.PlanItems.PlanMove
 import com.aamu.aamuandroidapp.ui.theme.orange700
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import net.daum.mf.map.api.MapPoint
 import net.daum.mf.map.api.MapView
 
-@OptIn(ExperimentalMaterialApi::class, ExperimentalComposeUiApi::class,
-    ExperimentalFoundationApi::class
-)
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun AAMUPlanHome(){
     val context : Context = LocalContext.current
@@ -43,6 +42,7 @@ fun AAMUPlanHome(){
         factory = AAMUPlanViewModelFactory(LocalContext.current)
     )
     var topbarhide = remember { mutableStateOf(false) }
+    var startMove = remember { mutableStateOf(false) }
     Box(modifier = Modifier.fillMaxSize()){
         BottomSheetScaffold(
             sheetElevation = 0.dp,
@@ -60,13 +60,6 @@ fun AAMUPlanHome(){
                         topbarhide,
                         bottomSheetScaffoldState,
                         coroutineScope)
-//                        ActionButton(
-//                            Modifier
-//                                .statusBarsPadding()
-//                                .align(Alignment.TopEnd),
-//                            topbarhide,
-//                            bottomSheetScaffoldState,
-//                            coroutineScope)
                     }
                 }
             },
@@ -74,7 +67,7 @@ fun AAMUPlanHome(){
                 PlanBottomSheet()
             },
             drawerBackgroundColor = orange700,
-            drawerGesturesEnabled = true,
+            drawerGesturesEnabled = bottomSheetScaffoldState.drawerState.isOpen,
             drawerContent = {
                 Spacer(modifier = Modifier.height(WindowInsets.statusBars.asPaddingValues().calculateTopPadding()+56.dp))
                 SideContent() },
@@ -83,7 +76,8 @@ fun AAMUPlanHome(){
 
         )
         if(topbarhide.value) {
-            PlanDetails(bottomSheetScaffoldState,topbarhide,coroutineScope)
+            val modifierBottom = Modifier.align(Alignment.BottomCenter)
+            PlanDetails(mapviewModel,modifierBottom,bottomSheetScaffoldState,topbarhide,startMove,coroutineScope)
         }
     }
 
@@ -101,7 +95,6 @@ fun KakaoMap(
     {mapView->
         mapView.setCurrentLocationEventListener(eventListener)
         mapView.currentLocationTrackingMode=MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeading
-        mapView.currentLocationTrackingMode=MapView.CurrentLocationTrackingMode.TrackingModeOff
     }
 }
 
@@ -143,8 +136,6 @@ fun ActionButton(
     Box(modifier = modifier) {
         FloatingActionButton(
             onClick = {
-//                mapviewModel.mapView.currentLocationTrackingMode=MapView.CurrentLocationTrackingMode.TrackingModeOff
-//                mapviewModel.getRcentPlaces()
                 mapviewModel.getPlannerSelectOne(32)
                 topbarhide.value = true
                 coroutineScope.launch { bottomSheetScaffoldState.drawerState.open() }

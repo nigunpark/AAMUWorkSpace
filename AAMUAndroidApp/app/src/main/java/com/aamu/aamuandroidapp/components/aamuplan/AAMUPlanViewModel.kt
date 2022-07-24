@@ -41,6 +41,7 @@ class AAMUPlanViewModel(context : Context) : ViewModel(), MapView.POIItemEventLi
     val errorLiveData = MutableLiveData<String>()
     val plannerSelectOne = MutableLiveData<AAMUPlannerSelectOne>()
     val planners = MutableLiveData<MutableList<Place>>()
+    val place = MutableLiveData<Place>()
 
     init {
         mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord("103.8198".toDouble(), "1.3521".toDouble()), true)
@@ -88,6 +89,7 @@ class AAMUPlanViewModel(context : Context) : ViewModel(), MapView.POIItemEventLi
 
         mapView.addPOIItem(mCustomMarker)
         mapView.selectPOIItem(mCustomMarker, false)
+        mapView.currentLocationTrackingMode=MapView.CurrentLocationTrackingMode.TrackingModeOff
         mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(mapy,mapx), true)
     }
 
@@ -113,7 +115,11 @@ class AAMUPlanViewModel(context : Context) : ViewModel(), MapView.POIItemEventLi
                     Toast.makeText(context,"Failed to PlannerSelectOne",Toast.LENGTH_LONG)
                 }
             }
+    }
 
+    fun getPlanMove(planner: Place){
+
+        place.value = planner
     }
 
     override fun onPOIItemSelected(mapView: MapView?, mapPOIItem: MapPOIItem?) {
