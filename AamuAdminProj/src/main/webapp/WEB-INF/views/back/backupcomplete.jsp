@@ -15,10 +15,12 @@
 							<div class="card">
 								<div class="card-body">
 								<div class="card-numberOfBoard">
-										<button class="btn btn-primary text-white me-0" style="float: right" id="backup">데이터 백업</button>
 										<button class="btn btn-primary text-white me-0" style="float: right" id="save">데이터 저장</button>
 									</div>
 									<h4 class="card-title">여행지 리스트</h4>
+									<div class="card-numberOfBoard">
+										데이터 수: ${totalCount}개
+									</div>
 									<div class="table-responsive text-center">
 										<table class="table text-center">
 											<thead>
@@ -51,30 +53,6 @@
 							</div>
 						</div>
 						<!--예시 용 테이블-->
-						<!-- 검색 -->
-						<div class="row">
-							<form class="col-md-12 d-flex justify-content-center align-items-center" method="post" action="<c:url value="adminbackup.do"/>">
-								<div class="form-group row">
-									<div class="col-sm-12">
-										<select class="form-control background-color-secondary text-black" name="searchColumn">
-											<option value="c.id">지역</option>
-											<option value="ctitle">장소 타입</option>
-										</select>
-									</div>
-								</div>
-								<div class="form-group row">
-									<div class="col-sm-12">
-										<input type="text" class="form-control mx-2 my-2" placeholder="검색어를 입력하세요" name="searchWord" />
-									</div>
-								</div>
-								<div class="form-group row">
-									<div class="col-sm-12">
-										<input type="submit" class="btn btn-primary mx-3 my-2 text-white" value="검색" id="submit"/>
-									</div>
-								</div>
-							</form>
-						</div>
-						<!-- 검색 끝 -->
 						<!--------------------- 내용의 끝 부분입니다------------------------------------>
 					</div>
 				</div>

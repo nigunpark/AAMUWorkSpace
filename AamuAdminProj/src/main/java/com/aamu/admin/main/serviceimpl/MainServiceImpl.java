@@ -1,6 +1,7 @@
 package com.aamu.admin.main.serviceimpl;
 
 import java.text.ParseException;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -9,17 +10,30 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 
+import com.aamu.admin.main.service.ListPagingData;
 import com.aamu.admin.main.service.MainService;
+import com.aamu.admin.main.service.PagingUtil;
+import com.aamu.admin.main.service.api.AreaCountDTO;
 import com.aamu.admin.main.service.api.AttractionDTO;
 
 @Service
+@PropertySource("classpath:admin/resources/paging.properties")
 public class MainServiceImpl implements MainService {
 
 	@Autowired
 	private MainDAO dao;
+	
+	@Value("${pageSize}")
+	private int pageSize;
+	@Value("${blockPage}")
+	private int blockPage;
 
 	@Override
 	public int usersTotalCount() {
@@ -202,13 +216,178 @@ public class MainServiceImpl implements MainService {
 	}
 
 	@Override
-	public Map countAllPlaces() {
+	public ListPagingData<AreaCountDTO> countAllPlaces(Map pagingMap, HttpServletRequest req, int nowPage) {
 		Map map = new HashMap();
+		List list = new Vector<>();
+		String area =null;
+		int areacode = 0;
 		
-		map.put("areacode", 1);
-		map.put("contenttypeid", 12);
-		map.put("seoulattrcount" ,dao.countAllPlaces(map));
-		return null;
+		for(int i=1;i<=17;i++) {
+			areacode = i;
+			if(i>8) areacode +=22;
+			switch(areacode) {
+			case 1:
+				area = "서울";
+				count(areacode, map, list,area);
+				break;
+			case 2:
+				area = "인천";
+				count(areacode, map, list,area);
+				break;
+			case 3:
+				area = "대전";
+				count(areacode, map, list,area);
+				break;
+			case 4:
+				area = "대구";
+				count(areacode, map, list,area);
+				break;
+			case 5:
+				area = "광주";
+				count(areacode, map, list,area);
+				break;
+			case 6:
+				area = "부산";
+				count(areacode, map, list,area);
+				break;
+			case 7:
+				area = "울산";
+				count(areacode, map, list,area);
+				break;
+			case 31:
+				area = "경기도";
+				count(areacode, map, list,area);
+				break;
+			case 32:
+				area = "강원도";
+				count(areacode, map, list,area);
+				break;
+			case 33:
+				area = "충청북도";
+				count(areacode, map, list,area);
+				break;
+			case 34:
+				area = "충청남도";
+				count(areacode, map, list,area);
+				break;
+			case 35:
+				area = "경상북도";
+				count(areacode, map, list,area);
+				break;
+			case 36:
+				area = "경상남도";
+				count(areacode, map, list,area);
+				break;
+			case 37:
+				area = "전라북도";
+				count(areacode, map, list,area);
+				break;
+			case 38:
+				area = "전라남도";
+				count(areacode, map, list,area);
+				break;
+			case 39:
+				area = "제주도";
+				count(areacode, map, list,area);
+				break;
+			
+		}
+	}
+		
+		int totalCount=list.size();
+		pagingMap.put(PagingUtil.PAGE_SIZE, pageSize);
+		pagingMap.put(PagingUtil.BLOCK_PAGE, blockPage);
+		pagingMap.put(PagingUtil.TOTAL_COUNT, totalCount);
+		//페이징과 관련된 값들 얻기를 위한 메소드 호출
+		PagingUtil.setMapForPaging(pagingMap);
+		//글 전체 목록 얻기;
+		
+		String pagingString = PagingUtil.pagingBootStrapStyle(
+				Integer.parseInt(pagingMap.get(PagingUtil.TOTAL_COUNT).toString()), 
+				Integer.parseInt(pagingMap.get(PagingUtil.PAGE_SIZE).toString()), 
+				Integer.parseInt(pagingMap.get(PagingUtil.BLOCK_PAGE).toString()), 
+				Integer.parseInt(pagingMap.get(PagingUtil.NOW_PAGE).toString()), 
+				req.getContextPath()+"/adminbackup.do?");
+		
+		//Lombok라이브러리 사용시
+		List pagingList = new Vector<>();
+		int totalPage= (int)(Math.ceil(((double)totalCount/pageSize)));
+		int i=(nowPage-1)*totalPage;
+		for(int k=0;k<pageSize;k++) {
+			pagingList.add(list.get(i+k));
+		}
+
+		ListPagingData<AreaCountDTO> listPagingData =ListPagingData.builder().lists(pagingList).map(pagingMap).pagingString(pagingString).build();
+		
+		return listPagingData;
+	}
+	public List<AreaCountDTO> count(int i,Map map,List<AreaCountDTO> list,String area) {
+		for(int k=0;k<4;k++) {
+			AreaCountDTO dto = new AreaCountDTO();
+			dto.setArea(area);
+			switch(k) {
+			case 0:
+				dto.setContenttype("관광지");
+				map.put("areacode", i);
+				map.put("contenttypeid", 12);
+				dto.setCount(dao.countAllPlaces(map));
+				break;
+			case 1:
+				dto.setContenttype("호텔");
+				map.put("areacode", i);
+				map.put("contenttypeid", 32);
+				dto.setCount(dao.countAllPlaces(map));
+				break;
+			case 2:
+				dto.setContenttype("식당");
+				map.put("areacode", i);
+				map.put("contenttypeid", 39);
+				dto.setCount(dao.countAllPlaces(map));
+				break;
+			case 3:
+				dto.setContenttype("행사");
+				map.put("areacode", i);
+				map.put("contenttypeid", 15);
+				dto.setCount(dao.countAllPlaces(map));
+				break;
+				}
+			list.add(dto);
+			}
+		return list;
+	}
+	public List<AreaCountDTO> searchPlaces(int i,Map map,List<AreaCountDTO> list,String area) {
+		for(int k=0;k<4;k++) {
+			AreaCountDTO dto = new AreaCountDTO();
+			dto.setArea(area);
+			switch(k) {
+			case 0:
+				dto.setContenttype("관광지");
+				map.put("areacode", i);
+				map.put("contenttypeid", 12);
+				dto.setCount(dao.countAllPlaces(map));
+				break;
+			case 1:
+				dto.setContenttype("호텔");
+				map.put("areacode", i);
+				map.put("contenttypeid", 32);
+				dto.setCount(dao.countAllPlaces(map));
+				break;
+			case 2:
+				dto.setContenttype("식당");
+				map.put("areacode", i);
+				map.put("contenttypeid", 39);
+				dto.setCount(dao.countAllPlaces(map));
+				break;
+			case 3:
+				dto.setContenttype("행사");
+				map.put("areacode", i);
+				map.put("contenttypeid", 15);
+				dto.setCount(dao.countAllPlaces(map));
+				break;
+				}
+			list.add(dto);
+			}
+		return list;
 	}
 
 }

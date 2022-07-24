@@ -11,6 +11,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Vector;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
@@ -21,6 +23,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,7 +32,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 
+import com.aamu.admin.main.service.AdminCommuDTO;
+import com.aamu.admin.main.service.ListPagingData;
 import com.aamu.admin.main.service.MainService;
+import com.aamu.admin.main.service.PagingUtil;
+import com.aamu.admin.main.service.api.AreaCountDTO;
 import com.aamu.admin.main.service.api.AttractionDTO;
 import com.aamu.admin.main.service.api.Info;
 import com.aamu.admin.main.service.api.KakaoKey;
@@ -100,8 +107,14 @@ public class MainController {
 		
 	}
 	@GetMapping("adminbackup.do")
-	public String back() {
-		Map map = service.countAllPlaces();
+	public String back(@ModelAttribute("id") String id,
+			@RequestParam Map map,
+			@RequestParam(defaultValue = "1",required = false) int nowPage,
+			HttpServletRequest req,
+			Model model) {
+		map.put(PagingUtil.NOW_PAGE, nowPage);
+		ListPagingData<AreaCountDTO> list = service.countAllPlaces(map,req,nowPage);
+		model.addAttribute("areaCount", list);
 		return"/back/backup";
 	}
 	@GetMapping("placesbackup.do")

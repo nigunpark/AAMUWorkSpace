@@ -41,8 +41,8 @@
 	</select>
 	<select id="countAllPlaces" parameterType="Map" resultType="int">
 		SELECT count(*) FROM places WHERE areacode=#{areacode} and contenttypeid=#{contenttypeid} 	
-		<if test='contenttypeid="12"'>
-			or contenttypeid='28'
+		<if test='contenttypeid=="12"'>
+			or areacode=#{areacode} and contenttypeid='28'
 		</if>
 	</select>
 </mapper>
