@@ -8,6 +8,8 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.aamu.admin.main.service.api.AttractionDTO;
+
 @Repository
 public class MainDAO {
 	@Autowired
@@ -57,6 +59,11 @@ public class MainDAO {
 	public int countAllPlaces(Map map) {
 		
 		return template.selectOne("countAllPlaces",map);
+	}
+
+	public int placeInsert(AttractionDTO dto) {
+		
+		return template.insert("placeInsert",dto);
 	}
 
 }

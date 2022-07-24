@@ -93,12 +93,12 @@
 
 
 <script>
-$('#backup').click(function(){
-	$.ajax({
-		url:"<c:url value="placesbackup.do"/>",
-		type:"get",
-		dataType: "json"
-	})
+$(document).on('click','#backup',function(){
+	console.log($(this).parent().prev().prev().html());
+	console.log($(this).parent().prev().prev().prev().html())
+	var area = $(this).parent().prev().prev().prev().html();
+	var contenttype =$(this).parent().prev().prev().html();
+	location.replace("<c:url value="placesbackup.do?area="/>"+area+"&contenttype="+contenttype);
 });
 $('#save').click(function(){
 	

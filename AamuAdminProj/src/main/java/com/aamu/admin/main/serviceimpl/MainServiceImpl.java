@@ -205,8 +205,8 @@ public class MainServiceImpl implements MainService {
 
 	@Override
 	public int placeInsert(AttractionDTO dto) {
-		// TODO Auto-generated method stub
-		return 0;
+		
+		return dao.placeInsert(dto);
 	}
 
 	@Override
@@ -391,76 +391,76 @@ public class MainServiceImpl implements MainService {
 	}
 	public static Map switchArea(String area,String contenttype) {
 		Map codeMap = new HashMap<>();
-		int areacode=0;
-		int contenttypeid=0;
+		String areacode=null;
+		String contenttypeid=null;
 		switch(area) {
 			case "서울":
-				areacode=1;
+				areacode="1";
 				break;
 			case "인천":
-				areacode=2;
+				areacode="2";
 				break;
 			case "대전":
-				areacode=3;
+				areacode="3";
 				break;
 			case "대구":
-				areacode=4;
+				areacode="4";
 				break;
 			case "광주":
-				areacode=5;
+				areacode="5";
 				break;
 			case "부산":
-				areacode=6;
+				areacode="6";
 				break;
 			case "울산":
-				areacode=7;
+				areacode="7";
 				break;
 			case "세종":
-				areacode=8;
+				areacode="8";
 				break;
 			case "경기도":
-				areacode=31;
+				areacode="31";
 				break;
 			case "강원도":
-				areacode=32;
+				areacode="32";
 				break;
 			case "충청북도":
-				areacode=33;
+				areacode="33";
 				break;
 			case "충청남도":
-				areacode=34;
+				areacode="34";
 				break;
 			case "경상북도":
-				areacode=35;
+				areacode="35";
 				break;
 			case "경상암도":
-				areacode=36;
+				areacode="36";
 				break;
 			case "전라북도":
-				areacode=37;
+				areacode="37";
 				break;
 			case "전라남도":
-				areacode=38;
+				areacode="38";
 				break;
 			case "제주도":
-				areacode=39;
+				areacode="39";
 				break;
 			}
 		switch(contenttype) {
 			case"관광지":
-				contenttypeid=12;
+				contenttypeid="12";
 				break;
 			case"호텔":
-				contenttypeid=32;
+				contenttypeid="32";
 				break;
 			case"식당":
-				contenttypeid=39;
+				contenttypeid="39";
 				break;
 			case"행사":
-				contenttypeid=15;
+				contenttypeid="15";
 				break;
 			case"레져":
-				contenttypeid=28;
+				contenttypeid="28";
 				break;	
 		}
 		codeMap.put("areacode", areacode);

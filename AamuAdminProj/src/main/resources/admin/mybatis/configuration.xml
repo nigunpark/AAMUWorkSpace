@@ -12,6 +12,7 @@
 		<typeAlias type="com.aamu.admin.main.service.NoticeDTO" alias="NoticeDTO"/>
 		<typeAlias type="com.aamu.admin.main.service.QNADTO" alias="QNADTO"/>
 		<typeAlias type="com.aamu.admin.main.service.AnswerDTO" alias="AnswerDTO"/>
+		<typeAlias type="com.aamu.admin.main.service.api.AttractionDTO" alias="attrDTO"/>
   	</typeAliases>
 	<mappers>
 		<mapper resource="admin/mybatis/mapper/main.xml" />

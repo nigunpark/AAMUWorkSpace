@@ -42,6 +42,7 @@ import com.aamu.admin.main.service.api.Info;
 import com.aamu.admin.main.service.api.KakaoKey;
 import com.aamu.admin.main.service.api.Places;
 import com.aamu.admin.main.service.api.Places.Item;
+import com.aamu.admin.main.serviceimpl.MainServiceImpl;
 
 @Controller
 @PropertySource("classpath:admin/resources/api.properties")
@@ -118,10 +119,12 @@ public class MainController {
 		return"/back/backup";
 	}
 	@GetMapping("placesbackup.do")
-	public String info2(@RequestParam Map map) {
-		String area = map.get("areacode").toString();
-		String contentTypeId = map.get("contenttypeid").toString();
-
+	public String info2(@RequestParam Map map,Model model) {
+		String area = map.get("area").toString();
+		String contentTypeId = map.get("contenttype").toString();
+		Map codeMap = MainServiceImpl.switchArea(area, contentTypeId);
+		area = codeMap.get("areacode").toString();
+		contentTypeId = codeMap.get("contenttypeid").toString();
 		HttpEntity httpEntity = null;
 		HttpHeaders header = new HttpHeaders();
 		header.add("Authorization", "KakaoAK "+kakaokey);
@@ -145,7 +148,7 @@ public class MainController {
 				null,Places.class);
 		
 		List<Item> items =responseEntity.getBody().getResponse().getBody().getItems().getItem();
-		List<AttractionDTO> list = new Vector<AttractionDTO>();
+		List<AttractionDTO> list = new Vector<>();
 		for(Item item : items) {
 			AttractionDTO dto = new AttractionDTO();
 			dto.setAddr(item.getAddr1());
@@ -339,10 +342,7 @@ public class MainController {
 			}
 
 		}
-		
-	
-		Map resultMap = new HashMap();
-		resultMap.put("result", affected+"count success");
+		model.addAttribute("placelist", list);
 
 
 		return"/back/backupcomplete";
