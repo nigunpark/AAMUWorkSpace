@@ -135,7 +135,7 @@
 			</connections>
 			<display>false</display>
 			<creation_date>2022-06-25 15:20:16</creation_date>
-			<updated_date>2022-07-24 15:47:41</updated_date>
+			<updated_date>2022-07-24 15:58:10</updated_date>
 			<model_property>
 				<name>프로젝트명</name>
 				<value></value>
@@ -67816,7 +67816,7 @@
 					<referenced_complex_unique_key>null</referenced_complex_unique_key>
 				</relation>
 			</connections>
-			<physical_name>NEW_TABLE</physical_name>
+			<physical_name>ANSWER</physical_name>
 			<logical_name>새 테이블</logical_name>
 			<description></description>
 			<constraint></constraint>

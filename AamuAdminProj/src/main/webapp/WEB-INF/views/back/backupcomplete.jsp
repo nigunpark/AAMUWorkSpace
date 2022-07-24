@@ -25,19 +25,23 @@
 										<table class="table text-center">
 											<thead>
 												<tr>
-													<th>지역</th>
-													<th>장소 타입</th>
-													<th>카운트</th>									
+													<th class="col-1">장소 번호</th>
+													<th class="col-1">지역 번호</th>
+													<th class="col-1">타입 번호</th>
+													<th>주소</th>
+													<th class="col-4">장소명</th>
+
+													<th class="col-1">좋아요수</th>								
 												</tr>
 											</thead>
 											<tbody>
-												<c:if test="${empty areaCount.lists }" var="isEmpty">
+												<c:if test="${empty placelist.lists }" var="isEmpty">
 													<tr>
-														<td colspan="8">등록된 여행지가 없습니다.</td>
+														<td colspan="8">받은 데이터가 없습니다.</td>
 													</tr>
 												</c:if>
 												<c:if test="${not isEmpty }">
-													<c:forEach var="record" items="${areaCount.lists}" varStatus="loop">
+													<c:forEach var="record" items="${placelist.lists}" varStatus="loop">
 														<tr>
 															<td>${record.area}</td>
 															<td>${record.contenttype}</td>
@@ -47,7 +51,6 @@
 												</c:if>
 											</tbody>
 										</table>
-										<div>${areaCount.pagingString}</div>
 									</div>
 								</div>
 							</div>
