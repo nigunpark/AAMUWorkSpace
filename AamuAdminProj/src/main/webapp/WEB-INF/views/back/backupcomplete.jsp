@@ -30,7 +30,6 @@
 													<th class="col-1">타입 번호</th>
 													<th>주소</th>
 													<th class="col-4">장소명</th>
-
 													<th class="col-1">좋아요수</th>								
 												</tr>
 											</thead>
@@ -43,9 +42,12 @@
 												<c:if test="${not isEmpty }">
 													<c:forEach var="record" items="${placelist.lists}" varStatus="loop">
 														<tr>
-															<td>${record.area}</td>
+															<td>${record.areacode}</td>
 															<td>${record.contenttype}</td>
 															<td>${record.count}</td>
+															<td>${record.contenttype}</td>
+															<td>${record.count}</td>
+															<td>${record.contenttype}</td>
 														</tr>
 													</c:forEach>
 												</c:if>
