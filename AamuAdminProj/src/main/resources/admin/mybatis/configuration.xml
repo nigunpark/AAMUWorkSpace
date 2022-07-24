@@ -10,11 +10,15 @@
 		<typeAlias type="com.aamu.admin.main.service.AdminCommuDTO" alias="adminCommuDTO"/>
 		<typeAlias type="com.aamu.admin.main.service.AdminCommuCommentDTO" alias="adminCommuCommentDTO"/>
 		<typeAlias type="com.aamu.admin.main.service.NoticeDTO" alias="NoticeDTO"/>
+		<typeAlias type="com.aamu.admin.main.service.QNADTO" alias="QNADTO"/>
+		<typeAlias type="com.aamu.admin.main.service.AnswerDTO" alias="AnswerDTO"/>
   	</typeAliases>
 	<mappers>
 		<mapper resource="admin/mybatis/mapper/main.xml" />
 		<mapper resource="admin/mybatis/mapper/adminCommu.xml" />
 		<mapper resource="admin/mybatis/mapper/notice.xml" />
 		<mapper resource="admin/mybatis/mapper/bbs.xml" />
+		<mapper resource="admin/mybatis/mapper/qna.xml" />
+		<mapper resource="admin/mybatis/mapper/answer.xml" />
 	</mappers>
 </configuration>
