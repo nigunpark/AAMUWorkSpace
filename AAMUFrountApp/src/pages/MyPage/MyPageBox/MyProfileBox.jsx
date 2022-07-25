@@ -29,7 +29,7 @@ const MyProfileBox = () => {
     const [zoneCode, setZoneCode] = useState(""); //우편번호
     const [address, setAddress] = useState(""); //기본주소
     const [detailAddr, setDetailAddr] = useState(""); //상세주소
-    let addr = zoneCode + '/' + address + '/' + detailAddr;
+    let addr = (zoneCode + '/' + address + '/' + detailAddr).split();
     
     const [isOpenPost, setIsOpenPost] = useState(false);
 
@@ -100,6 +100,10 @@ const MyProfileBox = () => {
 
             setEmailFrist(resp.data.email.split('@')[0]);
             setEmailSecond(resp.data.email.split('@')[1]);
+
+            setZoneCode(resp.data.addrid.split('/')[0]);
+            setAddress(resp.data.addrid.split('/')[1]);
+            setDetailAddr(resp.data.addrid.split('/')[2]);
 
             setIntroduce(resp.data.self);
             setShowImages(resp.data.userprofile.split());
@@ -239,7 +243,10 @@ const MyProfileBox = () => {
                     setZoneCode={setZoneCode}
                     setDetailAddr={setDetailAddr}
                     /> :
-                <Addr/>
+                <Addr
+                    zoneCode={zoneCode}
+                    address={address}
+                    detailAddr={detailAddr}/>
             }
             </div>
             <div style={{textAlign:'end', marginTop:'50px'}}>
@@ -250,7 +257,7 @@ const MyProfileBox = () => {
                     }}>
                     저장
                 </UpdateBtn>
-            </div>
+            </div>{console.log('addr :',addr)}
         </MyUpdateProfile>
     </MyProfileContainer>
   )
@@ -413,7 +420,7 @@ const AddresApi = ({ setIsOpenPost, setAddress, setZoneCode }) => {
     );
 };
 
-function Addr(){
+function Addr({zoneCode, address, detailAddr}){
 return(
     <>
         <div style={{
@@ -426,7 +433,7 @@ return(
                 style={{ marginLeft: "3px" }}
                 type="text"
                 size={14}
-                value="xxxxx"
+                value={zoneCode}
                 // ref={zoneCodeRef}
                 // value={zoneCode}
                 disabled
@@ -442,7 +449,7 @@ return(
                     style={{ marginLeft: "3px" }}
                     type="text"
                     size={52}
-                    value="한소인"
+                    value={address}
                     // ref={addrRef}
                     // value={address}
                     disabled
@@ -458,7 +465,7 @@ return(
                 style={{ marginLeft: "3px" }}
                 type="text"
                 size={52}
-                value="410호"
+                value={detailAddr}
                 // ref={addrDetailRef}
                 disabled
                 />
