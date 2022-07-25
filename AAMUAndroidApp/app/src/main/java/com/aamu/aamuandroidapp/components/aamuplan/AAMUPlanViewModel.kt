@@ -42,6 +42,7 @@ class AAMUPlanViewModel(context : Context) : ViewModel(), MapView.POIItemEventLi
 
     val recentPlaces = MutableLiveData<List<AAMUPlaceResponse>>()
     val errorLiveData = MutableLiveData<String>()
+    val plannerSelectList = MutableLiveData<List<AAMUPlannerSelectOne>>()
     val plannerSelectOne = MutableLiveData<AAMUPlannerSelectOne>()
     val planners = MutableLiveData<MutableList<Place>>()
     val place = MutableLiveData<Place>()
