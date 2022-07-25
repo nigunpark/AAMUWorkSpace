@@ -9,14 +9,17 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Typography } from "@mui/material";
 import axios from "axios";
 import React, { useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { keyframes } from "styled-components";
+import { addProfileImg } from "../../redux/store";
 import "./Login.css";
 const LoginTest = () => {
   let idRef = useRef();
   let pwdRef = useRef();
   let navigate = useNavigate();
   const [showValid, setShowValid] = useState(false);
+  let dispatch = useDispatch();
   return (
     <div className="LoginTest">
       {/* <video src="/images/video3.mp4" muted autoPlay loop /> */}
@@ -43,7 +46,7 @@ const LoginTest = () => {
               method="post"
               className="loginForm"
               onSubmit={() => {
-                return login(idRef, pwdRef, navigate, setShowValid);
+                return login(idRef, pwdRef, navigate, setShowValid, dispatch);
               }}
             >
               <div className="loginInput__container">
@@ -141,7 +144,7 @@ function Copyright(props) {
   );
 }
 
-const login = (idRef, pwdRef, navigate, setShowValid) => {
+const login = (idRef, pwdRef, navigate, setShowValid, dispatch) => {
   if (idRef.current.value.length === 0) {
     idRef.current.parentElement.classList.add("validation");
     idRef.current.focus();
@@ -166,6 +169,8 @@ const login = (idRef, pwdRef, navigate, setShowValid) => {
       password: pwdRef.current.value,
     })
     .then((resp) => {
+      // console.log("resp.data", resp.data);
+      dispatch(addProfileImg(resp.data.userprofile));
       sessionStorage.setItem("token", resp.data.token);
       sessionStorage.setItem("username", idRef.current.value);
       navigate(-1);
