@@ -461,8 +461,9 @@ public class MainServiceImpl implements MainService {
 		//Lombok라이브러리 사용시
 		List pagingList = new Vector<>();
 		int totalPage= (int)(Math.ceil(((double)totalCount/pageSize)));
-		int i=(nowPage-1)*totalPage;
+		int i=(nowPage-1)*pageSize;
 		for(int k=0;k<pageSize;k++) {
+			if(i+k<list.size())
 			pagingList.add(list.get(i+k));
 		}
 
