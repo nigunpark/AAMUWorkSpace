@@ -1,5 +1,6 @@
 package com.aamu.aamurest.user.web;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -43,6 +44,7 @@ public class CommuController {
 	//글 목록용
 	@GetMapping("/gram/selectList")
 	public List<CommuDTO> commuSelectList(@RequestParam Map map, HttpServletRequest req){
+		System.out.println("셀렉트 리스트 id:"+map.get("id"));
 		//List<CommuDTO> list();
 		//list=글 목록들
 		List<CommuDTO> list = commuService.commuSelectList(map);
@@ -58,10 +60,8 @@ public class CommuController {
 			//글쓴이-프로필 사진 가져와서 dto에 셋팅
 			dto.setUserprofile(FileUploadUtil.requestOneFile(commuService.commuSelectUserProf(dto.getId()), "/resources/commuUpload", req));
 		}/////for
-
 		return list;
 	}////////////////commuSelectList
-
 
 
 	//글 생성용: 리스트 ver
@@ -158,7 +158,8 @@ public class CommuController {
 
 	//글 수정용: Map ver
 	@PutMapping("/gram/edit")
-	public Map commuUpdate(@RequestBody Map map, HttpServletRequest req) {
+	public Map commuUpdate(@RequestBody Map map, HttpServletRequest req) { 
+		System.out.println("글수정 map:"+map);
 		int affected=commuService.commuUpdate(map);
 		Map resultMap = new HashMap<> ();
 		//글 목록 뿌려주기
@@ -171,15 +172,23 @@ public class CommuController {
 
 	//글 삭제용
 	@DeleteMapping("/gram/edit/{lno}")
-	public Map commuDelete(@PathVariable String lno) {
+	public Map commuDelete(@PathVariable String lno, HttpServletRequest req) {
+		
+		List<String> photoLists=commuService.commuSelectPhotoList(lno);
+		String path=req.getSession().getServletContext().getRealPath("/resources/commuUpload");
+		
+		try {
+			FileUploadUtil.fileDeletes(photoLists, path);
+		} catch (IllegalStateException | IOException e) {}
+		
 		int affected=commuService.commuDelete(lno);
 		Map map = new HashMap<> ();
 		if(affected == 1) map.put("isSuccess", true);
 		else map.put("isSuccess", false);
 		return map;
 	}
-
-	//댓글 생성용 -
+	//댓글 생성용 - List ver
+	/*
 	@PostMapping("/gram/comment/edit")
 	public List<CommuDTO> commuCommentInsert(@RequestBody Map map, HttpServletRequest req) {
 		System.out.println("댓글생성 map:"+map);
@@ -195,7 +204,19 @@ public class CommuController {
 		}/////for
 		return list;
 	}
-
+	*/
+	
+	//댓글 생성용 - Map ver
+	@PostMapping("/gram/comment/edit")
+	public Map commuCommentInsert(@RequestBody Map map) {
+		System.out.println("댓글생성 map:"+map);
+		int affected=commuService.commuCommentInsert(map);
+		Map resultMap = new HashMap<> ();
+		if(affected == 1) resultMap.put("isSuccess", true);
+		else resultMap.put("isSuccess", false);
+		return resultMap;
+	}
+	
 	//댓글 수정용
 	@PutMapping("/gram/comment/edit")
 	public Map commuCommentUpdate(@RequestBody Map map) {
@@ -212,12 +233,12 @@ public class CommuController {
 	//댓글 삭제용
 	@DeleteMapping("/gram/comment/edit")
 	public Map commuCommentDelete(@RequestParam Map map) {
-		int commuCommentDeleteAffected=commuService.commuCommentDelete(map);
+		int affected=commuService.commuCommentDelete(map);
 		//rcount -1
-		int RcMinusAffected=commuService.commuRcMinusUpdate(map);
+		//int RcMinusAffected=commuService.commuRcMinusUpdate(map);
 		Map resultMap = new HashMap();
-		if(commuCommentDeleteAffected == 1 && RcMinusAffected==1) resultMap.put("result", "DeleteCommentSuccess");
-		else resultMap.put("result", "DeleteCommentNotSuccess");
+		if(affected==1) resultMap.put("isSuccess", true);
+		else resultMap.put("isSuccess", false);
 		return resultMap;
 	}
 

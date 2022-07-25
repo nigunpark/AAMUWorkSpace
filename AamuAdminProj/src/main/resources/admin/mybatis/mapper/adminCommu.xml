@@ -22,7 +22,7 @@
 	
 	<!-- 글 삭제 -->
 	<delete id="commuDelete" parameterType="Map">
-		DELETE community WHERE lno = #{lno}
+		DELETE ${table} WHERE lno = #{lno}
 	</delete>
 	
 	<!-- 전체 댓글 뿌려주기 -->

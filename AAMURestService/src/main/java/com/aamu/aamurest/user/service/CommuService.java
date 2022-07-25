@@ -50,7 +50,11 @@ public interface CommuService<T> {
 	int commuCommentInsert(Map map);
 
 	//댓글 생성용_Rcount +1
-	int commuRcPlusUpdate(Map map);
+	//int commuRcPlusUpdate(Map map);
+
+
+	//int commuRcPlusUpdate(Map map);
+	
 
 	//댓글 수정용
 	int commuCommentUpdate(Map map);
@@ -59,8 +63,10 @@ public interface CommuService<T> {
 	int commuCommentDelete(Map map);
 
 	//댓글 삭제용_Rcount -1
-	int commuRcMinusUpdate(Map map);
+	//int commuRcMinusUpdate(Map map);
 
+	//int commuRcMinusUpdate(Map map);
+	
 	//글 좋아요 전체리스트
 	//int commuLike(Map map);
 
