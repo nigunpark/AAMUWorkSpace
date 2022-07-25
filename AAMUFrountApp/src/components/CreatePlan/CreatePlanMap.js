@@ -49,6 +49,7 @@ const CreatePlanMap = ({
   //지도 줌 관련
   useEffect(() => {
     if (cMap === null) return;
+
     //지도레벨이벤트
     kakao.maps.event.addListener(cMap, "zoom_changed", function () {
       // 지도의 현재 레벨을 얻어옵니다
@@ -59,10 +60,11 @@ const CreatePlanMap = ({
       cMap.setCenter(newCoords);
     });
   }, []);
-  console.log("fromWooJaeData(map)", fromWooJaeData);
+  // console.log("fromWooJaeData(map)", fromWooJaeData);
   useEffect(() => {
+    // cMap.relayout();
     if (cMap === null) return;
-    // if(fromWooJaeData)
+
     let linePath = [];
     let forMarkers = [];
     const colors = [
@@ -129,17 +131,17 @@ const CreatePlanMap = ({
             markersArr.push(marker);
           });
         });
-        markersArr.map((val, index) => {
+        markersArr.map((val) => {
           val.setMap(cMap);
         });
       }
       //전체일정 외 DAY1..등 선택시
       else {
         let marker;
-        markersArr.map((val, index) => {
+        markersArr.map((val) => {
           val.setMap(null);
         });
-        polylineArr.map((val, index) => {
+        polylineArr.map((val) => {
           val.setMap(null);
         });
         markersArr = [];
@@ -178,17 +180,19 @@ const CreatePlanMap = ({
           markersArr.push(marker);
         });
 
-        markersArr.map((val, index) => {
+        markersArr.map((val) => {
           val.setMap(cMap);
         });
       }
     }
+    cMap.relayout();
   }, [fromWooJaeData, forDayLine]);
   return (
     <div
       style={{
         position: "relative",
         width: "100%",
+        height: "100%",
         display: "inline-block",
       }}
     >
