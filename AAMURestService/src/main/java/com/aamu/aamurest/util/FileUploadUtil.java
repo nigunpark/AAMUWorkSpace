@@ -36,6 +36,14 @@ public class FileUploadUtil {
 		}
 		return filePath;
 	}
+	
+	public static void fileDeletes(List<String> fileNameList,String pathString) throws IllegalStateException, IOException{
+        for(String fileName : fileNameList) {
+        	File file = new File(pathString +File.separator + fileName);
+            file.delete();
+        }
+    }
+	
 	public static String oneFile(MultipartFile multipartFile,String path) throws IllegalStateException, IOException {
 		UUID uuid = UUID.randomUUID();
     	String filename = uuid.toString()+"_"+multipartFile.getOriginalFilename();
