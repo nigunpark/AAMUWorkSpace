@@ -33,7 +33,7 @@ public class AuthenticateController {
     private JwtUserDetailsService userDetailService;
     
     @PostMapping("/authenticate")
-    public Map createAuthenticationToken(@RequestBody Map authenticationRequest) throws Exception {
+    public Map createAuthenticationToken(@RequestBody Map authenticationRequest,HttpServletRequest req) throws Exception {
     	System.out.println(authenticationRequest);
         AAMUUserDTO member = userDetailService.authenticateByNameAndPassword
         		(authenticationRequest.get("username").toString(), authenticationRequest.get("password").toString());
@@ -41,6 +41,7 @@ public class AuthenticateController {
         Map map = new HashMap();
         map.put("member", member);
         map.put("token", token);
+        map.put("userprofile",FileUploadUtil.requestOneFile(userDetailService.getUserProfile(member.getUsername()), "/resources/userUpload", req));
         System.out.println(map.get("token"));
         return map;
     }
