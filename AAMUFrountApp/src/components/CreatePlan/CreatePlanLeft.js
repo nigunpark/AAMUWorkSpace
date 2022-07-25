@@ -50,7 +50,7 @@ const CreatePlanLeft = ({
     val.id = i;
   });
 
-  console.log("fromWooJaeData", fromWooJaeData);
+  // console.log("fromWooJaeData", fromWooJaeData);
   return (
     <div className="createPlanLeft">
       <div className="createPlanLeft__days">
