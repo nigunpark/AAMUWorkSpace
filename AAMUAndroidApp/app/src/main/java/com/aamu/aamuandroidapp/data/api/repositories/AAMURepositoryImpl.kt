@@ -44,6 +44,8 @@ class AAMURepositoryImpl(
         emit(emptyList<AAMUPlaceResponse>())
     }.flowOn(Dispatchers.IO)
 
+
+
     override suspend fun getRecentDiner(
         placey: Double,
         placex: Double
@@ -57,6 +59,18 @@ class AAMURepositoryImpl(
         }
     }.catch {
         emit(emptyList<AAMUPlaceResponse>())
+    }.flowOn(Dispatchers.IO)
+
+    override suspend fun getPlannerSelectList(): Flow<List<AAMUPlannerSelectOne>> = flow<List<AAMUPlannerSelectOne>> {
+        val response = aamuApi.getPlannerSelectList()
+        if(response.isSuccessful){
+            emit(response.body() ?: emptyList<AAMUPlannerSelectOne>())
+        }
+        else{
+            emit(emptyList<AAMUPlannerSelectOne>())
+        }
+    }.catch {
+        emit(emptyList<AAMUPlannerSelectOne>())
     }.flowOn(Dispatchers.IO)
 
     override suspend fun getPlannerSelectOne(rbn: Int): Flow<AAMUPlannerSelectOne> = flow<AAMUPlannerSelectOne> {

@@ -9,5 +9,6 @@ interface AAMURepository {
     suspend fun isok() : Boolean
     suspend fun getRecentPlace(placey : Double,placex : Double) : Flow<List<AAMUPlaceResponse>>
     suspend fun getRecentDiner(placey : Double,placex : Double) : Flow<List<AAMUPlaceResponse>>
+    suspend fun getPlannerSelectList() : Flow<List<AAMUPlannerSelectOne>>
     suspend fun getPlannerSelectOne(rbn : Int) : Flow<AAMUPlannerSelectOne>
 }

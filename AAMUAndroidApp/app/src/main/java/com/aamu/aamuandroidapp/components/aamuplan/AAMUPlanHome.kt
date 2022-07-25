@@ -21,6 +21,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.aamu.aamuandroidapp.components.aamuplan.PlanDetails.PlanBottomViewPager
 import com.aamu.aamuandroidapp.components.aamuplan.PlanDetails.PlanDetails
 import com.aamu.aamuandroidapp.components.aamuplan.PlanDetails.SideContent
 import com.aamu.aamuandroidapp.components.aamuplan.PlanItems.PlanMove
@@ -64,7 +65,7 @@ fun AAMUPlanHome(){
                 }
             },
             sheetContent = {
-                PlanBottomSheet()
+                PlanBottomSheet(mapviewModel)
             },
             drawerBackgroundColor = orange700,
             drawerGesturesEnabled = bottomSheetScaffoldState.drawerState.isOpen,
@@ -99,7 +100,7 @@ fun KakaoMap(
 }
 
 @Composable
-fun PlanBottomSheet(){
+fun PlanBottomSheet(mapviewModel: AAMUPlanViewModel){
     Box(
         modifier = Modifier
             .wrapContentHeight()
@@ -121,7 +122,7 @@ fun PlanBottomSheet(){
                 .padding(top = 25.dp)
                 .fillMaxHeight(0.4f))
         {
-
+            PlanBottomViewPager()
         }
     }
 }
@@ -138,7 +139,7 @@ fun ActionButton(
     Box(modifier = modifier) {
         FloatingActionButton(
             onClick = {
-                mapviewModel.getPlannerSelectOne(32)
+                mapviewModel.getPlannerSelectOne(42)
                 topbarhide.value = true
                 coroutineScope.launch { bottomSheetScaffoldState.drawerState.open() }
             },
