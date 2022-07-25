@@ -1,4 +1,8 @@
-import { faCircleInfo, faPlus } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCircleInfo,
+  faPlus,
+  faStar,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useRef, useState } from "react";
 import "./SearchedLocation.css";
@@ -9,6 +13,7 @@ import {
   CloseLim,
   BodyLim,
   ImgLim,
+  Review,
 } from "../Modal/localInfoModalParts.js";
 import { useDispatch, useSelector } from "react-redux";
 //redux에서 localNameForMarker(마커찍기위한 장소이름) 변경함수
@@ -17,7 +22,7 @@ import {
   changeLnfM,
   changeShowWhichModal,
 } from "../../redux/store.js";
-
+import axios from "axios";
 const SearchedSukso = ({ local, index }) => {
   const [locaInfoModal, setLocaInfoModal] = useState(false);
   let dispatch = useDispatch();
@@ -25,6 +30,8 @@ const SearchedSukso = ({ local, index }) => {
   let reduxState = useSelector((state) => {
     return state;
   });
+  const [commentData, setCommentData] = useState({});
+  const [showReview, setShowReview] = useState(false);
   return (
     <div
       className="SearchedLocation"
@@ -39,6 +46,9 @@ const SearchedSukso = ({ local, index }) => {
           locaInfoModal={locaInfoModal}
           setLocaInfoModal={setLocaInfoModal}
           local={local}
+          commentData={commentData}
+          showReview={showReview}
+          setShowReview={setShowReview}
         />
       )}
       <div
@@ -54,10 +64,6 @@ const SearchedSukso = ({ local, index }) => {
               return (
                 <PickedSuksoBadge index={index} local={local} key={index} />
               );
-              // return reduxState.saveDaysNPickedSuksoRedux.map((sukso, i) => {
-              //   if (sukso !== 0)
-              //     return <PickedSuksoBadge index={i} local={local} key={i} />;
-              // });
             }
           })}
 
@@ -76,7 +82,11 @@ const SearchedSukso = ({ local, index }) => {
             <FontAwesomeIcon
               icon={faCircleInfo}
               className="searchedLocation__i"
-              onClick={() => setLocaInfoModal(true)}
+              onClick={(e) => {
+                e.stopPropagation();
+                getReview(local, setCommentData);
+                setLocaInfoModal(true);
+              }}
             />
             <FontAwesomeIcon
               icon={faPlus}
@@ -94,7 +104,14 @@ const SearchedSukso = ({ local, index }) => {
   );
 };
 
-function LocalInfoModal({ locaInfoModal, setLocaInfoModal, local }) {
+function LocalInfoModal({
+  locaInfoModal,
+  setLocaInfoModal,
+  local,
+  commentData,
+  showReview,
+  setShowReview,
+}) {
   return (
     <ContainerLim>
       <OverlayLim onClick={() => setLocaInfoModal(!locaInfoModal)} />
@@ -111,7 +128,25 @@ function LocalInfoModal({ locaInfoModal, setLocaInfoModal, local }) {
           />
         </ImgLim>
         <BodyLim>
-          <h4>{local.title}</h4>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "flex-start",
+              alignItems: "center",
+            }}
+          >
+            <h4>{local.title}</h4>
+            <h4>
+              (
+              <FontAwesomeIcon
+                icon={faStar}
+                style={{ marginRight: "8px", color: "gold" }}
+              />
+              {commentData.basic_info !== undefined &&
+                `(${commentData.basic_info.star})`}
+              )
+            </h4>
+          </div>
           <div className="localInfo__container">
             <div className="localInfo">
               <ul className="localInfo-ul">
@@ -174,13 +209,69 @@ function LocalInfoModal({ locaInfoModal, setLocaInfoModal, local }) {
           </ul>
         </div>
         <div className="localInfo-btn">
-          <span>리뷰보기</span>
+          <span
+            onClick={() => {
+              setShowReview(!showReview);
+            }}
+          >
+            리뷰보기
+            {commentData.basic_info !== undefined &&
+              `(${commentData.basic_info.feedback})`}
+          </span>
           <span>목록에 추가</span>
         </div>
+        {showReview && (
+          <Review>
+            {commentData.comment_info !== undefined &&
+              commentData.comment_info.map((obj, i) => {
+                return (
+                  <div className="review__container">
+                    <div className="review__info">
+                      <div>
+                        <FontAwesomeIcon
+                          icon={faStar}
+                          style={{ marginRight: "8px", color: "gold" }}
+                        />
+                        <span>{`(${obj.point})`}</span>
+                      </div>
+                      <p style={{ fontWeight: "bold" }}>{obj.review}</p>
+                      <span
+                        style={{
+                          fontSize: "13px",
+                          display: "flex",
+                          justifyContent: "center",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        {obj.username}
+                      </span>
+                    </div>
+                  </div>
+                );
+              })}
+          </Review>
+        )}
       </ContentsLim>
     </ContainerLim>
   );
 }
+const getReview = async (local, setCommentData) => {
+  let token = sessionStorage.getItem("token");
+  await axios
+    .get("/aamurest/info/review", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      params: { kakaoKey: local.kakaokey },
+    })
+    .then((resp) => {
+      console.log(resp.data);
+      setCommentData(resp.data);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
 
 function PickedSuksoBadge({ sukso, index }) {
   return (

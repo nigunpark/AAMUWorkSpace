@@ -298,7 +298,17 @@ const savePlan = (reduxState, currPosition, fromWooJaeData, navigate) => {
         }일 ${getDow(reduxState, i)}`
       );
   });
-  console.log("toWoo", toWoo);
+  // console.log("toWoo", toWoo);
+  // console.log(
+  //   "title",
+  //   `${currPosition} ${reduxState.tripPeriod.length - 1}박 ${
+  //     reduxState.tripPeriod.length
+  //   }일`
+  // );
+  // console.log(
+  //   "plannerdate",
+  //   `${plannerDate[0]} ~ ${plannerDate[plannerDate.length - 1]}`
+  // );
   let token = sessionStorage.getItem("token");
   axios
     .post(

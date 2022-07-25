@@ -31,6 +31,7 @@ const SearchedLocation = ({ local }) => {
   const [showReview, setShowReview] = useState(false);
   let dispatch = useDispatch();
   let localContainer = useRef();
+  const [commentData, setCommentData] = useState({});
   return (
     <>
       <div
@@ -58,6 +59,7 @@ const SearchedLocation = ({ local }) => {
                 className="searchedLocation__i"
                 onClick={(e) => {
                   e.stopPropagation();
+                  getReview(local, setCommentData);
                   setLocaInfoModal(true);
                 }}
               />
@@ -87,6 +89,8 @@ const SearchedLocation = ({ local }) => {
           localContainer={localContainer}
           setShowReview={setShowReview}
           showReview={showReview}
+          commentData={commentData}
+          setCommentData={setCommentData}
         />
       )}
     </>
@@ -100,9 +104,10 @@ function LocalInfoModal({
   localContainer,
   setShowReview,
   showReview,
+  commentData,
 }) {
   let dispatch = useDispatch();
-
+  let reviewData;
   return (
     <ContainerLim>
       <OverlayLim onClick={() => setLocaInfoModal(!locaInfoModal)} />
@@ -119,7 +124,25 @@ function LocalInfoModal({
           />
         </ImgLim>
         <BodyLim>
-          <h4>{`${local.title}(별점)`}</h4>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "flex-start",
+              alignItems: "center",
+            }}
+          >
+            <h4>{`${local.title}`}</h4>
+            <h4>
+              (
+              <FontAwesomeIcon
+                icon={faStar}
+                style={{ marginRight: "8px", color: "gold" }}
+              />
+              {commentData.basic_info !== undefined &&
+                `(${commentData.basic_info.star})`}
+              )
+            </h4>
+          </div>
           <div className="localInfo__container">
             <div className="localInfo">
               <ul className="localInfo-ul">
@@ -187,10 +210,11 @@ function LocalInfoModal({
             onClick={(e) => {
               e.stopPropagation();
               setShowReview(!showReview);
-              getReview();
             }}
           >
             리뷰보기
+            {commentData.basic_info !== undefined &&
+              `(${commentData.basic_info.feedback})`}
           </span>
           <span
             onClick={(e) => {
@@ -207,90 +231,33 @@ function LocalInfoModal({
         </div>
         {showReview && (
           <Review>
-            <div className="review__container">
-              <div className="review__info">
-                <div>
-                  <FontAwesomeIcon
-                    icon={faStar}
-                    style={{ marginRight: "8px", color: "gold" }}
-                  />
-                  <span>4.5</span>
-                </div>
-                <p>좋았어요</p>
-                <span
-                  style={{
-                    fontSize: "13px",
-                    display: "flex",
-                    justifyContent: "center",
-                  }}
-                >
-                  kim1111
-                </span>
-              </div>
-            </div>
-            <div className="review__container">
-              <div className="review__info">
-                <div>
-                  <FontAwesomeIcon
-                    icon={faStar}
-                    style={{ marginRight: "8px", color: "gold" }}
-                  />
-                  <span>4.5</span>
-                </div>
-                <p>좋았어요</p>
-                <span
-                  style={{
-                    fontSize: "13px",
-                    display: "flex",
-                    justifyContent: "center",
-                  }}
-                >
-                  kim1111
-                </span>
-              </div>
-            </div>
-            <div className="review__container">
-              <div className="review__info">
-                <div>
-                  <FontAwesomeIcon
-                    icon={faStar}
-                    style={{ marginRight: "8px", color: "gold" }}
-                  />
-                  <span>4.5</span>
-                </div>
-                <p>좋았어요</p>
-                <span
-                  style={{
-                    fontSize: "13px",
-                    display: "flex",
-                    justifyContent: "center",
-                  }}
-                >
-                  kim1111
-                </span>
-              </div>
-            </div>
-            <div className="review__container">
-              <div className="review__info">
-                <div>
-                  <FontAwesomeIcon
-                    icon={faStar}
-                    style={{ marginRight: "8px", color: "gold" }}
-                  />
-                  <span>4.5</span>
-                </div>
-                <p>좋았어요</p>
-                <span
-                  style={{
-                    fontSize: "13px",
-                    display: "flex",
-                    justifyContent: "center",
-                  }}
-                >
-                  kim1111
-                </span>
-              </div>
-            </div>
+            {commentData.comment_info !== undefined &&
+              commentData.comment_info.map((obj, i) => {
+                return (
+                  <div className="review__container">
+                    <div className="review__info">
+                      <div>
+                        <FontAwesomeIcon
+                          icon={faStar}
+                          style={{ marginRight: "8px", color: "gold" }}
+                        />
+                        <span>{`(${obj.point})`}</span>
+                      </div>
+                      <p style={{ fontWeight: "bold" }}>{obj.review}</p>
+                      <span
+                        style={{
+                          fontSize: "13px",
+                          display: "flex",
+                          justifyContent: "center",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        {obj.username}
+                      </span>
+                    </div>
+                  </div>
+                );
+              })}
           </Review>
         )}
       </ContentsLim>
@@ -298,7 +265,21 @@ function LocalInfoModal({
   );
 }
 
-function getReview() {
-  // axios.get('/aamurest/info/review',{})
-}
+const getReview = async (local, setCommentData, reviewData) => {
+  let token = sessionStorage.getItem("token");
+  await axios
+    .get("/aamurest/info/review", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      params: { kakaoKey: local.kakaokey },
+    })
+    .then((resp) => {
+      console.log(resp.data);
+      setCommentData(resp.data);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
 export default SearchedLocation;

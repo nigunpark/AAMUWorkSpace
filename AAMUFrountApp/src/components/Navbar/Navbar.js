@@ -3,6 +3,7 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import "./Navbar.css";
 import { Outlet } from "react-router-dom";
 import styled, { keyframes } from "styled-components";
+import { useSelector } from "react-redux";
 const Navbar = ({ scrollNav, whereUrl }) => {
   const [click, setClick] = useState(false);
   const handleClick = () => setClick(!click);
@@ -98,6 +99,8 @@ function UserBadge() {
     if (e.target !== userRef.current) setShowUserModal(false);
   };
   window.addEventListener("click", handleUserModal);
+  let reduxState = useSelector((state) => state);
+  console.log("profileImg", reduxState.profileImg);
   return (
     <>
       <Container>
@@ -106,10 +109,10 @@ function UserBadge() {
             style={{ boxShadow: "var(--shadow)" }}
             ref={userRef}
             className="userImg"
-            src="/images/user.jpg"
+            src={reduxState.profileImg ?? "/images/user.jpg"}
             alt="유저이미지"
             onError={(e) => {
-              e.target.src = "/images/user/jpg";
+              e.target.src = "/images/user.jpg";
             }}
             onClick={(e) => {
               setShowUserModal(!showUserModal);
@@ -145,6 +148,7 @@ function UserBadge() {
     </>
   );
 }
+
 const slide_bottom = keyframes`
 0% {
   transform: translateY(-15px);

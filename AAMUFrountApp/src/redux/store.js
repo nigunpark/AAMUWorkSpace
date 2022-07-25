@@ -302,6 +302,17 @@ let wholeBlackBox = createSlice({
 });
 export let { addWholeBlackBox, delAllWholeBb } = wholeBlackBox.actions;
 
+let profileImg = createSlice({
+  name: "profileImg",
+  initialState: "",
+  reducers: {
+    addProfileImg(state, action) {
+      return action.payload;
+    },
+  },
+});
+export let { addProfileImg } = profileImg.actions;
+
 export default configureStore({
   reducer: {
     localNameForMarker: localNameForMarker.reducer,
@@ -321,6 +332,7 @@ export default configureStore({
     movingTime: movingTime.reducer,
     joinData: joinData.reducer,
     wholeBlackBox: wholeBlackBox.reducer,
+    profileImg: profileImg.reducer,
   },
   //planTripTime.js 168번줄쯤의 fullDate를 위한 serializable무시
   middleware: (getDefaultMiddleware) =>

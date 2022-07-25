@@ -636,6 +636,7 @@ const SendEmail = ({
 };
 
 const addImage = (e) => {
+  console.log("e.target.files", e.target.files);
   // const nowImageURL = URL.createObjectURL(e.target.files[0]);
   let formData = new FormData();
   formData.append("userprofile", e.target.files[0]);
