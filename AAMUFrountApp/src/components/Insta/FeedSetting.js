@@ -11,14 +11,18 @@ import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 import axios from "axios";
 import { Link } from "react-router-dom";
+import Edit from './ModalGroup/Edit/Edit'
+
+
+
 function FeedSetting({val,setlist,forReRender, setForReRender}) {
     
     let menuRef = useRef();
     let profileRef = useRef();
     let commentRef = useRef();
+    let menuDotRef = useRef();
+    const [editModal, seteditModal] = useState(false);
     
-    const [heart,setHeart] = useState(false);
-   
     const [modalShow, setModalShow] = useState(false);
     const [profileModal, setprofileModal] = useState(false);
     const [commentModal, setcommentModal] = useState(false);
@@ -87,6 +91,7 @@ function FeedSetting({val,setlist,forReRender, setForReRender}) {
     function menuModalRef(e){//메뉴 모달 나왔을때 주변 눌러도 꺼지게 만들기
         e.stopPropagation();
         if (e.target != menuRef.current) setModalShow(false);
+       
     }
     
     window.addEventListener("click", menuModalRef);
@@ -158,9 +163,11 @@ function FeedSetting({val,setlist,forReRender, setForReRender}) {
             ref={menuRef}
             onClick={() => setModalShow(!modalShow)}></i>
             {modalShow 
-                ?<MenuModal></MenuModal>
-                :null}
-                
+                &&<MenuModal setModalShow={setModalShow} seteditModal={seteditModal}/>
+            }
+            {
+                editModal && <Edit val={val}/>
+            }
         </div>  
     </div>
     <div className="location">
@@ -182,7 +189,7 @@ function FeedSetting({val,setlist,forReRender, setForReRender}) {
             <div className='heart-icon' 
                  onClick={(e)=>{
                      e.stopPropagation();
-                     fillLike(setfHeart,setForReRender,forReRender)}}>
+                     fillLike(setForReRender,forReRender)}}>
                 {val.islike?
                 <i className="fa-solid fa-heart fa-2x"  style={{color:'red'}}></i>
                 :<i className="fa-regular fa-heart fa-2x"></i>}
@@ -320,12 +327,12 @@ const Container1 = styled.div`
 position: fixed;
 width: 100%;
 height: 100%;
-z-index: 1000;
 top: 0;
 left: 0;
 right: 0;
 bottom: 0;
 display: flex;
+z-index:1;
 justify-content: center;
 align-items: center;
 `
@@ -333,6 +340,7 @@ const Overlay = styled.div`
 position: relative;
 width: 100%;
 height: 100%;
+z-index:15;
 background-color: rgba(0, 0, 0, 0.6);
 `
 export default FeedSetting

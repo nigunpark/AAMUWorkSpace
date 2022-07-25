@@ -1,45 +1,29 @@
 import { red } from '@mui/material/colors';
 import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
-import Edit from './Edit/Edit'
 
-const Modal = ({setIsOpen}) => {
+
+const Modal = ({setModalShow,seteditModal}) => {
     let menuRef = useRef();
+    let editRef = useRef();
     const [goEdit, setgoEdit] = useState(false);
-    const [commentModal, setcommentModal] = useState(false);
-
-    const handleClose = () => {
-        setIsOpen(false);
-    };
-
-   
-    useEffect(() => {
-        const $body = document.querySelector("body");
-        $body.style.overflow= "hidden";
-
-        return () => (
-            $body.style.overflow = "auto"
-            );
-    }, []);
+    
 
     function menuModalRef(e){//메뉴 모달 나왔을때 주변 눌러도 꺼지게 만들기
         e.stopPropagation();
         if (e.target != menuRef.current) setgoEdit(false);
+        
     }
     
     window.addEventListener("click", menuModalRef);
     
   return (
     <Container >
-        <Overlay
-        ref={menuRef} 
-        onClick={ (e) => { if(e.target == menuRef.current) setcommentModal(false)  }}>
+        <Overlay>
             <ModalWrap >
-                <Contents>
-                        <Button type="button" className='edit' onClick={()=>{setgoEdit(!goEdit)}}>수정하기</Button>
-                        {
-                            goEdit ? <Edit/> :null
-                        }
+                <Contents  ref={menuRef} >
+                        <Button type="button" className='edit' ref={editRef} onClick={(e)=>{e.stopPropagation(); setModalShow(false); seteditModal(true) }}>수정하기</Button>
+                     
                         <Button type="button" className='delete'>삭제하기</Button>
                         <Button type="button" className='cancel'>취소하기</Button>    
                                   
@@ -55,12 +39,12 @@ const Container = styled.div`
     position: fixed;
     width: 100%;
     height: 100%;
-    z-index: 1000;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
     display: flex;
+    z-index:1;
     flex-direction: column;
     justify-content: center;
     align-items: center;
@@ -70,7 +54,7 @@ const Overlay = styled.div`
     position: absolute;
     width: 100%;
     height: 100%;
-    z-index:100;
+    z-index:11;
     background-color: rgba(0, 0, 0, 0.6);
 `
 
@@ -83,6 +67,7 @@ const ModalWrap = styled.div`
     position: absolute;
     top: 50%;
     left: 50%;
+    z-index:12;
     transform: translate(-50%, -50%);
     //border: solid 5px black;
 `

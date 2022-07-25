@@ -276,7 +276,7 @@ const Uploader = ({ setsquare, setlist }) => {
                     <div className='side'>
                       <div className="title-profile">
                           <img src="'/img/bk.jpg ' ?? '/images/user.jpg'" alt="프사" onError={(e)=>{e.target.src='/images/user.jpg'}}/>                
-                          <span>{sessionStorage.getItem('username')}</span> 
+                          <span className="uploadname">{sessionStorage.getItem('username')}</span> 
                       </div>
                       <div>
                         <span style={{fontWeight:'bold', marginLeft:'10px'}}>제목 : </span>
@@ -498,11 +498,12 @@ const Contents = styled.div`
   display: flex;
   flex-direction: column;
   border-radius: 7px;
-  z-index: 11;
+  z-index:11;
 `;
 
 const FirstLine = styled.div`
   height: auto;
+  
   display: flex;
   justify-content: space-around;
   align-items: center;
