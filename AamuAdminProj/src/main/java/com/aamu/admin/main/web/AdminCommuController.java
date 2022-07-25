@@ -58,8 +58,8 @@ public class AdminCommuController {
 		//데이타 반환
 		Map resultMap = new HashMap();
 		System.out.println("affected:"+affected);
-		if(affected==1) resultMap.put("result", "Success");
-		else resultMap.put("result", "NotSuccess");
+		if(affected==1) resultMap.put("isSuccess", true);
+		else resultMap.put("isSuccess", false);
 		return resultMap;
 	}
 	

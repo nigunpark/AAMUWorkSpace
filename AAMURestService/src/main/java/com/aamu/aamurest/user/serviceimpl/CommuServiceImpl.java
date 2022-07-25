@@ -1,5 +1,6 @@
 package com.aamu.aamurest.user.serviceimpl;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -102,7 +103,6 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 	public CommuDTO commuSelectOne(String lno) {
 		CommuDTO dto=dao.commuSelectOne(lno);
 		List<CommuCommentDTO> list=dao.commuCommentList(lno);
-		System.out.println("(셀렉트원)list:"+dto);
 		dto.setCommuCommentList(list);
 		return dto;
 	}
@@ -169,14 +169,25 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 	//댓글 생성용
 	@Override
 	public int commuCommentInsert(Map map) {
-		return dao.commuCommentInsert(map);
+		int affected=0;
+		affected = transactionTemplate.execute(tx->{
+			int affectedCommuCommentInsert=dao.commuCommentInsert(map);
+			dao.commuRcPlusUpdate(map);
+			return affectedCommuCommentInsert;
+		});
+		
+		return affected;
 	}
 
 	//댓글 생성용_Rcount컬럼 +1
+	/*
 	@Override
 	public int commuRcPlusUpdate(Map map) {
 		return dao.commuRcPlusUpdate(map);
 	}
+
+	*/
+	
 
 	//댓글 수정용
 	@Override
@@ -187,15 +198,25 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 	//댓글 삭제용
 	@Override
 	public int commuCommentDelete(Map map) {
-		return dao.commuCommentDelete(map);
+		int affected=0;
+		affected = transactionTemplate.execute(tx->{
+			int affectedCommuCommentDelete =dao.commuCommentDelete(map);
+			//댓글 삭제용_Rcount컬럼 -1
+			dao.commuRcMinusUpdate(map);
+			return affectedCommuCommentDelete;
+		});
+		return affected;
 	}
 
 	//댓글 삭제용_Rcount컬럼 -1
+	/*
 	@Override
 	public int commuRcMinusUpdate(Map map) {
 		return dao.commuRcMinusUpdate(map);
 	}
 
+	*/
+	
 	//글 좋아요 전체리스트
 	/*
 	@Override
