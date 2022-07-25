@@ -91,7 +91,7 @@ const LoginTest = () => {
                 className="loginBtn"
                 onClick={(e) => {
                   e.preventDefault();
-                  login(idRef, pwdRef, navigate, setShowValid);
+                  login(idRef, pwdRef, navigate, setShowValid, dispatch);
                 }}
               >
                 Login
