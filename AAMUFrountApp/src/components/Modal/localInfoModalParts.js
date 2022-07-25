@@ -43,7 +43,7 @@ const OverlayLim = styled.div`
 
 const ContentsLim = styled.div`
   position: relative;
-  top: 0px;
+  top: -20px;
   padding: 0 auto;
   margin: auto;
   border-radius: 10px;
@@ -101,7 +101,7 @@ const BodyLim = styled.div`
 
 const Review = styled.div`
   width: 900px;
-  height: 130px;
+  height: 150px;
   background: rgba(255, 255, 255, 0.8);
   border-radius: 5px;
   transition: 0.1s;
