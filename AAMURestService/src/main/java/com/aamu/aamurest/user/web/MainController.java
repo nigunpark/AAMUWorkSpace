@@ -7,6 +7,8 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.Vector;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.swing.event.ListSelectionEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
@@ -345,10 +347,9 @@ public class MainController {
 		return dto;
 	}
 	@GetMapping("/planner/selectList")
-	public List<PlannerDTO> selectPlannerList(@RequestParam String id){
-
-		List<PlannerDTO> list = service.getPlannerList(id);
-
+	public List<PlannerDTO> selectPlannerList(HttpServletRequest req){
+		
+		List<PlannerDTO> list = service.getPlannerList(req.getAttribute("username").toString());
 		return list;
 	}
 	@PostMapping("/planner/change")

@@ -3,10 +3,19 @@ import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import DaumPostcode from "react-daum-postcode";
 import axios from 'axios';
+import { Avatar } from 'antd';
 
 const MyProfileBox = () => {
 
-    
+    const [userProfile, setUserProfile] = useState();
+
+    // const {gender} = userProfile;
+    // 이렇게 데이터 뽑아서 저장가능
+    // console.log('gender :', gender); 
+
+    const [name, setName] = useState();
+    const [gender, setGender] = useState();
+    const [userId, setUserId] = useState();
 
     const [addrIsValid, setAddrIsValid] = useState(false);
 
@@ -15,16 +24,17 @@ const MyProfileBox = () => {
     const [phoneTNum, setPhoneTNum] = useState("");
     let phoneNum = phoneFNum + '-' + phoneSNum + '-' + phoneTNum;
 
-    const [introduce, setIntroduce] = useState("");
+    const [introduce, setIntroduce] = useState(""); //self
 
     const [zoneCode, setZoneCode] = useState(""); //우편번호
     const [address, setAddress] = useState(""); //기본주소
     const [detailAddr, setDetailAddr] = useState(""); //상세주소
-    let addr = zoneCode + '/' + address + '/' + detailAddr;
+    let addr = (zoneCode + '/' + address + '/' + detailAddr).split();
     
     const [isOpenPost, setIsOpenPost] = useState(false);
 
     const [showImages, setShowImages] = useState([]); //이미지
+    
 
     //이메일
     let [emailFrist, setEmailFrist] = useState("");
@@ -35,39 +45,44 @@ const MyProfileBox = () => {
     let addrRef = useRef();
     let addrDetailRef = useRef();
 
-    console.log('email :',email);
-    console.log('addr :',addr);
+    const [pwd, setPwd] = useState();
 
+    // console.log('email :',email);
+    // console.log('addr :',addr);
+    console.log('phoneNum :', phoneNum);
     // console.log('zoneCode :',zoneCode);
     // console.log('address :',address);
     // console.log('setDetailAddr :',detailAddr);
-    // console.log('showImages :',showImages);
     
     //이미지 등록
     const handleAddImages = (e) => {
         const imageLists = e.target.files;
         let imageUrlLists = [...showImages];
 
+        
         for (let i = 0; i < imageLists.length; i++) {
-        const currentImageUrl = URL.createObjectURL(imageLists[i]);
-        imageUrlLists.push(currentImageUrl);
+            const currentImageUrl = URL.createObjectURL(imageLists[i]);
+            imageUrlLists.push(currentImageUrl);
         }
 
         if (imageUrlLists.length > 1) { //사진 1개 제한
-        imageUrlLists = imageUrlLists.slice(0, 1);
+            imageUrlLists = imageUrlLists.slice(0, 1);
         }
-
         setShowImages(imageUrlLists);
+
+        let formData = new FormData();
+        formData.append('userprofile',e.target.files[0]);
+        return formData;
     };
 
-    const handleDeleteImage = (id) => { //등록한 사진 삭제
-        setShowImages(showImages.filter((_, index) => index !== id));
+    const handleDeleteImage = () => { //등록한 사진 삭제
+        setShowImages([]);
     };
 
     useEffect(()=>{
         let token = sessionStorage.getItem("token");
   
-        axios.get('',{
+        axios.get('/aamurest/users/selectone',{
             params:{
                 id:sessionStorage.getItem('username')
             },
@@ -76,31 +91,61 @@ const MyProfileBox = () => {
             }
         }).then((resp)=>{
             console.log('데이터 확인 : ',resp.data);
+            setUserProfile(resp.data);
+            setPwd(resp.data.pwd);
+
+            setPhoneFNum(resp.data.phonenum.split('-')[0]);
+            setPhoneSNum(resp.data.phonenum.split('-')[1]);
+            setPhoneTNum(resp.data.phonenum.split('-')[2]);
+
+            setEmailFrist(resp.data.email.split('@')[0]);
+            setEmailSecond(resp.data.email.split('@')[1]);
+
+            setZoneCode(resp.data.addrid.split('/')[0]);
+            setAddress(resp.data.addrid.split('/')[1]);
+            setDetailAddr(resp.data.addrid.split('/')[2]);
+
+            setIntroduce(resp.data.self);
+            setShowImages(resp.data.userprofile.split());
+            setName(resp.data.name);
+            setGender(resp.data.gender);
+            setUserId(resp.data.id);
         }).catch((error)=>{
             console.log((error) => console.log("프로필 가져오기 실패", error));
         });
         
     },[]);
 
+    
+    // console.log('userProfile :',userProfile.userprofile.split());
+    console.log('showImages :',showImages);
+    let [profiles, setProfile] = useState([]);
   return (
     <MyProfileContainer>
         <MyUpdateImg>
             <ImgBox>
                 <Imgs src='images/no-image.jpg'/>
+                {/* <Imgs src={userProfile.userprofile}/> */}
                 <form encType='multipart/form-data'>
                     <input
                         className="write-picture-input"
                         type='file' id='upload'
-                        onChange={handleAddImages}
-                        onClick={(e)=>e.target.value = null}/>
+                        onChange={(e)=>{
+                            setProfile(handleAddImages(e));
+                        }}
+                        onClick={(e)=>e.target.value = null}
+                        />
                     <ImgUploadLabel for='upload'>
                         {showImages.map((image, id) => (
-                            <Imgs
-                            src={image}
+                        <Imgs src={showImages}
+                        // onClick={() => handleDeleteImage(id)}/>
                             alt={`${image}-${id}`}
-                            onClick={() => handleDeleteImage(id)}/>
+                            onClick={() => handleDeleteImage()}/>
                         ))}
                     </ImgUploadLabel>
+                    {
+                        console.log('showImages 왜 안되:', showImages)
+                    }
                 </form>
             </ImgBox>
             <div
@@ -123,38 +168,47 @@ const MyProfileBox = () => {
 
         <MyUpdateProfile>
 
-            <div style={{fontSize:'14px'}}>이름</div>
-            <Name>뚱이</Name>
+            <div style={{fontSize:'14px', display: 'flex', flexDirection: 'row'}}>
+                <div>이름</div>
+                <div style={{marginLeft:'200px'}}>아이디</div>
+            </div>
+            <div style={{fontSize:'14px', display: 'flex', flexDirection: 'row'}}>
+                <Name>{name}</Name>
+                {/* {userProfile.name} */}
+                <Id>{userId}</Id>
+                {/* {userProfile.id} */}
+            </div>
             
-            <div style={{fontSize:'14px'}}>주민등록번호</div>
+            <div style={{fontSize:'14px'}}>비밀번호</div>
             <RRNContainer>
-                <div>96xxxx</div> 
-                -
-                <div style={{textAlign:'center'}}>1</div>
-                <span style={{paddingTop:'3px'}}>******</span>
+                <input type='password'
+                    onChange={(e)=>{
+                        setPwd(e.target.value);
+                    }}
+                    value={pwd}/>
             </RRNContainer>
 
             <div style={{fontSize:'14px'}}>휴대폰 번호</div>
             <PhoneNum>
-                <input type='text' placeholder='010'
+                <input type='text'
                     onChange={(e)=>{setPhoneFNum(e.target.value)}} value={phoneFNum}/>
                 -
-                <input type='text' placeholder='1234'
+                <input type='text'
                     onChange={(e)=>{setPhoneSNum(e.target.value)}} value={phoneSNum}/>
                 -
-                <input type='text' placeholder='5678'
+                <input type='text'
                     onChange={(e)=>{setPhoneTNum(e.target.value)}} value={phoneTNum}/>
             </PhoneNum>
 
             <div style={{fontSize:'14px'}}>이메일</div>
             <EmailContainer>
-                <input type='text' placeholder='qwe123'
+                <input type='text'
                     onChange={(e) => {
                         setEmailFrist(e.target.value);
                     }}
                     value={emailFrist}/>
                 @
-                <input type='text' placeholder='naver.com'
+                <input type='text'
                     onChange={(e) => {
                         setEmailSecond(e.target.value);
                     }}
@@ -189,18 +243,21 @@ const MyProfileBox = () => {
                     setZoneCode={setZoneCode}
                     setDetailAddr={setDetailAddr}
                     /> :
-                <Addr/>
+                <Addr
+                    zoneCode={zoneCode}
+                    address={address}
+                    detailAddr={detailAddr}/>
             }
             </div>
             <div style={{textAlign:'end', marginTop:'50px'}}>
                 <UpdateBtn type='button'
                     onClick={()=>{
-                        let profile = uploadFile(showImages);
-                        ProfileUpdate(profile, phoneNum, email, addr, introduce);
+                        // let profile = uploadFile(showImages);
+                        profileUpdate(profiles, phoneNum, email, addr, introduce, pwd, gender, name);
                     }}>
                     저장
                 </UpdateBtn>
-            </div>
+            </div>{console.log('addr :',addr)}
         </MyUpdateProfile>
     </MyProfileContainer>
   )
@@ -209,24 +266,27 @@ const MyProfileBox = () => {
 function uploadFile(showImages){//이미지 업로드
     let formData = new FormData(); // formData 객체를 생성한다.
     for (let i = 0; i < showImages.length; i++) { 
-      formData.append("profileImg", showImages[i]); // 반복문을 활용하여 파일들을 formData 객체에 추가한다
+      formData.append("userprofile", showImages[i]); // 반복문을 활용하여 파일들을 formData 객체에 추가한다
     }
     return formData;
 }
-function ProfileUpdate(profile, phoneNum, email, addr, introduce){
 
-    profile.append('id', sessionStorage.getItem('username'));
-    profile.append('email', email);
-    profile.append('addr', addr);
-    profile.append('phoneNum', phoneNum);
-    profile.append('introduce', introduce);
-    //키값은 백이랑 얘기해서 조정해야함
+function profileUpdate(profiles, phoneNum, email, addr, introduce, pwd, gender, name){
+
+    profiles.append('addrid', addr);
+    profiles.append('email', email);
+    profiles.append('gender', gender);
+    profiles.append('id', sessionStorage.getItem('username'));
+    profiles.append('name', name);
+    profiles.append('phonenum', phoneNum);
+    profiles.append('pwd', pwd);
+    profiles.append('self', introduce);
 
     let token = sessionStorage.getItem("token");
-    axios.post('',profile, {
+    axios.post('/aamurest/users/upload',profiles, {
         headers: {
                 Authorization: `Bearer ${token}`,
-                'Content-Type': 'multipart/form-data',
+                'Content-type': 'multipart/form-data',
             }
         }
     )
@@ -360,7 +420,7 @@ const AddresApi = ({ setIsOpenPost, setAddress, setZoneCode }) => {
     );
 };
 
-function Addr(){
+function Addr({zoneCode, address, detailAddr}){
 return(
     <>
         <div style={{
@@ -373,7 +433,7 @@ return(
                 style={{ marginLeft: "3px" }}
                 type="text"
                 size={14}
-                value="xxxxx"
+                value={zoneCode}
                 // ref={zoneCodeRef}
                 // value={zoneCode}
                 disabled
@@ -389,7 +449,7 @@ return(
                     style={{ marginLeft: "3px" }}
                     type="text"
                     size={52}
-                    value="한소인"
+                    value={address}
                     // ref={addrRef}
                     // value={address}
                     disabled
@@ -405,7 +465,7 @@ return(
                 style={{ marginLeft: "3px" }}
                 type="text"
                 size={52}
-                value="410호"
+                value={detailAddr}
                 // ref={addrDetailRef}
                 disabled
                 />
@@ -464,19 +524,37 @@ const Name = styled.div`
     margin-bottom: 10px;
     margin-left: 10px;
 `
-const RRNContainer = styled.div`
-    display: flex;
-    flex-direction: row;
+const Id = styled.div`
+    width: 100px;
     margin-bottom: 10px;
-    margin-left: 10px;
-    gap: 2px;
+    margin-left: 130px;
+`
+const RRNContainer = styled.div`
+    // display: flex;
+    // flex-direction: row;
+    // margin-bottom: 10px;
+    // margin-left: 10px;
+    // gap: 2px;
     
-    div{
+    // div{
+    // }
+
+    display: flex;
+    flexDirection: row;
+    gap: 3px;
+    margin-left: 10px;
+    margin-bottom: 10px;
+
+    input{
+        font-size: 18px;
+        width: 100px;
+        border: solid 2px gray;
+        border-radius: 0.3em;
     }
 `
 const PhoneNum = styled.div`
     display: flex;
-    flexDirection: row;
+    flex-direction: row;
     gap: 2px;
     margin-bottom: 10px;
     margin-left: 10px;

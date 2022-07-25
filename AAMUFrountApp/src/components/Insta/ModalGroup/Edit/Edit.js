@@ -19,7 +19,7 @@ import "swiper/css/pagination";
 import '../Upload/UploadSwiper.css';
 
 
-const Edit = ({setsquare,setlist}) => {
+const Edit = ({setsquare,setlist,val}) => {
 
   
 let searchRef = useRef();
@@ -27,7 +27,7 @@ let titleRef = useRef();
 let textareaRef = useRef();
 let navigate=useNavigate();
 const [hide, setHide] = useState(false);
-const [showNext, setshowNext] = useState(false);
+const [close, setClose] = useState(false);
 const [search, setSearch] = useState([]);
 const [showSearch, setshowSearch] = useState(false);
 const [showWrite, setShowWrite] = useState([]);
@@ -36,97 +36,13 @@ const [hasText,setHasText] = useState(false);
 const [inputValue,setinputValue] = useState(''); 
 
 
-  //이미지 하나 업로드시
-  // const [image, setImage] = useState({//초기 이미지 세팅 및 변수
-  //   image_file: "",
-  //   preview_URL: "img/image.jpg",
-  // });
 
-  // let inputRef;
-  // const saveImage = (e) => {
-  //   e.preventDefault();
-  //   if(e.target.files[0]){
-  //     // 새로운 이미지를 올리면 createObjectURL()을 통해 생성한 기존 URL을 폐기
-  //     //URL.revokeObjectURL(image.preview_URL);
-  //     const preview_URL = URL.createObjectURL(e.target.files[0]);
-  //     setImage(() => (
-  //       {
-  //         image_file: e.target.files[0],
-  //         preview_URL: preview_URL
-  //       }
-  //     ))
-  //   }
-  // }
   
   //이미지 다중 업로드 시
   const [myImage,setMyImage] = useState([]);
   const [myImagefile,setMyImageFile] = useState([]);
 
-  const addImage = e => {
-    const nowSelectImageList = e.target.files;//한번에 받은 파일 리스트(object)
-    const nowImageURLList = [...myImage];//현재 myImage복사하고
-    for (let i = 0; i < nowSelectImageList.length; i += 1){
-      //nowSelectImageList object를 i를 이용해서 돌리면서
-      const nowImageURL = URL.createObjectURL(nowSelectImageList[i]);
-      //미리보기 가능하게 변수화
-      nowImageURLList.push(nowImageURL);
-      //복사한 myImage에 추가
-    }
-    if(nowImageURLList.length > 5){
-      alert('사진은 5장 이하로만 가능합니다!')
-      setHide(false)
-      nowImageURLList=nowImageURLList.slice(0,5);
-    }
-    setMyImage(nowImageURLList);
-    setMyImageFile(nowSelectImageList);
-
-    //myImage원본에 덮어씌우기
-  }
-
-
-  //이미지 삭제 
-  // const deleteFileImage = () =>{
-  //   URL.revokeObjectURL(fileImage);
-  //   setFileImage("");
-  //   setHide(false)
-    
-  // console.log('Ref', countRef.current.value)
-  // };
-  {/* <button style={{
-                    width: "50px",
-                    height: "50px",
-                    cursor: "pointer",
-                    marginBottom:'-50px'}}
-                    onClick={() => deleteFileImage()} > 삭제 </button>  */}
-
-  const deleteImage = () => {// 이미지 삭제를 위해
-    // createObjectURL()을 통해 생성한 기존 URL을 폐기
-    setMyImage([]);
-    URL.revokeObjectURL(myImage);
-    setHide(false)
-  }
-
-  useEffect(()=> {
-    // 컴포넌트가 언마운트되면 createObjectURL()을 통해 생성한 기존 URL을 폐기
-    return () => {
-      URL.revokeObjectURL(myImage)
-    }
-  }, [])
-  // const sendImageToServer = async () => {
-  //   if (image.image_file) {
-  //     const formData = new FormData()
-  //     formData.append('file', image.image_file);
-  //     await axios.get('/aamurest//gram/edit', formData,);
-  //     alert("서버에 등록이 완료되었습니다!");
-  //     setImage({
-  //       image_file: "",
-  //       preview_URL: "img/image.jpg",
-  //     });
-  //   } else {
-  //     alert("사진을 등록하세요!")
-  //   }
-  // }
-
+ 
 
   function searchWord(e,setSearch){//위치 지정을 위한 백에게 받는 axios
     let val = e.target.value
@@ -180,54 +96,40 @@ const [inputValue,setinputValue] = useState('');
   
  
   return (
-  
-    <Contents>  
+    <Container>
+    <Overlay >
+    <Contents >  
         <FirstLine>
-            <Deletebtn 
-                variant="contained" onClick={deleteImage} > 
-                <i className="fa-solid fa-arrow-left"></i>
-            </Deletebtn> 
-            <div className='newPosting'>
-                <h2>새 게시물 만들기</h2>
+            
+            <div className='newPosting' style={{marginLeft:'12%'}}>
+                <h2>수정하기</h2>
             </div>
             {/* {showNext ?  */}
               <Nextbtn  
                       onClick={()=>{
-                        let temp= uploadFile(myImagefile)
-                        console.log('temp',temp);
-                        gramEdit(temp,setlist,titleRef,textareaRef,searchRef,search)
-                        setsquare(false)
-                        feedList(setlist)
+                        // let temp= uploadFile(myImagefile)
+                        // console.log('temp',temp);
+                        // edit(val,temp,setlist,titleRef,textareaRef,searchRef,search)
+                        // setsquare(false)
+                        // feedList(setlist)
                       }}>
                        <FontAwesomeIcon icon={faPaperPlane}  size="2x" />
                 </Nextbtn>
-              {/* {
-                showNext && navigate('/Insta')
-                //  window.location.reload(window.location.href)
-              } */}
-            {/* :
-              <Nextbtn  onClick={()=>setshowNext(!showNext)}>다음</Nextbtn>
-            }     */}
         </FirstLine>
             <Body>           
-                <form className='picfileframe' encType='multipart/form-data'>
+                <form className='picfileframe'  encType='multipart/form-data'>
                
                     <input  
                         id="input-file"
                         type="file" 
                         multiple
                         accept="image/*"
-                        onChange={addImage}
                     // 클릭할 때 마다 file input의 value를 초기화 하지 않으면 버그가 발생할 수 있다
                     // 사진 등록을 두개 띄우고 첫번째에 사진을 올리고 지우고 두번째에 같은 사진을 올리면 그 값이 남아있음!
                         onClick={(e) => e.target.value = null}
                         // ref={refParam => inputRef = refParam}
                         style={{display: "none" , width:'100%',height:'100%'}}
                     />
-                       {/* {myImage.map((images,i)=>(
-                                   <img className='divimage' alt="sample" src={images}/>
-                             
-                          ))}  */}
               <div className="previewPic1">
                   <ul>
                     <Swiper
@@ -241,7 +143,7 @@ const [inputValue,setinputValue] = useState('');
                       pagination={{ clickable: true }}
                       scrollbar={{ draggable: true }}
                     >
-                      {myImage.map((image,i)=>{
+                      {val.photo.map((image,i)=>{
                         return(
                         <SwiperSlide>
                           <li>
@@ -259,19 +161,8 @@ const [inputValue,setinputValue] = useState('');
                   <label 
                       className="rweet_file_btn" 
                       onClick={ ()=>{setHide(!hide)} }
-                      htmlFor="input-file"      
-                      onChange={addImage}          
+                      htmlFor="input-file"          
                       >
-                          {hide ?
-                          null
-                          :
-                          <Button 
-                            
-                              type="primary" 
-                              variant="contained" >
-                               {/* onClick={() => inputRef.click()} */}
-                              컴퓨터에서 선택
-                          </Button>}
                     </label>    
                 </form> 
                 
@@ -283,7 +174,7 @@ const [inputValue,setinputValue] = useState('');
                       </div>
                       <div>
                         <span style={{fontWeight:'bold', marginLeft:'10px'}}>제목 : </span>
-                        <input ref={titleRef} type="text" placeholder="제목을 입력하세요"/>
+                        <input ref={titleRef} type="text" placeholder="제목을 입력하세요" onChange={(e)=>{ val.ctitle = e.target.value}} value  = {val.ctitle}/>
                       </div>
                       <div>
                         <textarea 
@@ -294,6 +185,7 @@ const [inputValue,setinputValue] = useState('');
                           onKeyUp={(e)=>fn_checkByte(e)}
                           rows="8" 
                           placeholder="문구입력..." 
+                          value= {val.content}
                           style={{border:'none',resize: 'none',
                               fontSize: '16px',fontFamily:'normal',
                               outline: 'none',paddingTop:'5px' ,
@@ -308,7 +200,10 @@ const [inputValue,setinputValue] = useState('');
                        >
                         <input 
                             onKeyUp={(e)=>searchWord(e,setSearch)}
-                            value={inputValue}
+                            value={close === false ? 
+                              val.title 
+                              :inputValue}
+                              style={{width:'70%'}}
                             onChange={(e)=>{setinputValue(e.target.value)
                               setHasText(true)
                             }}
@@ -321,7 +216,10 @@ const [inputValue,setinputValue] = useState('');
                             setHasText={setHasText}
                             setinputValue={setinputValue}/>
                                             : null}
-                        <i className="fa-solid fa-location-dot"></i>
+                                            
+                        <i className="fa-solid fa-location-dot" />
+                        {close ? null : <i className="fa-regular fa-circle-xmark" style={{marginRight:'-10px'}} onClick={()=>{setClose(!close)}}/>}
+                        
                       </div>     
                              
                   </div>
@@ -329,7 +227,8 @@ const [inputValue,setinputValue] = useState('');
                   </Body>
                   {/* {show?<SearchModal search={search}/>:null} */}
         </Contents>
-
+    </Overlay>
+</Container> 
  
   );
 }
@@ -359,25 +258,20 @@ function feedList(setlist){//업로드 버튼 누르고 화면 새로고침
   return formData;
 }
 
-function gramEdit(temp,setlist,titleRef,textareaRef,searchRef,search){//새 게시물 업로드를 위한 axios
+function edit(val,temp,setlist,titleRef,textareaRef,searchRef,search){//새 게시물 업로드를 위한 axios
  let searched= search.find((val,i)=>{
     return val.TITLE===searchRef.current.value
   })
   console.log('searched:',searched)
 
-  temp.append('id',sessionStorage.getItem('username'))
+  temp.append('lno',val.lno)
   temp.append('ctitle',titleRef.current.value)
   temp.append('content',textareaRef.current.value)
   temp.append('contentid',searched.CONTENTID)
 
   let token = sessionStorage.getItem("token");
-  axios.post('/aamurest/gram/edit',temp,
-      //  { temp,
-      //   id: sessionStorage.getItem('username'),
-      //   ctitle: titleRef.current.value,
-      //   content: textareaRef.current.value,
-      //   contentid:searched.CONTENTID
-      // },  
+  axios.put('/aamurest/gram/edit',temp,
+    
        { headers: {
               Authorization: `Bearer ${token}`,
               'Content-Type': 'multipart/form-data',
@@ -396,26 +290,45 @@ function gramEdit(temp,setlist,titleRef,textareaRef,searchRef,search){//새 게�
   }
 
 
-  const SliderContainer = styled.div`
-  margin: 0 auto;
-  margin-bottom: 2em;
-  display: flex; // 이미지들을 가로로 나열합니다.
-`;
+  const Container = styled.div`
+  cursor: default;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  z-index:1;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`
+
+const Overlay = styled.div`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index:13;
+  background-color: rgba(0, 0, 0, 0.6);
+  
+`
 
 
 const Contents = styled.div`
   position: relative;
-  top:30px;
+  transform: translate(-50%,-50%);
   padding : 0 auto;
   width:60%;
-  // min-width:30%;
-  // max-width:60%;
+  left: 50%;
+  top: 54%;
   height: 700px;
   background :white;
   display:flex;
   flex-direction:column;
   border-radius:7px;
-  z-index: 11;
+  z-index: 14;
 `
 
 const FirstLine = styled.div`
