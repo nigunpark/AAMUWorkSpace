@@ -13,7 +13,7 @@ public class KakaoReview {
 	public BasicInfo basicInfo;
 	@JsonProperty("comment_info")
 	public List<CommentInfo> commentInfo = null;
-	
+
 	@Getter
 	@Setter
 	public static class BasicInfo {

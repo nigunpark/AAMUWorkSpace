@@ -11,10 +11,10 @@ import org.springframework.core.io.ClassPathResource;
 
 @Configuration
 public class MybatisConfiguration {
-	
+
 	@Autowired
 	private DataSource dataSource;
-	
+
 	@Bean
 	public SqlSessionTemplate template() throws Exception {
 		SqlSessionFactoryBean sqlSessionFactory = new SqlSessionFactoryBean();

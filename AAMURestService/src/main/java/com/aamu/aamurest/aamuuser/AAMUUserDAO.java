@@ -12,10 +12,10 @@ import com.aamu.aamurest.user.service.UsersDTO;
 
 @Repository
 public class AAMUUserDAO {
-	
+
 	@Autowired
 	private SqlSessionTemplate template;
-	
+
 	public Optional<AAMUUserDTO> findByUsername(String username){
 		AAMUUserDTO dto = template.selectOne("findByUsername", username);
 		return Optional.ofNullable(dto);

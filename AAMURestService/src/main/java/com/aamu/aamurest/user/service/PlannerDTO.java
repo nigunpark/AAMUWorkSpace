@@ -1,7 +1,6 @@
 package com.aamu.aamurest.user.service;
 
 import java.util.Date;
-
 import java.util.List;
 import java.util.Map;
 
@@ -19,5 +18,5 @@ public class PlannerDTO {
 	private String plannerdate;
 	private Map<String,List<RouteDTO>> routeMap=null;
 	private String smallImage;
-	
+
 }

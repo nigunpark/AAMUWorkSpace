@@ -1,7 +1,6 @@
 package com.aamu.aamurest.user.serviceimpl;
 
 import java.util.List;
-
 import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
@@ -14,24 +13,24 @@ import com.aamu.aamurest.user.service.RouteDTO;
 
 @Repository
 public class MainDAO {
-	
+
 	@Autowired
 	private SqlSessionTemplate template;
-	
+
 	//////////////////////////api insert dao
 	public int placeInsert(AttractionDTO dto) {
-		
-		
+
+
 		return template.insert("placeInsert",dto);
 	}
-	
+
 	//////////////////////////get place dao
 	public List<AttractionDTO> selectPlacesList(Map map) {
-		
+
 		return template.selectList("selectPlacesList", map);
 	}
 	public List<AttractionDTO> selectAttrSigungu(Map map) {
-		
+
 		return template.selectList("selectAttrSigungu",map);
 	}
 	////////////////////////////planner dao
@@ -41,7 +40,7 @@ public class MainDAO {
 	}
 
 	public int routeInsert(RouteDTO route) {
-		
+
 		return template.insert("routeInsert",route);
 	}
 
@@ -51,7 +50,7 @@ public class MainDAO {
 	}
 	///////////////////////////////////////////////////serchdao
 	public List<AttractionDTO> searchOnePlace(Map map) {
-		
+
 		return template.selectList("searchOnePlace", map);
 	}
 
@@ -60,22 +59,22 @@ public class MainDAO {
 		return template.update("updatePlaces",map);
 	}
 	public int updateUrl(AttractionDTO dto) {
-			
+
 			return template.update("updateUrl",dto);
 		}
 
 	public AttractionDTO selectOnePlace(int contentid) {
-		
+
 		return template.selectOne("selectOnePlace", contentid);
 	}
 
 	public int checkPlace(Map map) {
-		
+
 		return template.selectOne("checkPlace", map);
 	}
 
 	public int updateRoute(List<RouteDTO> routes) {
-		
+
 		return template.update("updateRoute", routes);
 	}
 
@@ -85,42 +84,42 @@ public class MainDAO {
 	}
 
 	public int deletePlanner(Map map) {
-		
+
 		return template.delete("deletePlanner",map);
 	}
 
 	public int deleteRoute(int rbn) {
-		
+
 		return template.delete("deleteRoute",rbn);
 	}
 
 	public List<AttractionDTO> getRecentPlaceAll(Map map) {
-		
+
 		return template.selectList("getRecentPlaceAll", map);
 	}
-	
+
 	public AttractionDTO selectPlace(Map map) {
-		
+
 		return template.selectOne("selectPlace",map);
 	}
 
 	public double getRecentPlaceOne(Map map) {
-		
+
 		return template.selectOne("getRecentPlaceOne", map);
 	}
 
 	public List<PlannerDTO> getPlannerList(String id) {
-	
+
 		return template.selectList("getPlannerList", id);
 	}
 
 	public PlannerDTO selectPlannerOne(int rbn) {
-		
+
 		return template.selectOne("selectPlannerOne", rbn);
 	}
 
 	public List<RouteDTO> selectRouteList(int rbn) {
-		
+
 		return template.selectList("selectRouteList",rbn);
 	}
 

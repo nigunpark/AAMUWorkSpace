@@ -18,5 +18,5 @@ public class UsersDTO {
 	private String self;
 	private Date joindate;
 	private String userprofile;
-	
+
 }

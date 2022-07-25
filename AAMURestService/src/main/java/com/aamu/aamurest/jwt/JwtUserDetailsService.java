@@ -17,10 +17,10 @@ import com.aamu.aamurest.aamuuser.AAMUUserDAO;
 import com.aamu.aamurest.aamuuser.AAMUUserDTO;
 
 public class JwtUserDetailsService implements UserDetailsService {
-	
+
 	@Autowired
-	private AAMUUserDAO dao; 
-	
+	private AAMUUserDAO dao;
+
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		AAMUUserDTO user = dao.findByUsername(username).orElseThrow(()-> new UsernameNotFoundException("���� �̸��� ã���� �����ϴ�."+username));
@@ -28,7 +28,7 @@ public class JwtUserDetailsService implements UserDetailsService {
         grantedAuthorities.add(new SimpleGrantedAuthority(user.getAuthority()));
 		return new User(user.getUsername(), user.getPassword(), grantedAuthorities);
 	}
-	
+
 	public AAMUUserDTO authenticateByNameAndPassword(String username, String password) {
 		AAMUUserDTO member = dao.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("���� �̸��� ã���� �����ϴ�."+username));
@@ -39,10 +39,8 @@ public class JwtUserDetailsService implements UserDetailsService {
 
         return member;
     }
-
 	public String getUserProfile(String id) {
 		
 		return dao.getUserProfile(id);
 	}
-	
 }

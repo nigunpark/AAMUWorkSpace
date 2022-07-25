@@ -2,11 +2,9 @@ package com.aamu.aamurest.user.serviceimpl;
 
 import java.util.HashMap;
 import java.util.List;
-
 import java.util.Map;
 import java.util.Vector;
 
-import org.apache.http.entity.ContentType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;
@@ -33,7 +31,7 @@ public class MainServiceImpl implements MainService{
 		if(url!=null) {
 			if(url.contains("\"")) {
 				dto.setUrl(url.split("\"")[1]);
-				
+
 				resultUrl = dto.getUrl();
 				if(!resultUrl.contains("http")) {
 					if(resultUrl.contains("href=\"")) {
@@ -43,12 +41,12 @@ public class MainServiceImpl implements MainService{
 					else if(url.contains("href=")) {
 						resultUrl = url.split("href=")[1];
 						dto.setUrl(resultUrl.split("\"")[0]);
-						
+
 					}
 					else {
 						dto.setUrl(url.split("\"")[2]);
 					}
-					
+
 					resultUrl = dto.getUrl();
 				}
 			}
@@ -56,7 +54,7 @@ public class MainServiceImpl implements MainService{
 				resultUrl = url;
 				dto.setUrl(resultUrl);
 			}
-			
+
 		}
 		if(dto.getMapx()>999 || dto.getMapy()>999) {
 			dto.setMapx(0);
@@ -164,7 +162,7 @@ public class MainServiceImpl implements MainService{
 			if(charge!=null) {
 				if(charge.contains("<br>")) {
 					charge = charge.replace("<br>", "\r\n");
-					
+
 				}
 				else if(charge.contains("<br />")) {
 					charge = charge.replace("<br />", "\r\n");
@@ -183,23 +181,23 @@ public class MainServiceImpl implements MainService{
 	@Override
 	public int plannerInsert(PlannerDTO dto) {
 		int affected=0;
-		
+
 		affected = transactionTemplate.execute(tx->{
 			int insertPlanner = dao.plannerInsert(dto);
 			List<RouteDTO> routes = dto.getRoute();
-			
+
 			for(RouteDTO route:routes) {
 				route.setRbn(dto.getRbn());
 				dao.routeInsert(route);
 			}
 			return insertPlanner;
-			
+
 		});
-		
+
 		/*
 		int insertPlanner = dao.plannerInsert(dto);
 		List<RouteDTO> routes = dto.getRoute();
-		
+
 		for(RouteDTO route:routes) {
 			route.setRbn(dto.getRbn());
 			dao.routeInsert(route);
@@ -210,12 +208,12 @@ public class MainServiceImpl implements MainService{
 	@Override
 	public int updatePlanner(PlannerDTO dto) {
 		int affected=0;
-		
+
 		affected = transactionTemplate.execute(tx->{
 			int updatePlanner = dao.updatePlanner(dto);
 			dao.deleteRoute(dto.getRbn());
 			List<RouteDTO> routes = dto.getRoute();
-			
+
 			for(RouteDTO route:routes) {
 				route.setRbn(dto.getRbn());
 				dao.routeInsert(route);
@@ -226,7 +224,7 @@ public class MainServiceImpl implements MainService{
 		int updatePlanner = dao.updatePlanner(dto);
 		dao.deleteRoute(dto.getRbn());
 		List<RouteDTO> routes = dto.getRoute();
-		
+
 		for(RouteDTO route:routes) {
 			route.setRbn(dto.getRbn());
 			dao.routeInsert(route);
@@ -234,17 +232,17 @@ public class MainServiceImpl implements MainService{
 		*/
 		return affected;
 	}
-	
+
 ///////////////////////////////////////////////////get place impl
 
 	@Override
 	public List<AttractionDTO> selectPlacesList(Map map) {
-		
+
 		return dao.selectPlacesList(map);
 	}
 	@Override
 	public List<AttractionDTO> selectAttrSigungu(Map map) {
-		
+
 		return dao.selectAttrSigungu(map);
 	}
 ///////////////////////////////////////////////////search place impl
@@ -271,7 +269,7 @@ public class MainServiceImpl implements MainService{
 
 	@Override
 	public List<AttractionDTO> searchOnePlace(Map map) {
-		
+
 		return dao.searchOnePlace(map);
 	}
 ///////////////////////////////////////////////////update place impl
@@ -292,9 +290,9 @@ public class MainServiceImpl implements MainService{
 					else {
 						resultUrl = url.split("href=")[1];
 						map.put("url",resultUrl.split("\"")[0]);
-						
+
 					}
-					
+
 					resultUrl = map.get("url").toString();
 				}
 			}
@@ -348,7 +346,7 @@ public class MainServiceImpl implements MainService{
 		if(map.get("eventtime")!=null) {
 			String eventtime = map.get("eventtime").toString();
 			String charge = map.get("charge").toString();
-			
+
 			if(eventtime!=null) {
 				if(eventtime.contains("<br>")) {
 					eventtime = eventtime.replace("<br>", "\r\n");
@@ -364,7 +362,7 @@ public class MainServiceImpl implements MainService{
 			if(charge!=null) {
 				if(charge.contains("<br>")) {
 					charge = charge.replace("<br>", "\r\n");
-					
+
 				}
 				else if(charge.contains("<br />")) {
 					charge = charge.replace("<br />", "\r\n");
@@ -375,45 +373,45 @@ public class MainServiceImpl implements MainService{
 				map.put("charge", charge);
 			}
 		}
-		
+
 		return dao.updatePlaces(map);
 	}
 	////////////////////////////////////selectone place
 	@Override
 	public AttractionDTO selectOnePlace(int contentid) {
-		
+
 		return dao.selectOnePlace(contentid);
 	}
 	@Override
 	public int checkPlace(Map map) {
-		
+
 		return dao.checkPlace(map);
 	}
 	@Override
 	public int updateUrl(AttractionDTO dto) {
 		return dao.updateUrl(dto);
 	}
-	
-	
-	
-	
+
+
+
+
 	///////////////planner update
 	@Override
 	public int updateRoute(List<RouteDTO> routes) {
-		
+
 		return dao.updateRoute(routes);
 	}
-	
+
 	@Override
 	public int deletePlanner(int rbn) {
 		int affected=0;
 		Map map = new HashMap<>();
 		affected = transactionTemplate.execute(tx->{
-				
+
 				map.put("table", "route");
 				map.put("rbn", rbn);
 				dao.deletePlanner(map);
-				
+
 				map.put("table", "routeboard");
 				return dao.deletePlanner(map);
 			});
@@ -451,12 +449,12 @@ public class MainServiceImpl implements MainService{
 			}
 			returnList.add(dto);
 		}
-		
+
 		return returnList;
 	}
 	@Override
 	public double getRecentPlaceOne(Map map) {
-		
+
 		return dao.getRecentPlaceOne(map);
 	}
 	@Override
@@ -488,8 +486,8 @@ public class MainServiceImpl implements MainService{
 			dto.setRoute(null);
 			returnList.add(dto);
 		}
-		
-		
+
+
 		return returnList;
 	}
 	@Override
@@ -502,12 +500,12 @@ public class MainServiceImpl implements MainService{
 			routes2.add(route);
 		}
 		dto.setRoute(routes2);
-		
+
 		return dto;
 	}
 	@Override
 	public List<AttractionDTO> selectMainPlaceList() {
-		
+
 		return dao.selectMainPlaceList();
 	}
 
