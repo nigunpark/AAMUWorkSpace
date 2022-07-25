@@ -23,13 +23,13 @@ public class HikariConfiguration {
 
 	@Bean(name = "dataSource")
 	public HikariDataSource dataSource() {
-		
+
 		HikariConfig hikariConfig = new HikariConfig();
 		hikariConfig.setDriverClassName(driver);
 		hikariConfig.setJdbcUrl(url);
 		hikariConfig.setUsername(username);
 		hikariConfig.setPassword(password);
 		return new HikariDataSource(hikariConfig);
-		
+
 	}
 }

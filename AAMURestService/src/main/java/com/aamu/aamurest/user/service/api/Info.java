@@ -7,7 +7,7 @@ import lombok.Setter;
 @Setter
 public class Info {
 public Response response;
-	
+
 	@Getter
 	@Setter
 	public static class Response{
@@ -50,7 +50,7 @@ public Response response;
 		public String parking;
 		public String restdate;
 		public String usetime;
-		
+
 		//ȣ��
 		public int barbecue;
 		public int beauty;
@@ -79,7 +79,7 @@ public Response response;
 		public int seminar;
 		public int sports;
 		public String subfacility;
-		
+
 		//������
 		public String chkcreditcardfood;
 		public String discountinfofood;
@@ -93,14 +93,14 @@ public Response response;
 		public String restdatefood;
 		public String smoking;
 		public String treatmenu;
-		
+
 		//Ȩ����������
 		public int booktour;
 		public long createdtime;
 		public String homepage;
 		public long modifiedtime;
 		public String title;
-		
+
 		//���
 		public String bookingplace;
 		public String discountinfofestival;
@@ -118,7 +118,7 @@ public Response response;
 		public String sponsor2tel;
 		public String subevent;
 		public String usetimefestival;
-		
+
 		//������
 		public String chkbabycarriageleports;
 		public String chkcreditcardleports;

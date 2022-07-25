@@ -22,11 +22,11 @@ public class RestTemplateConfig {
 		HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory();
 		factory.setConnectTimeout(3000);
 		factory.setHttpClient(httpClient);
-		
+
 		return new RestTemplate(factory);
 
 	}
-	
+
 	@Bean
 	public CommonsMultipartResolver multipartResolver() {
 		CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();

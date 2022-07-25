@@ -1,15 +1,11 @@
 package com.aamu.aamurest.user.web;
 
-import java.text.SimpleDateFormat;
-
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.Vector;
-
-import javax.swing.event.ListSelectionEvent;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,7 +21,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
@@ -36,41 +31,40 @@ import com.aamu.aamurest.user.service.RouteDTO;
 import com.aamu.aamurest.user.service.api.KakaoKey;
 import com.aamu.aamurest.user.service.api.KakaoKey.Document;
 import com.aamu.aamurest.user.service.api.KakaoReview;
-import com.aamu.aamurest.user.service.api.KakaoReview.CommentInfo;
 
 @RestController
 @CrossOrigin("*")
 @PropertySource("classpath:aamu/resources/api.properties")
 public class MainController {
-	
+
 	@Value("${kakaokey}")
 	private String kakaokey;
-	
+
 	@Autowired
 	private MainService service;
-	
+
 	@Autowired
 	private RestTemplate restTemplate;
-	
+
 	@PostMapping("/planner/edit")
 	public int plannerInsert(@RequestBody PlannerDTO dto) {
-		
+
 
 		return service.plannerInsert(dto);
 	}
-	
+
 	@PutMapping("/planner/edit")
 	public int plannerUpdate(@RequestBody PlannerDTO dto) {
-		
-		
+
+
 		return service.updatePlanner(dto);
 	}
 	@DeleteMapping("/planner/edit")
 	public int deletePlanner(@RequestParam int rbn) {
 		int affected = 0;
 		affected = service.deletePlanner(rbn);
-		
-		
+
+
 		return affected;
 	}
 	@PostMapping("/planner/data")
@@ -86,12 +80,12 @@ public class MainController {
 			int contentid = list.get(i).getContentid();
 			AttractionDTO placeInfo = service.selectOnePlace(contentid);
 			list.get(i).setDto(placeInfo);
-			
+
 			if(list.get(i).getDay()!=0) {
 				int hotelDay = list.get(i).getDay();
 				Collections.swap(list, hotelDay-1, i);
 				if(tripDay<hotelDay) tripDay =hotelDay;
-				
+
 			}
 			else {
 				list.get(i).setMtime(30*1000*60);
@@ -115,7 +109,7 @@ public class MainController {
 		long mtime=0;
 		/////////////////////////////
 		while(true){
-			
+
 			if(count<result) {
 				/*
 				double standardx = list.get(count*tripDay+index).getDto().getMapx();
@@ -129,30 +123,30 @@ public class MainController {
 				//double attry =0;
 				double resultxy=0;
 				for(int k=tripDay;k<list.size();k++) {
-					
+
 					if(list.get(k).getDay()==0) {
-						
+
 						//System.out.println(k);
 						/*
 						attrx = list.get(k).getDto().getMapx();
 						attry = list.get(k).getDto().getMapy();
 						resultxy = Math.sqrt(Math.pow(Math.abs(standardx-attrx),2)+Math.pow(Math.abs(standardy-attry),2));
 						*/
-						
+
 						map.put("secondx", list.get(k).getDto().getMapx());
 						map.put("secondy", list.get(k).getDto().getMapy());
-						
+
 						resultxy = service.getRecentPlaceOne(map);
 						if(low>resultxy && tripDay*(count+1)+index<list.size()) {
-							
+
 							low=resultxy;
-							
-							
+
+
 							//System.out.println("low:"+low);
 							//System.out.println(String.format("swap할 인덱스 tripday:%s,index:%s,주소:%s",tripDay*(count+1)+index,k,list.get(k).getDto().getTitle()));
-							
+
 						}
-			
+
 					}
 					if(k==list.size()-1) {
 						for(int j=tripDay;j<list.size();j++) {
@@ -163,15 +157,15 @@ public class MainController {
 								map.put("secondx", list.get(j).getDto().getMapx());
 								map.put("secondy", list.get(j).getDto().getMapy());
 								resultxy = service.getRecentPlaceOne(map);
-								
+
 								if(low==resultxy) {
 									Collections.swap(list,j,tripDay*(count+1)+index);
-									
-									break;} 
+
+									break;}
 							}
 						}
 					}
-					
+
 				}
 				if(tripDay*(count+1)+index<list.size() && list.get(tripDay*(count+1)+index).getDay()==0) {
 					list.get(tripDay*(count+1)+index).setDay(index+1);
@@ -182,7 +176,7 @@ public class MainController {
 							+list.get(tripDay*(count+1)+index).getDto().getMapy();
 							*/
 					/*
-					ResponseEntity<Map> responseEntity = 
+					ResponseEntity<Map> responseEntity =
 							restTemplate.exchange(uri, HttpMethod.GET, null, Map.class);
 					long mtime = Long.parseLong(responseEntity.getBody().get("MVTM").toString())*1000;
 					*/
@@ -190,14 +184,14 @@ public class MainController {
 					String uri = "https://apis-navi.kakaomobility.com/v1/directions?origin="+list.get(count*tripDay+index).getDto().getMapx()+","+list.get(count*tripDay+index).getDto().getMapy()+"&"
 							+ "destination="+list.get(tripDay*(count+1)+index).getDto().getMapx()+","+list.get(tripDay*(count+1)+index).getDto().getMapy()+"&"
 							+ "waypoints=&priority=RECOMMEND&car_fuel=GASOLINE&car_hipass=false&alternatives=false&road_details=false";
-					
-					ResponseEntity<Map> responseEntity = 
+
+					ResponseEntity<Map> responseEntity =
 							restTemplate.exchange(uri, HttpMethod.GET, httpEntity, Map.class);
 					System.out.println(responseEntity.getBody());
 					long mtime=0;
 					if(((Map)((List)responseEntity.getBody().get("routes")).get(0)).get("result_code").toString().equals("0"))
 						mtime = Long.parseLong(((Map)((List)((Map)((List)responseEntity.getBody().get("routes")).get(0)).get("sections")).get(0)).get("duration").toString())*1000;
-					
+
 					list.get(tripDay*(count+1)+index).setMtime(mtime);
 					*/
 					if(count==0 && index!=0) {
@@ -205,38 +199,38 @@ public class MainController {
 						map.put("firsty", list.get(count*tripDay+index-1).getDto().getMapy());
 						map.put("secondx",list.get(tripDay*(count+1)+index).getDto().getMapx());
 						map.put("secondy",list.get(tripDay*(count+1)+index).getDto().getMapy());
-						
+
 						mtime = (long)(service.getRecentPlaceOne(map)*1000*60*1.5);
 						list.get(tripDay*(count+1)+index).setMtime(mtime);
 					}
-					
+
 					else if(count==result-1) {
 						map.put("firstx",list.get(tripDay*(count+1)+index).getDto().getMapx());
 						map.put("firsty",list.get(tripDay*(count+1)+index).getDto().getMapy());
 						map.put("secondx", list.get(index).getDto().getMapx());
 						map.put("secondy", list.get(index).getDto().getMapy());
-						
+
 						mtime = (long)(service.getRecentPlaceOne(map)*1000*60*1.5);
-						
-						list.get(index).setMtime(mtime);	
+
+						list.get(index).setMtime(mtime);
 					}
 					else{
 						map.put("firstx", list.get(count*tripDay+index).getDto().getMapx());
 						map.put("firsty", list.get(count*tripDay+index).getDto().getMapy());
 						map.put("secondx",list.get(tripDay*(count+1)+index).getDto().getMapx());
 						map.put("secondy",list.get(tripDay*(count+1)+index).getDto().getMapy());
-	
+
 						mtime = (long)(service.getRecentPlaceOne(map)*1000*60*1.5);
-						
+
 						list.get(tripDay*(count+1)+index).setMtime(mtime);
 					}
 
 				}
-				
+
 				setDay++;
-				
+
 				count++;
-				
+
 			}
 			else {
 				count=0;
@@ -246,14 +240,14 @@ public class MainController {
 				}
 
 				continue;
-				
-				
+
+
 			}//////////
 		//System.out.println(setDay);
 		//System.out.println(list.size()-1);
 		if(setDay==list.size()) break;
 		}////////////for attr most near place
-	
+
 		/*
 
 
@@ -267,7 +261,7 @@ public class MainController {
 				}
 			}
 		}////////////////////
-		
+
 
 		int result = (int)Math.ceil(((double)list.size()-tripDay)/tripDay);
 		int count = 0;
@@ -287,7 +281,7 @@ public class MainController {
 				}
 			}////////////for
 		}////////////////if
-		
+
 		else {
 				for(RouteDTO route:list) {
 					route.setMtime(30*1000*60);
@@ -300,13 +294,13 @@ public class MainController {
 							count=0;
 							day++;
 							route.setDay(day);
-							
+
 							count++;
-							
+
 						}//////////
 					}//////day=0
-			
-					
+
+
 			}///////////////for
 		}////////////////else
 		 */
@@ -314,14 +308,14 @@ public class MainController {
 		PlannerDTO routeList = new PlannerDTO();
 		routeList.setRoute(list);
 		return routeList;
-		
+
 	}
-	
+
 	@GetMapping("/planner/selectone")
 	public PlannerDTO selectPlannerOne(@RequestParam int rbn) {
-		
+
 		PlannerDTO dto = service.selectPlannerOne(rbn);
-		
+
 		return dto;
 	}
 
@@ -334,17 +328,17 @@ public class MainController {
 		List<RouteDTO> routes =  dto.getRoute();
 		int max= 0 ;
 		for(RouteDTO route : routes) {
-			if(max<route.getDay()) 
-				max=route.getDay();	
+			if(max<route.getDay())
+				max=route.getDay();
 		}
-		for(int i=1;i<=max;i++) 
+		for(int i=1;i<=max;i++)
 			map.put("day"+i, new Vector<>());
-			
-		
-		for(RouteDTO route : routes) 
-			((List<RouteDTO>)map.get("day"+route.getDay())).add(route);		
-		
-		
+
+
+		for(RouteDTO route : routes)
+			map.get("day"+route.getDay()).add(route);
+
+
 
 		dto.setRouteMap(map);
 		dto.setRoute(null);
@@ -352,9 +346,9 @@ public class MainController {
 	}
 	@GetMapping("/planner/selectList")
 	public List<PlannerDTO> selectPlannerList(@RequestParam String id){
-		
+
 		List<PlannerDTO> list = service.getPlannerList(id);
-		
+
 		return list;
 	}
 	@PostMapping("/planner/change")
@@ -364,23 +358,23 @@ public class MainController {
 		List<RouteDTO> routes =  dto.getRoute();
 		int max= 0 ;
 		for(RouteDTO route : routes) {
-			if(max<route.getDay()) 
-				max=route.getDay();	
+			if(max<route.getDay())
+				max=route.getDay();
 		}
-		for(int i=1;i<=max;i++) 
+		for(int i=1;i<=max;i++)
 			routeMap.put("day"+i, new Vector<>());
-			
-		
-		for(RouteDTO route : routes) 
-			((List<RouteDTO>)routeMap.get("day"+route.getDay())).add(route);		
-		
+
+
+		for(RouteDTO route : routes)
+			routeMap.get("day"+route.getDay()).add(route);
+
 		dto.setRouteMap(routeMap);
-		
+
 		int day = routeMap.size();
 		long mtime=0;
-		Map<String,Double> map = new HashMap<String, Double>();
+		Map<String,Double> map = new HashMap<>();
 		for(int i=1;i<=day;i++) {
-			List<RouteDTO> list = (List)dto.getRouteMap().get("day"+i);
+			List<RouteDTO> list = dto.getRouteMap().get("day"+i);
 			int place = list.size();
 			for(int k=0;k<place;k++) {
 				/*
@@ -402,21 +396,21 @@ public class MainController {
 					map.put("firsty", list.get(k-1).getDto().getMapy());
 					map.put("secondx",list.get(k).getDto().getMapx());
 					map.put("secondy",list.get(k).getDto().getMapy());
-					
+
 					mtime = (long)(service.getRecentPlaceOne(map)*1000*60*1.5);
 					list.get(k).setMtime(mtime);
 				}
 			}
 		}
-		
+
 		return dto;
 	}
-	
+
 	@GetMapping("/info/places")
 	public List<AttractionDTO> attractionList(@RequestParam Map map){
-		
+
 		List<AttractionDTO> list = new Vector<>();
-		
+
 		if(map.get("sigungucode")!=null) {
 			switch(map.get("contenttypeid").toString()) {
 			case "12":
@@ -436,7 +430,7 @@ public class MainController {
 			list = service.selectAttrSigungu(map);
 		}
 		else {
-			
+
 			switch(map.get("contenttypeid").toString()) {
 			case "12":
 			case "28":
@@ -459,40 +453,40 @@ public class MainController {
 			System.out.println(dto.getKakaokey());
 			if(dto.getKakaokey()!=null) {
 				String uri = "http://192.168.0.19:5000/review?map="+dto.getKakaokey();
-				
-				ResponseEntity<KakaoReview> responseEntity = 
+
+				ResponseEntity<KakaoReview> responseEntity =
 						restTemplate.exchange(uri, HttpMethod.GET, null, KakaoReview.class);
 				System.out.println(responseEntity.getBody().getBasicInfo().getStar());
 				dto.setStar(responseEntity.getBody().getBasicInfo().getStar());
-				
-			
+
+
 			}
-			
+
 		}
 		*/
 		return list;
 	}
-	
+
 	@GetMapping("/info/review")
 	public KakaoReview getReview(@RequestParam String kakaoKey) {
 		KakaoReview kakaReview = new KakaoReview();
 		if(kakaoKey!=null) {
-			
+
 			String uri = "http://192.168.0.19:5000/review?map="+kakaoKey;
-			
-			ResponseEntity<KakaoReview> responseEntity = 
+
+			ResponseEntity<KakaoReview> responseEntity =
 					restTemplate.exchange(uri, HttpMethod.GET, null, KakaoReview.class);
 			kakaReview = responseEntity.getBody();
 		}
 		return kakaReview;
-		
+
 	}
-	
+
 	@GetMapping("/info/search")
 	public List<AttractionDTO> search(@RequestParam Map map){
 
 		List<AttractionDTO> lists =service.searchTwoPlace(map);
-		
+
 		return lists;
 	}
 	@GetMapping("/info/recentplace")
@@ -500,7 +494,7 @@ public class MainController {
 		if(map.get("distance")==null) map.put("distance", 3);
 
 		List<AttractionDTO> lists = service.getRecentPlaceAll(map);
-		
+
 		return lists;
 	}
 	@GetMapping("/info/recentdiner")
@@ -511,12 +505,12 @@ public class MainController {
 		HttpHeaders header = new HttpHeaders();
 		header.add("Authorization", "KakaoAK "+kakaokey);
 		HttpEntity httpEntity = new HttpEntity(header);
-		
+
 		String uri="https://dapi.kakao.com/v2/local/search/category.json?y="+map.get("placey")
 		+"&x="+map.get("placex")
 		+"&radius="+radius+"&category_group_code=FD6&page="+1+"&sort=distance";
 
-		ResponseEntity<KakaoKey> responseEntity = 
+		ResponseEntity<KakaoKey> responseEntity =
 				restTemplate.exchange(uri, HttpMethod.GET, httpEntity, KakaoKey.class);
 		List<Document> listDocument =  responseEntity.getBody().getDocuments();
 		while(true) {
@@ -527,13 +521,13 @@ public class MainController {
 				+"&x="+map.get("placex")
 				+"&radius="+radius+"&category_group_code=FD6&page="+page+"&sort=distance";
 
-				 responseEntity = 
+				 responseEntity =
 						restTemplate.exchange(uri, HttpMethod.GET, httpEntity, KakaoKey.class);
 				 listDocument =  responseEntity.getBody().getDocuments();
 				 if(listDocument.size()<10)continue;
 			}
 			for(Document document:listDocument) {
-				
+
 				AttractionDTO dto = new AttractionDTO();
 				dto.setAddr(document.getRoadAddressName());
 				dto.setContenttypeid(39);
@@ -543,7 +537,7 @@ public class MainController {
 				dto.setMenu(document.getCategoryName());
 				dto.setMapx(Double.parseDouble(document.getX()));
 				dto.setMapy(Double.parseDouble(document.getY()));
-				
+
 				list.add(dto);
 
 				if(!responseEntity.getBody().getMeta().getIsEnd()&&list.size()==15*page) {
@@ -553,31 +547,31 @@ public class MainController {
 					+"&x="+map.get("placex")
 					+"&radius="+radius+"&category_group_code=FD6&page="+page+"&sort=distance";
 
-					 responseEntity = 
+					 responseEntity =
 							restTemplate.exchange(uri, HttpMethod.GET, httpEntity, KakaoKey.class);
 					 listDocument =  responseEntity.getBody().getDocuments();
 				}
-				
+
 			}
 			if(responseEntity.getBody().getMeta().getIsEnd() ||list.size()>50) break;
 		}
-		
-		
+
+
 		return list;
 	}
 	@GetMapping("/main/mainelement")
 	public Map<String,Map<String,List>> mainElement(){
-		
+
 		Map<String,Map<String,List>> map = new HashMap<>();
 		Map<String,List> mapElement = new HashMap<>();
 		List<AttractionDTO> list = service.selectMainPlaceList();
 		mapElement.put("places", list);
 		map.put("placesInfo", mapElement );
-		
+
 		return map;
-		
+
 	}
 
-	
+
 
 }
