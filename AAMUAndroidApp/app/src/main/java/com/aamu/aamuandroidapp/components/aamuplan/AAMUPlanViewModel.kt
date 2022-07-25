@@ -1,9 +1,12 @@
 package com.aamu.aamuandroidapp.components.aamuplan
 
 import android.content.Context
+import android.location.Location
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.compose.runtime.MutableState
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.lifecycle.MutableLiveData
@@ -17,13 +20,13 @@ import com.aamu.aamuandroidapp.data.api.response.AAMUPlaceResponse
 import com.aamu.aamuandroidapp.data.api.response.AAMUPlannerSelectOne
 import com.aamu.aamuandroidapp.data.api.response.Place
 import com.aamu.aamuandroidapp.fragment.main.planner.PlannerFragment
+import com.aamu.aamuandroidapp.util.getLatLng
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationResult
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.plus
-import net.daum.mf.map.api.CalloutBalloonAdapter
-import net.daum.mf.map.api.MapPOIItem
-import net.daum.mf.map.api.MapPoint
-import net.daum.mf.map.api.MapView
+import net.daum.mf.map.api.*
 
 class AAMUPlanViewModelFactory(val context: Context) : ViewModelProvider.Factory{
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -44,7 +47,23 @@ class AAMUPlanViewModel(context : Context) : ViewModel(), MapView.POIItemEventLi
     val place = MutableLiveData<Place>()
 
     init {
-        mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord("103.8198".toDouble(), "1.3521".toDouble()), true)
+        setCurrentMarker()
+    }
+
+    fun setCurrentMarker(){
+        val location : Location = getLatLng()
+        mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(location.latitude, location.longitude),true)
+        mapView.removeAllPOIItems()
+        mapView.removeAllPolylines()
+        val mCustomMarker :MapPOIItem =MapPOIItem()
+        mCustomMarker.itemName = "현재 위치"
+        mCustomMarker.mapPoint = MapPoint.mapPointWithGeoCoord(location.latitude,location.longitude)
+        mCustomMarker.markerType =MapPOIItem.MarkerType.CustomImage
+
+        mCustomMarker.customImageResourceId = R.drawable.map_start_icon
+        mCustomMarker.setCustomImageAutoscale(false)
+
+        mapView.addPOIItem(mCustomMarker);
         mapView.setZoomLevel(5, true)
     }
 
@@ -78,21 +97,6 @@ class AAMUPlanViewModel(context : Context) : ViewModel(), MapView.POIItemEventLi
         }
     }
 
-    fun setMarker(title : String , contentid : Int , mapy : Double , mapx : Double){
-        mapView.removeAllPOIItems()
-        val mCustomMarker :MapPOIItem =MapPOIItem()
-        mCustomMarker.itemName = title
-        mCustomMarker.tag = contentid
-        mCustomMarker.mapPoint = MapPoint.mapPointWithGeoCoord(mapy,mapx)
-        mCustomMarker.showAnimationType = MapPOIItem.ShowAnimationType.SpringFromGround
-        mCustomMarker.markerType = MapPOIItem.MarkerType.RedPin
-
-        mapView.addPOIItem(mCustomMarker)
-        mapView.selectPOIItem(mCustomMarker, false)
-        mapView.currentLocationTrackingMode=MapView.CurrentLocationTrackingMode.TrackingModeOff
-        mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(mapy,mapx), true)
-    }
-
     fun getPlannerSelectOne(rbn : Int) = viewModelScope.launch {
         aamuRepository.getPlannerSelectOne(rbn)
             .collect {selectOne ->
@@ -117,8 +121,87 @@ class AAMUPlanViewModel(context : Context) : ViewModel(), MapView.POIItemEventLi
             }
     }
 
-    fun getPlanMove(planner: Place){
+    fun setDayMarker(title : String){
+        mapView.removeAllPOIItems()
+        mapView.removeAllPolylines()
+        val mCustomMarker : MapPOIItem = MapPOIItem()
+        val mapPoint : MutableList<MapPoint> = emptyList<MapPoint>().toMutableList()
+        for(place in plannerSelectOne.value?.routeMap?.get(title)!!){
+            mCustomMarker.itemName = place?.dto?.title
+            mCustomMarker.mapPoint = MapPoint.mapPointWithGeoCoord(place?.dto?.mapy!!,place?.dto?.mapx!!)
+            mapPoint.add(mCustomMarker.mapPoint)
+            mCustomMarker.showAnimationType = MapPOIItem.ShowAnimationType.SpringFromGround
 
+            mCustomMarker.markerType =MapPOIItem.MarkerType.CustomImage
+            mCustomMarker.customImageResourceId = R.drawable.map_end_icon
+            mCustomMarker.setCustomImageAutoscale(false)
+
+            mapView.addPOIItem(mCustomMarker)
+        }
+        val polyLine : MapPolyline = MapPolyline()
+        polyLine.addPoints(mapPoint.toTypedArray())
+        polyLine.lineColor = Color(0xAAf44336).hashCode()
+        mapView.addPolyline(polyLine)
+
+        mapView.fitMapViewAreaToShowMapPoints(mapPoint.toTypedArray())
+        mapView.zoomOut(true)
+    }
+
+
+    fun setMarker(title : String , contentid : Int , mapy : Double , mapx : Double){
+        mapView.removeAllPOIItems()
+        mapView.removeAllPolylines()
+        mapView.setZoomLevel(5, true)
+        val mCustomMarker :MapPOIItem =MapPOIItem()
+        mCustomMarker.itemName = title
+        mCustomMarker.tag = contentid
+        mCustomMarker.mapPoint = MapPoint.mapPointWithGeoCoord(mapy,mapx)
+        mCustomMarker.showAnimationType = MapPOIItem.ShowAnimationType.SpringFromGround
+
+        mCustomMarker.markerType =MapPOIItem.MarkerType.CustomImage
+        mCustomMarker.customImageResourceId = R.drawable.map_end_icon
+        mCustomMarker.setCustomImageAutoscale(false)
+
+        mapView.addPOIItem(mCustomMarker)
+        mapView.selectPOIItem(mCustomMarker, false)
+        mapView.currentLocationTrackingMode=MapView.CurrentLocationTrackingMode.TrackingModeOff
+        mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(mapy,mapx), true)
+    }
+
+
+    fun getPlanMove(planner: Place){
+        mapView.removeAllPOIItems()
+        mapView.removeAllPolylines()
+        val location : Location = getLatLng()
+
+        val mapPoint : Array<MapPoint> = arrayOf(MapPoint.mapPointWithGeoCoord(location.latitude,location.longitude)
+                ,MapPoint.mapPointWithGeoCoord(planner.dto?.mapy!!,planner.dto?.mapx!!))
+
+        val mCustomMarker :MapPOIItem =MapPOIItem()
+
+        mCustomMarker.itemName = "현재 위치"
+        mCustomMarker.mapPoint = MapPoint.mapPointWithGeoCoord(location.latitude,location.longitude)
+        mCustomMarker.markerType =MapPOIItem.MarkerType.CustomImage
+
+        mCustomMarker.customImageResourceId = R.drawable.map_start_icon
+        mCustomMarker.setCustomImageAutoscale(false)
+
+        mapView.addPOIItem(mCustomMarker);
+
+        mCustomMarker.mapPoint = MapPoint.mapPointWithGeoCoord(planner.dto?.mapy!!,planner.dto?.mapx!!)
+        mCustomMarker.itemName = planner.dto?.title
+        mCustomMarker.markerType =MapPOIItem.MarkerType.CustomImage
+
+        mCustomMarker.customImageResourceId = R.drawable.map_end_icon
+        mCustomMarker.setCustomImageAutoscale(false)
+
+        mapView.addPOIItem(mCustomMarker);
+        val polyLine : MapPolyline = MapPolyline()
+        polyLine.addPoints(mapPoint)
+        polyLine.lineColor = Color(0xAAf44336).hashCode()
+        mapView.addPolyline(polyLine)
+        mapView.fitMapViewAreaToShowMapPoints(mapPoint)
+        mapView.zoomOut(true)
         place.value = planner
     }
 

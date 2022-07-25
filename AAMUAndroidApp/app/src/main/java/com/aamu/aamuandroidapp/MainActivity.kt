@@ -11,6 +11,7 @@ import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import com.aamu.aamuandroidapp.databinding.ActivityMainBinding
 import com.aamu.aamuandroidapp.util.setContextapp
+import com.kakao.sdk.common.KakaoSdk
 import java.security.MessageDigest
 
 
@@ -47,6 +48,7 @@ class MainActivity : AppCompatActivity() {
             Log.d("hashcode", "에러::" + e.toString())
 
         }
+        KakaoSdk.init(this, "c55ed90259ce1795a67bdc259d5642f1")
     }
 
 
