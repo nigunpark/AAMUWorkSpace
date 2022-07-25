@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -16,14 +15,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
-
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import com.aamu.aamurest.user.service.CommuCommentDTO;
@@ -36,14 +31,14 @@ import com.aamu.aamurest.util.FileUploadUtil;
 public class CommuController {
 	@Autowired
 	private RestTemplate restTemplate;
-	
+
 	@Autowired
 	private CommuServiceImpl commuService;
-	
+
 	@Autowired
 	private CommonsMultipartResolver multipartResolver;
-	
-	
+
+
 
 	//글 목록용
 	@GetMapping("/gram/selectList")
@@ -63,10 +58,10 @@ public class CommuController {
 			//글쓴이-프로필 사진 가져와서 dto에 셋팅
 			dto.setUserprofile(FileUploadUtil.requestOneFile(commuService.commuSelectUserProf(dto.getId()), "/resources/commuUpload", req));
 		}/////for
-		
+
 		return list;
 	}////////////////commuSelectList
-	
+
 
 
 	//글 생성용: 리스트 ver
@@ -75,12 +70,12 @@ public class CommuController {
 	public List<CommuDTO> commuInsert(@RequestParam List<MultipartFile> multifiles, @RequestParam Map map, HttpServletRequest req) {
 		//서버의 물리적 경로 얻기
 		String path=req.getSession().getServletContext().getRealPath("/resources/commuUpload");
-		
+
 		try {
 			List<String> uploads= FileUploadUtil.fileProcess(multifiles, path);
 			map.put("photolist", uploads);
 		} catch (IllegalStateException | IOException e) {e.printStackTrace();}
-		
+
 		int affected=commuService.commuInsert(map);
 		List<CommuDTO> list = commuService.commuSelectList(map);
 		for(CommuDTO dto : list) {//글 목록들 list에서 하나씩 꺼내서 dto에 담는다
@@ -92,19 +87,19 @@ public class CommuController {
 		return list;
 	}////////////////////////////
 	*/
-	
+
 	//글 생성용: true false
 	@PostMapping(value="/gram/edit")
 	public Map commuInsert(@RequestParam List<MultipartFile> multifiles, @RequestParam Map map, HttpServletRequest req) {
 		//서버의 물리적 경로 얻기
 		String path=req.getSession().getServletContext().getRealPath("/resources/commuUpload");
 		Map resultMap = new HashMap();
-		
+
 		try {
 			List<String> uploads= FileUploadUtil.fileProcess(multifiles, path);
 			map.put("photolist", uploads);
 		} catch (IllegalStateException | IOException e) {e.printStackTrace();}
-		
+
 		int affected=commuService.commuInsert(map);
 		List<CommuDTO> list = commuService.commuSelectList(map);
 		for(CommuDTO dto : list) {//글 목록들 list에서 하나씩 꺼내서 dto에 담는다
@@ -116,16 +111,16 @@ public class CommuController {
 		if(affected==1) resultMap.put("isSuccess", true);
 		else resultMap.put("isSuccess", false);
 		return resultMap;
-		
+
 	}////////////////////////////
-	
+
 	//글 생성용_장소 뿌려주기
 	@GetMapping("/gram/place/selectList")
 	public List<Map> commuPlaceList(@RequestParam Map map) {
 		List<Map> list=commuService.commuPlaceList(map);
 		return list;
 	}
-	
+
 	//글 하나 뿌려주는 용
 	@GetMapping("/gram/SelectOne/{lno}")
 	public CommuDTO commuSelectOne(@PathVariable String lno, HttpServletRequest req) {
@@ -143,37 +138,37 @@ public class CommuController {
 			commentDto.setUserprofile(FileUploadUtil.requestOneFile(commuService.commuSelectUserProf(commentDto.getId()), "/resources/commuUpload", req));
 		}
 		dto.setCommuCommentList(commentList);
-		
+
 		return dto;
 	}
-	
+
 	//글 수정용: List ver
 	/*
 	@PutMapping("/gram/edit")
-	public List<CommuDTO> commuUpdate(@RequestBody Map map, HttpServletRequest req) { 
+	public List<CommuDTO> commuUpdate(@RequestBody Map map, HttpServletRequest req) {
 		int affected=commuService.commuUpdate(map);
-		
-		//글 목록 뿌려주기 
+
+		//글 목록 뿌려주기
 		List<CommuDTO> lists=commuSelectList(map, req);
-		
+
 		if(affected==1) return lists;
 		else return null;
 	}
 	*/
-	
+
 	//글 수정용: Map ver
 	@PutMapping("/gram/edit")
-	public Map commuUpdate(@RequestBody Map map, HttpServletRequest req) { 
+	public Map commuUpdate(@RequestBody Map map, HttpServletRequest req) {
 		int affected=commuService.commuUpdate(map);
 		Map resultMap = new HashMap<> ();
-		//글 목록 뿌려주기 
+		//글 목록 뿌려주기
 		List<CommuDTO> lists=commuSelectList(map, req);
-		
+
 		if(affected==1) resultMap.put("isSuccess", true);
-		else resultMap.put("isSuccess", false); 
+		else resultMap.put("isSuccess", false);
 		return resultMap;
 	}
-	
+
 	//글 삭제용
 	@DeleteMapping("/gram/edit/{lno}")
 	public Map commuDelete(@PathVariable String lno) {
@@ -183,7 +178,7 @@ public class CommuController {
 		else map.put("isSuccess", false);
 		return map;
 	}
-	
+
 	//댓글 생성용 -
 	@PostMapping("/gram/comment/edit")
 	public List<CommuDTO> commuCommentInsert(@RequestBody Map map, HttpServletRequest req) {
@@ -200,7 +195,7 @@ public class CommuController {
 		}/////for
 		return list;
 	}
-	
+
 	//댓글 수정용
 	@PutMapping("/gram/comment/edit")
 	public Map commuCommentUpdate(@RequestBody Map map) {
@@ -213,7 +208,7 @@ public class CommuController {
 			resultMap.put("result", "UpdateCommentNotSuccess");
 		return resultMap;
 	}
-	
+
 	//댓글 삭제용
 	@DeleteMapping("/gram/comment/edit")
 	public Map commuCommentDelete(@RequestParam Map map) {
@@ -225,7 +220,7 @@ public class CommuController {
 		else resultMap.put("result", "DeleteCommentNotSuccess");
 		return resultMap;
 	}
-	
+
 	//글 좋아요 누르기 전체리스트
 	/*
 	@GetMapping("/gram/like")
@@ -256,7 +251,7 @@ public class CommuController {
 		//community테이블의 selectone likecount
 		int likecount=commuService.commuLikecountSelect(map);
 		Map resultMap = new HashMap();
-		if(affected==true) {
+		if(affected) {
 			resultMap.put("isLike", true);
 			resultMap.put("likecount", likecount);
 			resultMap.put("lno", map.get("lno"));
@@ -268,6 +263,6 @@ public class CommuController {
 		}
 		return resultMap;
 	}
-	
+
 
 }

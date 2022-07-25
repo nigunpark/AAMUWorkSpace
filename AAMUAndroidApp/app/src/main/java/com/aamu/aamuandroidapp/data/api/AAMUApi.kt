@@ -32,11 +32,16 @@ interface AAMUApi {
     @GET("info/recentdiner")
     suspend fun getRecentDiner(@Query("placey") placey : Double,@Query("placex") placex : Double) : Response<List<AAMUPlaceResponse>>
 
+    @GET("planner/selectList")
+    suspend fun getPlannerSelectList() : Response<List<AAMUPlannerSelectOne>>
+
     @GET("planner/selectonemap")
     suspend fun getPlannerSelectOne(@Query("rbn") rbn : Int) : Response<AAMUPlannerSelectOne>
 
+
+
     companion object {
-        private const val BASE_URL = "http://192.168.45.107:8080/aamurest/"
+        private const val BASE_URL = "http://192.168.0.19:8080/aamurest/"
 
         operator fun invoke():AAMUApi{
             val requestInterceptor  = Interceptor{ chain ->

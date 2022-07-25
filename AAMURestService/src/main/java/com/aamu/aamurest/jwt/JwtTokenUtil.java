@@ -12,7 +12,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
 public class JwtTokenUtil {
-	
+
 	private static final String secret = "jwtpassword";
 
     public static final long JWT_TOKEN_VALIDITY = 5 * 60 * 60;

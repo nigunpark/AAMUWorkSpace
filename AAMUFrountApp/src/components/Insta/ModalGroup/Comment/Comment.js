@@ -274,9 +274,9 @@ function Comment({val,forReRender, setForReRender}) {
 const Contents = styled.div`
     position: absolute;
     width: 75%;
-    height: 780px;
+    height: 750px;
     left: 50%;
-    top: 50%;
+    top: 54%;
     background :white;
     transform: translate(-50%,-50%);
     display:flex;

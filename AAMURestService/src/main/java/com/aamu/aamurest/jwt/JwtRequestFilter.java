@@ -21,7 +21,7 @@ import io.jsonwebtoken.ExpiredJwtException;
 
 
 public class JwtRequestFilter extends OncePerRequestFilter {
-	
+
 	@Autowired
     private JwtUserDetailsService jwtUserDetailService;
 
@@ -29,18 +29,18 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     private JwtTokenUtil jwtTokenUtil;
 
     private static final List<String> EXCLUDE_URL = Collections.unmodifiableList(Arrays.asList("/authenticate","/users/checkid","/users/edit","/resources","/main/mainelement"));
-	
+
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
-		String requestTokenHeader = request.getHeader("Authorization"); // Post ��İ� Put����� Authorization�� �ش��� ���� 
+		String requestTokenHeader = request.getHeader("Authorization"); // Post ��İ� Put����� Authorization�� �ش��� ����
 		String username = null;
 		String jwtToken = null;
 		if(requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")) {
 			jwtToken = requestTokenHeader.substring(7);
 			try {
 				username = jwtTokenUtil.getUsernameFromToken(jwtToken);
-				
+
 			}
 			catch (IllegalArgumentException e) {
 				System.out.println("Unable to get JWT Token");
@@ -52,7 +52,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 		else {
 			System.out.println("JWT Token does not begin with Bearer String");
 		}
-		
+
 		if(username != null && SecurityContextHolder.getContext().getAuthentication()==null) {
 			UserDetails userDetails = this.jwtUserDetailService.loadUserByUsername(username);
 			if(jwtTokenUtil.validateToken(jwtToken, userDetails)) {
@@ -69,7 +69,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 	protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
 		return EXCLUDE_URL.stream().anyMatch(exclude ->request.getServletPath().startsWith(exclude));
 	}
-	
-	
+
+
 
 }

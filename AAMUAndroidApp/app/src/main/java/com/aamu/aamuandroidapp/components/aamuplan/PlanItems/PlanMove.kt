@@ -1,5 +1,8 @@
 package com.aamu.aamuandroidapp.components.aamuplan.PlanItems
 
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -25,15 +28,21 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat.startActivity
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.aamu.aamuandroidapp.R
 import com.aamu.aamuandroidapp.components.aamuplan.AAMUPlanViewModel
 import com.aamu.aamuandroidapp.ui.theme.components.Material3Card
 import com.aamu.aamuandroidapp.ui.theme.cyan700
+import com.kakao.sdk.navi.Constants
+import com.kakao.sdk.navi.NaviClient
+import com.kakao.sdk.navi.model.CoordType
+import com.kakao.sdk.navi.model.Location
+import com.kakao.sdk.navi.model.NaviOption
 
 @Composable
-fun PlanMove(mapviewModel : AAMUPlanViewModel){
+fun PlanMove(context : Context, mapviewModel : AAMUPlanViewModel){
     val place by mapviewModel.place.observeAsState()
     Material3Card(
         modifier = Modifier
@@ -68,7 +77,23 @@ fun PlanMove(mapviewModel : AAMUPlanViewModel){
                 Text(text = "설정한 이동시간 : "+place?.mtime.toString(), fontSize = 10.sp)
             }
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                IconButton(onClick = { },modifier = Modifier.size(50.dp)) {
+                IconButton(onClick = {// 카카오내비 앱으로 길 안내
+                    if (NaviClient.instance.isKakaoNaviInstalled(context)) {
+                        // 카카오내비 앱으로 길 안내 - WGS84
+                        startActivity(context,
+                            NaviClient.instance.shareDestinationIntent(
+                                Location(place?.dto?.title!!, place?.dto?.mapx.toString(), place?.dto?.mapy.toString()),
+                                NaviOption(coordType = CoordType.WGS84)
+                            ),null)
+                    } else {
+                        // 카카오내비 설치 페이지로 이동
+                        startActivity(context,
+                            Intent(
+                                Intent.ACTION_VIEW,
+                                Uri.parse(Constants.WEB_NAVI_INSTALL)
+                            ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                        ,null)
+                    }},modifier = Modifier.size(50.dp)) {
                     Icon(
                         painter = painterResource(R.drawable.navigation_pin_icon),
                         contentDescription = "안내시작 버튼",
@@ -90,6 +115,6 @@ fun PreviewPlanMove() {
     Box(modifier = Modifier
         .fillMaxWidth()
         .height(120.dp)) {
-        PlanMove(AAMUPlanViewModel(LocalContext.current))
+//        PlanMove(AAMUPlanViewModel())
     }
 }

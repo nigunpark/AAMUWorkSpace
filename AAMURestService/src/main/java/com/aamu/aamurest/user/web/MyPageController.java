@@ -12,7 +12,7 @@ import com.aamu.aamurest.user.serviceimpl.MyPageImpl;
 public class MyPageController {
 	@Autowired
 	private RestTemplate restTemplate;
-	
+
 	@Autowired
 	private MyPageImpl myPageService;
 

@@ -1,5 +1,6 @@
 package com.aamu.aamuandroidapp.components.aamuplan.PlanDetails
 
+import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -36,6 +37,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun PlanDetails(
+    context : Context,
     mapviewModel : AAMUPlanViewModel,
     modifierBottom : Modifier,
     scaffoldState : BottomSheetScaffoldState,
@@ -53,7 +55,7 @@ fun PlanDetails(
             .padding(bottom = 50.dp, start = 30.dp, end = 30.dp)
             .fillMaxWidth()
             .height(120.dp)){
-            PlanMove(mapviewModel)
+            PlanMove(context,mapviewModel)
         }
     }
     Surface(elevation = 1.dp) {
@@ -128,6 +130,9 @@ fun PlanListScroll(
                 planners[mapMakerIndex].dto?.mapy!!,
                 planners[mapMakerIndex].dto?.mapx!!
             )
+        }
+        else{
+            mapviewModel.setDayMarker(planners[mapMakerIndex].dto?.title!!)
         }
     }
 

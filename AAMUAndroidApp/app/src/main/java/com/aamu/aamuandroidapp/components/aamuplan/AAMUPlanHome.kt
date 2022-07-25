@@ -21,6 +21,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.aamu.aamuandroidapp.components.aamuplan.PlanDetails.PlanBottomViewPager
 import com.aamu.aamuandroidapp.components.aamuplan.PlanDetails.PlanDetails
 import com.aamu.aamuandroidapp.components.aamuplan.PlanDetails.SideContent
 import com.aamu.aamuandroidapp.components.aamuplan.PlanItems.PlanMove
@@ -50,7 +51,7 @@ fun AAMUPlanHome(){
             content = {
                 Box(contentAlignment = Alignment.Center) {
                     Box(modifier = Modifier.fillMaxSize()) {
-                        KakaoMap(mapView = mapviewModel.mapView, PlanListener())
+                        KakaoMap(mapviewModel = mapviewModel, PlanListener())
                     }
                     if(!topbarhide.value) {
                     ActionButton(mapviewModel,
@@ -64,7 +65,7 @@ fun AAMUPlanHome(){
                 }
             },
             sheetContent = {
-                PlanBottomSheet()
+                PlanBottomSheet(mapviewModel)
             },
             drawerBackgroundColor = orange700,
             drawerGesturesEnabled = bottomSheetScaffoldState.drawerState.isOpen,
@@ -77,7 +78,7 @@ fun AAMUPlanHome(){
         )
         if(topbarhide.value) {
             val modifierBottom = Modifier.align(Alignment.BottomCenter)
-            PlanDetails(mapviewModel,modifierBottom,bottomSheetScaffoldState,topbarhide,startMove,coroutineScope)
+            PlanDetails(context,mapviewModel,modifierBottom,bottomSheetScaffoldState,topbarhide,startMove,coroutineScope)
         }
     }
 
@@ -88,18 +89,18 @@ fun AAMUPlanHome(){
 
 @Composable
 fun KakaoMap(
-    mapView: MapView,
+    mapviewModel: AAMUPlanViewModel,
     eventListener: PlanListener
 ) {
-    AndroidView({ mapView })
+    AndroidView({ mapviewModel.mapView })
     {mapView->
         mapView.setCurrentLocationEventListener(eventListener)
-        mapView.currentLocationTrackingMode=MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeading
+        mapviewModel.setCurrentMarker()
     }
 }
 
 @Composable
-fun PlanBottomSheet(){
+fun PlanBottomSheet(mapviewModel: AAMUPlanViewModel){
     Box(
         modifier = Modifier
             .wrapContentHeight()
@@ -119,7 +120,9 @@ fun PlanBottomSheet(){
         Box(
             Modifier
                 .padding(top = 25.dp)
-                .height(300.dp)) {
+                .fillMaxHeight(0.4f))
+        {
+            PlanBottomViewPager()
         }
     }
 }
@@ -136,7 +139,7 @@ fun ActionButton(
     Box(modifier = modifier) {
         FloatingActionButton(
             onClick = {
-                mapviewModel.getPlannerSelectOne(32)
+                mapviewModel.getPlannerSelectOne(42)
                 topbarhide.value = true
                 coroutineScope.launch { bottomSheetScaffoldState.drawerState.open() }
             },

@@ -1,12 +1,18 @@
 package com.aamu.aamuandroidapp.util
 
+import android.Manifest
 import android.app.Activity
 import android.content.Context
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
+import android.location.Location
+import android.location.LocationManager
 import android.os.Build
 import android.view.View
 import android.view.WindowManager
 import androidx.compose.ui.platform.LocalContext
+import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
@@ -47,6 +53,28 @@ fun getToken() : String?{
     val token : String? = preferences.getString("token",null)
     return token
 }
+
+fun getLatLng(): Location {
+    var currentLatLng: Location? = null
+    var hasFineLocationPermission = ContextCompat.checkSelfPermission(
+        contextL,
+        Manifest.permission.ACCESS_FINE_LOCATION
+    )
+    var hasCoarseLocationPermission = ContextCompat.checkSelfPermission(
+        contextL,
+        Manifest.permission.ACCESS_COARSE_LOCATION
+    )
+    val locatioNProvider = LocationManager.GPS_PROVIDER
+    val locatioNManager = contextL.getSystemService(Context.LOCATION_SERVICE) as LocationManager?
+    if (hasFineLocationPermission == PackageManager.PERMISSION_GRANTED &&
+        hasCoarseLocationPermission == PackageManager.PERMISSION_GRANTED
+    ) {
+        currentLatLng = locatioNManager?.getLastKnownLocation(locatioNProvider)
+    }
+
+    return currentLatLng!!
+}
+
 
 
 

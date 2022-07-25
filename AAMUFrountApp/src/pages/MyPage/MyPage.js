@@ -506,24 +506,23 @@ function TabContent({clickTab, setClickTab, planList}) {
 function uploadFile(showImages){//이미지 업로드
   let formData = new FormData(); // formData 객체를 생성한다.
   for (let i = 0; i < showImages.length; i++) { 
-    formData.append("writeImg", showImages[i]); // 반복문을 활용하여 파일들을 formData 객체에 추가한다
+    formData.append("photo", showImages[i]); // 반복문을 활용하여 파일들을 formData 객체에 추가한다
   }
   return formData;
 };
 function bordWrite(write, title, content, tag, writeTag, setWriteTag){
 
-  setWriteTag(tag.split('#'));
-  writeTag.splice(0,1);
+  // setWriteTag(tag.split('#'));
+  // writeTag.splice(0,1);
   // console.log('writeTag :', writeTag);
 
   write.append('id', sessionStorage.getItem('username'));
   write.append('title', title);
   write.append('content', content);
-  write.append('writeTag', writeTag);
-  //키값은 백이랑 얘기해서 조정해야함
+  // write.append('writeTag', writeTag);
 
   let token = sessionStorage.getItem("token");
-  axios.post('',write, {
+  axios.post('/aamurest/bbs/edit',write, {
       headers: {
               Authorization: `Bearer ${token}`,
               'Content-Type': 'multipart/form-data',

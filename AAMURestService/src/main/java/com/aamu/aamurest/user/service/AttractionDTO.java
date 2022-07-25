@@ -2,7 +2,6 @@ package com.aamu.aamurest.user.service;
 
 import java.util.List;
 
-
 import com.aamu.aamurest.user.service.api.KakaoReview.CommentInfo;
 
 import lombok.Getter;

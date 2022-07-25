@@ -17,7 +17,7 @@ public class UsersServiceImpl implements UsersService{
 	private TransactionTemplate transactionTemplate;
 	@Override
 	public int joinUser(Map map) {
-		int affected = 0; 
+		int affected = 0;
 		affected = transactionTemplate.execute(tx->{
 			dao.joinUser(map);
 			return dao.insertAuth(map);
@@ -39,10 +39,10 @@ public class UsersServiceImpl implements UsersService{
 
 	@Override
 	public int checkId(String id) {
-	
+
 		return dao.checkId(id);
 	}
-	
-	
+
+
 
 }
