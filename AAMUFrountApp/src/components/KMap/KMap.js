@@ -250,17 +250,14 @@ const KMap = ({
   useEffect(() => {
     if (kMap === null) return;
 
-    kakao.maps.event.addListener(kMap, "zoom_changed", function () {
-      if (kMap.getLevel() <= 6) {
-        let center = kMap.getCenter();
-        // let level = kMap.getLevel();
-        // // setMapLevel(level);
-        // let newCoords = new kakao.maps.LatLng(center.getLat(), center.getLng());
-        zoomAxios(center.getLat(), center.getLng());
-      }
+    kakao.maps.event.addListener(kMap, "rightclick", function (mouseEvent) {
+      let center = kMap.getCenter();
+      console.log("우측클릭");
+      zoomAxios(center.getLat(), center.getLng());
     });
-  }, [handleWheel]);
-
+  }, [handleRightClick]);
+  function handleRightClick() {}
+  window.addEventListener("contextMenu", handleRightClick);
   const zoomAxios = (placey, placex) => {
     let token = sessionStorage.getItem("token");
     axios
@@ -289,8 +286,6 @@ const KMap = ({
         console.log(error);
       });
   };
-  function handleWheel() {}
-  window.addEventListener("wheel", handleWheel);
 
   return (
     <div>
@@ -748,6 +743,8 @@ async function toWooJae(currPosition, reduxState, setFromWooJaeData) {
         },
       }
     );
+    console.log("resp.data", resp.data);
+    console.log("resp.data.route", resp.data.route);
     let settedData = await manufacData(resp.data.route, reduxState);
     await setFromWooJaeData(settedData);
   } catch (error) {
