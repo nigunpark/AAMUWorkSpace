@@ -41,7 +41,6 @@ function App() {
           <Route path="/forum" element={<Forum />} />
           {/* <Route path="/review" element={<Board />} /> */}
           <Route path="/Insta" element={<Main />} />
-          <Route path="/Insta" element={<Main />}></Route>
           <Route path="/myPage" element={<MyPage />} />
         </Route>
         <Route path="/login" element={<LoginTest />}></Route>
