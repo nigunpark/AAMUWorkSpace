@@ -71,4 +71,10 @@ public class MainDAO {
 		return template.selectOne("checkPlace", map);
 	}
 
+	public List<AttractionDTO> selectLocation(Map map) {
+
+		return template.selectList("selectLocation", map);
+		
+	}
+
 }

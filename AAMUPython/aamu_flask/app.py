@@ -5,6 +5,7 @@ from flask_restful import Api
 from flask_cors import CORS
 from api.dialog import DialogMessage
 from api.webhook import WebHook
+from api.saveplaces import SavePlaces
 app =Flask(__name__)
 app.config['JSON_AS_ASCII']=False
 
@@ -14,5 +15,6 @@ CORS(app)
 api=Api(app)
 api.add_resource(DialogMessage,'/message')
 api.add_resource(WebHook,'/webhook')
+api.add_resource(SavePlaces,'/saveplaces')
 if __name__ == '__main__':
     app.run(debug=True)
