@@ -68,5 +68,10 @@
 		where ROWNUM &lt;=5
 	</select>
 	
+	<!-- 프로필 사진 -->
+	<select id="commuSelectUserProf" parameterType="String" resultType="String">
+		SELECT userprofile from users where id=#{id}
+	</select>
+	
 	
 </mapper>
