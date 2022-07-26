@@ -11,12 +11,6 @@
 		JOIN routeboard rb ON rbbs.rbn = rb.rbn
 		JOIN theme ON rbbs.themeid = rbbs.themeid
 	</select>
-	
-	<!-- 경로 -->
-	<select id="selectRouteList" resultType="RouteDTO">
-		SELECT * FROM route WHERE rbn=#{rbn}
-	</select>
-	
 	<!-- 글 목록용_사진 뿌려주기 -->
 	<select id="bbsSelectPhotoList" parameterType="int" resultType="String">
 		SELECT photo FROM routebbsphoto WHERE rbn=#{rbn}
