@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import "./MyPage.scss";
 import MyHomeBox from "./MyPageBox/MyHomeBox";
 import MyProfileBox from "./MyPageBox/MyProfileBox";
+import MyInstaBox from "./MyPageBox/MyInstaBox";
 import MyMessageBar from "./MyMessageBar/MyMessageBar";
 import styled from "styled-components";
 import { faStar } from "@fortawesome/free-regular-svg-icons";
@@ -552,12 +553,8 @@ function TabContent({clickTab, setClickTab, planList}) {
     </div>
     );
   }
-  else if (clickTab === 11){
-    return(
-      <div>
-        dd
-      </div>
-    )
+  else if (clickTab === 11){ //------------인스타 상세보기-------------
+    return <MyInstaBox/>;
   }
 };
 function uploadFile(showImages){//이미지 업로드
