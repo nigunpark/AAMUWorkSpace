@@ -319,6 +319,9 @@ function TabContent({clickTab, setClickTab, planList}) {
     return content !== "" && title !== "";
   }, [title, content]);
 
+  // const randomNum = ['#fee4cb', '#ffd6ff', '#d6f6dd'].length;
+  // const imgNum = Math.floor(Math.random() * randomNum)+1;
+
   if (clickTab === 0) {// 홈
     return planList.map((val, idx) => {
       return (
