@@ -18,13 +18,13 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "../Upload/UploadSwiper.css";
 
-const Uploader = ({ setsquare, setlist }) => {
+const Uploader = ({ setsquare, setlist, setloading }) => {
   let searchRef = useRef();
   let titleRef = useRef();
   let textareaRef = useRef();
   let navigate = useNavigate();
   const [hide, setHide] = useState(false);
-  const [showNext, setshowNext] = useState(false);
+  const [upload, setupload] = useState(false)
   const [search, setSearch] = useState([]);
   const [showSearch, setshowSearch] = useState(false);
   const [showWrite, setShowWrite] = useState([]);
@@ -193,9 +193,9 @@ const Uploader = ({ setsquare, setlist }) => {
                       onClick={()=>{
                         let temp= uploadFile(myImagefile)
                         console.log('temp',temp);
-                        gramEdit(temp,setlist,titleRef,textareaRef,searchRef,search)
+                        gramEdit(temp,setloading,setlist,setupload,titleRef,textareaRef,searchRef,search)
                         setsquare(false)
-                        feedList(setlist)
+                        setloading(true)
                       }}>
                        <FontAwesomeIcon icon={faPaperPlane}  size="2x" />
                 </Nextbtn>
@@ -314,7 +314,6 @@ const Uploader = ({ setsquare, setlist }) => {
                             ref={searchRef}/>
                             {hasText ? 
                             <SearchModal search={search} 
-                            inputValue={inputValue}
                             setHasText={setHasText}
                             setinputValue={setinputValue}/>
                                             : null}
@@ -324,97 +323,13 @@ const Uploader = ({ setsquare, setlist }) => {
                   </div>
                   {/* // :null} */}
                   </Body>
-                  {/* {show?<SearchModal search={search}/>:null} */}
-        {/* </Contents>
-        {/* {showNext ?  */}
-        {/* <div className="side">
-          <div className="title-profile">
-            <img
-              src="'/img/bk.jpg ' ?? '/images/user.jpg'"
-              alt="프사"
-              onError={(e) => {
-                e.target.src = "/images/user.jpg";
-              }}
-            />
-            <span>{sessionStorage.getItem("username")}</span>
-          </div>
-          <div>
-            <span style={{ fontWeight: "bold", marginLeft: "10px" }}>
-              제목 :{" "}
-            </span>
-            <input ref={titleRef} type="text" placeholder="제목을 입력하세요" />
-          </div>
-          <div>
-            <textarea
-              ref={textareaRef}
-              className="form-control"
-              id="textArea_byteLimit"
-              name="textArea_byteLimit"
-              onKeyUp={(e) => fn_checkByte(e)}
-              rows="8"
-              placeholder="문구입력..."
-              style={{
-                border: "none",
-                resize: "none",
-                fontSize: "16px",
-                fontFamily: "normal",
-                outline: "none",
-                paddingTop: "5px",
-                marginLeft: "10px",
-                width: "90%",
-                position: "relative",
-              }}
-            ></textarea>
-          </div>
-          <div
-            style={{
-              borderBottom: "0.1px solid #c0c0c0",
-              width: "97%",
-              height: "27px",
-            }}
-          >
-            <sup
-              style={{ float: "right", paddingRight: "15px", color: "#c0c0c0" }}
-            >
-              (<span id="nowByte">0</span>/1000bytes)
-            </sup>
-          </div>
-          <div
-            className="uploadLocation"
-            onClick={() => {
-              setshowSearch(!showSearch);
-            }}
-          >
-            <input
-              onKeyUp={(e) => searchWord(e, setSearch)}
-              value={inputValue}
-              onChange={(e) => {
-                setinputValue(e.target.value);
-                setHasText(true);
-              }}
-              placeholder="위치 추가"
-              type="text"
-              ref={searchRef}
-            />
-            {hasText ? (
-              <SearchModal
-                search={search}
-                inputValue={inputValue}
-                setHasText={setHasText}
-                setinputValue={setinputValue}
-              />
-            ) : null}
-            <i className="fa-solid fa-location-dot"></i>
-          </div>
-        </div>
-        {/* // :null} */}
-      {/* </Body> */}
-      {/* {show?<SearchModal search={search}/>:null} */}
+                 
     </Contents>
   );
 }; 
 
-function feedList(setlist) {
+function feedList(setlist,setloading) {
+  
   //업로드 버튼 누르고 화면 새로고침
   let token = sessionStorage.getItem("token");
   axios
@@ -424,7 +339,9 @@ function feedList(setlist) {
       },
     })
     .then((resp) => {
+      console.log(resp.data);
       setlist(resp.data);
+      setloading(false);
     })
     .catch((error) => {
       console.log(error);
@@ -440,7 +357,7 @@ function uploadFile(myImagefile) {
   return formData;
 }
 
-function gramEdit(temp, setlist, titleRef, textareaRef, searchRef, search) {
+function gramEdit(temp,setloading,setlist, setupload, titleRef, textareaRef, searchRef, search) {
   //새 게시물 업로드를 위한 axios
   let searched = search.find((val, i) => {
     return val.TITLE === searchRef.current.value;
@@ -472,8 +389,8 @@ function gramEdit(temp, setlist, titleRef, textareaRef, searchRef, search) {
       )
   .then((resp) => {
     console.log(resp.data);
-    setlist(resp.data);
-    
+    setupload(resp.data);
+    feedList(setlist,setloading);
     })
     .catch((error) => {
       console.log(error);
