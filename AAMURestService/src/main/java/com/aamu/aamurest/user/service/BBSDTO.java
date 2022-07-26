@@ -18,7 +18,7 @@ public class BBSDTO {
 	private java.sql.Date postdate;
 	private int themeid;
 	private String themename;
-	private String themeimg; //테마이미지
+	private String themeimg; //테마 이미지
 	private String id; //작성자
 	private List<String> photo;
 	private long starttime; //출발시간

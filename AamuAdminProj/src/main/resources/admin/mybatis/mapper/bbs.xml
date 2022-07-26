@@ -3,5 +3,15 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="admin.mybatis.mapper.bbs">
+	<!-- 전체 게시글 목록 -->
 	
-</mapper>
+	<!-- 게시글 하나 보기 -->
+	
+	<!-- 게시글 삭제 -->
+	
+	<!--                     리뷰                          -->
+	
+	<!-- 전체 리뷰 목록 -->
+	
+	<!-- 리뷰 삭제 -->
+</mapper> 

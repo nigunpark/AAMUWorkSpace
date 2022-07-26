@@ -1,4 +1,4 @@
-package com.aamu.aamurest.user.service;
+package com.aamu.admin.main.service;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,11 +9,11 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ReviewDTO {
+public class ReviewAdminDTO {
 	private int rbn;
-	private String id; //리뷰 작성자
-	private int rate; //평점
+	private String id;
+	private int rate;
 	private String review;
-	private java.sql.Date ratedate; //리뷰 작성날짜
+	private java.sql.Date ratedate; 
 	private String rno;
 }
