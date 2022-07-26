@@ -5,8 +5,12 @@ import SearchModal from "./ModalGroup/Search/Search";
 import WriteModal from "./ModalGroup/Upload/Upload";
 import ButtonGroup from "./ModalGroup/Search/ButtonGroup";
 import { confirmAlert } from "react-confirm-alert";
+import axios from "axios";
+import { Link } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
-function User({ setlist }) {
+function User({ setlist ,setloading}) {
+
   const modalRef = useRef();
   const notimodalRef = useRef();
   const outside = useRef();
@@ -14,6 +18,38 @@ function User({ setlist }) {
   const [follow, setFollowing] = useState(false);
   const [search, setsearch] = useState(false);
   const [square, setsquare] = useState(false);
+
+  const [title, settitle] = useState(false);
+  const [searchb, setSearchb] = useState('');
+  const [searchText, setsearchText] = useState(false);
+  const [inputValue, setinputValue] = useState("");
+
+  const [searchbar,setsearchbar] = useState([]);
+  const [forReRender, setForReRender] = useState(false)
+  let navigater = useNavigate()
+  function searchBar(e,setSearch){//백이랑 인스타 리스드를 뿌려주기 위한 axios
+    
+    let val = e.target.value;
+    if (e.keyCode != 13) return;
+    let token = sessionStorage.getItem("token");
+    axios.get('/aamurest/gram/selectList',{
+      headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          params:{
+            searchColumn : searchb,
+            searchWord :val,
+          }
+    })
+    .then((resp) => {
+      console.log(resp.data)
+      setsearchbar(resp.data);
+      navigater('./searchList')
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
 
   function handleModal(e) {
     e.stopPropagation();
@@ -46,21 +82,36 @@ function User({ setlist }) {
   return (
     <div>
       <div className="userSearch">
-        <ButtonGroup></ButtonGroup>
+        <select name="select" className="select" onChange={(e)=>{ setSearchb(e.target.value);}}>
+            <option defaultValue={'DEFAULT'}>선택</option>
+            <option value="title">제목</option>
+            <option value="id">아이디</option>
+            <option value="tag">태그</option>
+        </select>
         <div
           className="search"
           onClick={() => {
             setsearch(!search);
           }}
         >
-          <input
+          <input 
+            onKeyUp={(e)=>searchBar(e,setsearchbar)}
+            value={inputValue}
+            onChange={(e)=>{
+              setinputValue(e.target.value)
+              setsearchText(true) 
+            }}
+            placeholder="검색" 
             type="text"
             className="search-bar"
-            placeholder="검색"
-            onChange={handleChange}
-            ref={modalRef}
-          />
-          {search ? <SearchModal></SearchModal> : null}
+            ref={modalRef}/>
+            {search ? 
+            <SearchModal searchbar={searchbar} 
+            setsearchText={setsearchText}
+            setinputValue={setinputValue}
+            />
+                            : null}
+          
         </div>
       </div>
       <div className="user">
@@ -114,6 +165,7 @@ function User({ setlist }) {
                 onClick={() => setsquare(false)}
                 setsquare={setsquare}
                 setlist={setlist}
+                setloading={setloading}
               />
             </Container>
           </>
