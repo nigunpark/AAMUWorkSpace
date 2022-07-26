@@ -115,6 +115,42 @@
   }
 }
 
+.chatBotBtn__container {
+  position: fixed;
+  width: 50px;
+  height: 50px;
+  z-index: 105;
+  background-color: var(--orange);
+  padding: 15px;
+  border-radius: 50%;
+  display: flex;
+  bottom: 60px;
+  right: 70px;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  transition: 0.4s;
+}
+
+.chatBotBtn {
+  position: relative;
+}
+.chatBotBtn__icon {
+  position: absolute;
+  font-size: 30px;
+  top: -6px;
+  left: -8.5px;
+  color: white;
+  text-shadow: var(--shadow);
+}
+.chatBotBtn__container:hover {
+  background-color: white;
+  cursor: pointer;
+  transform: scale(1.1);
+}
+
+.chatBotBtn__container:hover .chatBotBtn__icon {
+  color: var(--orange);
+}
+
 /* response navbar - 나중에하자 */
 /* @media screen and (max-width: 960px) {
   .NavbarItems {

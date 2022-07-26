@@ -222,7 +222,7 @@ const DetailModal = ({setIsOpen, dummy}) => {
                         }} //리뷰창 변할때마다 setComment를 통해 comment의 값 변경
                         onKeyUp={(e)=>{
                             e.target.value.length > 0 ? setIsValid(true) : setIsValid(false);
-                            console.log(isValid);
+                            // console.log(isValid);
                         }} //사용자가 리뷰를 작성했을 때 빈공간인지 확인하여 유효성 검사
                         value={comment}
                         />

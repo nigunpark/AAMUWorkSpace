@@ -4,10 +4,14 @@ import "./Navbar.css";
 import { Outlet } from "react-router-dom";
 import styled, { keyframes } from "styled-components";
 import { useSelector } from "react-redux";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faMessage, faRobot } from "@fortawesome/free-solid-svg-icons";
+import ChatBot from "../ChatBot/ChatBot";
 const Navbar = ({ scrollNav, whereUrl }) => {
   const [click, setClick] = useState(false);
   const handleClick = () => setClick(!click);
   const closeMoblieMenu = () => setClick(false);
+  const [showChatBot, setShowChatBot] = useState(false);
   let navigate = useNavigate();
   return (
     <div className="navbar__fragment">
@@ -86,9 +90,26 @@ const Navbar = ({ scrollNav, whereUrl }) => {
         </div>
       </nav>
       <Outlet />
+      {showChatBot && <ChatBot />}
+      <ChatBotBtn setShowChatBot={setShowChatBot} showChatBot={showChatBot} />
     </div>
   );
 };
+
+function ChatBotBtn({ setShowChatBot, showChatBot }) {
+  return (
+    <div
+      className="chatBotBtn__container"
+      onClick={() => {
+        setShowChatBot(!showChatBot);
+      }}
+    >
+      <div className="chatBotBtn">
+        <FontAwesomeIcon icon={faRobot} className="chatBotBtn__icon" />
+      </div>
+    </div>
+  );
+}
 
 function UserBadge() {
   const [showUserModal, setShowUserModal] = useState(false);
@@ -100,7 +121,7 @@ function UserBadge() {
   };
   window.addEventListener("click", handleUserModal);
   let reduxState = useSelector((state) => state);
-  console.log("profileImg", reduxState.profileImg);
+
   return (
     <>
       <Container>

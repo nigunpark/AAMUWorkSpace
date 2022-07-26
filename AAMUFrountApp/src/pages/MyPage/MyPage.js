@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import "./MyPage.scss";
 import MyHomeBox from "./MyPageBox/MyHomeBox";
 import MyProfileBox from "./MyPageBox/MyProfileBox";
+import MyInstaBox from "./MyPageBox/MyInstaBox";
 import MyMessageBar from "./MyMessageBar/MyMessageBar";
 import styled from "styled-components";
 import { faStar } from "@fortawesome/free-regular-svg-icons";
@@ -301,12 +302,14 @@ function TabContent({clickTab, setClickTab, planList}) {
   const [tag, setTag] = useState();
   let [writeTag, setWriteTag] = useState([]);
 
+  const [selectRbn, setSelectRbn] = useState();
+
   // console.log('등록한 이미지:',showImages);
   // console.log('등록한 이미지 1:',showImages[0]);
   // console.log('등록한 이미지 2:',showImages[1]);
   // console.log('입력한 제목:',title);
   // console.log('입력한 내용:',content);
-  console.log('입력한 태그:',tag);
+  // console.log('입력한 태그:',tag);
 
   let myImgs = showImages.map((showImages, imgIndex)=>{
     console.log('인덱스:',imgIndex,' 값:',showImages);
@@ -319,18 +322,48 @@ function TabContent({clickTab, setClickTab, planList}) {
     return content !== "" && title !== "";
   }, [title, content]);
 
+  // const randomNum = ['#fee4cb', '#ffd6ff', '#d6f6dd'].length;
+  // const imgNum = Math.floor(Math.random() * randomNum)+1;
+
+  
+  
+
   if (clickTab === 0) {// 홈
     return planList.map((val, idx) => {
       return (
           <MyHomeBox
             setClickTab={setClickTab}
             planList={val}
+            rbn={val.rbn}
+            setSelectRbn={setSelectRbn}
             />
         );
     });
   }
   else if (clickTab === 1) { //인스타
-    return <div>Tab 2 내용입니다.</div>;
+    let num = [1,2,3,4,5,6,7,8,9];
+    
+    return (
+      <div className="myInstaContainer">
+          <div className="myInstar">
+            {
+              num.map((val, idx)=>{
+                return(
+                  <div
+                    className="instarBox"
+                    onClick={(e)=>{
+                      setClickTab(11);
+                    }}>
+                    <img
+                      className="instaImg"
+                      src={`/images/img-${val}.jpg`}/>
+                  </div>
+                )
+              })
+            }
+          </div>
+      </div>
+      );
   }
   else if (clickTab === 2) { //즐겨찾기
     return (
@@ -396,6 +429,24 @@ function TabContent({clickTab, setClickTab, planList}) {
     //     };
     //   });
     // };
+    console.log('selectRbn 글번호 넘어오나 :', selectRbn);
+
+
+    let token = sessionStorage.getItem("token");
+
+    axios.get('',{
+        params:{
+            // id:sessionStorage.getItem('username'),
+            rbn:selectRbn
+        },
+        headers: {
+            Authorization: `Bearer ${token}`,
+        }
+    }).then((resp)=>{
+        console.log('글작성시 필요한 여행경로 데이터 : ',resp.data);
+    }).catch((error)=>{
+        console.log((error) => console.log("글작성시 필요한 여행경로 데이터 가져오기 실패", error));
+    });
 
     let test = [1,2,3,4];
 
@@ -502,6 +553,9 @@ function TabContent({clickTab, setClickTab, planList}) {
     </div>
     );
   }
+  else if (clickTab === 11){ //------------인스타 상세보기-------------
+    return <MyInstaBox/>;
+  }
 };
 function uploadFile(showImages){//이미지 업로드
   let formData = new FormData(); // formData 객체를 생성한다.
@@ -584,7 +638,7 @@ function TabTopLine({clickTab, planList}) {
     )
   }
   else if (clickTab === 1) {
-    return <div></div>;
+    return null;
   }
   else if (clickTab === 2) {
     return (

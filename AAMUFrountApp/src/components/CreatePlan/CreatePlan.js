@@ -38,6 +38,10 @@ const CreatePlan = ({
   const [forDayLine, setForDayLine] = useState(0);
   const [savePlan, setSavePlan] = useState(false);
   const [auSure, setAuSure] = useState(false);
+  let reduxState = useSelector((state) => {
+    return state;
+  });
+  console.log("reduxState.monthNdate", reduxState.monthNdate);
   return (
     <div>
       <DimmedContainer>
@@ -91,6 +95,7 @@ const SavePlan = ({ setSavePlan, fromWooJaeData, currPosition }) => {
   let reduxState = useSelector((state) => {
     return state;
   });
+  // console.log('reduxState.monthNdate',reduxState.monthNdate)
   let navigate = useNavigate();
   return (
     <DimmedAuSContainer>

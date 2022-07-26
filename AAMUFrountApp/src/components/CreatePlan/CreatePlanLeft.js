@@ -20,6 +20,7 @@ import {
   delAllWholeBb,
 } from "../../redux/store";
 import axios from "axios";
+let count = 0;
 const CreatePlanLeft = ({
   currPosition,
   fromWooJaeData,
@@ -38,7 +39,7 @@ const CreatePlanLeft = ({
   }, []);
   if (fromWooJaeData.length === 0) return;
   if (fromWooJaeData === undefined) return;
-
+  console.log("fromWooJaeData", fromWooJaeData);
   let tempWholeArr = [];
   fromWooJaeData.forEach((val, i) => {
     let temp = Object.values(val)[0];
@@ -50,7 +51,7 @@ const CreatePlanLeft = ({
     val.id = i;
   });
 
-  // console.log("fromWooJaeData", fromWooJaeData);
+  // console.log("reduxState.monthNdate 이거 : ", reduxState.monthNdate);
   return (
     <div className="createPlanLeft">
       <div className="createPlanLeft__days">
@@ -65,6 +66,7 @@ const CreatePlanLeft = ({
             temp.classList.remove("days-container-active");
             e.target.classList.add("days-container-active");
             setForDayLine(0);
+            count++;
           }}
         >
           전체일정
@@ -78,9 +80,13 @@ const CreatePlanLeft = ({
                 onClick={(e) => {
                   setWhichModal(`day${index + 1}`);
                   setTemp(e.target);
-                  temp.classList.remove("days-container-active");
                   e.target.classList.add("days-container-active");
+                  if (temp !== undefined)
+                    temp.classList.remove("days-container-active");
+                  if (count === 0)
+                    dayRef.current.classList.remove("days-container-active");
                   setForDayLine(index + 1);
+                  count++;
                 }}
               >
                 Day{index + 1}
