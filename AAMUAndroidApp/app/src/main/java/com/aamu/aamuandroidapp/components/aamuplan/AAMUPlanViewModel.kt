@@ -49,6 +49,19 @@ class AAMUPlanViewModel(context : Context) : ViewModel(), MapView.POIItemEventLi
 
     init {
         setCurrentMarker()
+        viewModelScope.launch {
+            aamuRepository.getPlannerSelectList()
+                .collect{aamuListPlanner->
+                    if (aamuListPlanner.isNotEmpty()){
+                        plannerSelectList.value = aamuListPlanner
+                    }
+                    else{
+                        errorLiveData.value = "리스트를 받아오는데 실페했습니다"
+                        Toast.makeText(context,"리스트를 받아오는데 실페했습니다",Toast.LENGTH_LONG)
+                    }
+            }
+        }
+
     }
 
     fun setCurrentMarker(){
