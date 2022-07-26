@@ -19,7 +19,7 @@ import "swiper/css/pagination";
 import '../Upload/UploadSwiper.css';
 
 
-const Edit = ({setsquare,setlist,val}) => {
+const Edit = ({setlist,val,seteditModal }) => {
 
   
 let searchRef = useRef();
@@ -30,7 +30,7 @@ const [hide, setHide] = useState(false);
 const [close, setClose] = useState(false);
 const [search, setSearch] = useState([]);
 const [showSearch, setshowSearch] = useState(false);
-const [showWrite, setShowWrite] = useState([]);
+const [showWrite, setShowWrite] = useState(false);
 const [show] = useState(false);
 const [hasText,setHasText] = useState(false); 
 const [inputValue,setinputValue] = useState(''); 
@@ -39,9 +39,17 @@ const [inputValue,setinputValue] = useState('');
 
   
   //이미지 다중 업로드 시
-  const [myImage,setMyImage] = useState([]);
-  const [myImagefile,setMyImageFile] = useState([]);
+  const [myImage, setMyImage] = useState([]);
+  const [myImagefile, setMyImageFile] = useState([]);
 
+
+  const [title,settitle] = useState('');
+  const [content,setcontent] = useState('');
+
+  useEffect(()=>{
+    settitle(val.ctitle)
+    setcontent(val.content)
+  },[])
  
 
   function searchWord(e,setSearch){//위치 지정을 위한 백에게 받는 axios
@@ -57,7 +65,7 @@ const [inputValue,setinputValue] = useState('');
           },
     })
     .then((resp) => {
-      // console.log(resp.data);
+      console.log(resp.data);
       setSearch(resp.data);
       })
       .catch((error) => {
@@ -100,17 +108,14 @@ const [inputValue,setinputValue] = useState('');
     <Overlay >
     <Contents >  
         <FirstLine>
-            
             <div className='newPosting' style={{marginLeft:'12%'}}>
                 <h2>수정하기</h2>
             </div>
             {/* {showNext ?  */}
               <Nextbtn  
                       onClick={()=>{
-                        // let temp= uploadFile(myImagefile)
-                        // console.log('temp',temp);
-                        // edit(val,temp,setlist,titleRef,textareaRef,searchRef,search)
-                        // setsquare(false)
+                        edit(val,setlist,setShowWrite,titleRef,textareaRef,searchRef,search)
+                        seteditModal(false)
                         // feedList(setlist)
                       }}>
                        <FontAwesomeIcon icon={faPaperPlane}  size="2x" />
@@ -174,7 +179,7 @@ const [inputValue,setinputValue] = useState('');
                       </div>
                       <div>
                         <span style={{fontWeight:'bold', marginLeft:'10px'}}>제목 : </span>
-                        <input ref={titleRef} type="text" placeholder="제목을 입력하세요" onChange={(e)=>{ val.ctitle = e.target.value}} value  = {val.ctitle}/>
+                        <input ref={titleRef} type="text" placeholder="제목을 입력하세요" onChange={(e)=>{ settitle(e.target.value)}} value  = {title}/>
                       </div>
                       <div>
                         <textarea 
@@ -185,7 +190,8 @@ const [inputValue,setinputValue] = useState('');
                           onKeyUp={(e)=>fn_checkByte(e)}
                           rows="8" 
                           placeholder="문구입력..." 
-                          value= {val.content}
+                          onChange={(e)=>{ setcontent(e.target.value)}}
+                          value= {content}
                           style={{border:'none',resize: 'none',
                               fontSize: '16px',fontFamily:'normal',
                               outline: 'none',paddingTop:'5px' ,
@@ -249,40 +255,27 @@ function feedList(setlist){//업로드 버튼 누르고 화면 새로고침
 }
 
 
-
- function uploadFile(myImagefile){//이미지 업로드
-  let formData = new FormData(); // formData 객체를 생성한다.
-  for (let i = 0; i < myImagefile.length; i++) { 
-    formData.append("multifiles", myImagefile[i]); // 반복문을 활용하여 파일들을 formData 객체에 추가한다
-  }
-  return formData;
-}
-
-function edit(val,temp,setlist,titleRef,textareaRef,searchRef,search){//새 게시물 업로드를 위한 axios
+function edit(val,setlist,setShowWrite,titleRef,textareaRef,searchRef,search){//새 게시물 업로드를 위한 axios
  let searched= search.find((val,i)=>{
     return val.TITLE===searchRef.current.value
   })
-  console.log('searched:',searched)
-
-  temp.append('lno',val.lno)
-  temp.append('ctitle',titleRef.current.value)
-  temp.append('content',textareaRef.current.value)
-  temp.append('contentid',searched.CONTENTID)
 
   let token = sessionStorage.getItem("token");
-  axios.put('/aamurest/gram/edit',temp,
-    
+  axios.put('/aamurest/gram/edit',{
+    lno : val.lno,
+    ctitle : titleRef.current.value,
+    content : textareaRef.current.value,
+    contentid : searched.CONTENTID,
+  },    
        { headers: {
-              Authorization: `Bearer ${token}`,
-              'Content-Type': 'multipart/form-data',
+              Authorization: `Bearer ${token}`
             }
         }
-
       )
   .then((resp) => {
     console.log(resp.data);
-    setlist(resp.data);
-    
+    setShowWrite(resp.data);
+    feedList(setlist)
     })
     .catch((error) => {
       console.log(error);
