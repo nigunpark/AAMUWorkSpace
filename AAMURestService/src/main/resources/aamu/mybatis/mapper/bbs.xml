@@ -33,7 +33,7 @@
 	
 	<!-- 글 등록 -->
 	<insert id="bbsInsert" parameterType="map">
-		INSERT INTO routebbs VALUES (SEQ_PLA.nextval,#{title},SYSDATE,#{content},SEQ_THE.nextval,#{id},NOT NULL)
+		INSERT INTO routebbs VALUES (SEQ_PLA.nextval,#{title},SYSDATE,#{content},SEQ_THE.nextval,DEFAULT,#{id})
 	<selectKey keyProperty="rbn" resultType="int" order="AFTER">
     	SELECT #{rbn} FROM DUAL
     </selectKey>
