@@ -49,7 +49,7 @@ const MyProfileBox = () => {
 
     // console.log('email :',email);
     // console.log('addr :',addr);
-    console.log('phoneNum :', phoneNum);
+    // console.log('phoneNum :', phoneNum);
     // console.log('zoneCode :',zoneCode);
     // console.log('address :',address);
     // console.log('setDetailAddr :',detailAddr);
@@ -91,6 +91,7 @@ const MyProfileBox = () => {
             }
         }).then((resp)=>{
             console.log('데이터 확인 : ',resp.data);
+            
             setUserProfile(resp.data);
             setPwd(resp.data.pwd);
 
@@ -118,7 +119,7 @@ const MyProfileBox = () => {
 
     
     // console.log('userProfile :',userProfile.userprofile.split());
-    console.log('showImages :',showImages);
+    // console.log('showImages :',showImages);
     let [profiles, setProfile] = useState([]);
   return (
     <MyProfileContainer>
@@ -143,9 +144,6 @@ const MyProfileBox = () => {
                             onClick={() => handleDeleteImage()}/>
                         ))}
                     </ImgUploadLabel>
-                    {
-                        console.log('showImages 왜 안되:', showImages)
-                    }
                 </form>
             </ImgBox>
             <div
@@ -257,7 +255,7 @@ const MyProfileBox = () => {
                     }}>
                     저장
                 </UpdateBtn>
-            </div>{console.log('addr :',addr)}
+            </div>
         </MyUpdateProfile>
     </MyProfileContainer>
   )
