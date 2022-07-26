@@ -14,12 +14,6 @@
 	<select id="bbsSelectPhotoList" parameterType="int" resultType="String">
 		SELECT photo FROM routebbsphoto WHERE rbn=#{rbn}
 	</select>
-	
-	<!-- 경로 선택 -->
-	<select id="selectRouteList" parameterType="int" resultType="routeDTO">
-		SELECT * FROM route WHERE rbn=#{rbn}
-	</select>
-	
 	<!-- 리뷰 목록 -->
 	 <select id="reviewList" parameterType="int" resultType="ReviewDTO" >
 		SELECT * FROM ratereview WHERE rbn=#{rbn}
