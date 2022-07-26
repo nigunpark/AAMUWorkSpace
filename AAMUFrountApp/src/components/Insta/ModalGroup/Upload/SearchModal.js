@@ -3,7 +3,7 @@ import React from 'react'
 import styled from 'styled-components';
 
 
-function SearchModal({search, inputValue,setinputValue,setHasText}){
+function SearchModal({search,setinputValue,setHasText}){
     
 
   return (

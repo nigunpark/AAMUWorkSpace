@@ -13,18 +13,24 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import '../Upload/UploadSwiper.css';
 import dayjs from 'dayjs';
+import { CommentsDisabled } from "@mui/icons-material";
 
 function Comment({val,forReRender, setForReRender}) {
     let menuRef = useRef();
-    let profileRef = useRef();
+    let replyRef = useRef();
     let commentRef = useRef();
     const [commentHeart,setCommentHeart] = useState(false);
     const [modalShow, setModalShow] = useState(false);
+    const [reply, setReply] = useState(false);
     let [comment, setComment] = useState('');
     const [idReply, setidReply] = useState([{
         id: '',
         reply:''
     }]);
+
+    
+    let [feedComments, setfeedComments] = useState([]); 
+    let [isValid, setisValid] = useState(false); 
     
     function menuModalRef(e){
         e.stopPropagation();
@@ -41,6 +47,7 @@ function Comment({val,forReRender, setForReRender}) {
       }
 
     const [comments, setcomments] = useState([]);
+    
     function commentModal(setcomments){
         const copyFeedComments = [...comments];//feedComments에 담겨있던 댓글 받아옴
         copyFeedComments.push(comment);//copyFeedComments에 있는 기존 댓글에 push하기 위함 
@@ -92,8 +99,37 @@ function Comment({val,forReRender, setForReRender}) {
             console.log(error);
           });
       }
-      
+      const [commentss, setcommentss] = useState('');
+      function post(comment){//유효성 검사를 통과하고 게시버튼 클릭시 발생하는 함수
+  
+          let token = sessionStorage.getItem("token");
+          axios.post('/aamurest/gram/comment/edit',
+          {
+              id:sessionStorage.getItem('username'),
+              reply:comment,
+              lno:val.lno,
+               }
+               ,            
+              { headers: {
+                      Authorization: `Bearer ${token}`,
+                  }
+              }
+          )
+          .then((resp) => {       
+              console.log('resp.data',resp.data)     
+              setfeedComments(resp.data);
+              val.commuComment.reply=resp.data.reply 
+              console.log('val.commuComment.reply',val.commuComment.reply)  
+              })
+              .catch((error) => {
+              console.log(error);
+              });
+  
+              setComment('');//사용자 댓글창을 빈 댓글 창으로 초기화
+      };
+
       let CommentList = ({val}) => {
+          
         return(
             // <div className = 'writing'>
             //     <span className="id">{val.commuComment==null?null:val.commuComment.id}</span>
@@ -103,8 +139,8 @@ function Comment({val,forReRender, setForReRender}) {
                 <img className='likeimg' src="./img/bk.jpg" alt="추사" />
                 <div style={{width:'100%',display:'flex',flexDirection:'column',marginTop:'10px',marginLeft:'10px'}}>
                     <div style={{display:'flex',flexDirection:'row'}}>
-                        <p className="userName"><strong>{val.id}</strong></p>
-                        <p className="userName">{val.reply}</p>
+                        <p className="userName"><strong>{sessionStorage.getItem('username')}</strong></p>
+                        <p className="userName">{val.commuCommentList ==null ? null : val.commuComment.reply}</p>
                     </div>
                     <div className="comment-heart">
                         {commentHeart ?<i className="fa-solid fa-heart"onClick={()=>{setCommentHeart(!commentHeart)}} style={{color:'red'}} />
@@ -118,6 +154,7 @@ function Comment({val,forReRender, setForReRender}) {
             </div>
         )
     }
+   
 
   return (
     // <ModalWrap>
@@ -130,7 +167,6 @@ function Comment({val,forReRender, setForReRender}) {
                     spaceBetween={10}
                     slidesPerView={1}
                     // navigation
-                    autoplay={{ delay: 2500 }}
                     loop={true}
                     pagination={{ clickable: true }}
                     scrollbar={{ draggable: true }}
@@ -215,7 +251,27 @@ function Comment({val,forReRender, setForReRender}) {
                                     })
                                 }
                                 
-
+                        {
+                            reply?
+                            <div className="recommend-contents">
+                            <img className='likeimg' src="./img/bk.jpg" alt="추사" />
+                            <div style={{width:'100%',display:'flex',flexDirection:'column',marginTop:'10px',marginLeft:'10px'}}>
+                                <div style={{display:'flex',flexDirection:'row'}}>
+                                    <p className="userName"><strong>{sessionStorage.getItem('username')}</strong></p>
+                                    <p className="userName">{val.commuCommentList ==null ? null : val.commuComment.reply}</p>
+                                </div>
+                                <div className="comment-heart">
+                                    {commentHeart ?<i className="fa-solid fa-heart"onClick={()=>{setCommentHeart(!commentHeart)}} style={{color:'red'}} />
+                                    :<i className="fa-regular fa-heart"  onClick={()=>{setCommentHeart(!commentHeart)}}></i>}
+                                    <i class="fa-regular fa-trash-can"></i>
+                                </div>
+                                <div style={{fontSize:'10px',color:'#a5a5a5',marginTop:'8px'}}>
+                                    <p className="postDate">{dayjs(val.postdate).format('YYYY/MM/DD')}</p>
+                                </div>
+                            </div>
+                        </div>
+                        : null
+                        }
                        
                        
                     </div>    
@@ -246,8 +302,35 @@ function Comment({val,forReRender, setForReRender}) {
                     </div>
                 </div>
                 <div className="comment">
-                    <input type="text" className="typing-comment" placeholder="댓글 달기..."/>
-                    <button className="comment-button" type="button" onClick={()=>{commentModal(comment,setcomments)}} >게시</button>
+                    <input type="text"
+                        ref={replyRef}
+                        className="inputComment_" 
+                        placeholder="댓글 달기..."
+                        onChange={(e)=>{
+                            setComment(e.target.value);//댓글 창의 상태가 변할때마다 setComment를 통해 comment값을 바꿔준다
+                        }}
+                        onKeyUp={(e)=>{
+                            e.target.value.length > 0//사용자가 키를 눌렀다 떼었을때 길이가 0을 넘는 값인지 유효성 검사 결과 값을 담는다
+                            ? setisValid(true)
+                            : setisValid(false);
+                        }}
+                        value={comment}
+                    />
+
+                    <button 
+                        className={//클래스명을 comment창의 글자 길에 따라서 다르게 주면서 버튼색에 css디자인을 줄 수 있음
+                            comment.length > 0
+                            ? 'submitCommentActive'
+                            : 'submitCommentInactive'
+                        }
+                        onClick={()=>{
+                            post(comment)
+                            setReply(!reply)
+                        } }//클릭하면 위서 선언한 post함수를 실행하여 feedComments에 담겨서 re-rendering 된 댓글창을 확인할 수 있다
+                        disabled={isValid ? false : true}//사용자가 아무것도 입력하지 않았을 경우 게시를 할 수 없도록
+                        type="button" >
+                            게시
+                    </button>
                 </div>
             </div>             
         </Contents>

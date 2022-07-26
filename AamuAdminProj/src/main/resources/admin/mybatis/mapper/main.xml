@@ -48,6 +48,9 @@
 	<select id="checkPlace" parameterType="Map" resultType="int">
 		SELECT count(*) FROM ${table} WHERE contentid=#{contentid}
 	</select>
+	<select id="selectLocation" parameterType="Map" resultType="attrDTO">
+		SELECT * FROM places WHERE areacode=#{areacode} and contenttypeid=#{contenttypeid}
+	</select>
 	<insert id="placeInsert" parameterType="attrDTO">
 		INSERT INTO ${table} 
 		<choose>

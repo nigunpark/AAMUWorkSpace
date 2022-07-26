@@ -70,7 +70,8 @@
 
 <script>
 $('#save').click(function(){
-	
+	var bbs =${placelist};
+	console.log(bbs);
 });
     
   </script>

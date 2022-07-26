@@ -19,7 +19,7 @@
 									</div>
 									<h4 class="card-title">여행지 리스트</h4>
 									<div class="table-responsive text-center">
-										<table class="table text-center">
+										<table class="table table-hover text-center">
 											<thead>
 												<tr>
 													<th>지역</th>
@@ -36,14 +36,14 @@
 												</c:if>
 												<c:if test="${not isEmpty }">
 													<c:forEach var="record" items="${areaCount.lists}" varStatus="loop">
-														<tr>
-															<td>${record.area}</td>
-															<td>${record.contenttype}</td>
+														<tr class="tr">
+															<td class="selectlocation">${record.area}</td>
+															<td class="selectlocation">${record.contenttype}</td>
 															<c:if test="${record.count eq '0' }" var="isZero">
-																	<td class="text-danger font-weight-bold"><h6>${record.count}</h6></td>
+																	<td class="text-danger selectlocation">">${record.count}</td>
 															</c:if>
 															<c:if test="${not isZero }">
-															<td class="font-weight-bold">${record.count}</td>
+															<td class="selectlocation">${record.count}</td>
 															</c:if>
 															<td><button class="btn btn-primary text-white me-0" id="backup">데이터 백업</button></td>
 														</tr>
@@ -93,6 +93,7 @@
 
 
 <script>
+
 $(document).on('click','#backup',function(){
 	console.log($(this).parent().prev().prev().html());
 	console.log($(this).parent().prev().prev().prev().html())
@@ -100,9 +101,17 @@ $(document).on('click','#backup',function(){
 	var contenttype =$(this).parent().prev().prev().html();
 	location.replace("<c:url value="placesbackup.do?area="/>"+area+"&contenttype="+contenttype);
 });
-$('#save').click(function(){
-	
+$('.tr').mouseenter(function(){
+	var td = $(this).children();
+	var area = td.eq(0).text();
+	var contenttype = td.eq(1).text();
+	$('.selectlocation').click(function(){
+		console.log('클릭 이벤트 발생');
+		location.replace("<c:url value="selectlocation.do?area="/>"+area+"&contenttype="+contenttype);
+	});
 });
+
+
     
   </script>
 </body>

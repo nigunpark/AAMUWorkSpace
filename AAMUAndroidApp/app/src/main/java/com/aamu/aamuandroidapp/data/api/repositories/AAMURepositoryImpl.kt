@@ -61,7 +61,8 @@ class AAMURepositoryImpl(
         emit(emptyList<AAMUPlaceResponse>())
     }.flowOn(Dispatchers.IO)
 
-    override suspend fun getPlannerSelectList(): Flow<List<AAMUPlannerSelectOne>> = flow<List<AAMUPlannerSelectOne>> {
+    override suspend fun getPlannerSelectList(
+    ): Flow<List<AAMUPlannerSelectOne>> = flow<List<AAMUPlannerSelectOne>> {
         val response = aamuApi.getPlannerSelectList()
         if(response.isSuccessful){
             emit(response.body() ?: emptyList<AAMUPlannerSelectOne>())

@@ -21,4 +21,5 @@ public interface MainService {
 	int placeInsert(AttractionDTO dto);
 	int checkPlace(Map map);
 	ListPagingData<AreaCountDTO> countAllPlaces(Map map, HttpServletRequest req, int nowPage);
+	List<AttractionDTO> selectLocation(Map map);
 }

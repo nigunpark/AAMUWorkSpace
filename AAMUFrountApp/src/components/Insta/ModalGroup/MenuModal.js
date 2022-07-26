@@ -1,12 +1,15 @@
 import { red } from '@mui/material/colors';
+import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
+import Spinner from "../Spinner";
 
 
-const Modal = ({setModalShow,seteditModal}) => {
+const Modal = ({val,setModalShow,seteditModal , setlist}) => {
     let menuRef = useRef();
     let editRef = useRef();
     const [goEdit, setgoEdit] = useState(false);
+    const [loading, setloading] = useState(false);
     
 
     function menuModalRef(e){//메뉴 모달 나왔을때 주변 눌러도 꺼지게 만들기
@@ -17,14 +20,50 @@ const Modal = ({setModalShow,seteditModal}) => {
     
     window.addEventListener("click", menuModalRef);
     
+    let [deleteOnee, setdeleteOnee] = useState(false); 
+    function deleteOne(){//업로드 버튼 누르고 화면 새로고침
+        let token = sessionStorage.getItem("token");
+        axios.delete(`/aamurest/gram/edit/${val.lno}`,{
+          headers: {
+                Authorization: `Bearer ${token}`,
+              },
+        })
+        .then((resp) => {
+            setdeleteOnee(resp.data);//성공 여부가 온다 true false
+            feedList(setlist,setloading)
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
+ 
+      function feedList(setlist,setloading) {
+  
+        //업로드 버튼 누르고 화면 새로고침
+        let token = sessionStorage.getItem("token");
+        axios
+          .get("/aamurest/gram/selectList", {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          })
+          .then((resp) => {
+            console.log(resp.data);
+            setlist(resp.data);
+            setloading(false);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
   return (
     <Container >
         <Overlay>
             <ModalWrap >
                 <Contents  ref={menuRef} >
                         <Button type="button" className='edit' ref={editRef} onClick={(e)=>{e.stopPropagation(); setModalShow(false); seteditModal(true) }}>수정하기</Button>
-                     
-                        <Button type="button" className='delete'>삭제하기</Button>
+                       
+                        <Button type="button" className='delete' onClick={(e)=>{e.stopPropagation(); setModalShow(false);   deleteOne() }}>삭제하기</Button>
                         <Button type="button" className='cancel'>취소하기</Button>    
                                   
                 </Contents>

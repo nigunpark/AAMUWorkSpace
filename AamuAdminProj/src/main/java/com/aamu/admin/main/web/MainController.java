@@ -347,6 +347,13 @@ public class MainController {
 
 		return"/back/backupcomplete";
 	}
+	@GetMapping("selectlocation.do")
+	public String selectlocation(@RequestParam Map map,Model model) {
+		
+		List<AttractionDTO> list = service.selectLocation(map);
+		model.addAttribute("placelist", list);
+		return "/back/backupcomplete";
+	}
 	
 	
 }

@@ -623,4 +623,10 @@ public class MainServiceImpl implements MainService {
 		
 	}
 
+	@Override
+	public List<AttractionDTO> selectLocation(Map map) {
+		Map codeMap =  switchArea(map.get("area").toString(),map.get("contenttype").toString());
+		return dao.selectLocation(codeMap);
+	}
+
 }

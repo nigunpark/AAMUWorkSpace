@@ -2,6 +2,7 @@ package com.aamu.aamuandroidapp.data.api.response
 
 data class AAMUUserResponse(
     var member : Member,
+    var userprofile : String,
     var token : String
 )
 

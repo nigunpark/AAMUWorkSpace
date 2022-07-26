@@ -1,6 +1,7 @@
 package com.aamu.aamuandroidapp.components.aamuplan
 
 import android.content.Context
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -8,7 +9,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.*
 import androidx.compose.material3.Shapes
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -65,7 +65,7 @@ fun AAMUPlanHome(){
                 }
             },
             sheetContent = {
-                PlanBottomSheet(mapviewModel)
+                PlanBottomSheet(mapviewModel,coroutineScope,topbarhide,bottomSheetScaffoldState)
             },
             drawerBackgroundColor = orange700,
             drawerGesturesEnabled = bottomSheetScaffoldState.drawerState.isOpen,
@@ -73,13 +73,12 @@ fun AAMUPlanHome(){
                 Spacer(modifier = Modifier.height(WindowInsets.statusBars.asPaddingValues().calculateTopPadding()+56.dp))
                 SideContent() },
             scaffoldState = bottomSheetScaffoldState,
-            sheetPeekHeight = 25.dp,
+            sheetPeekHeight = if(topbarhide.value) 0.dp else 40.dp,
 
         )
-        if(topbarhide.value) {
-            val modifierBottom = Modifier.align(Alignment.BottomCenter)
-            PlanDetails(context,mapviewModel,modifierBottom,bottomSheetScaffoldState,topbarhide,startMove,coroutineScope)
-        }
+        val modifierBottom = Modifier.align(Alignment.BottomCenter)
+        val modifierBottomStart = Modifier.align(Alignment.BottomStart)
+        PlanDetails(context,mapviewModel,modifierBottom,modifierBottomStart,bottomSheetScaffoldState,topbarhide,startMove,coroutineScope)
     }
 
 }
@@ -95,12 +94,15 @@ fun KakaoMap(
     AndroidView({ mapviewModel.mapView })
     {mapView->
         mapView.setCurrentLocationEventListener(eventListener)
-        mapviewModel.setCurrentMarker()
     }
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun PlanBottomSheet(mapviewModel: AAMUPlanViewModel){
+fun PlanBottomSheet(mapviewModel: AAMUPlanViewModel,
+                    coroutineScope: CoroutineScope,
+                    topbarhide : MutableState<Boolean>,
+                    bottomSheetScaffoldState: BottomSheetScaffoldState,){
     Box(
         modifier = Modifier
             .wrapContentHeight()
@@ -108,7 +110,7 @@ fun PlanBottomSheet(mapviewModel: AAMUPlanViewModel){
             .clip(RoundedCornerShape(topEnd = 20.dp, topStart = 20.dp))
             .background(Color.White)
     ) {
-        androidx.compose.material.Divider(
+        Divider(
             color = Color.Gray,
             thickness = 5.dp,
             modifier = Modifier
@@ -119,10 +121,10 @@ fun PlanBottomSheet(mapviewModel: AAMUPlanViewModel){
         )
         Box(
             Modifier
-                .padding(top = 25.dp)
+                .padding(top = 40.dp)
                 .fillMaxHeight(0.4f))
         {
-            PlanBottomViewPager()
+            PlanBottomViewPager(mapviewModel,coroutineScope,topbarhide,bottomSheetScaffoldState)
         }
     }
 }
@@ -139,14 +141,12 @@ fun ActionButton(
     Box(modifier = modifier) {
         FloatingActionButton(
             onClick = {
-                mapviewModel.getPlannerSelectOne(42)
-                topbarhide.value = true
-                coroutineScope.launch { bottomSheetScaffoldState.drawerState.open() }
+
             },
             modifier = Modifier
                 .size(width = 50.dp, height = 50.dp)
                 .offset(x = (-20).dp, y = 5.dp),
-            containerColor = Color.White,
+            backgroundColor = Color.White,
             shape = Shapes.Full
         ) {
             Row() {
