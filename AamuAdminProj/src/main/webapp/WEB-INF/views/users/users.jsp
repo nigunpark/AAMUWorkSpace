@@ -19,14 +19,13 @@
 										<div
 											class="d-sm-flex justify-content-between align-items-start">
 											<div>
-												<h4 class="card-title card-title-dash">Pending Requests</h4>
-												<p class="card-subtitle card-subtitle-dash">You have 50+
-													new requests</p>
+												<h4 class="card-title card-title-dash">전체 회원 관리</h4>
+												<p class="card-subtitle card-subtitle-dash">총 회원 수</p>
 											</div>
 											<div>
 												<button class="btn btn-primary btn-lg text-white mb-0 me-0"
 													type="button">
-													<i class="mdi mdi-account-plus"></i>Add new member
+													<i class="mdi mdi-account-remove"></i>탈퇴
 												</button>
 											</div>
 										</div>
@@ -36,174 +35,72 @@
 													<tr>
 														<th>
 															<div class="form-check form-check-flat mt-0">
-																<label class="form-check-label"> <input
-																	type="checkbox" class="form-check-input"
-																	aria-checked="false"><i class="input-helper"></i></label>
+																<label class="form-check-label"> 
+																	<input type="checkbox" class="form-check-input" aria-checked="false" id="chkAll"><i class="input-helper"></i>
+																</label>
 															</div>
 														</th>
-														<th>Customer</th>
-														<th>Company</th>
-														<th>Progress</th>
-														<th>Status</th>
+														<th>회원번호</th>
+														<th>id</th>
+														<th>이름</th>
+														<th>가입일</th>
+														<th>상태</th>
 													</tr>
 												</thead>
 												<tbody>
 													<tr>
 														<td>
 															<div class="form-check form-check-flat mt-0">
-																<label class="form-check-label"> <input
-																	type="checkbox" class="form-check-input"
-																	aria-checked="false"><i class="input-helper"></i></label>
+																<label class="form-check-label"> 
+																	<input name="RowCheck" type="checkbox" class="form-check-input" aria-checked="false" value="${record.lno}"><i class="input-helper"></i>
+																</label>
 															</div>
 														</td>
+														<td>1</td>
 														<td>
 															<div class="d-flex ">
 																<img src="images/faces/face1.jpg" alt="">
 																<div>
 																	<h6>Brandon Washington</h6>
-																	<p>Head admin</p>
+																	<p>여성</p>
 																</div>
 															</div>
 														</td>
-														<td>
-															<h6>Company name 1</h6>
-															<p>company type</p>
-														</td>
-														<td>
-															<div>
-																<div
-																	class="d-flex justify-content-between align-items-center mb-1 max-width-progress-wrap">
-																	<p class="text-success">79%</p>
-																	<p>85/162</p>
-																</div>
-																<div class="progress progress-md">
-																	<div class="progress-bar bg-success" role="progressbar"
-																		style="width: 85%" aria-valuenow="25"
-																		aria-valuemin="0" aria-valuemax="100"></div>
-																</div>
-															</div>
-														</td>
-														<td><div class="badge badge-opacity-warning">In
-																progress</div></td>
-													</tr>
-													<tr>
-														<td>
-															<div class="form-check form-check-flat mt-0">
-																<label class="form-check-label"> <input
-																	type="checkbox" class="form-check-input"
-																	aria-checked="false"><i class="input-helper"></i></label>
-															</div>
-														</td>
-														<td>
-															<div class="d-flex">
-																<img src="images/faces/face3.jpg" alt="">
-																<div>
-																	<h6>Wayne Murphy</h6>
-																	<p>Head admin</p>
-																</div>
-															</div>
-														</td>
-														<td>
-															<h6>Company name 1</h6>
-															<p>company type</p>
-														</td>
-														<td>
-															<div>
-																<div
-																	class="d-flex justify-content-between align-items-center mb-1 max-width-progress-wrap">
-																	<p class="text-success">65%</p>
-																	<p>85/162</p>
-																</div>
-																<div class="progress progress-md">
-																	<div class="progress-bar bg-warning" role="progressbar"
-																		style="width: 38%" aria-valuenow="38"
-																		aria-valuemin="0" aria-valuemax="100"></div>
-																</div>
-															</div>
-														</td>
-														<td><div class="badge badge-opacity-warning">In
-																progress</div></td>
-													</tr>
-													<tr>
-														<td>
-															<div class="form-check form-check-flat mt-0">
-																<label class="form-check-label"> <input
-																	type="checkbox" class="form-check-input"
-																	aria-checked="false"><i class="input-helper"></i></label>
-															</div>
-														</td>
-														<td>
-															<div class="d-flex">
-																<img src="images/faces/face4.jpg" alt="">
-																<div>
-																	<h6>Matthew Bailey</h6>
-																	<p>Head admin</p>
-																</div>
-															</div>
-														</td>
-														<td>
-															<h6>Company name 1</h6>
-															<p>company type</p>
-														</td>
-														<td>
-															<div>
-																<div
-																	class="d-flex justify-content-between align-items-center mb-1 max-width-progress-wrap">
-																	<p class="text-success">65%</p>
-																	<p>85/162</p>
-																</div>
-																<div class="progress progress-md">
-																	<div class="progress-bar bg-danger" role="progressbar"
-																		style="width: 15%" aria-valuenow="15"
-																		aria-valuemin="0" aria-valuemax="100"></div>
-																</div>
-															</div>
-														</td>
-														<td><div class="badge badge-opacity-danger">Pending</div></td>
-													</tr>
-													<tr>
-														<td>
-															<div class="form-check form-check-flat mt-0">
-																<label class="form-check-label"> <input
-																	type="checkbox" class="form-check-input"
-																	aria-checked="false"><i class="input-helper"></i></label>
-															</div>
-														</td>
-														<td>
-															<div class="d-flex">
-																<img src="images/faces/face5.jpg" alt="">
-																<div>
-																	<h6>Katherine Butler</h6>
-																	<p>Head admin</p>
-																</div>
-															</div>
-														</td>
-														<td>
-															<h6>Company name 1</h6>
-															<p>company type</p>
-														</td>
-														<td>
-															<div>
-																<div
-																	class="d-flex justify-content-between align-items-center mb-1 max-width-progress-wrap">
-																	<p class="text-success">65%</p>
-																	<p>85/162</p>
-																</div>
-																<div class="progress progress-md">
-																	<div class="progress-bar bg-success" role="progressbar"
-																		style="width: 65%" aria-valuenow="65"
-																		aria-valuemin="0" aria-valuemax="100"></div>
-																</div>
-															</div>
-														</td>
-														<td><div class="badge badge-opacity-success">Completed</div></td>
+														<td>김경희</td>
+														<td>2022.7.24</td>
+														<td><div class="badge badge-opacity-success">활동중</div></td>
 													</tr>
 												</tbody>
 											</table>
+											<!-- 페이징 출력 -->
+											<div>${listPagingData.pagingString}</div>
 										</div>
 									</div>
 								</div>
 							</div>
+						</div>
+						<!-- 검색 -->
+						<div class="row">
+							<form class="col-md-12 d-flex justify-content-center align-items-center" method="post" action="<c:url value="Commu.do"/>">
+								<div class="form-group row">
+									<div class="col-sm-12">
+										<select class="form-control background-color-secondary text-black" name="searchColumn">
+											<option value="u.id">id</option>
+											<option value="name">이름</option>
+										</select>
+									</div>
+								</div>
+								<div class="form-group row">
+									<div class="col-sm-12">
+										<input type="text" class="form-control mx-2 my-2" placeholder="검색어를 입력하세요" name="searchWord" />
+									</div>
+								</div>
+								<div class="form-group row">
+									<div class="col-sm-12">
+										<input type="submit" class="btn btn-primary mx-3 my-2 text-white" value="검색" id="submit"/>
+									</div>
+								</div>
+							</form>
 						</div>
 						<!--------------------- 내용의 끝 부분입니다------------------------------------>
 					</div>
@@ -222,86 +119,59 @@
 <script type="text/javascript"
 	src="https://www.gstatic.com/charts/loader.js"></script>
 <script>
-	$(function() {
-		'use strict';
-		//월별 게시물 수
-		var data = {
-			labels : [ "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12" ],
-			datasets : [ {
-				label : '# of Votes',
-				data : [ 0,0,0,0,0,0,${commuMonthTotal},0,0,0,0,0 ],
-				backgroundColor : [ 'rgba(255, 99, 132, 0.2)',
-						'rgba(54, 162, 235, 0.2)', 'rgba(255, 206, 86, 0.2)',
-						'rgba(75, 192, 192, 0.2)', 'rgba(153, 102, 255, 0.2)',
-						'rgba(255, 159, 64, 0.2)' ],
-				borderColor : [ 'rgba(255,99,132,1)', 'rgba(54, 162, 235, 1)',
-						'rgba(255, 206, 86, 1)', 'rgba(75, 192, 192, 1)',
-						'rgba(153, 102, 255, 1)', 'rgba(255, 159, 64, 1)' ],
-				borderWidth : 1,
-				fill : false
-			} ]
-		};
-
-		//월별 게시물 수
-		var options = {
-			scales : {
-				yAxes : [ {
-					ticks : {
-						beginAtZero : true
-					}
-				} ]
-			},
-			legend : {
-				display : false
-			},
-			elements : {
-				point : {
-					radius : 0
-				}
-			}
-
-		};
-
-		//성별 게시물 비율
-		var doughnutPieData = {
-			datasets : [ {
-				data : [ ${femaleRecordCount}, ${maleRecordCount} ],
-				backgroundColor : [ 'rgba(153, 102, 255, 0.5)', 'rgba(255, 206, 86, 0.5)'],
-				borderColor : [ 'rgba(153, 102, 255, 1)', 'rgba(255, 206, 86, 1)'],
-			} ],
-			labels : [ '여성', '남성',]
-		};
-
-		//성별 게시물 비율
-		var doughnutPieOptions = {
-			responsive : true,
-			animation : {
-				animateScale : true,
-				animateRotate : true
-			}
-		};
-
-		//월별 게시물 수
-		if ($("#lineChart").length) {
-			var lineChartCanvas = $("#lineChart").get(0).getContext("2d");
-			var lineChart = new Chart(lineChartCanvas, {
-				type : 'line',
-				data : data,
-				options : options
-			});
+	//체크박스 
+	var selectLength=$(':checkbox').slice(1).length;
+	$(':checkbox').click(function(){
+	  if($(this).val()==='all'){
+	    if($(this).prop('checked')) $(':checkbox').slice(1).prop('checked',true);
+	    else $(':checkbox').slice(1).prop('checked',false);
+	  }
+	  else{
+	    if($(this).prop('checked')){
+	      if(selectLength==$(':checkbox:checked').length){
+	        $(':checkbox:first').prop('checked',true)
+	      }             
+	    }
+	    else $(':checkbox:first').prop('checked',false)
+	  }
+	});
+	
+	//체크박스all버튼 눌렀을 때 전체 선택
+	$('#chkAll').click(function(){
+		if($('#chkAll').is(":checked")) $(':checkbox').prop("checked",true)
+		else $(':checkbox').prop("checked",false)
+	});  
+	
+	//삭제 click
+	$('div:nth-child(2) > button').click(function(){
+		console.log("버튼이벤트 발생");
+		var lnoArr = new Array();
+	    $('input[name="RowCheck"]:checked').each(function(i){//체크된 리스트 저장
+	    	lnoArr.push($(this).val());
+	    	console.log($(this).val()); //lnoArr:63,62
+	    });
+		if(lnoArr.length ==0){
+			alert("선택된 글이 없습니다.");
 		}
-
-		//성별 게시물 비율
-		if ($("#doughnutChart").length) {
-			var doughnutChartCanvas = $("#doughnutChart").get(0).getContext(
-					"2d");
-			var doughnutChart = new Chart(doughnutChartCanvas, {
-				type : 'doughnut',
-				data : doughnutPieData,
-				options : doughnutPieOptions
-			});
-		}
-
+		else{
+			if(confirm("회원탈퇴를 진행하시겠습니까?")){
+				var jsonString = JSON.stringify({id : idArr})
+	    		$.ajax({
+	       			url:"<c:url value="UsersDelete.do"/>",
+	       			type:"post",
+	       			data: jsonString,
+	       			contentType:"application/json", //데이타 보낼 때
+	       			dataType: "json" //데이타 받을 때 
+	       		}).done(data=>{
+	       			console.log('삭제성공:',data);
+	       			location.replace("Commu.do");
+	       			
+	       		}).fail(error=>{
+	       			console.log('삭제에러:',error);
+	       		});
+			}///////if 삭제하시겠습니까?
+			
+		}//////else
 	});
 </script>
 </body>

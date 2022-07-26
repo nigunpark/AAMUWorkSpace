@@ -57,6 +57,24 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 		if(isLikeaffected == 1) return true;
 		else return false;
 	}*/
+	
+	//글 검색용
+	@Override
+	public List<String> commuSearachList(Map map) {
+		
+		if(map.get("searchColumn").equals("id")) {
+			map.put("searchWord", map.get("searchWord").toString().toUpperCase());
+			System.out.println(map.get("searchColumn"));
+			map.put("table", "users");
+			List<String> list=dao.commuSearachList(map);
+			System.out.println(list.get(0).toString());
+			return list;
+		}
+		else{
+			map.put("table", "community");
+			return dao.commuSearachList(map);
+		}
+	}
 
 	//글 생성용
 	@Override

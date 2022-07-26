@@ -30,6 +30,14 @@ public class CommuDAO {
 	public List commuSelectPhotoList(String lno){
 		return template.selectList("commuSelectPhotoList",lno);
 	}
+	
+	//글 검색용
+	public List<String> commuSearachList(Map map){
+		System.out.println("dao map:"+map.get("searchColumn"));
+		System.out.println("dao map:"+map.get("table"));
+		System.out.println("dao map:"+map.get("searchWord"));
+		return template.selectList("commuSearachList",map);
+	}
 
 	//글 생성용
 	public int commuInsert(Map map) {

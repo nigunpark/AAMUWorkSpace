@@ -66,7 +66,23 @@ public class CommuController {
 		System.out.println(list.get(0).id.toString());
 		return list;
 	}////////////////commuSelectList
-
+	
+	//글 검색용_id로 검색
+	/*
+	@GetMapping("/gram/place/selectList")
+	public List<Map> commuPlaceList(@RequestParam Map map) {
+		List<Map> list=commuService.commuPlaceList(map);
+		return list;
+	}
+	*/
+	//글 검색용_id,title,tag로 검색
+	@GetMapping("/gram/search/selectList")
+	public List<String> commuSearachList(@RequestParam Map map){
+		System.out.println("검색 map:"+map.get("searchColumn"));
+		System.out.println("검색 map:"+map.get("searchWord"));
+		List<String> list=commuService.commuSearachList(map);
+		return list;
+	}
 
 	//글 생성용: 리스트 ver
 	/*
@@ -175,7 +191,7 @@ public class CommuController {
 	//글 삭제용
 	@DeleteMapping("/gram/edit/{lno}")
 	public Map commuDelete(@PathVariable String lno, HttpServletRequest req) {
-		
+		System.out.println("글삭제 lno:"+lno);
 		List<String> photoLists=commuService.commuSelectPhotoList(lno);
 		String path=req.getSession().getServletContext().getRealPath("/resources/commuUpload");
 		
@@ -211,10 +227,13 @@ public class CommuController {
 	//댓글 생성용 - Map ver
 	@PostMapping("/gram/comment/edit")
 	public Map commuCommentInsert(@RequestBody Map map) {
-		System.out.println("댓글생성 map:"+map);
+		System.out.println("댓글생성 reply:"+map.get("reply"));
 		int affected=commuService.commuCommentInsert(map);
 		Map resultMap = new HashMap<> ();
-		if(affected == 1) resultMap.put("isSuccess", true);
+		if(affected == 1) {
+			resultMap.put("id", map.get("id"));
+			resultMap.put("reply", map.get("reply"));
+		}
 		else resultMap.put("isSuccess", false);
 		return resultMap;
 	}
