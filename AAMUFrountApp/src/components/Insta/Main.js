@@ -4,6 +4,7 @@ import { Routes, Route, Link } from "react-router-dom";
 import FeedSetting from "./FeedSetting.js";
 import User from "./User.js";
 import axios from "axios";
+import Spinner from "./Spinner";
 function Main() {
 
   const [list,setlist] = useState([]);
@@ -30,23 +31,31 @@ function Main() {
   useEffect(()=>{
     feedList()
   },[])
-  // console.log('list',list)
+
+  const spinner = document.querySelector('.spinner');  
+	const [loading, setloading] = useState(false )
+  
   return (
     <div className="main">
-      {/* <div className="margin-top"> 
+          
+
+      {/* <div className="margin-top">  
           <Story></Story>   
         </div> */}
       <div className="margin-value">
         <div className="main-left" style={{display:'flex',flexDirection:'column'}}>
+        {loading &&
+          <Spinner/>
+        }
         {
           list.map((val,i)=>{
-            return <FeedSetting val={val} setlist={setlist} forReRender={forReRender} setForReRender={setForReRender} />
+            return <FeedSetting val={val} setlist={setlist} forReRender={forReRender} setForReRender={setForReRender} setloading={setloading}/>
           })
         }
         {/* <FeedSetting></FeedSetting> */}
         </div>
         <div className="main-right">
-          <User setlist={setlist}></User>
+          <User setlist={setlist} setloading={setloading}></User>
         </div>
       </div>
     </div>
