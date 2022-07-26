@@ -46,7 +46,6 @@
 											<thead>
 												<tr>
 													<th>순위</th>
-													<th>프로필사진</th>
 													<th>id</th>
 													<th>좋아요 수</th>
 													<th>댓글 수</th>
@@ -64,8 +63,14 @@
 														<c:set var="i" value="${i+1}"/>
 														<tr>
 															<td>${i}위</td>
-															<td class="py-1">${record.userprofile}</td>
-															<td>${record.id}</td>
+															<td>
+					                                          <div class="d-flex ">
+					                                            <img src="${record.userprofile}" alt="">
+					                                            <div>
+					                                              <h6 class="text-center">${record.id}</h6>
+					                                            </div>
+					                                          </div>
+					                                        </td>
 															<td>${record.likecount}</td>
 															<td>${record.rcount}</td>
 															<td>${record.joindate}</td>

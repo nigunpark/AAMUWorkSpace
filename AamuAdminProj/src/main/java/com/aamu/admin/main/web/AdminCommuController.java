@@ -17,18 +17,21 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import com.aamu.admin.main.service.AdminCommuCommentDTO;
 import com.aamu.admin.main.service.AdminCommuDTO;
 import com.aamu.admin.main.service.ListPagingData;
 import com.aamu.admin.main.service.PagingUtil;
 import com.aamu.admin.main.serviceimpl.AdminCommuServiceImpl;
+import com.aamu.admin.util.FileUploadUtil;
 
 @Controller
 public class AdminCommuController {
 	
 	@Autowired
 	private AdminCommuServiceImpl commuService;
+	
 	
 	//전체 글 뿌려주기
 	@RequestMapping("Commu.do")
@@ -100,17 +103,20 @@ public class AdminCommuController {
 	
 	//커뮤니티 통계
 	@RequestMapping("CommuStatistics.do")
-	public String commuStatistics(Model model) {
+	public String commuStatistics(Model model, HttpServletRequest req) {
 		Map map = commuService.commuTotal();
 		//월별 게시물 수
 		System.out.println("commuMonthTotal:"+map.get("commuMonthTotal"));
 		model.addAttribute("commuMonthTotal",map.get("commuMonthTotal"));
 		//성별 게시물 수 
-		model.addAttribute("femaleRecordCount",map.get("femaleRecordCount"));
+		model.addAttribute("femaleRecordCount",map.get("femaleRecordCount")); 
 		model.addAttribute("maleRecordCount",map.get("maleRecordCount"));
 		
 		//베스트 글쓴이 
 		List<AdminCommuDTO> lists = commuService.bestUsersList();
+		for(AdminCommuDTO dto:lists) {
+			dto.setUserprofile(FileUploadUtil.requestOneFile(commuService.commuSelectUserProf(dto.getId()), "/resources/commuUpload", req));
+		}
 		model.addAttribute("lists",lists);
 		
 		return "commu/commuStatistics";

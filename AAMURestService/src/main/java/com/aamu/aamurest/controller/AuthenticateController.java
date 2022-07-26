@@ -37,7 +37,7 @@ public class AuthenticateController {
         map.put("member", member);
         map.put("token", token);
         map.put("userprofile",FileUploadUtil.requestOneFile(userDetailService.getUserProfile(member.getUsername()), "/resources/userUpload", req));
-        System.out.println(map.get("token"));
+        System.out.println(map);
         return map;
     }
 

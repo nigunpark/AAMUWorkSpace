@@ -33,5 +33,8 @@ public interface AdminCommuService {
 	//커뮤니티 통계_베스트 글쓴이
 	List<AdminCommuDTO> bestUsersList();
 	
+	//커뮤니티 통계_글쓴이 프로필 사진 뿌려주기
+	String commuSelectUserProf(String id);
+	
 
 }

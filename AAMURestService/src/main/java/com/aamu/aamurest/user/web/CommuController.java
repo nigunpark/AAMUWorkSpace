@@ -45,6 +45,8 @@ public class CommuController {
 	@GetMapping("/gram/selectList")
 	public List<CommuDTO> commuSelectList(@RequestParam Map map, HttpServletRequest req){
 		System.out.println("셀렉트 리스트 id:"+map.get("id"));
+		System.out.println("셀렉트 리스트 searchColumn:"+map.get("searchColumn"));
+		System.out.println("셀렉트 리스트 searchWord:"+map.get("searchWord"));
 		//List<CommuDTO> list();
 		//list=글 목록들
 		List<CommuDTO> list = commuService.commuSelectList(map);
@@ -53,13 +55,15 @@ public class CommuController {
 			dto.setCommuComment(commuService.commuCommentSelectOne(dto.getLno()));
 			//코멘트의 프로필 셋팅
 			CommuCommentDTO commentdto=dto.getCommuComment();
-			if(commentdto!=null)
+			if(commentdto!=null) {
 				commentdto.setUserprofile(FileUploadUtil.requestOneFile(commuService.commuSelectUserProf(commentdto.getId()), "/resources/commuUpload", req));
+			}
 			//포토 셋팅
 			dto.setPhoto(FileUploadUtil.requestFilePath(commuService.commuSelectPhotoList(dto.getLno()), "/resources/commuUpload", req));
 			//글쓴이-프로필 사진 가져와서 dto에 셋팅
 			dto.setUserprofile(FileUploadUtil.requestOneFile(commuService.commuSelectUserProf(dto.getId()), "/resources/commuUpload", req));
 		}/////for
+		System.out.println(list.get(0).id.toString());
 		return list;
 	}////////////////commuSelectList
 
@@ -158,12 +162,10 @@ public class CommuController {
 
 	//글 수정용: Map ver
 	@PutMapping("/gram/edit")
-	public Map commuUpdate(@RequestBody Map map, HttpServletRequest req) { 
+	public Map commuUpdate(@RequestBody Map map) { 
 		System.out.println("글수정 map:"+map);
 		int affected=commuService.commuUpdate(map);
 		Map resultMap = new HashMap<> ();
-		//글 목록 뿌려주기
-		List<CommuDTO> lists=commuSelectList(map, req);
 
 		if(affected==1) resultMap.put("isSuccess", true);
 		else resultMap.put("isSuccess", false);
