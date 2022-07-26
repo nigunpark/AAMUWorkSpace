@@ -3,7 +3,7 @@ import styled from "styled-components";
 import axios from 'axios';
 
 
-const search = () => {
+const search = ({ setsearchText, setinputValue,searchbar}) => {
 
 
   return (
@@ -11,13 +11,21 @@ const search = () => {
       <div className="search-engine">
         <div className="parent">
           <div className="search-contents">
-            <div className="gradient">
+            {/* <div className="gradient">
               <img src="img/bk.jpg" alt="스토리 프로필 사진" />
             </div>
             <div>
               <p className="user-id">jenny0305</p>
               <p className="user-name">hi im jenny💙</p>
-            </div>
+            </div> */}
+            {searchbar.map((val,i)=>{return <p onClick={(e)=>{
+                setinputValue(e.target.textContent)
+                setsearchText(false)}              
+              }>{val}</p>
+                
+               }
+            
+              )}
           </div>
         </div>
         <div className="search-square"></div>
