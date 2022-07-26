@@ -60,6 +60,7 @@ public class CommuController {
 			//글쓴이-프로필 사진 가져와서 dto에 셋팅
 			dto.setUserprofile(FileUploadUtil.requestOneFile(commuService.commuSelectUserProf(dto.getId()), "/resources/commuUpload", req));
 		}/////for
+		System.out.println(list.get(0).id.toString());
 		return list;
 	}////////////////commuSelectList
 
