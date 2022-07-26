@@ -179,7 +179,13 @@ public class AdminCommuServiceImpl implements AdminCommuService {
 		return lists;
 	}
 	
+	//커뮤니티 통계_프로필 뿌려주기
+	@Override
+	public String commuSelectUserProf(String id) {
+		return dao.commuSelectUserProf(id);
+	}
 	
+
 	
 	
 

@@ -68,5 +68,11 @@ public class AdminCommuDAO {
 		return records;
 	}
 	
+	//
+	public String commuSelectUserProf(String id) {
+		return template.selectOne("commuSelectUserProf",id);
+		
+	}
+	
 
 }
