@@ -15,12 +15,12 @@ import Edit from './ModalGroup/Edit/Edit'
 
 
 
-function FeedSetting({val,setlist,forReRender, setForReRender}) {
+function FeedSetting({val,setlist,forReRender, setForReRender, setloading}) {
     
     let menuRef = useRef();
     let profileRef = useRef();
     let commentRef = useRef();
-    let menuDotRef = useRef();
+    let replyRef = useRef();
     const [editModal, seteditModal] = useState(false);
     
     const [modalShow, setModalShow] = useState(false);
@@ -38,7 +38,7 @@ function FeedSetting({val,setlist,forReRender, setForReRender}) {
     //   }
 
     function post(comment,setfeedComments){//유효성 검사를 통과하고 게시버튼 클릭시 발생하는 함수
-        feedComments = val.commuComment;
+        // feedComments = val.commuComment;
         // console.log('id',sessionStorage.getItem('username'))
         // console.log('lno',val.lno)
         //    console.log('comment(11)',comment)
@@ -68,7 +68,8 @@ function FeedSetting({val,setlist,forReRender, setForReRender}) {
         .then((resp) => {       
             console.log('resp.data',resp.data)     
             setfeedComments(resp.data);
-            
+            val.commuComment.reply=resp.data.reply
+            val.commuComment.id=resp.data.id
             })
             .catch((error) => {
             console.log(error);
@@ -130,13 +131,14 @@ function FeedSetting({val,setlist,forReRender, setForReRender}) {
             console.log(error);
           });
       }
-    
+      
       
 
   return (
 <div>
+    
     <div className="feeds-setting">  
-    <div className="title-profile">
+      <div className="title-profile">
         <img src="./img/bk.jpg" alt="프사" />                
         <span
             ref={profileRef}
@@ -163,10 +165,10 @@ function FeedSetting({val,setlist,forReRender, setForReRender}) {
             ref={menuRef}
             onClick={() => setModalShow(!modalShow)}></i>
             {modalShow 
-                &&<MenuModal setModalShow={setModalShow} seteditModal={seteditModal}/>
+                &&<MenuModal setlist={setlist} setModalShow={setModalShow} seteditModal={seteditModal} val={val}/>
             }
             {
-                editModal && <Edit val={val}/>
+                editModal && <Edit val={val} setlist={setlist} seteditModal={seteditModal} />
             }
         </div>  
     </div>
@@ -270,7 +272,7 @@ function FeedSetting({val,setlist,forReRender, setForReRender}) {
     </div>
     <div className="comment">
         <input type="text"
-                // ref={replyRef}
+                ref={replyRef}
                 className="inputComment" 
                 placeholder="댓글 달기..."
                 onChange={(e)=>{
@@ -293,7 +295,7 @@ function FeedSetting({val,setlist,forReRender, setForReRender}) {
                 }
                 onClick={()=>{
                     post(comment,setfeedComments)
-                    feedList(setlist)
+
                    } }//클릭하면 위서 선언한 post함수를 실행하여 feedComments에 담겨서 re-rendering 된 댓글창을 확인할 수 있다
                 disabled={isValid ? false : true}//사용자가 아무것도 입력하지 않았을 경우 게시를 할 수 없도록
                 type="button" >
@@ -307,20 +309,7 @@ function FeedSetting({val,setlist,forReRender, setForReRender}) {
   )
   
 }
-function feedList(setlist){//업로드 버튼 누르고 화면 새로고침
-    let token = sessionStorage.getItem("token");
-    axios.get('/aamurest/gram/selectList',{
-      headers: {
-            Authorization: `Bearer ${token}`,
-          },
-    })
-    .then((resp) => {
-      setlist(resp.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
+
   
 
 const Container1 = styled.div`
