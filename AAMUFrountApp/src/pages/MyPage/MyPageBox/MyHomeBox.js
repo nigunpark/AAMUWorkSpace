@@ -1,18 +1,21 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components';
 import { faRectangleXmark } from "@fortawesome/free-solid-svg-icons";
 import CreatePlanLeft from '../../../components/CreatePlan/CreatePlanLeft';
 import CreatePlanMap from '../../../components/CreatePlan/CreatePlanMap';
 import { useParams } from 'react-router-dom';
+import axios from 'axios';
+import MyPlanMap from './MyPlanMap';
 
-const MyHomeBox = ({setClickTab, planList}) => {
+const MyHomeBox = ({setClickTab, planList, rbn, setSelectRbn}) => {
 
     const [showCreatePlan, setShowCratePlan] = useState(false);
     const [fromWooJaeData, setFromWooJaeData] = useState([]);
-    let { currPosition } = useParams();
+    
+    let [currPosition, setCurrPosition] = useState();
 
-    // console.log('잘 넘어왔나 :',planList);
+    // console.log('잘 넘어왔나 :',rbn);
 
     const [isOpen, setIsOpen] = useState(false);
 
@@ -32,7 +35,6 @@ const MyHomeBox = ({setClickTab, planList}) => {
         setIsOpen(true);
     };
 
-    
     // fee4cb ffd6ff d6f6dd
     
     // transform: scale(1.07);
@@ -72,13 +74,19 @@ const MyHomeBox = ({setClickTab, planList}) => {
                     저장 날자 : {dateFormat(postDate)}
                 </p>
                 <p className="box-progress-header">
-                    {planList.plannerdate} (rbn :{planList.rbn})
+                    {planList.plannerdate} (rbn :{rbn})
                 </p>
             </div>
 
             <div className="project-box-footer" style={{marginTop:'5px'}}>
                 <div className='detail-button'>
-                    <button className="learn-more" type="button" onClick={()=>{setClickTab(10)}}>공유하기</button>
+                    <button
+                        className="learn-more"
+                        type="button"
+                        onClick={()=>{
+                            setClickTab(10);
+                            setSelectRbn(rbn);
+                            }}>공유하기</button>
                 </div>
                 <div className='detail-button'>
                     <button className="learn-more" type="button" style={{marginTop:'20px'}} onClick={onClickModal}>일정보기</button>
@@ -90,8 +98,10 @@ const MyHomeBox = ({setClickTab, planList}) => {
             setIsOpen={setIsOpen}
             setShowCratePlan={setShowCratePlan}
             currPosition={currPosition}
+            setCurrPosition={setCurrPosition}
             fromWooJaeData={fromWooJaeData}
             setFromWooJaeData={setFromWooJaeData}
+            rbn={rbn}
             />
         ) : null}
     </div>
@@ -102,14 +112,59 @@ function MyDetailPlan({
         setIsOpen,
         setShowCratePlan,
         currPosition,
+        setCurrPosition,
         fromWooJaeData,
-        setFromWooJaeData}){
+        setFromWooJaeData,
+        rbn}){
 
     const [auSure, setAuSure] = useState(false);
     const [savePlan, setSavePlan] = useState(false);
     const [forDayLine, setForDayLine] = useState(0);
+    const [routeMap, setRouteMap] = useState([]);
+    const [planDate, setPlanDate] = useState();
+
+
+    useEffect(()=>{
+        let token = sessionStorage.getItem("token");
+//   /planner/selectonemap
+        axios.get('/aamurest/planner/selectonemap',{
+            params:{
+                // id:sessionStorage.getItem('username'),
+                rbn:rbn
+            },
+            headers: {
+                Authorization: `Bearer ${token}`,
+            }
+        }).then((resp)=>{
+            console.log('상세경로 데이터 확인 : ',resp.data);
+
+            setCurrPosition(resp.data.title.split(' ')[0]);
+            setRouteMap(resp.data.routeMap);
+            
+            setPlanDate(resp.data.plannerdate);
+
+        }).catch((error)=>{
+            console.log((error) => console.log("상세경로 가져오기 실패", error));
+        });
+        
+    },[]);
+    // console.log('currPosition 잘 짤렷나요 :',currPosition);
+    console.log('planDate 가져왔나 :',planDate);
+
+    console.log('자르기 1 :', planDate.substring(planDate.indexOf('월')-1,planDate.indexOf('월')));
+    console.log('자르기 2 :', planDate.substring(planDate.indexOf('일')-2,planDate.indexOf('일')));
+    console.log('자르기 3 :', planDate.substring(planDate.indexOf('수'),planDate.indexOf('수')+1));
+
+    let keys = Object.keys(routeMap);
+    let values = Object.values(routeMap);
+
+    let bbc = Object.entries(routeMap).map((val, idx)=>{
+        return {[keys[idx]] : values[idx]};
+    });
     
+    console.log('bbc :',bbc);
     
+    //Object.entries(routeMap)
     return(
         <DimmedContainer>
             <Modal>
@@ -125,8 +180,8 @@ function MyDetailPlan({
                 </TitleBar>
                 <Contents>
                     <CreatePlanLeft
-                    currPosition={currPosition}
-                    fromWooJaeData={fromWooJaeData}
+                    currPosition={currPosition}//지역명 넣기
+                    fromWooJaeData={fromWooJaeData} //routeMap [{},{},{}] 형식으로 가공해야함
                     setFromWooJaeData={setFromWooJaeData}
                     setForDayLine={setForDayLine}
                     />
@@ -137,12 +192,13 @@ function MyDetailPlan({
                         setAuSure={setAuSure}
                     />
                     )}
-                    <CreatePlanMap
+                    <MyPlanMap
                     setSavePlan={setSavePlan}
                     currPosition={currPosition}
                     fromWooJaeData={fromWooJaeData}
                     forDayLine={forDayLine}
                     />
+                    
                 </Contents>
             </Modal>
             {/* {savePlan && (
