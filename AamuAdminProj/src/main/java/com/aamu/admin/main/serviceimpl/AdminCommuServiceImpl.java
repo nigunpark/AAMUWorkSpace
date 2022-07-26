@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import com.aamu.admin.main.service.AdminCommuCommentDTO;
 import com.aamu.admin.main.service.AdminCommuDTO;
@@ -21,6 +22,9 @@ public class AdminCommuServiceImpl implements AdminCommuService {
 	
 	@Autowired
 	private AdminCommuDAO dao;
+	
+	@Autowired
+	private TransactionTemplate transactionTemplate;
 	
 	//리소스파일(paging.properties)에서 읽어오기
 	@Value("${pageSize}")
@@ -65,19 +69,29 @@ public class AdminCommuServiceImpl implements AdminCommuService {
 	@Override
 	public int commuDelete(Map map) {
 		int affected=0;
-		List<String> lnolists=(List<String>)map.get("lno");
-		System.out.println(lnolists);
-		for(String lno:lnolists) {
-			Map lnoMap = new HashMap(); 
-			lnoMap.put("lno", lno); 
-			System.out.println(lnoMap);
-			affected+=dao.commuDelete(lnoMap);
-		}
-		if(affected==((List)map.get("lno")).size()) {
-			return 1;
-		}
-		else
-			return 0;
+		affected = transactionTemplate.execute(tx->{
+			List<String> lnolists=(List<String>)map.get("lno");
+			System.out.println(lnolists);
+			for(String lno:lnolists) {
+				map.put("table", "commucomment");
+				map.put("lno", lno); 
+				dao.commuDelete(map);
+				
+				map.put("table", "commuphoto");
+				dao.commuDelete(map);
+				
+				map.put("table", "commuplace");
+				dao.commuDelete(map);
+				
+				map.put("table", "likeboard");
+				dao.commuDelete(map);
+				
+				map.put("table", "community");
+			}
+			return dao.commuDelete(map);
+		});
+		
+		return affected;
 	}
 	
 	//댓글 뿌려주기
@@ -117,6 +131,7 @@ public class AdminCommuServiceImpl implements AdminCommuService {
 	@Override
 	public int commuCommentDelete(Map map) {
 		int affected=0;
+		
 		List<String> cnolists=(List<String>)map.get("cno");
 		System.out.println(cnolists);
 		for(String cno:cnolists) {
