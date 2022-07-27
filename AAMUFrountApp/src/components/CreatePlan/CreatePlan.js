@@ -315,6 +315,10 @@ const savePlan = (reduxState, currPosition, fromWooJaeData, navigate) => {
   //   `${plannerDate[0]} ~ ${plannerDate[plannerDate.length - 1]}`
   // );
   let token = sessionStorage.getItem("token");
+  toWoo.map((val, i) => {
+    val["ordno"] = i + 1;
+  });
+  console.log("toWoo", toWoo);
   axios
     .post(
       "/aamurest/planner/edit",

@@ -90,7 +90,6 @@ const Navbar = ({ scrollNav, whereUrl }) => {
         </div>
       </nav>
       <Outlet />
-      {showChatBot && <ChatBot />}
       <ChatBotBtn setShowChatBot={setShowChatBot} showChatBot={showChatBot} />
     </div>
   );
@@ -98,15 +97,18 @@ const Navbar = ({ scrollNav, whereUrl }) => {
 
 function ChatBotBtn({ setShowChatBot, showChatBot }) {
   return (
-    <div
-      className="chatBotBtn__container"
-      onClick={() => {
-        setShowChatBot(!showChatBot);
-      }}
-    >
-      <div className="chatBotBtn">
-        <FontAwesomeIcon icon={faRobot} className="chatBotBtn__icon" />
+    <div className="chatBotBtn__container">
+      <div
+        className="chatBotBtn__wrap"
+        onClick={() => {
+          setShowChatBot(!showChatBot);
+        }}
+      >
+        <div className="chatBotBtn">
+          <FontAwesomeIcon icon={faRobot} className="chatBotBtn__icon" />
+        </div>
       </div>
+      {showChatBot && <ChatBot />}
     </div>
   );
 }
