@@ -311,6 +311,8 @@ function TabContent({clickTab, setClickTab, planList}) {
   // console.log('입력한 내용:',content);
   // console.log('입력한 태그:',tag);
 
+  const [detailPostData, setDetailPostData] = useState();
+
   let myImgs = showImages.map((showImages, imgIndex)=>{
     console.log('인덱스:',imgIndex,' 값:',showImages);
 
@@ -378,8 +380,8 @@ function TabContent({clickTab, setClickTab, planList}) {
                         xmlns="http://www.w3.org/2000/svg" 
                         width="24" height="24" 
                         viewBox="0 0 24 24" fill="none" 
-                        stroke="currentColor" stroke-width="2" 
-                        stroke-linecap="round" stroke-linejoin="round"
+                        stroke="currentColor" strokeWidth="2" 
+                        strokeLinecap="round" strokeLinejoin="round"
                         className="feather feather-more-vertical">
                             <circle cx="12" cy="12" r="1" />
                             <circle cx="12" cy="5" r="1" />
@@ -429,24 +431,25 @@ function TabContent({clickTab, setClickTab, planList}) {
     //     };
     //   });
     // };
+    console.log('detailPostData 글작성 할 떄 필요함:',planList);
     console.log('selectRbn 글번호 넘어오나 :', selectRbn);
 
 
-    let token = sessionStorage.getItem("token");
+    // let token = sessionStorage.getItem("token");
 
-    axios.get('',{
-        params:{
-            // id:sessionStorage.getItem('username'),
-            rbn:selectRbn
-        },
-        headers: {
-            Authorization: `Bearer ${token}`,
-        }
-    }).then((resp)=>{
-        console.log('글작성시 필요한 여행경로 데이터 : ',resp.data);
-    }).catch((error)=>{
-        console.log((error) => console.log("글작성시 필요한 여행경로 데이터 가져오기 실패", error));
-    });
+    // axios.get('',{
+    //     params:{
+    //         // id:sessionStorage.getItem('username'),
+    //         rbn:selectRbn
+    //     },
+    //     headers: {
+    //         Authorization: `Bearer ${token}`,
+    //     }
+    // }).then((resp)=>{
+    //     console.log('글작성시 필요한 여행경로 데이터 : ',resp.data);
+    // }).catch((error)=>{
+    //     console.log((error) => console.log("글작성시 필요한 여행경로 데이터 가져오기 실패", error));
+    // });
 
     let test = [1,2,3,4];
 
