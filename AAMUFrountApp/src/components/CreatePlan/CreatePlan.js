@@ -41,7 +41,7 @@ const CreatePlan = ({
   let reduxState = useSelector((state) => {
     return state;
   });
-  console.log("reduxState.monthNdate", reduxState.monthNdate);
+  console.log("reduxState.timeSetObj", reduxState.timeSetObj);
   return (
     <div>
       <DimmedContainer>
