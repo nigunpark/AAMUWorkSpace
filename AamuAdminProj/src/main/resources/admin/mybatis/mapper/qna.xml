@@ -4,50 +4,103 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="admin.mybatis.mapper.qna">
 
+	<!-- 	
+	QNO number NOT NULL, 
+	ID varchar2(20) NOT NULL,
+	TITLE nvarchar2(100) NOT NULL,
+	CONTENT nvarchar2(2000) NOT NULL,
+	QCOUNT number DEFAULT 0,
+	QDATE date DEFAULT SYSDATE,
+	PRIMARY KEY (QNO)
+	-->
 
+	<resultMap type="QNADTO" id="QNADTOResult">
+		<!-- 
+		property:자바빈(OneMemoDTO)의 속성명
+		column:테이블의 컬럼(조회(SELECT)결과의 컬럼명들 의미)
+		 -->
+		<result property="qno" column="qno"/>
+		<result property="id" column="id"/>
+		<result property="title" column="title"/>
+		<result property="content" column="content"/>
+		<result property="qcount" column="qcount"/>
+		<result property="qdate" column="qdate"/>
+		<result property="answerCount" column="answerCount"/>
+		<!-- 
+		1:N관계 매핑용
+		column: 조인조건의 컬럼명 (ON onememo.no = linecomments.no)
+		select: select태그의 id 속성값(쿼리문은 조인문)
+		javaType : OneMemoDTO의 자식레코드(LineCommentDTO)를 담을 컬렉션 타입
+		ofType : 자식의 DTO타입
+		
+		아래 collection태그 사용시 
+		현재 매퍼파일에서 메모글 하나 가져올때 반드시 resultMap="memoDtoResult"을 사용하지
+		 -->
+		<collection property="answer" column="qno" select="admin.mybatis.mapper.answer.answerSelectList" javaType="List" ofType="AnswerDTO"/>
+	</resultMap>
 
-
-	<!-- 전체 글 뿌려주기 -->
+	<!-- 목록 -->
 	<select id="qnaSelectList" parameterType="Map"
 		resultType="QNADTO">
 		SELECT * FROM
 		(SELECT T.*, ROWNUM R FROM (
-		SELECT q. * FROM
+		SELECT q.*,name,(SELECT
+		COUNT(*) FROM answer WHERE qno=q.qno) as answerCount
+		FROM
 		QNA q
-		JOIN users u ON q.id=u.id
+		JOIN
+		users u ON q.id=u.id
 		<if test="searchColumn != null">
-	  	 	WHERE ${searchColumn} LIKE '%' || #{searchWord} || '%' 
-	  	</if>  
+			WHERE ${searchColumn} LIKE '%' || #{searchWord} || '%'
+		</if>
 		ORDER BY qno DESC) T)
 		WHERE R BETWEEN
 		#{start} AND #{end}
 	</select>
 
-	<!-- 전체 글 레코드수 -->
+	<!-- 게시물수 -->
 	<select id="qnaGetTotalRecordCount" parameterType="Map"
 		resultType="int">
 		SELECT COUNT(*) FROM qna
 	</select>
 
-	<!-- 글 상세 보기 -->
-
+	<!-- 읽기 -->
 	<select id="qnaSelectOne" parameterType="Map"
 		resultType="QNADTO">
 		SELECT * FROM qna
 		WHERE qno=#{qno}
 	</select>
 
-	<!-- 조회수 올리기 -->
-	<update id="qnaCount" parameterType="Map">
-		update qna set qcount
-		= qcount + 1 where qno=#{qno}
+	<!-- 쓰기 -->
+	<insert id="qnaWrite" parameterType="Map">
+		INSERT INTO qna VALUES
+		(SEQ_QNA.NEXTVAL,
+		#{id},
+		#{title},
+		#{content},
+		DEFAULT,
+		SYSDATE
+		)
+	</insert>
+
+	<!-- 수정 -->
+	<update id="qnaEdit" parameterType="Map">
+		UPDATE qna SET
+		title=#{title},content=#{content} WHERE qno=#{qno}
 	</update>
 
-	<!-- 글 삭제 -->
+	<!-- 삭제 -->
 	<delete id="qnaDelete" parameterType="Map">
 		DELETE qna WHERE
 		qno =
 		#{qno}
 	</delete>
+
+	<!-- 조회수 -->
+	<update id="qnaCount" parameterType="Map">
+		update qna set qcount
+		=
+		qcount + 1 where qno=#{qno}
+	</update>
 
 </mapper>

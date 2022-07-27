@@ -1,5 +1,7 @@
 package com.aamu.admin.main.service;
 
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -29,5 +31,8 @@ public class QNADTO {
 	private String content;
 	private String qcount;
 	private java.sql.Date qdate;
+	private String answerComment;
+	
+	List<AnswerDTO> answer;
 
 }

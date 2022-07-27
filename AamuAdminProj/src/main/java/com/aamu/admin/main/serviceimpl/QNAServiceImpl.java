@@ -15,8 +15,8 @@ import com.aamu.admin.main.service.PagingUtil;
 import com.aamu.admin.main.service.QNADTO;
 import com.aamu.admin.main.service.QNAService;
 
-@Service
-public class QNAServiceImpl implements QNAService {
+@Service("qnaService")
+public class QNAServiceImpl implements QNAService<QNADTO> {
 
 	@Autowired
 	private QNADAO dao;
@@ -27,9 +27,9 @@ public class QNAServiceImpl implements QNAService {
 	@Value("${blockPage}")
 	private int blockPage;
 
-	// 전체 글 뿌려주기
+	// 목록
 	@Override
-	public ListPagingData<QNADTO> qnaSelectList(Map map, HttpServletRequest req, int nowPage) {
+	public ListPagingData<QNADTO> selectList(Map map, HttpServletRequest req, int nowPage) {
 		// 페이징을 위한 로직 시작]
 		// 전체 레코드수
 		int totalCount = dao.qnaGetTotalRecordCount(map);
@@ -54,14 +54,13 @@ public class QNAServiceImpl implements QNAService {
 		return listPagingData;
 	}
 
-	// 전체 게시물 수 뿌려주기
+	// 게시물수
 	@Override
 	public int qnaGetTotalRecordCount(Map map) {
 		return dao.qnaGetTotalRecordCount(map);
 	}
 
-
-	// 글 상세 보기
+	// 읽기
 	@Override
 	public QNADTO selectOne(Map map) {
 		QNADTO record = dao.selectOne(map);
@@ -70,13 +69,19 @@ public class QNAServiceImpl implements QNAService {
 		return record;
 	}
 
-	// 조회수
+	// 쓰기
 	@Override
-	public int qnaCount(Map map) throws Exception {
-		return dao.qnaCount(map);
+	public int qnaWrite(Map map) {
+		return dao.qnaWrite(map);
 	}
 
-	// 글 삭제
+	// 수정
+	@Override
+	public int qnaEdit(Map map) throws Exception {
+		return dao.qnaEdit(map);
+	}
+
+	// 목록에서 삭제
 	@Override
 	public int qnaDelete(Map map) {
 		int affected = 0;
@@ -94,10 +99,21 @@ public class QNAServiceImpl implements QNAService {
 			return 0;
 	}
 
+	// 읽기에서 삭제
 	public int qnaViewDelete(Map map) {
-
 		return dao.qnaViewDelete(map);
+	}
 
+	// 조회수
+	@Override
+	public int qnaCount(Map map) throws Exception {
+		return dao.qnaCount(map);
+	}
+
+	@Override
+	public String findNameByKey(Map map) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

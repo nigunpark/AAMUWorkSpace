@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.aamu.admin.main.service.ListPagingData;
+import com.aamu.admin.main.service.NoticeDTO;
 import com.aamu.admin.main.service.PagingUtil;
 import com.aamu.admin.main.service.QNADTO;
 import com.aamu.admin.main.serviceimpl.QNAServiceImpl;
@@ -27,44 +28,70 @@ public class QNAController {
 	@Autowired
 	private QNAServiceImpl qnaService;
 
-	// 전체 글 뿌려주기
+	// 목록
 	@RequestMapping("QNA.do")
-	public String qnaSelectList(@ModelAttribute("id") String id, @RequestParam Map map,
+	public String selectList(@ModelAttribute("id") String id, @RequestParam Map map,
 			@RequestParam(defaultValue = "1", required = false) int nowPage, HttpServletRequest req, Model model) {
 		// 현재 페이지를 맵에 저장
 		map.put(PagingUtil.NOW_PAGE, nowPage);
-		ListPagingData<QNADTO> listPagingData = qnaService.qnaSelectList(map, req, nowPage);
-
-		// 데이타 저장]
+		ListPagingData<QNADTO> listPagingData = qnaService.selectList(map, req, nowPage);
+		// 데이타 저장
 		model.addAttribute("listPagingData", listPagingData);
 		model.addAttribute("totalCount", qnaService.qnaGetTotalRecordCount(map));
-
 		// 뷰정보 반환
 		return "qna/qnaList";
 	}
-	
-	
-	//상세보기]
+
+	// 읽기
 	@RequestMapping("QNAView.do")
 	public String qnaView(
-			//@ModelAttribute("id") String id,
+			// @ModelAttribute("id") String id,
 			@RequestParam Map map, Model model) throws Exception {
-	
 		qnaService.qnaCount(map);
-	
-		//서비스 호출]
+		// 서비스 호출]
 		QNADTO record = qnaService.selectOne(map);
-		
-		//데이타 저장]		
+		// 데이타 저장]
 		model.addAttribute("record", record);
-		//뷰정보 반환]
-		return "qna/QNAView";
+		// 뷰정보 반환]
+		return "qna/qnaView";
 	}///////////////////////
-	
-	
 
+	// 쓰기
+	@GetMapping("QNAWrite.do")
+	public String qnaWrite() throws Exception {
+		return "qna/qnaWrite";
+	}
 
-	// 글 삭제
+	// 쓰기 완료
+	@PostMapping("QNAWrite.do")
+	public String qnaWriteOk(@RequestParam Map map) {
+		map.put("id", "ADMIN2");
+		qnaService.qnaWrite(map);
+		return "redirect:/QNA.do";
+	}
+	
+	// 수정
+	@GetMapping("QNAEdit.do")
+	public String qnaEdit(@ModelAttribute("qno") String qno, @RequestParam Map map, Model model) throws Exception {
+		// 서비스 호출]
+		QNADTO record = qnaService.selectOne(map);
+		record.setContent(record.getContent().replace("<br/>", "\r\n"));
+		// 데이타 저장]
+		model.addAttribute("record", record);
+		// 뷰정보 반환]
+		return "qna/qnaEdit";
+	}
+	
+	// 수정 완료
+	@PostMapping("QNAEdit.do")
+	public String qnaEditOk(@ModelAttribute("qno") String qno, @RequestParam Map map) throws Exception {
+		// 서비스 호출]
+		qnaService.qnaEdit(map);
+		// 뷰정보 반환]-목록을 처리하는 컨트롤러로 이동
+		return "redirect:/QNAView.do";
+	}/////////////////////////
+
+	// 목록에서 삭제
 	@PostMapping("QNADelete.do")
 	@ResponseBody
 	public Map qnaDelete(@RequestBody Map map) {
@@ -79,15 +106,11 @@ public class QNAController {
 		return resultMap;
 	}
 	
-	
+	// 읽기에서 삭제
 	@GetMapping("QNAViewDelete.do")
-	public String delete(@ModelAttribute("qno") String nno,@RequestParam Map map) {
-		
+	public String delete(@ModelAttribute("qno") String qno, @RequestParam Map map) {
 		qnaService.qnaViewDelete(map);
-		
 		return "redirect:/QNA.do";
-	}/////////////////////////
-	
-	
+	}
 
 }

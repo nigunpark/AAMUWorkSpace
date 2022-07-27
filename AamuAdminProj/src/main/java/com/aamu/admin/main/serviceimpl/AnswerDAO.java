@@ -7,7 +7,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.aamu.admin.main.service.NoticeDTO;
+import com.aamu.admin.main.service.AnswerDTO;
 
 @Repository
 public class AnswerDAO {
@@ -15,46 +15,31 @@ public class AnswerDAO {
 	@Autowired
 	private SqlSessionTemplate template;
 
-	// 전체 글
-	public List<NoticeDTO> noticeSelectList(Map map) {
-		List<NoticeDTO> records = template.selectList("noticeSelectList", map);
-		return records;
+	public int insert(Map map) {
+		//마이바티스의 insert는 무조건 영향받은 행의 수 반환
+		template.insert("answerInsert",map);
+		//인자로 전달하는 Map에 새로 입력된 행의 키(번호)를 담을 수 있다
+		return Integer.parseInt(map.get("qno").toString());
 	}
 
-	// 게시물수
-	public int noticeGetTotalRecordCount(Map map) {
-		return template.selectOne("noticeGetTotalRecordCount", map);
+	public List<AnswerDTO> selectList(Map map) {		
+		return template.selectList("answerSelectList", map);
 	}
 
-	// 쓰기
-	public int noticeWrite(Map map) {
-		return template.insert("noticeWrite", map);
+	public String findNameByKey(Map map) {		
+		return template.selectOne("answerFindNameByKey",map);
 	}
 
-	// 읽기
-	public NoticeDTO selectOne(Map map) {
-		return template.selectOne("noticeSelectOne", map);
+	public int update(Map map) {		
+		return template.update("answerUpdate",map);
 	}
 
-	// 조회수
-	public int noticeCount(Map map) throws Exception {
-		return template.update("noticeCount", map);
+	public int delete(Map map) {
+		return template.delete("answerDelete",map);
 	}
 
-	// 목록에서 삭제
-	public int noticeDelete(Map map) {
-		return template.delete("noticeDelete", map);
-	}
-
-	// 글에서 삭제
-	public int noticeViewDelete(Map map) {
-		return template.delete("noticeDelete", map);
-
+	public int deleteByNo(Map map) {		
+		return template.delete("answerDeleteByNo",map);
 	}
 	
-	// 수정
-	public int noticeEdit(Map map) throws Exception {
-		return template.update("noticeEdit", map);
-	}
-
 }

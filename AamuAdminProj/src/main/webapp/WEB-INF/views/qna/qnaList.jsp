@@ -21,12 +21,12 @@
 
 										<button class="delete btn btn-primary text-white me-0"
 											style="float: right">삭제</button>
-										<a href="<c:url value="NoticeWrite.do"/>"><button
+										<a href="<c:url value="QNAWrite.do"/>"><button
 												class="write btn btn-primary text-white me-0"
 												style="float: right">등록</button></a>
 									</div>
 
-									<div class="notice-table table-responsive text-center">
+									<div class="qna-table table-responsive text-center">
 										<table class="table text-center ">
 											<thead>
 												<tr>
@@ -61,16 +61,16 @@
 																	<label class="form-check-label"> <input
 																		name="RowCheck" type="checkbox"
 																		class="form-check-input" aria-checked="false"
-																		value="${record.nno}"> <i class="input-helper"></i>
+																		value="${record.qno}"> <i class="input-helper"></i>
 																	</label>
 																</div>
 															</td>
-															<td>${record.nno}</td>
+															<td>${record.qno}</td>
 															<td><a
-																href="<c:url value="/NoticeView.do?nno=${record.nno}&nowPage="/><c:out value="${param.nowPage}" default="1"/>">${record.title}</a></td>
+																href="<c:url value="/QNAView.do?qno=${record.qno}&nowPage="/><c:out value="${param.nowPage}" default="1"/>">${record.title}</a></td>
 															<td>${record.id}</td>
-															<td>${record.noticedate}</td>
-															<td>${record.ncount}</td>
+															<td>${record.qdate}</td>
+															<td>${record.qcount}</td>
 														</tr>
 													</c:forEach>
 												</c:if>
@@ -87,13 +87,13 @@
 						<div class="row">
 							<form
 								class="col-md-12 d-flex justify-content-center align-items-center"
-								method="post" action="<c:url value="Notice.do"/>">
+								method="post" action="<c:url value="QNA.do"/>">
 								<div class="form-group row">
 									<div class="col-sm-12">
 										<select
 											class="form-control background-color-secondary text-black"
 											name="searchColumn">
-											<option value="n.id">id</option>
+											<option value="q.id">id</option>
 											<option value="title">제목</option>
 											<option value="content">내용</option>
 										</select>
@@ -127,7 +127,7 @@
 
 <style>
 
-.notice-table {width: 100%;}
+.qna-table {width: 100%;}
 
 </style>
 
@@ -157,27 +157,27 @@
     //삭제 click
     $('div.card-numberOfBoard > button.delete').click(function(){
     	console.log("버튼이벤트 발생");
-    	var nnoArr = new Array();
+    	var qnoArr = new Array();
         $('input[name="RowCheck"]:checked').each(function(i){//체크된 리스트 저장
-        	nnoArr.push($(this).val());
-        	console.log($(this).val()); //nnoArr:63,62
+        	qnoArr.push($(this).val());
+        	console.log($(this).val()); //qnoArr:63,62
         });
-    	if(nnoArr.length ==0){
+    	if(qnoArr.length ==0){
     		alert("선택된 글이 없습니다.");
     	}
     	else{
     		if (confirm("정말 삭제하시겠습니까?")){
     		
-    		var jsonString = JSON.stringify({nno : nnoArr})
+    		var jsonString = JSON.stringify({qno : qnoArr})
     		$.ajax({
-       			url:"<c:url value="NoticeDelete.do"/>",
+       			url:"<c:url value="QNADelete.do"/>",
        			type:"post",
        			data: jsonString,
        			contentType:"application/json", //데이타 보낼 때
        			dataType: "json" //데이타 받을 때 
        		}).done(data=>{
        			console.log('삭제성공:',data);
-       			location.replace("Notice.do");
+       			location.replace("QNA.do");
        			
        		}).fail(error=>{
        			console.log('삭제에러:',error);

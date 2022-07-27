@@ -4,30 +4,37 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="admin.mybatis.mapper.notice">
 
-	<!-- 전체 글 뿌려주기 -->
+	<!-- 목록 -->
 	<select id="noticeSelectList" parameterType="Map"
 		resultType="NoticeDTO">
 		SELECT * FROM
 		(SELECT T.*, ROWNUM R FROM (
 		SELECT n. * FROM
 		Notice n
-		JOIN users u ON n.id=u.id
+		JOIN
+		users u ON n.id=u.id
 		<if test="searchColumn != null">
-	  	 	WHERE ${searchColumn} LIKE '%' || #{searchWord} || '%' 
-	  	</if>  
+			WHERE ${searchColumn} LIKE '%' || #{searchWord} || '%'
+		</if>
 		ORDER BY nno DESC) T)
 		WHERE R BETWEEN
 		#{start} AND #{end}
 	</select>
 
-	<!-- 전체 글 레코드수 -->
+	<!-- 게시물수 -->
 	<select id="noticeGetTotalRecordCount" parameterType="Map"
 		resultType="int">
 		SELECT COUNT(*) FROM Notice
 	</select>
 
-	<!-- 글 등록 -->
+	<!-- 읽기 -->
+	<select id="noticeSelectOne" parameterType="Map"
+		resultType="NoticeDTO">
+		SELECT * FROM notice
+		WHERE nno=#{nno}
+	</select>
 
+	<!-- 쓰기 -->
 	<insert id="noticeWrite" parameterType="Map">
 		INSERT INTO notice VALUES
 		(SEQ_NNO.NEXTVAL,
@@ -38,31 +45,23 @@
 		#{id})
 	</insert>
 
-	<!-- 글 상세 보기 -->
-
-	<select id="noticeSelectOne" parameterType="Map"
-		resultType="NoticeDTO">
-		SELECT * FROM notice
-		WHERE nno=#{nno}
-	</select>
-
-	<!-- 조회수 올리기 -->
-	<update id="noticeCount" parameterType="Map">
-		update notice set ncount
-		= ncount + 1 where nno=#{nno}
-	</update>
-
-
+	<!-- 수정 -->
 	<update id="noticeEdit" parameterType="Map">
-		UPDATE notice SET title=#{title},content=#{content} WHERE nno=#{nno}
+		UPDATE notice SET
+		title=#{title},content=#{content} WHERE nno=#{nno}
 	</update>
 
-
-	<!-- 글 삭제 -->
+	<!-- 삭제 -->
 	<delete id="noticeDelete" parameterType="Map">
 		DELETE notice WHERE
 		nno =
 		#{nno}
 	</delete>
+
+	<!-- 조회수 -->
+	<update id="noticeCount" parameterType="Map">
+		update notice set ncount
+		= ncount + 1 where nno=#{nno}
+	</update>
 
 </mapper>
