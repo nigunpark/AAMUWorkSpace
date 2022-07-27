@@ -56,4 +56,21 @@ public class UsersServicelmpl implements UsersService{
 		return listPagingData;
 	}
 	
+	//전체 회원 수 뿌려주기
+	@Override
+	public int usersGetTotalRecordCount(Map map) {
+		return dao.usersGetTotalRecordCount(map);
+	}
+	
+	//유저 프로필
+	@Override
+	public String usersSelectUserProf(String id) {
+		return dao.usersSelectUserProf(id);
+	}
+	
+	//회원
+	@Override
+	public int usersStop(Map map) {
+		return dao.usersStop(map);
+	}
 }

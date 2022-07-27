@@ -115,7 +115,7 @@ public class AdminCommuController {
 		//베스트 글쓴이 
 		List<AdminCommuDTO> lists = commuService.bestUsersList();
 		for(AdminCommuDTO dto:lists) {
-			dto.setUserprofile(FileUploadUtil.requestOneFile(commuService.commuSelectUserProf(dto.getId()), "/resources/commuUpload", req));
+			dto.setUserprofile(FileUploadUtil.requestOneFile(commuService.commuSelectUserProf(dto.getId()), "/resources/userUpload", req));
 		}
 		model.addAttribute("lists",lists);
 		

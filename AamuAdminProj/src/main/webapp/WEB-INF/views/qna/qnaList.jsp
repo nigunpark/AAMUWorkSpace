@@ -41,9 +41,10 @@
 													</th>
 													<th class="col-1">글번호</th>
 													<th >제목</th>
-													<th class="col-1">ID</th>
-													<th class="col-1">작성일</th>
+													<th class="col-1">작성자</th>
+													<th class="col-1">답변수</th>
 													<th class="col-1">조회수</th>
+													<th class="col-1">작성일</th>
 												</tr>
 											</thead>
 											<tbody>
@@ -68,9 +69,10 @@
 															<td>${record.qno}</td>
 															<td><a
 																href="<c:url value="/QNAView.do?qno=${record.qno}&nowPage="/><c:out value="${param.nowPage}" default="1"/>">${record.title}</a></td>
-															<td>${record.id}</td>
-															<td>${record.qdate}</td>
+															<td>${record.name}</td>
+															<td>${record.answerCount}</td>
 															<td>${record.qcount}</td>
+															<td>${record.qdate}</td>
 														</tr>
 													</c:forEach>
 												</c:if>

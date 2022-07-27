@@ -3,38 +3,44 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="admin.mybatis.mapper.answer">
-	 
-	<!-- 
-	QNO number NOT NULL,
-	ID varchar2(20) NOT NULL,
-	ANSWER nvarchar2(2000) NOT NULL,
-	ADATE date DEFAULT SYSDATE
-	-->
-	 
-	<insert id="answerInsert" parameterType="Map" >
-		 <selectKey keyProperty="qno" resultType="int" order="BEFORE">
-		 	SELECT SEQ_ANSWER.NEXTVAL FROM DUAL
-		 </selectKey>
-		 INSERT INTO answer VALUES(SEQ_ANSWER.CURRVAL,#{id},#{answer},SYSDATE)
+
+	<!-- QNO number NOT NULL, ID varchar2(20) NOT NULL, ANSWER nvarchar2(2000) 
+		NOT NULL, ADATE date DEFAULT SYSDATE -->
+
+	<insert id="answerInsert" parameterType="Map">
+		<selectKey keyProperty="ano" resultType="int" order="BEFORE">
+			SELECT SEQ_ANSWER.NEXTVAL FROM DUAL
+		</selectKey>
+		INSERT INTO answer
+		VALUES(#{ano},#{qno},#{id},#{answer},SYSDATE)
 	</insert>
 	<!-- no에 따른 댓글 모든 목록 얻기 -->
-	<select id="answerSelectList" parameterType="Map" resultType="AnswerDTO">
+	<select id="answerSelectList" parameterType="Map"
+		resultType="AnswerDTO">
 		SELECT a.*, name
 		FROM users u JOIN answer a ON u.id=a.id
 		WHERE qno =#{qno}
+		ORDER BY ano DESC
 	</select>
-	
-	<select id="answerFindNameByKey" parameterType="Map" resultType="String">
+
+	<select id="answerFindNameByKey" parameterType="Map"
+		resultType="String">
 		SELECT name
 		FROM users u JOIN answer a ON u.id=a.id
-		WHERE qno =#{qno}
+		WHERE ano
+		=#{ano}
 	</select>
-	<update id="answerUpdate" parameterType="Map" >
-		UPDATE answer SET answer=#{answer} WHERE qno = #{qno}
+	<update id="answerUpdate" parameterType="Map">
+		UPDATE answer SET
+		answer=#{answer} WHERE ano = #{ano}
 	</update>
 	<delete id="answerDelete" parameterType="Map">
+		DELETE answer WHERE ano
+		= #{ano}
+	</delete>
+
+	<delete id="answerDeleteByNo" parameterType="Map">
 		DELETE answer WHERE qno = #{qno}
 	</delete>
-	
 
 </mapper>

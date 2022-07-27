@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   addMonthNDate,
   changeTimeSetObj,
+  delAllTimeSetObj,
   resetMonthNDate,
 } from "../../../redux/store";
 
@@ -56,7 +57,7 @@ const MyHomeBox = ({ setClickTab, planList, rbn, setSelectRbn }) => {
                         width="24" height="24" 
                         viewBox="0 0 24 24" fill="none" 
                         stroke="currentColor" stroke-width="2" 
-                        stroke-linecap="round" stroke-linejoin="round"
+                        strokeLinecap="round" strokeLinejoin="round"
                         className="feather feather-more-vertical">
                             <circle cx="12" cy="12" r="1" />
                             <circle cx="12" cy="5" r="1" />
@@ -145,7 +146,11 @@ function MyDetailPlan({
   const [forDayLine, setForDayLine] = useState(0);
   const [routeMap, setRouteMap] = useState([]);
   const [planDate, setPlanDate] = useState();
+  const [bbc, setBbc] = useState([]);
   let dispatch = useDispatch();
+  let reduxState = useSelector((state) => {
+    return state;
+  });
 
   useEffect(() => {
     let token = sessionStorage.getItem("token");
@@ -161,12 +166,17 @@ function MyDetailPlan({
         },
       })
       .then((resp) => {
-        // console.log('상세경로 데이터 확인 : ',resp.data);
-
+        // console.log("상세경로 데이터 확인 : ", resp.data);
         setCurrPosition(resp.data.title.split(" ")[0]);
         setRouteMap(resp.data.routeMap);
-
         setPlanDate(resp.data.plannerdate);
+        let keys = Object.keys(resp.data.routeMap);
+        let values = Object.values(resp.data.routeMap);
+        let bbc = Object.entries(resp.data.routeMap).map((val, idx) => {
+          return { [keys[idx]]: values[idx] };
+        });
+        dispatch(delAllTimeSetObj([]));
+        setBbc(bbc);
       })
       .catch((error) => {
         console.log((error) => console.log("상세경로 가져오기 실패", error));
@@ -217,25 +227,6 @@ function MyDetailPlan({
   dispatch(
     addMonthNDate({ month: fristMonth, date: fristDate, dow: fristDow })
   );
-  // dispatch(
-  //     changeTimeSetObj({
-  //       day: index + 1,
-  //       fullDate:
-  //         "Sat Jan 01 2022 10:00:00 GMT+0900 (한국 표준시)",
-  //       ampm: "오전",
-  //       time: 10,
-  //       min: 0,
-  //     })
-  // );
-
-  let keys = Object.keys(routeMap);
-  let values = Object.values(routeMap);
-
-  let bbc = Object.entries(routeMap).map((val, idx) => {
-    return { [keys[idx]]: values[idx] };
-  });
-
-  //   console.log("bbc :", bbc);
 
   //Object.entries(routeMap)
   return (

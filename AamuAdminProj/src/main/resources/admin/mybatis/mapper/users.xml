@@ -3,26 +3,33 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="admin.mybatis.mapper.users">
-	<!-- 전체 글 뿌려주기 -->
-	<!--  
-	<select id="commuSelectList"  parameterType="Map" resultType="usersDTO">
+	<!-- 전체 회원 뿌려주기 -->
+	<select id="usersSelectList"  parameterType="Map" resultType="usersDTO">
 		SELECT * FROM
-		(SELECT T.*,ROWNUM R FROM (
-		SELECT c.* FROM community c JOIN users u ON c.id=u.id 
+		(SELECT T.*, ROWNUM R FROM(
+		SELECT u.*, ac.enabled FROM USERS u join authority_security ac on u.id=ac.id where ac.authority='ROLE_USER' 
 		<if test="searchColumn != null">
 	  	 	WHERE ${searchColumn} LIKE '%' || #{searchWord} || '%' 
-	  	</if>  
-		ORDER BY lno DESC) T)
+	  	</if>
+		ORDER BY u.ID)T)
 		WHERE R BETWEEN #{start} AND #{end}
 	</select>
-	-->
+
 	
 	<!-- 전체 글 레코드수 -->
-	<!--  
-	<select id="commuGetTotalRecordCount" parameterType="Map" resultType="int">
-	 	SELECT COUNT(*) FROM community
+	<select id="usersGetTotalRecordCount" parameterType="Map" resultType="int">
+	 	SELECT COUNT(*) FROM USERS u JOIN authority_security ac on u.id=ac.id where ac.authority='ROLE_USER'
 	</select>
-	-->
+	
+	<!-- 프로필 사진 -->
+	<select id="usersSelectUserProf" parameterType="String" resultType="String">
+		SELECT userprofile from users where id=#{id}
+	</select>
+	
+	<!-- 회원 정지 -->
+	<update id="usersStop" parameterType="Map">
+		UPDATE authority_security SET enabled=0 WHERE id=#{id}
+	</update>
 	
 	
 	

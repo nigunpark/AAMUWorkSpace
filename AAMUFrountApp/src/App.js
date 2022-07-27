@@ -15,6 +15,8 @@ import DetailModal from "./pages/Forum/DetailModal/DetailModal";
 import KakaoRedirectHandler from "./components/Login/Kakao/KakaoRedirectHandler";
 import JoinStep1 from "./components/Join/JoinStep1.js";
 import JoinStep2 from "./components/Join/JoinStep2.js";
+import SearchList from "./components/Insta/SearchList";
+
 
 function App() {
   let location = useLocation();
@@ -23,6 +25,7 @@ function App() {
   }, [location]);
   const [scrollNav, setScrollNav] = useState(false);
   const [whereUrl, setWhereUrl] = useState(false);
+  const [searchb, setSearchb] = useState([]);
 
   const handleScroll = () => {
     if (window.scrollY > 950 && window.scrollY < 2500) setScrollNav(true);
@@ -41,6 +44,7 @@ function App() {
           <Route path="/forum" element={<Forum />} />
           {/* <Route path="/review" element={<Board />} /> */}
           <Route path="/Insta" element={<Main />} />
+          <Route path="/Insta/searchList" element={<SearchList searchb={searchb} setSearchb={setSearchb}/>} />
           <Route path="/myPage" element={<MyPage />} />
         </Route>
         <Route path="/login" element={<LoginTest />}></Route>

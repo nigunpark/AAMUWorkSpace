@@ -55,6 +55,9 @@ public class CommuController {
 			dto.setCommuComment(commuService.commuCommentSelectOne(dto.getLno()));
 			//코멘트의 프로필 셋팅
 			CommuCommentDTO commentdto=dto.getCommuComment();
+			//토탈카운트
+			System.out.println("commuService.commuTotalCount(map):"+commuService.commuTotalCount(map));
+			dto.setTotalCount(commuService.commuTotalCount(map));
 			if(commentdto!=null) {
 				commentdto.setUserprofile(FileUploadUtil.requestOneFile(commuService.commuSelectUserProf(commentdto.getId()), "/resources/commuUpload", req));
 			}
@@ -62,6 +65,7 @@ public class CommuController {
 			dto.setPhoto(FileUploadUtil.requestFilePath(commuService.commuSelectPhotoList(dto.getLno()), "/resources/commuUpload", req));
 			//글쓴이-프로필 사진 가져와서 dto에 셋팅
 			dto.setUserprofile(FileUploadUtil.requestOneFile(commuService.commuSelectUserProf(dto.getId()), "/resources/commuUpload", req));
+			
 		}/////for
 		System.out.println(list.get(0).id.toString());
 		return list;
@@ -78,8 +82,8 @@ public class CommuController {
 	//글 검색용_id,title,tag로 검색
 	@GetMapping("/gram/search/selectList")
 	public List<String> commuSearachList(@RequestParam Map map){
-		System.out.println("검색 map:"+map.get("searchColumn"));
-		System.out.println("검색 map:"+map.get("searchWord"));
+		System.out.println("검색 searchColumn:"+map.get("searchColumn"));
+		System.out.println("검색 searchWord:"+map.get("searchWord"));
 		List<String> list=commuService.commuSearachList(map);
 		return list;
 	}

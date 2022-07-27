@@ -836,7 +836,7 @@
         height: 28px;
         border: 1.7px solid #ffffff;
         background-color: #fff;
-        text-align: center;
+        padding-left: 18px;
         font-size: 14px;
         font-weight: lighter;
         border-radius: 5px;
@@ -847,8 +847,8 @@
                 돋보기 구현 전
                 background-image: none;
                 */
-        width: 230px;
-        padding-left: 28px;
+        width: 180px;
+        padding-left: 18px;
         color: #262626;
         text-align: left;
       }
@@ -1344,6 +1344,8 @@
       padding-right: 30px;
       font-size: 20px;
       margin-top: 5PX;
+
+      
     }
   }
   
@@ -1362,6 +1364,7 @@
     overflow: hidden;
     clip:rect(0,0,0,0);
     border: 0;
+   
   }
 
 }
@@ -1383,7 +1386,7 @@
 
    
   }
-
+  
 
 .comment-writing {
   margin-left: 5px;

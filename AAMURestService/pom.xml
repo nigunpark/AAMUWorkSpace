@@ -233,12 +233,12 @@
 		<dependency>
 		    <groupId>org.springframework</groupId>
 		    <artifactId>spring-websocket</artifactId>
-		    <version>5.3.22</version>
+		    <version>${org.springframework-version}</version>
 		</dependency>
 		<dependency>
 		    <groupId>org.springframework</groupId>
 		    <artifactId>spring-messaging</artifactId>
-		    <version>5.3.22</version>
+		    <version>${org.springframework-version}</version>
 		</dependency>
 		      
 	</dependencies>
