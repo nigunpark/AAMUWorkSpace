@@ -51,7 +51,7 @@ const CreatePlanLeft = ({
     val.id = i;
   });
 
-  // console.log("reduxState.monthNdate 이거 : ", reduxState.monthNdate);
+  console.log("reduxState.timeSetObj 이거 : ", reduxState.timeSetObj);
   return (
     <div className="createPlanLeft">
       <div className="createPlanLeft__days">
