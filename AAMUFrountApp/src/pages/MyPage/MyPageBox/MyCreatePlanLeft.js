@@ -27,7 +27,7 @@ const MyCreatePlanLeft = ({
   fromWooJaeData,
   setForDayLine,
   setFromWooJaeData,
-  routeMap
+  routeMap,
 }) => {
   let reduxState = useSelector((state) => {
     return state;
@@ -37,11 +37,11 @@ const MyCreatePlanLeft = ({
   const [temp, setTemp] = useState("");
 
   useEffect(() => {
-    setTemp(dayRef.current);
+    return setTemp(dayRef.current);
   }, []);
   if (fromWooJaeData.length === 0) return;
   if (fromWooJaeData === undefined) return;
-  console.log("fromWooJaeData", fromWooJaeData);
+  // console.log("fromWooJaeData", fromWooJaeData);
   let tempWholeArr = [];
   fromWooJaeData.forEach((val, i) => {
     let temp = Object.values(val)[0];
@@ -115,7 +115,7 @@ function WhichModal({
   currPosition,
   fromWooJaeData,
   setFromWooJaeData,
-  routeMap
+  routeMap,
 }) {
   if (whichModal === "전체일정") {
     return (
@@ -148,17 +148,20 @@ function WhichModal({
   }
 }
 
-function WholeSchedule({ currPosition, fromWooJaeData, setFromWooJaeData, routeMap }) {
+function WholeSchedule({
+  currPosition,
+  fromWooJaeData,
+  setFromWooJaeData,
+  routeMap,
+}) {
   let reduxState = useSelector((state) => {
     return state;
   });
   let dispatch = useDispatch();
   useEffect(() => {
     dispatch(delAllWholeBb([]));
-    dispatch(delAllTimeSetObj([]))
+    dispatch(delAllTimeSetObj([]));
   }, []);
-
-  
 
   return (
     <div className="createPlanLeft__schedule">
@@ -189,58 +192,60 @@ function WholeSchedule({ currPosition, fromWooJaeData, setFromWooJaeData, routeM
 }
 
 function Content({ index, fromWooJaeData, setFromWooJaeData, routeMap }) {
- 
-// console.log('fromWooJaeData :', fromWooJaeData);
-  // console.log('routeMap 잘 되는지 :',(fromWooJaeData[index][`day${index+1}`][0].starttime)/(1000*60*60));
-
-  
-  // console.log('ㅇㅇㅇㅇㅇㅇ',new Date(`2022-01-01 ${bbcT/60}:${bbcT%60}`));
-  // console.log('bbcT ;;', bbcT);
- 
-  console.log('fromWooJaeData :', fromWooJaeData);
-  console.log('bbcTime :', bbcTime);
-
+  const [sortedList, setSortedList] = useState([]);
+  const [showTimePicker, setShowTimePicker] = useState(false);
+  const [bbcTime, setBbcTime] = useState({});
   let reduxState = useSelector((state) => {
     return state;
   });
-  const [sortedList, setSortedList] = useState([]);
+  // console.log('fromWooJaeData :', fromWooJaeData);
+  // console.log('routeMap 잘 되는지 :',(fromWooJaeData[index][`day${index+1}`][0].starttime)/(1000*60*60));
+
+  // console.log('ㅇㅇㅇㅇㅇㅇ',new Date(`2022-01-01 ${bbcT/60}:${bbcT%60}`));
+  // console.log('bbcT ;;', bbcT);
+
+  // console.log("fromWooJaeData :", fromWooJaeData);
+  console.log("content안");
+
   let dispatch = useDispatch();
-  const [bbcTime, setBbcTime] = useState({});
   let contentRef = useRef();
   let sourceElement = null;
-  let bbcT=(fromWooJaeData[index][`day${index+1}`][0].starttime)/(1000*60);
-  const [showTimePicker, setShowTimePicker] = useState(false);
+
   useEffect(() => {
-    console.log('useEffet11111111111111111111')
-    if(bbcT >= 13*60){
-      console.log('위위위')
+    let bbcT =
+      fromWooJaeData[index][`day${index + 1}`][0].starttime / (1000 * 60);
+    console.log("bbcT", bbcT);
+    if (bbcT >= 13 * 60) {
+      console.log("위위위");
       setBbcTime({
-        ampm : '오후',
-        time : (bbcT/60)-12,
-        fullDate:new Date(`2022-01-01 ${bbcT/60}:${bbcT%60}`),
-        min : bbcT%60,
-        day : index+1
-      })
-    }
-    else{
-      console.log('11111')
+        ampm: "오후",
+        time: bbcT / 60 - 12,
+        fullDate: new Date(`2022-01-01 ${bbcT / 60}:${bbcT % 60}`),
+        min: bbcT % 60,
+        day: index + 1,
+      });
+    } else {
+      console.log("11111");
       setBbcTime({
-        ampm : '오전',
-        time : bbcT/60,
-        fullDate:new Date(`2022-01-01 ${bbcT/60}:${bbcT%60}`),
-        min : bbcT%60,
-        day : index+1
-      })
+        ampm: "오전",
+        time: bbcT / 60,
+        fullDate: new Date(`2022-01-01 ${bbcT / 60}:${bbcT % 60}`),
+        min: bbcT % 60,
+        day: index + 1,
+      });
     }
-    dispatch(changeTimeSetObj(bbcTime))
-    fromWooJaeData.forEach((val, i) => {
-      fromWooJaeData[index]["day" + (index + 1)][0].mtime = 0;
-    });
-    // console.log("fromWooJaeData[index]", fromWooJaeData[index]);
-    if (fromWooJaeData[index] !== undefined) {
-      let newArr = [...fromWooJaeData[index]["day" + (index + 1)]];
-      setSortedList(newArr);
-    }
+    dispatch(changeTimeSetObj(bbcTime));
+  }, []);
+
+  useEffect(() => {
+    // fromWooJaeData.forEach((val, i) => {
+    //   fromWooJaeData[index]["day" + (index + 1)][0].mtime = 0;
+    // });
+    // // console.log("fromWooJaeData[index]", fromWooJaeData[index]);
+    // if (fromWooJaeData[index] !== undefined) {
+    //   let newArr = [...fromWooJaeData[index]["day" + (index + 1)]];
+    //   setSortedList(newArr);
+    // }
   }, []);
   if (fromWooJaeData === undefined) return;
   if (fromWooJaeData.length === 0) return;
@@ -360,10 +365,6 @@ function Content({ index, fromWooJaeData, setFromWooJaeData, routeMap }) {
   }
   return (
     <div className="createPlanLeft__schedule__content" ref={contentRef}>
-      {
-        // console.log('timeSetObj  ㅇㅇㅇㅇ :',reduxState.timeSetObj),
-        console.log('bbcTime  ㅇㅇㅇㅇ :',bbcTime)
-      }
       <select
         className="createPlanLeft__schedule__select"
         onChange={(e) => {
@@ -510,12 +511,12 @@ function Content({ index, fromWooJaeData, setFromWooJaeData, routeMap }) {
           </span>{" "}
           <span>
             {reduxState.timeSetObj
-                .find((obj) => {
-                  return obj.day === index + 1;
-                })
-                .time.toString()
-                .trim()
-                .padStart(2, "0")}
+              .find((obj) => {
+                return obj.day === index + 1;
+              })
+              .time.toString()
+              .trim()
+              .padStart(2, "0")}
           </span>
           {" : "}
           <span>
