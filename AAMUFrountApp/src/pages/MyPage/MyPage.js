@@ -272,11 +272,6 @@ function Title({clickTab}){ //타이틀
 //-----------------------------------------------------------------------
 function TabContent({clickTab, setClickTab, planList}) {
   
-  
-  
-
-  
-
   const [selectRbn, setSelectRbn] = useState();
 
   // console.log('등록한 이미지:',showImages);
@@ -285,7 +280,7 @@ function TabContent({clickTab, setClickTab, planList}) {
   // console.log('입력한 제목:',title);
   // console.log('입력한 내용:',content);
   // console.log('입력한 태그:',tag);
-  console.log('selectRbn 1 :', selectRbn);
+  // console.log('selectRbn 1 :', selectRbn);
 
   
   
