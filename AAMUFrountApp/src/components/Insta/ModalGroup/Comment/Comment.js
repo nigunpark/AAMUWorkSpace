@@ -18,18 +18,12 @@ import { CommentsDisabled } from "@mui/icons-material";
 function Comment({val,forReRender, setForReRender}) {
     let menuRef = useRef();
     let replyRef = useRef();
-    let commentRef = useRef();
     const [commentHeart,setCommentHeart] = useState(false);
     const [modalShow, setModalShow] = useState(false);
     const [reply, setReply] = useState(false);
     let [comment, setComment] = useState('');
-    const [idReply, setidReply] = useState([{
-        id: '',
-        reply:''
-    }]);
 
     
-    let [feedComments, setfeedComments] = useState([]); 
     let [isValid, setisValid] = useState(false); 
     
     function menuModalRef(e){
@@ -37,14 +31,6 @@ function Comment({val,forReRender, setForReRender}) {
         if (e.target != menuRef.current) setModalShow(false);
     }
     window.addEventListener("click", menuModalRef);
-
-    function uploadFile(idReply){//이미지 업로드
-        let formData = new FormData(); // formData 객체를 생성한다.
-        for (let i = 0; i < comments.length; i++) { 
-          formData.append("", comments[i]); // 반복문을 활용하여 파일들을 formData 객체에 추가한다
-        }
-        return formData;
-      }
 
     const [comments, setcomments] = useState([]);
     
@@ -59,7 +45,6 @@ function Comment({val,forReRender, setForReRender}) {
             },
         })
         .then((resp) => {
-        console.log(resp.data);
         setcomments(resp.data.commuCommentList);
         })
         .catch((error) => {
@@ -67,9 +52,11 @@ function Comment({val,forReRender, setForReRender}) {
         });
         setComment('');
     }
+
     useEffect(()=>{
         commentModal(setcomments)
       },[])
+
     const settings = {//이미지 슬라이드
         dots: true,
         infinite: false,
@@ -99,7 +86,9 @@ function Comment({val,forReRender, setForReRender}) {
             console.log(error);
           });
       }
+
       const [commentss, setcommentss] = useState('');
+
       function post(comment){//유효성 검사를 통과하고 게시버튼 클릭시 발생하는 함수
   
           let token = sessionStorage.getItem("token");
@@ -116,10 +105,11 @@ function Comment({val,forReRender, setForReRender}) {
               }
           )
           .then((resp) => {       
-              console.log('resp.data',resp.data)     
-              setfeedComments(resp.data);
-              val.commuComment.reply=resp.data.reply 
-              console.log('val.commuComment.reply',val.commuComment.reply)  
+                const replyOne=resp.data.reply 
+                console.log('resp.data',resp.data.reply )   
+                const copyComments = [...replyOne];
+                setcomments(copyComments);
+                commentModal(setcomments)
               })
               .catch((error) => {
               console.log(error);
@@ -131,16 +121,12 @@ function Comment({val,forReRender, setForReRender}) {
       let CommentList = ({val}) => {
           
         return(
-            // <div className = 'writing'>
-            //     <span className="id">{val.commuComment==null?null:val.commuComment.id}</span>
-            //     <span>{val.commuComment==null?null:val.commuComment.reply}</span>
-            // </div>
             <div className="recommend-contents">
                 <img className='likeimg' src="./img/bk.jpg" alt="추사" />
                 <div style={{width:'100%',display:'flex',flexDirection:'column',marginTop:'10px',marginLeft:'10px'}}>
                     <div style={{display:'flex',flexDirection:'row'}}>
                         <p className="userName"><strong>{sessionStorage.getItem('username')}</strong></p>
-                        <p className="userName">{val.commuCommentList ==null ? null : val.commuComment.reply}</p>
+                        <p className="userName">{val.reply}</p>
                     </div>
                     <div className="comment-heart">
                         {commentHeart ?<i className="fa-solid fa-heart"onClick={()=>{setCommentHeart(!commentHeart)}} style={{color:'red'}} />
@@ -251,28 +237,7 @@ function Comment({val,forReRender, setForReRender}) {
                                     })
                                 }
                                 
-                        {
-                            reply?
-                            <div className="recommend-contents">
-                            <img className='likeimg' src="./img/bk.jpg" alt="추사" />
-                            <div style={{width:'100%',display:'flex',flexDirection:'column',marginTop:'10px',marginLeft:'10px'}}>
-                                <div style={{display:'flex',flexDirection:'row'}}>
-                                    <p className="userName"><strong>{sessionStorage.getItem('username')}</strong></p>
-                                    <p className="userName">{val.commuCommentList ==null ? null : val.commuComment.reply}</p>
-                                </div>
-                                <div className="comment-heart">
-                                    {commentHeart ?<i className="fa-solid fa-heart"onClick={()=>{setCommentHeart(!commentHeart)}} style={{color:'red'}} />
-                                    :<i className="fa-regular fa-heart"  onClick={()=>{setCommentHeart(!commentHeart)}}></i>}
-                                    <i class="fa-regular fa-trash-can"></i>
-                                </div>
-                                <div style={{fontSize:'10px',color:'#a5a5a5',marginTop:'8px'}}>
-                                    <p className="postDate">{dayjs(val.postdate).format('YYYY/MM/DD')}</p>
-                                </div>
-                            </div>
-                        </div>
-                        : null
-                        }
-                       
+                    
                        
                     </div>    
                 </div>

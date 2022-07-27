@@ -28,4 +28,5 @@ public class CommuDTO {
 	public List<String> photo;
 	public String contentid;
 	public String title;
+	public int totalCount;
 }

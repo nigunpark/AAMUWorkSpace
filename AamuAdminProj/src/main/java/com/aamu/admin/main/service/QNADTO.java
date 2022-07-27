@@ -31,7 +31,8 @@ public class QNADTO {
 	private String content;
 	private String qcount;
 	private java.sql.Date qdate;
-	private String answerComment;
+	private String name;//이름 저장용
+	private String answerCount;
 	
 	List<AnswerDTO> answer;
 

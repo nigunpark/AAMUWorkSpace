@@ -22,6 +22,7 @@ import {
 } from "../../../redux/store";
 import axios from "axios";
 let count = 0;
+let timeSetArr = [];
 function MyCreatePlanLeft({
   currPosition,
   fromWooJaeData,
@@ -32,11 +33,39 @@ function MyCreatePlanLeft({
   let reduxState = useSelector((state) => {
     return state;
   });
+  let dispatch = useDispatch();
   const [whichModal, setWhichModal] = useState("전체일정");
   const dayRef = useRef();
   const [temp, setTemp] = useState("");
-  console.log("timeSetObj0---------", reduxState.timeSetObj);
+
   useEffect(() => {
+    console.log("fromWooJaeData", fromWooJaeData);
+
+    fromWooJaeData.map((val, index) => {
+      let bbcT =
+        fromWooJaeData[index][`day${index + 1}`][0].starttime / (1000 * 60);
+      if (bbcT >= 13 * 60) {
+        console.log("위");
+        let temp = {
+          ampm: "오후",
+          time: bbcT / 60 - 12,
+          fullDate: new Date(`2022-01-01 ${bbcT / 60}:${bbcT % 60}`),
+          min: bbcT % 60,
+          day: index + 1,
+        };
+        // dispatch(changeTimeSetObj({ ...temp }));
+      } else {
+        console.log("아래");
+        let temp = {
+          ampm: "오전",
+          time: bbcT / 60,
+          fullDate: new Date(`2022-01-01 ${bbcT / 60}:${bbcT % 60}`),
+          min: bbcT % 60,
+          day: index + 1,
+        };
+        // dispatch(changeTimeSetObj({ ...temp }));
+      }
+    });
     setTemp(dayRef.current);
   }, []);
   if (fromWooJaeData.length === 0) return;
@@ -193,10 +222,10 @@ function WholeSchedule({
 function Content({ index, fromWooJaeData, setFromWooJaeData }) {
   const [sortedList, setSortedList] = useState([]);
   const [showTimePicker, setShowTimePicker] = useState(false);
-  const [bbcTime, setBbcTime] = useState({});
   let reduxState = useSelector((state) => {
     return state;
   });
+  console.log("timeSetObj0(Content)", reduxState.timeSetObj);
   let dispatch = useDispatch();
   let contentRef = useRef();
   let sourceElement = null;
@@ -241,48 +270,15 @@ function Content({ index, fromWooJaeData, setFromWooJaeData }) {
   //   },
   // ];
   useEffect(() => {
-    return console.log("1111");
-    // dispatch(
-    //   changeTimeSetObj({
-    //     ampm: "오전",
-    //     time: bbcT / 60,
-    //     fullDate: new Date(`2022-01-01 ${bbcT / 60}:${bbcT % 60}`),
-    //     min: bbcT % 60,
-    //     day: index + 1,
-    //   })
-    // );
-    // let bbcT =
-    //   fromWooJaeData[index][`day${index + 1}`][0].starttime / (1000 * 60);
-    // console.log("bbcT", bbcT);
-    // if (bbcT >= 13 * 60) {
-    //   setBbcTime({
-    //     ampm: "오후",
-    //     time: bbcT / 60 - 12,
-    //     fullDate: new Date(`2022-01-01 ${bbcT / 60}:${bbcT % 60}`),
-    //     min: bbcT % 60,
-    //     day: index + 1,
-    //   });
-    // } else {
-    //   setBbcTime({
-    //     ampm: "오전",
-    //     time: bbcT / 60,
-    //     fullDate: new Date(`2022-01-01 ${bbcT / 60}:${bbcT % 60}`),
-    //     min: bbcT % 60,
-    //     day: index + 1,
-    //   });
-    // }
-    // dispatch(changeTimeSetObj(bbcTime));
-
-    // fromWooJaeData.forEach((val, i) => {
-    //   fromWooJaeData[index]["day" + (index + 1)][0].mtime = 0;
-    // });
-    // // console.log("fromWooJaeData[index]", fromWooJaeData[index]);
-    // if (fromWooJaeData[index] !== undefined) {
-    //   let newArr = [...fromWooJaeData[index]["day" + (index + 1)]];
-    //   setSortedList(newArr);
-    // }
+    fromWooJaeData.forEach((val, i) => {
+      fromWooJaeData[index]["day" + (index + 1)][0].mtime = 0;
+    });
+    // console.log("fromWooJaeData[index]", fromWooJaeData[index]);
+    if (fromWooJaeData[index] !== undefined) {
+      let newArr = [...fromWooJaeData[index]["day" + (index + 1)]];
+      setSortedList(newArr);
+    }
   }, []);
-  console.log("fromWooJaeData(Content안)", fromWooJaeData);
   if (fromWooJaeData === undefined) return;
   if (fromWooJaeData.length === 0) return;
   if (fromWooJaeData[index] === undefined) return;

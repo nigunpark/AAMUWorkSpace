@@ -19,6 +19,9 @@ public interface CommuService<T> {
 	//글 목록용_좋아요 여부 뿌려주기
 	//Boolean commuIsLike(Map map);
 	
+	//글 목록용_토탈카운트 
+	int commuTotalCount(Map map);
+	
 	//글 검색용
 	List<String> commuSearachList(Map map);
 

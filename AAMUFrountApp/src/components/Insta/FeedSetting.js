@@ -7,11 +7,10 @@ import Slider from "react-slick";
 import "./ModalGroup/Slider/slick.css";
 import "./ModalGroup/Slider/slick-theme.css";
 import dayjs from 'dayjs';
-import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 import axios from "axios";
-import { Link } from "react-router-dom";
 import Edit from './ModalGroup/Edit/Edit'
+import { confirmAlert } from "react-confirm-alert";
 
 
 
@@ -21,6 +20,7 @@ function FeedSetting({val,setlist,forReRender, setForReRender, setloading}) {
     let profileRef = useRef();
     let commentRef = useRef();
     let replyRef = useRef();
+    let editRef = useRef();
     const [editModal, seteditModal] = useState(false);
     
     const [modalShow, setModalShow] = useState(false);
@@ -131,15 +131,15 @@ function FeedSetting({val,setlist,forReRender, setForReRender, setloading}) {
             console.log(error);
           });
       }
-      
-      
+     
 
+     
+      
   return (
 <div>
-    
     <div className="feeds-setting">  
       <div className="title-profile">
-        <img src="./img/bk.jpg" alt="프사" />                
+        <img src="/images/user.jpg" alt="프사" onError={(e)=>{e.stopPropagation(); e.target.src='/images/user.jpg'}}/>                
         <span
             ref={profileRef}
             className="profileSpan"
@@ -206,7 +206,7 @@ function FeedSetting({val,setlist,forReRender, setForReRender, setloading}) {
                 <Container1>
                     <Overlay
                     ref={commentRef} 
-                    onClick={ (e) => { if(e.target == commentRef.current) setcommentModal(false)  }}
+                    onClick={ (e) => {e.stopPropagation(); if(e.target == commentRef.current) setcommentModal(false)  }}
                     >
                         <Comment onClick={ () => {setcommentModal(false)}} val={val} forReRender={forReRender} setForReRender={setForReRender}></Comment>
                     </Overlay>
@@ -275,11 +275,12 @@ function FeedSetting({val,setlist,forReRender, setForReRender, setloading}) {
                 ref={replyRef}
                 className="inputComment" 
                 placeholder="댓글 달기..."
-                onChange={(e)=>{
+                onChange={(e)=>{e.stopPropagation();
                     setComment(e.target.value);//댓글 창의 상태가 변할때마다 setComment를 통해 comment값을 바꿔준다
                     
                 }}
                 onKeyUp={(e)=>{
+                    e.stopPropagation();
                     e.target.value.length > 0//사용자가 키를 눌렀다 떼었을때 길이가 0을 넘는 값인지 유효성 검사 결과 값을 담는다
                     ? setisValid(true)
                     : setisValid(false);

@@ -26,6 +26,11 @@
 		SELECT photo FROM commuphoto WHERE lno=#{lno}
 	</select>
 	
+	<!-- 글 목록용_검색 총 게시물수 -->
+	<select id="commuTotalCount" parameterType="Map" resultType="int">
+		SELECT COUNT(*) FROM community WHERE #{searchColumn}=#{searchWord}
+	</select>
+	
 	<!-- 글 검색용 -->
 	<select id="commuSearachList" parameterType="Map" resultType="String">
 		SELECT ${searchColumn} FROM ${table} WHERE ${searchColumn} LIKE '%'||#{searchWord}||'%'

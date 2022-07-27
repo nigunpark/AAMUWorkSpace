@@ -13,6 +13,7 @@ function SearchModal({search,setinputValue,setHasText}){
             <Searchcontents>
             
               {search.map((val,i)=>{return <P onClick={(e)=>{
+                e.stopPropagation();
                 setinputValue(e.target.textContent)
                 setHasText(false)}              
               }>{val.TITLE}</P>

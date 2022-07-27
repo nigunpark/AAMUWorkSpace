@@ -19,6 +19,8 @@ const Modal = ({val,setModalShow,seteditModal , setlist}) => {
     }
     
     window.addEventListener("click", menuModalRef);
+
+ 
     
     let [deleteOnee, setdeleteOnee] = useState(false); 
     function deleteOne(){//업로드 버튼 누르고 화면 새로고침
@@ -30,6 +32,7 @@ const Modal = ({val,setModalShow,seteditModal , setlist}) => {
         })
         .then((resp) => {
             setdeleteOnee(resp.data);//성공 여부가 온다 true false
+            // alert('삭제되었습니다!')
             feedList(setlist,setloading)
           })
           .catch((error) => {
