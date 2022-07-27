@@ -54,7 +54,7 @@ fun getToken() : String?{
     return token
 }
 
-fun getLatLng(): Location {
+fun getLatLng(): Location? {
     var currentLatLng: Location? = null
     var hasFineLocationPermission = ContextCompat.checkSelfPermission(
         contextL,
@@ -70,9 +70,10 @@ fun getLatLng(): Location {
         hasCoarseLocationPermission == PackageManager.PERMISSION_GRANTED
     ) {
         currentLatLng = locatioNManager?.getLastKnownLocation(locatioNProvider)
+            ?: locatioNManager?.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
     }
 
-    return currentLatLng!!
+    return currentLatLng
 }
 
 

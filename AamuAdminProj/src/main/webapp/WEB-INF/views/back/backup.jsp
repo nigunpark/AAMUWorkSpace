@@ -14,9 +14,6 @@
 						<div class="col-lg-12 grid-margin stretch-card">
 							<div class="card">
 								<div class="card-body">
-								<div class="card-numberOfBoard">
-										<button class="btn btn-primary text-white me-0" style="float: right" id="backup">저장</button>
-									</div>
 									<h4 class="card-title">여행지 리스트</h4>
 									<div class="table-responsive text-center">
 										<table class="table table-hover text-center">

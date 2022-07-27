@@ -48,6 +48,7 @@ class AAMUPlanViewModel(context : Context) : ViewModel(), MapView.POIItemEventLi
     val place = MutableLiveData<Place>()
 
     init {
+        mapView.setCurrentLocationEventListener(PlanListener())
         setCurrentMarker()
         viewModelScope.launch {
             aamuRepository.getPlannerSelectList()
@@ -65,13 +66,13 @@ class AAMUPlanViewModel(context : Context) : ViewModel(), MapView.POIItemEventLi
     }
 
     fun setCurrentMarker(){
-        val location : Location = getLatLng()
-        mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(location.latitude, location.longitude),true)
+        val location : Location? = getLatLng()
+        mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(location?.latitude ?: 33.450701, location?.longitude ?: 126.570667),true)
         mapView.removeAllPOIItems()
         mapView.removeAllPolylines()
         val mCustomMarker :MapPOIItem =MapPOIItem()
         mCustomMarker.itemName = "현재 위치"
-        mCustomMarker.mapPoint = MapPoint.mapPointWithGeoCoord(location.latitude,location.longitude)
+        mCustomMarker.mapPoint = MapPoint.mapPointWithGeoCoord(location?.latitude ?:33.450701,location?.longitude ?:126.570667)
         mCustomMarker.markerType =MapPOIItem.MarkerType.CustomImage
 
         mCustomMarker.customImageResourceId = R.drawable.map_start_icon
@@ -120,10 +121,14 @@ class AAMUPlanViewModel(context : Context) : ViewModel(), MapView.POIItemEventLi
                         val keys = it.routeMap?.keys
                         val tempPlanner = ArrayList<Place>(emptyList())
                         for (key in keys!!){
-                            tempPlanner.add(Place(dto = AAMUPlaceResponse(title = "${key}")))
+                            val tempPlace = Place(dto = AAMUPlaceResponse(title = "${key}"))
+                            val tempString = ArrayList<String>(emptyList())
+                            tempPlanner.add(tempPlace)
                             for( place in it.routeMap!!.get(key)!!){
                                 tempPlanner.add(place!!)
+                                tempString.add(place.dto?.title!!)
                             }
+                            tempPlace.dto?.addr = tempString.joinToString("&&")
                         }
                         planners.value = tempPlanner
                     }
@@ -186,15 +191,15 @@ class AAMUPlanViewModel(context : Context) : ViewModel(), MapView.POIItemEventLi
     fun getPlanMove(planner: Place){
         mapView.removeAllPOIItems()
         mapView.removeAllPolylines()
-        val location : Location = getLatLng()
+        val location : Location? = getLatLng()
 
-        val mapPoint : Array<MapPoint> = arrayOf(MapPoint.mapPointWithGeoCoord(location.latitude,location.longitude)
+        val mapPoint : Array<MapPoint> = arrayOf(MapPoint.mapPointWithGeoCoord(location?.latitude ?: 33.450701, location?.longitude ?: 126.570667)
                 ,MapPoint.mapPointWithGeoCoord(planner.dto?.mapy!!,planner.dto?.mapx!!))
 
         val mCustomMarker :MapPOIItem =MapPOIItem()
 
         mCustomMarker.itemName = "현재 위치"
-        mCustomMarker.mapPoint = MapPoint.mapPointWithGeoCoord(location.latitude,location.longitude)
+        mCustomMarker.mapPoint = MapPoint.mapPointWithGeoCoord(location?.latitude ?: 33.450701, location?.longitude ?: 126.570667)
         mCustomMarker.markerType =MapPOIItem.MarkerType.CustomImage
 
         mCustomMarker.customImageResourceId = R.drawable.map_start_icon

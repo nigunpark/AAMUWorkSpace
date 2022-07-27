@@ -1,8 +1,13 @@
 package com.aamu.aamuandroidapp.util
 
 import android.content.Context
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -10,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
@@ -52,4 +58,28 @@ fun LottieLoadingView(
         modifier = modifier.defaultMinSize(300.dp),
         iterations = iterations,
     )
+}
+
+@Composable
+fun CustomChips(text: String, modifier: Modifier = Modifier){
+    Surface(
+        color = androidx.compose.material3.MaterialTheme.colorScheme.inverseOnSurface.copy(alpha = 0.05f),
+        contentColor = androidx.compose.material3.MaterialTheme.colorScheme.onSurface,
+        shape = CircleShape,
+        border = BorderStroke(
+            width = 1.dp,
+            color = Color.LightGray
+        ),
+        modifier = modifier
+    ) {
+        Text(
+            text = text,
+            textAlign = TextAlign.Center,
+            style = androidx.compose.material3.MaterialTheme.typography.bodyMedium,
+            modifier = Modifier.padding(
+                vertical = 8.dp,
+                horizontal = 12.dp,
+            )
+        )
+    }
 }

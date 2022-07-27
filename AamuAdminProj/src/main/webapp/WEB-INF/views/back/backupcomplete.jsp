@@ -70,8 +70,29 @@
 
 <script>
 $('#save').click(function(){
-	var bbs =${placelist};
-	console.log(bbs);
+	var placelist =new Array();
+	<c:forEach items="${placelist}" var="item">
+		placelist.push({
+			areacode:"${item.areacode}",
+			sigungucode:"${item.sigungucode}",
+			contentid:"${item.contentid}",
+			contenttypeid:"${item.contenttypeid}",
+			mapx:"${item.mapx}",
+			mapy:"${item.mapy}",
+			title:"${item.title}",
+			addr:"${item.addr}",
+			image:"${item.bigimage}"
+			
+		});
+	</c:forEach>
+	var placejson = JSON.stringify({"placelist":placelist});
+	$.ajax({
+		url:"http://192.168.0.19:5020/saveplaces",
+		type:"post",
+		data: placejson,
+		contentType:"application/json", //데이타 보낼 때
+		dataType: "json" //데이타 받을 때 
+	}).done(data=>{(console.log('저장 성공'),data)}).fail(e=>{console.log('실패',e)})
 });
     
   </script>
