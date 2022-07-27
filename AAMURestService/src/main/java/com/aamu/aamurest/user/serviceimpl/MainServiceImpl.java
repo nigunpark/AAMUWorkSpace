@@ -187,6 +187,9 @@ public class MainServiceImpl implements MainService{
 			List<RouteDTO> routes = dto.getRoute();
 
 			for(RouteDTO route:routes) {
+				System.out.println("routeid 입니다:"+route.getContentid());
+				System.out.println("routecontenttypeid 입니다:"+route.getContenttypeid());
+				System.out.println("순서입니다:"+route.getOrdno());
 				route.setRbn(dto.getRbn());
 				dao.routeInsert(route);
 			}

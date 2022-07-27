@@ -13,6 +13,7 @@
 		<typeAlias type="com.aamu.admin.main.service.QNADTO" alias="QNADTO"/>
 		<typeAlias type="com.aamu.admin.main.service.AnswerDTO" alias="AnswerDTO"/>
 		<typeAlias type="com.aamu.admin.main.service.api.AttractionDTO" alias="attrDTO"/>
+		<typeAlias type="com.aamu.admin.main.service.UsersDTO" alias="usersDTO"/>
   	</typeAliases>
 	<mappers>
 		<mapper resource="admin/mybatis/mapper/main.xml" />
@@ -21,5 +22,6 @@
 		<mapper resource="admin/mybatis/mapper/bbs.xml" />
 		<mapper resource="admin/mybatis/mapper/qna.xml" />
 		<mapper resource="admin/mybatis/mapper/answer.xml" />
+		<mapper resource="admin/mybatis/mapper/users.xml" />
 	</mappers>
 </configuration>

@@ -2,11 +2,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components';
 import { faRectangleXmark } from "@fortawesome/free-solid-svg-icons";
-import CreatePlanLeft from '../../../components/CreatePlan/CreatePlanLeft';
+import MyCreatePlanLeft from './MyCreatePlanLeft';
 import CreatePlanMap from '../../../components/CreatePlan/CreatePlanMap';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import MyPlanMap from './MyPlanMap';
+import { useDispatch, useSelector } from 'react-redux';
+import { addMonthNDate, changeTimeSetObj, resetMonthNDate } from '../../../redux/store';
 
 const MyHomeBox = ({setClickTab, planList, rbn, setSelectRbn}) => {
 
@@ -89,7 +91,11 @@ const MyHomeBox = ({setClickTab, planList, rbn, setSelectRbn}) => {
                             }}>공유하기</button>
                 </div>
                 <div className='detail-button'>
-                    <button className="learn-more" type="button" style={{marginTop:'20px'}} onClick={onClickModal}>일정보기</button>
+                    <button
+                        className="learn-more"
+                        type="button"
+                        style={{marginTop:'20px'}}
+                        onClick={onClickModal}>일정보기</button>
                 </div>
             </div>
         </div>
@@ -122,12 +128,13 @@ function MyDetailPlan({
     const [forDayLine, setForDayLine] = useState(0);
     const [routeMap, setRouteMap] = useState([]);
     const [planDate, setPlanDate] = useState();
+    let reduxState = useSelector(state => state);
+    let dispatch = useDispatch();
 
-
-    useEffect(()=>{
+    useEffect(async ()=>{
         let token = sessionStorage.getItem("token");
 //   /planner/selectonemap
-        axios.get('/aamurest/planner/selectonemap',{
+        await axios.get('/aamurest/planner/selectonemap',{
             params:{
                 // id:sessionStorage.getItem('username'),
                 rbn:rbn
@@ -151,9 +158,41 @@ function MyDetailPlan({
     // console.log('currPosition 잘 짤렷나요 :',currPosition);
     console.log('planDate 가져왔나 :',planDate);
 
-    console.log('자르기 1 :', planDate.substring(planDate.indexOf('월')-1,planDate.indexOf('월')));
-    console.log('자르기 2 :', planDate.substring(planDate.indexOf('일')-2,planDate.indexOf('일')));
-    console.log('자르기 3 :', planDate.substring(planDate.indexOf('수'),planDate.indexOf('수')+1));
+    // console.log('자르기 1 :', planDate.substring(planDate.indexOf('월')-1,planDate.indexOf('월')));
+    // console.log('자르기 2 :', planDate.substring(planDate.indexOf('일')-2,planDate.indexOf('일')));
+    // console.log('자르기 3 :', planDate.substring(planDate.indexOf('~')-2,planDate.indexOf('~')-1));
+
+    // console.log('자르기 4 :', planDate.substring(planDate.lastIndexOf('월')-1,planDate.lastIndexOf('월')));
+    // console.log('자르기 5 :', planDate.substring(planDate.lastIndexOf('일')-2,planDate.lastIndexOf('일')));
+    // console.log('자르기 6 :', planDate.substring(planDate.lastIndexOf(' ')+1,planDate.lastIndexOf(' ')+2));
+    if(planDate == undefined) return;
+    let fristMonth = planDate.substring(planDate.indexOf('월')-1,planDate.indexOf('월'));
+    let fristDate = planDate.substring(planDate.indexOf('일')-2,planDate.indexOf('일'));
+    let fristDow = planDate.substring(planDate.indexOf('~')-2,planDate.indexOf('~')-1);
+
+    switch(fristDate){
+        case '일': return fristDate=0;
+        case '월': return fristDate=1;
+        case '화': return fristDate=2;
+        case '수': return fristDate=3;
+        case '목': return fristDate=4;
+        case '금': return fristDate=5;
+        case '토': return fristDate=6;
+    };
+
+    dispatch(resetMonthNDate([]));
+    dispatch(addMonthNDate({month:fristMonth, date:fristDate, dow:fristDow}));
+    // dispatch(
+    //     changeTimeSetObj({
+    //       day: index + 1,
+    //       fullDate:
+    //         "Sat Jan 01 2022 10:00:00 GMT+0900 (한국 표준시)",
+    //       ampm: "오전",
+    //       time: 10,
+    //       min: 0,
+    //     })
+    // );
+
 
     let keys = Object.keys(routeMap);
     let values = Object.values(routeMap);
@@ -179,11 +218,12 @@ function MyDetailPlan({
                     </CloseBtn>
                 </TitleBar>
                 <Contents>
-                    <CreatePlanLeft
+                    <MyCreatePlanLeft
                     currPosition={currPosition}//지역명 넣기
-                    fromWooJaeData={fromWooJaeData} //routeMap [{},{},{}] 형식으로 가공해야함
+                    fromWooJaeData={bbc} //routeMap [{},{},{}] 형식으로 가공해야함
                     setFromWooJaeData={setFromWooJaeData}
                     setForDayLine={setForDayLine}
+                    routeMap={routeMap}
                     />
                     {auSure && (
                     <AuSureModal

@@ -49,7 +49,7 @@
 	</insert>
 
 	<insert id="routeInsert" parameterType="routeDTO">
-		INSERT INTO route VALUES(#{rbn},#{contentid},#{day},#{starttime},#{atime},#{mtime})
+		INSERT INTO route VALUES(#{rbn},#{contentid},#{day},#{starttime},#{atime},#{mtime},#{ordno})
 
 	</insert>
 	
@@ -129,7 +129,7 @@
 	</select>
 			
 	<select id="selectRouteList" parameterType="int" resultType="routeDTO">
-		SELECT * FROM route WHERE rbn=#{rbn}
+		SELECT * FROM route WHERE rbn=#{rbn} ORDER BY ordno
 	</select>
 	
 
