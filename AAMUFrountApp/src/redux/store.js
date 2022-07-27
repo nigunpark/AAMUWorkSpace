@@ -215,9 +215,12 @@ let timeSetObj = createSlice({
         })
       ] = action.payload;
     },
+    delAllTimeSetObj(state,action){
+      return action.payload
+    }
   },
 });
-export let { changeTimeSetObj, delTimeSetObj, corrTimeSetObj } =
+export let { changeTimeSetObj, delTimeSetObj, corrTimeSetObj,delAllTimeSetObj } =
   timeSetObj.actions;
 
 //db에서 계산되서 받아온 이동시간이 저장되는 배열 state
