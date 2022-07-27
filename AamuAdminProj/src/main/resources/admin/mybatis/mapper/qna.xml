@@ -25,6 +25,7 @@
 		<result property="content" column="content"/>
 		<result property="qcount" column="qcount"/>
 		<result property="qdate" column="qdate"/>
+		<result property="name" column="name"/>
 		<result property="answerCount" column="answerCount"/>
 		<!-- 
 		1:N관계 매핑용
@@ -46,10 +47,7 @@
 		(SELECT T.*, ROWNUM R FROM (
 		SELECT q.*,name,(SELECT
 		COUNT(*) FROM answer WHERE qno=q.qno) as answerCount
-		FROM
-		QNA q
-		JOIN
-		users u ON q.id=u.id
+		FROM users u JOIN qna q ON u.id=q.id
 		<if test="searchColumn != null">
 			WHERE ${searchColumn} LIKE '%' || #{searchWord} || '%'
 		</if>
@@ -66,9 +64,10 @@
 
 	<!-- 읽기 -->
 	<select id="qnaSelectOne" parameterType="Map"
-		resultType="QNADTO">
-		SELECT * FROM qna
-		WHERE qno=#{qno}
+		resultMap="QNADTOResult">
+  	SELECT q.*,name FROM users u JOIN qna q ON u.id = q.id 
+  	WHERE qno=#{qno}
+		
 	</select>
 
 	<!-- 쓰기 -->

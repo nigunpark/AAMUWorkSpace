@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import com.aamu.admin.main.service.ListPagingData;
 import com.aamu.admin.main.service.PagingUtil;
@@ -53,6 +54,14 @@ public class QNAServiceImpl implements QNAService<QNADTO> {
 
 		return listPagingData;
 	}
+	
+	
+	@Autowired
+	private TransactionTemplate transactionTemplate;
+	
+	//글번호에따른 댓글 삭제용 DAO주입 받기
+	@Autowired
+	private AnswerDAO ldao;
 
 	// 게시물수
 	@Override
