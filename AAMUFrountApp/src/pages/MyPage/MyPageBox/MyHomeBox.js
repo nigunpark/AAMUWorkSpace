@@ -169,38 +169,14 @@ function MyDetailPlan({
         // console.log("상세경로 데이터 확인 : ", resp.data);
         setCurrPosition(resp.data.title.split(" ")[0]);
         setRouteMap(resp.data.routeMap);
+        setPlanDate(resp.data.plannerdate);
         let keys = Object.keys(resp.data.routeMap);
         let values = Object.values(resp.data.routeMap);
-
         let bbc = Object.entries(resp.data.routeMap).map((val, idx) => {
           return { [keys[idx]]: values[idx] };
         });
-        setBbc(bbc);
         dispatch(delAllTimeSetObj([]));
-        reduxState.tripPeriod.map((val, index) => {
-          let bbcT = bbc[index][`day${index + 1}`][0].starttime / (1000 * 60);
-          if (bbcT >= 13 * 60) {
-            let temp = {
-              ampm: "오후",
-              time: bbcT / 60 - 12,
-              fullDate: new Date(`2022-01-01 ${bbcT / 60}:${bbcT % 60}`),
-              min: bbcT % 60,
-              day: index + 1,
-            };
-            dispatch(changeTimeSetObj(temp));
-          } else {
-            let temp = {
-              ampm: "오전",
-              time: bbcT / 60,
-              fullDate: new Date(`2022-01-01 ${bbcT / 60}:${bbcT % 60}`),
-              min: bbcT % 60,
-              day: index + 1,
-            };
-            dispatch(changeTimeSetObj(temp));
-          }
-        });
-
-        setPlanDate(resp.data.plannerdate);
+        setBbc(bbc);
       })
       .catch((error) => {
         console.log((error) => console.log("상세경로 가져오기 실패", error));
@@ -251,8 +227,6 @@ function MyDetailPlan({
   dispatch(
     addMonthNDate({ month: fristMonth, date: fristDate, dow: fristDow })
   );
-
-  //   console.log("bbc :", bbc);
 
   //Object.entries(routeMap)
   return (
