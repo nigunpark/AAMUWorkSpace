@@ -21,6 +21,7 @@ data class Place(
     var day : Int? = null,
     var atime : Int? = null,
     var mtime : Int? = null,
+    var ordno : Int? = null,
     var endtime : Int? = null,
     var comment : String? = null
 )

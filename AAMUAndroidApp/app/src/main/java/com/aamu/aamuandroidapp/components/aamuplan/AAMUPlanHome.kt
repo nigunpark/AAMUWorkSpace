@@ -51,7 +51,7 @@ fun AAMUPlanHome(){
             content = {
                 Box(contentAlignment = Alignment.Center) {
                     Box(modifier = Modifier.fillMaxSize()) {
-                        KakaoMap(mapviewModel = mapviewModel, PlanListener())
+                        KakaoMap(mapviewModel = mapviewModel)
                     }
                     if(!topbarhide.value) {
                     ActionButton(mapviewModel,
@@ -67,11 +67,10 @@ fun AAMUPlanHome(){
             sheetContent = {
                 PlanBottomSheet(mapviewModel,coroutineScope,topbarhide,bottomSheetScaffoldState)
             },
-            drawerBackgroundColor = orange700,
             drawerGesturesEnabled = bottomSheetScaffoldState.drawerState.isOpen,
             drawerContent = {
                 Spacer(modifier = Modifier.height(WindowInsets.statusBars.asPaddingValues().calculateTopPadding()+56.dp))
-                SideContent() },
+                SideContent(mapviewModel) },
             scaffoldState = bottomSheetScaffoldState,
             sheetPeekHeight = if(topbarhide.value) 0.dp else 40.dp,
 
@@ -88,13 +87,9 @@ fun AAMUPlanHome(){
 
 @Composable
 fun KakaoMap(
-    mapviewModel: AAMUPlanViewModel,
-    eventListener: PlanListener
+    mapviewModel: AAMUPlanViewModel
 ) {
     AndroidView({ mapviewModel.mapView })
-    {mapView->
-        mapView.setCurrentLocationEventListener(eventListener)
-    }
 }
 
 @OptIn(ExperimentalMaterialApi::class)

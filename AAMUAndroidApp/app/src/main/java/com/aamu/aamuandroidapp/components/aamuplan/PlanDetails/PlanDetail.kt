@@ -5,11 +5,13 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.animation.*
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBox
@@ -21,16 +23,24 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewmodel.compose.viewModel
+import coil.compose.rememberAsyncImagePainter
+import coil.request.ImageRequest
+import com.aamu.aamuandroidapp.R
 import com.aamu.aamuandroidapp.components.aamuplan.AAMUPlanViewModel
 import com.aamu.aamuandroidapp.components.aamuplan.AAMUPlanViewModelFactory
 import com.aamu.aamuandroidapp.components.aamuplan.PlanItems.PlanListVerticalItem
@@ -39,7 +49,11 @@ import com.aamu.aamuandroidapp.components.aamuplan.PlanItems.PlanMove
 import com.aamu.aamuandroidapp.data.DemoDataProvider
 import com.aamu.aamuandroidapp.data.api.response.AAMUPlannerSelectOne
 import com.aamu.aamuandroidapp.data.api.response.Place
+import com.aamu.aamuandroidapp.ui.theme.amber200
 import com.aamu.aamuandroidapp.ui.theme.amber700
+import com.aamu.aamuandroidapp.ui.theme.components.Material3Card
+import com.aamu.aamuandroidapp.ui.theme.cyan200
+import com.aamu.aamuandroidapp.ui.theme.orange200
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -71,6 +85,11 @@ fun PlanDetails(
     BackHandler(topbarhide.value) {
         topbarhide.value = false
         mapviewModel.setCurrentMarker()
+    }
+    BackHandler(scaffoldState.drawerState.isOpen) {
+        coroutineScope.launch {
+            scaffoldState.drawerState.close()
+        }
     }
     BackHandler(startMove.value) {
         startMove.value = false
@@ -114,7 +133,7 @@ fun PlanDetails(
                 }) {
                     Icon(Icons.Filled.ArrowBack, null)
                 }
-                Text(text = plannerSelectOne?.title ?: "")
+                Text(text = plannerSelectOne?.title ?: "", fontWeight = FontWeight.Bold)
             }
         }
     }
@@ -130,6 +149,7 @@ fun PlanListScroll(
     startMove : MutableState<Boolean>
 ){
     val planners by mapviewModel.planners.observeAsState(emptyList())
+    val plannerSelectOne by mapviewModel.plannerSelectOne.observeAsState()
 
     val lazyListState = rememberLazyListState()
     val lazyListStateVertical = rememberLazyListState()
@@ -178,7 +198,7 @@ fun PlanListScroll(
             mapviewModel.setDayMarker(planners[mapMakerIndex].dto?.title!!)
         }
     }
-    AnimatedVisibility(topbarhide.value&& scaffoldState.drawerState.isClosed && !startMove.value,
+    AnimatedVisibility(visible = topbarhide.value&& scaffoldState.drawerState.isClosed && !startMove.value,
         enter = slideInHorizontally(), exit = slideOutHorizontally(targetOffsetX = {(-200)})) {
         BoxWithConstraints {
             Surface(elevation = 3.dp) {
@@ -188,7 +208,7 @@ fun PlanListScroll(
                         .padding(
                             top = WindowInsets.statusBars
                                 .asPaddingValues()
-                                .calculateTopPadding() + 112.dp
+                                .calculateTopPadding() + 164.dp
                         )
                         .nestedScroll(nestedScrollConnection)
                         .background(Color.White),
@@ -222,23 +242,50 @@ fun PlanListScroll(
                             .asPaddingValues()
                             .calculateTopPadding() + 56.dp
                     )
-                    .height(64.dp)
+                    .height(100.dp)
                     .nestedScroll(nestedScrollConnection)
                     .background(Color.White),
                 state = lazyListStateVertical,
-                contentPadding = PaddingValues(5.dp)
+                contentPadding = PaddingValues(5.dp),
+                userScrollEnabled = false
             ) {
                 item {
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(55.dp),
+                            .height(91.dp),
                         Arrangement.Center,
                         Alignment.CenterVertically
                     ) {
-                        Text(text = "여행출발하기")
+                        Material3Card(
+                            modifier = Modifier
+                                .padding(16.dp)
+                                .fillMaxWidth(),
+                            backgroundColor = Color(0xffe9f6ff),
+                            shape = RoundedCornerShape(4.dp),
+                            elevation = 4.dp,
+                        ) {
+                            Row {
+                                Image(
+                                    painter = rememberAsyncImagePainter(
+                                        model = ImageRequest.Builder(LocalContext.current)
+                                            .data(plannerSelectOne?.smallImage ?: R.drawable.no_image)
+                                            .crossfade(true)
+                                            .build(),
+                                        contentScale = ContentScale.Crop
+                                    ),
+                                    contentDescription = null,
+                                    contentScale = ContentScale.Crop,
+                                    modifier = Modifier.size(60.dp)
+                                )
+                                Text(text = plannerSelectOne?.plannerdate ?: "날짜를 못받았어요",
+                                    fontSize = 20.sp,
+                                    modifier = Modifier.padding(16.dp))
+                            }
+                        }
                     }
                     Spacer(modifier = Modifier.padding(bottom = 5.dp))
+
                 }
                 itemsIndexed(items = planners,
                     itemContent = { index, planner ->

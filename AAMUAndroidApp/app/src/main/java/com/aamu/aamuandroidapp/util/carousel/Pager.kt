@@ -1,4 +1,4 @@
-package com.aamu.aamuandroidapp.components.carousel
+package com.aamu.aamuandroidapp.util.carousel
 
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.draggable
