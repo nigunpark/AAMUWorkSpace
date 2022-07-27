@@ -20,12 +20,12 @@
 											class="d-sm-flex justify-content-between align-items-start">
 											<div>
 												<h4 class="card-title card-title-dash">전체 회원 관리</h4>
-												<p class="card-subtitle card-subtitle-dash">총 회원 수</p>
+												<p class="card-subtitle card-subtitle-dash">총 회원 수: ${totalCount}명</p>
 											</div>
 											<div>
 												<button class="btn btn-primary btn-lg text-white mb-0 me-0"
 													type="button">
-													<i class="mdi mdi-account-remove"></i>탈퇴
+													<i class="mdi mdi-account-remove"></i>회원정지
 												</button>
 											</div>
 										</div>
@@ -40,7 +40,6 @@
 																</label>
 															</div>
 														</th>
-														<th>회원번호</th>
 														<th>id</th>
 														<th>이름</th>
 														<th>가입일</th>
@@ -48,28 +47,43 @@
 													</tr>
 												</thead>
 												<tbody>
-													<tr>
-														<td>
-															<div class="form-check form-check-flat mt-0">
-																<label class="form-check-label"> 
-																	<input name="RowCheck" type="checkbox" class="form-check-input" aria-checked="false" value="${record.lno}"><i class="input-helper"></i>
-																</label>
-															</div>
-														</td>
-														<td>1</td>
-														<td>
-															<div class="d-flex ">
-																<img src="images/faces/face1.jpg" alt="">
-																<div>
-																	<h6>Brandon Washington</h6>
-																	<p>여성</p>
-																</div>
-															</div>
-														</td>
-														<td>김경희</td>
-														<td>2022.7.24</td>
-														<td><div class="badge badge-opacity-success">활동중</div></td>
-													</tr>
+													<c:if test="${empty listPagingData.lists }" var="isEmpty">
+														<tr>
+															<td colspan="8">가입된 회원이 없습니다.</td>
+														</tr>
+													</c:if>
+													<c:if test="${not isEmpty }">
+														<c:forEach var="record" items="${listPagingData.lists}" varStatus="loop">
+															<tr>
+																<td>
+																	<div class="form-check form-check-flat mt-0">
+																		<label class="form-check-label"> 
+																			<input name="RowCheck" type="checkbox" class="form-check-input" aria-checked="false" value="${record.id}"><i class="input-helper"></i>
+																		</label>
+																	</div>
+																</td>
+																<td>
+																	<div class="d-flex ">
+																		<img src="${record.userprofile}" alt="">
+																		<div>
+																			<h6>${record.id}</h6>
+																			<p>${record.gender}</p>
+																		</div>
+																	</div>
+																</td>
+																<td>${record.name}</td>
+																<td>${record.joindate}</td>
+																<c:choose>
+																	<c:when test="${record.enabled eq 1}">
+																		<td><div class="badge badge-opacity-success">활동중</div></td>
+																	</c:when>
+																	<c:otherwise>
+																		<td><div class="badge badge-opacity-warning">활동정지</div></td>
+																	</c:otherwise>
+																</c:choose>
+															</tr>
+														</c:forEach>
+													</c:if>
 												</tbody>
 											</table>
 											<!-- 페이징 출력 -->
@@ -81,7 +95,7 @@
 						</div>
 						<!-- 검색 -->
 						<div class="row">
-							<form class="col-md-12 d-flex justify-content-center align-items-center" method="post" action="<c:url value="Commu.do"/>">
+							<form class="col-md-12 d-flex justify-content-center align-items-center" method="post" action="<c:url value="Users.do"/>">
 								<div class="form-group row">
 									<div class="col-sm-12">
 										<select class="form-control background-color-secondary text-black" name="searchColumn">
@@ -142,29 +156,29 @@
 		else $(':checkbox').prop("checked",false)
 	});  
 	
-	//삭제 click
+	//회원정지 click
 	$('div:nth-child(2) > button').click(function(){
 		console.log("버튼이벤트 발생");
-		var lnoArr = new Array();
+		var idArr = new Array();
 	    $('input[name="RowCheck"]:checked').each(function(i){//체크된 리스트 저장
-	    	lnoArr.push($(this).val());
-	    	console.log($(this).val()); //lnoArr:63,62
+	    	idArr.push($(this).val());
+	    	console.log($(this).val()); 
 	    });
-		if(lnoArr.length ==0){
+		if(idArr.length ==0){
 			alert("선택된 글이 없습니다.");
 		}
 		else{
-			if(confirm("회원탈퇴를 진행하시겠습니까?")){
+			if(confirm("회원정지를 진행하시겠습니까?")){
 				var jsonString = JSON.stringify({id : idArr})
 	    		$.ajax({
-	       			url:"<c:url value="UsersDelete.do"/>",
+	       			url:"<c:url value="UsersStop.do"/>",
 	       			type:"post",
 	       			data: jsonString,
 	       			contentType:"application/json", //데이타 보낼 때
 	       			dataType: "json" //데이타 받을 때 
 	       		}).done(data=>{
 	       			console.log('삭제성공:',data);
-	       			location.replace("Commu.do");
+	       			location.replace("Users.do");
 	       			
 	       		}).fail(error=>{
 	       			console.log('삭제에러:',error);

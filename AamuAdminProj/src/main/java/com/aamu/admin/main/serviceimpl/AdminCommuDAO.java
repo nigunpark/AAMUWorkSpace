@@ -68,7 +68,7 @@ public class AdminCommuDAO {
 		return records;
 	}
 	
-	//
+	//프로필사진
 	public String commuSelectUserProf(String id) {
 		return template.selectOne("commuSelectUserProf",id);
 		

@@ -31,6 +31,11 @@ public class CommuDAO {
 		return template.selectList("commuSelectPhotoList",lno);
 	}
 	
+	//글 목록용_검색 총 게시물
+	public int commuTotalCount(Map map) {
+		return template.selectOne("commuTotalCount",map);
+	}
+	
 	//글 검색용
 	public List<String> commuSearachList(Map map){
 		System.out.println("dao map:"+map.get("searchColumn"));

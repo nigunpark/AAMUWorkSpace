@@ -48,6 +48,12 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 	public List commuSelectPhotoList(String lno) {
 		return dao.commuSelectPhotoList(lno);
 	}
+	
+	//글 목록용_토탈 카운트 
+	@Override
+	public int commuTotalCount(Map map) {
+		return dao.commuTotalCount(map);
+	}
 
 	//글 목록용_좋아요 여부 뿌려주기
 	/*

@@ -70,9 +70,9 @@ public class AdminCommuServiceImpl implements AdminCommuService {
 	public int commuDelete(Map map) {
 		int affected=0;
 		affected = transactionTemplate.execute(tx->{
-			List<String> lnolists=(List<String>)map.get("lno");
-			System.out.println(lnolists);
-			for(String lno:lnolists) {
+			List<String> lnoLists=(List<String>)map.get("lno");
+			
+			for(String lno:lnoLists) {
 				map.put("table", "commucomment");
 				map.put("lno", lno); 
 				dao.commuDelete(map);

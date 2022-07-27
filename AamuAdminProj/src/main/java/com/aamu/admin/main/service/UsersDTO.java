@@ -17,7 +17,8 @@ public class UsersDTO {
 	private String phonenum;
 	private String addrid;
 	private String self;
-	private String joindate;
+	private java.sql.Date joindate;
 	private String userprofile;
+	private String enabled;
 	
 }
