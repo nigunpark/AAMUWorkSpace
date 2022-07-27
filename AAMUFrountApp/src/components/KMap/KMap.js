@@ -731,6 +731,7 @@ async function toWooJae(currPosition, reduxState, setFromWooJaeData) {
     });
   });
 
+  // console.log("arr", arr);
   try {
     const resp = await axios.post(
       "/aamurest/planner/data",
