@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import NotificationModal from "./ModalGroup/Notification";
-import SearchModal from "./ModalGroup/Search/Search";
+import SearchModal from "./ModalGroup/Search/SearchUser";
 import WriteModal from "./ModalGroup/Upload/Upload";
-import ButtonGroup from "./ModalGroup/Search/ButtonGroup";
+
 import { confirmAlert } from "react-confirm-alert";
 import axios from "axios";
 import { Link } from "@mui/material";
@@ -14,20 +14,24 @@ function User({ setlist ,setloading}) {
   const modalRef = useRef();
   const notimodalRef = useRef();
   const outside = useRef();
+  const SearchModalRef = useRef();
   const [heart, setHeart] = useState(false);
   const [follow, setFollowing] = useState(false);
   const [search, setsearch] = useState(false);
   const [square, setsquare] = useState(false);
 
-  const [title, settitle] = useState(false);
-  const [searchb, setSearchb] = useState('');
+  const [userModal, setUserModal] = useState(false);
+
+  const [title, settitle] = useState([]);
+  const [searchb, setSearchb] = useState([]);
   const [searchText, setsearchText] = useState(false);
   const [inputValue, setinputValue] = useState("");
 
   const [searchbar,setsearchbar] = useState([]);
   const [forReRender, setForReRender] = useState(false)
   let navigater = useNavigate()
-  function searchBar(e,setSearch){//백이랑 인스타 리스드를 뿌려주기 위한 axios
+
+  function searchBar(e){//백이랑 인스타 리스드를 뿌려주기 위한 axios
     
     let val = e.target.value;
     if (e.keyCode != 13) return;
@@ -44,7 +48,29 @@ function User({ setlist ,setloading}) {
     .then((resp) => {
       console.log(resp.data)
       setsearchbar(resp.data);
-      navigater('./searchList')
+      navigater('/Insta/searchList')
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  function searchBarModal(e,modalRef){//백이랑 인스타 리스드를 뿌려주기 위한 axios
+     let val = e.target.value;
+    //  if (e.keyCode != 13) return;
+    let token = sessionStorage.getItem("token");
+    axios.get('/aamurest/gram/search/selectList',{
+      headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          params:{
+            searchColumn : searchb,
+            searchWord :val,
+          }
+    })
+    .then((resp) => {
+      console.log(resp.data)
+      settitle(resp.data);
       })
       .catch((error) => {
         console.log(error);
@@ -55,17 +81,18 @@ function User({ setlist ,setloading}) {
     e.stopPropagation();
     if (e.target !== modalRef.current) setsearch(false);
     if (e.target !== notimodalRef.current) setHeart(false);
-    // if (e.target !== uploadmodalRef.current) setsquare(false);
+    if (e.target !== SearchModalRef.current) setsearchText(false);
   }
   window.addEventListener("click", handleModal);
 
   const handleChange = (e) => {
     console.log(e.target.value);
   };
+
   const submit = () => {
     confirmAlert({
-      title: "게시물을 삭제하시겠어요?",
-      message: "지금 나가면 수정 내용이 저장되지 않습니다.",
+      title: "새 글 작성을 삭제하시겠습니까?",
+      message: "지금 나가면 내용이 저장되지 않습니다.",
       buttons: [
         {
           label: "삭제",
@@ -82,9 +109,9 @@ function User({ setlist ,setloading}) {
   return (
     <div>
       <div className="userSearch">
-        <select name="select" className="select" onChange={(e)=>{ setSearchb(e.target.value);}}>
+        <select name="select" className="select" onChange={(e)=>{e.stopPropagation(); setSearchb(e.target.value);}}>
             <option defaultValue={'DEFAULT'}>선택</option>
-            <option value="title">제목</option>
+            <option value="ctitle">제목</option>
             <option value="id">아이디</option>
             <option value="tag">태그</option>
         </select>
@@ -95,9 +122,10 @@ function User({ setlist ,setloading}) {
           }}
         >
           <input 
-            onKeyUp={(e)=>searchBar(e,setsearchbar)}
+            onKeyUp={(e)=>{e.stopPropagation();searchBarModal(e,modalRef);searchBar(e)}}
             value={inputValue}
             onChange={(e)=>{
+              e.stopPropagation();
               setinputValue(e.target.value)
               setsearchText(true) 
             }}
@@ -105,17 +133,18 @@ function User({ setlist ,setloading}) {
             type="text"
             className="search-bar"
             ref={modalRef}/>
-            {search ? 
-            <SearchModal searchbar={searchbar} 
+            {searchText && 
+            <SearchModal 
+            ref={SearchModalRef}
+            title={title} 
             setsearchText={setsearchText}
             setinputValue={setinputValue}
-            />
-                            : null}
+            />}
           
         </div>
       </div>
       <div className="user">
-        <img src="./img/bk.jpg" alt="사프" />
+        <img src="/images/user.jpg" alt="프사" onError={(e)=>{e.stopPropagation(); e.target.src='/images/user.jpg'}}/>
         <div>
           <p className="user-id">0hyun0hyun</p>
           <p className="user-name">김영현</p>

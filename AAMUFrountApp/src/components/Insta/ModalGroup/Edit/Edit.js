@@ -17,6 +17,7 @@ import "swiper/css"; //basic
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import '../Upload/UploadSwiper.css';
+import { confirmAlert } from 'react-confirm-alert';
 
 
 const Edit = ({setlist,val,seteditModal }) => {
@@ -39,7 +40,7 @@ const [inputValue,setinputValue] = useState('');
 
   
   //이미지 다중 업로드 시
-  const [myImage, setMyImage] = useState([]);
+  const [back, setback] = useState(false);
   const [myImagefile, setMyImageFile] = useState([]);
 
 
@@ -101,11 +102,27 @@ const [inputValue,setinputValue] = useState('');
         }
     }
    
-  
+    const submit = () => {
+      confirmAlert({
+        title: "수정내용을 삭제하시겠습니까?",
+        message: "지금 나가면 수정 내용이 저장되지 않습니다.",
+        buttons: [
+          {
+            label: "삭제",
+            onClick: () => {
+              seteditModal(false);
+            },
+          },
+          {
+            label: "취소",
+          },
+        ],
+      });
+    };
  
   return (
     <Container>
-    <Overlay >
+    <Overlay  onClick={()=>{submit()}}>
     <Contents >  
         <FirstLine>
             <div className='newPosting' style={{marginLeft:'12%'}}>

@@ -190,7 +190,8 @@ const Uploader = ({ setsquare, setlist, setloading }) => {
             </div>
             {/* {showNext ?  */}
               <Nextbtn  
-                      onClick={()=>{
+                      onClick={(e)=>{
+                        e.stopPropagation();
                         let temp= uploadFile(myImagefile)
                         console.log('temp',temp);
                         gramEdit(temp,setloading,setlist,setupload,titleRef,textareaRef,searchRef,search)
@@ -217,7 +218,7 @@ const Uploader = ({ setsquare, setlist, setloading }) => {
             onChange={addImage}
             // 클릭할 때 마다 file input의 value를 초기화 하지 않으면 버그가 발생할 수 있다
             // 사진 등록을 두개 띄우고 첫번째에 사진을 올리고 지우고 두번째에 같은 사진을 올리면 그 값이 남아있음!
-            onClick={(e) => (e.target.value = null)}
+            onClick={(e) => {e.stopPropagation(); e.target.value = null}}
             // ref={refParam => inputRef = refParam}
             style={{ display: "none", width: "100%", height: "100%" }}
           />
@@ -275,7 +276,7 @@ const Uploader = ({ setsquare, setlist, setloading }) => {
                     {/* {showNext ?  */}
                     <div className='side'>
                       <div className="title-profile">
-                          <img src="'/img/bk.jpg ' ?? '/images/user.jpg'" alt="프사" onError={(e)=>{e.target.src='/images/user.jpg'}}/>                
+                          <img src="'/img/bk.jpg ' ?? '/images/user.jpg'" alt="프사" onError={(e)=>{e.stopPropagation();e.target.src='/images/user.jpg'}}/>                
                           <span className="uploadname">{sessionStorage.getItem('username')}</span> 
                       </div>
                       <div>
@@ -306,7 +307,9 @@ const Uploader = ({ setsquare, setlist, setloading }) => {
                         <input 
                             onKeyUp={(e)=>searchWord(e,setSearch)}
                             value={inputValue}
-                            onChange={(e)=>{setinputValue(e.target.value)
+                            onChange={(e)=>{
+                              e.stopPropagation();
+                              setinputValue(e.target.value)
                               setHasText(true)
                             }}
                             placeholder="위치 추가" 
