@@ -1,4 +1,4 @@
-package com.aamu.aamuandroidapp.components.carousel
+package com.aamu.aamuandroidapp.util.carousel
 
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.layout.ParentDataModifier

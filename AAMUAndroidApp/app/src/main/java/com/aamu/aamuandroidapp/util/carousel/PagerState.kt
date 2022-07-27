@@ -1,4 +1,4 @@
-package com.aamu.aamuandroidapp.components.carousel
+package com.aamu.aamuandroidapp.util.carousel
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.runtime.getValue

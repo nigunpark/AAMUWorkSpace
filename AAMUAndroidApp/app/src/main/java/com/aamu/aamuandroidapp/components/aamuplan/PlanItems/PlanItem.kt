@@ -4,6 +4,8 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Surface
@@ -23,6 +25,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -33,6 +36,7 @@ import com.aamu.aamuandroidapp.components.aamuplan.AAMUPlanViewModel
 import com.aamu.aamuandroidapp.data.api.response.Place
 import com.aamu.aamuandroidapp.ui.theme.amber200
 import com.aamu.aamuandroidapp.ui.theme.typography
+import com.aamu.aamuandroidapp.util.CustomChips
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -45,16 +49,23 @@ fun PlanListWidthItem(mapviewModel : AAMUPlanViewModel, planner: Place, itemInde
         if (planner.rbn==null){
             Box(
                 modifier = Modifier
-                    .padding(horizontal = 4.dp)
-                    .size(55.dp)
-                    .clip(shape = CircleShape)
+                    .size(91.dp)
+                    .padding(4.dp)
+                    .shadow(5.dp)
                     .background(amber200),
                 Alignment.Center
             ) {
                 Text(
                     text = planner.dto?.title!!,
-                    style = typography.h6.copy(fontSize = 16.sp),
+                    style = typography.h6.copy(fontSize = 25.sp),
                     color = MaterialTheme.colorScheme.onSurface
+                )
+            }
+            LazyRow {
+                itemsIndexed(items = planner.dto?.addr?.split("&&")!!,
+                    itemContent = { index, item ->
+                        CustomChips(text = item)
+                    }
                 )
             }
         }
@@ -70,9 +81,9 @@ fun PlanListWidthItem(mapviewModel : AAMUPlanViewModel, planner: Place, itemInde
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
-                    .size(55.dp)
+                    .size(91.dp)
                     .padding(4.dp)
-                    .shadow(1.dp)
+                    .shadow(5.dp)
             )
             Column(
                 modifier = Modifier
