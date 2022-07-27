@@ -27,6 +27,10 @@
 													type="button">
 													<i class="mdi mdi-account-remove"></i>회원정지
 												</button>
+												<button class="btn btn-primary btn-lg text-white mb-0 me-0"
+													type="button">
+													<i class="mdi mdi-account"></i>회원권한
+												</button>
 											</div>
 										</div>
 										<div class="table-responsive  mt-1">
@@ -101,6 +105,7 @@
 										<select class="form-control background-color-secondary text-black" name="searchColumn">
 											<option value="u.id">id</option>
 											<option value="name">이름</option>
+											<option value="enabled">회원상태</option>
 										</select>
 									</div>
 								</div>
@@ -157,19 +162,19 @@
 	});  
 	
 	//회원정지 click
-	$('div:nth-child(2) > button').click(function(){
+	$('div:nth-child(2) > button:nth-child(1)').click(function(){
 		console.log("버튼이벤트 발생");
 		var idArr = new Array();
 	    $('input[name="RowCheck"]:checked').each(function(i){//체크된 리스트 저장
 	    	idArr.push($(this).val());
-	    	console.log($(this).val()); 
+	    	console.log($(this).val()); //KIMKIM
 	    });
 		if(idArr.length ==0){
 			alert("선택된 글이 없습니다.");
 		}
 		else{
 			if(confirm("회원정지를 진행하시겠습니까?")){
-				var jsonString = JSON.stringify({id : idArr})
+				var jsonString = JSON.stringify({stopId : idArr})
 	    		$.ajax({
 	       			url:"<c:url value="UsersStop.do"/>",
 	       			type:"post",
@@ -187,6 +192,39 @@
 			
 		}//////else
 	});
+	
+	//회원 권한 주기
+	$('div:nth-child(2) > button:nth-child(2)').click(function(){
+		console.log("버튼이벤트 발생");
+		var idArr = new Array();
+	    $('input[name="RowCheck"]:checked').each(function(i){//체크된 리스트 저장
+	    	idArr.push($(this).val());
+	    	console.log($(this).val()); //KIMKIM
+	    });
+		if(idArr.length ==0){
+			alert("선택된 글이 없습니다.");
+		}
+		else{
+			if(confirm("회원권한을 부여하시겠습니까?")){
+				var jsonString = JSON.stringify({addId : idArr})
+	    		$.ajax({
+	       			url:"<c:url value="UsersStop.do"/>",
+	       			type:"post",
+	       			data: jsonString,
+	       			contentType:"application/json", //데이타 보낼 때
+	       			dataType: "json" //데이타 받을 때 
+	       		}).done(data=>{
+	       			console.log('삭제성공:',data);
+	       			location.replace("Users.do");
+	       			
+	       		}).fail(error=>{
+	       			console.log('삭제에러:',error);
+	       		});
+			}///////if 삭제하시겠습니까?
+			
+		}//////else
+	});
+	
 </script>
 </body>
 </html>

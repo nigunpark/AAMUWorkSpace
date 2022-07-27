@@ -9,7 +9,7 @@
 		(SELECT T.*, ROWNUM R FROM(
 		SELECT u.*, ac.enabled FROM USERS u join authority_security ac on u.id=ac.id where ac.authority='ROLE_USER' 
 		<if test="searchColumn != null">
-	  	 	WHERE ${searchColumn} LIKE '%' || #{searchWord} || '%' 
+	  	 	AND ${searchColumn} LIKE '%' || #{searchWord} || '%' 
 	  	</if>
 		ORDER BY u.ID)T)
 		WHERE R BETWEEN #{start} AND #{end}
@@ -28,7 +28,7 @@
 	
 	<!-- 회원 정지 -->
 	<update id="usersStop" parameterType="Map">
-		UPDATE authority_security SET enabled=0 WHERE id=#{id}
+		UPDATE authority_security SET enabled=#{enabled} WHERE id=#{id}
 	</update>
 	
 	

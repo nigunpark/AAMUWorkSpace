@@ -67,7 +67,6 @@ public class CommuController {
 			dto.setUserprofile(FileUploadUtil.requestOneFile(commuService.commuSelectUserProf(dto.getId()), "/resources/commuUpload", req));
 			
 		}/////for
-		System.out.println(list.get(0).id.toString());
 		return list;
 	}////////////////commuSelectList
 	

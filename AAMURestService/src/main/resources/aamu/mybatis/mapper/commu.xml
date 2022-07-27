@@ -28,7 +28,7 @@
 	
 	<!-- 글 목록용_검색 총 게시물수 -->
 	<select id="commuTotalCount" parameterType="Map" resultType="int">
-		SELECT COUNT(*) FROM community WHERE #{searchColumn}=#{searchWord}
+		SELECT COUNT(*) FROM community WHERE ${searchColumn}=#{searchWord}
 	</select>
 	
 	<!-- 글 검색용 -->

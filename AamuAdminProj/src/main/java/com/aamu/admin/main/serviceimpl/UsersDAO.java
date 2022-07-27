@@ -31,8 +31,9 @@ public class UsersDAO {
 		return template.selectOne("usersSelectUserProf",id);
 	}
 	
-	//회원 삭제
+	//회원 정지
 	public int usersStop(Map map) {
+		System.out.println("dao id:"+map.get("id"));
 		return template.update("usersStop",map);
 	}
 }

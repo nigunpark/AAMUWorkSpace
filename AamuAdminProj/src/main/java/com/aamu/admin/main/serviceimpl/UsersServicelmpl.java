@@ -1,7 +1,9 @@
 package com.aamu.admin.main.serviceimpl;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -40,7 +42,10 @@ public class UsersServicelmpl implements UsersService{
 		map.put(PagingUtil.TOTAL_COUNT, totalCount);
 		//페이징과 관련된 값들 얻기를 위한 메소드 호출
 		PagingUtil.setMapForPaging(map);
+		System.out.println("무ㅓ가 오나 "+map.get("searchWord"));
 		//글 전체 목록 얻기
+		//if(map.get("searchWord").equals("활동정지")) map.put("searchWord", 0);
+		//else map.put("searchWord", 1);
 		List lists= dao.usersSelectList(map);
 		
 		String pagingString = PagingUtil.pagingBootStrapStyle(
@@ -68,9 +73,30 @@ public class UsersServicelmpl implements UsersService{
 		return dao.usersSelectUserProf(id);
 	}
 	
-	//회원
+	//회원 정지
 	@Override
 	public int usersStop(Map map) {
-		return dao.usersStop(map);
+		int affected=0;
+		Set<String> mapSet=map.keySet();
+		for(String idMap:mapSet) {
+			if(idMap.equals("stopId")) {
+				List<String> stopIdLists=(List<String>)map.get("stopId");
+				for(String stopId:stopIdLists) {
+					map.put("id",stopId);
+					map.put("enabled", 0);
+					affected+=dao.usersStop(map);
+				}
+			}
+			else {
+				List<String> addIdLists=(List<String>)map.get("addId");
+				for(String addId:addIdLists) {
+					map.put("id",addId); 
+					map.put("enabled", 1);
+					affected+=dao.usersStop(map);
+				}
+			}
+		}
+		return affected;
+		
 	}
 }
