@@ -22,22 +22,22 @@ import {
 } from "../../../redux/store";
 import axios from "axios";
 let count = 0;
-const MyCreatePlanLeft = ({
+function MyCreatePlanLeft({
   currPosition,
   fromWooJaeData,
   setForDayLine,
   setFromWooJaeData,
   routeMap,
-}) => {
+}) {
   let reduxState = useSelector((state) => {
     return state;
   });
   const [whichModal, setWhichModal] = useState("전체일정");
   const dayRef = useRef();
   const [temp, setTemp] = useState("");
-
+  console.log("timeSetObj0---------", reduxState.timeSetObj);
   useEffect(() => {
-    return setTemp(dayRef.current);
+    setTemp(dayRef.current);
   }, []);
   if (fromWooJaeData.length === 0) return;
   if (fromWooJaeData === undefined) return;
@@ -108,7 +108,7 @@ const MyCreatePlanLeft = ({
       </div>
     </div>
   );
-};
+}
 
 function WhichModal({
   whichModal,
@@ -182,7 +182,6 @@ function WholeSchedule({
               key={index}
               fromWooJaeData={fromWooJaeData}
               setFromWooJaeData={setFromWooJaeData}
-              routeMap={routeMap}
             />
           );
         })}
@@ -191,53 +190,89 @@ function WholeSchedule({
   );
 }
 
-function Content({ index, fromWooJaeData, setFromWooJaeData, routeMap }) {
+function Content({ index, fromWooJaeData, setFromWooJaeData }) {
   const [sortedList, setSortedList] = useState([]);
   const [showTimePicker, setShowTimePicker] = useState(false);
   const [bbcTime, setBbcTime] = useState({});
   let reduxState = useSelector((state) => {
     return state;
   });
-  // console.log('fromWooJaeData :', fromWooJaeData);
-  // console.log('routeMap 잘 되는지 :',(fromWooJaeData[index][`day${index+1}`][0].starttime)/(1000*60*60));
-
-  // console.log('ㅇㅇㅇㅇㅇㅇ',new Date(`2022-01-01 ${bbcT/60}:${bbcT%60}`));
-  // console.log('bbcT ;;', bbcT);
-
-  // console.log("fromWooJaeData :", fromWooJaeData);
-  console.log("content안");
-
   let dispatch = useDispatch();
   let contentRef = useRef();
   let sourceElement = null;
-
+  // console.log('fromWooJaeData :', fromWooJaeData);
+  // console.log('routeMap 잘 되는지 :',(fromWooJaeData[index][`day${index+1}`][0].starttime)/(1000*60*60));
+  // console.log('ㅇㅇㅇㅇㅇㅇ',new Date(`2022-01-01 ${bbcT/60}:${bbcT%60}`));
+  // console.log('bbcT ;;', bbcT);
+  // console.log("fromWooJaeData :", fromWooJaeData);
+  console.log("content안");
+  // let bbcT =
+  //   fromWooJaeData[index][`day${index + 1}`][0].starttime / (1000 * 60);
+  // dispatch(
+  //   changeTimeSetObj({
+  //     ampm: "오전",
+  //     time: bbcT / 60,
+  //     fullDate: new Date(`2022-01-01 ${bbcT / 60}:${bbcT % 60}`),
+  //     min: bbcT % 60,
+  //     day: index + 1,
+  //   })
+  // );
+  // let test = [
+  //   {
+  //     ampm: "오전",
+  //     time: bbcT / 60,
+  //     fullDate: new Date(`2022-01-01 ${bbcT / 60}:${bbcT % 60}`),
+  //     min: bbcT % 60,
+  //     day: 1,
+  //   },
+  //   {
+  //     ampm: "오전",
+  //     time: bbcT / 60,
+  //     fullDate: new Date(`2022-01-01 ${bbcT / 60}:${bbcT % 60}`),
+  //     min: bbcT % 60,
+  //     day: 2,
+  //   },
+  //   {
+  //     ampm: "오전",
+  //     time: bbcT / 60,
+  //     fullDate: new Date(`2022-01-01 ${bbcT / 60}:${bbcT % 60}`),
+  //     min: bbcT % 60,
+  //     day: 3,
+  //   },
+  // ];
   useEffect(() => {
-    let bbcT =
-      fromWooJaeData[index][`day${index + 1}`][0].starttime / (1000 * 60);
-    console.log("bbcT", bbcT);
-    if (bbcT >= 13 * 60) {
-      console.log("위위위");
-      setBbcTime({
-        ampm: "오후",
-        time: bbcT / 60 - 12,
-        fullDate: new Date(`2022-01-01 ${bbcT / 60}:${bbcT % 60}`),
-        min: bbcT % 60,
-        day: index + 1,
-      });
-    } else {
-      console.log("11111");
-      setBbcTime({
-        ampm: "오전",
-        time: bbcT / 60,
-        fullDate: new Date(`2022-01-01 ${bbcT / 60}:${bbcT % 60}`),
-        min: bbcT % 60,
-        day: index + 1,
-      });
-    }
-    dispatch(changeTimeSetObj(bbcTime));
-  }, []);
+    return console.log("1111");
+    // dispatch(
+    //   changeTimeSetObj({
+    //     ampm: "오전",
+    //     time: bbcT / 60,
+    //     fullDate: new Date(`2022-01-01 ${bbcT / 60}:${bbcT % 60}`),
+    //     min: bbcT % 60,
+    //     day: index + 1,
+    //   })
+    // );
+    // let bbcT =
+    //   fromWooJaeData[index][`day${index + 1}`][0].starttime / (1000 * 60);
+    // console.log("bbcT", bbcT);
+    // if (bbcT >= 13 * 60) {
+    //   setBbcTime({
+    //     ampm: "오후",
+    //     time: bbcT / 60 - 12,
+    //     fullDate: new Date(`2022-01-01 ${bbcT / 60}:${bbcT % 60}`),
+    //     min: bbcT % 60,
+    //     day: index + 1,
+    //   });
+    // } else {
+    //   setBbcTime({
+    //     ampm: "오전",
+    //     time: bbcT / 60,
+    //     fullDate: new Date(`2022-01-01 ${bbcT / 60}:${bbcT % 60}`),
+    //     min: bbcT % 60,
+    //     day: index + 1,
+    //   });
+    // }
+    // dispatch(changeTimeSetObj(bbcTime));
 
-  useEffect(() => {
     // fromWooJaeData.forEach((val, i) => {
     //   fromWooJaeData[index]["day" + (index + 1)][0].mtime = 0;
     // });
@@ -247,6 +282,7 @@ function Content({ index, fromWooJaeData, setFromWooJaeData, routeMap }) {
     //   setSortedList(newArr);
     // }
   }, []);
+  console.log("fromWooJaeData(Content안)", fromWooJaeData);
   if (fromWooJaeData === undefined) return;
   if (fromWooJaeData.length === 0) return;
   if (fromWooJaeData[index] === undefined) return;
