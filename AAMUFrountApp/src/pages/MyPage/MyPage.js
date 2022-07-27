@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import "./MyPage.scss";
+import MyPostBox from "./MyPageBox/MyPostBox";
 import MyHomeBox from "./MyPageBox/MyHomeBox";
 import MyProfileBox from "./MyPageBox/MyProfileBox";
 import MyInstaBox from "./MyPageBox/MyInstaBox";
@@ -260,38 +261,6 @@ function Title({ clickTab }) {
 
 //-----------------------------------------------------------------------
 function TabContent({ clickTab, setClickTab, planList }) {
-  //--------------------------------이미지 시작--------------------------------
-  const [showImages, setShowImages] = useState([]);
-
-  //이미지 등록
-  const handleAddImages = (e) => {
-    const imageLists = e.target.files;
-    let imageUrlLists = [...showImages];
-
-    for (let i = 0; i < imageLists.length; i++) {
-      const currentImageUrl = URL.createObjectURL(imageLists[i]);
-      imageUrlLists.push(currentImageUrl);
-    }
-
-    if (imageUrlLists.length > 6) {
-      //사진 6개 제한
-      imageUrlLists = imageUrlLists.slice(0, 6);
-    }
-
-    setShowImages(imageUrlLists);
-  };
-
-  const handleDeleteImage = (id) => {
-    //등록한 사진 삭제
-    setShowImages(showImages.filter((_, index) => index !== id));
-  };
-  //--------------------------------이미지 끝--------------------------------
-
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
-  const [tag, setTag] = useState();
-  let [writeTag, setWriteTag] = useState([]);
-
   const [selectRbn, setSelectRbn] = useState();
 
   // console.log('등록한 이미지:',showImages);
@@ -300,19 +269,19 @@ function TabContent({ clickTab, setClickTab, planList }) {
   // console.log('입력한 제목:',title);
   // console.log('입력한 내용:',content);
   // console.log('입력한 태그:',tag);
+  // console.log('selectRbn 1 :', selectRbn);
 
-  const [detailPostData, setDetailPostData] = useState();
+  // let myImgs = showImages.map((showImages, imgIndex)=>{
+  //   console.log('인덱스:',imgIndex,' 값:',showImages);
 
   let myImgs = showImages.map((showImages, imgIndex) => {
     console.log("인덱스:", imgIndex, " 값:", showImages);
 
     return { imgIndex: showImages };
   });
+  //   return {imgIndex:showImages};
+  // });
   // console.log('저장된 myImgs:',myImgs);
-
-  const canSubmit = useCallback(() => {
-    return content !== "" && title !== "";
-  }, [title, content]);
 
   // const randomNum = ['#fee4cb', '#ffd6ff', '#d6f6dd'].length;
   // const imgNum = Math.floor(Math.random() * randomNum)+1;
@@ -409,182 +378,11 @@ function TabContent({ clickTab, setClickTab, planList }) {
     return <MyProfileBox />;
   } else if (clickTab === 10) {
     //-----------------------글작성------------------------
-    // const imgFileUpload = (fileBlob) => {
-    //   const reader = new FileReader();
-
-    //   reader.readAsDataURL(fileBlob);
-
-    //   return new Promise((resolve) => {
-    //     reader.onload = () => {
-    //       setImageSrc(reader.result);
-    //       resolve();
-    //     };
-    //   });
-    // };
-    console.log("detailPostData 글작성 할 떄 필요함:", planList);
-    console.log("selectRbn 글번호 넘어오나 :", selectRbn);
-
-    // let token = sessionStorage.getItem("token");
-
-    // axios.get('',{
-    //     params:{
-    //         // id:sessionStorage.getItem('username'),
-    //         rbn:selectRbn
-    //     },
-    //     headers: {
-    //         Authorization: `Bearer ${token}`,
-    //     }
-    // }).then((resp)=>{
-    //     console.log('글작성시 필요한 여행경로 데이터 : ',resp.data);
-    // }).catch((error)=>{
-    //     console.log((error) => console.log("글작성시 필요한 여행경로 데이터 가져오기 실패", error));
-    // });
-
-    let test = [1, 2, 3, 4];
-
-    return (
-      <div className="MyWrite-container">
-        <div className="write-box plan">
-          <div className="plan-title">여행경로</div>
-
-          <div style={{ border: "1.5px solid #edf2f4" }}>
-            {test.map((val, idx) => {
-              return (
-                <div className="detail-plan">
-                  <span className="paln-date">{val} 일차 20xx-xx-xx x요일</span>
-                  <div>00:00 ~ 00:00</div>
-                  <div className="plan-region">제주공항</div>
-
-                  <div>00:00 ~ 00:00</div>
-                  <div className="plan-region">제주공항</div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-
-        <div className="write-box">
-          <input
-            onChange={(e) => {
-              setTitle(e.target.value);
-            }}
-            name="title"
-            type="text"
-            className="wirte-title"
-            placeholder="제목을 입력하세요"
-            value={title}
-          />
-        </div>
-
-        <div className="write-box">
-          <input
-            multiple
-            className="write-picture-input"
-            type="file"
-            id="upload"
-            onChange={handleAddImages}
-            onClick={(e) => (e.target.value = null)}
-          />
-          <label className="write-picture-label" for="upload">
-            Img Upload
-          </label>
-        </div>
-
-        {/* <div className="write-box">
-        <Imgs src='/images/imageMap.png'/>
-      </div> */}
-        <div className="write-box add-delete">
-          {showImages.map((image, id) => (
-            <Imgs
-              src={image}
-              alt={`${image}-${id}`}
-              onClick={() => handleDeleteImage(id)}
-            />
-          ))}
-        </div>
-
-        <div className="write-box writer">
-          <textarea
-            onChange={(e) => {
-              setContent(e.target.value);
-            }}
-            name="content"
-            className="write-section"
-            placeholder="글 쓰기"
-            value={content}
-          />
-          <div className="box-gab"></div>
-          <input
-            onChange={(e) => {
-              setTag(e.target.value);
-            }}
-            type="text"
-            className="tag-section"
-            placeholder="#tag"
-            value={tag}
-          />
-        </div>
-
-        <div className="write-box" style={{ textAlign: "end" }}>
-          {/* <div className='detail-button'> */}
-          {canSubmit() ? (
-            <button
-              style={{ color: "black" }}
-              className="navbar-btn"
-              type="button"
-              onClick={() => {
-                let write = uploadFile(showImages);
-                bordWrite(write, title, content, tag, writeTag, setWriteTag);
-              }}
-            >
-              공유하기
-            </button>
-          ) : (
-            <button type="button" disabled>
-              제목과 내용을 모두 입력하세요
-            </button>
-          )}
-          {/* </div> */}
-        </div>
-      </div>
-    );
+    return <MyPostBox selectRbn={selectRbn} />;
   } else if (clickTab === 11) {
     //------------인스타 상세보기-------------
     return <MyInstaBox />;
   }
-}
-function uploadFile(showImages) {
-  //이미지 업로드
-  let formData = new FormData(); // formData 객체를 생성한다.
-  for (let i = 0; i < showImages.length; i++) {
-    formData.append("photo", showImages[i]); // 반복문을 활용하여 파일들을 formData 객체에 추가한다
-  }
-  return formData;
-}
-function bordWrite(write, title, content, tag, writeTag, setWriteTag) {
-  // setWriteTag(tag.split('#'));
-  // writeTag.splice(0,1);
-  // console.log('writeTag :', writeTag);
-
-  write.append("id", sessionStorage.getItem("username"));
-  write.append("title", title);
-  write.append("content", content);
-  // write.append('writeTag', writeTag);
-
-  let token = sessionStorage.getItem("token");
-  axios
-    .post("/aamurest/bbs/edit", write, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "multipart/form-data",
-      },
-    })
-    .then((resp) => {
-      console.log(resp.data);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
 }
 
 // const write = () => {
@@ -648,13 +446,5 @@ function TabTopLine({ clickTab, planList }) {
     return <div></div>;
   }
 }
-
-const Imgs = styled.img`
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  object-fit: contain;
-  position: relative;
-`;
 
 export default MyPage;
