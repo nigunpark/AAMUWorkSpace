@@ -352,6 +352,7 @@ public class MainController {
 		
 		List<AttractionDTO> list = service.selectLocation(map);
 		model.addAttribute("placelist", list);
+		model.addAttribute("totalcount",list.size());
 		return "/back/backupcomplete";
 	}
 	
