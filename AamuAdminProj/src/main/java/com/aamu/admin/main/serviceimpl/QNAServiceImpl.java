@@ -22,6 +22,9 @@ public class QNAServiceImpl implements QNAService<QNADTO> {
 	@Autowired
 	private QNADAO dao;
 
+	@Autowired
+	private TransactionTemplate transactionTemplate;
+
 	// 리소스파일(paging.properties)에서 읽어오기
 	@Value("${pageSize}")
 	private int pageSize;
@@ -54,14 +57,6 @@ public class QNAServiceImpl implements QNAService<QNADTO> {
 
 		return listPagingData;
 	}
-	
-	
-	@Autowired
-	private TransactionTemplate transactionTemplate;
-	
-	//글번호에따른 댓글 삭제용 DAO주입 받기
-	@Autowired
-	private AnswerDAO ldao;
 
 	// 게시물수
 	@Override
@@ -90,28 +85,6 @@ public class QNAServiceImpl implements QNAService<QNADTO> {
 		return dao.qnaEdit(map);
 	}
 
-	// 목록에서 삭제
-	@Override
-	public int qnaDelete(Map map) {
-		int affected = 0;
-		List<String> qnolists = (List<String>) map.get("qno");
-		System.out.println(qnolists);
-		for (String qno : qnolists) {
-			Map qnoMap = new HashMap();
-			qnoMap.put("qno", qno);
-			System.out.println(qnoMap);
-			affected += dao.qnaDelete(qnoMap);
-		}
-		if (affected == ((List) map.get("qno")).size()) {
-			return 1;
-		} else
-			return 0;
-	}
-
-	// 읽기에서 삭제
-	public int qnaViewDelete(Map map) {
-		return dao.qnaViewDelete(map);
-	}
 
 	// 조회수
 	@Override
@@ -123,6 +96,53 @@ public class QNAServiceImpl implements QNAService<QNADTO> {
 	public String findNameByKey(Map map) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	// 글번호에따른 댓글 삭제용 DAO주입 받기
+	@Autowired
+	private AnswerDAO adao;
+
+	@Override
+	public int qnaDelete(Map map) {
+		int affected = 0;
+		affected = transactionTemplate.execute(tx -> {
+			List<String> qnoLists = (List<String>) map.get("qno");
+
+			for (String qno : qnoLists) {
+				map.put("table", "answer");
+				map.put("qno", qno);
+				adao.answerAllDelete(map);
+				dao.qnaDelete(map);
+				map.put("table", "qna");
+			}
+			return dao.qnaDelete(map);
+		});
+
+		return affected;
+	}
+	
+	
+	@Override
+	public int qnaViewDelete(Map map) {
+		int affected = 0;
+		affected = transactionTemplate.execute(tx -> {
+			int deleteAnswerCount = adao.deleteByNo(map);
+			dao.qnaDelete(map);
+			return deleteAnswerCount;
+		});
+		return affected;
+	}
+
+	@Override
+	public int answerDelete(Map map) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int answerAllDelete(Map map) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 }

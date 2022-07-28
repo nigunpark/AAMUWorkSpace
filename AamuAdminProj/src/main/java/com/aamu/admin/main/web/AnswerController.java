@@ -1,12 +1,15 @@
 package com.aamu.admin.main.web;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.aamu.admin.main.service.AnswerDTO;
@@ -55,23 +58,28 @@ public class AnswerController {
 		return map;
 	}
 
-
-	@PostMapping(value = "Edit.do")
-	public Map edit(@ModelAttribute("id") String id, @RequestParam Map map) {
-
-		// 서비스 호출
-		answerService.qnaEdit(map);
-		// 데이타 반환]
-		return map;
-	}//////////// write
-
 	@PostMapping(value = "Delete.do")
 	public Map delete(@ModelAttribute("id") String id, @RequestParam Map map) {
 
 		// 서비스 호출
-		answerService.qnaDelete(map);
+		answerService.answerDelete(map);
 		// 데이타 반환]
 		return map;
 	}//////////// write
+	
+	
+	//댓글 삭제
+	@PostMapping("AnswerAllDelete.do")
+	@ResponseBody
+	public Map answerAllDelete(@RequestBody Map map){
+		int affected=answerService.answerAllDelete(map);
+		//데이타 반환
+		Map resultMap = new HashMap();
+		System.out.println("affected:"+affected);
+		if(affected==1) resultMap.put("result", "Success");
+		else resultMap.put("result", "NotSuccess");
+		return resultMap;
+	}
+	
 
 }

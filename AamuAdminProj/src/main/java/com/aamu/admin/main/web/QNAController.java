@@ -91,6 +91,7 @@ public class QNAController {
 		return "redirect:/QNAView.do";
 	}/////////////////////////
 
+	
 	// 목록에서 삭제
 	@PostMapping("QNADelete.do")
 	@ResponseBody
@@ -112,5 +113,9 @@ public class QNAController {
 		qnaService.qnaViewDelete(map);
 		return "redirect:/QNA.do";
 	}
+	
+	
+
+	
 
 }

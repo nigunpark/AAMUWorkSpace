@@ -9,7 +9,8 @@
 
 	<insert id="answerInsert" parameterType="Map">
 		<selectKey keyProperty="ano" resultType="int" order="BEFORE">
-			SELECT SEQ_ANSWER.NEXTVAL FROM DUAL
+			SELECT
+			SEQ_ANSWER.NEXTVAL FROM DUAL
 		</selectKey>
 		INSERT INTO answer
 		VALUES(#{ano},#{qno},#{id},#{answer},SYSDATE)
@@ -40,7 +41,17 @@
 	</delete>
 
 	<delete id="answerDeleteByNo" parameterType="Map">
-		DELETE answer WHERE qno = #{qno}
+		DELETE answer WHERE
+		qno = #{qno}
+	</delete>
+
+	<delete id="answerDeletesByNo" parameterType="int[]">
+		DELETE FROM answer
+		WHERE qno IN
+		<foreach collection="array" item="item" open="(" close=")"
+			separator=",">
+			#{item}
+		</foreach>
 	</delete>
 
 </mapper>
