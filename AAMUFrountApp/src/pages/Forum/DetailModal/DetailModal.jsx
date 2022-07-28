@@ -7,9 +7,7 @@ import { Rating } from '@mui/material'
 import axios from 'axios'
 import './BookMark.css';
 
-import dummyPlanner from '../DB/planner.json';
-
-const DetailModal = ({setIsOpen, dummy}) => {
+const DetailModal = ({setIsOpen, detailRbn}) => {
 
     let [tempObj, setTempObj] = useState({review: "",
                                         reviewId: "",
@@ -39,10 +37,29 @@ const DetailModal = ({setIsOpen, dummy}) => {
     }, []);
 
     // 더미 데이터
+    // useEffect(()=>{
+    //     let temp = [...dummy.reviewdata]
+    //     setFeedComments(temp)
+    // },[])
+
+    // console.log('detailRbn 글번호 넘어왔나 :',detailRbn);
     useEffect(()=>{
-        let temp = [...dummy.reviewdata]
-        setFeedComments(temp)
-    },[])
+        let token = sessionStorage.getItem("token");
+        axios.get('/aamurest/bbs/SelectOne',{
+            params:{
+                rbn:detailRbn
+            },
+            headers: {
+                Authorization: `Bearer ${token}`,
+            }
+        }).then((resp)=>{
+            console.log('게시판 상세보기 : ',resp.data);
+            
+        }).catch((error)=>{
+            console.log((error) => console.log("게시판 상세보기 실패", error));
+        });
+        
+    },[]);
     
 
     let reviewPost = (e) => {
@@ -140,12 +157,12 @@ const DetailModal = ({setIsOpen, dummy}) => {
         <DetailOverlay>
             <DetailModalWrap>
                 <Plan>
-                    <PlanTitle>{dummyPlanner.title}</PlanTitle>
-                    {
+                    <PlanTitle>여행경로 제목 자리</PlanTitle>
+                    {/* {
                         dummyPlanner.route.map((val, idx)=>{
                             console.log('더미 플래너 :',val, '인덱스:',idx);
                         })
-                    }
+                    } */}
                     <div style={{border:'1.5px solid #edf2f4'}}>
                     {/*
                     게시글 클릭시 게시글 작성자의 id (혹은 다른 값)를 키로 보내서
@@ -181,8 +198,9 @@ const DetailModal = ({setIsOpen, dummy}) => {
                                 }}/>
                             <label for="star"></label>
                         </div>
-
-                        {dummy.title}
+                        
+                        {/* 여기가 글 작성할때 쓴 제목 */}
+                        {/* {dummy.title} */}
 
                         <div className='detail-button'>
                             <button className="learn-more_exit" type="button" onClick={(e)=>{
@@ -193,10 +211,12 @@ const DetailModal = ({setIsOpen, dummy}) => {
                 </DetailTitle>
 
                 <DetailContents>
-                    <Notice dummy={dummy.imgsdata}/>
+                    <Notice />
+                    {/* dummy={dummy.imgsdata} */}
                     
                     <Textarea>
-                        {dummy.content}
+                        {/* {dummy.content} */}
+                        {/* 여기가 공유한 글 내용 */}
                     </Textarea>
                     <div>
                         <Rating
@@ -209,7 +229,7 @@ const DetailModal = ({setIsOpen, dummy}) => {
                         />
                     </div>
                     <Tag>
-                        <Date>작성일. {dummy.postDate}</Date>
+                        <Date>작성일. </Date>
                         <Link to='/'>
                             #tag
                         </Link>
