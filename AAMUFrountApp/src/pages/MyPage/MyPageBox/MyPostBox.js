@@ -7,6 +7,7 @@ const MyPostBox = ({selectRbn}) => {
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
     const [tag, setTag] = useState();
+    const [detailRbn, setDetailRbn] = useState();
     let [writeTag, setWriteTag] = useState([]);
 
     //--------------------------------이미지 시작--------------------------------
@@ -54,7 +55,7 @@ const MyPostBox = ({selectRbn}) => {
         }).then((resp)=>{
             console.log('글 작성 페이지에서 상세경로 데이터 확인 : ',resp.data);
             setDetailPostData(resp.data);
-    
+            setDetailRbn(resp.data.rbn);
         }).catch((error)=>{
             console.log((error) => console.log("상세경로 가져오기 실패", error));
         });
@@ -62,7 +63,7 @@ const MyPostBox = ({selectRbn}) => {
       },[]);
 
 
-      console.log('detailPostData :', detailPostData);
+      console.log('detailRbn :', detailRbn);
 
   return (
     <div className="MyWrite-container">
@@ -155,7 +156,7 @@ const MyPostBox = ({selectRbn}) => {
             type="button"
             onClick={()=>{
               let write = uploadFile(showImages);
-              bordWrite(write, title, content, tag, writeTag, setWriteTag);
+              bordWrite(write, title, content, tag, writeTag, setWriteTag, detailRbn);
             }}>공유하기</button>
           ) : (
             <button  type="button" disabled>제목과 내용을 모두 입력하세요</button>
@@ -175,7 +176,7 @@ function uploadFile(showImages){//이미지 업로드
     }
     return formData;
   };
-  function bordWrite(write, title, content, tag, writeTag, setWriteTag){
+  function bordWrite(write, title, content, tag, writeTag, setWriteTag, detailRbn){
   
     // setWriteTag(tag.split('#'));
     // writeTag.splice(0,1);
@@ -184,6 +185,7 @@ function uploadFile(showImages){//이미지 업로드
     write.append('id', sessionStorage.getItem('username'));
     write.append('title', title);
     write.append('content', content);
+    write.append('rbn', detailRbn);
     // write.append('writeTag', writeTag);
   
     let token = sessionStorage.getItem("token");
