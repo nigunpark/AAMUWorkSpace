@@ -16,7 +16,7 @@ import { confirmAlert } from "react-confirm-alert";
 
 function FeedSetting({val,setlist,forReRender, setForReRender, setloading}) {
     
-    let menuRef = useRef();
+    
     let profileRef = useRef();
     let commentRef = useRef();
     let replyRef = useRef();
@@ -89,13 +89,7 @@ function FeedSetting({val,setlist,forReRender, setForReRender, setloading}) {
       
 
 
-    function menuModalRef(e){//메뉴 모달 나왔을때 주변 눌러도 꺼지게 만들기
-        e.stopPropagation();
-        if (e.target != menuRef.current) setModalShow(false);
-       
-    }
     
-    window.addEventListener("click", menuModalRef);
     
     let CommentList = ({val}) => {
         return(
@@ -162,7 +156,7 @@ function FeedSetting({val,setlist,forReRender, setForReRender, setloading}) {
         </div>
         <div className="dot">
             <i className="fa-solid fa-ellipsis fa-2x"
-            ref={menuRef}
+            
             onClick={() => setModalShow(!modalShow)}></i>
             {modalShow 
                 &&<MenuModal setlist={setlist} setModalShow={setModalShow} seteditModal={seteditModal} val={val}/>
@@ -208,7 +202,7 @@ function FeedSetting({val,setlist,forReRender, setForReRender, setloading}) {
                     ref={commentRef} 
                     onClick={ (e) => {e.stopPropagation(); if(e.target == commentRef.current) setcommentModal(false)  }}
                     >
-                        <Comment onClick={ () => {setcommentModal(false)}} val={val} forReRender={forReRender} setForReRender={setForReRender}></Comment>
+                        <Comment onClick={ () => {setcommentModal(false)}} val={val} forReRender={forReRender} setForReRender={setForReRender} setlist={setlist}/>
                     </Overlay>
                 </Container1>
                 :null}

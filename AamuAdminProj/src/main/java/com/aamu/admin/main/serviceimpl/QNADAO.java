@@ -12,7 +12,7 @@ import com.aamu.admin.main.service.QNADTO;
 
 @Repository
 public class QNADAO {
-	
+
 	@Autowired
 	private SqlSessionTemplate template;
 
@@ -56,5 +56,7 @@ public class QNADAO {
 	public int qnaCount(Map map) throws Exception {
 		return template.update("qnaCount", map);
 	}
+
+	
 
 }

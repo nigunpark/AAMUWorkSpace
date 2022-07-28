@@ -39,6 +39,4 @@ public interface BBSService {
 	//리뷰 삭제
 	int reviewDelete(Map map);
 
-
-
 }

@@ -1,5 +1,6 @@
 package com.aamu.admin.main.serviceimpl;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -41,8 +42,28 @@ public class AnswerServiceImpl implements QNAService<AnswerDTO> {
 	}
 
 	@Override
-	public int qnaDelete(Map map) {
+	public int answerDelete(Map map) {
 		return dao.delete(map);
+	}
+	
+	
+	@Override
+	public int answerAllDelete(Map map) {
+		int affected=0;
+		
+		List<String> anolists=(List<String>)map.get("ano");
+		System.out.println(anolists);
+		for(String ano:anolists) {
+			Map anoMap = new HashMap(); 
+			anoMap.put("ano",ano); 
+			System.out.println(anoMap);
+			affected+=dao.answerAllDelete(anoMap);
+		}
+		if(affected==((List)map.get("ano")).size()) {
+			return 1;
+		}
+		else
+			return 0;
 	}
 
 	@Override
@@ -67,5 +88,19 @@ public class AnswerServiceImpl implements QNAService<AnswerDTO> {
 		// TODO Auto-generated method stub
 		return 0;
 	}
+
+	@Override
+	public int qnaDelete(Map map) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int qnaViewDelete(Map map) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+
 
 }

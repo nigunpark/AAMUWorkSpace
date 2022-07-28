@@ -9,7 +9,7 @@
 		resultType="NoticeDTO">
 		SELECT * FROM
 		(SELECT T.*, ROWNUM R FROM (
-		SELECT n. * FROM
+		SELECT n. *, name FROM
 		Notice n
 		JOIN
 		users u ON n.id=u.id
@@ -30,7 +30,7 @@
 	<!-- 읽기 -->
 	<select id="noticeSelectOne" parameterType="Map"
 		resultType="NoticeDTO">
-		SELECT * FROM notice
+		SELECT n.*, name FROM users u JOIN notice n ON u.id = n.id 
 		WHERE nno=#{nno}
 	</select>
 

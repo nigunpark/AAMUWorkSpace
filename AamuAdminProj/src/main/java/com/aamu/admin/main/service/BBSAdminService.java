@@ -12,9 +12,6 @@ public interface BBSAdminService {
 	//전체 게시글 수
 	int bbsGetTotalRecordCount(Map map);
 	
-	//게시글 하나 보기
-	BBSAdminDTO bbsAdimSelectOne(Map map);
-	
 	//게시글 삭제
 	int bbsDelete(Map map);
 	

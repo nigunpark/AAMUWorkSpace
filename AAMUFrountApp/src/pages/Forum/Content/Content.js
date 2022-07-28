@@ -10,6 +10,8 @@ import dummy from "../DB/contentdata.json";
 const Content = () => {
     //let navigate = useNavigate();
 
+    const [listData, setListData] = useState([]);
+
     let token = sessionStorage.getItem("token");
     
     let [list, setList] = useState('');
@@ -22,10 +24,11 @@ const Content = () => {
         }).then((resp)=>{
             // setList(resp.data);
             console.log('글 목록이 왔는지 : ',resp.data);
+            setListData(resp.data);
         }).catch((error)=>{
             console.log((error) => console.log("글 목록 가져오기 실패", error));
         });
-    });
+    },[]);
 
     return (
         <div className="Cards_minCon">
@@ -44,9 +47,11 @@ const Content = () => {
                     <FSearch/>
                     
                     <ul className="card__items_minCon">
-                        {dummy.forumContent.map((dummyData, idx) => {
-                        return <ContentItem dummy={dummyData} keys={idx}/>;
-                        })}
+                        {
+                            listData.map((val, idx)=>{
+                                return <ContentItem detail={val} index={idx}/>
+                            })
+                        }
                     </ul>
                 </div>
             </div>
