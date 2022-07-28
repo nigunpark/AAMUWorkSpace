@@ -17,7 +17,6 @@ import JoinStep1 from "./components/Join/JoinStep1.js";
 import JoinStep2 from "./components/Join/JoinStep2.js";
 import SearchList from "./components/Insta/SearchList";
 
-
 function App() {
   let location = useLocation();
   useEffect(() => {
@@ -44,8 +43,33 @@ function App() {
           <Route path="/mainPage/:currPosition" element={<MainPage />} />
           <Route path="/forum" element={<Forum />} />
           {/* <Route path="/review" element={<Board />} /> */}
-          <Route path="/Insta" element={<Main inputValue={inputValue} setinputValue={setinputValue} searchb={searchb} setSearchb={setSearchb}/>} />
-          <Route path="/Insta/searchList" element={<SearchList inputValue={inputValue} setinputValue={setinputValue} searchb={searchb} setSearchb={setSearchb}/>} />
+          {/* <Route path="/Insta" element={<Main />} /> */}
+          {/* <Route
+            path="/Insta/searchList"
+            element={<SearchList searchb={searchb} setSearchb={setSearchb} />}
+          /> */}
+          <Route
+            path="/Insta"
+            element={
+              <Main
+                inputValue={inputValue}
+                setinputValue={setinputValue}
+                searchb={searchb}
+                setSearchb={setSearchb}
+              />
+            }
+          />
+          <Route
+            path="/Insta/searchList"
+            element={
+              <SearchList
+                inputValue={inputValue}
+                setinputValue={setinputValue}
+                searchb={searchb}
+                setSearchb={setSearchb}
+              />
+            }
+          />
           <Route path="/myPage" element={<MyPage />} />
         </Route>
         <Route path="/login" element={<LoginTest />}></Route>
@@ -55,10 +79,7 @@ function App() {
         <Route path="/test" element={<Test />} />
         <Route path="/Detailmodal" element={<DetailModal />} />
 
-        <Route
-          path="/oauth/callback/kakao"
-          element={<KakaoRedirectHandler />}
-        />
+        <Route path="/oauth/callback/kakao" element={<KakaoRedirectHandler />} />
       </Routes>
     </div>
   );
