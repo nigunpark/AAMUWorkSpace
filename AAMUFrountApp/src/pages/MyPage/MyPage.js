@@ -274,11 +274,11 @@ function TabContent({ clickTab, setClickTab, planList }) {
   // let myImgs = showImages.map((showImages, imgIndex)=>{
   //   console.log('인덱스:',imgIndex,' 값:',showImages);
 
-  let myImgs = showImages.map((showImages, imgIndex) => {
-    console.log("인덱스:", imgIndex, " 값:", showImages);
+  // let myImgs = showImages.map((showImages, imgIndex) => {
+  //   console.log("인덱스:", imgIndex, " 값:", showImages);
 
-    return { imgIndex: showImages };
-  });
+  //   return { imgIndex: showImages };
+  // });
   //   return {imgIndex:showImages};
   // });
   // console.log('저장된 myImgs:',myImgs);

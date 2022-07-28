@@ -15,6 +15,7 @@
 							<div class="card">
 								<div class="card-body">
 								<div class="card-numberOfBoard">
+										<button class="btn btn-primary text-white me-0" style="float: right" id="crawll">이미지 크롤링</button>
 										<button class="btn btn-primary text-white me-0" style="float: right" id="save">데이터 저장</button>
 									</div>
 									<h4 class="card-title">여행지 리스트</h4>
@@ -94,7 +95,26 @@ $('#save').click(function(){
 		dataType: "json" //데이타 받을 때 
 	}).done(data=>{(console.log('저장 성공'),data)}).fail(e=>{console.log('실패',e)})
 });
-    
+$('#crawll').click(function(){
+	console.log('클릭이벤트 발생')
+	var placelist =new Array();
+	<c:forEach items="${placelist}" var="item">
+		<c:if test="${item.bigimage eq null}">
+			placelist.push({
+				title:"${item.title}"
+			});
+		</c:if>
+	</c:forEach>
+	var placejson = JSON.stringify({"placelist":placelist});
+	console.log(placejson);
+	$.ajax({
+		url:"http://192.168.0.19:5020/imgcrawll",
+		type:"post",
+		data: placejson,
+		contentType:"application/json", //데이타 보낼 때
+		dataType: "json" //데이타 받을 때 
+	}).done(data=>{(console.log('저장 성공'),data)}).fail(e=>{console.log('실패',e)})
+});
   </script>
 </body>
 </html>

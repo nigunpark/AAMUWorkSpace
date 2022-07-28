@@ -22,7 +22,7 @@ import { confirmAlert } from 'react-confirm-alert';
 
 const Edit = ({setlist,val,seteditModal }) => {
 
-  
+  let menuRef = useRef();
 let searchRef = useRef();
 let titleRef = useRef();
 let textareaRef = useRef();
@@ -43,7 +43,7 @@ const [inputValue,setinputValue] = useState('');
   const [back, setback] = useState(false);
   const [myImagefile, setMyImageFile] = useState([]);
 
-
+  const [modalShow, setModalShow] = useState(false);
   const [title,settitle] = useState('');
   const [content,setcontent] = useState('');
 
@@ -102,6 +102,14 @@ const [inputValue,setinputValue] = useState('');
         }
     }
    
+    function menuModalRef(e){//메뉴 모달 나왔을때 주변 눌러도 꺼지게 만들기
+      e.stopPropagation();
+      if (e.target != menuRef.current) setModalShow(false);
+      
+    }
+    
+    window.addEventListener("click", menuModalRef);
+
     const submit = () => {
       confirmAlert({
         title: "수정내용을 삭제하시겠습니까?",
@@ -122,7 +130,7 @@ const [inputValue,setinputValue] = useState('');
  
   return (
     <Container>
-    <Overlay  onClick={()=>{submit()}}>
+    <Overlay ref={menuRef}  onClick={()=>{submit()}}>
     <Contents >  
         <FirstLine>
             <div className='newPosting' style={{marginLeft:'12%'}}>

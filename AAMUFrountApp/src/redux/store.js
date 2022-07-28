@@ -48,12 +48,8 @@ let arrForJangso = createSlice({
     },
   },
 });
-export let {
-  changeArrForJangso,
-  addArrInForJangso,
-  deleteArrInJangso,
-  addAtimeArrForJangso,
-} = arrForJangso.actions;
+export let { changeArrForJangso, addArrInForJangso, deleteArrInJangso, addAtimeArrForJangso } =
+  arrForJangso.actions;
 
 //추천장소에서 선택한 장소를 넣는 배열
 let arrForPickJangso = createSlice({
@@ -64,17 +60,14 @@ let arrForPickJangso = createSlice({
       state = state.push(action.payload);
     },
     deletePickJangso(state, action) {
-      return (state = state.filter(
-        (local) => local.contentid !== action.payload.contentid
-      ));
+      return (state = state.filter((local) => local.contentid !== action.payload.contentid));
     },
     deleteAllPickJanso(state, action) {
       return action.payload;
     },
   },
 });
-export let { addPickJangso, deleteAllPickJanso, deletePickJangso } =
-  arrForPickJangso.actions;
+export let { addPickJangso, deleteAllPickJanso, deletePickJangso } = arrForPickJangso.actions;
 
 //추천숙소
 let arrForSukso = createSlice({
@@ -215,12 +208,12 @@ let timeSetObj = createSlice({
         })
       ] = action.payload;
     },
-    delAllTimeSetObj(state,action){
-      return action.payload
-    }
+    delAllTimeSetObj(state, action) {
+      return action.payload;
+    },
   },
 });
-export let { changeTimeSetObj, delTimeSetObj, corrTimeSetObj,delAllTimeSetObj } =
+export let { changeTimeSetObj, delTimeSetObj, corrTimeSetObj, delAllTimeSetObj } =
   timeSetObj.actions;
 
 //db에서 계산되서 받아온 이동시간이 저장되는 배열 state

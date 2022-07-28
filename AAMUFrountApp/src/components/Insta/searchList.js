@@ -2,55 +2,28 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components';
 
-function SearchList({searchb, setSearchb}) {
-    const [searchbar, setsearchbar] = useState([]);
-    function searchBar(e,searchb){//백이랑 인스타 리스드를 뿌려주기 위한 axios
-    
-        let val = e.target.value;
-        let token = sessionStorage.getItem("token");
-        axios.get('/aamurest/gram/selectList',{
-          headers: {
-                Authorization: `Bearer ${token}`,
-              },
-              params:{
-                searchColumn : searchb,
-                searchWord :val,
-              }
-        })
-        .then((resp) => {
-          console.log(resp.data)
-          setsearchbar(resp.data);
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      }
-      useEffect((e)=>{
-        searchBar(e,searchb)
-      },[])
-    
+function SearchList({searchb, inputValue}) {
+   
     return (
         <MyInstaContainer>
             <Grid>
             <User>
-                <img src="/img/mm.jpg" alt="프사" onError={(e)=>{e.stopPropagation(); e.target.src='/images/user.jpg'}}/>
-                <div style={{paddingLeft:'20px'}}>
-                <p className="user-id">@토토</p>
-                <p className="user-name">총 게시물</p>
-                </div>
-
-                
+              <img src= { searchb[0] ===undefined ? null : searchb[0].photo[0]}  onError={(e)=>{e.stopPropagation(); e.target.src='/images/user.jpg'}}/>
+              <div style={{paddingLeft:'20px'}}>
+                <p className="user-id">{inputValue}</p>
+                <p className="user-name">게시물  <strong style={{color:'black'}}>{searchb.length}</strong></p>
+              </div>
             </User>
             <MyInstar>
             
                 {
-                searchbar.map((val, idx)=>{
+                searchb.map((val, idx)=>{
                     return(
                     <InstarBox
                         onClick={(e)=>{
                         }}>
                         <InstaImg
-                        src={val === undefined ? null : val.photo}/>
+                        src={val.photo[0]}/>
                     </InstarBox>
                     )
                 })
@@ -63,7 +36,7 @@ function SearchList({searchb, setSearchb}) {
 }
 
 const MyInstaContainer = styled.div`
-
+background-color: #f3f3f3;
 display: grid;
 grid-template-columns: auto 900px auto;
 gap:5px;
@@ -94,7 +67,7 @@ const User = styled.div`
     flex-direction: row;
     align-items: center;
     margin-bottom: 10px;
-    height:200px;
+    height:180px;
     > img {
       width: 150px;
       height: 150px;
@@ -104,7 +77,7 @@ const User = styled.div`
     }
 
     .user-id {
-      font-size: 25px;
+      font-size: 30px;
       font-weight: bold;
       margin-left: 10px;
     }
@@ -153,7 +126,7 @@ const User = styled.div`
     transform: scale(1.03);
   }
   `
-const InstaImg = styled.div`
+const InstaImg = styled.img`
     width: 100%;
     height: 100%;
     border-radius: 10px;

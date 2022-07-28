@@ -24,10 +24,18 @@ public interface QNAService<T> {
 	// 삭제
 	int qnaDelete(Map map);
 
+	int qnaViewDelete(Map map);
+	
 	// 조회수
 	int qnaCount(Map map) throws Exception;
 	
 	// 키로 이름 찾는 메소드
 	String findNameByKey(Map map);
+
+	// 댓글 삭제
+	int answerDelete(Map map);
+
+	int answerAllDelete(Map map);
+
 
 }

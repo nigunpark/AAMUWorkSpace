@@ -9,7 +9,7 @@ import "swiper/css"; //basic
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 
-const Notice = ({dummy}) => {
+const Notice = () => {
     
   return (
     <div className='Notice'>
@@ -27,7 +27,7 @@ const Notice = ({dummy}) => {
                         pagination={{ clickable: true }}
                         scrollbar={{ draggable: true }}
                         >
-                        {
+                        {/* {
                             dummy.map((val, idx)=>{
                                 return (
                                     <SwiperSlide>
@@ -35,7 +35,10 @@ const Notice = ({dummy}) => {
                                     </SwiperSlide>
                                 )
                             })
-                        }
+                        } */}
+                        <SwiperSlide>
+                            <NoticeItem/>
+                        </SwiperSlide>
                     </Swiper>
                 </ul>
             </div>

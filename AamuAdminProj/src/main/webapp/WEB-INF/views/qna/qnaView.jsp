@@ -18,13 +18,17 @@
 								</tr>
 								<tr>
 									<th class="w-25 bg-dark text-white text-center">글쓴이</th>
-									<td>${record.name}</td>
+									<td>${record.name}(${record.id})</td>
 								</tr>
 								<tr>
 									<th class="w-25 bg-dark text-white text-center">작성일</th>
 									<td>${record.qdate}</td>
 								</tr>
 
+								<tr>
+									<th class="w-25 bg-dark text-white text-center">답변수</th>
+									<td><span class="answer-count p-0">${record.answerCount}</span></td>
+								</tr>
 								<tr>
 									<th class="w-25 bg-dark text-white text-center">조회수</th>
 									<td>${record.qcount}</td>
@@ -145,6 +149,7 @@ $('#submit').click(function(){
     dataType:'json',//{lno:입력된댓글번호,name:댓글 작성한 이름}
     type:"post"         
  }).done(function(data){
+	
     console.log('서버에서 받은 데이타:',data);
     //입력후 입력된 댓글 뿌려주기위한 함수 호출:함수안에서 다시 모든 댓글 목록을 AJAX요청이 이루어짐
     //showComments();
@@ -152,8 +157,9 @@ $('#submit').click(function(){
     console.log("입력한 댓글:",{id: data.id,answer:$("#answer").val(),adate:new Date().getTime(),name: data.name,no:${record.qno}});
 
     if($('#submit').val()==="등록"){
-       var tr="<tr><td>"+data.name+"</td><td title=\""+data.ano+"\" class=\"text-left answer\">"+$("#answer").val()+"</td><td>"+(getDate(new Date().getTime()))+"</td><td><span class=\"btn btn-info btn-sm delete\">삭qwe제</span></td></tr>";
+       var tr="<tr><td>"+data.name+"</td><td title=\""+data.ano+"\" class=\"text-left answer\">"+$("#answer").val()+"</td><td>"+(getDate(new Date().getTime()))+"</td><td><span class=\"btn btn-info btn-sm delete\">삭제</span></td></tr>";
        $('#answer-list').before(tr);
+       answerCount();
     }
     else{//수정
        $('#submit').val("등록");
@@ -200,6 +206,7 @@ $('#submit').click(function(){
            dataType:'json'
         }).done(data=>{
            console.log('삭제성공:',data);
+           answerCount();
            //tr태그 제거
            this_.parent().parent().remove();
         }).fail(error=>{
@@ -216,6 +223,9 @@ $('#submit').click(function(){
     }////////////////
     
     
+    function answerCount() {
+    	$('.answer-count').load(location.href+' .answer-count');
+    }
 
 //메모글 삭제
 function qnaDelete(key){

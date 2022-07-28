@@ -29,6 +29,7 @@ function MyCreatePlanLeft({
   setForDayLine,
   setFromWooJaeData,
   routeMap,
+  newTimeSet,
 }) {
   let reduxState = useSelector((state) => {
     return state;
@@ -37,40 +38,13 @@ function MyCreatePlanLeft({
   const [whichModal, setWhichModal] = useState("전체일정");
   const dayRef = useRef();
   const [temp, setTemp] = useState("");
-
+  const [timeSet, setTimeSet] = useState([]);
   useEffect(() => {
-    console.log("fromWooJaeData", fromWooJaeData);
-
-    fromWooJaeData.map((val, index) => {
-      let bbcT =
-        fromWooJaeData[index][`day${index + 1}`][0].starttime / (1000 * 60);
-      if (bbcT >= 13 * 60) {
-        console.log("위");
-        let temp = {
-          ampm: "오후",
-          time: bbcT / 60 - 12,
-          fullDate: new Date(`2022-01-01 ${bbcT / 60}:${bbcT % 60}`),
-          min: bbcT % 60,
-          day: index + 1,
-        };
-        // dispatch(changeTimeSetObj({ ...temp }));
-      } else {
-        console.log("아래");
-        let temp = {
-          ampm: "오전",
-          time: bbcT / 60,
-          fullDate: new Date(`2022-01-01 ${bbcT / 60}:${bbcT % 60}`),
-          min: bbcT % 60,
-          day: index + 1,
-        };
-        // dispatch(changeTimeSetObj({ ...temp }));
-      }
-    });
     setTemp(dayRef.current);
   }, []);
   if (fromWooJaeData.length === 0) return;
   if (fromWooJaeData === undefined) return;
-  // console.log("fromWooJaeData", fromWooJaeData);
+
   let tempWholeArr = [];
   fromWooJaeData.forEach((val, i) => {
     let temp = Object.values(val)[0];
@@ -112,10 +86,8 @@ function MyCreatePlanLeft({
                   setWhichModal(`day${index + 1}`);
                   setTemp(e.target);
                   e.target.classList.add("days-container-active");
-                  if (temp !== undefined)
-                    temp.classList.remove("days-container-active");
-                  if (count === 0)
-                    dayRef.current.classList.remove("days-container-active");
+                  if (temp !== undefined) temp.classList.remove("days-container-active");
+                  if (count === 0) dayRef.current.classList.remove("days-container-active");
                   setForDayLine(index + 1);
                   count++;
                 }}
@@ -132,7 +104,8 @@ function MyCreatePlanLeft({
           currPosition={currPosition}
           fromWooJaeData={fromWooJaeData}
           setFromWooJaeData={setFromWooJaeData}
-          routeMap={routeMap}
+          timeSet={timeSet}
+          newTimeSet={newTimeSet}
         />
       </div>
     </div>
@@ -144,7 +117,8 @@ function WhichModal({
   currPosition,
   fromWooJaeData,
   setFromWooJaeData,
-  routeMap,
+  timeSet,
+  newTimeSet,
 }) {
   if (whichModal === "전체일정") {
     return (
@@ -152,7 +126,8 @@ function WhichModal({
         currPosition={currPosition}
         fromWooJaeData={fromWooJaeData}
         setFromWooJaeData={setFromWooJaeData}
-        routeMap={routeMap}
+        timeSet={timeSet}
+        newTimeSet={newTimeSet}
       />
     );
   } else {
@@ -177,12 +152,7 @@ function WhichModal({
   }
 }
 
-function WholeSchedule({
-  currPosition,
-  fromWooJaeData,
-  setFromWooJaeData,
-  routeMap,
-}) {
+function WholeSchedule({ currPosition, fromWooJaeData, setFromWooJaeData, timeSet, newTimeSet }) {
   let reduxState = useSelector((state) => {
     return state;
   });
@@ -190,6 +160,7 @@ function WholeSchedule({
   useEffect(() => {
     dispatch(delAllWholeBb([]));
     dispatch(delAllTimeSetObj([]));
+    console.log("tripPeriod", reduxState.tripPeriod);
   }, []);
 
   return (
@@ -211,6 +182,8 @@ function WholeSchedule({
               key={index}
               fromWooJaeData={fromWooJaeData}
               setFromWooJaeData={setFromWooJaeData}
+              timeSet={timeSet}
+              newTimeSet={newTimeSet}
             />
           );
         })}
@@ -219,56 +192,16 @@ function WholeSchedule({
   );
 }
 
-function Content({ index, fromWooJaeData, setFromWooJaeData }) {
+function Content({ index, fromWooJaeData, setFromWooJaeData, timeSet, newTimeSet }) {
   const [sortedList, setSortedList] = useState([]);
   const [showTimePicker, setShowTimePicker] = useState(false);
   let reduxState = useSelector((state) => {
     return state;
   });
-  console.log("timeSetObj0(Content)", reduxState.timeSetObj);
+
   let dispatch = useDispatch();
   let contentRef = useRef();
   let sourceElement = null;
-  // console.log('fromWooJaeData :', fromWooJaeData);
-  // console.log('routeMap 잘 되는지 :',(fromWooJaeData[index][`day${index+1}`][0].starttime)/(1000*60*60));
-  // console.log('ㅇㅇㅇㅇㅇㅇ',new Date(`2022-01-01 ${bbcT/60}:${bbcT%60}`));
-  // console.log('bbcT ;;', bbcT);
-  // console.log("fromWooJaeData :", fromWooJaeData);
-  console.log("content안");
-  // let bbcT =
-  //   fromWooJaeData[index][`day${index + 1}`][0].starttime / (1000 * 60);
-  // dispatch(
-  //   changeTimeSetObj({
-  //     ampm: "오전",
-  //     time: bbcT / 60,
-  //     fullDate: new Date(`2022-01-01 ${bbcT / 60}:${bbcT % 60}`),
-  //     min: bbcT % 60,
-  //     day: index + 1,
-  //   })
-  // );
-  // let test = [
-  //   {
-  //     ampm: "오전",
-  //     time: bbcT / 60,
-  //     fullDate: new Date(`2022-01-01 ${bbcT / 60}:${bbcT % 60}`),
-  //     min: bbcT % 60,
-  //     day: 1,
-  //   },
-  //   {
-  //     ampm: "오전",
-  //     time: bbcT / 60,
-  //     fullDate: new Date(`2022-01-01 ${bbcT / 60}:${bbcT % 60}`),
-  //     min: bbcT % 60,
-  //     day: 2,
-  //   },
-  //   {
-  //     ampm: "오전",
-  //     time: bbcT / 60,
-  //     fullDate: new Date(`2022-01-01 ${bbcT / 60}:${bbcT % 60}`),
-  //     min: bbcT % 60,
-  //     day: 3,
-  //   },
-  // ];
   useEffect(() => {
     fromWooJaeData.forEach((val, i) => {
       fromWooJaeData[index]["day" + (index + 1)][0].mtime = 0;
@@ -307,17 +240,11 @@ function Content({ index, fromWooJaeData, setFromWooJaeData }) {
     e.stopPropagation();
     if (sourceElement.id !== e.target.id) {
       //drag를 당하는 녀석을 제외하고 새로운 배열
-      const list = sortedList.filter(
-        (val, i) => i.toString() !== sourceElement.id
-      );
+      const list = sortedList.filter((val, i) => i.toString() !== sourceElement.id);
 
       //지워지는 detail
-      const removed = sortedList.filter(
-        (val, i) => val.id === Number(sourceElement.id)
-      )[0];
-      const dropedIt = sortedList.filter(
-        (val, i) => val.id === Number(e.target.id)
-      )[0];
+      const removed = sortedList.filter((val, i) => val.id === Number(sourceElement.id))[0];
+      const dropedIt = sortedList.filter((val, i) => val.id === Number(e.target.id))[0];
       let temp = removed.starttime;
       removed.starttime = dropedIt.starttime;
       dropedIt.starttime = temp;
@@ -327,9 +254,7 @@ function Content({ index, fromWooJaeData, setFromWooJaeData }) {
       // 마지막 detailing위에 놓았을 때 id+1안되도록
       if (insertAt >= list.length) {
         tempList = list.slice(0).concat(removed);
-        e.target.parentElement.parentElement.parentElement.classList.remove(
-          "over"
-        );
+        e.target.parentElement.parentElement.parentElement.classList.remove("over");
       }
       //마지막detailing이 아닌 다른녀석 위에 놓았을 때
       else if (insertAt < list.length) {
@@ -339,9 +264,7 @@ function Content({ index, fromWooJaeData, setFromWooJaeData }) {
         const newList = tempList.concat(list.slice(insertAt));
         tempList = [...newList];
 
-        e.target.parentElement.parentElement.parentElement.classList.remove(
-          "over"
-        );
+        e.target.parentElement.parentElement.parentElement.classList.remove("over");
       }
       setSortedList(tempList);
       setFromWooJaeData((current) => {
@@ -360,9 +283,7 @@ function Content({ index, fromWooJaeData, setFromWooJaeData }) {
 
   const handleDelete = (e, testRef) => {
     e.preventDefault();
-    const list = sortedList.filter(
-      (item, i) => i !== Number(testRef.current.id)
-    );
+    const list = sortedList.filter((item, i) => i !== Number(testRef.current.id));
     setSortedList(list);
     setFromWooJaeData((current) => {
       let newData = [...current];
@@ -400,33 +321,27 @@ function Content({ index, fromWooJaeData, setFromWooJaeData }) {
       <select
         className="createPlanLeft__schedule__select"
         onChange={(e) => {
-          let newWooJaeData = [...fromWooJaeData];
-          newWooJaeData.map((val, i) => {
+          let fromWooJaeData = [...fromWooJaeData];
+          fromWooJaeData.map((val, i) => {
             //바꾸고싶은 날짜를 선택했을 때
             if (index === 0) {
               if (Object.keys(val)[0] === e.target.value) {
-                let originDay = Object.keys(newWooJaeData[index])[0]; //day1
-                let newOne = newWooJaeData.splice(i, 1); //{day2 : array}
+                let originDay = Object.keys(fromWooJaeData[index])[0]; //day1
+                let newOne = fromWooJaeData.splice(i, 1); //{day2 : array}
                 let newDay = Object.keys(newOne[0])[0]; //day2
-                newWooJaeData.splice(index, 0, newOne[0]);
-                newWooJaeData.map((val, idx) => {
+                fromWooJaeData.splice(index, 0, newOne[0]);
+                fromWooJaeData.map((val, idx) => {
                   if (Object.keys(val)[0] === newDay) {
                     Object.values(val)[0].forEach((obj) => {
                       obj.day = parseInt(
-                        originDay.substring(
-                          originDay.indexOf("y") + 1,
-                          originDay.indexOf("y") + 2
-                        )
+                        originDay.substring(originDay.indexOf("y") + 1, originDay.indexOf("y") + 2)
                       );
                     });
                   }
                   if (Object.keys(val)[0] === originDay) {
                     Object.values(val)[0].forEach((obj) => {
                       obj.day = parseInt(
-                        newDay.substring(
-                          newDay.indexOf("y") + 1,
-                          newDay.indexOf("y") + 2
-                        )
+                        newDay.substring(newDay.indexOf("y") + 1, newDay.indexOf("y") + 2)
                       );
                     });
                   }
@@ -434,32 +349,32 @@ function Content({ index, fromWooJaeData, setFromWooJaeData }) {
               }
             }
           });
-          newWooJaeData.map((val, i) => {
+          fromWooJaeData.map((val, i) => {
             if (i === 0) {
-              Object.values(newWooJaeData[0])[0][0] = Object.values(
-                newWooJaeData[0]
-              )[0][newWooJaeData.length];
+              Object.values(fromWooJaeData[0])[0][0] = Object.values(fromWooJaeData[0])[0][
+                fromWooJaeData.length
+              ];
             } else {
               if (i === 1) {
-                Object.values(newWooJaeData[i])[0][0] = {
-                  ...Object.values(newWooJaeData[0])[0][0],
+                Object.values(fromWooJaeData[i])[0][0] = {
+                  ...Object.values(fromWooJaeData[0])[0][0],
                 };
-                Object.values(newWooJaeData[i])[0][0].day = i + 1;
+                Object.values(fromWooJaeData[i])[0][0].day = i + 1;
               } else {
-                Object.values(newWooJaeData[i])[0][0] = {
-                  ...Object.values(newWooJaeData[i - 1])[0][
-                    Object.values(newWooJaeData[i - 1])[0].length - 1
+                Object.values(fromWooJaeData[i])[0][0] = {
+                  ...Object.values(fromWooJaeData[i - 1])[0][
+                    Object.values(fromWooJaeData[i - 1])[0].length - 1
                   ],
                 };
-                Object.values(newWooJaeData[i])[0][0].day = i + 1;
+                Object.values(fromWooJaeData[i])[0][0].day = i + 1;
               }
             }
           });
 
           // console.log("what", what);
-          // console.log("newWooJaeData", newWooJaeData);
+          // console.log("fromWooJaeData", fromWooJaeData);
           let editData = [];
-          newWooJaeData.map((val, i) => {
+          fromWooJaeData.map((val, i) => {
             Object.values(val)[0].map((obj, i) => {
               editData.push(obj);
             });
@@ -506,13 +421,9 @@ function Content({ index, fromWooJaeData, setFromWooJaeData }) {
       >
         {reduxState.tripPeriod.map((val, i) => {
           return (
-            <option
-              key={i}
-              value={`day${i + 1}`}
-              selected={index + 1 === i + 1 ? true : false}
-            >
+            <option key={i} value={`day${i + 1}`} selected={index + 1 === i + 1 ? true : false}>
               {i + 1}DAY {reduxState.monthNdate[0].month}월{" "}
-              {reduxState.monthNdate[0].date + i}일 {getDow(reduxState, i)}
+              {parseInt(reduxState.monthNdate[0].date) + i}일 {getDow(reduxState, i)}
             </option>
           );
         })}
@@ -535,30 +446,31 @@ function Content({ index, fromWooJaeData, setFromWooJaeData }) {
         <span style={{ fontSize: "13px" }}>시작</span>{" "}
         <span className="createPlanLeft__schedule__time-span">
           <span>
-            {
-              reduxState.timeSetObj.find((obj) => {
+            {newTimeSet.length !== 0 &&
+              newTimeSet.find((obj) => {
                 return obj.day === index + 1;
-              }).ampm
-            }
+              }).ampm}
           </span>{" "}
           <span>
-            {reduxState.timeSetObj
-              .find((obj) => {
-                return obj.day === index + 1;
-              })
-              .time.toString()
-              .trim()
-              .padStart(2, "0")}
+            {newTimeSet.length !== 0 &&
+              newTimeSet
+                .find((obj) => {
+                  return obj.day === index + 1;
+                })
+                .time.toString()
+                .trim()
+                .padStart(2, "0")}
           </span>
           {" : "}
           <span>
-            {reduxState.timeSetObj
-              .find((obj) => {
-                return obj.day === index + 1;
-              })
-              .min.toString()
-              .trim()
-              .padStart(2, "0")}
+            {newTimeSet.length !== 0 &&
+              newTimeSet
+                .find((obj) => {
+                  return obj.day === index + 1;
+                })
+                .min.toString()
+                .trim()
+                .padStart(2, "0")}
           </span>
         </span>
         <FontAwesomeIcon
@@ -571,16 +483,13 @@ function Content({ index, fromWooJaeData, setFromWooJaeData }) {
       </div>
       <hr />
       {showTimePicker ? (
-        <LocalizationProvider
-          dateAdapter={AdapterDateFns}
-          className="createPlanLeft__timePicker"
-        >
+        <LocalizationProvider dateAdapter={AdapterDateFns} className="createPlanLeft__timePicker">
           <Stack sx={{ m: 1, p: 0 }}>
             <TimePicker
               className="timePicker"
               renderInput={(params) => <TextField {...params} />}
               value={
-                reduxState.timeSetObj.find((obj) => {
+                newTimeSet.find((obj) => {
                   return obj.day === index + 1;
                 }).fullDate
               }
@@ -593,8 +502,7 @@ function Content({ index, fromWooJaeData, setFromWooJaeData }) {
                 //시작시간 변경 시 fromWooJaeData의 해당날짜 호텔 starttime에 넣어줌
                 if (newObj.ampm === "오후" && newObj.time >= 1) {
                   fromWooJaeData[index]["day" + (index + 1)][0].starttime =
-                    (newObj.time + 12) * 60 * 60 * 1000 +
-                    newObj.min * 60 * 1000;
+                    (newObj.time + 12) * 60 * 60 * 1000 + newObj.min * 60 * 1000;
                 } else {
                   fromWooJaeData[index]["day" + (index + 1)][0].starttime =
                     newObj.time * 60 * 60 * 1000 + newObj.min * 60 * 1000;
@@ -621,6 +529,7 @@ function Content({ index, fromWooJaeData, setFromWooJaeData }) {
               handleDrop={handleDrop}
               handleDragEnd={handleDragEnd}
               handleDelete={handleDelete}
+              newTimeSet={newTimeSet}
             />
           );
         })}
@@ -640,6 +549,7 @@ function DetailSetting({
   handleDrop,
   handleDragEnd,
   handleDelete,
+  newTimeSet,
 }) {
   let reduxState = useSelector((state) => {
     return state;
@@ -655,7 +565,7 @@ function DetailSetting({
   let testRef = useRef();
   useEffect(() => {
     if (i === 0) {
-      let firstAccum = getNAccumDetailTime(periodIndex, reduxState, obj);
+      let firstAccum = getNAccumDetailTime(periodIndex, reduxState, obj, newTimeSet);
       setUpTime(firstAccum);
       setDownTime(firstAccum + obj.atime / 1000 / 60);
       fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i + 1].starttime =
@@ -669,39 +579,26 @@ function DetailSetting({
     }
     if (i !== 0) {
       setUpTime(
-        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime +
-          obj.mtime / 1000 / 60
+        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime + obj.mtime / 1000 / 60
       );
       setDownTime(
         fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime +
           obj.mtime / 1000 / 60 +
-          fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].atime /
-            1000 /
-            60
+          fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].atime / 1000 / 60
       );
       let forBlackBoxRedux = getTimes(
         periodIndex,
-        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime +
-          obj.mtime / 1000 / 60,
+        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime + obj.mtime / 1000 / 60,
         fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime +
           obj.mtime / 1000 / 60 +
-          fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].atime /
-            1000 /
-            60
+          fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].atime / 1000 / 60
       );
       dispatch(addWholeBlackBox(forBlackBoxRedux));
-      if (
-        i !==
-        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)].length - 1
-      ) {
-        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][
-          i + 1
-        ].starttime =
+      if (i !== fromWooJaeData[periodIndex]["day" + (periodIndex + 1)].length - 1) {
+        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i + 1].starttime =
           fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime +
           obj.mtime / 1000 / 60 +
-          fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].atime /
-            1000 /
-            60;
+          fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].atime / 1000 / 60;
       }
     }
   }, []);
@@ -777,13 +674,8 @@ function DetailSetting({
                 gap: "5px",
               }}
             >
-              <div style={{ fontWeight: "bold", fontSize: "13px" }}>
-                {obj.dto.title}
-              </div>
-              <div
-                className="detailLocation__aTime"
-                style={{ fontSize: "14px" }}
-              >
+              <div style={{ fontWeight: "bold", fontSize: "13px" }}>{obj.dto.title}</div>
+              <div className="detailLocation__aTime" style={{ fontSize: "14px" }}>
                 <span style={{ color: "var(--orange)" }}>
                   {Math.floor(obj.atime / 1000 / 60 / 60)}
                 </span>{" "}
@@ -830,10 +722,7 @@ function DetailSetting({
           </div>
           <div className="detailLocation__part-bottom">
             <span>시간표</span>
-            <a
-              href={`https://www.myrealtrip.com/search?q=${obj.dto.title}`}
-              target="blank"
-            >
+            <a href={`https://www.myrealtrip.com/search?q=${obj.dto.title}`} target="blank">
               <span>구매</span>
             </a>
             <span
@@ -870,9 +759,7 @@ function DetailSetting({
           periodIndex={periodIndex}
           index={i}
         />
-        {showAdjustMTime && (
-          <AdjustMTime setShowAdjustMTime={setShowAdjustMTime} obj={obj} />
-        )}
+        {showAdjustMTime && <AdjustMTime setShowAdjustMTime={setShowAdjustMTime} obj={obj} />}
       </div>
     </div>
   );
@@ -916,8 +803,7 @@ function MemoArea({
   index,
 }) {
   if (fromWooJaeData === undefined) return;
-  if (Object.values(fromWooJaeData[periodIndex])[0][index] === undefined)
-    return;
+  if (Object.values(fromWooJaeData[periodIndex])[0][index] === undefined) return;
 
   return (
     <div className="memoArea" ref={memoRef}>
@@ -927,12 +813,7 @@ function MemoArea({
             <h5>Memo</h5>
           </div>
           <div className="memoArea__textArea">
-            <textarea
-              ref={textAreaRef}
-              rows="3"
-              cols="25"
-              style={{ resize: "none" }}
-            >
+            <textarea ref={textAreaRef} rows="3" cols="25" style={{ resize: "none" }}>
               {Object.values(fromWooJaeData[periodIndex])[0][index].comment}
             </textarea>
           </div>
@@ -970,9 +851,7 @@ function AdjustMTime({ setShowAdjustMTime, obj }) {
               max={23}
               defaultValue={Math.floor(obj.atime / 1000 / 60 / 60)}
               onChange={(e) => {
-                obj.atime =
-                  e.target.value * 1000 * 60 * 60 +
-                  minRef.current.value * 1000 * 60;
+                obj.atime = e.target.value * 1000 * 60 * 60 + minRef.current.value * 1000 * 60;
               }}
             />
             <span>시간</span>
@@ -983,9 +862,7 @@ function AdjustMTime({ setShowAdjustMTime, obj }) {
               max={59}
               defaultValue={Math.floor((obj.atime / 1000 / 60) % 60)}
               onChange={(e) => {
-                obj.atime =
-                  e.target.value * 1000 * 60 +
-                  timeRef.current.value * 1000 * 60 * 60;
+                obj.atime = e.target.value * 1000 * 60 + timeRef.current.value * 1000 * 60 * 60;
               }}
             />
             <span>분</span>
@@ -1005,11 +882,13 @@ function AdjustMTime({ setShowAdjustMTime, obj }) {
   );
 }
 
-function getNAccumDetailTime(periodIndex, reduxState, obj) {
+function getNAccumDetailTime(periodIndex, reduxState, obj, newTimeSet) {
   let sumTime;
-  let sTime = reduxState.timeSetObj.find((val) => {
-    return val.day === periodIndex + 1;
-  });
+  let sTime =
+    newTimeSet.length !== 0 &&
+    newTimeSet.find((val) => {
+      return val.day === periodIndex + 1;
+    });
   if (sTime.ampm === "오후" && sTime.time >= 1 && sTime.time <= 11) {
     sumTime = (sTime.time + 12) * 60 + sTime.min + obj.mtime / 1000 / 60;
   } else {
@@ -1022,26 +901,17 @@ function getAmpmTmStart(newValue, index) {
   let array = [];
   //오전오후 가져오는 코드
   let localeString = newValue.toLocaleString();
-  let ampm = localeString.substring(
-    localeString.indexOf("오"),
-    localeString.indexOf("오") + 2
-  );
+  let ampm = localeString.substring(localeString.indexOf("오"), localeString.indexOf("오") + 2);
   array.push(ampm);
   //시간가져오는 코드
   let time = parseInt(
-    localeString.substring(
-      localeString.indexOf(":") - 2,
-      localeString.indexOf(":")
-    )
+    localeString.substring(localeString.indexOf(":") - 2, localeString.indexOf(":"))
   );
 
   array.push(time);
   //분 가져오는 코드
   let min = parseInt(
-    localeString.substring(
-      localeString.indexOf(":") + 1,
-      localeString.lastIndexOf(":")
-    )
+    localeString.substring(localeString.indexOf(":") + 1, localeString.lastIndexOf(":"))
   );
 
   return {

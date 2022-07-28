@@ -18,7 +18,7 @@
 								</tr>
 								<tr>
 									<th class="w-25 bg-dark text-white text-center">글쓴이</th>
-									<td>${record.id }</td>
+									<td>${record.name } (${record.id })</td>
 								</tr>
 								<tr>
 									<th class="w-25 bg-dark text-white text-center">작성일</th>
