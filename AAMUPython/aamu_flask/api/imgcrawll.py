@@ -44,22 +44,29 @@ class Imgcrawll(Resource):
 
                 driver.get(url)
                 driver.find_element(By.CSS_SELECTOR, selector).click()
-                image = driver.find_element(By.CSS_SELECTOR,'#Sva75c > div > div > div > div > c-wiz > div > div > div > div > div > a > img')
+                image = driver.find_element(By.CSS_SELECTOR,'#Sva75c > div > div > div.pxAole > div.tvh9oe.BIB1wf > c-wiz > div > div.OUZ5W > div.zjoqD > div.qdnLaf.isv-id.b0vFpe > div > a > img')
                 src = image.get_attribute('src') if image.get_attribute('src') else image.get_attribute('data-src')
+                if src.find('https') == -1 or src.find('http') == -1:
 
+                    driver.find_element(By.CSS_SELECTOR, '#Sva75c > div > div > div.pxAole > div.tvh9oe.BIB1wf > c-wiz > div > div.OUZ5W > div.QnfS4e.cZEg1e > div.X5SPld > c-wiz > div > div > div.tmS4cc.dDArof > div.l7VXJc.pZqGvd.sMVRZe > div:nth-child(1) > div:nth-child(1) > a.wXeWr.islib.nfEiy > div.bRMDJf.islir > img').click()
+                    image = driver.find_element(BY.CSS_SELECTOR,'#Sva75c > div > div > div.pxAole > div.tvh9oe.BIB1wf > c-wiz > div > div.OUZ5W > div.zjoqD > div.qdnLaf.isv-id.b0vFpe > div > a > img')
+                '''
                 dir = '{}\\DESKTOP\\AAMUIMG\\'.format(os.path.expanduser('~'))
                 if not os.path.isdir(dir):
                     os.makedirs(dir)
                 file = '{}hotel{}{}.jpg'.format(dir,index,title)
                 print(src)
-                #if src != None and (src.find('https') == 0 or src.find('http') == 0):
-                #    # 이미지로 저장
-                #    res = requests.get(src)
-                #    print('들어몸')
-                #    with open(file, 'wb') as f:
-                #        f.write(res.content)
+                
+                if src != None and (src.find('https') == 0 or src.find('http') == 0):
+                    pass
+                    # 이미지로 저장
+                    res = requests.get(src)
+                    print('들어몸')
+                    with open(file, 'wb') as f:
+                        f.write(res.content)
 
-                #    index += 1
+                    index += 1
+                '''
             except Exception as e:
                 print(e)
 
