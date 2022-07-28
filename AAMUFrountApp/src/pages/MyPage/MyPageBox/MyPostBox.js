@@ -186,6 +186,7 @@ function uploadFile(showImages){//이미지 업로드
     write.append('title', title);
     write.append('content', content);
     write.append('rbn', detailRbn);
+    write.append('themeid', 'themeHard');
     // write.append('writeTag', writeTag);
   
     let token = sessionStorage.getItem("token");
