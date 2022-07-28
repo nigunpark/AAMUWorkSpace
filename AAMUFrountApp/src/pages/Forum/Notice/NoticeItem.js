@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from "react-router-dom";
-
-const NoticeItem = ({picture}) => {
+//더미로 {picture} 를 넘겨받았었음
+const NoticeItem = () => {
   // console.log('props.src : ',props.src);
 
   // console.log('picture :', picture);
@@ -13,7 +13,7 @@ const NoticeItem = ({picture}) => {
         <div className="swiper__item__link_Notice">
           <figure className="swiper__item__pic-wrap_Notice">
             <img
-              src={picture}
+              src='/images/img-1.jpg'
               alt="travel image"
               className="swiper__item__img_Notice"
             />
