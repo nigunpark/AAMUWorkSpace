@@ -55,6 +55,16 @@
 		INSERT INTO commuplace VALUES (#{lno},#{contentid})
 	</insert>
 	
+	<!-- 글 생성용_commutag테이블에 저장 !!!!!!!!!!!!!!!!!!!!!!!!!-->
+	<insert id="commuTagInsert" parameterType="Map">
+		INSERT INTO commutag VALUES (#{lno},#{tno})
+	</insert>
+	
+	<!-- 글 생성용_selectTno -->
+	<select id="selectTno" parameterType="Map" resultType="int">
+		SELECT tno FROM TAGS WHERE tno=#{tno}
+	</select>
+		
 	<!-- 글 생성용_장소 뿌려주기 -->
 	<select id="commuPlaceList" resultType="Map" parameterType="Map">
 		SELECT contentid, title FROM places WHERE title LIKE '%'||#{searchWord}||'%'
@@ -67,6 +77,23 @@
 		JOIN places p ON cp.contentid=p.contentid WHERE ROWNUM = 1
 		ORDER BY c.lno DESC
 	</select>
+	
+	<!-- 글 생성용_태그 뿌려주기~~~~~~~~~~~~~~ -->
+	<select id="commuSelectTag" parameterType="Map" resultType="String">
+		SELECT tname FROM TAGS WHERE tname LIKE '%'||#{tname}||'%'
+	</select>
+	
+	<!-- 글 생성용_커뮤태그 테이블에 넣기 ~~~~~~~~~~~~~~~ -->
+	<!-- 
+	<insert id="commuInsertCommuTag" parameterMap="Map">
+		INSERT INTO commutag VALUES(SEQ_TAG.NEXTVAL,#{tname})
+	</insert>
+	 -->
+	 
+	<!-- 글 생성용_태그 테이블에 넣기 !!!!!!!!!!!!!!!!!! -->
+	<insert id="commuInsertTags" parameterType="Map">
+		INSERT INTO tags VALUES(SEQ_TAG.NEXTVAL,#{tname})
+	</insert>
 	
 	<!-- 글 하나 뿌려주는 용-->
 	<select id="commuSelectOne" resultType="commuDTO" parameterType="String">

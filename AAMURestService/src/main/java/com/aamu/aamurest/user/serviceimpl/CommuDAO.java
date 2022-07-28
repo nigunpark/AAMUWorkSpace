@@ -68,6 +68,31 @@ public class CommuDAO {
 	public CommuDTO commuSelectAfterInsert() {
 		return template.selectOne("commuSelectAfterInsert");
 	}
+	
+	//글 생성용_태그 뿌려주기!!!!!!!!!!!!!!!!!!!
+	public List<String> commuSelectTag(Map map) {
+		return template.selectList("commuSelectTag",map);
+	}
+	
+	//글 생성용_커뮤태그 테이블에 넣기!!!!!!!!!!!!!!!!!!!!!!1
+	public int commuInsertCommuTag(Map map) {
+		return template.insert("commuInsertCommuTag",map);
+	}
+	
+	//글 생성용_태그 테이블에 넣기 !!!!!!!!!!!!!!!!!!
+	public int commuInsertTags(Map map) {
+		return template.insert("commuInsertTags",map);
+	}
+	
+	//글 생성용_commuTag 테이블에 넣기!!!!!!!!!!!!!!!!~~~~~~~~~~~~~~~~~~
+	public int commuTagInsert(Map map) {
+		return template.insert("commuTagInsert",map);
+	}
+	
+	//글 생성용_tno 가져오기
+	public int selectTno(Map map) {
+		return template.selectOne("selectTno",map);
+	}
 
 	//글 하나 뿌려주는 용
 	public CommuDTO commuSelectOne(String lno) {

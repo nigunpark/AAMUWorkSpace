@@ -77,23 +77,20 @@ public class UsersServicelmpl implements UsersService{
 	@Override
 	public int usersStop(Map map) {
 		int affected=0;
-		Set<String> mapSet=map.keySet();
-		for(String idMap:mapSet) {
-			if(idMap.equals("stopId")) {
-				List<String> stopIdLists=(List<String>)map.get("stopId");
-				for(String stopId:stopIdLists) {
-					map.put("id",stopId);
-					map.put("enabled", 0);
-					affected+=dao.usersStop(map);
-				}
+		if(map.keySet().contains("stopId")) {
+			List<String> stopIdLists=(List<String>)map.get("stopId");
+			for(String stopId:stopIdLists) {
+				map.put("id",stopId);
+				map.put("enabled", 0);
+				affected+=dao.usersStop(map);
 			}
-			else {
-				List<String> addIdLists=(List<String>)map.get("addId");
-				for(String addId:addIdLists) {
-					map.put("id",addId); 
-					map.put("enabled", 1);
-					affected+=dao.usersStop(map);
-				}
+		}
+		else {
+			List<String> addIdLists=(List<String>)map.get("addId");
+			for(String addId:addIdLists) {
+				map.put("id",addId); 
+				map.put("enabled", 1);
+				affected+=dao.usersStop(map);
 			}
 		}
 		return affected;

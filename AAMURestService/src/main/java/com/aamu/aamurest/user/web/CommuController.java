@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -56,8 +57,11 @@ public class CommuController {
 			//코멘트의 프로필 셋팅
 			CommuCommentDTO commentdto=dto.getCommuComment();
 			//토탈카운트
-			System.out.println("commuService.commuTotalCount(map):"+commuService.commuTotalCount(map));
-			dto.setTotalCount(commuService.commuTotalCount(map));
+			//System.out.println("포함되어있냐"+map.keySet().contains("searchColumn"));
+			if(map.keySet().contains("searchColumn")) { 
+				dto.setTotalCount(commuService.commuTotalCount(map));
+			}
+			
 			if(commentdto!=null) {
 				commentdto.setUserprofile(FileUploadUtil.requestOneFile(commuService.commuSelectUserProf(commentdto.getId()), "/resources/commuUpload", req));
 			}
@@ -67,6 +71,7 @@ public class CommuController {
 			dto.setUserprofile(FileUploadUtil.requestOneFile(commuService.commuSelectUserProf(dto.getId()), "/resources/commuUpload", req));
 			
 		}/////for
+		System.out.println("몇개 넘어가니:"+list.size());
 		return list;
 	}////////////////commuSelectList
 	
@@ -142,6 +147,14 @@ public class CommuController {
 	public List<Map> commuPlaceList(@RequestParam Map map) {
 		List<Map> list=commuService.commuPlaceList(map);
 		return list;
+	}
+	
+	//글 생성용_태그 뿌려주기!!!!!!!!!!!!!!!!!!!!!
+	//tname이라는 키값으로 #여행이 넘어와 
+	//TAGS테이블에 있으면 TNO,TNAME 키값으로 뿌려주고 COMMUTAG에 저장 //없으면 INSERT TAGS테이블 COMMUTAG테이블
+	@GetMapping("/gram/tag")
+	public List<String> commuTag(@RequestParam Map map){
+		return commuService.commuTag(map);
 	}
 
 	//글 하나 뿌려주는 용

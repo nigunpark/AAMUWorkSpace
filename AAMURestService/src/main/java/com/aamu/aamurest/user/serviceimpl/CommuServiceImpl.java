@@ -96,10 +96,18 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 			photomap.put("photo", photo);
 			photoAffected+=dao.photoInsert(photomap);
 		}
+		
 		//장소
 		if(map.get("contentid")!=null) {
 			int placeAffected=dao.placeInsert(map);
 			if(placeAffected ==0) return 0;
+		}
+		
+		//태그 저장
+		if(map.get("tname")!=null) {
+			int tno=dao.selectTno(map);
+			map.put("tno", tno);
+			dao.commuTagInsert(map);
 		}
 
 		if(commuaffected==1 && photoAffected==((List)map.get("photolist")).size())
@@ -121,6 +129,24 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 		return dao.commuSelectAfterInsert();
 	}
 	*/
+	
+	//글 생성용_태그 뿌려주기
+	//TAGS테이블에 있으면 TNO,TNAME 키값으로 뿌려주기 //없으면 INSERT TAGS테이블 COMMUTAG테이블
+	@Override
+	public List<String> commuTag(Map map) {
+		List<String> tagLists=dao.commuSelectTag(map);
+		//System.out.println("첫번째방의tanme의 벨류값은?"+tagLists.to);
+		System.out.println("트루일가요?"+tagLists.contains(map.get("tname")));
+		if(tagLists.contains(map.get("tname"))) {
+			System.out.println("tname은 뭘가요?"+map.get("tname"));
+			return tagLists;
+		}
+		else {
+			int affected=dao.commuInsertTags(map);
+			return tagLists;
+			
+		}
+	}
 
 	//글 하나 뿌려주는 용
 	@Override

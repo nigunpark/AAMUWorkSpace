@@ -33,6 +33,9 @@ public interface CommuService<T> {
 
 	//글 생성용_방금 insert된 글 다시 보내기 안쓰나?
 	//CommuDTO commuSelectAfterInsert();
+	
+	//글 생성용_태그 뿌려주기 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	List<String> commuTag(Map map);
 
 	//글 하나 뿌려주는 용
 	CommuDTO commuSelectOne(String lno);
