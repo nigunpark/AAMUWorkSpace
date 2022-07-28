@@ -39,12 +39,12 @@
 															</label>
 														</div>
 													</th>
-													<th class="col-1">글번호</th>
-													<th >제목</th>
+													<th class="col-1">번호</th>
+													<th>제목</th>
 													<th class="col-1">작성자</th>
-													<th class="col-1">답변수</th>
+													<th class="col-1">답변</th>
 													<th class="col-1">조회수</th>
-													<th class="col-1">작성일</th>
+													<th class="col-1">날짜</th>
 												</tr>
 											</thead>
 											<tbody>
@@ -68,9 +68,15 @@
 															</td>
 															<td>${record.qno}</td>
 															<td><a
-																href="<c:url value="/QNAView.do?qno=${record.qno}&nowPage="/><c:out value="${param.nowPage}" default="1"/>">${record.title}</a></td>
-															<td>${record.name}</td>
-															<td>${record.answerCount}</td>
+																href="<c:url value="/QNAView.do?qno=${record.qno}&nowPage="/><c:out value="${param.nowPage}" default="1"/>">${record.title}</a>
+																<span class="badge badge-dark">${record.answerCount}</span></td>
+															<td>${record.name}(${record.id})</td>
+															<td>
+															<c:set var = "ac" value="${record.answerCount}"/>
+															<c:choose>
+															<c:when test="${ac == 0}">X</c:when><c:otherwise>O</c:otherwise>
+															</c:choose>
+															</td>
 															<td>${record.qcount}</td>
 															<td>${record.qdate}</td>
 														</tr>
@@ -128,9 +134,9 @@
 </div>
 
 <style>
-
-.qna-table {width: 100%;}
-
+.qna-table {
+	width: 100%;
+}
 </style>
 
 <script>

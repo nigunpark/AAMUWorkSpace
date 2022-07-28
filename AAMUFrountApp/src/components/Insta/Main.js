@@ -5,7 +5,7 @@ import FeedSetting from "./FeedSetting.js";
 import User from "./User.js";
 import axios from "axios";
 import Spinner from "./Spinner";
-function Main() {
+function Main({searchb, setSearchb, inputValue, setinputValue}) {
 
   const [list,setlist] = useState([]);
   const [forReRender, setForReRender] = useState(false)
@@ -30,6 +30,7 @@ function Main() {
  
   useEffect(()=>{
     feedList()
+    setinputValue('')
   },[])
 
   const spinner = document.querySelector('.spinner');  
@@ -55,7 +56,7 @@ function Main() {
         {/* <FeedSetting></FeedSetting> */}
         </div>
         <div className="main-right">
-          <User setlist={setlist} setloading={setloading}></User>
+          <User inputValue={inputValue} setinputValue={setinputValue} setlist={setlist} setloading={setloading} searchb={searchb} setSearchb={setSearchb}></User>
         </div>
       </div>
     </div>

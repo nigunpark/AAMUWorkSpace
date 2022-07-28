@@ -22,6 +22,7 @@ import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import com.aamu.aamurest.user.service.BBSDTO;
 import com.aamu.aamurest.user.service.ReviewDTO;
+import com.aamu.aamurest.user.service.UsersDTO;
 import com.aamu.aamurest.user.serviceimpl.BBSServiceImpl;
 import com.aamu.aamurest.util.FileUploadUtil;
 
@@ -48,7 +49,7 @@ public class BBSController {
 			//dto.setPhoto(dao.bbsSelectPhotoList(rbn));
 			//모든 리뷰 가져오기
 			dto.setReviewList(bbsService.reviewList(dto.getRbn()));
-			//모든 별점 별점가져오기
+			
 		}
 		return list;
 	}
@@ -56,9 +57,9 @@ public class BBSController {
 	//글 등록 <성공>
 	@PostMapping("/bbs/edit")
 	public Map bbsInsert(@RequestParam List<MultipartFile> multifiles, @RequestParam Map map, HttpServletRequest req) {
+		System.out.println("등록:"+map);
 		//서버의 물리적 경로 얻기
 		String path=req.getSession().getServletContext().getRealPath("/resources/bbsUpload");
-
 		try {
 			List<String> uploads= FileUploadUtil.fileProcess(multifiles, path);
 			System.out.println("(bbsController)uploads:"+uploads);
@@ -69,6 +70,7 @@ public class BBSController {
 		Map resultMap = new HashMap();
 		if(affected==1) resultMap.put("result", "insertSuccess");
 		else resultMap.put("result", "insertNotSuccess");
+		
 		return resultMap;
 	}
 
@@ -150,6 +152,16 @@ public class BBSController {
 		return resultMap;
 
 	}
+	
+	/*
+	//테마 사진 등록
+	@GetMapping("/theme/SelectOne{themeid}")
+	public BBSDTO themeSelectOne(@RequestParam Map map,HttpServletRequest req) {
+		BBSDTO dto = bbsService.themeSelectOne(map);
+		dto.setThemeimg(FileUploadUtil.requestOneFile(dto.getThemeimg(), "/resources/themeUpload", req));
+		return dto;
+	}
+	*/
 
 }
 

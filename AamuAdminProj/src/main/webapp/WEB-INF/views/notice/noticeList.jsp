@@ -68,7 +68,7 @@
 															<td>${record.nno}</td>
 															<td><a
 																href="<c:url value="/NoticeView.do?nno=${record.nno}&nowPage="/><c:out value="${param.nowPage}" default="1"/>">${record.title}</a></td>
-															<td>${record.id}</td>
+															<td>${record.name} (${record.id})</td>
 															<td>${record.noticedate}</td>
 															<td>${record.ncount}</td>
 														</tr>
