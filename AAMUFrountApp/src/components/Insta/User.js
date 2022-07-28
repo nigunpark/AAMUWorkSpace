@@ -8,8 +8,9 @@ import { confirmAlert } from "react-confirm-alert";
 import axios from "axios";
 import { Link } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import SearchSelect from "./ModalGroup/Search/SearchSelect";
 
-function User({ setlist ,setloading}) {
+function User({ setlist ,setloading, searchb, setSearchb, inputValue, setinputValue}) {
 
   const modalRef = useRef();
   const notimodalRef = useRef();
@@ -20,20 +21,17 @@ function User({ setlist ,setloading}) {
   const [search, setsearch] = useState(false);
   const [square, setsquare] = useState(false);
 
-  const [userModal, setUserModal] = useState(false);
+  const [userModal, setUserModal] = useState('');
 
   const [title, settitle] = useState([]);
-  const [searchb, setSearchb] = useState([]);
+  // const [searchb, setSearchb] = useState([]);
   const [searchText, setsearchText] = useState(false);
-  const [inputValue, setinputValue] = useState("");
 
-  const [searchbar,setsearchbar] = useState([]);
-  const [forReRender, setForReRender] = useState(false)
   let navigater = useNavigate()
 
   function searchBar(e){//백이랑 인스타 리스드를 뿌려주기 위한 axios
-    
-    let val = e.target.value;
+    console.log('inputValue',inputValue)
+    setinputValue(e.target.value);
     if (e.keyCode != 13) return;
     let token = sessionStorage.getItem("token");
     axios.get('/aamurest/gram/selectList',{
@@ -42,21 +40,25 @@ function User({ setlist ,setloading}) {
           },
           params:{
             searchColumn : searchb,
-            searchWord :val,
+            searchWord :inputValue,
           }
     })
     .then((resp) => {
       console.log(resp.data)
-      setsearchbar(resp.data);
+      setSearchb(resp.data);
+    
       navigater('/Insta/searchList')
-      })
+      
+    })
       .catch((error) => {
         console.log(error);
       });
+
+     
   }
 
-  function searchBarModal(e,modalRef){//백이랑 인스타 리스드를 뿌려주기 위한 axios
-     let val = e.target.value;
+  function searchBarModal(){//백이랑 인스타 리스드를 뿌려주기 위한 axios
+    
     //  if (e.keyCode != 13) return;
     let token = sessionStorage.getItem("token");
     axios.get('/aamurest/gram/search/selectList',{
@@ -65,7 +67,7 @@ function User({ setlist ,setloading}) {
           },
           params:{
             searchColumn : searchb,
-            searchWord :val,
+            searchWord :inputValue,
           }
     })
     .then((resp) => {
@@ -76,6 +78,7 @@ function User({ setlist ,setloading}) {
         console.log(error);
       });
   }
+  
 
   function handleModal(e) {
     e.stopPropagation();
@@ -109,12 +112,7 @@ function User({ setlist ,setloading}) {
   return (
     <div>
       <div className="userSearch">
-        <select name="select" className="select" onChange={(e)=>{e.stopPropagation(); setSearchb(e.target.value);}}>
-            <option defaultValue={'DEFAULT'}>선택</option>
-            <option value="ctitle">제목</option>
-            <option value="id">아이디</option>
-            <option value="tag">태그</option>
-        </select>
+        <SearchSelect setSearchb={setSearchb}/>
         <div
           className="search"
           onClick={() => {
@@ -122,10 +120,9 @@ function User({ setlist ,setloading}) {
           }}
         >
           <input 
-            onKeyUp={(e)=>{e.stopPropagation();searchBarModal(e,modalRef);searchBar(e)}}
+            onKeyUp={(e)=>{searchBarModal(e,modalRef);searchBar(e)}}
             value={inputValue}
             onChange={(e)=>{
-              e.stopPropagation();
               setinputValue(e.target.value)
               setsearchText(true) 
             }}
@@ -146,7 +143,7 @@ function User({ setlist ,setloading}) {
       <div className="user">
         <img src="/images/user.jpg" alt="프사" onError={(e)=>{e.stopPropagation(); e.target.src='/images/user.jpg'}}/>
         <div>
-          <p className="user-id">0hyun0hyun</p>
+          <p className="user-id">{sessionStorage.getItem('username')}</p>
           <p className="user-name">김영현</p>
         </div>
 
