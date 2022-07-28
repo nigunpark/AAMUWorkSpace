@@ -6,7 +6,7 @@ import axios from "axios";
 import "../Slider/slick.css";
 import "../Slider/slick-theme.css";
 import { SwiperSlide,Swiper } from 'swiper/react';
-import SwipersItem from '../../Swipers/SwipersItem';
+import Edit from '../Edit/Edit'
 import  { A11y, Autoplay, Navigation, Pagination, Scrollbar } from 'swiper';
 import "swiper/css"; //basic
 import "swiper/css/navigation";
@@ -15,9 +15,10 @@ import '../Upload/UploadSwiper.css';
 import dayjs from 'dayjs';
 import { CommentsDisabled } from "@mui/icons-material";
 
-function Comment({val,forReRender, setForReRender}) {
+function Comment({val,setlist,forReRender, setForReRender}) {
     let menuRef = useRef();
     let replyRef = useRef();
+    const [editModal, seteditModal] = useState(false);
     const [commentHeart,setCommentHeart] = useState(false);
     const [modalShow, setModalShow] = useState(false);
     const [reply, setReply] = useState(false);
@@ -188,8 +189,11 @@ function Comment({val,forReRender, setForReRender}) {
                         ref={menuRef}
                         onClick={() => setModalShow(!modalShow)}></i>
                         {modalShow 
-                            ?<MenuModal></MenuModal>
-                            :null}
+                            &&<MenuModal setlist={setlist} setModalShow={setModalShow} seteditModal={seteditModal} val={val}/>
+                        }
+                        {
+                            editModal && <Edit val={val} setlist={setlist} seteditModal={seteditModal} />
+                        }
                     </div> 
                 </div>
                 <div className="recommend">                    
@@ -322,7 +326,7 @@ function Comment({val,forReRender, setForReRender}) {
 const Contents = styled.div`
     position: absolute;
     width: 75%;
-    height: 750px;
+    height: 700px;
     left: 50%;
     top: 54%;
     background :white;
