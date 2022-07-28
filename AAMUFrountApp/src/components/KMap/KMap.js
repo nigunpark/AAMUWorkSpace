@@ -138,77 +138,73 @@ const KMap = ({
     let geocoder = new kakao.maps.services.Geocoder();
     if (reduxState.localNameForMarker.addr !== undefined) {
       // 주소로 좌표를 검색합니다
-      geocoder.addressSearch(
-        reduxState.localNameForMarker.addr,
-        (result, status) => {
-          // 정상적으로 검색이 완료됐으면
-          if (status === kakao.maps.services.Status.OK) {
-            coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-            if (tempCoords !== coords) {
-              tempCoords = coords;
-              kMap.panTo(coords);
-            }
+      geocoder.addressSearch(reduxState.localNameForMarker.addr, (result, status) => {
+        // 정상적으로 검색이 완료됐으면
+        if (status === kakao.maps.services.Status.OK) {
+          coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+          if (tempCoords !== coords) {
+            tempCoords = coords;
+            kMap.panTo(coords);
           }
-
-          let iwContent =
-              '<div class="iwContent__wrap">' +
-              '    <div class="iwContent__info">' +
-              '        <div class="iwContent__title">' +
-              "            <h3>" +
-              (reduxState.localNameForMarker.title ?? currPosition) +
-              "</h3>" +
-              '            <div class="iwContent__close" onclick="closeOverlay()" title="닫기"></div>' +
-              "        </div>                                                                        " +
-              '         <div class="iwContent__body">' +
-              '            <div class="iwContent__desc">' +
-              '              <div class="iwContent__ellipsis">' +
-              (reduxState.localNameForMarker.addr ?? "") +
-              "</div>" +
-              '              <div class="iwContent__jibun iwContent__ellipsis">(우) 63309 (지번) 영평동 2181</div>' +
-              "<span class='iWContent__tel'>" +
-              (reduxState.localNameForMarker.tel ?? "") +
-              "</span>" +
-              '              <div style="display:flex"><a href="https://place.map.kakao.com/' +
-              reduxState.localNameForMarker.kakaokey +
-              '" target="_blank" class="iwContent__link"><span style="color:var(--skyblue);font-weight:bold">상세보기</span></a>&nbsp' +
-              '<a href="https://map.kakao.com/link/roadview/' +
-              reduxState.localNameForMarker.kakaokey +
-              '" target="_blank" class="iwContent__link"><span style="color:var(--skyblue);font-weight:bold">로드뷰</span></div><a/>' +
-              "           </div>" +
-              "        </div>" +
-              "    </div>    " +
-              "</div>",
-            // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
-            // iwPosition = new kakao.maps.LatLng(lat, lng), //인포윈도우 표시 위치입니다
-            iwRemoveable = true;
-          // removeable 속성을 ture 로 설정하면 인포윈도우를 닫을 수 있는 x버튼이 표시됩니다
-
-          // 인포윈도우를 생성하고 지도에 표시합니다
-          infowindow = new kakao.maps.InfoWindow({
-            content: iwContent,
-            removable: iwRemoveable,
-          });
-
-          mainMarker = new kakao.maps.Marker({
-            map: kMap,
-            position: coords,
-            clickable: true,
-          });
-
-          if (mainMarkers.length != 0) {
-            mainMarkers.pop().setMap(null);
-          }
-          mainMarkers.push(mainMarker);
-          kakao.maps.event.addListener(mainMarker, "click", function () {
-            infowindow.open(kMap, mainMarker);
-          });
         }
-      );
+
+        let iwContent =
+            '<div class="iwContent__wrap">' +
+            '    <div class="iwContent__info">' +
+            '        <div class="iwContent__title">' +
+            "            <h3>" +
+            (reduxState.localNameForMarker.title ?? currPosition) +
+            "</h3>" +
+            '            <div class="iwContent__close" onclick="closeOverlay()" title="닫기"></div>' +
+            "        </div>                                                                        " +
+            '         <div class="iwContent__body">' +
+            '            <div class="iwContent__desc">' +
+            '              <div class="iwContent__ellipsis">' +
+            (reduxState.localNameForMarker.addr ?? "") +
+            "</div>" +
+            '              <div class="iwContent__jibun iwContent__ellipsis">(우) 63309 (지번) 영평동 2181</div>' +
+            "<span class='iWContent__tel'>" +
+            (reduxState.localNameForMarker.tel ?? "") +
+            "</span>" +
+            '              <div style="display:flex"><a href="https://place.map.kakao.com/' +
+            reduxState.localNameForMarker.kakaokey +
+            '" target="_blank" class="iwContent__link"><span style="color:var(--skyblue);font-weight:bold">상세보기</span></a>&nbsp' +
+            '<a href="https://map.kakao.com/link/roadview/' +
+            reduxState.localNameForMarker.kakaokey +
+            '" target="_blank" class="iwContent__link"><span style="color:var(--skyblue);font-weight:bold">로드뷰</span></div><a/>' +
+            "           </div>" +
+            "        </div>" +
+            "    </div>    " +
+            "</div>",
+          // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
+          // iwPosition = new kakao.maps.LatLng(lat, lng), //인포윈도우 표시 위치입니다
+          iwRemoveable = true;
+        // removeable 속성을 ture 로 설정하면 인포윈도우를 닫을 수 있는 x버튼이 표시됩니다
+
+        // 인포윈도우를 생성하고 지도에 표시합니다
+        infowindow = new kakao.maps.InfoWindow({
+          content: iwContent,
+          removable: iwRemoveable,
+        });
+
+        mainMarker = new kakao.maps.Marker({
+          map: kMap,
+          position: coords,
+          clickable: true,
+        });
+
+        if (mainMarkers.length != 0) {
+          mainMarkers.pop().setMap(null);
+        }
+        mainMarkers.push(mainMarker);
+        kakao.maps.event.addListener(mainMarker, "click", function () {
+          infowindow.open(kMap, mainMarker);
+        });
+      });
     }
 
     if (reduxState.arrForPickJangso.length !== 0) {
-      let jangsoObj =
-        reduxState.arrForPickJangso[reduxState.arrForPickJangso.length - 1];
+      let jangsoObj = reduxState.arrForPickJangso[reduxState.arrForPickJangso.length - 1];
       pickedJangso.push({
         title: jangsoObj.title,
         latlng: new kakao.maps.LatLng(jangsoObj.mapy, jangsoObj.mapx),
@@ -223,8 +219,7 @@ const KMap = ({
     }
 
     // 마커 이미지의 이미지 주소입니다
-    let imageSrc =
-      "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
+    let imageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
 
     for (let i = 0; i < pickedJangso.length; i++) {
       // 마커 이미지의 이미지 크기 입니다
@@ -296,11 +291,7 @@ const KMap = ({
           paddingTop: "75px",
         }}
       >
-        <div
-          id="map"
-          ref={container}
-          style={{ width: "100%", height: "92vh" }}
-        ></div>
+        <div id="map" ref={container} style={{ width: "100%", height: "92vh" }}></div>
         <div id="roadview" style={{ width: "100%", height: "99vh" }}></div>
         <div className="kmap__right-btn__container">
           <div
@@ -356,16 +347,10 @@ const KMap = ({
                     whichTransport(e);
                   }}
                 >
-                  <FontAwesomeIcon
-                    icon={faBus}
-                    className="kmap__left-icon bus"
-                  />
+                  <FontAwesomeIcon icon={faBus} className="kmap__left-icon bus" />
                   <span>대중교통</span>
                 </div>
-                <span
-                  style={{ fontSize: "15px", fontWeight: "bold" }}
-                  className="slide-in-left-or"
-                >
+                <span style={{ fontSize: "15px", fontWeight: "bold" }} className="slide-in-left-or">
                   OR
                 </span>
                 <div
@@ -377,10 +362,7 @@ const KMap = ({
                     whichTransport(e);
                   }}
                 >
-                  <FontAwesomeIcon
-                    icon={faCar}
-                    className="kmap__left-icon car"
-                  />
+                  <FontAwesomeIcon icon={faCar} className="kmap__left-icon car" />
                   <span>자가용</span>
                 </div>
               </>
@@ -390,8 +372,7 @@ const KMap = ({
             onClick={(e) => {
               e.stopPropagation();
               if (
-                reduxState.leftSideTimeSetter * 60 +
-                  reduxState.leftSideMinSetter >
+                reduxState.leftSideTimeSetter * 60 + reduxState.leftSideMinSetter >
                 1440 * reduxState.tripPeriod.length
               ) {
                 setAlertTime(true);
@@ -402,8 +383,7 @@ const KMap = ({
                   return val !== 0;
                 }).length !==
                   reduxState.tripPeriod.length - 1 ||
-                reduxState.arrForPickJangso.length <
-                  reduxState.tripPeriod.length
+                reduxState.arrForPickJangso.length < reduxState.tripPeriod.length
               ) {
                 setShowAlert(true);
 
@@ -419,8 +399,7 @@ const KMap = ({
                   dispatch(
                     changeTimeSetObj({
                       day: index + 1,
-                      fullDate:
-                        "Sat Jan 01 2022 10:00:00 GMT+0900 (한국 표준시)",
+                      fullDate: "Sat Jan 01 2022 10:00:00 GMT+0900 (한국 표준시)",
                       ampm: "오전",
                       time: 10,
                       min: 0,
@@ -466,12 +445,8 @@ const KMap = ({
             style={{ zIndex: "1000", padding: "30px 100px", fontSize: "20px" }}
           >
             {/* <AlertTitle></AlertTitle> */}
-            {showAlert && (
-              <strong> 여행일자만큼 숙소와 여행지를 선택해주세요</strong>
-            )}
-            {showAlertTime && (
-              <strong> 여행일자 x 24시간을 초과할 수 없습니다.</strong>
-            )}
+            {showAlert && <strong> 여행일자만큼 숙소와 여행지를 선택해주세요</strong>}
+            {showAlertTime && <strong> 여행일자 x 24시간을 초과할 수 없습니다.</strong>}
             <FontAwesomeIcon
               icon={faCircleXmark}
               className="alert_X"
@@ -489,12 +464,7 @@ const KMap = ({
 };
 
 //일정등록 버튼 시 보이는 확인모달창
-function AreUSurePlan({
-  setShowAuSModal,
-  setShowCratePlan,
-  currPosition,
-  setFromWooJaeData,
-}) {
+function AreUSurePlan({ setShowAuSModal, setShowCratePlan, currPosition, setFromWooJaeData }) {
   let reduxState = useSelector((state) => {
     return state;
   });
@@ -644,9 +614,7 @@ function threeBtnToggle(e) {
   if (e.target.nodeName === "SPAN") {
     if (e.target.classList.contains("jangso")) {
       e.target.nextElementSibling.classList.remove("click__threebtnToggle");
-      e.target.nextElementSibling.nextElementSibling.classList.remove(
-        "click__threebtnToggle"
-      );
+      e.target.nextElementSibling.nextElementSibling.classList.remove("click__threebtnToggle");
       e.target.classList.add("click__threebtnToggle");
     } else if (e.target.classList.contains("restaurant")) {
       e.target.previousElementSibling.classList.remove("click__threebtnToggle");
@@ -664,14 +632,10 @@ function threeBtnToggle(e) {
 
 function whichTransport(e) {
   if (e !== null && e.target.classList.contains("public")) {
-    e.target.nextElementSibling.nextElementSibling.classList.remove(
-      "pickedTransport"
-    );
+    e.target.nextElementSibling.nextElementSibling.classList.remove("pickedTransport");
     e.target.classList.add("pickedTransport");
   } else if (e !== null && e.target.classList.contains("personal")) {
-    e.target.previousElementSibling.previousElementSibling.classList.remove(
-      "pickedTransport"
-    );
+    e.target.previousElementSibling.previousElementSibling.classList.remove("pickedTransport");
     e.target.classList.add("pickedTransport");
   }
 }
