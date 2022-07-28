@@ -65,7 +65,12 @@ const MyPostBox = ({selectRbn}) => {
         setDetailPostData(resp.data);
         setDetailRbn(resp.data.rbn);
         setDetailTitle(resp.data.title);
-        setDetailRoute(Object.entries(resp.data.routeMap));
+        let keys = Object.keys(resp.data.routeMap);
+        let values = Object.values(resp.data.routeMap);
+        let keyValueData = Object.entries(resp.data.routeMap).map((val, idx) => {
+          return { [keys[idx]]: values[idx] };
+        });
+        setDetailRoute(keyValueData);
       }
       catch(error){
         console.log((error) => console.log("상세경로 가져오기 실패", error));
@@ -87,17 +92,20 @@ const MyPostBox = ({selectRbn}) => {
         <div style={{border:'1.5px solid #edf2f4'}}>
           {
             detailRoute.map((route, idx)=>{
+              let add = [];
+              add.push(route);
+              console.log('route 외부 map:', add);
               return(
                 <div key={idx} className="detail-plan">
                   <span className="paln-date">{idx+1} 일차 20xx-xx-xx x요일</span>
                   {
-                    route[1].map((val, i)=>{
-                      let firstTime = (val.starttime)/1000/60/60;
-                      console.log('val :',firstTime);
-                      console.log('-------------',i);
+                    add.map((val, i)=>{
+                      // let firstTime = (val.starttime)/1000/60/60;
+                      console.log('val 내부 map :',Object.values(val));
+                      // console.log('-------------',i);
                       return(
-                        <div key={i}>
-                          <div>{firstTime} ~ 00:00</div>
+                        <div>
+                          <div> ~ 00:00</div>
                           <div className="plan-region"></div>
                           <hr/>
                         </div>
