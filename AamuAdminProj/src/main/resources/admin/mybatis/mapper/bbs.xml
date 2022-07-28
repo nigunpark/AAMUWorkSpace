@@ -5,15 +5,23 @@
 <mapper namespace="admin.mybatis.mapper.bbs">
 	<!-- 전체 게시글 목록 -->
 	
-	<!-- 게시글 하나 보기 -->
+	<!-- 게시글 조회 수 -->
+	<select id="bbsGetTotalRecordCount" parameterType="Map" resultType="int">
+	 	SELECT COUNT(*) FROM routebbs
+	</select>
 	
 	<!-- 게시글 삭제 -->
-	
+	 <delete id="bbsAdminDelete" parameterType="map">
+	 	DELETE FROM ${table} WHERE rbn=#{rbn}
+	 </delete>
 	<!--                     리뷰                          -->
 	
 	<!-- 전체 리뷰 목록 -->
+
 	
 	<!-- 리뷰 삭제 -->
-	
+	<delete id="reviewAdminDelete" parameterType="map">
+	 	DELETE ratereview WHERE rno=#{rno}
+	 </delete>
 	
 </mapper> 

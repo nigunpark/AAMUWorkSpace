@@ -14,7 +14,7 @@
 						<div class="col-lg-12 grid-margin stretch-card">
 							<div class="card">
 								<div class="card-body">
-									<h4 class="card-title">게시글 전체 리스트</h4>
+									<h4 class="card-title">게시글 전체 목록</h4>
 
 									<div class="card-numberOfBoard">
 										총 게시글 수: ${totalCount}개
@@ -35,7 +35,7 @@
 													<th>제목</th>
 													<th class="col-1">ID</th>
 													<th class="col-1">작성일</th>
-													<th class="col-1">리뷰 수</th>
+													<th class="col-1">조회수</th>
 													<th class="col-1"></th>
 												</tr>
 											</thead>
@@ -60,7 +60,7 @@
 															<td>${record.id}</td>
 															<td>${record.postdate}</td>
 															<td>${record.rcount}</td>
-															<td>${record.likecount}</td>
+															<td>${record.}</td>
 														</tr>
 													</c:forEach>
 												</c:if>
