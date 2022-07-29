@@ -31,10 +31,11 @@
 		<selectKey resultType="date" keyProperty="senddate" order="AFTER">
 			SELECT to_date(SYSDATE,'YYYY-MM-DD HH24:mi:SS') FROM DUAL
 		</selectKey>
-		<selectKey resultType="String" keyProperty="authpro" order="AFTER">
-			SELECT USERPROFILE authpro FROM users WHERE id = #{authid}
-		</selectKey>
 	</insert>
+	
+	<select id="messagepro" parameterType="chatingMessageDTO" resultType="String">
+		SELECT USERPROFILE authpro FROM users WHERE id = #{authid}
+	</select>
 	
 	
 </mapper>

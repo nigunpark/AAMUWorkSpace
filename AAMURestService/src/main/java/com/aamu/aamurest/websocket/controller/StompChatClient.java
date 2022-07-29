@@ -24,6 +24,7 @@ public class StompChatClient {
 	@MessageMapping("/chat/message")
 	public void message(ChatingMessageDTO message) {
 		template.insert("message",message);
+		message.setAuthpro(template.selectOne("messagepro",message));
 		messagingTemplate.convertAndSend("/queue/chat/message/"+message.getRoomno(), message);
 	}
 }
