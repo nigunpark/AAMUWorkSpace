@@ -21,6 +21,7 @@ class Imgcrawll(Resource):
         parser = parser.parse_args()
         placelist = parser['placelist']
         list_ = []
+        index = 1
         for i in placelist:
             list_.append(ast.literal_eval(i))
         for dict_ in list_:
@@ -31,6 +32,7 @@ class Imgcrawll(Resource):
             if title.find('[') != -1:
                 title = title.split('[')[0]
             print(title)
+
             url = 'https://www.google.com/search?q=' + title + '&source=lnms&tbm=isch'
             selector = '#islrg > div.islrc > div:nth-child(2) > a.wXeWr.islib.nfEiy > div.bRMDJf.islir > img'
 
@@ -60,17 +62,19 @@ class Imgcrawll(Resource):
                         f.write(res.content)
                     else:
                         f.write(b64decode(src[23:]))
-                url='http://192.168.0.19/aamurest/img/upload'
+                springurl='http://192.168.0.19:8080/aamurest/img/upload'
                 #headers={'Content-Type': 'application/json; charset=utf-8'}
-                file = {"file":open(file,'rb')}
+                files = {"files":open(file,'rb')}
                 params = {'contentid':contentid}
                 #res = requests.post(url,headers=headers,data={'contentid':contentid},file=file)
-                requests.post(url, params=params, files=file)
-                print(res)
+                responseSpring = requests.post(springurl, params=params, files=files)
+                print(responseSpring)
+                index+=1
 
             except Exception as e:
                 print(e)
             finally:
                 driver.quit()
+        return index;
 
 

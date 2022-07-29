@@ -28,8 +28,8 @@
 	<insert id="message" parameterType="chatingMessageDTO">
 		INSERT INTO CHATINGMESSAGE
 		VALUES(#{roomno},#{authid},#{missage},to_date(SYSDATE,'YYYY-MM-DD HH24:mi:SS'))
-		<selectKey resultType="date" keyProperty="senddate" order="AFTER">
-			SELECT to_date(SYSDATE,'YYYY-MM-DD HH24:mi:SS') FROM DUAL
+		<selectKey resultType="java.sql.Date" keyProperty="senddate" order="AFTER">
+			SELECT to_date(SYSDATE,'YYYY-MM-DD HH24:mi:SS') senddate FROM DUAL
 		</selectKey>
 	</insert>
 	

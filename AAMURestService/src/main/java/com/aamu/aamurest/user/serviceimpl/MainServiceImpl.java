@@ -511,6 +511,11 @@ public class MainServiceImpl implements MainService{
 
 		return dao.selectMainPlaceList();
 	}
+	@Override
+	public int updateImage(Map map) {
+		
+		return dao.updateImage(map);
+	}
 
 
 

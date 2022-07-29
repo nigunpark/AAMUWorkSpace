@@ -1,5 +1,6 @@
 package com.aamu.aamurest.user.web;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -34,6 +35,7 @@ import com.aamu.aamurest.user.service.RouteDTO;
 import com.aamu.aamurest.user.service.api.KakaoKey;
 import com.aamu.aamurest.user.service.api.KakaoKey.Document;
 import com.aamu.aamurest.user.service.api.KakaoReview;
+import com.aamu.aamurest.util.FileUploadUtil;
 
 @RestController
 @CrossOrigin("*")
@@ -574,11 +576,14 @@ public class MainController {
 
 	}
 	@PostMapping("/img/upload")
-	public int imgUpload(@RequestParam Map map,@RequestParam MultipartFile file) {
+	public int imgUpload(@RequestParam Map map,@RequestParam MultipartFile files,HttpServletRequest req) throws IllegalStateException, IOException {
 		int affected = 0;
 		System.out.println(map.get("contentid"));
-		System.out.println(file);
-		
+		System.out.println(files);
+		String path = req.getSession().getServletContext().getRealPath("/resources/hotelImage");
+		String filename = FileUploadUtil.oneFile(files, path);
+		map.put("smallimage", filename);
+		affected = service.updateImage(map);
 		return affected;
 	}
 

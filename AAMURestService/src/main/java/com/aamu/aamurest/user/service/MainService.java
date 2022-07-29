@@ -42,5 +42,7 @@ public interface MainService{
 
 	List<PlannerDTO> getPlannerList(String id);
 
+	int updateImage(Map map);
+
 
 }
