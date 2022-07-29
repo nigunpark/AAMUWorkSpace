@@ -18,6 +18,7 @@ package com.aamu.aamuandroidapp.components.chat
 
 import androidx.compose.animation.core.animateDp
 import androidx.compose.animation.core.updateTransition
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.material.icons.Icons
@@ -31,6 +32,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.aamu.aamuandroidapp.ui.theme.cyan200
+import com.aamu.aamuandroidapp.ui.theme.cyan700
 
 private enum class Visibility {
     VISIBLE,
@@ -68,8 +71,8 @@ fun JumpToBottom(
                 Text(text = "Jump to bottom")
             },
             onClick = onClicked,
-            containerColor = MaterialTheme.colorScheme.surface,
-            contentColor = MaterialTheme.colorScheme.primary,
+            containerColor = cyan200,
+            contentColor = cyan700,
             modifier = modifier
                 .offset(x = 0.dp, y = -bottomOffset)
                 .height(36.dp)

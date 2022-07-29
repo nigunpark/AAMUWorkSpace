@@ -1,11 +1,15 @@
 package com.aamu.aamuandroidapp.data.api.repositories
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.util.Log
 import com.aamu.aamuandroidapp.data.api.AAMUApi
+import com.aamu.aamuandroidapp.data.api.response.AAMUChatingMessageResponse
 import com.aamu.aamuandroidapp.data.api.response.AAMUPlaceResponse
 import com.aamu.aamuandroidapp.data.api.response.AAMUPlannerSelectOne
 import com.aamu.aamuandroidapp.data.api.response.AAMUUserResponse
 import com.aamu.aamuandroidapp.data.api.userLogin
+import com.aamu.aamuandroidapp.util.contextL
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 
@@ -15,6 +19,10 @@ class AAMURepositoryImpl(
     override suspend fun dologin(username : String, password : String): String? {
         val response = aamuApi.doLogin(userLogin(username,password))
         if(response.isSuccessful){
+            val preferences: SharedPreferences =
+                contextL.getSharedPreferences("usersInfo", Context.MODE_PRIVATE)
+            preferences.edit().putString("id", response.body()?.member?.username).commit()
+            preferences.edit().putString("profile", response.body()?.userprofile).commit()
             return response.body()?.token
         }
         else{
@@ -85,5 +93,16 @@ class AAMURepositoryImpl(
         }
     }.catch {
         emit(AAMUPlannerSelectOne(null,null,null,null,null,null,null,null))
+    }.flowOn(Dispatchers.IO)
+
+    override suspend fun getChatMessageList(map: Map<String, String>): Flow<List<AAMUChatingMessageResponse>> = flow<List<AAMUChatingMessageResponse>> {
+        val response = aamuApi.getChatMessageList(map)
+        if (response.isSuccessful){
+            emit(response.body() ?: emptyList<AAMUChatingMessageResponse>())
+        }
+        else
+            emit(emptyList<AAMUChatingMessageResponse>())
+    }.catch {
+        emit(emptyList<AAMUChatingMessageResponse>())
     }.flowOn(Dispatchers.IO)
 }

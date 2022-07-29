@@ -1,6 +1,7 @@
 package com.aamu.aamuandroidapp.data.api
 
 import android.widget.Toast
+import com.aamu.aamuandroidapp.data.api.response.AAMUChatingMessageResponse
 import com.aamu.aamuandroidapp.data.api.response.AAMUPlaceResponse
 import com.aamu.aamuandroidapp.data.api.response.AAMUPlannerSelectOne
 import com.aamu.aamuandroidapp.data.api.response.AAMUUserResponse
@@ -38,7 +39,8 @@ interface AAMUApi {
     @GET("planner/selectonemap")
     suspend fun getPlannerSelectOne(@Query("rbn") rbn : Int) : Response<AAMUPlannerSelectOne>
 
-
+    @GET("chat/room")
+    suspend fun getChatMessageList(@QueryMap map : Map<String,String>): Response<List<AAMUChatingMessageResponse>>
 
     companion object {
         private const val BASE_URL = "http://192.168.0.19:8080/aamurest/"

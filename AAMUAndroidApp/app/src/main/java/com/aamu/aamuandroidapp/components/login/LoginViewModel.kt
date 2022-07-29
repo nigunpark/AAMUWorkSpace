@@ -1,6 +1,7 @@
 package com.aamu.aamuandroidapp.components.login
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.util.Log
 import androidx.compose.runtime.*
 import androidx.compose.ui.platform.LocalContext
@@ -10,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.aamu.aamuandroidapp.data.api.AAMUDIGraph
 import com.aamu.aamuandroidapp.data.api.repositories.AAMURepository
+import com.aamu.aamuandroidapp.util.contextL
 import com.aamu.aamuandroidapp.util.getToken
 import kotlinx.coroutines.launch
 
@@ -21,7 +23,6 @@ class LoginViewModelFactory() : ViewModelProvider.Factory{
 }
 
 class LoginViewModel() : ViewModel(){
-
 
     private val aamuRepository : AAMURepository = AAMUDIGraph.createAAMURepository()
 
