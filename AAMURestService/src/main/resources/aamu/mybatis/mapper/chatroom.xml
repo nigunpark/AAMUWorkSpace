@@ -28,6 +28,12 @@
 	<insert id="message" parameterType="chatingMessageDTO">
 		INSERT INTO CHATINGMESSAGE
 		VALUES(#{roomno},#{authid},#{missage},to_date(SYSDATE,'YYYY-MM-DD HH24:mi:SS'))
+		<selectKey resultType="date" keyProperty="senddate" order="AFTER">
+			SELECT to_date(SYSDATE,'YYYY-MM-DD HH24:mi:SS') FROM DUAL
+		</selectKey>
+		<selectKey resultType="String" keyProperty="authpro" order="AFTER">
+			SELECT USERPROFILE authpro FROM users WHERE id = #{authid}
+		</selectKey>
 	</insert>
 	
 	
