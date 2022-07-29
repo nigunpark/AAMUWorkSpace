@@ -9,9 +9,8 @@ import axios from "axios";
 import { Link } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import SearchSelect from "./ModalGroup/Search/SearchSelect";
-
-function User({ setlist ,setloading, searchb, setSearchb, inputValue, setinputValue}) {
-
+import Chat from "../Chat/Chat";
+function User({ setlist, setloading, searchb, setSearchb, inputValue, setinputValue, showChat }) {
   const modalRef = useRef();
   const notimodalRef = useRef();
   const outside = useRef();
@@ -21,64 +20,64 @@ function User({ setlist ,setloading, searchb, setSearchb, inputValue, setinputVa
   const [search, setsearch] = useState(false);
   const [square, setsquare] = useState(false);
 
-  const [userModal, setUserModal] = useState('');
+  const [userModal, setUserModal] = useState("");
 
   const [title, settitle] = useState([]);
   // const [searchb, setSearchb] = useState([]);
   const [searchText, setsearchText] = useState(false);
 
-  let navigater = useNavigate()
+  let navigater = useNavigate();
 
-  function searchBar(e){//백이랑 인스타 리스드를 뿌려주기 위한 axios
-    console.log('inputValue',inputValue)
+  function searchBar(e) {
+    //백이랑 인스타 리스드를 뿌려주기 위한 axios
+    console.log("inputValue", inputValue);
     setinputValue(e.target.value);
     if (e.keyCode != 13) return;
     let token = sessionStorage.getItem("token");
-    axios.get('/aamurest/gram/selectList',{
-      headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          params:{
-            searchColumn : searchb,
-            searchWord :inputValue,
-          }
-    })
-    .then((resp) => {
-      console.log(resp.data)
-      setSearchb(resp.data);
-    
-      navigater('/Insta/searchList')
-      
-    })
-      .catch((error) => {
-        console.log(error);
-      });
+    axios
+      .get("/aamurest/gram/selectList", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        params: {
+          searchColumn: searchb,
+          searchWord: inputValue,
+        },
+      })
+      .then((resp) => {
+        console.log(resp.data);
+        setSearchb(resp.data);
 
-     
-  }
-
-  function searchBarModal(){//백이랑 인스타 리스드를 뿌려주기 위한 axios
-    
-    //  if (e.keyCode != 13) return;
-    let token = sessionStorage.getItem("token");
-    axios.get('/aamurest/gram/search/selectList',{
-      headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          params:{
-            searchColumn : searchb,
-            searchWord :inputValue,
-          }
-    })
-    .then((resp) => {
-      console.log(resp.data)
-      settitle(resp.data);
+        navigater("/Insta/searchList");
       })
       .catch((error) => {
         console.log(error);
       });
   }
-  
+
+  function searchBarModal() {
+    //백이랑 인스타 리스드를 뿌려주기 위한 axios
+
+    //  if (e.keyCode != 13) return;
+    let token = sessionStorage.getItem("token");
+    axios
+      .get("/aamurest/gram/search/selectList", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        params: {
+          searchColumn: searchb,
+          searchWord: inputValue,
+        },
+      })
+      .then((resp) => {
+        console.log(resp.data);
+        settitle(resp.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
 
   function handleModal(e) {
     e.stopPropagation();
@@ -111,39 +110,51 @@ function User({ setlist ,setloading, searchb, setSearchb, inputValue, setinputVa
   };
   return (
     <div>
+      {showChat && <Chat />}
       <div className="userSearch">
-        <SearchSelect setSearchb={setSearchb}/>
+        <SearchSelect setSearchb={setSearchb} />
         <div
           className="search"
           onClick={() => {
             setsearch(!search);
           }}
         >
-          <input 
-            onKeyUp={(e)=>{searchBarModal(e,modalRef);searchBar(e)}}
-            value={inputValue}
-            onChange={(e)=>{
-              setinputValue(e.target.value)
-              setsearchText(true) 
+          <input
+            onKeyUp={(e) => {
+              searchBarModal(e, modalRef);
+              searchBar(e);
             }}
-            placeholder="검색" 
+            value={inputValue}
+            onChange={(e) => {
+              setinputValue(e.target.value);
+              setsearchText(true);
+            }}
+            placeholder="검색"
             type="text"
             className="search-bar"
-            ref={modalRef}/>
-            {searchText && 
-            <SearchModal 
-            ref={SearchModalRef}
-            title={title} 
-            setsearchText={setsearchText}
-            setinputValue={setinputValue}
-            />}
-          
+            ref={modalRef}
+          />
+          {searchText && (
+            <SearchModal
+              ref={SearchModalRef}
+              title={title}
+              setsearchText={setsearchText}
+              setinputValue={setinputValue}
+            />
+          )}
         </div>
       </div>
       <div className="user">
-        <img src="/images/user.jpg" alt="프사" onError={(e)=>{e.stopPropagation(); e.target.src='/images/user.jpg'}}/>
+        <img
+          src="/images/user.jpg"
+          alt="프사"
+          onError={(e) => {
+            e.stopPropagation();
+            e.target.src = "/images/user.jpg";
+          }}
+        />
         <div>
-          <p className="user-id">{sessionStorage.getItem('username')}</p>
+          <p className="user-id">{sessionStorage.getItem("username")}</p>
           <p className="user-name">김영현</p>
         </div>
 
@@ -155,11 +166,7 @@ function User({ setlist ,setloading, searchb, setSearchb, inputValue, setinputVa
         >
           <div className="heart">
             {heart ? (
-              <i
-                className=" fa-solid fa-heart fa-2x"
-                ref={notimodalRef}
-                style={{ color: "black" }}
-              >
+              <i className=" fa-solid fa-heart fa-2x" ref={notimodalRef} style={{ color: "black" }}>
                 <NotificationModal></NotificationModal>
               </i>
             ) : (
