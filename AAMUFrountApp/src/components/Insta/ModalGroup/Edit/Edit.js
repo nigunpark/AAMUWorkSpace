@@ -102,13 +102,7 @@ const [inputValue,setinputValue] = useState('');
         }
     }
    
-    function menuModalRef(e){//메뉴 모달 나왔을때 주변 눌러도 꺼지게 만들기
-      e.stopPropagation();
-      if (e.target != menuRef.current) setModalShow(false);
-      
-    }
     
-    window.addEventListener("click", menuModalRef);
 
     const submit = () => {
       confirmAlert({
@@ -130,7 +124,7 @@ const [inputValue,setinputValue] = useState('');
  
   return (
     <Container>
-    <Overlay ref={menuRef}  onClick={()=>{submit()}}>
+    <Overlay onClick={()=>{submit()}} />
     <Contents >  
         <FirstLine>
             <div className='newPosting' style={{marginLeft:'12%'}}>
@@ -258,7 +252,6 @@ const [inputValue,setinputValue] = useState('');
                   </Body>
                   {/* {show?<SearchModal search={search}/>:null} */}
         </Contents>
-    </Overlay>
 </Container> 
  
   );
@@ -318,7 +311,7 @@ function edit(val,setlist,setShowWrite,titleRef,textareaRef,searchRef,search){//
   right: 0;
   bottom: 0;
   display: flex;
-  z-index:1;
+  z-index:2;
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -336,11 +329,10 @@ const Overlay = styled.div`
 
 const Contents = styled.div`
   position: relative;
-  transform: translate(-50%,-50%);
   padding : 0 auto;
   width:60%;
-  left: 50%;
-  top: 54%;
+  top: 30px;
+  // align-item:center;
   height: 700px;
   background :white;
   display:flex;
