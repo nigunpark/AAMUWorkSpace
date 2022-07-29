@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
@@ -326,55 +328,6 @@ public class ApiController {
 		if(map.get("searchcolumn2")!=null) {
 
 		}
-
-		return affected;
-	}
-	@PostMapping("/data/insertInfo")
-	public int info3(@RequestParam Map map){
-		int affected = 0;
-		String area = map.get("areacode").toString();
-		String contentTypeId = map.get("contenttypeid").toString();
-		map.put("selecttable", "places");
-		List<AttractionDTO> list = service.selectPlacesList(map);
-		for(AttractionDTO dto:list) {
-			map.put("table", "placesinfo");
-			map.put("contentid",dto.getContentid());
-
-			if(service.checkPlace(map)!=1) {
-
-				if(dto.getContenttypeid()==12 || dto.getContenttypeid()==28||dto.getContenttypeid()==39) {
-					System.out.println(dto.getContentid());
-					String uri = "http://api.visitkorea.or.kr/openapi/service/rest/KorService/detailIntro?"
-							+ "serviceKey="+apikey
-							+ "&numOfRows=1&pageNo=1&MobileOS=ETC&MobileApp=AppTest&contentId="+dto.getContentid()+"&contentTypeId="+dto.getContenttypeid()+"&_type=json";
-
-					ResponseEntity<Info> responseEntity2 =
-							restTemplate.exchange(uri, HttpMethod.GET,
-									null,Info.class);
-
-					switch (contentTypeId) {
-					case "12":
-						dto.setResttime(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getRestdate());
-						dto.setPlaytime(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getUsetime());
-						dto.setTel(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getInfocenter());
-						dto.setPark(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getParking());
-						break;
-					case "28":
-						dto.setTel(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getInfocenterleports());
-						dto.setPark(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getParkingleports());
-						dto.setPlaytime(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getUsetimeleports());
-						dto.setResttime(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getRestdateleports());
-						break;
-					}
-					dto.setTable("placesinfo");
-					service.placeInsert(dto);
-				}
-
-			}
-			affected++;
-		}
-
-
 
 		return affected;
 	}

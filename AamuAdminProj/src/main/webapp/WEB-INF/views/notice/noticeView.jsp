@@ -17,25 +17,26 @@
 									<td>${record.nno}</td>
 								</tr>
 								<tr>
-									<th class="w-25 bg-dark text-white text-center">글쓴이</th>
-									<td>${record.name } (${record.id })</td>
-								</tr>
-								<tr>
-									<th class="w-25 bg-dark text-white text-center">작성일</th>
-									<td>${record.noticedate}</td>
-								</tr>
-
-								<tr>
-									<th class="w-25 bg-dark text-white text-center">조회수</th>
-									<td>${record.ncount}</td>
-								</tr>
-
-								<tr>
 									<th class="w-25 bg-dark text-white text-center">제목</th>
 									<td>${record.title}</td>
 								</tr>
 								<tr>
-									<th class="bg-dark text-white text-center" colspan="2">내 용</th>
+									<th class="w-25 bg-dark text-white text-center">공지</th>
+									<td>${record.name } (${record.id })</td>
+								</tr>
+								<tr>
+									<th class="w-25 bg-dark text-white text-center">날짜</th>
+									<td>${record.noticedate}</td>
+								</tr>
+
+								<tr>
+									<th class="w-25 bg-dark text-white text-center">조회</th>
+									<td>${record.ncount}</td>
+								</tr>
+
+
+								<tr>
+									<th class="bg-dark text-white text-center" colspan="2">내용</th>
 								</tr>
 								<tr>
 									<td colspan="2">${record.content }</td>

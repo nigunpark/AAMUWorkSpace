@@ -127,5 +127,10 @@ public class MainDAO {
 		return template.selectList("selectMainPlaceList");
 	}
 
+	public int updateImage(Map map) {
+		
+		return template.update("updateImage",map);
+	}
+
 
 }

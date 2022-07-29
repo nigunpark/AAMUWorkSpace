@@ -8,14 +8,14 @@ class DialogMessage(Resource):
     def post(self):
         parser = reqparse.RequestParser()
         parser.add_argument('message')
-        parser.add_argument('session_id')
+        parser.add_argument('id')
 
         args = parser.parse_args()
 
         project_id=DIALOG_CONFIG['PROJECT_ID']
 
         session_client = dialogflow.SessionsClient()
-        session_path = session_client.session_path(project_id, args['session_id'])
+        session_path = session_client.session_path(project_id, args['id'])
 
         message = args['message']
         # session_path()함수는 projects/프로젝트아이디/agent/sessions/세션아이디 로 생성해서 반환한다

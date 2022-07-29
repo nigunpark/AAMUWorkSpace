@@ -44,10 +44,6 @@ public class AnswerDAO {
 		return template.delete("answerDeleteByNo", map);
 	}
 
-	public void deletesByNo(int[] email) {
-		template.delete("answerDeletesByNo", email);
-	}
-
 	public int answerAllDelete(Map map) {
 		return template.delete("answerDeleteByNo", map);
 	}

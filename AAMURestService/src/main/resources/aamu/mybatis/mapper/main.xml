@@ -131,6 +131,8 @@
 	<select id="selectRouteList" parameterType="int" resultType="routeDTO">
 		SELECT * FROM route WHERE rbn=#{rbn} ORDER BY ordno
 	</select>
-	
+	<update id="updateImage" parameterType="Map">
+		UPDATE places SET smallimage=#{smallimage} WHERE contentid=#{contentid}
+	</update>
 
 </mapper>
