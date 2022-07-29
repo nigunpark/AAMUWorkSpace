@@ -244,7 +244,6 @@ const KMap = ({
 
   useEffect(() => {
     if (kMap === null) return;
-
     kakao.maps.event.addListener(kMap, "rightclick", function (mouseEvent) {
       let center = kMap.getCenter();
       console.log("우측클릭");
