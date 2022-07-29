@@ -68,11 +68,13 @@ const MyHomeBox = ({ setClickTab, planList, rbn, setSelectRbn }) => {
               type="button"
               style={{ marginTop: "20px" }}
               onClick={() => {
-                excAxios(rbn, setNewFromWooJae, dispatch, setCurrPosition);
-                // getTimeSetArr(newFromWooJae, planList, setNewTimeSet, please);
+                excAxios(rbn, setNewFromWooJae, dispatch, setCurrPosition, planList);
+
+                // getTimeSetArr(newFromWooJae, planList, setNewTimeSet, dispatch);
+
                 setTimeout(() => {
                   setIsOpen(true);
-                }, 100);
+                }, 500);
               }}
             >
               일정보기
@@ -84,10 +86,9 @@ const MyHomeBox = ({ setClickTab, planList, rbn, setSelectRbn }) => {
         <MyDetailPlan
           setIsOpen={setIsOpen}
           currPosition={currPosition}
-          fromWooJaeData={fromWooJaeData}
-          setFromWooJaeData={setFromWooJaeData}
           setNewTimeSet={setNewTimeSet}
           newFromWooJae={newFromWooJae}
+          setNewFromWooJae={setNewFromWooJae}
           newTimeSet={newTimeSet}
           planList={planList}
         />
@@ -96,43 +97,9 @@ const MyHomeBox = ({ setClickTab, planList, rbn, setSelectRbn }) => {
   );
 };
 
-function getTimeSetArr(newFromWooJae, planList, setNewTimeSet) {
-  // let lengths = planList.title.substring(
-  //   planList.title.indexOf("일") - 1,
-  //   planList.title.indexOf("일")
-  // );
-  // console.log("lengths", lengths);
-  // // if (newFromWooJae.length === 0) return;
-  // let tempArr = new Array(lengths).fill(0);
-  // tempArr.forEach((val, index) => {
-  //   let bbcT = newFromWooJae[index][`day${index + 1}`][0].starttime / (1000 * 60);
-  //   if (bbcT >= 13 * 60) {
-  //     console.log("위");
-  //     let temp = {
-  //       ampm: "오후",
-  //       time: bbcT / 60 - 12,
-  //       fullDate: new Date(`2022-01-01 ${bbcT / 60}:${bbcT % 60}`),
-  //       min: bbcT % 60,
-  //       day: index + 1,
-  //     };
-  //     // dispatch(changeTimeSetObj(temp));
-  //     setNewTimeSet((curr) => [...curr, temp]);
-  //   } else {
-  //     console.log("아래");
-  //     let temp = {
-  //       ampm: "오전",
-  //       time: bbcT / 60,
-  //       fullDate: new Date(`2022-01-01 ${bbcT / 60}:${bbcT % 60}`),
-  //       min: bbcT % 60,
-  //       day: index + 1,
-  //     };
-  //     // dispatch(changeTimeSetObj(temp));
-  //     setNewTimeSet((curr) => [...curr, temp]);
-  //   }
-  // });
-}
+function getTimeSetArr(newFromWooJae, planList, setNewTimeSet, dispatch) {}
 
-async function excAxios(rbn, setNewFromWooJae, dispatch, setCurrPosition) {
+async function excAxios(rbn, setNewFromWooJae, dispatch, setCurrPosition, planList) {
   try {
     let token = sessionStorage.getItem("token");
     //   /planner/selectonemap
@@ -145,7 +112,8 @@ async function excAxios(rbn, setNewFromWooJae, dispatch, setCurrPosition) {
       },
     });
     console.log("resp.data", resp.data);
-    // setCurrPosition(resp.data.title);
+    setCurrPosition(resp.data.title.split(" ")[0]);
+
     let keys = Object.keys(resp.data.routeMap);
     let values = Object.values(resp.data.routeMap);
     let tempArr = keys.map((val, i) => {
@@ -189,20 +157,23 @@ async function excAxios(rbn, setNewFromWooJae, dispatch, setCurrPosition) {
     }
     dispatch(resetMonthNDate([]));
     dispatch(addMonthNDate({ month: fristMonth, date: fristDate, dow: fristDow }));
+    let lengths = parseInt(
+      planList.title.substring(planList.title.indexOf("일") - 1, planList.title.indexOf("일"))
+    );
+    dispatch(changeTripPeriod(lengths));
   } catch (error) {
-    console.log((error) => console.log("상세경로 가져오기 실패", error));
+    console.log(error);
   }
 }
 
 function MyDetailPlan({
   setIsOpen,
   currPosition,
-  fromWooJaeData,
-  setFromWooJaeData,
   setNewTimeSet,
   newFromWooJae,
   newTimeSet,
   planList,
+  setNewFromWooJae,
 }) {
   const [auSure, setAuSure] = useState(false);
   const [savePlan, setSavePlan] = useState(false);
@@ -210,7 +181,6 @@ function MyDetailPlan({
   let reduxState = useSelector((state) => state);
   let dispatch = useDispatch();
   useEffect(() => {
-    console.log("newFromWooJae", newFromWooJae);
     let lengths = parseInt(
       planList.title.substring(planList.title.indexOf("일") - 1, planList.title.indexOf("일"))
     );
@@ -226,7 +196,6 @@ function MyDetailPlan({
           min: bbcT % 60,
           day: index + 1,
         };
-        // dispatch(changeTimeSetObj(temp));
         setNewTimeSet((curr) => [...curr, temp]);
       } else {
         let temp = {
@@ -236,7 +205,6 @@ function MyDetailPlan({
           min: bbcT % 60,
           day: index + 1,
         };
-        // dispatch(changeTimeSetObj(temp));
         setNewTimeSet((curr) => [...curr, temp]);
       }
     });
@@ -258,7 +226,7 @@ function MyDetailPlan({
           <MyCreatePlanLeft
             currPosition={currPosition} //지역명 넣기
             fromWooJaeData={newFromWooJae} //routeMap [{},{},{}] 형식으로 가공해야함
-            setFromWooJaeData={setFromWooJaeData}
+            setFromWooJaeData={setNewFromWooJae}
             setForDayLine={setForDayLine}
             newTimeSet={newTimeSet}
           />
@@ -272,7 +240,7 @@ function MyDetailPlan({
           <MyPlanMap
             setSavePlan={setSavePlan}
             currPosition={currPosition}
-            fromWooJaeData={fromWooJaeData}
+            fromWooJaeData={newFromWooJae}
             forDayLine={forDayLine}
           />
         </Contents>
