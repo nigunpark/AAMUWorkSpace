@@ -8,7 +8,11 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import MyPlanMap from "./MyPlanMap";
 import { useDispatch, useSelector } from "react-redux";
-import { addMonthNDate, changeTripPeriod, resetMonthNDate } from "../../../redux/store";
+import {
+  addMonthNDate,
+  changeTripPeriod,
+  resetMonthNDate,
+} from "../../../redux/store";
 
 const MyHomeBox = ({ setClickTab, planList, rbn, setSelectRbn }) => {
   const [fromWooJaeData, setFromWooJaeData] = useState([]);
@@ -27,18 +31,53 @@ const MyHomeBox = ({ setClickTab, planList, rbn, setSelectRbn }) => {
 
   let reduxState = useSelector((state) => state);
   let dispatch = useDispatch();
+
+  const [modalOpen, setModalOpen] = useState(false);
+  const onModalSelect = () => {
+    setModalOpen(true);
+  };
+
   return (
-    <div className="project-box-wrapper">
-      {/* style={{backgroundColor: '#fee4cb'}} */}
-      <div className="project-box">
-        <div className="project-box-content-header">
-          {/* '/images/img-'+imgNum+'.jpg' */}
-          <img className="MapImgSize" src={planList.smallImage} style={{ marginTop: "10px" }} />
-          {/* 저장한 경로 */}
+    <>
+      {modalOpen == true ? (
+        <MyBoxList
+          setModalOpen={setModalOpen}
+          rbn={rbn}
+          setNewFromWooJae={setNewFromWooJae}
+          dispatch={dispatch}
+          setCurrPosition={setCurrPosition}
+          setIsOpen={setIsOpen}
+          setSelectRbn={setSelectRbn}
+          setClickTab={setClickTab}
+        />
+      ) : null}
+
+      <div className="MyBoxContainer" onClick={onModalSelect}>
+        {/*  className="project-box-wrapper" */}
+        {/* <div className="project-box"> */}
+
+        <div className="MyBox">
+          <img
+            className="instaImg"
+            src={planList.smallImage}
+            // style={{ marginTop: "10px" }}
+          />
+          <div style={{ fontSize: "20px" }}>{planList.title}</div>
+
+          <div>
+            {planList.plannerdate} (rbn :{rbn})
+          </div>
+
+          <div style={{ marginLeft: "170px" }}>{dateFormat(postDate)}</div>
         </div>
 
-        <div className="box-progress-wrapper">
-          <p className="box-progress-header" style={{ marginTop: "10px", marginBottom: "10px" }}>
+        {/*  */}
+
+        {/* <div className="box-progress-wrapper">
+          <p
+            className="box-progress-header"
+            style={{ marginTop: "10px", marginBottom: "10px" }}
+          >
             여행 제목 : {planList.title}
           </p>
           <p className="box-progress-header" style={{ marginBottom: "10px" }}>
@@ -78,7 +117,11 @@ const MyHomeBox = ({ setClickTab, planList, rbn, setSelectRbn }) => {
               일정보기
             </button>
           </div>
-        </div>
+        </div> */}
+
+        {/*  */}
+
+        {/* </div> */}
       </div>
       {isOpen && (
         <MyDetailPlan
@@ -92,9 +135,57 @@ const MyHomeBox = ({ setClickTab, planList, rbn, setSelectRbn }) => {
           planList={planList}
         />
       )}
-    </div>
+    </>
   );
 };
+
+function MyBoxList({
+  setModalOpen,
+  rbn,
+  setNewFromWooJae,
+  dispatch,
+  setCurrPosition,
+  setIsOpen,
+  setSelectRbn,
+  setClickTab,
+}) {
+  return (
+    <div className="myBox-List">
+      <div className="myBox-List-overlay">
+        <div
+          className="myBox-List-Plan"
+          onClick={() => {
+            excAxios(rbn, setNewFromWooJae, dispatch, setCurrPosition);
+            // getTimeSetArr(newFromWooJae, planList, setNewTimeSet, please);
+            setTimeout(() => {
+              setIsOpen(true);
+            }, 100);
+          }}
+        >
+          일정확인/수정
+        </div>
+        <div
+          className="myBox-List-Post"
+          onClick={() => {
+            setClickTab(10);
+            setSelectRbn(rbn);
+          }}
+        >
+          공유하기
+        </div>
+        <div className="myBox-List-Delete">삭제하기</div>
+        <div
+          className="myBox-List-back"
+          onClick={(e) => {
+            setModalOpen(false);
+          }}
+        >
+          취소
+        </div>
+      </div>
+    </div>
+  );
+}
 
 function getTimeSetArr(newFromWooJae, planList, setNewTimeSet) {
   // let lengths = planList.title.substring(
@@ -188,7 +279,9 @@ async function excAxios(rbn, setNewFromWooJae, dispatch, setCurrPosition) {
         break;
     }
     dispatch(resetMonthNDate([]));
-    dispatch(addMonthNDate({ month: fristMonth, date: fristDate, dow: fristDow }));
+    dispatch(
+      addMonthNDate({ month: fristMonth, date: fristDate, dow: fristDow })
+    );
   } catch (error) {
     console.log((error) => console.log("상세경로 가져오기 실패", error));
   }
@@ -212,12 +305,16 @@ function MyDetailPlan({
   useEffect(() => {
     console.log("newFromWooJae", newFromWooJae);
     let lengths = parseInt(
-      planList.title.substring(planList.title.indexOf("일") - 1, planList.title.indexOf("일"))
+      planList.title.substring(
+        planList.title.indexOf("일") - 1,
+        planList.title.indexOf("일")
+      )
     );
     let tempArr = new Array(lengths).fill(0);
     dispatch(changeTripPeriod(lengths));
     tempArr.forEach((val, index) => {
-      let bbcT = newFromWooJae[index][`day${index + 1}`][0].starttime / (1000 * 60);
+      let bbcT =
+        newFromWooJae[index][`day${index + 1}`][0].starttime / (1000 * 60);
       if (bbcT >= 13 * 60) {
         let temp = {
           ampm: "오후",
