@@ -480,6 +480,7 @@ const MyProfileContainer = styled.div`
     gap: 10px;
     // border: solid 1px black;
     font-size: 18px;
+    margin: auto;
     
 `
 

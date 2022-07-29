@@ -1,5 +1,6 @@
 package com.aamu.aamurest.user.web;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.aamu.aamurest.user.service.AttractionDTO;
 import com.aamu.aamurest.user.service.MainService;
@@ -33,6 +35,7 @@ import com.aamu.aamurest.user.service.RouteDTO;
 import com.aamu.aamurest.user.service.api.KakaoKey;
 import com.aamu.aamurest.user.service.api.KakaoKey.Document;
 import com.aamu.aamurest.user.service.api.KakaoReview;
+import com.aamu.aamurest.util.FileUploadUtil;
 
 @RestController
 @CrossOrigin("*")
@@ -572,7 +575,17 @@ public class MainController {
 		return map;
 
 	}
-
+	@PostMapping("/img/upload")
+	public int imgUpload(@RequestParam Map map,@RequestParam MultipartFile files,HttpServletRequest req) throws IllegalStateException, IOException {
+		int affected = 0;
+		System.out.println(map.get("contentid"));
+		System.out.println(files);
+		String path = req.getSession().getServletContext().getRealPath("/resources/hotelImage");
+		String filename = FileUploadUtil.oneFile(files, path);
+		map.put("smallimage", filename);
+		affected = service.updateImage(map);
+		return affected;
+	}
 
 
 }

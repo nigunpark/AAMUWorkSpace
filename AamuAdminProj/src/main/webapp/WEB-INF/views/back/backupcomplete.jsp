@@ -101,7 +101,8 @@ $('#crawll').click(function(){
 	<c:forEach items="${placelist}" var="item">
 		<c:if test="${item.bigimage eq null}">
 			placelist.push({
-				title:"${item.title}"
+				title:"${item.title}",
+				contentid:"${item.contentid}"
 			});
 		</c:if>
 	</c:forEach>

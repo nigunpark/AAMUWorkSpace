@@ -101,7 +101,8 @@ const MyPostBox = ({selectRbn}) => {
                   {
                     add.map((val, i)=>{
                       // let firstTime = (val.starttime)/1000/60/60;
-                      console.log('val 내부 map :',Object.values(val));
+                      let soanMap = Object.values(val);
+                      console.log('val 내부 map :',soanMap);
                       // console.log('-------------',i);
                       return(
                         <div>
