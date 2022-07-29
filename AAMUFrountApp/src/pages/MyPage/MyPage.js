@@ -288,16 +288,22 @@ function TabContent({ clickTab, setClickTab, planList }) {
 
   if (clickTab === 0) {
     // 홈
-    return planList.map((val, idx) => {
-      return (
-        <MyHomeBox
-          setClickTab={setClickTab}
-          planList={val}
-          rbn={val.rbn}
-          setSelectRbn={setSelectRbn}
-        />
-      );
-    });
+    return (
+      <div className="myInstaContainer">
+        <div className="myInstar">
+          {planList.map((val, idx) => {
+            return (
+              <MyHomeBox
+                setClickTab={setClickTab}
+                planList={val}
+                rbn={val.rbn}
+                setSelectRbn={setSelectRbn}
+              />
+            );
+          })}
+        </div>
+      </div>
+    );
   } else if (clickTab === 1) {
     //인스타
     let num = [1, 2, 3, 4, 5, 6, 7, 8, 9];
