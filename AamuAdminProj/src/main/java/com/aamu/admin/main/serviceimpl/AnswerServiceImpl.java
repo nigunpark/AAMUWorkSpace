@@ -37,39 +37,38 @@ public class AnswerServiceImpl implements QNAService<AnswerDTO> {
 		// 마이바티스의 insert()는 무조건 영향받은 행의 수를 반환
 		int newAno = dao.insert(map);
 		System.out.println("새로 입력된 코멘트의 글번호:" + newAno);
-		
+
 		return newAno;
+	}
+	
+	@Override
+	public int answerUpdate(Map map) {		
+		return dao.update(map);
 	}
 
 	@Override
 	public int answerDelete(Map map) {
 		return dao.delete(map);
 	}
-	
-	
+
 	@Override
 	public int answerAllDelete(Map map) {
-		int affected=0;
-		
-		List<String> anolists=(List<String>)map.get("ano");
+		int affected = 0;
+
+		List<String> anolists = (List<String>) map.get("ano");
 		System.out.println(anolists);
-		for(String ano:anolists) {
-			Map anoMap = new HashMap(); 
-			anoMap.put("ano",ano); 
+		for (String ano : anolists) {
+			Map anoMap = new HashMap();
+			anoMap.put("ano", ano);
 			System.out.println(anoMap);
-			affected+=dao.answerAllDelete(anoMap);
+			affected += dao.answerAllDelete(anoMap);
 		}
-		if(affected==((List)map.get("ano")).size()) {
+		if (affected == ((List) map.get("ano")).size()) {
 			return 1;
-		}
-		else
+		} else
 			return 0;
 	}
 
-	@Override
-	public int qnaEdit(Map map) {
-		return dao.update(map);
-	}
 
 	// map에 lno키 넣기
 	@Override
@@ -88,6 +87,11 @@ public class AnswerServiceImpl implements QNAService<AnswerDTO> {
 		// TODO Auto-generated method stub
 		return 0;
 	}
+	
+	@Override
+	public int qnaEdit(Map map) {
+		return dao.update(map);
+	}
 
 	@Override
 	public int qnaDelete(Map map) {
@@ -101,6 +105,11 @@ public class AnswerServiceImpl implements QNAService<AnswerDTO> {
 		return 0;
 	}
 
+	@Override
+	public int answerWrite(Map map) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 
 
 }
