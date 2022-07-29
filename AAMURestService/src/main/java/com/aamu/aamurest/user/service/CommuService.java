@@ -22,6 +22,12 @@ public interface CommuService<T> {
 	//글 목록용_토탈카운트 
 	int commuTotalCount(Map map);
 	
+	//글 목록용_CommuTag에 레코드값
+	int selectCountCommuTag(String lno);
+	
+	//글 목록용_tname 얻기
+	List<String> commuSelectTagName(String lno);
+	
 	//글 검색용
 	List<String> commuSearachList(Map map);
 

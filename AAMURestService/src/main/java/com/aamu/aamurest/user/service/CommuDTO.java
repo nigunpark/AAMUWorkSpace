@@ -29,4 +29,5 @@ public class CommuDTO {
 	public String contentid;
 	public String title;
 	public int totalCount;
+	public List<String> tname;
 }

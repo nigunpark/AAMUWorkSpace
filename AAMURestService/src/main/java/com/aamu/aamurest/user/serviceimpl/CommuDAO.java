@@ -36,6 +36,16 @@ public class CommuDAO {
 		return template.selectOne("commuTotalCount",map);
 	}
 	
+	//글 목록용_CommuTag에 레코드값
+	public int selectCountCommuTag(String lno) {
+		return template.selectOne("selectCountCommuTag",lno);
+	}
+	
+	//글 목록용_tname 얻기
+	public List<String> commuSelectTagName(String lno){
+		return template.selectList("commuSelectTagName",lno);
+	}
+	
 	//글 검색용
 	public List<String> commuSearachList(Map map){
 		System.out.println("dao map:"+map.get("searchColumn"));
@@ -65,9 +75,11 @@ public class CommuDAO {
 	}
 
 	//글 생성용_방금 insert된 글 다시 보내기
+	/*
 	public CommuDTO commuSelectAfterInsert() {
 		return template.selectOne("commuSelectAfterInsert");
 	}
+	*/
 	
 	//글 생성용_태그 뿌려주기!!!!!!!!!!!!!!!!!!!
 	public List<String> commuSelectTag(Map map) {
@@ -91,6 +103,7 @@ public class CommuDAO {
 	
 	//글 생성용_tno 가져오기
 	public int selectTno(Map map) {
+		System.out.println("(dao)tname에 들어있니?"+map.get("tname"));
 		return template.selectOne("selectTno",map);
 	}
 

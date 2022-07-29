@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,6 +28,7 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 	@Override
 	public List<CommuDTO> commuSelectList(Map map) {
 		List<CommuDTO> lists=dao.commuSelectList(map);
+		//isLike셋팅
 		List<CommuDTO> returnLists = new Vector();
 		for(int i=0; i<lists.size(); i++) {
 			CommuDTO dto=lists.get(i);
@@ -63,6 +66,18 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 		if(isLikeaffected == 1) return true;
 		else return false;
 	}*/
+	
+	//글 목록용_CommuTag에 레코드값
+	@Override
+	public int selectCountCommuTag(String lno) {
+		return dao.selectCountCommuTag(lno);
+	}
+	
+	//글 목록용_tname 얻기
+	@Override
+	public List<String> commuSelectTagName(String lno) {
+		return dao.commuSelectTagName(lno);
+	}
 	
 	//글 검색용
 	@Override
@@ -104,10 +119,20 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 		}
 		
 		//태그 저장
+		//tname이라는 키값으로 tname:#서울#서울여행이 넘어온다...
 		if(map.get("tname")!=null) {
-			int tno=dao.selectTno(map);
-			map.put("tno", tno);
-			dao.commuTagInsert(map);
+			String tnameString=map.get("tname").toString(); //#서울#서울여행 통으로 넘어오면
+			String[] tnameArr = tnameString.split("#"); //[null,서울,서울여행]
+			for(int i=1; i<tnameArr.length;i++) {
+				map.put("tname", tnameArr[i]);//이러면 tname:#서울 그 다음 for문돌면 tname:#서울여행 들어있나??????
+				System.out.println("서비스 tname첫번재방:"+tnameArr[1]);
+				System.out.println("tname에 들어있니?"+map.get("tname")); //서울
+				int tno=dao.selectTno(map); //tno를 구했음
+				map.put("tno", tno);
+				dao.commuTagInsert(map);
+				
+			}
+			
 		}
 
 		if(commuaffected==1 && photoAffected==((List)map.get("photolist")).size())
@@ -135,16 +160,19 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 	@Override
 	public List<String> commuTag(Map map) {
 		List<String> tagLists=dao.commuSelectTag(map);
-		//System.out.println("첫번째방의tanme의 벨류값은?"+tagLists.to);
 		System.out.println("트루일가요?"+tagLists.contains(map.get("tname")));
 		if(tagLists.contains(map.get("tname"))) {
 			System.out.println("tname은 뭘가요?"+map.get("tname"));
-			return tagLists;
+			List<String> sharptTagList = new Vector<>();
+			for(String tag:tagLists) { //서울, 서울여행을 꺼내서 
+				String sharpTag="#"+tag; //#서울을 붙이기
+				sharptTagList.add(sharpTag); //새로운 배열에 담아서 전달
+			}
+			return sharptTagList;
 		}
 		else {
 			int affected=dao.commuInsertTags(map);
 			return tagLists;
-			
 		}
 	}
 
