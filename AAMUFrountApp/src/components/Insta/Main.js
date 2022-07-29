@@ -5,10 +5,9 @@ import FeedSetting from "./FeedSetting.js";
 import User from "./User.js";
 import axios from "axios";
 import Spinner from "./Spinner";
-function Main({searchb, setSearchb, inputValue, setinputValue}) {
+function Main({searchb, setSearchb, inputValue, setinputValue,list,setlist,forReRender, setForReRender}) {
 
-  const [list,setlist] = useState([]);
-  const [forReRender, setForReRender] = useState(false)
+  
   function feedList(){//백이랑 인스타 리스드를 뿌려주기 위한 axios
     let token = sessionStorage.getItem("token");
     axios.get('/aamurest/gram/selectList',{

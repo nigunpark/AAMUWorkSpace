@@ -15,10 +15,10 @@ import '../Upload/UploadSwiper.css';
 import dayjs from 'dayjs';
 import { CommentsDisabled } from "@mui/icons-material";
 
-function Comment({val,setlist,forReRender, setForReRender}) {
+function Comment({val,setlist,forReRender, setForReRender,seteditModal}) {
     let menuRef = useRef();
     let replyRef = useRef();
-    const [editModal, seteditModal] = useState(false);
+  
     const [commentHeart,setCommentHeart] = useState(false);
     const [modalShow, setModalShow] = useState(false);
     const [reply, setReply] = useState(false);
@@ -162,16 +162,14 @@ function Comment({val,setlist,forReRender, setForReRender}) {
                       return(
                       <SwiperSlide>
                         <li>
-                        <img className='divimage' alt="sample" src={image}/>
-                        {/* <img className='divimage' alt="sample" src='/images/bg1.png'/> */}
+                            <img className='divimage' alt="sample" src={image}/>
+                            {/* <img className='divimage' alt="sample" src='/images/bg1.png'/> */}
                         </li>
-                    </SwiperSlide>
-                      )
-                      
+                      </SwiperSlide>
+                      )                      
                     })
                     }      
-                  </Swiper>
-                  
+                  </Swiper>                  
                 </ul>
             </div>
             <div className="contents">
@@ -191,58 +189,38 @@ function Comment({val,setlist,forReRender, setForReRender}) {
                         {modalShow 
                             &&<MenuModal setlist={setlist} setModalShow={setModalShow} seteditModal={seteditModal} val={val}/>
                         }
-                        {
+                        {/* {
                             editModal && <Edit val={val} setlist={setlist} seteditModal={seteditModal} />
-                        }
+                        } */}
                     </div> 
                 </div>
                 <div className="recommend">                    
                     <div className="recommend-down">
 
                         <div className="recommend-contents">
-                        <img className="userimg" src="'/img/bk.jpg ' ?? '/images/user.jpg'" alt="프사" onError={(e)=>{e.target.src='/images/user.jpg'}}/> 
-                            <div style={{display:'flex',flexDirection:'column',marginTop:'10px',marginLeft:'10px'}}>
-                                <div style={{display:'flex',flexDirection:'row',paddingRight:'15px'}}>
-                                    <p className="userName" ><strong style={{fontSize:'13px',marginRight:'5px'}}>{sessionStorage.getItem('username')}</strong>
-                                                             {val.content}</p>
-                                    
+                            <img className="userimg" src="'/img/bk.jpg ' ?? '/images/user.jpg'" alt="프사" onError={(e)=>{e.target.src='/images/user.jpg'}}/> 
+                                <div style={{display:'flex',flexDirection:'column',marginTop:'10px',marginLeft:'10px'}}>
+                                    <div style={{display:'flex',flexDirection:'row',paddingRight:'15px'}}>
+                                        <div className="feeds-title">
+                                            <p><span className="userName">제목 </span><span> {val.ctitle}</span></p>
+                                            <p className="userName"><strong style={{fontSize:'13px',marginRight:'5px'}}>{sessionStorage.getItem('username')}</strong>
+                                            <span style={{fontFamily:'normal'}}>{val.content}</span></p>
+                                        </div>
+                                    </div>
+                                    <div style={{fontSize:'10px',color:'#a5a5a5',marginTop:'8px'}}>
+                                        <p className="postDate">{dayjs(new Date(val.postdate)).format('YYYY/MM/DD')}</p>
+                                    </div>
                                 </div>
-                                <div style={{fontSize:'10px',color:'#a5a5a5',marginTop:'8px'}}>
-                                    <p className="postDate">{dayjs(new Date(val.postdate)).format('YYYY/MM/DD')}</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* <div className="recommend-contents">
-                            <img className='likeimg' src="./img/bk.jpg" alt="추사" />
-                            <div style={{width:'100%',display:'flex',flexDirection:'column',marginTop:'10px',marginLeft:'10px'}}>
-                                <div style={{display:'flex',flexDirection:'row'}}>
-                                    <p className="userName"><strong>0hyun0hyun</strong></p>
-                                    <p className="userName">풍경사진 잘 보고 갑니다</p>
-                                </div>
-                                <div className="comment-heart">
-                                    {commentHeart ?<i className="fa-solid fa-heart"onClick={()=>{setCommentHeart(!commentHeart)}} style={{color:'red'}} />
-                                    :<i className="fa-regular fa-heart"  onClick={()=>{setCommentHeart(!commentHeart)}}></i>}
-                                    <i class="fa-regular fa-trash-can"></i>
-                                </div>
-                                <div style={{fontSize:'10px',color:'#a5a5a5',marginTop:'8px'}}>
-                                    <p className="postDate">{dayjs(new Date(val.postdate)).format('YYYY/MM/DD')}</p>
-                                </div>
-                            </div>
-                        </div> */}
-                       
-                                {
-                                    comments.map((val,i)=>{//feedComments에 담겨있을 댓글 값을 CommentList 컴포넌트에 담아서 가져온다
-                                        return(
-                                            <CommentList//CommentList 컴포넌트는 반복적으로 추가되는 사용자 댓글 하나하나를 담고있는 박스
-                                            val={val}
-                                            />
-                                        );
-                                    })
-                                }
-                                
-                    
-                       
+                        </div>                       
+                            {
+                                comments.map((val,i)=>{//feedComments에 담겨있을 댓글 값을 CommentList 컴포넌트에 담아서 가져온다
+                                    return(
+                                        <CommentList//CommentList 컴포넌트는 반복적으로 추가되는 사용자 댓글 하나하나를 담고있는 박스
+                                        val={val}
+                                        />
+                                    );
+                                })
+                            }
                     </div>    
                 </div>
                 <div className="contentIcon">

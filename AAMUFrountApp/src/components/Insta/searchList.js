@@ -1,9 +1,12 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components';
+import Comment from './ModalGroup/Comment/Comment'
 
-function SearchList({searchb, inputValue}) {
-   
+function SearchList({searchb, inputValue,list,setlist,forReRender, setForReRender}) {
+  let commentRef = useRef();
+  const [editModal, seteditModal] = useState(false);
+  const [commentModal, setcommentModal] = useState(false);
     return (
         <MyInstaContainer>
             <Grid>
@@ -20,8 +23,16 @@ function SearchList({searchb, inputValue}) {
                 searchb.map((val, idx)=>{
                     return(
                     <InstarBox
-                        onClick={(e)=>{
-                        }}>
+                        onClick={()=>{setcommentModal(!commentModal)}}>
+                          {commentModal &&
+                            <Container1>
+                                <Overlay
+                                ref={commentRef} 
+                                onClick={ (e) => {e.stopPropagation(); if(e.target == commentRef.current) setcommentModal(false)}}
+                                >
+                                    <Comment onClick={ () => {setcommentModal(false)}} seteditModal={seteditModal} val={val} forReRender={forReRender} setForReRender={setForReRender} setlist={setlist}/>
+                                </Overlay>
+                            </Container1>}
                         <InstaImg
                         src={val.photo[0]}/>
                     </InstarBox>
@@ -133,6 +144,25 @@ const InstaImg = styled.img`
     object-fit: cover;
  ` 
 
-
+ const Container1 = styled.div`
+ position: fixed;
+ width: 100%;
+ height: 100%;
+ top: 0;
+ left: 0;
+ right: 0;
+ bottom: 0;
+ display: flex;
+ z-index:1;
+ justify-content: center;
+ align-items: center;
+ `
+ const Overlay = styled.div`
+ position: relative;
+ width: 100%;
+ height: 100%;
+ z-index:15;
+ background-color: rgba(0, 0, 0, 0.6);
+ `
 
  export default SearchList

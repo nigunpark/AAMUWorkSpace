@@ -31,7 +31,10 @@ function User({ setlist ,setloading, searchb, setSearchb, inputValue, setinputVa
 
   function searchBar(e){//백이랑 인스타 리스드를 뿌려주기 위한 axios
     console.log('inputValue',inputValue)
+    console.log('searchb',searchb)
     setinputValue(e.target.value);
+    if(searchb === 'choice') return alert('무엇으로 검색할지 선택해주세요!');;
+    if(inputValue === undefined || inputValue === '') return alert('검색내용을 입력해주세요!');
     if (e.keyCode != 13) return;
     let token = sessionStorage.getItem("token");
     axios.get('/aamurest/gram/selectList',{
@@ -58,7 +61,8 @@ function User({ setlist ,setloading, searchb, setSearchb, inputValue, setinputVa
   }
 
   function searchBarModal(){//백이랑 인스타 리스드를 뿌려주기 위한 axios
-    
+    if(searchb === 'choice') return ;
+    if(inputValue === undefined || inputValue === '') return ;
     //  if (e.keyCode != 13) return;
     let token = sessionStorage.getItem("token");
     axios.get('/aamurest/gram/search/selectList',{
