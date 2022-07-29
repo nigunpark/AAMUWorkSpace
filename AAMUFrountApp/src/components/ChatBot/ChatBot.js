@@ -6,8 +6,69 @@ const ChatBot = () => {
     <Container>
       <Content>
         <Title>챗봇에게 무엇이든 물어보세요</Title>
-        <Body>내용</Body>
-        <Body>내용</Body>
+        <Body>
+          <div className="chatBotContent">
+            {/* <div className="chatBot__wrap">
+              <span className="chatBotBox">안녕</span>
+            </div> */}
+            <p className="chatBotBox mine">
+              <span className="chatBotBox__span">안녕</span>
+            </p>
+            <p className="chatBotBox">
+              <span className="chatBotBox__span">무엇을도와드릴까요</span>
+            </p>
+            <p className="chatBotBox mine">
+              <span className="chatBotBox__span">안녕</span>
+            </p>
+            <p className="chatBotBox">
+              <span className="chatBotBox__span">무엇을도와드릴까요</span>
+            </p>
+            <p className="chatBotBox mine">
+              <span className="chatBotBox__span">안녕</span>
+            </p>
+            <p className="chatBotBox">
+              <span className="chatBotBox__span">무엇을도와드릴까요</span>
+            </p>
+            <p className="chatBotBox mine">
+              <span className="chatBotBox__span">안녕</span>
+            </p>
+            <p className="chatBotBox">
+              <span className="chatBotBox__span">무엇을도와드릴까요</span>
+            </p>
+            <p className="chatBotBox mine">
+              <span className="chatBotBox__span">안녕</span>
+            </p>
+            <p className="chatBotBox">
+              <span className="chatBotBox__span">무엇을도와드릴까요</span>
+            </p>
+            <p className="chatBotBox mine">
+              <span className="chatBotBox__span">안녕</span>
+            </p>
+            <p className="chatBotBox">
+              <span className="chatBotBox__span">무엇을도와드릴까요</span>
+            </p>
+
+            {/* <li>
+              <span className="chatBox mine">여행하고 싶어</span>
+            </li>
+            <li>
+              <span className="chatBox ">어떤 지역으로 가고 싶어요?</span>
+            </li>
+            <li>
+              <span className="chatBox mine">안녕</span>
+            </li>
+            <li>
+              <span className="chatBox ">무엇을도와드릴까요</span>
+            </li>
+            <li>
+              <span className="chatBox mine">안녕</span>
+            </li>
+            <li>
+              <span className="chatBox ">무엇을도와드릴까요</span>
+            </li> */}
+          </div>
+        </Body>
+
         <div className="chatBot__input-container">
           <input type="text" className="chatBot__input" />
           <span className="chatBot__input-btn">보내기</span>
@@ -39,7 +100,7 @@ const Content = styled.div`
   position: relative;
   background: var(--blueWhite);
   box-shadow: var(--lightShadow);
-  z-index: 9999;
+  z-index: 200;
   width: 330px;
   height: 600px;
   bottom: 620px;
@@ -68,6 +129,8 @@ const Body = styled.div`
   margin-top: 7px;
   background: white;
   border-radius: 7px;
+  display: flex;
+  flex-direction: column-reverse;
 `;
 
 export default ChatBot;
