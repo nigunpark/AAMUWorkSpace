@@ -17,6 +17,8 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -411,7 +413,7 @@ public class MainController {
 	}
 
 	@GetMapping("/info/places")
-	public List<AttractionDTO> attractionList(@RequestParam Map map){
+	public List<AttractionDTO> attractionList(@RequestParam Map map,HttpServletRequest req){
 
 		List<AttractionDTO> list = new Vector<>();
 
@@ -450,7 +452,7 @@ public class MainController {
 				map.put("selecttable", "dinerinfo");
 				break;
 			}
-			list = service.selectPlacesList(map);
+			list = service.selectPlacesList(map,req);
 		}
 		/*
 		for(AttractionDTO dto:list) {
@@ -585,6 +587,19 @@ public class MainController {
 		map.put("smallimage", filename);
 		affected = service.updateImage(map);
 		return affected;
+	}
+	@PostMapping("/main/chatbot")
+	public String mainChatbot(@RequestBody Map map) {
+		
+		String uri="http://192.168.0.19:5020/message";
+		MultiValueMap<String,String> requestBody = new LinkedMultiValueMap<>();
+		requestBody.add("id", map.get("id").toString());
+		requestBody.add("message", map.get("message").toString());
+		HttpEntity httpEntity = new HttpEntity<>(requestBody);
+		ResponseEntity<String> responseEntity =
+				restTemplate.exchange(uri, HttpMethod.GET,httpEntity, String.class);
+		
+		return responseEntity.getBody();
 	}
 
 
