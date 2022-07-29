@@ -42,10 +42,4 @@ public class ChatRoomController {
     public List<ChatingMessageDTO> getRoom(@RequestParam Map map){
         return template.selectList("chatroomslistone", map);
     }
-	
-	//채팅메시지 보내기
-	@GetMapping("/message/{roomno}")
-    public ChatingMessageDTO getMessage(@PathVariable String roomno,@RequestParam ChatingMessageDTO map){
-        return map;
-    }
 }
