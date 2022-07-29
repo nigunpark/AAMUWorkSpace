@@ -63,8 +63,9 @@ class Imgcrawll(Resource):
                 url='http://192.168.0.19/aamurest/img/upload'
                 #headers={'Content-Type': 'application/json; charset=utf-8'}
                 file = {"file":open(file,'rb')}
+                params = {'contentid':contentid}
                 #res = requests.post(url,headers=headers,data={'contentid':contentid},file=file)
-                requests.post(url, data={'contentid': contentid}, files=file)
+                requests.post(url, params=params, files=file)
                 print(res)
 
             except Exception as e:
