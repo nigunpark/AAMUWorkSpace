@@ -53,15 +53,8 @@ const MyHomeBox = ({ setClickTab, planList, rbn, setSelectRbn }) => {
       ) : null}
 
       <div className="MyBoxContainer" onClick={onModalSelect}>
-        {/*  className="project-box-wrapper" */}
-        {/* <div className="project-box"> */}
-
         <div className="MyBox">
-          <img
-            className="instaImg"
-            src={planList.smallImage}
-            // style={{ marginTop: "10px" }}
-          />
+          <img className="instaImg" src={planList.smallImage} />
           <div style={{ fontSize: "20px" }}>{planList.title}</div>
 
           <div>
@@ -70,58 +63,6 @@ const MyHomeBox = ({ setClickTab, planList, rbn, setSelectRbn }) => {
 
           <div style={{ marginLeft: "170px" }}>{dateFormat(postDate)}</div>
         </div>
-
-        {/*  */}
-
-        {/* <div className="box-progress-wrapper">
-          <p
-            className="box-progress-header"
-            style={{ marginTop: "10px", marginBottom: "10px" }}
-          >
-            여행 제목 : {planList.title}
-          </p>
-          <p className="box-progress-header" style={{ marginBottom: "10px" }}>
-            저장 날자 : {dateFormat(postDate)}
-          </p>
-          <p className="box-progress-header">
-            {planList.plannerdate} (rbn :{rbn})
-          </p>
-        </div>
-
-        <div className="project-box-footer" style={{ marginTop: "5px" }}>
-          <div className="detail-button">
-            <button
-              className="learn-more"
-              type="button"
-              onClick={() => {
-                setClickTab(10);
-                setSelectRbn(rbn);
-              }}
-            >
-              공유하기
-            </button>
-          </div>
-          <div className="detail-button">
-            <button
-              className="learn-more"
-              type="button"
-              style={{ marginTop: "20px" }}
-              onClick={() => {
-                excAxios(rbn, setNewFromWooJae, dispatch, setCurrPosition);
-                // getTimeSetArr(newFromWooJae, planList, setNewTimeSet, please);
-                setTimeout(() => {
-                  setIsOpen(true);
-                }, 100);
-              }}
-            >
-              일정보기
-            </button>
-          </div>
-        </div> */}
-
-        {/*  */}
-
-        {/* </div> */}
       </div>
       {isOpen && (
         <MyDetailPlan
