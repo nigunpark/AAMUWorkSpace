@@ -22,7 +22,7 @@
 	<select id="chatroomslistone" parameterType="Map" resultType="chatingMessageDTO">
 		SELECT c.*,u.USERPROFILE authpro FROM CHATINGMESSAGE c
 		JOIN users u ON c.AUTHID = u.ID
-		WHERE c.ROOMNO = #{roomno} ORDER BY SENDDATE
+		WHERE c.ROOMNO = #{roomno} ORDER BY ROWNUM DESC
 	</select>
 	
 	<insert id="message" parameterType="chatingMessageDTO">

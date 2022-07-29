@@ -32,7 +32,7 @@ class Imgcrawll(Resource):
             if title.find('[') != -1:
                 title = title.split('[')[0]
             print(title)
-
+            title = '숙소 '+title
             url = 'https://www.google.com/search?q=' + title + '&source=lnms&tbm=isch'
             selector = '#islrg > div.islrc > div:nth-child(2) > a.wXeWr.islib.nfEiy > div.bRMDJf.islir > img'
 
