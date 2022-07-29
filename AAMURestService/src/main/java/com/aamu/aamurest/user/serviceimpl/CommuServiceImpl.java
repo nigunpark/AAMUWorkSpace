@@ -100,6 +100,7 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 	//글 생성용
 	@Override
 	public int commuInsert(Map map) {
+		//map에 tname있음
 		//commu
 		int commuaffected=dao.commuInsert(map);
 		//사진
@@ -119,20 +120,9 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 		}
 		
 		//태그 저장
-		//tname이라는 키값으로 tname:#서울#서울여행이 넘어온다...
+		int tagAffected=0;
 		if(map.get("tname")!=null) {
-			String tnameString=map.get("tname").toString(); //#서울#서울여행 통으로 넘어오면
-			String[] tnameArr = tnameString.split("#"); //[null,서울,서울여행]
-			for(int i=1; i<tnameArr.length;i++) {
-				map.put("tname", tnameArr[i]);//이러면 tname:#서울 그 다음 for문돌면 tname:#서울여행 들어있나??????
-				System.out.println("서비스 tname첫번재방:"+tnameArr[1]);
-				System.out.println("tname에 들어있니?"+map.get("tname")); //서울
-				int tno=dao.selectTno(map); //tno를 구했음
-				map.put("tno", tno);
-				dao.commuTagInsert(map);
-				
-			}
-			
+			tagAffected=insertCommuTagTb(map); //메소드호출
 		}
 
 		if(commuaffected==1 && photoAffected==((List)map.get("photolist")).size())
@@ -182,6 +172,17 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 		CommuDTO dto=dao.commuSelectOne(lno);
 		List<CommuCommentDTO> list=dao.commuCommentList(lno);
 		dto.setCommuCommentList(list);
+		//태그 셋팅
+		int CountTag=dao.selectCountCommuTag(lno);
+		if(CountTag>0) {
+			List<String> tagList=dao.commuSelectTagName(lno); //서울,서울여행 이니까 #붙여야됨
+			List<String> sharptTagList = new Vector<>();
+			for(String tag:tagList) {
+				String sharpTag="#"+tag; //#서울을 붙이기
+				sharptTagList.add(sharpTag); //새로운 배열에 담아서 전달
+			}
+			dto.setTname(sharptTagList);
+		}
 		return dto;
 	}
 
@@ -205,11 +206,24 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 		affected = transactionTemplate.execute(tx->{
 			int affectedCommuUpdate=dao.commuUpdate(map);
 			dao.commuPlaceUpdate(map);
+			
+			//태그 수정
+			if(map.get("tname")!=null) { //tname키값으로 tag가 넘어왔을 때
+				int CountTag=dao.selectCountCommuTag(map.get("lno").toString());//commutag테이블 count
+				if(CountTag==0) {//CountTag카운트가 0이면 insert만
+					insertCommuTagTb(map);
+				}
+				else {//CountTag카운트가 0이 아니다 delete 후 insert
+					dao.commuDeleteCommuTag(map);
+					insertCommuTagTb(map);
+				}
+			}/////if
+			else {
+				dao.commuDeleteCommuTag(map);
+			}
 			return affectedCommuUpdate;
-
 		});
 		return affected;
-
 	}
 
 	//글 수정용_commuplace 수정
@@ -236,6 +250,9 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 			dao.commuDelete(map);
 
 			map.put("table", "likeboard");
+			dao.commuDelete(map);
+			
+			map.put("table", "commutag");
 			dao.commuDelete(map);
 
 			map.put("table", "community");
@@ -285,42 +302,7 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 		});
 		return affected;
 	}
-
-	//댓글 삭제용_Rcount컬럼 -1
-	/*
-	@Override
-	public int commuRcMinusUpdate(Map map) {
-		return dao.commuRcMinusUpdate(map);
-	}
-
-	*/
 	
-	//글 좋아요 전체리스트
-	/*
-	@Override
-	public int commuLike(Map map) {
-		//likeboard테이블 select count(*)~where id=좋아요누른id
-		int commuLikeSelectAffected=dao.commuLikeSelect(map); //1이면 좋아요누른id가 존재하는거 0이면 처음누른거
-		int commuLikeInsertAffected, commuLikeUpdateAffected, commuLikeDeleteAffected=0;
-		Map resultMap = new HashMap();
-		//글 좋아요_insert(likeboard 테이블),update(community테이블의 likecount+1)
-		if(commuLikeSelectAffected==0) {//0이면 해당id로 처음 누른거니까 likeboard-insert community-update 둘다 진행
-			//likeboard테이블에 insert
-			commuLikeInsertAffected=dao.commuLikeInsert(map);
-			//community테이블의 likecount update
-			commuLikeUpdateAffected=dao.commuLikePlusUpdate(map);
-			if(commuLikeInsertAffected==1 && commuLikeUpdateAffected==1) return 1;
-			else return 0;
-		}
-		//글 좋아요 취소_delete(likeboard테이블),update(community테이블의 likecount-1)
-		else {//이미 likeboard테이블에 있는데 또 눌렀다는거 == 좋아요 취소
-			commuLikeDeleteAffected=dao.commuLikeDelete(map);
-			commuLikeUpdateAffected=dao.commuLikeMinusUpdate(map);
-			if(commuLikeDeleteAffected==1 && commuLikeUpdateAffected==1) return 1;
-			else return 0;
-		}
-	}*/
-
 	//글 좋아요 전체리스트
 	@Override
 	public Boolean commuLike(Map map) {
@@ -346,13 +328,28 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 		}
 	}
 
-
 	//글 좋아요_selectOne(community테이블의 likecount)
 	@Override
 	public int commuLikecountSelect(Map map) {
 		return dao.commuLikecountSelect(map);
 	}
-
-
+	
+	////////////////////////////////////////////////////////공통 메소드
+	
+	//insertCommuTag 메소드
+	public int insertCommuTagTb(Map map) {
+		int affected=0;
+		String tnameString=map.get("tname").toString();
+		String[] tnameArr = tnameString.split("#");
+		for(int i=1; i<tnameArr.length;i++) {
+			map.put("tname", tnameArr[i]);
+			System.out.println("메소드 타니?"+map.get("tname"));
+			int tno=dao.selectTnoOfTags(map);
+			map.put("tno", tno);
+			System.out.println("메소드 타니? tno"+map.get("tno"));
+			affected=dao.commuInsertCommuTag(map);
+		}
+		return affected;
+	}
 
 }

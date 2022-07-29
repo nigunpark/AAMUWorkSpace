@@ -36,15 +36,7 @@ public class CommuDAO {
 		return template.selectOne("commuTotalCount",map);
 	}
 	
-	//글 목록용_CommuTag에 레코드값
-	public int selectCountCommuTag(String lno) {
-		return template.selectOne("selectCountCommuTag",lno);
-	}
 	
-	//글 목록용_tname 얻기
-	public List<String> commuSelectTagName(String lno){
-		return template.selectList("commuSelectTagName",lno);
-	}
 	
 	//글 검색용
 	public List<String> commuSearachList(Map map){
@@ -80,32 +72,6 @@ public class CommuDAO {
 		return template.selectOne("commuSelectAfterInsert");
 	}
 	*/
-	
-	//글 생성용_태그 뿌려주기!!!!!!!!!!!!!!!!!!!
-	public List<String> commuSelectTag(Map map) {
-		return template.selectList("commuSelectTag",map);
-	}
-	
-	//글 생성용_커뮤태그 테이블에 넣기!!!!!!!!!!!!!!!!!!!!!!1
-	public int commuInsertCommuTag(Map map) {
-		return template.insert("commuInsertCommuTag",map);
-	}
-	
-	//글 생성용_태그 테이블에 넣기 !!!!!!!!!!!!!!!!!!
-	public int commuInsertTags(Map map) {
-		return template.insert("commuInsertTags",map);
-	}
-	
-	//글 생성용_commuTag 테이블에 넣기!!!!!!!!!!!!!!!!~~~~~~~~~~~~~~~~~~
-	public int commuTagInsert(Map map) {
-		return template.insert("commuTagInsert",map);
-	}
-	
-	//글 생성용_tno 가져오기
-	public int selectTno(Map map) {
-		System.out.println("(dao)tname에 들어있니?"+map.get("tname"));
-		return template.selectOne("selectTno",map);
-	}
 
 	//글 하나 뿌려주는 용
 	public CommuDTO commuSelectOne(String lno) {
@@ -131,6 +97,13 @@ public class CommuDAO {
 	public int commuPlaceUpdate(Map map) {
 		return template.update("commuPlaceUpdate",map);
 	}
+	
+	//글 수정용_commutag의 tno 얻어오기 
+	/*
+	public List selectTnoOfCommuTag(Map map) {
+		return template.selectList("selectTnoOfCommuTag",map);
+	}
+	*/
 
 	//글 삭제용
 	public int commuDelete(Map map) {
@@ -190,6 +163,43 @@ public class CommuDAO {
 	//글 좋아요취소_update(community테이블의 likecount+1)
 	public int commuLikeMinusUpdate(Map map) {
 		return template.delete("commuLikeMinusUpdate",map);
+	}
+	
+	////////////////////////////////////////////////////////////////////태그
+	
+	//글 목록용_CommuTag에 레코드값
+	public int selectCountCommuTag(String lno) {
+		return template.selectOne("selectCountCommuTag",lno);
+	}
+	
+	//글 목록용_tname 얻기
+	public List<String> commuSelectTagName(String lno){
+		return template.selectList("commuSelectTagName",lno);
+	}
+	
+	//tags테이블에 tno 셀렉트
+	public int selectTnoOfTags(Map map) {
+		return template.selectOne("selectTnoOfTags",map);
+	}
+	
+	//글 생성용_태그 뿌려주기!!!!!!!!!!!!!!!!!!!
+	public List<String> commuSelectTag(Map map) {
+		return template.selectList("commuSelectTag",map);
+	}
+	
+	//글 생성용_태그 테이블에 넣기 !!!!!!!!!!!!!!!!!!
+	public int commuInsertTags(Map map) {
+		return template.insert("commuInsertTags",map);
+	}
+	
+	//글 생성용_commuTag 테이블에 넣기!!!!!!!!!!!!!!!!~~~~~~~~~~~~~~~~~~
+	public int commuInsertCommuTag(Map map) {
+		return template.insert("commuInsertCommuTag",map);
+	}
+	
+	//commutag테이블에 lno에 따른 레코드 삭제
+	public int commuDeleteCommuTag(Map map) {
+		return template.delete("commuDeleteCommuTag",map);
 	}
 
 

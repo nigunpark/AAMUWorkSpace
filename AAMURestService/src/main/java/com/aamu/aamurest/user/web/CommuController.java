@@ -74,7 +74,6 @@ public class CommuController {
 			if(map.keySet().contains("searchColumn")) { 
 				dto.setTotalCount(commuService.commuTotalCount(map));
 			}
-			
 			if(commentdto!=null) {
 				commentdto.setUserprofile(FileUploadUtil.requestOneFile(commuService.commuSelectUserProf(commentdto.getId()), "/resources/commuUpload", req));
 			}
@@ -188,7 +187,6 @@ public class CommuController {
 			commentDto.setUserprofile(FileUploadUtil.requestOneFile(commuService.commuSelectUserProf(commentDto.getId()), "/resources/commuUpload", req));
 		}
 		dto.setCommuCommentList(commentList);
-
 		return dto;
 	}
 
@@ -212,7 +210,6 @@ public class CommuController {
 		System.out.println("글수정 map:"+map);
 		int affected=commuService.commuUpdate(map);
 		Map resultMap = new HashMap<> ();
-
 		if(affected==1) resultMap.put("isSuccess", true);
 		else resultMap.put("isSuccess", false);
 		return resultMap;
@@ -335,6 +332,9 @@ public class CommuController {
 		}
 		return resultMap;
 	}
+	
+	//태그 가져오는 메소드 
+	
 
 
 }
