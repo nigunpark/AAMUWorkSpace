@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.aamu.aamurest.user.service.AttractionDTO;
 import com.aamu.aamurest.user.service.MainService;
@@ -572,7 +573,14 @@ public class MainController {
 		return map;
 
 	}
-
+	@PostMapping("/img/upload")
+	public int imgUpload(@RequestParam Map map,@RequestParam MultipartFile file) {
+		int affected = 0;
+		System.out.println(map.get("contentid"));
+		System.out.println(file);
+		
+		return affected;
+	}
 
 
 }
