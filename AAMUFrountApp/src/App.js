@@ -17,6 +17,7 @@ import JoinStep1 from "./components/Join/JoinStep1.js";
 import JoinStep2 from "./components/Join/JoinStep2.js";
 import SearchList from "./components/Insta/SearchList";
 import Chat from "./components/Chat/Chat";
+import QnA from "./components/QnA/QnA";
 
 function App() {
   let location = useLocation();
@@ -45,6 +46,7 @@ function App() {
           <Route path="/WholeMap" element={<WholeMap />} />
           <Route path="/mainPage/:currPosition" element={<MainPage />} />
           <Route path="/forum" element={<Forum />} />
+          <Route path="/qna" element={<QnA />} />
 
           {/* <Route path="/review" element={<Board />} /> */}
           {/* <Route path="/Insta" element={<Main />} /> */}
@@ -92,10 +94,7 @@ function App() {
         <Route path="/test" element={<Test />} />
         <Route path="/Detailmodal" element={<DetailModal />} />
 
-        <Route
-          path="/oauth/callback/kakao"
-          element={<KakaoRedirectHandler />}
-        />
+        <Route path="/oauth/callback/kakao" element={<KakaoRedirectHandler />} />
       </Routes>
     </div>
   );
@@ -106,7 +105,8 @@ function changeLocation(location, setWhereUrl) {
     location.pathname.indexOf("forum") === 1 ||
     location.pathname.indexOf("login") === 1 ||
     location.pathname.indexOf("myPage") === 1 ||
-    location.pathname.indexOf("Insta") === 1
+    location.pathname.indexOf("Insta") === 1 ||
+    location.pathname.indexOf("qna") === 1
   )
     setWhereUrl(true);
   else setWhereUrl(false);
