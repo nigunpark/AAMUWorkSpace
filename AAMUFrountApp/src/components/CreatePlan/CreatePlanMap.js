@@ -5,12 +5,7 @@ import axios from "axios";
 const { kakao } = window;
 let markersArr = [];
 let polylineArr = [];
-const CreatePlanMap = ({
-  currPosition,
-  fromWooJaeData,
-  forDayLine,
-  setSavePlan,
-}) => {
+const CreatePlanMap = ({ currPosition, fromWooJaeData, forDayLine, setSavePlan }) => {
   let [lat, setLat] = useState("");
   let [lng, setLng] = useState("");
   let [cMap, setCMap] = useState(null);
@@ -29,18 +24,15 @@ const CreatePlanMap = ({
     map = new kakao.maps.Map(cMapRef.current, mapOption);
     let geocoder = new kakao.maps.services.Geocoder();
     // 주소로 좌표를 검색합니다
-    geocoder.addressSearch(
-      reduxState.saveDaysNPickedSuksoRedux[0].addr,
-      (result, status) => {
-        // 정상적으로 검색이 완료됐으면
-        if (status === kakao.maps.services.Status.OK) {
-          let coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-          setLat(result[0].y);
-          setLng(result[0].x);
-          map.panTo(coords);
-        }
+    geocoder.addressSearch(reduxState.saveDaysNPickedSuksoRedux[0].addr, (result, status) => {
+      // 정상적으로 검색이 완료됐으면
+      if (status === kakao.maps.services.Status.OK) {
+        let coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+        setLat(result[0].y);
+        setLng(result[0].x);
+        map.panTo(coords);
       }
-    );
+    });
     map.setMaxLevel(10);
     setCMap(map);
     map.relayout();
@@ -60,22 +52,11 @@ const CreatePlanMap = ({
       cMap.setCenter(newCoords);
     });
   }, []);
-  // console.log("fromWooJaeData(map)", fromWooJaeData);
   useEffect(() => {
-    // cMap.relayout();
     if (cMap === null) return;
-
     let linePath = [];
     let forMarkers = [];
-    const colors = [
-      "red",
-      "green",
-      "deepskyblue",
-      "blue",
-      "deeppink",
-      "indigo",
-      "black",
-    ];
+    const colors = ["red", "green", "deepskyblue", "blue", "deeppink", "indigo", "black"];
     if (fromWooJaeData.length !== 0) {
       reduxState.tripPeriod.map((val, index) => {
         let tempArr = [];

@@ -23,3 +23,30 @@
   color: white;
   margin-right: 2px;
 }
+.chatBotContent {
+  overflow-y: auto;
+  width: 100%;
+  height: auto;
+  padding: 5px;
+  display: flex;
+  flex-direction: column;
+  /* border: 1px solid red; */
+  padding: 10px 5px;
+}
+
+.chatBotBox {
+  text-align: start;
+  margin-top: 15px;
+}
+.mine {
+  text-align: end;
+}
+.chatBotBox__span {
+  background-color: var(--blueWhite);
+  box-shadow: var(--lightShadow);
+  padding: 5px;
+  border-radius: 5px;
+}
+.chatBotContent::-webkit-scrollbar {
+  width: 4px;
+}

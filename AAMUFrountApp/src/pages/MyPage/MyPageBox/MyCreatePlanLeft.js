@@ -160,7 +160,6 @@ function WholeSchedule({ currPosition, fromWooJaeData, setFromWooJaeData, timeSe
   useEffect(() => {
     dispatch(delAllWholeBb([]));
     dispatch(delAllTimeSetObj([]));
-    console.log("tripPeriod", reduxState.tripPeriod);
   }, []);
 
   return (

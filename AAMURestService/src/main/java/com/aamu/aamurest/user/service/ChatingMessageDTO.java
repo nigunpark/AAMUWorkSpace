@@ -13,6 +13,6 @@ public class ChatingMessageDTO {
 	private int roomno;
 	private String authid;
 	private String missage;
-	private Date senddate;
+	private long senddate;
 	private String authpro; 
 }
