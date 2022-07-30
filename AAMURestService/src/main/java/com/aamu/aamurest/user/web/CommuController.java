@@ -47,6 +47,7 @@ public class CommuController {
 	@GetMapping("/gram/selectList")
 	public List<CommuDTO> commuSelectList(@RequestParam Map map, HttpServletRequest req){
 		//검색할 때는 맵으로 써치워드 써치컬럼을 받고, id는 isLike때문에 받는거다. lno는 dto에서 뽑아온다
+		//cid가 넘어오면 마이페이지 id에 따른 글 뿌려주기
 		System.out.println("셀렉트 리스트 id:"+map.get("id"));
 		System.out.println("셀렉트 리스트 searchColumn:"+map.get("searchColumn"));
 		System.out.println("셀렉트 리스트 searchWord:"+map.get("searchWord"));
@@ -54,11 +55,15 @@ public class CommuController {
 		//list=글 목록들
 		List<CommuDTO> list = commuService.commuSelectList(map);
 		for(CommuDTO dto : list) {//글 목록들 list에서 하나씩 꺼내서 dto에 담는다
-			//코멘트 셋팅
+			//코멘트한개 셋팅 
 			dto.setCommuComment(commuService.commuCommentSelectOne(dto.getLno()));
 			//코멘트의 프로필 셋팅
 			CommuCommentDTO commentdto=dto.getCommuComment();
-			//커뮤태그에 레코드 1상이면 태그네임 셋팅하기 
+			//전체 코멘트 셋팅
+			//모든 댓글 가져오기
+			List<CommuCommentDTO> commentList=commuService.commuCommentList(dto.getLno());
+			dto.setCommuCommentList(commentList);
+			//커뮤태그에 레코드 1이상이면 태그네임 셋팅하기 
 			int CountTag=commuService.selectCountCommuTag(dto.getLno());
 			if(CountTag>0) {
 				List<String> tagList=commuService.commuSelectTagName(dto.getLno()); //서울,서울여행 이니까 #붙여야됨
@@ -72,8 +77,9 @@ public class CommuController {
 			//토탈카운트
 			//System.out.println("포함되어있냐"+map.keySet().contains("searchColumn"));
 			if(map.keySet().contains("searchColumn")) { 
-				dto.setTotalCount(commuService.commuTotalCount(map));
+				dto.setSearchtotalcount(commuService.commuSearchTotalCount(map));
 			}
+			//코멘트 프로필사진 셋팅
 			if(commentdto!=null) {
 				commentdto.setUserprofile(FileUploadUtil.requestOneFile(commuService.commuSelectUserProf(commentdto.getId()), "/resources/commuUpload", req));
 			}
@@ -95,7 +101,7 @@ public class CommuController {
 		return list;
 	}
 	*/
-	//글 검색용_id,title,tag로 검색
+	//글 검색용_searchColumn:id,ctitle,tname로 검색
 	@GetMapping("/gram/search/selectList")
 	public List<String> commuSearachList(@RequestParam Map map){
 		System.out.println("검색 searchColumn:"+map.get("searchColumn"));
@@ -187,6 +193,7 @@ public class CommuController {
 			commentDto.setUserprofile(FileUploadUtil.requestOneFile(commuService.commuSelectUserProf(commentDto.getId()), "/resources/commuUpload", req));
 		}
 		dto.setCommuCommentList(commentList);
+		System.out.println("셀렉트원 디티오 넘어가니:"+dto);
 		return dto;
 	}
 
@@ -320,7 +327,7 @@ public class CommuController {
 		//community테이블의 selectone likecount
 		int likecount=commuService.commuLikecountSelect(map);
 		Map resultMap = new HashMap();
-		if(affected) {
+		if(affected) { //true면
 			resultMap.put("isLike", true);
 			resultMap.put("likecount", likecount);
 			resultMap.put("lno", map.get("lno"));
@@ -333,7 +340,18 @@ public class CommuController {
 		return resultMap;
 	}
 	
-	//태그 가져오는 메소드 
+	//팔로우, 팔로잉 
+	@PostMapping("/gram/follower")
+	public Map commuFollower(@RequestBody Map map) {
+		//map에 id:로그인한사람이 누른 id follower:내 id
+		int affected=commuService.commuFollower(map);
+		Map resultMap = new HashMap();
+		if(affected==1) resultMap.put("isSuccess", true);
+		else resultMap.put("isSuccess", false);
+		return resultMap;
+	}
+	
+	//마이페이지용_id에 따른 
 	
 
 
