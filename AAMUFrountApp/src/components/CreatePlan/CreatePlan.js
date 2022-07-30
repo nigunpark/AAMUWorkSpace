@@ -4,17 +4,8 @@ import CreatePlanMap from "./CreatePlanMap";
 import CreatePlanLeft from "./CreatePlanLeft.js";
 import { faRectangleXmark, faX } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faCalendarPlus,
-  faFileExcel,
-} from "@fortawesome/free-regular-svg-icons";
-import {
-  DimmedContainer,
-  Modal,
-  TitleBar,
-  Contents,
-  CloseBtn,
-} from "./CratePlanModal";
+import { faCalendarPlus, faFileExcel } from "@fortawesome/free-regular-svg-icons";
+import { DimmedContainer, Modal, TitleBar, Contents, CloseBtn } from "./CratePlanModal";
 import {
   AuSBtn,
   AusBtnContainer,
@@ -29,12 +20,7 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { saveAs } from "file-saver";
 import * as ExcelJS from "exceljs";
-const CreatePlan = ({
-  setShowCratePlan,
-  currPosition,
-  fromWooJaeData,
-  setFromWooJaeData,
-}) => {
+const CreatePlan = ({ setShowCratePlan, currPosition, fromWooJaeData, setFromWooJaeData }) => {
   const [forDayLine, setForDayLine] = useState(0);
   const [savePlan, setSavePlan] = useState(false);
   const [auSure, setAuSure] = useState(false);
@@ -63,12 +49,7 @@ const CreatePlan = ({
               setFromWooJaeData={setFromWooJaeData}
               setForDayLine={setForDayLine}
             />
-            {auSure && (
-              <AuSureModal
-                setShowCratePlan={setShowCratePlan}
-                setAuSure={setAuSure}
-              />
-            )}
+            {auSure && <AuSureModal setShowCratePlan={setShowCratePlan} setAuSure={setAuSure} />}
             <CreatePlanMap
               setSavePlan={setSavePlan}
               currPosition={currPosition}
@@ -114,8 +95,7 @@ const SavePlan = ({ setSavePlan, fromWooJaeData, currPosition }) => {
             onClick={(e) => {
               e.stopPropagation();
               let bol = window.confirm("일정을 저장하시겠습니까?");
-              if (bol)
-                savePlan(reduxState, currPosition, fromWooJaeData, navigate);
+              if (bol) savePlan(reduxState, currPosition, fromWooJaeData, navigate);
             }}
           >
             <FontAwesomeIcon icon={faCalendarPlus} className="savePlan__icon" />
@@ -125,6 +105,7 @@ const SavePlan = ({ setSavePlan, fromWooJaeData, currPosition }) => {
             className="savePlan__icon-container"
             onClick={(e) => {
               e.stopPropagation();
+              savePlan(reduxState, currPosition, fromWooJaeData, navigate);
               handleExcel(fromWooJaeData, reduxState, currPosition);
             }}
           >
@@ -149,9 +130,10 @@ const handleExcel = async (fromWooJaeData, reduxState, currPosition) => {
   reduxState.tripPeriod.map((val, i) => {
     if (i === 0 || i === reduxState.tripPeriod.length - 1)
       plannerDate.push(
-        `${reduxState.monthNdate[0].month}월 ${
-          reduxState.monthNdate[0].date + i
-        }일 ${getDow(reduxState, i)}`
+        `${reduxState.monthNdate[0].month}월 ${reduxState.monthNdate[0].date + i}일 ${getDow(
+          reduxState,
+          i
+        )}`
       );
   });
 
@@ -159,9 +141,9 @@ const handleExcel = async (fromWooJaeData, reduxState, currPosition) => {
   const workSheet = workBook.addWorksheet("MyTravel"); // sheet 이름이 My Sheet
   //타이틀
   workSheet.mergeCells("B1:F1");
-  workSheet.getCell("B1").value = `${currPosition} ${
-    reduxState.tripPeriod.length - 1
-  }박 ${reduxState.tripPeriod.length}일 여행`;
+  workSheet.getCell("B1").value = `${currPosition} ${reduxState.tripPeriod.length - 1}박 ${
+    reduxState.tripPeriod.length
+  }일 여행`;
   workSheet.getCell("B1").font = { size: 16, bold: true };
   workSheet.getCell("B1").alignment = { horizontal: "center" };
   workSheet.getCell("B1").fill = {
@@ -236,7 +218,8 @@ const handleExcel = async (fromWooJaeData, reduxState, currPosition) => {
     let dayData = xlData.filter((val) => {
       return val.day === i + 1;
     });
-
+    console.log("dayData", dayData);
+    console.log("dayWholeBb", dayWholeBb);
     let data = [];
     dayWholeBb.forEach((val, idx) => {
       data.push({
@@ -298,9 +281,10 @@ const savePlan = (reduxState, currPosition, fromWooJaeData, navigate) => {
   reduxState.tripPeriod.map((val, i) => {
     if (i === 0 || i === reduxState.tripPeriod.length - 1)
       plannerDate.push(
-        `${reduxState.monthNdate[0].month}월 ${
-          reduxState.monthNdate[0].date + i
-        }일 ${getDow(reduxState, i)}`
+        `${reduxState.monthNdate[0].month}월 ${reduxState.monthNdate[0].date + i}일 ${getDow(
+          reduxState,
+          i
+        )}`
       );
   });
   // console.log("toWoo", toWoo);
@@ -326,9 +310,7 @@ const savePlan = (reduxState, currPosition, fromWooJaeData, navigate) => {
         title: `${currPosition} ${reduxState.tripPeriod.length - 1}박 ${
           reduxState.tripPeriod.length
         }일`,
-        plannerdate: `${plannerDate[0]} ~ ${
-          plannerDate[plannerDate.length - 1]
-        }`,
+        plannerdate: `${plannerDate[0]} ~ ${plannerDate[plannerDate.length - 1]}`,
         route: toWoo,
         id: sessionStorage.getItem("username"),
       },
