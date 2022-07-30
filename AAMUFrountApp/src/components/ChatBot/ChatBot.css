@@ -35,11 +35,11 @@
 }
 
 .chatBotBox {
-  text-align: start;
+  text-align: end;
   margin-top: 15px;
 }
-.mine {
-  text-align: end;
+.bot {
+  text-align: start;
 }
 .chatBotBox__span {
   background-color: var(--blueWhite);

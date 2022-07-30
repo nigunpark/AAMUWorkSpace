@@ -20,7 +20,7 @@ public interface CommuService<T> {
 	//Boolean commuIsLike(Map map);
 	
 	//글 목록용_토탈카운트 
-	int commuTotalCount(Map map);
+	int commuSearchTotalCount(Map map);
 	
 	//글 목록용_CommuTag에 레코드값
 	int selectCountCommuTag(String lno);
@@ -90,6 +90,9 @@ public interface CommuService<T> {
 
 	//글 좋아요_selectOne(community테이블의 likecount)
 	int commuLikecountSelect(Map map);
+	
+	//팔로우, 팔로잉
+	int commuFollower(Map map);
 
 
 }

@@ -11,6 +11,8 @@ public class ChatRoomDTO {
 	private int roomno;
 	private String fromid;
 	private String toid;
+	private String lastmessage;
+	private long senddate;
 	private String frompro;
 	private String topro;
 }

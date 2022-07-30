@@ -472,6 +472,8 @@ public class MainServiceImpl implements MainService{
 		int day =0;
 		for(PlannerDTO dto:list) {
 			List<RouteDTO> routes = dao.selectRouteList(dto.getRbn());
+			dto.setIsBBS(dao.countRouteBBS(dto.getRbn()));
+			System.out.println("isBBS의 값:"+dto.getIsBBS());
 			dto.setRoute(routes);
 			for(RouteDTO route:routes) {
 				route.setDto(dao.selectOnePlace(route.getContentid()));
@@ -541,6 +543,11 @@ public class MainServiceImpl implements MainService{
 		}
 		
 		return returnList;
+	}
+	@Override
+	public int searchPlanner(String message) {
+		
+		return dao.searchPlanner(message);
 	}
 
 

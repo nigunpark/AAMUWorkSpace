@@ -13,6 +13,9 @@
 		<if test="searchColumn != null">
   	 		WHERE ${searchColumn} LIKE '%'||#{searchWord}||'%' 
   	 	</if>
+  	 	<if test="cid != null">
+  	 		WHERE id=#{cid}
+  	 	</if>
 		ORDER BY c.lno DESC
 	</select>
 	
@@ -27,8 +30,8 @@
 	</select>
 	
 	<!-- 글 목록용_검색 총 게시물수 -->
-	<select id="commuTotalCount" parameterType="Map" resultType="int">
-		SELECT COUNT(*) FROM community WHERE ${searchColumn}=#{searchWord}
+	<select id="commuSearchTotalCount" parameterType="Map" resultType="int">
+		SELECT COUNT(*) FROM community c WHERE ${searchColumn}=#{searchWord}
 	</select>
 	
 	
@@ -167,6 +170,11 @@
 	<update id="commuLikeMinusUpdate" parameterType="Map">
 		UPDATE community SET likecount=likecount-1 WHERE lno=#{lno}
 	</update>
+	
+	<!-- 팔로우, 팔로잉 -->
+	<insert id="commuFollower" parameterType="Map">
+		INSERT INTO follower VALUES (#{id},#{follower})
+	</insert>
 	
 	<!-- @@@@@@@@@@@@@@@@@@@@@@@@@@@@@태그@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ -->
 	

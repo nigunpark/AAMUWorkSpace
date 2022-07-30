@@ -15,6 +15,7 @@ function Main({
   forReRender,
   setForReRender,
 }) {
+  const [showChat, setShowChat] = useState(false);
   function feedList() {
     //백이랑 인스타 리스드를 뿌려주기 위한 axios
     let token = sessionStorage.getItem("token");

@@ -134,5 +134,11 @@
 	<update id="updateImage" parameterType="Map">
 		UPDATE places SET smallimage=#{smallimage} WHERE contentid=#{contentid}
 	</update>
+	<select id="countRouteBBS" parameterType="int" resultType="int">
+		SELECT COUNT(*) FROM routebbs where rbn=#{rbn}
+	</select>
+	<select id="searchPlanner" parameterType="String" resultType="int">
+		SELECT rbn FROM routebbs WHERE rbn in(SELECT rbn from routeboard WHERE title LIKE '%'||#{message}||'%')
+	</select>
 
 </mapper>

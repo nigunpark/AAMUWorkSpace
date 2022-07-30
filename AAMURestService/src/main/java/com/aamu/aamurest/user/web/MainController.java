@@ -589,17 +589,40 @@ public class MainController {
 		return affected;
 	}
 	@PostMapping("/main/chatbot")
-	public String mainChatbot(@RequestBody Map map) {
-		
+	public Map mainChatbot(@RequestBody Map map) {
+		System.out.println(map);
 		String uri="http://192.168.0.19:5020/message";
 		MultiValueMap<String,String> requestBody = new LinkedMultiValueMap<>();
+		HttpHeaders header = new HttpHeaders();
+		header.add("Content-Type", "application/json");
 		requestBody.add("id", map.get("id").toString());
 		requestBody.add("message", map.get("message").toString());
-		HttpEntity httpEntity = new HttpEntity<>(requestBody);
-		ResponseEntity<String> responseEntity =
-				restTemplate.exchange(uri, HttpMethod.GET,httpEntity, String.class);
+		HttpEntity httpEntity = new HttpEntity<>(requestBody,header);
+
+		ResponseEntity<Map> responseEntity =
+				restTemplate.exchange(uri, HttpMethod.POST,httpEntity, Map.class);
 		
-		return responseEntity.getBody();
+		System.out.println(responseEntity.getBody());
+		Map returnMap = responseEntity.getBody();
+		String message = returnMap.get("message").toString();
+		returnMap.put("bool", true);
+		int rbn = 0;
+		if(message.contains("searchRoute")) {
+			message = message.split("searchRoute")[0].trim();
+			System.out.println(message);
+			rbn = service.searchPlanner(message);
+			if(rbn == 0) message = "죄송합니다 알맞은 플래너가 없습니다";
+			else message = "/forum/"+rbn;
+			
+			returnMap.put("message", message);
+		}
+		else if(message.contains("searchPlace")){
+			message = message.split("searchPlace")[0].trim();
+
+			if(rbn == 0) message = "죄송합니다 해당 하는 장소를 찾을수 없네요";
+			else message = "/forum/"+rbn;
+		}
+		return returnMap;
 	}
 
 

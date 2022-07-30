@@ -31,10 +31,7 @@ function User({ setlist, setloading, searchb, setSearchb, inputValue, setinputVa
   function searchBar(e) {
     //백이랑 인스타 리스드를 뿌려주기 위한 axios
     console.log("inputValue", inputValue);
-    console.log("searchb", searchb);
     setinputValue(e.target.value);
-    if (searchb === "choice") return alert("무엇으로 검색할지 선택해주세요!");
-    if (inputValue === undefined || inputValue === "") return alert("검색내용을 입력해주세요!");
     if (e.keyCode != 13) return;
     let token = sessionStorage.getItem("token");
     axios
@@ -50,257 +47,257 @@ function User({ setlist, setloading, searchb, setSearchb, inputValue, setinputVa
       .then((resp) => {
         console.log(resp.data);
         setSearchb(resp.data);
+
+        navigater("/Insta/searchList");
+      })
+      .catch((error) => {
+        console.log(error);
       });
+  }
 
-    function searchBarModal() {
-      //백이랑 인스타 리스드를 뿌려주기 위한 axios
-      if (searchb === "choice") return;
-      if (inputValue === undefined || inputValue === "") return;
-      //  if (e.keyCode != 13) return;
-      let token = sessionStorage.getItem("token");
-      axios
-        .get("/aamurest/gram/search/selectList", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          params: {
-            searchColumn: searchb,
-            searchWord: inputValue,
-          },
-        })
-        .then((resp) => {
-          console.log(resp.data);
-          settitle(resp.data);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    }
+  function searchBarModal() {
+    //백이랑 인스타 리스드를 뿌려주기 위한 axios
 
-    function handleModal(e) {
-      e.stopPropagation();
-      if (e.target !== modalRef.current) setsearch(false);
-      if (e.target !== notimodalRef.current) setHeart(false);
-      if (e.target !== SearchModalRef.current) setsearchText(false);
-    }
-    window.addEventListener("click", handleModal);
-
-    const handleChange = (e) => {
-      console.log(e.target.value);
-    };
-
-    const submit = () => {
-      confirmAlert({
-        title: "새 글 작성을 삭제하시겠습니까?",
-        message: "지금 나가면 내용이 저장되지 않습니다.",
-        buttons: [
-          {
-            label: "삭제",
-            onClick: () => {
-              setsquare(false);
-            },
-          },
-          {
-            label: "취소",
-          },
-        ],
+    //  if (e.keyCode != 13) return;
+    let token = sessionStorage.getItem("token");
+    axios
+      .get("/aamurest/gram/search/selectList", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        params: {
+          searchColumn: searchb,
+          searchWord: inputValue,
+        },
+      })
+      .then((resp) => {
+        console.log(resp.data);
+        settitle(resp.data);
+      })
+      .catch((error) => {
+        console.log(error);
       });
-    };
-    return (
-      <div>
-        {showChat && <Chat />}
-        <div className="userSearch">
-          <SearchSelect setSearchb={setSearchb} />
-          <div
-            className="search"
-            onClick={() => {
-              setsearch(!search);
+  }
+
+  function handleModal(e) {
+    e.stopPropagation();
+    if (e.target !== modalRef.current) setsearch(false);
+    if (e.target !== notimodalRef.current) setHeart(false);
+    if (e.target !== SearchModalRef.current) setsearchText(false);
+  }
+  window.addEventListener("click", handleModal);
+
+  const handleChange = (e) => {
+    console.log(e.target.value);
+  };
+
+  const submit = () => {
+    confirmAlert({
+      title: "새 글 작성을 삭제하시겠습니까?",
+      message: "지금 나가면 내용이 저장되지 않습니다.",
+      buttons: [
+        {
+          label: "삭제",
+          onClick: () => {
+            setsquare(false);
+          },
+        },
+        {
+          label: "취소",
+        },
+      ],
+    });
+  };
+  return (
+    <div>
+      {showChat && <Chat />}
+      <div className="userSearch">
+        <SearchSelect setSearchb={setSearchb} />
+        <div
+          className="search"
+          onClick={() => {
+            setsearch(!search);
+          }}
+        >
+          <input
+            onKeyUp={(e) => {
+              searchBarModal(e, modalRef);
+              searchBar(e);
             }}
-          >
-            <input
-              onKeyUp={(e) => {
-                searchBarModal(e, modalRef);
-                searchBar(e);
-              }}
-              value={inputValue}
-              onChange={(e) => {
-                setinputValue(e.target.value);
-                setsearchText(true);
-              }}
-              placeholder="검색"
-              type="text"
-              className="search-bar"
-              ref={modalRef}
+            value={inputValue}
+            onChange={(e) => {
+              setinputValue(e.target.value);
+              setsearchText(true);
+            }}
+            placeholder="검색"
+            type="text"
+            className="search-bar"
+            ref={modalRef}
+          />
+          {searchText && (
+            <SearchModal
+              ref={SearchModalRef}
+              title={title}
+              setsearchText={setsearchText}
+              setinputValue={setinputValue}
             />
-            {searchText && (
-              <SearchModal
-                ref={SearchModalRef}
-                title={title}
-                setsearchText={setsearchText}
-                setinputValue={setinputValue}
-              />
+          )}
+        </div>
+      </div>
+      <div className="user">
+        <img
+          src="/images/user.jpg"
+          alt="프사"
+          onError={(e) => {
+            e.stopPropagation();
+            e.target.src = "/images/user.jpg";
+          }}
+        />
+        <div>
+          <p className="user-id">{sessionStorage.getItem("username")}</p>
+          <p className="user-name">김영현</p>
+        </div>
+
+        <div
+          className="notifi"
+          onClick={() => {
+            setHeart(!heart);
+          }}
+        >
+          <div className="heart">
+            {heart ? (
+              <i className=" fa-solid fa-heart fa-2x" ref={notimodalRef} style={{ color: "black" }}>
+                <NotificationModal></NotificationModal>
+              </i>
+            ) : (
+              <i className="fa-regular fa-heart fa-2x"></i>
             )}
           </div>
         </div>
-        <div className="user">
-          <img
-            src="/images/user.jpg"
-            alt="프사"
-            onError={(e) => {
-              e.stopPropagation();
-              e.target.src = "/images/user.jpg";
-            }}
-          />
-          <div>
-            <p className="user-id">{sessionStorage.getItem("username")}</p>
-            <p className="user-name">김영현</p>
-          </div>
-
-          <div
-            className="notifi"
-            onClick={() => {
-              setHeart(!heart);
-            }}
-          >
-            <div className="heart">
-              {heart ? (
-                <i
-                  className=" fa-solid fa-heart fa-2x"
-                  ref={notimodalRef}
-                  style={{ color: "black" }}
-                >
-                  <NotificationModal></NotificationModal>
-                </i>
-              ) : (
-                <i className="fa-regular fa-heart fa-2x"></i>
-              )}
-            </div>
-          </div>
-          {/* <div className="post-icon">
+        {/* <div className="post-icon">
         </div>  */}
-          {square ? (
-            <>
-              <div className="post-icon">
-                <i
-                  className=" fa-solid fa-square-plus fa-2x"
-                  onClick={() => {
-                    setsquare(!square);
-                  }}
-                  style={{ color: "black" }}
-                ></i>
-              </div>
-              <Container>
-                <Overlay
-                  ref={outside}
-                  onClick={() => {
-                    submit();
-                  }}
-                />
-                <WriteModal
-                  onClick={() => setsquare(false)}
-                  setsquare={setsquare}
-                  setlist={setlist}
-                  setloading={setloading}
-                />
-              </Container>
-            </>
-          ) : (
+        {square ? (
+          <>
             <div className="post-icon">
               <i
-                className=" fa-regular fa-square-plus fa-2x"
+                className=" fa-solid fa-square-plus fa-2x"
                 onClick={() => {
                   setsquare(!square);
                 }}
+                style={{ color: "black" }}
               ></i>
             </div>
-          )}
-        </div>
+            <Container>
+              <Overlay
+                ref={outside}
+                onClick={() => {
+                  submit();
+                }}
+              />
+              <WriteModal
+                onClick={() => setsquare(false)}
+                setsquare={setsquare}
+                setlist={setlist}
+                setloading={setloading}
+              />
+            </Container>
+          </>
+        ) : (
+          <div className="post-icon">
+            <i
+              className=" fa-regular fa-square-plus fa-2x"
+              onClick={() => {
+                setsquare(!square);
+              }}
+            ></i>
+          </div>
+        )}
+      </div>
 
-        <div className="recommend">
-          <div className="recommend-title">
-            <span>회원님을 위한 추천</span>
-            <span>모두 보기</span>
-          </div>
-          <div className="recommend-down">
-            <div className="recommend-contents">
-              <img src="./img/bk.jpg" alt="추사" />
-              <div>
-                <p className="user-id">psg</p>
-                <p className="user-name">0hyun0hyun님 외 2명이...</p>
-              </div>
-              <div className="follow">
-                {follow ? (
-                  <span
-                    className="following"
-                    onClick={() => {
-                      setFollowing(!follow);
-                    }}
-                  >
-                    팔로잉
-                  </span>
-                ) : (
-                  <span
-                    onClick={() => {
-                      setFollowing(!follow);
-                    }}
-                  >
-                    팔로우
-                  </span>
-                )}
-              </div>
+      <div className="recommend">
+        <div className="recommend-title">
+          <span>회원님을 위한 추천</span>
+          <span>모두 보기</span>
+        </div>
+        <div className="recommend-down">
+          <div className="recommend-contents">
+            <img src="./img/bk.jpg" alt="추사" />
+            <div>
+              <p className="user-id">psg</p>
+              <p className="user-name">0hyun0hyun님 외 2명이...</p>
             </div>
-            <div className="recommend-contents">
-              <img src="./img/bk.jpg" alt="추사" />
-              <div>
-                <p className="user-id">manchesterun</p>
-                <p className="user-name">0hyun0hyun님 외 2명이...</p>
-              </div>
-              <div>
-                <span className="follow">팔로우</span>
-              </div>
-            </div>
-            <div className="recommend-contents">
-              <img src="./img/bk.jpg" alt="추사" />
-              <div>
-                <p className="user-id">jeenny</p>
-                <p className="user-name">0hyun0hyun님 외 2명이...</p>
-              </div>
-              <div>
-                <span className="follow">팔로우</span>
-              </div>
-            </div>
-            <div className="recommend-contents">
-              <img src="./img/bk.jpg" alt="추사" />
-              <div>
-                <p className="user-id">0hyun0hyun</p>
-                <p className="user-name">0hyun0hyun님 외 2명이...</p>
-              </div>
-              <div>
-                <span className="follow">팔로우</span>
-              </div>
-            </div>
-            <div className="recommend-contents">
-              <img src="./img/bk.jpg" alt="추사" />
-              <div>
-                <p className="user-id">0hyun0hyun</p>
-                <p className="user-name">0hyun0hyun님 외 2명이...</p>
-              </div>
-              <div>
-                <span className="follow">팔로우</span>
-              </div>
+            <div className="follow">
+              {follow ? (
+                <span
+                  className="following"
+                  onClick={() => {
+                    setFollowing(!follow);
+                  }}
+                >
+                  팔로잉
+                </span>
+              ) : (
+                <span
+                  onClick={() => {
+                    setFollowing(!follow);
+                  }}
+                >
+                  팔로우
+                </span>
+              )}
             </div>
           </div>
-        </div>
-        <div className="information">
-          <p> &nbsp;&nbsp;About ・ Help ・ Press ・ API ・ Jobs ・ Privacy </p>
-          <p> &nbsp;・ Terms ・ Locations ・ Language</p>
-        </div>
-        <div className="information2">
-          <p>ⓒ 2022 INSTAGRAM</p>
+          <div className="recommend-contents">
+            <img src="./img/bk.jpg" alt="추사" />
+            <div>
+              <p className="user-id">manchesterun</p>
+              <p className="user-name">0hyun0hyun님 외 2명이...</p>
+            </div>
+            <div>
+              <span className="follow">팔로우</span>
+            </div>
+          </div>
+          <div className="recommend-contents">
+            <img src="./img/bk.jpg" alt="추사" />
+            <div>
+              <p className="user-id">jeenny</p>
+              <p className="user-name">0hyun0hyun님 외 2명이...</p>
+            </div>
+            <div>
+              <span className="follow">팔로우</span>
+            </div>
+          </div>
+          <div className="recommend-contents">
+            <img src="./img/bk.jpg" alt="추사" />
+            <div>
+              <p className="user-id">0hyun0hyun</p>
+              <p className="user-name">0hyun0hyun님 외 2명이...</p>
+            </div>
+            <div>
+              <span className="follow">팔로우</span>
+            </div>
+          </div>
+          <div className="recommend-contents">
+            <img src="./img/bk.jpg" alt="추사" />
+            <div>
+              <p className="user-id">0hyun0hyun</p>
+              <p className="user-name">0hyun0hyun님 외 2명이...</p>
+            </div>
+            <div>
+              <span className="follow">팔로우</span>
+            </div>
+          </div>
         </div>
       </div>
-    );
-  }
+      <div className="information">
+        <p> &nbsp;&nbsp;About ・ Help ・ Press ・ API ・ Jobs ・ Privacy </p>
+        <p> &nbsp;・ Terms ・ Locations ・ Language</p>
+      </div>
+      <div className="information2">
+        <p>ⓒ 2022 INSTAGRAM</p>
+      </div>
+    </div>
+  );
 }
 
 const Container = styled.div`
