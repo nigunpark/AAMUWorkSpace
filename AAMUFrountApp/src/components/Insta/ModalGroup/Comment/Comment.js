@@ -15,10 +15,10 @@ import '../Upload/UploadSwiper.css';
 import dayjs from 'dayjs';
 import { CommentsDisabled } from "@mui/icons-material";
 
-function Comment({val,setlist,forReRender, setForReRender,seteditModal}) {
+function Comment({val,setlist,forReRender, setForReRender,seteditModal,setcommentModal}) {
     let menuRef = useRef();
     let replyRef = useRef();
-  
+    let commentRef = useRef();
     const [commentHeart,setCommentHeart] = useState(false);
     const [modalShow, setModalShow] = useState(false);
     const [reply, setReply] = useState(false);
@@ -144,7 +144,13 @@ function Comment({val,setlist,forReRender, setForReRender,seteditModal}) {
    
 
   return (
-    // <ModalWrap>
+    <Container1>
+      <Overlay
+        ref={commentRef}
+        onClick={(e) => {
+            e.stopPropagation();
+            if (e.target == commentRef.current) setcommentModal(false);
+        }}>
         <Contents> 
             <div className="swiperUi">
                 <ul>
@@ -281,25 +287,32 @@ function Comment({val,setlist,forReRender, setForReRender,seteditModal}) {
                 </div>
             </div>             
         </Contents>
-     //</ModalWrap>
+      </Overlay>
+    </Container1>
   )
 }
 
 
-// const ModalWrap = styled.div`
-//     width: 78%;
-//     overflow: hidden;
-//     height: 90%;
-//     border-radius: 5px;
-//     background-color: #fff;
-//     position: absolute;
-//     justify-content: center;
-//     align-items: center;
-//     top: 50%;
-//     left: 50%;
-//     transform: translate(-50%, -50%);
-//     //border: solid 5px black;
-// `
+const Container1 = styled.div`
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  z-index: 1;
+  justify-content: center;
+  align-items: center;
+`;
+const Overlay = styled.div`
+  position: relative;
+  width: 100%;
+  height: 100%;
+  z-index: 15;
+  background-color: rgba(0, 0, 0, 0.6);
+`;
 
 const Contents = styled.div`
     position: absolute;

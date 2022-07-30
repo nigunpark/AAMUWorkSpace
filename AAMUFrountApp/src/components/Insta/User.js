@@ -10,7 +10,7 @@ import { Link } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import SearchSelect from "./ModalGroup/Search/SearchSelect";
 import Chat from "../Chat/Chat";
-function User({ setlist, setloading, searchb, setSearchb, inputValue, setinputValue, showChat }) {
+function User({val, setlist, setloading, searchb, setSearchb, inputValue, setinputValue, showChat }) {
   const modalRef = useRef();
   const notimodalRef = useRef();
   const outside = useRef();
