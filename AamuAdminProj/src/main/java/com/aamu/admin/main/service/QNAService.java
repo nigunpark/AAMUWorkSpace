@@ -6,39 +6,43 @@ import javax.servlet.http.HttpServletRequest;
 
 public interface QNAService<T> {
 
-	// 목록
+	// 게시물 목록
 	ListPagingData<T> selectList(Map map, HttpServletRequest req, int nowPage);
 
-	// 게시물수
+	// 게시물 수 카운트
 	int qnaGetTotalRecordCount(Map map);
 
-	// 읽기
+	// 상세 보기
 	T selectOne(Map map);
 
-	// 쓰기
+	// 게시물 등록
 	int qnaWrite(Map map);
 
-	// 수정
+	// 게시물 수정
 	int qnaEdit(Map map) throws Exception;
 
-	// 삭제
+	// 게시물 목록에서 게시물 삭제
 	int qnaDelete(Map map);
 
+	// 상세 보기에서 게시물 삭제
 	int qnaViewDelete(Map map);
-	
-	// 조회수
+
+	// 조회 수 카운트
 	int qnaCount(Map map) throws Exception;
-	
-	// 키로 이름 찾는 메소드
+
+	// 이름 찾기
 	String findNameByKey(Map map);
 
+	// 댓글 등록
+	int answerWrite(Map map);
+
+	// 댓글 수정
 	int answerUpdate(Map map);
-	
+
 	// 댓글 삭제
 	int answerDelete(Map map);
 
+	// 댓글 전체 삭제
 	int answerAllDelete(Map map);
-
-	int answerWrite(Map map);
 
 }

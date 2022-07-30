@@ -27,7 +27,7 @@ public class NoticeController {
 	@Autowired
 	private NoticeServiceImpl noticeService;
 
-	// 목록
+	// 게시물 목록
 	@RequestMapping("Notice.do")
 	public String noticeSelectList(@ModelAttribute("id") String id, @RequestParam Map map,
 			@RequestParam(defaultValue = "1", required = false) int nowPage, HttpServletRequest req, Model model) {
@@ -41,7 +41,7 @@ public class NoticeController {
 		return "notice/noticeList";
 	}
 
-	// 읽기
+	// 상세 보기
 	@RequestMapping("NoticeView.do")
 	public String noticeView(
 			// @ModelAttribute("id") String id,
@@ -55,13 +55,13 @@ public class NoticeController {
 		return "notice/noticeView";
 	}
 
-	// 쓰기
+	// 게시물 등록
 	@GetMapping("NoticeWrite.do")
 	public String noticeWrite() throws Exception {
 		return "notice/noticeWrite";
 	}
 
-	// 쓰기 완료
+	// 게시물 등록 완료
 	@PostMapping("NoticeWrite.do")
 	public String noticeWriteOk(@RequestParam Map map) {
 		map.put("id", "ADMIN2");
@@ -69,7 +69,7 @@ public class NoticeController {
 		return "redirect:/Notice.do";
 	}
 
-	// 수정
+	// 게시물 수정
 	@GetMapping("NoticeEdit.do")
 	public String noticeEdit(@ModelAttribute("nno") String nno, @RequestParam Map map, Model model) throws Exception {
 		// 서비스 호출]
@@ -81,7 +81,7 @@ public class NoticeController {
 		return "notice/noticeEdit";
 	}///////////////////////
 
-	// 수정 완료
+	// 게시물 수정 완료
 	@PostMapping("NoticeEdit.do")
 	public String noticeEdit(@ModelAttribute("nno") String nno, @RequestParam Map map) throws Exception {
 		// 서비스 호출]
@@ -90,7 +90,7 @@ public class NoticeController {
 		return "redirect:/NoticeView.do";
 	}/////////////////////////
 
-	// 목록에서 삭제
+	// 게시물 목록에서 삭제
 	@PostMapping("NoticeDelete.do")
 	@ResponseBody
 	public Map noticeDelete(@RequestBody Map map) {
@@ -105,7 +105,7 @@ public class NoticeController {
 		return resultMap;
 	}
 
-	// 읽기에서 삭제
+	// 상세 보기에서 삭제
 	@GetMapping("NoticeViewDelete.do")
 	public String delete(@ModelAttribute("nno") String nno, @RequestParam Map map) {
 		noticeService.noticeViewDelete(map);

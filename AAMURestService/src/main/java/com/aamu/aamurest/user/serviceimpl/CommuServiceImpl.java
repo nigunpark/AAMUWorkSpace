@@ -54,8 +54,8 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 	
 	//글 목록용_토탈 카운트 
 	@Override
-	public int commuTotalCount(Map map) {
-		return dao.commuTotalCount(map);
+	public int commuSearchTotalCount(Map map) {
+		return dao.commuSearchTotalCount(map);
 	}
 
 	//글 목록용_좋아요 여부 뿌려주기
@@ -82,18 +82,25 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 	//글 검색용
 	@Override
 	public List<String> commuSearachList(Map map) {
-		
 		if(map.get("searchColumn").equals("id")) {
-			map.put("searchWord", map.get("searchWord").toString().toUpperCase());
-			System.out.println(map.get("searchColumn"));
+			//map.put("searchWord", map.get("searchWord").toString()); 어퍼케이스 하려고 넣었나?
 			map.put("table", "users");
 			List<String> list=dao.commuSearachList(map);
-			System.out.println(list.get(0).toString());
 			return list;
 		}
-		else{
+		else if(map.get("searchColumn").equals("ctitle")){
 			map.put("table", "community");
 			return dao.commuSearachList(map);
+		}
+		else {//tname이 넘어온거 searchColumn:tname , searchWord:서울
+			map.put("table", "tags");
+			List<String> tnameList=dao.commuSearachList(map);
+			List<String> shrapTnameList = new Vector();
+			for(String tname:tnameList) {
+				String sharpTname="#"+tname;
+				shrapTnameList.add(sharpTname);
+			}
+			return shrapTnameList;
 		}
 	}
 
@@ -334,6 +341,12 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 		return dao.commuLikecountSelect(map);
 	}
 	
+	//팔로우, 팔로잉
+	@Override
+	public int commuFollower(Map map) {
+		return dao.commuFollower(map);
+	}
+	
 	////////////////////////////////////////////////////////공통 메소드
 	
 	//insertCommuTag 메소드
@@ -351,5 +364,8 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 		}
 		return affected;
 	}
+	
+	
+	
 
 }

@@ -1,5 +1,6 @@
 package com.aamu.aamurest.websocket.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -32,9 +33,18 @@ public class ChatRoomController {
 	
 	//채팅방 개설
 	@PostMapping(value = "/room")
-    public List<ChatingMessageDTO> create(@RequestParam Map map){
-		template.insert("chatroominsert",map);
-        return template.selectList("chatroomslistone", map);
+    public Map create(@RequestParam Map map){
+		try {
+			int roomno = template.selectOne("chatroomsone",map);
+			map.put("roomno", roomno);
+		}
+		catch(NullPointerException e) {
+			template.insert("chatroominsert",map);
+		}
+		Map returnMap = new HashMap();
+		returnMap.put("roomno", map.get("roomno"));
+		returnMap.put("list", template.selectList("chatroomslistone", map));
+        return returnMap;
     }
 	
 	//채팅방 조회

@@ -15,43 +15,43 @@ public class NoticeDAO {
 	@Autowired
 	private SqlSessionTemplate template;
 
-	// 목록
+	// 게시물 목록
 	public List<NoticeDTO> noticeSelectList(Map map) {
 		List<NoticeDTO> records = template.selectList("noticeSelectList", map);
 		return records;
 	}
 
-	// 게시물수
+	// 게시물 수 카운트
 	public int noticeGetTotalRecordCount(Map map) {
 		return template.selectOne("noticeGetTotalRecordCount", map);
 	}
 
-	// 읽기
+	// 상세 보기
 	public NoticeDTO selectOne(Map map) {
 		return template.selectOne("noticeSelectOne", map);
 	}
 
-	// 쓰기
+	// 게시물 등록
 	public int noticeWrite(Map map) {
 		return template.insert("noticeWrite", map);
 	}
 
-	// 수정
+	// 게시물 수정
 	public int noticeEdit(Map map) throws Exception {
 		return template.update("noticeEdit", map);
 	}
 
-	// 목록에서 삭제
+	// 게시물 목록에서 삭제
 	public int noticeDelete(Map map) {
 		return template.delete("noticeDelete", map);
 	}
 
-	// 읽기에서 삭제
+	// 상세 보기에서 삭제
 	public int noticeViewDelete(Map map) {
 		return template.delete("noticeDelete", map);
 	}
 
-	// 조회수
+	// 게시물 조회 수 카운트
 	public int noticeCount(Map map) throws Exception {
 		return template.update("noticeCount", map);
 	}

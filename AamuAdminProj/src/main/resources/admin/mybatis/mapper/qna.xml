@@ -4,10 +4,7 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="admin.mybatis.mapper.qna">
 
-	<!-- QNO number NOT NULL, ID varchar2(20) NOT NULL, TITLE nvarchar2(100) 
-		NOT NULL, CONTENT nvarchar2(2000) NOT NULL, QCOUNT number DEFAULT 0, QDATE 
-		date DEFAULT SYSDATE, PRIMARY KEY (QNO) -->
-
+	<!-- 게시물 및 댓글 연동 -->
 	<resultMap type="QNADTO" id="QNADTOResult">
 		<!-- property:자바빈(OneMemoDTO)의 속성명 column:테이블의 컬럼(조회(SELECT)결과의 컬럼명들 의미) -->
 		<result property="qno" column="qno" />
@@ -27,7 +24,7 @@
 			ofType="AnswerDTO" />
 	</resultMap>
 
-	<!-- 목록 -->
+	<!-- 게시물 목록 -->
 	<select id="qnaSelectList" parameterType="Map"
 		resultType="QNADTO">
 		SELECT * FROM
@@ -44,13 +41,13 @@
 		#{start} AND #{end}
 	</select>
 
-	<!-- 게시물수 -->
+	<!-- 게시물 수 카운트 -->
 	<select id="qnaGetTotalRecordCount" parameterType="Map"
 		resultType="int">
 		SELECT COUNT(*) FROM qna
 	</select>
 
-	<!-- 읽기 -->
+	<!-- 상세 보기 -->
 	<select id="qnaSelectOne" parameterType="Map"
 		resultMap="QNADTOResult">
 		SELECT q.*,name,(SELECT
@@ -58,10 +55,9 @@
 		as answerCount
 		FROM users u JOIN qna q ON u.id = q.id
 		WHERE qno=#{qno}
-
 	</select>
 
-	<!-- 쓰기 -->
+	<!-- 게시물 등록 -->
 	<insert id="qnaWrite" parameterType="Map">
 		INSERT INTO qna VALUES
 		(SEQ_QNA.NEXTVAL,
@@ -73,20 +69,20 @@
 		)
 	</insert>
 
-	<!-- 수정 -->
+	<!-- 게시물 수정 -->
 	<update id="qnaEdit" parameterType="Map">
 		UPDATE qna SET
 		title=#{title},content=#{content} WHERE qno=#{qno}
 	</update>
 
-	<!-- 삭제 -->
+	<!-- 게시물 삭제 -->
 	<delete id="qnaDelete" parameterType="Map">
 		DELETE qna WHERE
 		qno =
 		#{qno}
 	</delete>
 
-	<!-- 조회수 -->
+	<!-- 조회 수 카운트 -->
 	<update id="qnaCount" parameterType="Map">
 		update qna set qcount
 		=

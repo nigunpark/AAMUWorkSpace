@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.aamu.aamuandroidapp.components.chat
+package com.aamu.aamuandroidapp.components.chatlist.chat
 
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme

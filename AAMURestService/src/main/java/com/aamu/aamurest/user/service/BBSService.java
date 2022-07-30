@@ -32,10 +32,12 @@ public interface BBSService {
 
 	//리뷰 등록
 	int reviewInsert(Map map);
-
+	
+	/*
 	//리뷰 수정
 	int reviewUpdate(Map map);
-
+	*/
+	
 	//리뷰 삭제
 	int reviewDelete(Map map);
 

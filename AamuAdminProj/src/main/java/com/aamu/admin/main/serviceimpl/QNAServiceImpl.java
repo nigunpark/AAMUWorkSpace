@@ -31,7 +31,7 @@ public class QNAServiceImpl implements QNAService<QNADTO> {
 	@Value("${blockPage}")
 	private int blockPage;
 
-	// 목록
+	// 게시물 목록
 	@Override
 	public ListPagingData<QNADTO> selectList(Map map, HttpServletRequest req, int nowPage) {
 		// 페이징을 위한 로직 시작]
@@ -58,13 +58,13 @@ public class QNAServiceImpl implements QNAService<QNADTO> {
 		return listPagingData;
 	}
 
-	// 게시물수
+	// 게시믈 수 카운트
 	@Override
 	public int qnaGetTotalRecordCount(Map map) {
 		return dao.qnaGetTotalRecordCount(map);
 	}
 
-	// 읽기
+	// 상세 보기
 	@Override
 	public QNADTO selectOne(Map map) {
 		QNADTO record = dao.selectOne(map);
@@ -73,35 +73,37 @@ public class QNAServiceImpl implements QNAService<QNADTO> {
 		return record;
 	}
 
-	// 쓰기
+	// 게시물 등록
 	@Override
 	public int qnaWrite(Map map) {
 		return dao.qnaWrite(map);
 	}
 
-	// 수정
+	// 게시물 수정
 	@Override
 	public int qnaEdit(Map map) throws Exception {
 		return dao.qnaEdit(map);
 	}
 
 
-	// 조회수
+	// 조회 수 카운트
 	@Override
 	public int qnaCount(Map map) throws Exception {
 		return dao.qnaCount(map);
 	}
-
+	
+	// 이름 찾기
 	@Override
 	public String findNameByKey(Map map) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	// 글번호에따른 댓글 삭제용 DAO주입 받기
+	// 게시물 번호에 따른 댓글 삭제용 DAO 주입 받기
 	@Autowired
 	private AnswerDAO adao;
 
+	// 트렌젝션을 활용하여 먼저 댓글 삭제 후 게시물 삭제
 	@Override
 	public int qnaDelete(Map map) {
 		int affected = 0;
@@ -121,7 +123,7 @@ public class QNAServiceImpl implements QNAService<QNADTO> {
 		return affected;
 	}
 	
-	
+	// 상세 보기에서 게시물 삭제
 	@Override
 	public int qnaViewDelete(Map map) {
 		int affected = 0;
@@ -133,26 +135,30 @@ public class QNAServiceImpl implements QNAService<QNADTO> {
 		return affected;
 	}
 
+	// 댓글 등록
+	@Override
+	public int answerWrite(Map map) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	
+	// 댓글 수정
+	@Override
+	public int answerUpdate(Map map) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	
+	// 댓글 삭제
 	@Override
 	public int answerDelete(Map map) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
+	// 댓글 전부 삭제
 	@Override
 	public int answerAllDelete(Map map) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public int answerUpdate(Map map) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public int answerWrite(Map map) {
 		// TODO Auto-generated method stub
 		return 0;
 	}

@@ -19,7 +19,7 @@
 									<div class="card-numberOfBoard">
 										총 게시글 수: ${totalCount}개
 
-										<button class="delete btn btn-primary text-white me-0"
+										<button class="delete btn btn-primary text-white me-0 mx-2"
 											style="float: right">삭제</button>
 										<a href="<c:url value="NoticeWrite.do"/>"><button
 												class="write btn btn-primary text-white me-0"
@@ -173,7 +173,7 @@ td.admin-title a {
     		alert("선택된 글이 없습니다.");
     	}
     	else{
-    		if (confirm("정말 삭제하시겠습니까?")){
+    		if (confirm("삭제하시겠습니까?")){
     		
     		var jsonString = JSON.stringify({nno : nnoArr})
     		$.ajax({
@@ -183,11 +183,11 @@ td.admin-title a {
        			contentType:"application/json", //데이타 보낼 때
        			dataType: "json" //데이타 받을 때 
        		}).done(data=>{
-       			console.log('삭제성공:',data);
+       			console.log('삭제 성공:',data);
        			location.replace("Notice.do");
        			
        		}).fail(error=>{
-       			console.log('삭제에러:',error);
+       			console.log('삭제 에러:',error);
        		});
     		
     		} else return false;

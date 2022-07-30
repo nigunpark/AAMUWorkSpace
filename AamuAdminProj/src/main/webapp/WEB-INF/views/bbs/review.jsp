@@ -35,7 +35,7 @@
 													<th>제목</th>
 													<th class="col-1">ID</th>
 													<th class="col-1">작성일</th>
-													<th class="col-1">리뷰 수</th>
+													<th class="col-1"></th>
 													<th class="col-1"></th>
 												</tr>
 											</thead>

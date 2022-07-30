@@ -7,27 +7,33 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class CommuDTO {
-	public String lno;
-	public String id;
-	public String ctitle;
-	public String content;
-	public java.sql.Date postdate;
-	public String likecount;
-	public Boolean islike;
-	public String rcount;
-	public String userprofile;
-	public CommuCommentDTO commuComment;
-	public List<CommuCommentDTO> commuCommentList;
-	public List<String> photo;
-	public String contentid;
-	public String title;
-	public int totalCount;
-	public List<String> tname;
+	private String lno;
+	private String id;
+	private String ctitle;
+	private String content;
+	private java.sql.Date postdate;
+	private String likecount;
+	private Boolean islike;
+	private String rcount;
+	private String userprofile;
+	private CommuCommentDTO commuComment;
+	private List<CommuCommentDTO> commuCommentList;
+	private List<String> photo;
+	private String contentid;
+	private String title;
+	private int searchtotalcount;
+	private List<String> tname;
+	private String name;
+	private int totalcount;
+	private int followercount;
+	private int followingcount;
 }

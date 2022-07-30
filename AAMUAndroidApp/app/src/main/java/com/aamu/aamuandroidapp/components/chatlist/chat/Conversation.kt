@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.aamu.aamuandroidapp.components.chat
+package com.aamu.aamuandroidapp.components.chatlist.chat
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -26,30 +26,22 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Info
-import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.LastBaseline
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -57,16 +49,12 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.aamu.aamuandroidapp.R
-import com.aamu.aamuandroidapp.components.login.LoginViewModel
-import com.aamu.aamuandroidapp.components.login.LoginViewModelFactory
 import com.aamu.aamuandroidapp.data.api.response.AAMUChatingMessageResponse
-import com.aamu.aamuandroidapp.data.exampleUiState
-import com.aamu.aamuandroidapp.ui.theme.amber200
-import com.aamu.aamuandroidapp.ui.theme.amber700
 import com.aamu.aamuandroidapp.ui.theme.cyan200
 import com.aamu.aamuandroidapp.ui.theme.cyan700
-import com.aamu.aamuandroidapp.util.contextL
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.*
 
 //@OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -171,18 +159,20 @@ fun Messages(
             for (index in messages.indices) {
                 val prevAuthor = messages.getOrNull(index - 1)?.authid
                 val nextAuthor = messages.getOrNull(index + 1)?.authid
+                val prevDay = messages.getOrNull(index)?.senddate
+                val nextDay = messages.getOrNull(index + 1)?.senddate
                 val content = messages[index]
                 val isFirstMessageByAuthor = prevAuthor != content.authid
                 val isLastMessageByAuthor = nextAuthor != content.authid
 
-                // Hardcode day dividers for simplicity
-                if (index == messages.size - 1) {
-                    item {
-                        DayHeader("20 Aug")
+                var isToday = prevDay.let {
+                    if (nextDay == null) {
+                        return@let true
+                    } else if(it == null){
+                        return@let false
                     }
-                } else if (index == 2) {
-                    item {
-                        DayHeader("Today")
+                    else{
+                        return@let nextDay / (1000 * 60 * 60 * 24) != it / (1000 * 60 * 60 * 24)
                     }
                 }
 
@@ -193,6 +183,13 @@ fun Messages(
                         isFirstMessageByAuthor = isFirstMessageByAuthor,
                         isLastMessageByAuthor = isLastMessageByAuthor
                     )
+                }
+                if (isToday == true) {
+                    item {
+                        val formatter = SimpleDateFormat("yyyy년 MM월 dd일")
+                        val time = formatter.format(messages.get(index).senddate!!)
+                        DayHeader(time)
+                    }
                 }
             }
         }

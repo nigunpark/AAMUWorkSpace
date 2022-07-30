@@ -106,13 +106,14 @@ const MyPostBox = ({ selectRbn }) => {
       console.log((error) => console.log("상세경로 가져오기 실패", error));
     }
   };
+  console.log("detailRoute 제발111 :", detailRoute);
 
   useEffect(() => {
     getPlanData();
   }, []);
 
   // console.log("detailPostData :", detailPostData);
-  // console.log("detailRoute :", detailRoute);
+  console.log("detailRoute :", detailRoute);
 
   const [isOpen, setIsOpen] = useState(false);
   const onClickModal = () => {
@@ -184,7 +185,7 @@ const MyPostBox = ({ selectRbn }) => {
 
         <div>
           {detailRoute.map((route, idx) => {
-            // console.log("route 외부 map:", route);
+            console.log("route 외부 map:", route);
 
             return (
               <div key={idx} className="detail-plan">

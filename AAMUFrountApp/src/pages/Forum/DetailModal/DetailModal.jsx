@@ -6,11 +6,21 @@ import { Link } from "react-router-dom";
 import { Rating } from "@mui/material";
 import axios from "axios";
 import "./BookMark.css";
+import { useDispatch, useSelector } from "react-redux";
+import { addWholeBlackBox } from "../../../redux/store";
 
-const DetailModal = ({ setIsOpen, detailRbn }) => {
+const DetailModal = ({ setIsOpen, detailRbn, postDay }) => {
+  function dateFormat(date) {
+    let month = date.getMonth() + 1;
+    let day = date.getDate();
+    month = month >= 10 ? month : "0" + month;
+    day = day >= 10 ? day : "0" + day;
+    return date.getFullYear() + "-" + month + "-" + day;
+  }
+
+  let username = sessionStorage.getItem("username");
+
   let [tempObj, setTempObj] = useState({ review: "", reviewId: "", star: "" });
-
-  let [userName] = useState("ADMIN");
 
   let [star, setStar] = useState(0); //사용자가 입력하는 별점
   let [commentStar, setCommentStar] = useState([]); //commentStar에 별점 저장
@@ -19,6 +29,14 @@ const DetailModal = ({ setIsOpen, detailRbn }) => {
   let [feedComments, setFeedComments] = useState([]); // feedComments 댓글 리스트 저장
   let [isValid, setIsValid] = useState(false); // 댓글 게시가능여부 (유효성 검사)
 
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+  const [theme, setTheme] = useState("");
+  const [userId, setUserId] = useState("");
+  const [photo, setPhoto] = useState([]);
+  const [detailRoute, setDetailRoute] = useState([]);
+  // const [rno, setRno] = useState(0);
+
   useEffect(() => {
     const $body = document.querySelector("body");
     $body.style.overflow = "hidden";
@@ -26,25 +44,93 @@ const DetailModal = ({ setIsOpen, detailRbn }) => {
     return () => ($body.style.overflow = "auto");
   }, []);
 
-  console.log("detailRbn 글번호 넘어왔나 :", detailRbn);
+  // console.log("detailRbn 글번호 넘어왔나 :", detailRbn);
   useEffect(() => {
     let token = sessionStorage.getItem("token");
     axios
       .get(`/aamurest/bbs/SelectOne/${detailRbn}`, {
-        // params: {
-        //   rbn: detailRbn,
-        // },
         headers: {
           Authorization: `Bearer ${token}`,
         },
       })
       .then((resp) => {
         console.log("게시판 상세보기 : ", resp.data);
+        setTitle(resp.data.title);
+        setContent(resp.data.content);
+        setTheme(resp.data.themename);
+        setPhoto(resp.data.photo);
+        setFeedComments(resp.data.reviewList);
+        setDetailRoute(resp.data.routeList);
+        setUserId(resp.data.id);
       })
       .catch((error) => {
         console.log((error) => console.log("게시판 상세보기 실패", error));
       });
   }, []);
+
+  function isId(e) {
+    if (e.id == username) {
+      return true;
+    }
+  }
+
+  const isReviewId = feedComments.filter(isId).length;
+  // console.log("리뷰의 id만 가져오나", isReviewId);
+  // console.log("ddd", feedComments);
+
+  const dRoute = detailRoute.reduce((acc, obj) => {
+    const { day } = obj;
+    acc[day] = acc[day] ?? [];
+    acc[day].push(obj);
+    return acc;
+  }, {});
+
+  let keys = Object.keys(dRoute);
+  let values = Object.values(dRoute);
+  let routeData = Object.entries(dRoute).map((val, idx) => {
+    return { ["day" + keys[idx]]: values[idx] };
+  });
+
+  // console.log("routeData :", routeData);
+
+  async function post() {
+    let token = sessionStorage.getItem("token");
+    await axios
+      .post(
+        "/aamurest/review/edit",
+        {
+          id: sessionStorage.getItem("username"),
+          rbn: detailRbn,
+          rate: star,
+          review: comment,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then((resp) => {
+        console.log("리뷰 post 했고 돌아오는 데이터", resp.data);
+        reviewData();
+      });
+  }
+
+  async function reviewData() {
+    let token = sessionStorage.getItem("token");
+    await axios
+      .get(`/aamurest/bbs/SelectOne/${detailRbn}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((resp) => {
+        setFeedComments(resp.data.reviewList);
+      })
+      .catch((error) => {
+        console.log((error) => console.log("게시판 상세보기 실패", error));
+      });
+  }
 
   let reviewPost = (e) => {
     // setTempObj((curr)=>{return {...curr, star:star, review:comment, reviewId:sessionStorage.getItem('token')}});
@@ -58,25 +144,11 @@ const DetailModal = ({ setIsOpen, detailRbn }) => {
     // console.log('comment 추가됬나 확인 :',comment);
     // console.log('star 값 저장됬나 확인 :',star);
 
-    let token = sessionStorage.getItem("token");
+    //`${comment}`
+    //`${star}`
+    //${detailRbn}/${id}/${rate}/${review}
 
-    axios
-      .post(
-        "",
-        {
-          comment: `${comment}`,
-          star: `${star}`,
-          id: sessionStorage.getItem("token"),
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      )
-      .then((res) => {
-        setFeedComments(res.data);
-      });
+    post();
 
     //기존 댓글 배열이 담긴 copyFeedComments에 사용자가 입력한 comment 를 push
     // copyFeedComments.push(comment);
@@ -98,81 +170,130 @@ const DetailModal = ({ setIsOpen, detailRbn }) => {
   // console.log('입력한 댓글 저장 확인 :', feedComments);
   // console.log('입력한 별점 저장 확인 :', star);
 
-  const reviewDelete = (no) => {
-    // console.log('프롭스 잘 넘어오나~', no);
+  const reviewDelete = (rno) => {
     // console.log('feedComments : ', feedComments);
 
-    setFeedComments(feedComments.filter((e, index) => index !== no));
-    setCommentStar(commentStar.filter((e, index) => index !== no));
+    // setFeedComments(feedComments.filter((e, index) => index !== no));
+    // setCommentStar(commentStar.filter((e, index) => index !== no));
 
     // filter 이거가지고 검색기능 가능할듯
+
+    let token = sessionStorage.getItem("token");
+    axios
+      .delete("/aamurest/review/edit", {
+        params: {
+          rno: rno,
+        },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((resp) => {
+        console.log("삭제 성공 :", resp.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
-  const CommentList = (props) => {
-    //리뷰댓글 컴포넌트
+  const CommentList = ({ val, setFeedComments }) => {
+    const rno = val.rno;
+    // console.log("리뷰정보 :", rno);
     return (
       <div>
         <Stars>
           <img src="/images/star.jpg" style={{ width: "30px" }} />
-          {props.commnetArr.star}
+          {val.rate}
         </Stars>
 
         <UserName>
-          {props.commnetArr.reviewId}
-          <Name>님 (2022-07-10)</Name>
+          <Name>{val.id} 님</Name>
         </UserName>
 
-        <p>{props.commnetArr.review}</p>
-
-        <EditDelte type="button">
-          <Name>수정</Name>
-        </EditDelte>
-        <EditDelte
-          type="button"
-          onClick={() => {
-            reviewDelete(props.index);
-          }}
-        >
-          <Name>삭제</Name>
-        </EditDelte>
-        {/* {
-                    console.log('인덱스 넘어온거 : ', props.index)
-                } */}
+        <p>{val.review}</p>
+        <span></span>
+        {username == val.id ? (
+          <EditDelte
+            type="button"
+            onClick={() => {
+              reviewDelete(rno);
+              setFeedComments((curr) => {
+                return curr.filter((e, index) => e.rno !== rno);
+              });
+            }}
+          >
+            <Name>삭제</Name>
+            {console.log("feedComments 삭제 되나요 :", feedComments)}
+          </EditDelte>
+        ) : null}
       </div>
     );
   };
 
-  // console.log('더미데이터 :', dummy.imgsdata);
-  const [bookMark, setBookMark] = useState(false);
-
-  let test = [1, 2, 3, 4];
-  // ref={modalRef}
   return (
     <DetailContainer>
       <DetailOverlay>
         <DetailModalWrap>
           <Plan>
-            <PlanTitle>여행경로 제목 자리</PlanTitle>
-            {/* {
-                        dummyPlanner.route.map((val, idx)=>{
-                            console.log('더미 플래너 :',val, '인덱스:',idx);
-                        })
-                    } */}
-            <div style={{ border: "1.5px solid #edf2f4" }}>
-              {/*
-                    게시글 클릭시 게시글 작성자의 id (혹은 다른 값)를 키로 보내서
-                    해당 글에 대한 여행 경로 데이터를 가져와서 표시해줘야함
-                    */}
-              {test.map((val, idx) => {
+            <div>
+              {routeData.map((route, idx) => {
                 return (
-                  <DetailPlan>
-                    <PlanDate>{val} 일차 20xx-xx-xx x요일</PlanDate>
-                    <PlanTime>00:00 ~ 00:00</PlanTime>
-                    <PlanRegion>제주공항</PlanRegion>
+                  <div key={idx} className="detail-plan">
+                    <span className="paln-date">{idx + 1} 일차</span>
+                    {
+                      route[`day${idx + 1}`].map((obj, i) => {
+                        // console.log("내부 map obj:", obj);
 
-                    <PlanTime>00:00 ~ 00:00</PlanTime>
-                    <PlanRegion>교원스위트호텔 제주</PlanRegion>
-                  </DetailPlan>
+                        return (
+                          <div style={{ display: "flex" }}>
+                            <div className="plan-region">
+                              <div className="myPlan-container">
+                                <div style={{ borderRadius: "5px" }}>
+                                  <img
+                                    style={{
+                                      width: "100%",
+                                      height: "80px",
+                                      objectFit: "cover",
+                                      border: "1px #edf2f4 solid",
+                                      paddingRight: "2px",
+                                      borderRadius: "5px",
+                                    }}
+                                    onError={(e) => {
+                                      e.target.src = "/images/no-image.jpg";
+                                    }}
+                                    src={
+                                      obj.dto.smallimage == null
+                                        ? "/images/no-image.jpg"
+                                        : obj.dto.smallimage
+                                    }
+                                  />
+                                </div>
+                                <div style={{ marginLeft: "1px" }}>
+                                  <div
+                                    style={{
+                                      fontSize: "15px",
+                                      marginTop: "10px",
+                                    }}
+                                  >
+                                    {obj.dto.title}
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="plan-clock">
+                              <DetailSetting
+                                fromWooJaeData={routeData}
+                                obj={obj}
+                                key={i}
+                                i={i}
+                                periodIndex={idx}
+                              />
+                            </div>
+                          </div>
+                        ); //MyPost_clock
+                      }) //내부 map
+                    }
+                  </div>
                 );
               })}
             </div>
@@ -190,10 +311,8 @@ const DetailModal = ({ setIsOpen, detailRbn }) => {
                 />
                 <label for="star"></label>
               </div>
-
               {/* 여기가 글 작성할때 쓴 제목 */}
-              {/* {dummy.title} */}
-
+              {title}
               <div className="detail-button">
                 <button
                   className="learn-more_exit"
@@ -209,49 +328,53 @@ const DetailModal = ({ setIsOpen, detailRbn }) => {
           </DetailTitle>
 
           <DetailContents>
-            <Notice />
+            <Notice photo={photo} />
             {/* dummy={dummy.imgsdata} */}
 
-            <Textarea>
-              {/* {dummy.content} */}
-              {/* 여기가 공유한 글 내용 */}
-            </Textarea>
+            <Textarea>{content}</Textarea>
             <div>
-              <Rating
-                name="simple-controlled"
-                precision={0.5}
-                onChange={(e, newValue) => {
-                  setStar(newValue);
-                }} // 사용자가 선택한만큼 setStar를 통해 star의 값 변경
-                value={star}
-              />
+              {isReviewId == 1 ? null : (
+                <Rating
+                  name="simple-controlled"
+                  precision={0.5}
+                  onChange={(e, newValue) => {
+                    setStar(newValue);
+                  }} // 사용자가 선택한만큼 setStar를 통해 star의 값 변경
+                  value={star}
+                />
+              )}
             </div>
             <Tag>
-              <Date>작성일. </Date>
-              <Link to="/">#tag</Link>
+              <Date>작성일. {postDay}</Date>
+              {theme}
             </Tag>
-            <input
-              type="text"
-              placeholder="리뷰 달기..."
-              onChange={(e) => {
-                setComment(e.target.value);
-              }} //리뷰창 변할때마다 setComment를 통해 comment의 값 변경
-              onKeyUp={(e) => {
-                e.target.value.length > 0
-                  ? setIsValid(true)
-                  : setIsValid(false);
-                // console.log(isValid);
-              }} //사용자가 리뷰를 작성했을 때 빈공간인지 확인하여 유효성 검사
-              value={comment}
-            />
-
+            {isReviewId == 1 ? (
+              <input type="text" placeholder="리뷰는 하나만!" disabled />
+            ) : (
+              <input
+                type="text"
+                placeholder="리뷰 달기..."
+                onChange={(e) => {
+                  setComment(e.target.value);
+                }} //리뷰창 변할때마다 setComment를 통해 comment의 값 변경
+                onKeyUp={(e) => {
+                  e.target.value.length > 0
+                    ? setIsValid(true)
+                    : setIsValid(false);
+                  // console.log(isValid);
+                }} //사용자가 리뷰를 작성했을 때 빈공간인지 확인하여 유효성 검사
+                value={comment}
+              />
+            )}
             {/* DetailButton.scss */}
             <div className="detail-button">
-              {isValid ? (
+              {isReviewId == 1 ? null : isValid ? (
                 <button
                   className="learn-more"
                   type="button"
-                  onClick={reviewPost}
+                  onClick={(e) => {
+                    reviewPost();
+                  }}
                 >
                   리뷰 등록
                 </button>
@@ -272,10 +395,11 @@ const DetailModal = ({ setIsOpen, detailRbn }) => {
               //userName 은 위에서 ADMIN 을 담은 값을,
               //userComment 는 feedComments 에 담겨있는 배열 담는다
               //stars 는 commentStar의 인덱스 번호에 맞는 별점 배열을 담는다
-              feedComments.map((commnetArr, idx) => {
+              feedComments.map((val, idx) => {
                 return (
                   <CommentList
-                    commnetArr={commnetArr}
+                    val={val}
+                    setFeedComments={setFeedComments}
                     // stars={commentStar[idx]}
                     // userName={userName}
                     // userComment={commnetArr}
@@ -291,6 +415,112 @@ const DetailModal = ({ setIsOpen, detailRbn }) => {
     </DetailContainer>
   );
 };
+
+function DetailSetting({ fromWooJaeData, periodIndex, obj, i }) {
+  let reduxState = useSelector((state) => {
+    return state;
+  });
+
+  const [upTime, setUpTime] = useState(0);
+  const [downTime, setDownTime] = useState(0);
+  let dispatch = useDispatch();
+
+  // if (i === 0) {
+  //   let firstAccum = getNAccumDetailTime(periodIndex, reduxState, obj);
+  //   setUpTime(firstAccum);
+  //   setDownTime(firstAccum + obj.atime / 1000 / 60);
+  //   fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i + 1].starttime =
+  //     firstAccum + obj.atime / 1000 / 60;
+  //   const forBlackBoxRedux = getTimes(
+  //     periodIndex,
+  //     firstAccum,
+  //     firstAccum + obj.atime / 1000 / 60
+  //   );
+  //   dispatch(addWholeBlackBox(forBlackBoxRedux));
+  // }
+
+  useEffect(() => {
+    if (i !== 0) {
+      setUpTime(
+        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime +
+          obj.mtime / 1000 / 60
+      );
+      setDownTime(
+        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime +
+          obj.mtime / 1000 / 60 +
+          fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].atime /
+            1000 /
+            60
+      );
+      let forBlackBoxRedux = getTimes(
+        periodIndex,
+        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime +
+          obj.mtime / 1000 / 60,
+        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime +
+          obj.mtime / 1000 / 60 +
+          fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].atime /
+            1000 /
+            60
+      );
+      dispatch(addWholeBlackBox(forBlackBoxRedux));
+      if (
+        i !==
+        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)].length - 1
+      ) {
+        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][
+          i + 1
+        ].starttime =
+          fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime +
+          obj.mtime / 1000 / 60 +
+          fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].atime /
+            1000 /
+            60;
+      }
+    }
+  }, []);
+
+  return (
+    <div className="MyPost_clock">
+      <span>
+        {Math.floor(upTime / 60)
+          .toString()
+          .padStart(2, "0")}
+        :
+        {Math.floor(upTime % 60)
+          .toString()
+          .padStart(2, "0")}
+      </span>
+      <span>~</span>
+      <span>
+        {Math.floor(downTime / 60)
+          .toString()
+          .padStart(2, "0")}
+        :
+        {Math.floor(downTime % 60)
+          .toString()
+          .padStart(2, "0")}
+      </span>
+    </div>
+  );
+}
+
+function getTimes(periodIndex, st, et) {
+  return {
+    day: periodIndex + 1,
+    stime: Math.floor(st / 60)
+      .toString()
+      .padStart(2, "0"),
+    smin: Math.floor(st % 60)
+      .toString()
+      .padStart(2, "0"),
+    etime: Math.floor(et / 60)
+      .toString()
+      .padStart(2, "0"),
+    emin: Math.floor(et % 60)
+      .toString()
+      .padStart(2, "0"),
+  };
+}
 const Plan = styled.div`
   display: flex;
   flex-direction: column;
