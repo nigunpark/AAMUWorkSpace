@@ -30,11 +30,24 @@ const ChatBot = ({ showChatBot, chatArr }) => {
         </Body>
 
         <div className="chatBot__input-container">
-          <input type="text" className="chatBot__input" ref={inputRef} />
+          <input
+            type="text"
+            className="chatBot__input"
+            ref={inputRef}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                chatArr.push({ message: inputRef.current.value, bool: false });
+                inputRef.current.value = "";
+                setChats(chatArr);
+                chatBotConn(inputRef, chats, setChats, chatArr);
+              }
+            }}
+          />
           <span
             className="chatBot__input-btn"
             onClick={() => {
               chatArr.push({ message: inputRef.current.value, bool: false });
+              inputRef.current.value = "";
               setChats(chatArr);
               chatBotConn(inputRef, chats, setChats, chatArr);
             }}
