@@ -807,7 +807,6 @@ a {
 
 .myBox-List {
   position: fixed;
-  display: auto;
   width: 100%;
   height: 100%;
   z-index: 100;
@@ -821,6 +820,23 @@ a {
   overflow: auto;
   border-radius: 10px;
   background-color: rgba(0, 0, 0, 0.6);
+  box-shadow: 0 0 0 2px #ffffff, 0 0 0 5px #e9ecef;
+}
+.myBox-List-two {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  z-index: 100;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: auto;
+  border-radius: 10px;
+  background-color: rgba(0, 0, 0, 0.1);
   box-shadow: 0 0 0 2px #ffffff, 0 0 0 5px #e9ecef;
 }
 .myBox-List-overlay {
@@ -909,6 +925,55 @@ a {
   100% {
     transform: translateX(0);
     opacity: 1;
+  }
+}
+.my-side {
+  // position: absolute;
+  // width: 35%;
+  height: 100%;
+}
+.my-title-profile {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  margin: 10px;
+
+  > img {
+    width: 35px;
+    border: 1px solid #dbdbdb;
+    border-radius: 50%;
+  }
+
+  .uploadname {
+    margin-top: -5px;
+    font-size: 16px;
+    font-weight: bold;
+    margin-left: 10px;
+
+    &:hover {
+      text-decoration: underline;
+      cursor: pointer;
+    }
+  }
+}
+.uploadLocation {
+  border-bottom: 0.1px solid #c0c0c0;
+  margin-top: 10px;
+  width: 100%;
+
+  > input {
+    position: relative;
+    width: fit-content;
+    margin-left: 10px;
+    padding: 10px 10px 10px 0px;
+    font-size: 18px;
+  }
+  > i {
+    float: right;
+    padding-right: 30px;
+    font-size: 20px;
+    margin-top: 5px;
   }
 }
 
