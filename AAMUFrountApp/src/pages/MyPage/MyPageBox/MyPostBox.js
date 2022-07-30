@@ -125,54 +125,50 @@ const MyPostBox = ({ selectRbn }) => {
   const themes = [
     {
       themeId: 1,
-      themeName: "ㅇㅅㅇ",
-    },
-    {
-      themeId: 15,
       themeName: "봄",
     },
     {
-      themeId: 16,
+      themeId: 2,
       themeName: "여름",
     },
     {
-      themeId: 17,
+      themeId: 3,
       themeName: "가을",
     },
     {
-      themeId: 18,
+      themeId: 4,
       themeName: "겨울",
     },
     {
-      themeId: 19,
+      themeId: 5,
       themeName: "산/트레킹",
     },
     {
-      themeId: 20,
+      themeId: 6,
       themeName: "바다/해수욕장",
     },
     {
-      themeId: 21,
+      themeId: 7,
       themeName: "호캉스",
     },
     {
-      themeId: 22,
+      themeId: 8,
       themeName: "자전거",
     },
     {
-      themeId: 23,
+      themeId: 9,
       themeName: "섬",
     },
     {
-      themeId: 24,
+      themeId: 10,
       themeName: "맛집",
     },
     {
-      themeId: 25,
+      themeId: 11,
       themeName: "힐링",
     },
     {
-      themeId: 26,
+      themeId: 12,
       themeName: "드라이브",
     },
   ];
