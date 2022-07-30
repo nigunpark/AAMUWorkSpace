@@ -1,5 +1,6 @@
 package com.aamu.admin.main.serviceimpl;
 
+import java.util.List;
 import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
@@ -13,7 +14,9 @@ public class BBSAdminDAO {
 	private SqlSessionTemplate template;
 	
 	//전체 게시글 목록
-	
+	public List bbsSelectList(Map map) {
+		return template.selectList("bbsSelectList",map);
+	}
 	
 	//전체 게시글 수
 	public int bbsGetTotalRecordCount(Map map) {
@@ -21,15 +24,22 @@ public class BBSAdminDAO {
 	}
 	
 	//게시글 삭제
-	public int bbsdelete(Map map) {
+	public int bbsDelete(Map map) {
 		return template.delete("bbsDelete",map);
 	}
 	
 	//전체 리뷰 목록
+	public List reviewSelectList(Map map) {
+		return template.selectList("reviewSelectList",map);
+	}
 	
+	//전체 리뷰 수
+	public int reviewGetTotalRecordCount(Map map) {
+		return template.selectOne("reviewGetTotalRecordCount",map);
+	}
 	
 	//리뷰 삭제
-	public int reviewdelete(Map map) {
+	public int reviewDelete(Map map) {
 		return template.delete("reviewDelete",map);
 	}
 	

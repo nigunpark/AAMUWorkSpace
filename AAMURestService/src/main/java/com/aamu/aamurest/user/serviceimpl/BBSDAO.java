@@ -63,11 +63,13 @@ public class BBSDAO {
 	public int reviewInsert(Map map) {
 		return template.insert("reviewInsert",map);
 	}
-
+	
+	/*
 	//리뷰 수정
 	public int reviewUpdate(Map map) {
 		return template.update("reviewUpdate",map);
 	}
+	*/
 
 	//리뷰 삭제
 	public int reviewDelete(Map map) {
@@ -78,7 +80,8 @@ public class BBSDAO {
 	public int themeInsert(BBSDTO theme) {
 		return template.insert("themeInsert",theme);
 	}
-
+	
+	//경로 가져오기
 	public List<RouteDTO> selectRouteList(int rbn) {
 		return template.selectList("selectRouteList",rbn);
 	}
