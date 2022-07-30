@@ -20,9 +20,10 @@ function FeedSetting({
   setloading,
   showChat,
   setShowChat,
+
 }) {
   let profileRef = useRef();
-  let commentRef = useRef();
+ 
   let replyRef = useRef();
   let editRef = useRef();
   const [editModal, seteditModal] = useState(false);
@@ -223,26 +224,27 @@ function FeedSetting({
                 ></i>
               </div>
               {commentModal && (
-                <Container1>
-                  <Overlay
-                    ref={commentRef}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      if (e.target == commentRef.current) setcommentModal(false);
-                    }}
-                  >
+                // <Container1>
+                //   <Overlay
+                    // ref={commentRef}
+                    // onClick={(e) => {
+                    //   e.stopPropagation();
+                    //   if (e.target == commentRef.current) setcommentModal(false);
+                    // }}
+                  // >
                     <Comment
                       onClick={() => {
                         setcommentModal(false);
                       }}
+                      setcommentModal={setcommentModal}
                       seteditModal={seteditModal}
                       val={val}
                       forReRender={forReRender}
                       setForReRender={setForReRender}
                       setlist={setlist}
                     />
-                  </Overlay>
-                </Container1>
+                //   </Overlay>
+                // </Container1>
               )}
               {comeditModal && <Edit val={val} setlist={setlist} seteditModal={seteditModal} />}
             </div>
