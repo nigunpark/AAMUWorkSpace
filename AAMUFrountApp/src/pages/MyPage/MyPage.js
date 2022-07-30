@@ -262,7 +262,10 @@ function Title({ clickTab }) {
 //-----------------------------------------------------------------------
 function TabContent({ clickTab, setClickTab, planList }) {
   const [selectRbn, setSelectRbn] = useState();
-
+  const [modalOpen, setModalOpen] = useState(false);
+  const onModalSelect = () => {
+    setModalOpen(true);
+  };
   // console.log('등록한 이미지:',showImages);
   // console.log('등록한 이미지 1:',showImages[0]);
   // console.log('등록한 이미지 2:',showImages[1]);
@@ -313,14 +316,17 @@ function TabContent({ clickTab, setClickTab, planList }) {
         <div className="myInstar">
           {num.map((val, idx) => {
             return (
-              <div
-                className="instarBox"
-                onClick={(e) => {
-                  setClickTab(11);
-                }}
-              >
-                <img className="instaImg" src={`/images/img-${val}.jpg`} />
-              </div>
+              <>
+                {modalOpen == true ? (
+                  <MyBoxList
+                    setModalOpen={setModalOpen}
+                    setClickTab={setClickTab}
+                  />
+                ) : null}
+                <div className="instarBox" onClick={onModalSelect}>
+                  <img className="instaImg" src={`/images/img-${val}.jpg`} />
+                </div>
+              </>
             );
           })}
         </div>
@@ -386,8 +392,8 @@ function TabContent({ clickTab, setClickTab, planList }) {
     //-----------------------글작성------------------------
     return <MyPostBox selectRbn={selectRbn} />;
   } else if (clickTab === 11) {
-    //------------인스타 상세보기-------------
-    return <MyInstaBox />;
+    //------------인스타 게시글 수정-------------
+    return; //<MyInstaBox />;
   }
 }
 
@@ -428,11 +434,6 @@ function TabTopLine({ clickTab, planList }) {
           <span className="status-number">0</span>
           <span className="status-type">Upload</span>
         </div>
-
-        <div className="item-status">
-          <span className="status-number">0</span>
-          <span className="status-type">Point</span>
-        </div>
       </div>
     );
   } else if (clickTab === 1) {
@@ -451,6 +452,34 @@ function TabTopLine({ clickTab, planList }) {
   } else if (clickTab === 10) {
     return <div></div>;
   }
+}
+
+function MyBoxList({ setModalOpen, setClickTab }) {
+  return (
+    <div className="myBox-List-two">
+      <div className="myBox-List-overlay">
+        <div className="myBox-List-Plan">내 글 보기</div>
+        <div
+          className="myBox-List-Post"
+          onClick={() => {
+            // setModalOpen(false);
+            // setClickTab(11);
+          }}
+        >
+          수정 하기
+        </div>
+        <div className="myBox-List-Delete">삭제하기</div>
+        <div
+          className="myBox-List-back"
+          onClick={(e) => {
+            setModalOpen(false);
+          }}
+        >
+          취소
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export default MyPage;
