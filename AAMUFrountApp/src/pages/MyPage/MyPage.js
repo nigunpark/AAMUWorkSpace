@@ -38,14 +38,14 @@ const MyPage = () => {
       })
       .then((resp) => {
         setPlanList(resp.data);
-        // console.log('데이터 확인 : ',resp.data);
+        console.log("데이터 확인 : ", resp.data);
       })
       .catch((error) => {
         console.log((error) => console.log("여행경로 가져오기 실패", error));
       });
   }, []);
 
-  // console.log('받아온 데이터 저장 확인 :',planList);
+  // console.log("받아온 데이터 저장 확인 :", planList);
 
   useEffect(() => {
     if (clickTab === 0) {
