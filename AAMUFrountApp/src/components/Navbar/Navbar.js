@@ -17,11 +17,7 @@ const Navbar = ({ scrollNav, whereUrl }) => {
     <div className="navbar__fragment">
       <nav
         className={
-          scrollNav
-            ? "navbar scrollActive"
-            : whereUrl
-            ? "navbar whereUrlActive "
-            : "navbar"
+          scrollNav ? "navbar scrollActive" : whereUrl ? "navbar whereUrlActive " : "navbar"
         }
       >
         <div className="navbar-container">
@@ -37,12 +33,8 @@ const Navbar = ({ scrollNav, whereUrl }) => {
               </Link>
             </li>
             <li>
-              <Link
-                to="/services"
-                className="nav-links"
-                onClick={closeMoblieMenu}
-              >
-                Services
+              <Link to="/chat" className="nav-links" onClick={closeMoblieMenu}>
+                ChatTest
               </Link>
             </li>
             <li>
@@ -51,11 +43,7 @@ const Navbar = ({ scrollNav, whereUrl }) => {
               </Link>
             </li>
             <li>
-              <Link
-                to="/others"
-                className="nav-links"
-                onClick={closeMoblieMenu}
-              >
+              <Link to="/others" className="nav-links" onClick={closeMoblieMenu}>
                 others
               </Link>
             </li>

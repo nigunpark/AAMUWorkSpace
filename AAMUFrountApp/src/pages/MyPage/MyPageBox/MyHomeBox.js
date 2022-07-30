@@ -8,11 +8,7 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import MyPlanMap from "./MyPlanMap";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  addMonthNDate,
-  changeTripPeriod,
-  resetMonthNDate,
-} from "../../../redux/store";
+import { addMonthNDate, changeTripPeriod, resetMonthNDate } from "../../../redux/store";
 
 const MyHomeBox = ({ setClickTab, planList, rbn, setSelectRbn }) => {
   const [fromWooJaeData, setFromWooJaeData] = useState([]);
@@ -68,10 +64,9 @@ const MyHomeBox = ({ setClickTab, planList, rbn, setSelectRbn }) => {
         <MyDetailPlan
           setIsOpen={setIsOpen}
           currPosition={currPosition}
-          fromWooJaeData={fromWooJaeData}
-          setFromWooJaeData={setFromWooJaeData}
           setNewTimeSet={setNewTimeSet}
           newFromWooJae={newFromWooJae}
+          setNewFromWooJae={setNewFromWooJae}
           newTimeSet={newTimeSet}
           planList={planList}
         />
@@ -164,7 +159,7 @@ function getTimeSetArr(newFromWooJae, planList, setNewTimeSet) {
   // });
 }
 
-async function excAxios(rbn, setNewFromWooJae, dispatch, setCurrPosition) {
+async function excAxios(rbn, setNewFromWooJae, dispatch, setCurrPosition, planList) {
   try {
     let token = sessionStorage.getItem("token");
     //   /planner/selectonemap
@@ -177,7 +172,8 @@ async function excAxios(rbn, setNewFromWooJae, dispatch, setCurrPosition) {
       },
     });
     console.log("resp.data", resp.data);
-    // setCurrPosition(resp.data.title);
+    setCurrPosition(resp.data.title.split(" ")[0]);
+
     let keys = Object.keys(resp.data.routeMap);
     let values = Object.values(resp.data.routeMap);
     let tempArr = keys.map((val, i) => {
@@ -220,23 +216,20 @@ async function excAxios(rbn, setNewFromWooJae, dispatch, setCurrPosition) {
         break;
     }
     dispatch(resetMonthNDate([]));
-    dispatch(
-      addMonthNDate({ month: fristMonth, date: fristDate, dow: fristDow })
-    );
+    dispatch(addMonthNDate({ month: fristMonth, date: fristDate, dow: fristDow }));
   } catch (error) {
-    console.log((error) => console.log("상세경로 가져오기 실패", error));
+    console.log(error);
   }
 }
 
 function MyDetailPlan({
   setIsOpen,
   currPosition,
-  fromWooJaeData,
-  setFromWooJaeData,
   setNewTimeSet,
   newFromWooJae,
   newTimeSet,
   planList,
+  setNewFromWooJae,
 }) {
   const [auSure, setAuSure] = useState(false);
   const [savePlan, setSavePlan] = useState(false);
@@ -244,18 +237,13 @@ function MyDetailPlan({
   let reduxState = useSelector((state) => state);
   let dispatch = useDispatch();
   useEffect(() => {
-    console.log("newFromWooJae", newFromWooJae);
     let lengths = parseInt(
-      planList.title.substring(
-        planList.title.indexOf("일") - 1,
-        planList.title.indexOf("일")
-      )
+      planList.title.substring(planList.title.indexOf("일") - 1, planList.title.indexOf("일"))
     );
     let tempArr = new Array(lengths).fill(0);
     dispatch(changeTripPeriod(lengths));
     tempArr.forEach((val, index) => {
-      let bbcT =
-        newFromWooJae[index][`day${index + 1}`][0].starttime / (1000 * 60);
+      let bbcT = newFromWooJae[index][`day${index + 1}`][0].starttime / (1000 * 60);
       if (bbcT >= 13 * 60) {
         let temp = {
           ampm: "오후",
@@ -264,7 +252,6 @@ function MyDetailPlan({
           min: bbcT % 60,
           day: index + 1,
         };
-        // dispatch(changeTimeSetObj(temp));
         setNewTimeSet((curr) => [...curr, temp]);
       } else {
         let temp = {
@@ -274,7 +261,6 @@ function MyDetailPlan({
           min: bbcT % 60,
           day: index + 1,
         };
-        // dispatch(changeTimeSetObj(temp));
         setNewTimeSet((curr) => [...curr, temp]);
       }
     });
@@ -296,7 +282,7 @@ function MyDetailPlan({
           <MyCreatePlanLeft
             currPosition={currPosition} //지역명 넣기
             fromWooJaeData={newFromWooJae} //routeMap [{},{},{}] 형식으로 가공해야함
-            setFromWooJaeData={setFromWooJaeData}
+            setFromWooJaeData={setNewFromWooJae}
             setForDayLine={setForDayLine}
             newTimeSet={newTimeSet}
           />
@@ -310,7 +296,7 @@ function MyDetailPlan({
           <MyPlanMap
             setSavePlan={setSavePlan}
             currPosition={currPosition}
-            fromWooJaeData={fromWooJaeData}
+            fromWooJaeData={newFromWooJae}
             forDayLine={forDayLine}
           />
         </Contents>

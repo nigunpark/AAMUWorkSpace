@@ -165,9 +165,7 @@ let tripPeriod = createSlice({
   initialState: [0],
   reducers: {
     changeTripPeriod(state, action) {
-      let arr = new Array(action.payload).fill(0);
-      for (let i = 0; i < action.length; i++) arr.splice(i, 1, i + 1);
-      return arr;
+      return new Array(action.payload).fill(0);
     },
   },
 });
