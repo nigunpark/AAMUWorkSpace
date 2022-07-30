@@ -12,7 +12,7 @@
 		WHERE r.FROMID = #{id} OR r.TOID = #{id} ORDER BY senddate DESC
 	</select>
 	
-	<select id="chatroomsone" parameterType="Map">
+	<select id="chatroomsone" parameterType="Map" resultType="int">
 		SELECT roomno FROM CHATROOM 
 		WHERE (FROMID=#{fromid} AND TOID=#{toid})
 		OR (FROMID=#{toid} AND TOID=#{fromid})
