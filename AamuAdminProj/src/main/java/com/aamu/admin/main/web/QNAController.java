@@ -28,7 +28,7 @@ public class QNAController {
 	@Autowired
 	private QNAServiceImpl qnaService;
 
-	// 목록
+	// 게시물 목록
 	@RequestMapping("QNA.do")
 	public String selectList(@ModelAttribute("id") String id, @RequestParam Map map,
 			@RequestParam(defaultValue = "1", required = false) int nowPage, HttpServletRequest req, Model model) {
@@ -42,7 +42,7 @@ public class QNAController {
 		return "qna/qnaList";
 	}
 
-	// 읽기
+	// 상세 보기
 	@RequestMapping("QNAView.do")
 	public String qnaView(
 			// @ModelAttribute("id") String id,
@@ -56,21 +56,21 @@ public class QNAController {
 		return "qna/qnaView";
 	}///////////////////////
 
-	// 쓰기
+	// 게시물 등록
 	@GetMapping("QNAWrite.do")
 	public String qnaWrite() throws Exception {
 		return "qna/qnaWrite";
 	}
 
-	// 쓰기 완료
+	// 게시물 등록 완료
 	@PostMapping("QNAWrite.do")
 	public String qnaWriteOk(@RequestParam Map map) {
 		map.put("id", "ADMIN2");
 		qnaService.qnaWrite(map);
 		return "redirect:/QNA.do";
 	}
-	
-	// 수정
+
+	// 게시물 수정
 	@GetMapping("QNAEdit.do")
 	public String qnaEdit(@ModelAttribute("qno") String qno, @RequestParam Map map, Model model) throws Exception {
 		// 서비스 호출]
@@ -81,8 +81,8 @@ public class QNAController {
 		// 뷰정보 반환]
 		return "qna/qnaEdit";
 	}
-	
-	// 수정 완료
+
+	// 게시물 수정 완료
 	@PostMapping("QNAEdit.do")
 	public String qnaEditOk(@ModelAttribute("qno") String qno, @RequestParam Map map) throws Exception {
 		// 서비스 호출]
@@ -91,8 +91,7 @@ public class QNAController {
 		return "redirect:/QNAView.do";
 	}/////////////////////////
 
-	
-	// 목록에서 삭제
+	// 게시물 목록에서 삭제
 	@PostMapping("QNADelete.do")
 	@ResponseBody
 	public Map qnaDelete(@RequestBody Map map) {
@@ -106,16 +105,12 @@ public class QNAController {
 			resultMap.put("result", "NotSuccess");
 		return resultMap;
 	}
-	
-	// 읽기에서 삭제
+
+	// 상세 보기에서 삭제
 	@GetMapping("QNAViewDelete.do")
 	public String delete(@ModelAttribute("qno") String qno, @RequestParam Map map) {
 		qnaService.qnaViewDelete(map);
 		return "redirect:/QNA.do";
 	}
-	
-	
-
-	
 
 }

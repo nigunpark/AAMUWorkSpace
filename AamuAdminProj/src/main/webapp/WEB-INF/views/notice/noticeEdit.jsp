@@ -15,17 +15,19 @@
 
 							<div class="form-group">
 								<label><kbd class="lead">제목</kbd></label> <input type="text"
-									class="form-control" placeholder="제목을 입력하세요." name="title" value="${record.title }">
+									class="form-control" placeholder="제목을 입력하세요." name="title"
+									value="${record.title }">
 							</div>
-							
+
 							<input type="hidden" name="id" value="${record.id }">
-							
+
 							<div class="form-group">
 								<label><kbd class="lead">내용</kbd></label>
 								<textarea class="form-control" rows="10" name="content"
-								 placeholder="내용을 입력하세요." onkeydown="resize(this)" onkeyup="resize(this)">${record.content }</textarea>
+									placeholder="내용을 입력하세요." onkeydown="resize(this)"
+									onkeyup="resize(this)">${record.content }</textarea>
 							</div>
-							
+
 							<button type="submit" class="btn btn-primary text-white">등록</button>
 						</form>
 						<!--------------------- 내용의 끝 부분입니다------------------------------------>
@@ -40,13 +42,11 @@
 
 
 <style>
-
-textarea.form-control{
-    min-height: 10rem;
-    overflow-y: hidden;
-    resize: none;
+textarea.form-control {
+	min-height: 10rem;
+	overflow-y: hidden;
+	resize: none;
 }
-
 </style>
 
 <script>

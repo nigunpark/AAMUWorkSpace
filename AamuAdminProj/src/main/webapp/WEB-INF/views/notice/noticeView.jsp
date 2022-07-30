@@ -18,7 +18,7 @@
 								</tr>
 								<tr>
 									<th class="w-25 bg-dark text-white text-center">제목</th>
-									<td>${record.title}</td>
+									<td><b>${record.title}</b></td>
 								</tr>
 								<tr>
 									<th class="w-25 bg-dark text-white text-center">공지</th>

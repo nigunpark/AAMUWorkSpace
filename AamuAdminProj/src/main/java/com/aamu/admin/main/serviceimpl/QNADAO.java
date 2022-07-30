@@ -16,47 +16,45 @@ public class QNADAO {
 	@Autowired
 	private SqlSessionTemplate template;
 
-	// 목록
+	// 게시물 목록
 	public List<QNADTO> qnaSelectList(Map map) {
 		List<QNADTO> records = template.selectList("qnaSelectList", map);
 		return records;
 	}
 
-	// 게시물수
+	// 게시물 수 카운트
 	public int qnaGetTotalRecordCount(Map map) {
 		return template.selectOne("qnaGetTotalRecordCount", map);
 	}
 
-	// 읽기
+	// 상세 보기
 	public QNADTO selectOne(Map map) {
 		return template.selectOne("qnaSelectOne", map);
 	}
 
-	// 쓰기
+	// 게시물 등록
 	public int qnaWrite(Map map) {
 		return template.insert("qnaWrite", map);
 	}
 
-	// 수정
+	// 게시물 수정
 	public int qnaEdit(Map map) throws Exception {
 		return template.update("qnaEdit", map);
 	}
 
-	// 목록에서 삭제
+	// 게시물 목록에서 삭제
 	public int qnaDelete(Map map) {
 		return template.delete("qnaDelete", map);
 	}
 
-	// 읽기에서 삭제
+	// 게시물 상세 보기에서 삭제
 	public int qnaViewDelete(Map map) {
 		return template.delete("qnaDelete", map);
 	}
 
-	// 조회수
+	// 조회 수 카운트
 	public int qnaCount(Map map) throws Exception {
 		return template.update("qnaCount", map);
 	}
-
-	
 
 }

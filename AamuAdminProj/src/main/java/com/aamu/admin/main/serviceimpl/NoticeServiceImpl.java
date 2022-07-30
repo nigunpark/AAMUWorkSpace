@@ -28,7 +28,7 @@ public class NoticeServiceImpl implements NoticeService {
 	@Value("${blockPage}")
 	private int blockPage;
 
-	// 목록
+	// 게시물 목록
 	@Override
 	public ListPagingData<NoticeDTO> noticeSelectList(Map map, HttpServletRequest req, int nowPage) {
 		// 페이징을 위한 로직 시작]
@@ -52,13 +52,13 @@ public class NoticeServiceImpl implements NoticeService {
 		return listPagingData;
 	}
 
-	// 게시물수
+	// 게시물 수 카운트
 	@Override
 	public int noticeGetTotalRecordCount(Map map) {
 		return dao.noticeGetTotalRecordCount(map);
 	}
 
-	// 읽기
+	// 상세 보기
 	@Override
 	public NoticeDTO selectOne(Map map) {
 		NoticeDTO record = dao.selectOne(map);
@@ -67,19 +67,19 @@ public class NoticeServiceImpl implements NoticeService {
 		return record;
 	}
 	
-	// 쓰기
+	// 게시물 등록
 	@Override
 	public int noticeWrite(Map map) {
 		return dao.noticeWrite(map);
 	}
 	
-	// 수정
+	// 게시물 수정
 	@Override
 	public int noticeEdit(Map map) throws Exception {
 		return dao.noticeEdit(map);
 	}
 
-	// 목록에서 삭제
+	// 게시물 목록에서 삭제
 	@Override
 	public int noticeDelete(Map map) {
 		int affected = 0;
@@ -97,12 +97,12 @@ public class NoticeServiceImpl implements NoticeService {
 			return 0;
 	}
 	
-	// 읽기에서 삭제
+	// 상세 보기에서 삭제
 	public int noticeViewDelete(Map map) {
 		return dao.noticeViewDelete(map);
 	}
 
-	// 조회수
+	// 조회 수 카운트
 	@Override
 	public int noticeCount(Map map) throws Exception {
 		return dao.noticeCount(map);

@@ -14,16 +14,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class QNADTO {
-	
-	/*	
-	QNO number NOT NULL, 
-	ID varchar2(20) NOT NULL,
-	TITLE nvarchar2(100) NOT NULL,
-	CONTENT nvarchar2(2000) NOT NULL,
-	QCOUNT number DEFAULT 0,
-	QDATE date DEFAULT SYSDATE,
-	PRIMARY KEY (QNO)
-	 */
 
 	private String qno;
 	private String id;
@@ -31,9 +21,9 @@ public class QNADTO {
 	private String content;
 	private String qcount;
 	private java.sql.Date qdate;
-	private String name;//이름 저장용
-	private String answerCount;
-	
+	private String name; // 이름 저장
+	private String answerCount; // 댓글 수 카운트
+
 	List<AnswerDTO> answer;
 
 }
