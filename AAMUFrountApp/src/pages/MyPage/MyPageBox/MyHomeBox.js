@@ -8,7 +8,11 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import MyPlanMap from "./MyPlanMap";
 import { useDispatch, useSelector } from "react-redux";
-import { addMonthNDate, changeTripPeriod, resetMonthNDate } from "../../../redux/store";
+import {
+  addMonthNDate,
+  changeTripPeriod,
+  resetMonthNDate,
+} from "../../../redux/store";
 
 const MyHomeBox = ({ setClickTab, planList, rbn, setSelectRbn }) => {
   const [fromWooJaeData, setFromWooJaeData] = useState([]);
@@ -95,6 +99,7 @@ function MyBoxList({
             // getTimeSetArr(newFromWooJae, planList, setNewTimeSet, please);
             setTimeout(() => {
               setIsOpen(true);
+              setModalOpen(false);
             }, 100);
           }}
         >
@@ -159,7 +164,13 @@ function getTimeSetArr(newFromWooJae, planList, setNewTimeSet) {
   // });
 }
 
-async function excAxios(rbn, setNewFromWooJae, dispatch, setCurrPosition, planList) {
+async function excAxios(
+  rbn,
+  setNewFromWooJae,
+  dispatch,
+  setCurrPosition,
+  planList
+) {
   try {
     let token = sessionStorage.getItem("token");
     //   /planner/selectonemap
@@ -216,7 +227,9 @@ async function excAxios(rbn, setNewFromWooJae, dispatch, setCurrPosition, planLi
         break;
     }
     dispatch(resetMonthNDate([]));
-    dispatch(addMonthNDate({ month: fristMonth, date: fristDate, dow: fristDow }));
+    dispatch(
+      addMonthNDate({ month: fristMonth, date: fristDate, dow: fristDow })
+    );
   } catch (error) {
     console.log(error);
   }
@@ -238,12 +251,16 @@ function MyDetailPlan({
   let dispatch = useDispatch();
   useEffect(() => {
     let lengths = parseInt(
-      planList.title.substring(planList.title.indexOf("일") - 1, planList.title.indexOf("일"))
+      planList.title.substring(
+        planList.title.indexOf("일") - 1,
+        planList.title.indexOf("일")
+      )
     );
     let tempArr = new Array(lengths).fill(0);
     dispatch(changeTripPeriod(lengths));
     tempArr.forEach((val, index) => {
-      let bbcT = newFromWooJae[index][`day${index + 1}`][0].starttime / (1000 * 60);
+      let bbcT =
+        newFromWooJae[index][`day${index + 1}`][0].starttime / (1000 * 60);
       if (bbcT >= 13 * 60) {
         let temp = {
           ampm: "오후",
