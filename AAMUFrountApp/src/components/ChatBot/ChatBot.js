@@ -1,82 +1,75 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./ChatBot.css";
 import styled, { keyframes } from "styled-components";
-const ChatBot = () => {
+import axios from "axios";
+// let chatArr = [];
+const ChatBot = ({ showChatBot, chatArr }) => {
+  let inputRef = useRef();
+  const [chats, setChats] = useState([]);
+
   return (
     <Container>
       <Content>
         <Title>챗봇에게 무엇이든 물어보세요</Title>
         <Body>
           <div className="chatBotContent">
-            {/* <div className="chatBot__wrap">
-              <span className="chatBotBox">안녕</span>
-            </div> */}
-            <p className="chatBotBox mine">
+            {chats.map((val, i) => {
+              return (
+                <p className={val.bool ? "chatBotBox bot" : "chatBotBox"}>
+                  <span className="chatBotBox__span">{val.message}</span>
+                </p>
+              );
+            })}
+            {/* <p className="chatBotBox ">
               <span className="chatBotBox__span">안녕</span>
             </p>
-            <p className="chatBotBox">
+            <p className="chatBotBox bot">
               <span className="chatBotBox__span">무엇을도와드릴까요</span>
-            </p>
-            <p className="chatBotBox mine">
-              <span className="chatBotBox__span">안녕</span>
-            </p>
-            <p className="chatBotBox">
-              <span className="chatBotBox__span">무엇을도와드릴까요</span>
-            </p>
-            <p className="chatBotBox mine">
-              <span className="chatBotBox__span">안녕</span>
-            </p>
-            <p className="chatBotBox">
-              <span className="chatBotBox__span">무엇을도와드릴까요</span>
-            </p>
-            <p className="chatBotBox mine">
-              <span className="chatBotBox__span">안녕</span>
-            </p>
-            <p className="chatBotBox">
-              <span className="chatBotBox__span">무엇을도와드릴까요</span>
-            </p>
-            <p className="chatBotBox mine">
-              <span className="chatBotBox__span">안녕</span>
-            </p>
-            <p className="chatBotBox">
-              <span className="chatBotBox__span">무엇을도와드릴까요</span>
-            </p>
-            <p className="chatBotBox mine">
-              <span className="chatBotBox__span">안녕</span>
-            </p>
-            <p className="chatBotBox">
-              <span className="chatBotBox__span">무엇을도와드릴까요</span>
-            </p>
-
-            {/* <li>
-              <span className="chatBox mine">여행하고 싶어</span>
-            </li>
-            <li>
-              <span className="chatBox ">어떤 지역으로 가고 싶어요?</span>
-            </li>
-            <li>
-              <span className="chatBox mine">안녕</span>
-            </li>
-            <li>
-              <span className="chatBox ">무엇을도와드릴까요</span>
-            </li>
-            <li>
-              <span className="chatBox mine">안녕</span>
-            </li>
-            <li>
-              <span className="chatBox ">무엇을도와드릴까요</span>
-            </li> */}
+            </p> */}
           </div>
         </Body>
 
         <div className="chatBot__input-container">
-          <input type="text" className="chatBot__input" />
-          <span className="chatBot__input-btn">보내기</span>
+          <input type="text" className="chatBot__input" ref={inputRef} />
+          <span
+            className="chatBot__input-btn"
+            onClick={() => {
+              chatArr.push({ message: inputRef.current.value, bool: false });
+              setChats(chatArr);
+              chatBotConn(inputRef, chats, setChats, chatArr);
+            }}
+          >
+            보내기
+          </span>
         </div>
       </Content>
     </Container>
   );
 };
+function chatBotConn(inputRef, chats, setChats, chatArr) {
+  let token = sessionStorage.getItem("token");
+  axios
+    .post(
+      "/aamurest/main/chatbot",
+      {
+        id: sessionStorage.getItem("username"),
+        message: inputRef.current.value,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    )
+    .then((resp) => {
+      chatArr.push(resp.data);
+      console.log("chatArr", chatArr);
+      setChats([...chatArr]);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+}
 const chatBotSlide = keyframes`
 0% {
   transform: translateY(700px) scaleY(2) ;
@@ -133,4 +126,4 @@ const Body = styled.div`
   flex-direction: column-reverse;
 `;
 
-export default ChatBot;
+export default React.memo(ChatBot);

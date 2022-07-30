@@ -589,17 +589,23 @@ public class MainController {
 		return affected;
 	}
 	@PostMapping("/main/chatbot")
-	public String mainChatbot(@RequestBody Map map) {
-		
+	public Map mainChatbot(@RequestBody Map map) {
+		System.out.println(map);
 		String uri="http://192.168.0.19:5020/message";
 		MultiValueMap<String,String> requestBody = new LinkedMultiValueMap<>();
+		HttpHeaders header = new HttpHeaders();
+		header.add("Content-Type", "application/json");
 		requestBody.add("id", map.get("id").toString());
 		requestBody.add("message", map.get("message").toString());
-		HttpEntity httpEntity = new HttpEntity<>(requestBody);
-		ResponseEntity<String> responseEntity =
-				restTemplate.exchange(uri, HttpMethod.GET,httpEntity, String.class);
+		HttpEntity httpEntity = new HttpEntity<>(requestBody,header);
+
+		ResponseEntity<Map> responseEntity =
+				restTemplate.exchange(uri, HttpMethod.POST,httpEntity, Map.class);
 		
-		return responseEntity.getBody();
+		System.out.println(responseEntity.getBody());
+		Map returnMap = responseEntity.getBody();
+		returnMap.put("bool", true);
+		return returnMap;
 	}
 
 

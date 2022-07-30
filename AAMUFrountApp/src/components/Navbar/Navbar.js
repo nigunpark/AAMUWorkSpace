@@ -7,12 +7,18 @@ import { useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMessage, faRobot } from "@fortawesome/free-solid-svg-icons";
 import ChatBot from "../ChatBot/ChatBot";
+import axios from "axios";
+import { message } from "antd";
+let chatArr = [];
 const Navbar = ({ scrollNav, whereUrl }) => {
   const [click, setClick] = useState(false);
   const handleClick = () => setClick(!click);
   const closeMoblieMenu = () => setClick(false);
   const [showChatBot, setShowChatBot] = useState(false);
   let navigate = useNavigate();
+  useEffect(() => {
+    if (showChatBot === false) chatArr = [];
+  }, [showChatBot]);
   return (
     <div className="navbar__fragment">
       <nav
@@ -96,7 +102,7 @@ function ChatBotBtn({ setShowChatBot, showChatBot }) {
           <FontAwesomeIcon icon={faRobot} className="chatBotBtn__icon" />
         </div>
       </div>
-      {showChatBot && <ChatBot />}
+      {showChatBot && <ChatBot showChatBot={showChatBot} chatArr={chatArr} />}
     </div>
   );
 }

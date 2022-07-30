@@ -33,7 +33,14 @@ public class ChatRoomController {
 	//채팅방 개설
 	@PostMapping(value = "/room")
     public List<ChatingMessageDTO> create(@RequestParam Map map){
-		template.insert("chatroominsert",map);
+		try {
+			int roomno = template.selectOne("chatroomsone",map);
+			map.put("roomno", roomno);
+		}
+		catch(NullPointerException e) {
+			template.insert("chatroominsert",map);
+		}
+		System.out.println("map : "+map);
         return template.selectList("chatroomslistone", map);
     }
 	

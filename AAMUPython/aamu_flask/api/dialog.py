@@ -11,7 +11,7 @@ class DialogMessage(Resource):
         parser.add_argument('id')
 
         args = parser.parse_args()
-
+        print(args)
         project_id=DIALOG_CONFIG['PROJECT_ID']
 
         session_client = dialogflow.SessionsClient()
@@ -34,4 +34,4 @@ class DialogMessage(Resource):
 
 
         # 다이얼로그 플로우에서 보낸 응답을 스프링으로 반환
-        return jsonify({'message': response.query_result.fulfillment_text})
+            return jsonify({'message': response.query_result.fulfillment_text})
