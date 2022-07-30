@@ -1,15 +1,16 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import SockJS from "sockjs-client";
 import * as StompJs from "@stomp/stompjs";
-function getConnet() {
+import { useDispatch, useSelector } from "react-redux";
+function getConnet(roomno) {
+  console.log("roomno", roomno);
   const client = new StompJs.Client();
-
   client.configure({
     brokerURL: "ws://192.168.0.19:8080/aamurest/ws/chat/websocket",
     onConnect: () => {
       console.log("onConnect");
-      client.subscribe("/queue/chat/message/1", (message) => {
+      client.subscribe(`/queue/chat/message/${roomno}`, (message) => {
         console.log(JSON.parse(message.body));
       });
     },
@@ -18,17 +19,22 @@ function getConnet() {
     },
   });
   client.activate();
+  return client;
 }
 
 const Chat = () => {
+  const [client, setClient] = useState();
+  let reduxState = useSelector((state) => state);
   useEffect(() => {
-    getConnet();
+    let what = getConnet(reduxState.forChatInfo.roomno);
+    setClient(what);
   }, []);
+  let inputRef = useRef();
   return (
     <Container>
       {/* <InnnerContainer> */}
       <Content>
-        <Title>KIM1111님과 대화</Title>
+        <Title>{reduxState.forChatInfo.id}님과 대화</Title>
         <Body>
           <div className="chatBotContent">
             <p className="chatBotBox mine">
@@ -77,15 +83,32 @@ const Chat = () => {
         </Body>
 
         <div className="chatBot__input-container">
-          <input type="text" className="chatBot__input" />
-          <span className="chatBot__input-btn">보내기</span>
+          <input type="text" className="chatBot__input" ref={inputRef} />
+          <span
+            className="chatBot__input-btn"
+            onClick={() => {
+              sendChat(inputRef, client, reduxState);
+            }}
+          >
+            보내기
+          </span>
         </div>
       </Content>
       {/* </InnnerContainer> */}
     </Container>
   );
 };
-
+function sendChat(inputRef, client, reduxState) {
+  client.publish({
+    destination: "/app/chat/message",
+    body: JSON.stringify({
+      roomno: reduxState.forChatInfo.roomno,
+      authid: "ADMIN",
+      missage: inputRef.current.value,
+      senddate: new Date().getTime(),
+    }),
+  });
+}
 const Container = styled.div`
   position: absolute;
   z-index: 999;
