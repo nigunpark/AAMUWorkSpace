@@ -132,5 +132,15 @@ public class MainDAO {
 		return template.update("updateImage",map);
 	}
 
+	public int searchPlanner(String message) {
+
+		return template.selectOne("searchPlanner",message);
+	}
+
+	public int countRouteBBS(int rbn) {
+		
+		return template.selectOne("countRouteBBS",rbn);
+	}
+
 
 }

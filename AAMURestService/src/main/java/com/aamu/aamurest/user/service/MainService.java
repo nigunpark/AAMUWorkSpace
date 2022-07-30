@@ -46,5 +46,7 @@ public interface MainService{
 
 	int updateImage(Map map);
 
+	int searchPlanner(String message);
+
 
 }
