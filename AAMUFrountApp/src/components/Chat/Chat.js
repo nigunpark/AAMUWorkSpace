@@ -83,10 +83,19 @@ const Chat = () => {
         </Body>
 
         <div className="chatBot__input-container">
-          <input type="text" className="chatBot__input" ref={inputRef} />
+          <input
+            type="text"
+            className="chatBot__input"
+            ref={inputRef}
+            onKeyDown={() => {
+              inputRef.current.value = "";
+              sendChat(inputRef, client, reduxState);
+            }}
+          />
           <span
             className="chatBot__input-btn"
             onClick={() => {
+              inputRef.current.value = "";
               sendChat(inputRef, client, reduxState);
             }}
           >
