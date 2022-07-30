@@ -27,7 +27,7 @@ public class AnswerController {
 
 	@PostMapping(value = "Write.do")
 	public Map write(@ModelAttribute("id") String id, @RequestParam Map map) {
-		// 한줄 댓글 작성자의 아이디 설정
+
 		map.put("id", "ADMIN2");
 		// 서비스 호출
 		int newAno = answerService.qnaWrite(map);
@@ -55,6 +55,15 @@ public class AnswerController {
 		// 리스트계열 컬렉션<맵 혹은 DTO>를 JSON형식의 문자열로 변환해준다.
 		// 데이타 반환
 		System.out.println(map);
+		return map;
+	}
+	
+	@PostMapping(value="Edit.do")
+	public Map edit(@ModelAttribute("id") String id,@RequestParam Map map) {
+		//서비스 호출
+		answerService.answerUpdate(map);
+		
+		//데이타 반환]		
 		return map;
 	}
 

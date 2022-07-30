@@ -27,7 +27,9 @@ function App() {
   const [whereUrl, setWhereUrl] = useState(false);
   const [searchb, setSearchb] = useState([]);
   const [inputValue, setinputValue] = useState("");
-
+  const [list,setlist] = useState([]);
+  const [forReRender, setForReRender] = useState(false)
+  
   const handleScroll = () => {
     if (window.scrollY > 950 && window.scrollY < 2500) setScrollNav(true);
     else setScrollNav(false);
@@ -58,6 +60,10 @@ function App() {
                 setinputValue={setinputValue}
                 searchb={searchb}
                 setSearchb={setSearchb}
+                list={list}
+                setlist={setlist}                
+                forReRender={forReRender}
+                setForReRender={setForReRender}
               />
             }
           />
@@ -69,6 +75,10 @@ function App() {
                 setinputValue={setinputValue}
                 searchb={searchb}
                 setSearchb={setSearchb}
+                list={list}
+                setlist={setlist}
+                forReRender={forReRender}
+                setForReRender={setForReRender}
               />
             }
           />

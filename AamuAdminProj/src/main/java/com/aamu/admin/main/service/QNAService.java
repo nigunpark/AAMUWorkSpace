@@ -32,10 +32,13 @@ public interface QNAService<T> {
 	// 키로 이름 찾는 메소드
 	String findNameByKey(Map map);
 
+	int answerUpdate(Map map);
+	
 	// 댓글 삭제
 	int answerDelete(Map map);
 
 	int answerAllDelete(Map map);
 
+	int answerWrite(Map map);
 
 }

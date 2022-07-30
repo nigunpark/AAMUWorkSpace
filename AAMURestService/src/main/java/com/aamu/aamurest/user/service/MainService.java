@@ -3,6 +3,8 @@ package com.aamu.aamurest.user.service;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 
 public interface MainService{
 	int placeInsert(AttractionDTO dto);
@@ -13,7 +15,7 @@ public interface MainService{
 
 	List<AttractionDTO> selectMainPlaceList();
 
-	List<AttractionDTO> selectPlacesList(Map map);
+	List<AttractionDTO> selectPlacesList(Map map,HttpServletRequest req);
 
 	List<AttractionDTO> selectAttrSigungu(Map map);
 
@@ -41,6 +43,8 @@ public interface MainService{
 	double getRecentPlaceOne(Map map);
 
 	List<PlannerDTO> getPlannerList(String id);
+
+	int updateImage(Map map);
 
 
 }

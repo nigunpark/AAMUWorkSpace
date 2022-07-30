@@ -28,10 +28,12 @@ function User({ setlist, setloading, searchb, setSearchb, inputValue, setinputVa
 
   let navigater = useNavigate();
 
-  function searchBar(e) {
-    //백이랑 인스타 리스드를 뿌려주기 위한 axios
-    console.log("inputValue", inputValue);
+  function searchBar(e){//백이랑 인스타 리스드를 뿌려주기 위한 axios
+    console.log('inputValue',inputValue)
+    console.log('searchb',searchb)
     setinputValue(e.target.value);
+    if(searchb === 'choice') return alert('무엇으로 검색할지 선택해주세요!');;
+    if(inputValue === undefined || inputValue === '') return alert('검색내용을 입력해주세요!');
     if (e.keyCode != 13) return;
     let token = sessionStorage.getItem("token");
     axios
@@ -48,31 +50,26 @@ function User({ setlist, setloading, searchb, setSearchb, inputValue, setinputVa
         console.log(resp.data);
         setSearchb(resp.data);
 
-        navigater("/Insta/searchList");
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+     
   }
 
-  function searchBarModal() {
-    //백이랑 인스타 리스드를 뿌려주기 위한 axios
-
+  function searchBarModal(){//백이랑 인스타 리스드를 뿌려주기 위한 axios
+    if(searchb === 'choice') return ;
+    if(inputValue === undefined || inputValue === '') return ;
     //  if (e.keyCode != 13) return;
     let token = sessionStorage.getItem("token");
-    axios
-      .get("/aamurest/gram/search/selectList", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        params: {
-          searchColumn: searchb,
-          searchWord: inputValue,
-        },
-      })
-      .then((resp) => {
-        console.log(resp.data);
-        settitle(resp.data);
+    axios.get('/aamurest/gram/search/selectList',{
+      headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          params:{
+            searchColumn : searchb,
+            searchWord :inputValue,
+          }
+    })
+    .then((resp) => {
+      console.log(resp.data)
+      settitle(resp.data);
       })
       .catch((error) => {
         console.log(error);

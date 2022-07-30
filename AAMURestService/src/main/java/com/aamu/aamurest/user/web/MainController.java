@@ -1,5 +1,6 @@
 package com.aamu.aamurest.user.web;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -16,6 +17,8 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.aamu.aamurest.user.service.AttractionDTO;
 import com.aamu.aamurest.user.service.MainService;
@@ -33,6 +37,7 @@ import com.aamu.aamurest.user.service.RouteDTO;
 import com.aamu.aamurest.user.service.api.KakaoKey;
 import com.aamu.aamurest.user.service.api.KakaoKey.Document;
 import com.aamu.aamurest.user.service.api.KakaoReview;
+import com.aamu.aamurest.util.FileUploadUtil;
 
 @RestController
 @CrossOrigin("*")
@@ -408,7 +413,7 @@ public class MainController {
 	}
 
 	@GetMapping("/info/places")
-	public List<AttractionDTO> attractionList(@RequestParam Map map){
+	public List<AttractionDTO> attractionList(@RequestParam Map map,HttpServletRequest req){
 
 		List<AttractionDTO> list = new Vector<>();
 
@@ -447,7 +452,7 @@ public class MainController {
 				map.put("selecttable", "dinerinfo");
 				break;
 			}
-			list = service.selectPlacesList(map);
+			list = service.selectPlacesList(map,req);
 		}
 		/*
 		for(AttractionDTO dto:list) {
@@ -572,7 +577,30 @@ public class MainController {
 		return map;
 
 	}
-
+	@PostMapping("/img/upload")
+	public int imgUpload(@RequestParam Map map,@RequestParam MultipartFile files,HttpServletRequest req) throws IllegalStateException, IOException {
+		int affected = 0;
+		System.out.println(map.get("contentid"));
+		System.out.println(files);
+		String path = req.getSession().getServletContext().getRealPath("/resources/hotelImage");
+		String filename = FileUploadUtil.oneFile(files, path);
+		map.put("smallimage", filename);
+		affected = service.updateImage(map);
+		return affected;
+	}
+	@PostMapping("/main/chatbot")
+	public String mainChatbot(@RequestBody Map map) {
+		
+		String uri="http://192.168.0.19:5020/message";
+		MultiValueMap<String,String> requestBody = new LinkedMultiValueMap<>();
+		requestBody.add("id", map.get("id").toString());
+		requestBody.add("message", map.get("message").toString());
+		HttpEntity httpEntity = new HttpEntity<>(requestBody);
+		ResponseEntity<String> responseEntity =
+				restTemplate.exchange(uri, HttpMethod.GET,httpEntity, String.class);
+		
+		return responseEntity.getBody();
+	}
 
 
 }

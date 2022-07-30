@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -45,6 +46,7 @@ public class CommuController {
 	//글 목록용
 	@GetMapping("/gram/selectList")
 	public List<CommuDTO> commuSelectList(@RequestParam Map map, HttpServletRequest req){
+		//검색할 때는 맵으로 써치워드 써치컬럼을 받고, id는 isLike때문에 받는거다. lno는 dto에서 뽑아온다
 		System.out.println("셀렉트 리스트 id:"+map.get("id"));
 		System.out.println("셀렉트 리스트 searchColumn:"+map.get("searchColumn"));
 		System.out.println("셀렉트 리스트 searchWord:"+map.get("searchWord"));
@@ -56,12 +58,22 @@ public class CommuController {
 			dto.setCommuComment(commuService.commuCommentSelectOne(dto.getLno()));
 			//코멘트의 프로필 셋팅
 			CommuCommentDTO commentdto=dto.getCommuComment();
+			//커뮤태그에 레코드 1상이면 태그네임 셋팅하기 
+			int CountTag=commuService.selectCountCommuTag(dto.getLno());
+			if(CountTag>0) {
+				List<String> tagList=commuService.commuSelectTagName(dto.getLno()); //서울,서울여행 이니까 #붙여야됨
+				List<String> sharptTagList = new Vector<>();
+				for(String tag:tagList) {
+					String sharpTag="#"+tag; //#서울을 붙이기
+					sharptTagList.add(sharpTag); //새로운 배열에 담아서 전달
+				}
+				dto.setTname(sharptTagList);
+			}
 			//토탈카운트
 			//System.out.println("포함되어있냐"+map.keySet().contains("searchColumn"));
 			if(map.keySet().contains("searchColumn")) { 
 				dto.setTotalCount(commuService.commuTotalCount(map));
 			}
-			
 			if(commentdto!=null) {
 				commentdto.setUserprofile(FileUploadUtil.requestOneFile(commuService.commuSelectUserProf(commentdto.getId()), "/resources/commuUpload", req));
 			}
@@ -119,6 +131,7 @@ public class CommuController {
 	//글 생성용: true false
 	@PostMapping(value="/gram/edit")
 	public Map commuInsert(@RequestParam List<MultipartFile> multifiles, @RequestParam Map map, HttpServletRequest req) {
+		System.out.println("tname이 오나?"+map.get("tname"));
 		//서버의 물리적 경로 얻기
 		String path=req.getSession().getServletContext().getRealPath("/resources/commuUpload");
 		Map resultMap = new HashMap();
@@ -174,7 +187,6 @@ public class CommuController {
 			commentDto.setUserprofile(FileUploadUtil.requestOneFile(commuService.commuSelectUserProf(commentDto.getId()), "/resources/commuUpload", req));
 		}
 		dto.setCommuCommentList(commentList);
-
 		return dto;
 	}
 
@@ -198,7 +210,6 @@ public class CommuController {
 		System.out.println("글수정 map:"+map);
 		int affected=commuService.commuUpdate(map);
 		Map resultMap = new HashMap<> ();
-
 		if(affected==1) resultMap.put("isSuccess", true);
 		else resultMap.put("isSuccess", false);
 		return resultMap;
@@ -321,6 +332,9 @@ public class CommuController {
 		}
 		return resultMap;
 	}
+	
+	//태그 가져오는 메소드 
+	
 
 
 }

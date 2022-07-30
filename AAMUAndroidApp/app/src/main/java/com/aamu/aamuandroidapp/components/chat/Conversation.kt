@@ -16,10 +16,9 @@
 
 package com.aamu.aamuandroidapp.components.chat
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.ScrollState
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
+import android.content.Context
+import android.content.SharedPreferences
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
@@ -34,6 +33,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -44,6 +44,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.LastBaseline
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.platform.testTag
@@ -52,45 +53,49 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import coil.compose.rememberAsyncImagePainter
+import coil.request.ImageRequest
+import com.aamu.aamuandroidapp.R
+import com.aamu.aamuandroidapp.components.login.LoginViewModel
+import com.aamu.aamuandroidapp.components.login.LoginViewModelFactory
+import com.aamu.aamuandroidapp.data.api.response.AAMUChatingMessageResponse
 import com.aamu.aamuandroidapp.data.exampleUiState
+import com.aamu.aamuandroidapp.ui.theme.amber200
+import com.aamu.aamuandroidapp.ui.theme.amber700
+import com.aamu.aamuandroidapp.ui.theme.cyan200
+import com.aamu.aamuandroidapp.ui.theme.cyan700
+import com.aamu.aamuandroidapp.util.contextL
 import kotlinx.coroutines.launch
 
-/**
- * Entry point for a conversation screen.
- *
- * @param uiState [ConversationUiState] that contains messages to display
- * @param navigateToProfile User action when navigation to a profile is requested
- * @param modifier [Modifier] to apply to this layout node
- * @param onNavIconPressed Sends an event up when the user clicks on the menu
- */
-@OptIn(ExperimentalMaterial3Api::class)
+//@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ConversationContent(
-    uiState: ConversationUiState,
     modifier: Modifier = Modifier,
 ) {
-    val authorMe = "me"
-    val timeNow = "8:30 PM"
+    val viewModel: ConversationViewModel = viewModel(
+        factory = ConversationViewModelFactory()
+    )
+
+    val messageList by viewModel.messageList.observeAsState(emptyList())
 
     val scrollState = rememberLazyListState()
     val scope = rememberCoroutineScope()
 
     Surface(modifier = modifier) {
-        Box(modifier = Modifier.fillMaxSize()) {
+        Box(modifier = Modifier.fillMaxSize().background(cyan200.copy(alpha = 0.1f))) {
             Column(
                 Modifier
                     .fillMaxSize()
             ) {
                 Messages(
-                    messages = uiState.messages,
+                    messages = messageList,
                     modifier = Modifier.weight(1f),
                     scrollState = scrollState
                 )
                 UserInput(
                     onMessageSent = { content ->
-                        uiState.addMessage(
-                            Message(authorMe, content, timeNow)
-                        )
+                        viewModel.sendMessage(content)
                     },
                     resetScroll = {
                         scope.launch {
@@ -99,17 +104,15 @@ fun ConversationContent(
                     },
                     // Use navigationBarsPadding() imePadding() and , to move the input panel above both the
                     // navigation bar, and on-screen keyboard (IME)
-                    modifier = Modifier
-                        .navigationBarsPadding()
-                        .imePadding(),
+                    modifier = Modifier,
                 )
             }
             // Channel name bar floats above the messages
             ChannelNameBar(
-                channelName = uiState.channelName,
-                channelMembers = uiState.channelMembers,
+                channelName = "ㅁㄴㅇㄻㄴㅇㄹ",
+                channelMembers = 1,
                 // Use statusBarsPadding() to move the app bar content below the status bar
-                modifier = Modifier.statusBarsPadding(),
+                modifier = Modifier.statusBarsPadding().background(cyan200.copy(alpha = 0.3f)),
             )
         }
     }
@@ -145,14 +148,14 @@ const val ConversationTestTag = "ConversationTestTag"
 
 @Composable
 fun Messages(
-    messages: List<Message>,
+    messages: List<AAMUChatingMessageResponse>,
     scrollState: LazyListState,
     modifier: Modifier = Modifier
 ) {
     val scope = rememberCoroutineScope()
     Box(modifier = modifier) {
-
-        val authorMe = "me"
+        val preferences : SharedPreferences = LocalContext.current.getSharedPreferences("usersInfo", Context.MODE_PRIVATE)
+        val authorMe : String? = preferences.getString("id",null)
         LazyColumn(
             reverseLayout = true,
             state = scrollState,
@@ -166,11 +169,11 @@ fun Messages(
                 .fillMaxSize()
         ) {
             for (index in messages.indices) {
-                val prevAuthor = messages.getOrNull(index - 1)?.author
-                val nextAuthor = messages.getOrNull(index + 1)?.author
+                val prevAuthor = messages.getOrNull(index - 1)?.authid
+                val nextAuthor = messages.getOrNull(index + 1)?.authid
                 val content = messages[index]
-                val isFirstMessageByAuthor = prevAuthor != content.author
-                val isLastMessageByAuthor = nextAuthor != content.author
+                val isFirstMessageByAuthor = prevAuthor != content.authid
+                val isLastMessageByAuthor = nextAuthor != content.authid
 
                 // Hardcode day dividers for simplicity
                 if (index == messages.size - 1) {
@@ -186,7 +189,7 @@ fun Messages(
                 item {
                     Message(
                         msg = content,
-                        isUserMe = content.author == authorMe,
+                        isUserMe = content.authid == authorMe,
                         isFirstMessageByAuthor = isFirstMessageByAuthor,
                         isLastMessageByAuthor = isLastMessageByAuthor
                     )
@@ -223,31 +226,37 @@ fun Messages(
 
 @Composable
 fun Message(
-    msg: Message,
+    msg: AAMUChatingMessageResponse,
     isUserMe: Boolean,
     isFirstMessageByAuthor: Boolean,
     isLastMessageByAuthor: Boolean
 ) {
     val borderColor = if (isUserMe) {
-        MaterialTheme.colorScheme.primary
+        cyan200
     } else {
-        MaterialTheme.colorScheme.tertiary
+        cyan700
     }
 
     val spaceBetweenAuthors = if (isLastMessageByAuthor) Modifier.padding(top = 8.dp) else Modifier
     val spaceArrangement = if(isUserMe) Arrangement.End else Arrangement.Start
     Row(modifier = spaceBetweenAuthors.fillMaxWidth(), horizontalArrangement = spaceArrangement) {
-        if (isLastMessageByAuthor) {
+        if (isLastMessageByAuthor && !isUserMe) {
             // Avatar
             Image(
                 modifier = Modifier
                     .padding(horizontal = 16.dp)
                     .size(42.dp)
                     .border(1.5.dp, borderColor, CircleShape)
-                    .border(3.dp, MaterialTheme.colorScheme.surface, CircleShape)
+                    .border(3.dp, cyan700, CircleShape)
                     .clip(CircleShape)
                     .align(Alignment.Top),
-                painter = painterResource(id = msg.authorImage),
+                painter = rememberAsyncImagePainter(
+                        model = ImageRequest.Builder(LocalContext.current)
+                            .data(msg.authpro ?: R.drawable.no_image)
+                            .crossfade(true)
+                            .build(),
+                contentScale = ContentScale.Crop
+                ),
                 contentScale = ContentScale.Crop,
                 contentDescription = null,
             )
@@ -268,15 +277,16 @@ fun Message(
 
 @Composable
 fun AuthorAndTextMessage(
-    msg: Message,
+    msg: AAMUChatingMessageResponse,
     isUserMe: Boolean,
     isFirstMessageByAuthor: Boolean,
     isLastMessageByAuthor: Boolean,
     modifier: Modifier = Modifier
 ) {
-    Column(modifier = modifier) {
+    val spaceArrangement = if(isUserMe) Alignment.End else Alignment.Start
+    Column(modifier = modifier, horizontalAlignment = spaceArrangement) {
         if (isLastMessageByAuthor) {
-            AuthorNameTimestamp(msg)
+            AuthorNameTimestamp(msg,isUserMe)
         }
         ChatItemBubble(msg, isUserMe)
         if (isFirstMessageByAuthor) {
@@ -290,11 +300,11 @@ fun AuthorAndTextMessage(
 }
 
 @Composable
-private fun AuthorNameTimestamp(msg: Message) {
+private fun AuthorNameTimestamp(msg: AAMUChatingMessageResponse,isUserMe: Boolean) {
     // Combine author and timestamp for a11y.
     Row(modifier = Modifier.semantics(mergeDescendants = true) {}) {
         Text(
-            text = msg.author,
+            text = msg.authid ?: "",
             style = MaterialTheme.typography.titleMedium,
             modifier = Modifier
                 .alignBy(LastBaseline)
@@ -302,15 +312,13 @@ private fun AuthorNameTimestamp(msg: Message) {
         )
         Spacer(modifier = Modifier.width(8.dp))
         Text(
-            text = msg.timestamp,
+            text = msg.senddate.toString(),
             style = MaterialTheme.typography.bodySmall,
             modifier = Modifier.alignBy(LastBaseline),
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
 }
-
-private val ChatBubbleShape = RoundedCornerShape(4.dp, 20.dp, 20.dp, 20.dp)
 
 @Composable
 fun DayHeader(dayString: String) {
@@ -342,17 +350,19 @@ private fun RowScope.DayHeaderLine() {
 
 @Composable
 fun ChatItemBubble(
-    message: Message,
+    message: AAMUChatingMessageResponse,
     isUserMe: Boolean
 ) {
-
+    val spaceArrangement = if(isUserMe) Alignment.End else Alignment.Start
     val backgroundBubbleColor = if (isUserMe) {
-        MaterialTheme.colorScheme.primary
+        cyan700.copy(alpha = 0.5f)
     } else {
-        MaterialTheme.colorScheme.surfaceVariant
+        cyan200.copy(alpha = 0.5f)
     }
 
-    Column {
+    val ChatBubbleShape = if(isUserMe) RoundedCornerShape(20.dp, 4.dp, 20.dp, 20.dp) else RoundedCornerShape(4.dp, 20.dp, 20.dp, 20.dp)
+
+    Column(horizontalAlignment =  spaceArrangement) {
         Surface(
             color = backgroundBubbleColor,
             shape = ChatBubbleShape
@@ -362,33 +372,18 @@ fun ChatItemBubble(
                 isUserMe = isUserMe
             )
         }
-
-        message.image?.let {
-            Spacer(modifier = Modifier.height(4.dp))
-            Surface(
-                color = backgroundBubbleColor,
-                shape = ChatBubbleShape
-            ) {
-                Image(
-                    painter = painterResource(it),
-                    contentScale = ContentScale.Fit,
-                    modifier = Modifier.size(160.dp),
-                    contentDescription = "Attached image"
-                )
-            }
-        }
     }
 }
 
 @Composable
 fun ClickableMessage(
-    message: Message,
+    message: AAMUChatingMessageResponse,
     isUserMe: Boolean
 ) {
     val uriHandler = LocalUriHandler.current
 
     val styledMessage = messageFormatter(
-        text = message.content,
+        text = message.missage ?: "",
         primary = isUserMe
     )
 
@@ -407,14 +402,6 @@ fun ClickableMessage(
                     }
                 }
         }
-    )
-}
-
-@Preview
-@Composable
-fun ConversationPreview() {
-    ConversationContent(
-        uiState = exampleUiState
     )
 }
 

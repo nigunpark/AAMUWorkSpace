@@ -6,16 +6,16 @@ import javax.servlet.http.HttpServletRequest;
 
 public interface NoticeService {
 
-	// 목록
+	// 게시물 목록
 	ListPagingData<NoticeDTO> noticeSelectList(Map map, HttpServletRequest req, int nowPage);
 
-	// 게시물수
+	// 게시물 수 카운트
 	int noticeGetTotalRecordCount(Map map);
 
-	// 읽기
+	// 상세 보기
 	NoticeDTO selectOne(Map map);
 
-	// 쓰기
+	// 등록
 	int noticeWrite(Map map);
 
 	// 수정
@@ -24,7 +24,7 @@ public interface NoticeService {
 	// 삭제
 	int noticeDelete(Map map);
 
-	// 조회수
+	// 조회 수 카운트
 	int noticeCount(Map map) throws Exception;
 
 }

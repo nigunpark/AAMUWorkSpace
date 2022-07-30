@@ -14,7 +14,7 @@
 						<div class="col-lg-12 grid-margin stretch-card">
 							<div class="card">
 								<div class="card-body">
-									<h4 class="card-title">게시글 전체 리스트</h4>
+									<h4 class="card-title">공지사항</h4>
 
 									<div class="card-numberOfBoard">
 										총 게시글 수: ${totalCount}개
@@ -39,11 +39,11 @@
 															</label>
 														</div>
 													</th>
-													<th class="col-1">글번호</th>
-													<th >제목</th>
-													<th class="col-1">ID</th>
-													<th class="col-1">작성일</th>
-													<th class="col-1">조회수</th>
+													<th class="col-1">번호</th>
+													<th>제목</th>
+													<th class="col-1">공지</th>
+													<th class="col-1">날짜</th>
+													<th class="col-1">조회</th>
 												</tr>
 											</thead>
 											<tbody>
@@ -66,9 +66,10 @@
 																</div>
 															</td>
 															<td>${record.nno}</td>
-															<td><a
+															<td class="admin-title"><a
 																href="<c:url value="/NoticeView.do?nno=${record.nno}&nowPage="/><c:out value="${param.nowPage}" default="1"/>">${record.title}</a></td>
-															<td>${record.name} (${record.id})</td>
+															<td>${record.name}(${record.id})</td>
+
 															<td>${record.noticedate}</td>
 															<td>${record.ncount}</td>
 														</tr>
@@ -126,9 +127,15 @@
 </div>
 
 <style>
+.notice-table {
+	width: 100%;
+}
 
-.notice-table {width: 100%;}
-
+td.admin-title a {
+	text-decoration: none;
+	color: black;
+	font-weight: bold;
+}
 </style>
 
 <script>

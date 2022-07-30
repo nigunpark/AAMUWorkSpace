@@ -27,59 +27,37 @@ const MyHomeBox = ({ setClickTab, planList, rbn, setSelectRbn }) => {
 
   let reduxState = useSelector((state) => state);
   let dispatch = useDispatch();
+
+  const [modalOpen, setModalOpen] = useState(false);
+  const onModalSelect = () => {
+    setModalOpen(true);
+  };
+
   return (
-    <div className="project-box-wrapper">
-      {/* style={{backgroundColor: '#fee4cb'}} */}
-      <div className="project-box">
-        <div className="project-box-content-header">
-          {/* '/images/img-'+imgNum+'.jpg' */}
-          <img className="MapImgSize" src={planList.smallImage} style={{ marginTop: "10px" }} />
-          {/* 저장한 경로 */}
-        </div>
+    <>
+      {modalOpen == true ? (
+        <MyBoxList
+          setModalOpen={setModalOpen}
+          rbn={rbn}
+          setNewFromWooJae={setNewFromWooJae}
+          dispatch={dispatch}
+          setCurrPosition={setCurrPosition}
+          setIsOpen={setIsOpen}
+          setSelectRbn={setSelectRbn}
+          setClickTab={setClickTab}
+        />
+      ) : null}
 
-        <div className="box-progress-wrapper">
-          <p className="box-progress-header" style={{ marginTop: "10px", marginBottom: "10px" }}>
-            여행 제목 : {planList.title}
-          </p>
-          <p className="box-progress-header" style={{ marginBottom: "10px" }}>
-            저장 날자 : {dateFormat(postDate)}
-          </p>
-          <p className="box-progress-header">
+      <div className="MyBoxContainer" onClick={onModalSelect}>
+        <div className="MyBox">
+          <img className="instaImg" src={planList.smallImage} />
+          <div style={{ fontSize: "20px" }}>{planList.title}</div>
+
+          <div>
             {planList.plannerdate} (rbn :{rbn})
-          </p>
-        </div>
-
-        <div className="project-box-footer" style={{ marginTop: "5px" }}>
-          <div className="detail-button">
-            <button
-              className="learn-more"
-              type="button"
-              onClick={() => {
-                setClickTab(10);
-                setSelectRbn(rbn);
-              }}
-            >
-              공유하기
-            </button>
           </div>
-          <div className="detail-button">
-            <button
-              className="learn-more"
-              type="button"
-              style={{ marginTop: "20px" }}
-              onClick={() => {
-                excAxios(rbn, setNewFromWooJae, dispatch, setCurrPosition, planList);
 
-                // getTimeSetArr(newFromWooJae, planList, setNewTimeSet, dispatch);
-
-                setTimeout(() => {
-                  setIsOpen(true);
-                }, 500);
-              }}
-            >
-              일정보기
-            </button>
-          </div>
+          <div style={{ marginLeft: "170px" }}>{dateFormat(postDate)}</div>
         </div>
       </div>
       {isOpen && (
@@ -93,11 +71,93 @@ const MyHomeBox = ({ setClickTab, planList, rbn, setSelectRbn }) => {
           planList={planList}
         />
       )}
-    </div>
+    </>
   );
 };
 
-function getTimeSetArr(newFromWooJae, planList, setNewTimeSet, dispatch) {}
+function MyBoxList({
+  setModalOpen,
+  rbn,
+  setNewFromWooJae,
+  dispatch,
+  setCurrPosition,
+  setIsOpen,
+  setSelectRbn,
+  setClickTab,
+}) {
+  return (
+    <div className="myBox-List">
+      <div className="myBox-List-overlay">
+        <div
+          className="myBox-List-Plan"
+          onClick={() => {
+            excAxios(rbn, setNewFromWooJae, dispatch, setCurrPosition);
+            // getTimeSetArr(newFromWooJae, planList, setNewTimeSet, please);
+            setTimeout(() => {
+              setIsOpen(true);
+            }, 100);
+          }}
+        >
+          일정확인/수정
+        </div>
+        <div
+          className="myBox-List-Post"
+          onClick={() => {
+            setClickTab(10);
+            setSelectRbn(rbn);
+          }}
+        >
+          공유하기
+        </div>
+        <div className="myBox-List-Delete">삭제하기</div>
+        <div
+          className="myBox-List-back"
+          onClick={(e) => {
+            setModalOpen(false);
+          }}
+        >
+          취소
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function getTimeSetArr(newFromWooJae, planList, setNewTimeSet) {
+  // let lengths = planList.title.substring(
+  //   planList.title.indexOf("일") - 1,
+  //   planList.title.indexOf("일")
+  // );
+  // console.log("lengths", lengths);
+  // // if (newFromWooJae.length === 0) return;
+  // let tempArr = new Array(lengths).fill(0);
+  // tempArr.forEach((val, index) => {
+  //   let bbcT = newFromWooJae[index][`day${index + 1}`][0].starttime / (1000 * 60);
+  //   if (bbcT >= 13 * 60) {
+  //     console.log("위");
+  //     let temp = {
+  //       ampm: "오후",
+  //       time: bbcT / 60 - 12,
+  //       fullDate: new Date(`2022-01-01 ${bbcT / 60}:${bbcT % 60}`),
+  //       min: bbcT % 60,
+  //       day: index + 1,
+  //     };
+  //     // dispatch(changeTimeSetObj(temp));
+  //     setNewTimeSet((curr) => [...curr, temp]);
+  //   } else {
+  //     console.log("아래");
+  //     let temp = {
+  //       ampm: "오전",
+  //       time: bbcT / 60,
+  //       fullDate: new Date(`2022-01-01 ${bbcT / 60}:${bbcT % 60}`),
+  //       min: bbcT % 60,
+  //       day: index + 1,
+  //     };
+  //     // dispatch(changeTimeSetObj(temp));
+  //     setNewTimeSet((curr) => [...curr, temp]);
+  //   }
+  // });
+}
 
 async function excAxios(rbn, setNewFromWooJae, dispatch, setCurrPosition, planList) {
   try {
@@ -157,10 +217,6 @@ async function excAxios(rbn, setNewFromWooJae, dispatch, setCurrPosition, planLi
     }
     dispatch(resetMonthNDate([]));
     dispatch(addMonthNDate({ month: fristMonth, date: fristDate, dow: fristDow }));
-    let lengths = parseInt(
-      planList.title.substring(planList.title.indexOf("일") - 1, planList.title.indexOf("일"))
-    );
-    dispatch(changeTripPeriod(lengths));
   } catch (error) {
     console.log(error);
   }

@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;
@@ -13,6 +15,7 @@ import com.aamu.aamurest.user.service.AttractionDTO;
 import com.aamu.aamurest.user.service.MainService;
 import com.aamu.aamurest.user.service.PlannerDTO;
 import com.aamu.aamurest.user.service.RouteDTO;
+import com.aamu.aamurest.util.FileUploadUtil;
 
 @Service
 public class MainServiceImpl implements MainService{
@@ -239,9 +242,10 @@ public class MainServiceImpl implements MainService{
 ///////////////////////////////////////////////////get place impl
 
 	@Override
-	public List<AttractionDTO> selectPlacesList(Map map) {
-
-		return dao.selectPlacesList(map);
+	public List<AttractionDTO> selectPlacesList(Map map,HttpServletRequest req) {
+		List<AttractionDTO> list = dao.selectPlacesList(map);
+		list = changeAttr(list, req);
+		return list;
 	}
 	@Override
 	public List<AttractionDTO> selectAttrSigungu(Map map) {
@@ -511,7 +515,33 @@ public class MainServiceImpl implements MainService{
 
 		return dao.selectMainPlaceList();
 	}
+	@Override
+	public int updateImage(Map map) {
+		
+		return dao.updateImage(map);
+	}
+	
+	public List<AttractionDTO> changeAttr(List<AttractionDTO> list,HttpServletRequest req){
+		List<AttractionDTO> returnList = new Vector<>();
 
+		for(AttractionDTO dto:list) {
+			String title = dto.getTitle().toString();
+			if(title!=null && dto.getSmallimage()!=null) {
+				if(!(dto.getSmallimage().toString().contains("http")) && dto.getSmallimage()!=null) 
+					dto.setSmallimage(FileUploadUtil.requestOneFile(dto.getSmallimage(),"/resources/hotelImage",req));
+				
+				if(title!=null && title.contains("\\[") &&!(title.split("\\[")[0].equals("")))
+					dto.setTitle(title.split("\\[")[0]);
+				
+				if(title!=null && title.contains("\\(")&&!(title.split("\\(")[0].equals("")))
+					dto.setTitle(title.split("\\(")[0]);
+				returnList.add(dto);
+			}
+			
+		}
+		
+		return returnList;
+	}
 
 
 }

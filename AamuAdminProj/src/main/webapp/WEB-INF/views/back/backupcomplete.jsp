@@ -99,9 +99,11 @@ $('#crawll').click(function(){
 	console.log('클릭이벤트 발생')
 	var placelist =new Array();
 	<c:forEach items="${placelist}" var="item">
-		<c:if test="${item.bigimage eq null}">
+		<c:if test="${item.smallimage eq null}">
 			placelist.push({
-				title:"${item.title}"
+				title:"${item.title}",
+				contenttypeid:"${item.contenttypeid}",
+				contentid:"${item.contentid}"
 			});
 		</c:if>
 	</c:forEach>

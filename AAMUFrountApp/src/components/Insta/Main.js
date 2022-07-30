@@ -5,11 +5,16 @@ import FeedSetting from "./FeedSetting.js";
 import User from "./User.js";
 import axios from "axios";
 import Spinner from "./Spinner";
-
-function Main({ searchb, setSearchb, inputValue, setinputValue }) {
-  const [list, setlist] = useState([]);
-  const [forReRender, setForReRender] = useState(false);
-  const [showChat, setShowChat] = useState(false);
+function Main({
+  searchb,
+  setSearchb,
+  inputValue,
+  setinputValue,
+  list,
+  setlist,
+  forReRender,
+  setForReRender,
+}) {
   function feedList() {
     //백이랑 인스타 리스드를 뿌려주기 위한 axios
     let token = sessionStorage.getItem("token");

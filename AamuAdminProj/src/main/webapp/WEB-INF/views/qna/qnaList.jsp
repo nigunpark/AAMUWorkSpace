@@ -14,7 +14,7 @@
 						<div class="col-lg-12 grid-margin stretch-card">
 							<div class="card">
 								<div class="card-body">
-									<h4 class="card-title">게시글 전체 리스트</h4>
+									<h4 class="card-title">Q&A</h4>
 
 									<div class="card-numberOfBoard">
 										총 게시글 수: ${totalCount}개
@@ -40,11 +40,12 @@
 														</div>
 													</th>
 													<th class="col-1">번호</th>
+
 													<th>제목</th>
-													<th class="col-1">작성자</th>
+													<th class="col-1">문의</th>
 													<th class="col-1">답변</th>
-													<th class="col-1">조회수</th>
 													<th class="col-1">날짜</th>
+													<th class="col-1">조회</th>
 												</tr>
 											</thead>
 											<tbody>
@@ -67,18 +68,22 @@
 																</div>
 															</td>
 															<td>${record.qno}</td>
-															<td><a
+															<td class="admin-title"><a
 																href="<c:url value="/QNAView.do?qno=${record.qno}&nowPage="/><c:out value="${param.nowPage}" default="1"/>">${record.title}</a>
-																<span class="badge badge-dark">${record.answerCount}</span></td>
-															<td>${record.name}(${record.id})</td>
-															<td>
-															<c:set var = "ac" value="${record.answerCount}"/>
-															<c:choose>
-															<c:when test="${ac == 0}">X</c:when><c:otherwise>O</c:otherwise>
-															</c:choose>
 															</td>
-															<td>${record.qcount}</td>
+															<td>${record.name}(${record.id})</td>
+															<td><c:set var="ac" value="${record.answerCount}" />
+																<c:choose>
+																	<c:when test="${ac == 0}">
+																		<label class="badge badge-danger">대기</label>
+																	</c:when>
+																	<c:otherwise>
+																		<label class="badge badge-success">완료</label>
+																	</c:otherwise>
+																</c:choose></td>
+
 															<td>${record.qdate}</td>
+															<td>${record.qcount}</td>
 														</tr>
 													</c:forEach>
 												</c:if>
@@ -137,6 +142,15 @@
 .qna-table {
 	width: 100%;
 }
+
+td.admin-title a {
+	text-decoration: none;
+	color: black;
+	font-weight: bold;
+}
+
+
+
 </style>
 
 <script>

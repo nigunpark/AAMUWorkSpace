@@ -1,1 +1,1 @@
-DIALOG_CONFIG ={'PROJECT_ID':'mytravelbot2-hbyl','GOOGLE_APPLICATION_CREDENTIALS':'mytravelbot2-hbyl-001abbaedbc3.json'}
+DIALOG_CONFIG ={'PROJECT_ID':'aamubot-glkq','GOOGLE_APPLICATION_CREDENTIALS':'aamubot-glkq-bdfbe5842dea.json'}

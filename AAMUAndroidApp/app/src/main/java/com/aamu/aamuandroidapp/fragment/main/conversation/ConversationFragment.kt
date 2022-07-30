@@ -16,22 +16,21 @@
 
 package com.aamu.aamuandroidapp.fragment.main.conversation
 
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.WindowInsetsSides
-import androidx.compose.foundation.layout.navigationBars
-import androidx.compose.foundation.layout.only
-import androidx.compose.foundation.layout.windowInsetsPadding
+import android.view.WindowManager
+import androidx.compose.foundation.layout.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import com.aamu.aamuandroidapp.components.chat.ConversationContent
 import com.aamu.aamuandroidapp.data.exampleUiState
+import com.aamu.aamuandroidapp.ui.theme.JetchatTheme
 
 
 class ConversationFragment : Fragment() {
@@ -43,9 +42,20 @@ class ConversationFragment : Fragment() {
     ): View = ComposeView(inflater.context).apply {
         layoutParams = LayoutParams(MATCH_PARENT, MATCH_PARENT)
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            requireActivity().window.setDecorFitsSystemWindows(false)
+            container?.rootView?.setOnApplyWindowInsetsListener { _, insets ->
+                val imeHeight = insets.getInsets(android.view.WindowInsets.Type.ime()).bottom
+                val bottomInset : Int = if (imeHeight == 0) 0 else imeHeight
+                container?.rootView?.setPadding(0, 0, 0, bottomInset)
+                insets
+            }
+        } else {
+            requireActivity().window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN or WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+        }
+
         setContent {
             ConversationContent(
-                uiState = exampleUiState,
                 // Add padding so that we are inset from any navigation bars
                 modifier = Modifier.windowInsetsPadding(
                     WindowInsets
@@ -53,6 +63,15 @@ class ConversationFragment : Fragment() {
                         .only(WindowInsetsSides.Horizontal + WindowInsetsSides.Top)
                 )
             )
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            requireActivity().window.setDecorFitsSystemWindows(true)
+        } else {
+            requireActivity().window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_UNSPECIFIED or WindowManager.LayoutParams.SOFT_INPUT_STATE_UNSPECIFIED)
         }
     }
 }

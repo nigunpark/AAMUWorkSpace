@@ -18,8 +18,10 @@ package com.aamu.aamuandroidapp.components.chat
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -48,6 +50,8 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.aamu.aamuandroidapp.ui.theme.cyan200
+import com.aamu.aamuandroidapp.ui.theme.cyan700
 
 enum class InputSelector {
     NONE,
@@ -131,7 +135,7 @@ private fun UserInputText(
             .semantics {
                 contentDescription = a11ylabel
                 keyboardShownProperty = keyboardShown
-            },
+            }.background(cyan200.copy(alpha = 0.3f)),
         horizontalArrangement = Arrangement.Start,
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -141,6 +145,7 @@ private fun UserInputText(
                     .height(64.dp)
                     .fillMaxWidth(0.8f)
                     .align(Alignment.Bottom)
+                    .background(cyan200.copy(alpha = 0.3f))
             ) {
                 var lastFocusState by remember { mutableStateOf(false) }
                 BasicTextField(
@@ -162,7 +167,8 @@ private fun UserInputText(
                     ),
                     maxLines = 1,
                     cursorBrush = SolidColor(LocalContentColor.current),
-                    textStyle = LocalTextStyle.current.copy(color = LocalContentColor.current)
+                    textStyle = LocalTextStyle.current.copy(color = LocalContentColor.current),
+                    keyboardActions = KeyboardActions(onSend = {onMessageSent()})
                 )
 
                 val disableContentColor =
@@ -182,16 +188,18 @@ private fun UserInputText(
         val border = if (!sendMessageEnabled) {
             BorderStroke(
                 width = 1.dp,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f)
+                color = cyan700.copy(alpha = 0.3f)
             )
         } else {
             null
         }
-        val disabledContentColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f)
+        val disabledContentColor = cyan700.copy(alpha = 0.3f)
 
         val buttonColors = ButtonDefaults.buttonColors(
             disabledContainerColor = Color.Transparent,
-            disabledContentColor = disabledContentColor
+            disabledContentColor = disabledContentColor,
+            containerColor = cyan700,
+            contentColor = Color.White
         )
 
         // Send button

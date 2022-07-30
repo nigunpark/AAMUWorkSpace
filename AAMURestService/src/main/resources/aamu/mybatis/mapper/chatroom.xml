@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="aamu.mybatis.mapper.chatroom">
+
+	<select id="chatroomslist" parameterType="Map" resultType="chatRoomDTO">
+		SELECT r.*,u.USERPROFILE frompro ,s.USERPROFILE topro FROM CHATROOM r 
+		JOIN users u ON r.FROMID = u.ID
+		JOIN users s ON r.TOID = s.ID
+		WHERE r.FROMID = #{id} OR r.TOID = #{id} 
+	</select>
+	
+	<insert id="chatroominsert" parameterType="Map">
+		INSERT INTO CHATROOM VALUES (SEQ_CHR.NEXTVAL,#{fromid},#{toid})
+		<selectKey keyProperty="roomno" resultType="int" order="AFTER">
+	    	SELECT SEQ_CHR.CURRVAL FROM DUAL
+	    </selectKey>
+	</insert>
+	
+	<select id="chatroomslistone" parameterType="Map" resultType="chatingMessageDTO">
+		SELECT c.*,u.USERPROFILE authpro FROM CHATINGMESSAGE c
+		JOIN users u ON c.AUTHID = u.ID
+		WHERE c.ROOMNO = #{roomno} ORDER BY ROWNUM DESC
+	</select>
+	
+	<insert id="message" parameterType="chatingMessageDTO">
+		INSERT INTO CHATINGMESSAGE
+		VALUES(#{roomno},#{authid},#{missage},to_date(SYSDATE,'YYYY-MM-DD HH24:mi:SS'))
+		<selectKey resultType="java.sql.Date" keyProperty="senddate" order="AFTER">
+			SELECT to_date(SYSDATE,'YYYY-MM-DD HH24:mi:SS') senddate FROM DUAL
+		</selectKey>
+	</insert>
+	
+	<select id="messagepro" parameterType="chatingMessageDTO" resultType="String">
+		SELECT USERPROFILE authpro FROM users WHERE id = #{authid}
+	</select>
+	
+	
+</mapper>

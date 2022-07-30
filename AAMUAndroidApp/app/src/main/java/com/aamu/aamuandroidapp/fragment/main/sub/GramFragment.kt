@@ -6,6 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.runtime.remember
+import androidx.navigation.NavController
+import androidx.navigation.Navigation
+import com.aamu.aamuandroidapp.R
 import com.aamu.aamuandroidapp.components.gram.AAMUgramHome
 import com.aamu.aamuandroidapp.data.DemoDataProvider
 import com.aamu.aamuandroidapp.databinding.FragmentGramBinding
@@ -14,12 +17,20 @@ import com.aamu.aamuandroidapp.ui.theme.ComposeCookBookTheme
 class GramFragment : Fragment() {
 
     private lateinit var binding: FragmentGramBinding
+    private lateinit var navControllerHost : NavController
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentGramBinding.inflate(layoutInflater)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        navControllerHost = Navigation.findNavController(view)
 
         binding.gramCompose.setContent {
             val posts = remember { DemoDataProvider.tweetList.filter { it.tweetImageId != 0 } }
@@ -32,11 +43,9 @@ class GramFragment : Fragment() {
                     onCommentsClicked = {},
                     onSendClicked = {},
                     onProfileClicked = {},
-                    onMessagingClicked = {}
+                    onMessagingClicked = {navControllerHost.navigate(R.id.action_mainFragment_to_conversationFragment)}
                 )
             }
         }
-
-        return binding.root
     }
 }
