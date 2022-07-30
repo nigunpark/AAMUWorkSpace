@@ -49,8 +49,8 @@ const Navbar = ({ scrollNav, whereUrl }) => {
               </Link>
             </li>
             <li>
-              <Link to="/others" className="nav-links" onClick={closeMoblieMenu}>
-                others
+              <Link to="/qna" className="nav-links" onClick={closeMoblieMenu}>
+                QnA
               </Link>
             </li>
             <li>
