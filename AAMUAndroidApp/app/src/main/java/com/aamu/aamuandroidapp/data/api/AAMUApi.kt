@@ -43,7 +43,7 @@ interface AAMUApi {
     suspend fun getChatMessageList(@QueryMap map : Map<String,String>): Response<List<AAMUChatingMessageResponse>>
 
     companion object {
-        private const val BASE_URL = "http://192.168.0.19:8080/aamurest/"
+        private const val BASE_URL = "http://192.168.45.107:8080/aamurest/"
 
         operator fun invoke():AAMUApi{
             val requestInterceptor  = Interceptor{ chain ->

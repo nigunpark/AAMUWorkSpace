@@ -172,16 +172,20 @@ fun Messages(
                         return@let false
                     }
                     else{
-                        return@let nextDay / (1000 * 60 * 60 * 24) != it / (1000 * 60 * 60 * 24)
+                        return@let (nextDay + (1000*60*60*9)) / (1000 * 60 * 60 * 24) != (it + (1000*60*60*9)) / (1000 * 60 * 60 * 24)
                     }
                 }
+
+                var isCurrentTime = nextDay?.let { it / (1000*60) } != prevDay?.let { it / (1000*60) }
 
                 item {
                     Message(
                         msg = content,
                         isUserMe = content.authid == authorMe,
                         isFirstMessageByAuthor = isFirstMessageByAuthor,
-                        isLastMessageByAuthor = isLastMessageByAuthor
+                        isLastMessageByAuthor = isLastMessageByAuthor,
+                        isToday = isToday,
+                        isCurrentTime = isCurrentTime
                     )
                 }
                 if (isToday == true) {
@@ -226,7 +230,9 @@ fun Message(
     msg: AAMUChatingMessageResponse,
     isUserMe: Boolean,
     isFirstMessageByAuthor: Boolean,
-    isLastMessageByAuthor: Boolean
+    isLastMessageByAuthor: Boolean,
+    isToday: Boolean,
+    isCurrentTime: Boolean,
 ) {
     val borderColor = if (isUserMe) {
         cyan200
@@ -237,7 +243,7 @@ fun Message(
     val spaceBetweenAuthors = if (isLastMessageByAuthor) Modifier.padding(top = 8.dp) else Modifier
     val spaceArrangement = if(isUserMe) Arrangement.End else Arrangement.Start
     Row(modifier = spaceBetweenAuthors.fillMaxWidth(), horizontalArrangement = spaceArrangement) {
-        if (isLastMessageByAuthor && !isUserMe) {
+        if (isLastMessageByAuthor && !isUserMe || isToday && !isUserMe || isCurrentTime && !isUserMe) {
             // Avatar
             Image(
                 modifier = Modifier
@@ -266,6 +272,8 @@ fun Message(
             isUserMe = isUserMe,
             isFirstMessageByAuthor = isFirstMessageByAuthor,
             isLastMessageByAuthor = isLastMessageByAuthor,
+            isToday = isToday,
+            isCurrentTime = isCurrentTime,
             modifier = Modifier
                 .padding(end = 16.dp)
         )
@@ -278,11 +286,13 @@ fun AuthorAndTextMessage(
     isUserMe: Boolean,
     isFirstMessageByAuthor: Boolean,
     isLastMessageByAuthor: Boolean,
+    isToday: Boolean,
+    isCurrentTime: Boolean,
     modifier: Modifier = Modifier
 ) {
     val spaceArrangement = if(isUserMe) Alignment.End else Alignment.Start
     Column(modifier = modifier, horizontalAlignment = spaceArrangement) {
-        if (isLastMessageByAuthor) {
+        if (isToday || isLastMessageByAuthor || isCurrentTime) {
             AuthorNameTimestamp(msg,isUserMe)
         }
         ChatItemBubble(msg, isUserMe)
@@ -308,8 +318,10 @@ private fun AuthorNameTimestamp(msg: AAMUChatingMessageResponse,isUserMe: Boolea
                 .paddingFrom(LastBaseline, after = 8.dp) // Space to 1st bubble
         )
         Spacer(modifier = Modifier.width(8.dp))
+        val formatter = SimpleDateFormat("a h:mm", Locale.KOREA)
+        val time = formatter.format(msg.senddate)
         Text(
-            text = msg.senddate.toString(),
+            text = time,
             style = MaterialTheme.typography.bodySmall,
             modifier = Modifier.alignBy(LastBaseline),
             color = MaterialTheme.colorScheme.onSurfaceVariant

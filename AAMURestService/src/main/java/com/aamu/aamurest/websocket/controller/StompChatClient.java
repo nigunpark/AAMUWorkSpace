@@ -13,10 +13,10 @@ import com.aamu.aamurest.user.service.ChatingMessageDTO;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequiredArgsConstructor
 public class StompChatClient {
 	
-	private final SimpMessagingTemplate messagingTemplate;
+	@Autowired
+	private SimpMessagingTemplate messagingTemplate;
 	
 	@Autowired
 	private SqlSessionTemplate template;
