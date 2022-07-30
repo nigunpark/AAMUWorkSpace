@@ -17,6 +17,7 @@ import JoinStep1 from "./components/Join/JoinStep1.js";
 import JoinStep2 from "./components/Join/JoinStep2.js";
 import SearchList from "./components/Insta/SearchList";
 import Chat from "./components/Chat/Chat";
+import CommentSearch from "./components/Insta/ModalGroup/Comment/CommentSearch";
 
 function App() {
   let location = useLocation();
@@ -82,6 +83,10 @@ function App() {
               />
             }
           />
+          <Route path="/CommentSearch" 
+          element={<CommentSearch 
+          forReRender={forReRender}
+          setForReRender={setForReRender}/>} />
           <Route path="/myPage" element={<MyPage />} />
         </Route>
         {/* <Route path="/chat" element={<Chat />} /> */}
