@@ -15,13 +15,13 @@ public interface NoticeService {
 	// 상세 보기
 	NoticeDTO selectOne(Map map);
 
-	// 등록
+	// 게시물 등록
 	int noticeWrite(Map map);
 
-	// 수정
+	// 게시물 수정
 	int noticeEdit(Map map) throws Exception;
 
-	// 삭제
+	// 게시물 삭제
 	int noticeDelete(Map map);
 
 	// 조회 수 카운트

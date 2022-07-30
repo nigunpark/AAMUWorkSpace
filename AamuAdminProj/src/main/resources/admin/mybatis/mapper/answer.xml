@@ -4,9 +4,25 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="admin.mybatis.mapper.answer">
 
-	<!-- QNO number NOT NULL, ID varchar2(20) NOT NULL, ANSWER nvarchar2(2000) 
-		NOT NULL, ADATE date DEFAULT SYSDATE -->
+	<!-- 이름 찾기 -->
+	<select id="answerFindNameByKey" parameterType="Map"
+		resultType="String">
+		SELECT name
+		FROM users u JOIN answer a ON u.id=a.id
+		WHERE ano
+		=#{ano}
+	</select>
 
+	<!-- 댓글 목록 -->
+	<select id="answerSelectList" parameterType="Map"
+		resultType="AnswerDTO">
+		SELECT a.*, name
+		FROM users u JOIN answer a ON u.id=a.id
+		WHERE qno =#{qno}
+		ORDER BY ano DESC
+	</select>
+
+	<!-- 댓글 등록 -->
 	<insert id="answerInsert" parameterType="Map">
 		<selectKey keyProperty="ano" resultType="int" order="BEFORE">
 			SELECT
@@ -16,32 +32,19 @@
 		VALUES(SEQ_ANSWER.CURRVAL,#{qno},#{id},#{answer},SYSDATE)
 	</insert>
 
-	<select id="answerSelectList" parameterType="Map"
-		resultType="AnswerDTO">
-		SELECT a.*, name
-		FROM users u JOIN answer a ON u.id=a.id
-		WHERE qno =#{qno}
-		ORDER BY ano DESC
-	</select>
-
-	<select id="answerFindNameByKey" parameterType="Map"
-		resultType="String">
-		SELECT name
-		FROM users u JOIN answer a ON u.id=a.id
-		WHERE ano
-		=#{ano}
-	</select>
-
+	<!-- 댓글 수정 -->
 	<update id="answerUpdate" parameterType="Map">
 		UPDATE answer SET
 		answer=#{answer} WHERE ano = #{ano}
 	</update>
 
+	<!-- 댓글 삭제 -->
 	<delete id="answerDelete" parameterType="Map">
 		DELETE answer WHERE ano
 		= #{ano}
 	</delete>
 
+	<!-- 댓글 전부 삭제 -->
 	<delete id="answerDeleteByNo" parameterType="Map">
 		DELETE answer WHERE
 		qno = #{qno}

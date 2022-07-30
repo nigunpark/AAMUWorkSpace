@@ -19,6 +19,6 @@ public class NoticeDTO {
 	private java.sql.Date noticedate;
 	private String ncount;
 	private String id;
-	private String name;
+	private String name; // 이름 저장
 
 }

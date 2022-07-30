@@ -16,7 +16,6 @@ import com.aamu.admin.main.service.QNAService;
 @Service("answerService")
 public class AnswerServiceImpl implements QNAService<AnswerDTO> {
 
-	// LineCommentDAO주입
 	@Autowired
 	private AnswerDAO dao;
 
@@ -31,30 +30,31 @@ public class AnswerServiceImpl implements QNAService<AnswerDTO> {
 		return null;
 	}
 
+	// 댓글 등록
 	@Override
 	public int qnaWrite(Map map) {
-		// 영향받은 행의 수가 아니라 새로 입력된 레코드의 키값(lno)를 반환 받는다
-		// 마이바티스의 insert()는 무조건 영향받은 행의 수를 반환
 		int newAno = dao.insert(map);
 		System.out.println("새로 입력된 코멘트의 글번호:" + newAno);
 
 		return newAno;
 	}
-	
+
+	// 댓글 수정
 	@Override
-	public int answerUpdate(Map map) {		
+	public int answerUpdate(Map map) {
 		return dao.update(map);
 	}
 
+	// 댓글 삭제
 	@Override
 	public int answerDelete(Map map) {
 		return dao.delete(map);
 	}
 
+	// 댓글 전체 삭제
 	@Override
 	public int answerAllDelete(Map map) {
 		int affected = 0;
-
 		List<String> anolists = (List<String>) map.get("ano");
 		System.out.println(anolists);
 		for (String ano : anolists) {
@@ -69,47 +69,51 @@ public class AnswerServiceImpl implements QNAService<AnswerDTO> {
 			return 0;
 	}
 
-
-	// map에 lno키 넣기
+	// 이름 찾기
 	@Override
 	public String findNameByKey(Map map) {
 		return dao.findNameByKey(map);
 	}
 
+	// 게시물 수 카운트
 	@Override
 	public int qnaGetTotalRecordCount(Map map) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
+	// 조회 수 카운트
 	@Override
 	public int qnaCount(Map map) throws Exception {
 		// TODO Auto-generated method stub
 		return 0;
 	}
-	
+
+	// 댓글 수정
 	@Override
 	public int qnaEdit(Map map) {
 		return dao.update(map);
 	}
 
+	// 게시물 목록에서 삭제
 	@Override
 	public int qnaDelete(Map map) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
+	// 상세 보기에서 삭제
 	@Override
 	public int qnaViewDelete(Map map) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
+	// 댓글 등록
 	@Override
 	public int answerWrite(Map map) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
-
 
 }

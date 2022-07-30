@@ -1,6 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<!-- textarea 개행을 위해 추가 1 -->
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<!-- textarea 개행을 위해 추가 2 -->
+<%
+pageContext.setAttribute("newLineChar", "\n");
+%>
+
 <jsp:include page="/WEB-INF/views/template/top.jsp" />
 
 <div class="main-panel">
@@ -9,56 +16,46 @@
 			<div class="col-sm-12">
 				<div class="home-tab">
 					<div class="tab-content tab-content-basic">
-						<!--여기부터 내용을 넣으시오-->
 
-
-
-
-
-
-
-
+						<!-- 템플릿 시작 -->
 
 						<table class="table table-bordered">
 							<tbody class="table-sm">
-
 								<tr>
 									<th class="w-25 bg-dark text-white text-center">번호</th>
 									<td>${record.qno}</td>
 								</tr>
 								<tr>
 									<th class="w-25 bg-dark text-white text-center">제목</th>
-									<td>${record.title}</td>
+									<td><b>${record.title}</b></td>
 								</tr>
 								<tr>
 									<th class="w-25 bg-dark text-white text-center">문의</th>
 									<td>${record.name}(${record.id})</td>
 								</tr>
+								<!-- 댓글 수에 따라서 답변 대기 및 완료로 전환 -->
 								<tr>
 									<th class="w-25 bg-dark text-white text-center">답변</th>
-									<td><c:set var="ac" value="${record.answerCount}" /> <c:choose>
-											<c:when test="${ac == 0}">
-												<label class="badge badge-danger">대기</label>
-											</c:when>
-											<c:otherwise>
-												<label class="badge badge-success">완료</label>
-											</c:otherwise>
-										</c:choose></td>
+									<td><span class="answer-count"><c:set var="ac"
+												value="${record.answerCount}" /> <c:choose>
+												<c:when test="${ac == 0}">
+													<label class="badge badge-danger">대기</label>
+												</c:when>
+												<c:otherwise>
+													<label class="badge badge-success">완료</label>
+												</c:otherwise>
+											</c:choose></span></td>
+								</tr>
+								<tr>
+									<th class="w-25 bg-dark text-white text-center">날짜</th>
+									<td>${record.qdate}</td>
 								</tr>
 								<tr>
 									<th class="w-25 bg-dark text-white text-center">조회</th>
 									<td>${record.qcount}</td>
 								</tr>
 								<tr>
-									<th class="w-25 bg-dark text-white text-center">날짜</th>
-									<td>${record.qdate}</td>
-								</tr>
-
-
-
-
-								<tr>
-									<th class="bg-dark text-white text-center" colspan="2">내 용</th>
+									<th class="bg-dark text-white text-center" colspan="2">내용</th>
 								</tr>
 								<tr>
 									<td colspan="2">${record.content}</td>
@@ -68,37 +65,30 @@
 
 						<!-- 수정/삭제/목록 컨트롤 버튼 -->
 						<div class="text-center mt-4">
-
 							<a href="<c:url value="QNAEdit.do?qno=${record.qno}"/>"
 								class="btn btn-success">수정</a> <a
 								href="javascript:qnaDelete(${record.qno})"
 								class="qna-delete btn btn-success">삭제</a> <a
 								href="<c:url value="QNA.do?nowPage="/><c:out value="${param.nowPage}" default="1"/>"
 								class="btn btn-success">목록</a>
-
 						</div>
 
-
-
-						<!-- 한줄 코멘트 입력 폼 -->
+						<!-- 댓글 입력 -->
 						<form id="form" class="col-sm-12  justify-content-center mt-3">
 							<input type="hidden" name="qno" value="${record.qno}" />
-							<!-- 댓글 수정용 -->
+
+							<!-- 댓글 수정 -->
 							<input type="hidden" name="ano" />
 							<textarea id="answer" name="answer"
 								class="form-control w-20 h-25" rows="10"
-								placeholder="답변 내용을 입력하세요."></textarea>
-
+								placeholder="내용을 입력하세요."></textarea>
 							<div class="d-flex justify-content-center">
 								<input type="button" class="btn btn-info mt-3" value="댓글 등록"
 									id="submit" />
 							</div>
 						</form>
 
-
-
-
-						<!-- 한줄 코멘트 목록 -->
+						<!-- 댓글 목록 -->
 						<div class="answer-index row d-flex justify-content-center mt-3">
 							<div class="col-sm-8">
 								<table class="table table-hover text-center">
@@ -117,25 +107,22 @@
 														없습니다.</span></td>
 											</tr>
 										</c:if>
-
-
 										<c:if test="${not isEmpty }">
 											<c:forEach items="${record.answer}" var="item">
-
 												<tr>
 													<c:set var="titleClass"
 														value="${\"ADMIN2\"==item.id ? 'answer' : ''}" />
 													<c:set var="inactive"
 														value="${\"ADMIN2\"==item.id ? '' : 'disabled'}" />
 													<td>${item.name}(${item.id})</td>
-													<td class="text-left ${titleClass}" title="${item.ano}"><pre>${item.answer }</pre></td>
+													<td class="text-left ${titleClass}" title="${item.ano}">
+														${fn:replace(item.answer, newLineChar, "<br/>")}</td>
 													<td>${item.adate }</td>
 													<td>
 														<button class="btn btn-sm btn-warning edit-answer"
 															title="${item.ano}" value="${item.answer }">수정</button>
 														<button class="btn btn-sm btn-danger delete">삭제</button>
 													</td>
-
 												</tr>
 											</c:forEach>
 										</c:if>
@@ -144,7 +131,8 @@
 							</div>
 						</div>
 
-						<!--------------------- 내용의 끝 부분입니다------------------------------------>
+						<!-- 템플릿 종료 -->
+
 					</div>
 				</div>
 			</div>
@@ -154,16 +142,15 @@
 	<!--main-panel-->
 </div>
 
-
 <style>
 .col-sm-8 {
 	width: 100% !important;
 }
 
 .answer-index {
-padding: 15px;
-border: 1px solid #dee2e6;}
-
+	padding: 10px 15px 10px 15px;
+	border: 1px solid #dee2e6;
+}
 
 .btn-warning {
 	background: #ffaf00 !important;
@@ -189,16 +176,15 @@ border: 1px solid #dee2e6;}
 .answer-index tr {
 	border-bottom: 1px solid #dee2e6 !important;
 }
+
 .answer-index tr:last-child {
-
-border-bottom: 0px solid #dee2e6 !important;
+	border-bottom: 0px solid #dee2e6 !important;
 }
-
 </style>
 
 <script>
 
-//코멘트 등록 및 수정처리
+// 댓글 등록 및 수정
 $('#submit').click(function(){
  console.log('등록 요청:',$(this).val());
  console.log($("#form").serialize());
@@ -206,19 +192,18 @@ $('#submit').click(function(){
  if($(this).val()==="댓글 등록"){
     action="<c:url value="/qna/answer/Write.do"/>";
  }
- else{//수정
+ else{ // 수정
     action="<c:url value="/qna/answer/Edit.do"/>";
  }
 
- //ajax로 요청
  $.ajax({
     url:action,
     data:$("#form").serialize(),
-    dataType:'json',//{lno:입력된댓글번호,name:댓글 작성한 이름}
+    dataType:'json',
     type:"post"         
  }).done(function(data){
    
-    console.log('서버에서 받은 데이타:',data);
+    console.log('서버에서 받은 데이터:',data);
     //입력후 입력된 댓글 뿌려주기위한 함수 호출:함수안에서 다시 모든 댓글 목록을 AJAX요청이 이루어짐
     //showComments();
     //성능개선 - 댓글목록 요청 하지 않고 초기데이타에 입력한 댓글을 추가한다
@@ -233,34 +218,25 @@ $('#submit').click(function(){
        $('#submit').val("댓글 등록");
        $('td[title='+data.ano+']').html(data.answer);
        console.log("수정하려는 댓글 번호:",data.ano);
-       
     }
-    
-    
-    
-   
-    
-    //입력값 클리어 및  포커스 주기
+     
+    // 입력값 클리어 및 포커스 주기
     $("#answer").val("");
     $("#answer").focus();
     
  }).fail(function(error){console.log('에러:',error)});
-});///////// 등록 및 수정버튼 클릭
-
-//※댓글 목록의 제목 클릭시-click이벤트걸때 반드시  $(document).on('이벤트명','셀렉터',콜백함수)으로
-//그래야 동적으로 추가된 요소에도 이벤트가 발생한다
+}); // 등록 및 수정 버튼 클릭
     
     $(document).on('click','.edit-answer',function(){
  console.log($(this).html());
- //입력상자값을 클릭한 제목을고 변경
+ // 입력 상자 값을 클릭한 제목으로 변경
  $('#answer').val($(this).attr("value"));      
- //버튼의 텍스트를 수정으로 변경
+ // 버튼의 텍스트를 수정으로 변경
  $('#submit').val("수정 완료");
- //폼의 hidden인 lno의 value를 클릭한 제목의 lno값으로 설정
+ // 폼의 hidden인 ano의 value를 클릭한 제목의 ano값으로 설정
  $('input[name=ano]').val($(this).attr("title"));
  console.log("ano히든값 설정 확인:",$('input[name=ano]').val());
 });
-    
 
     $(document).on('click','.delete',function(){
      if(confirm("삭제하시겠습니까?")){
@@ -275,7 +251,7 @@ $('#submit').click(function(){
         }).done(data=>{
            console.log('삭제 성공:',data);
            answerLoad();
-           //tr태그 제거
+           // tr 태그 제거
            this_.parent().parent().remove();
         }).fail(error=>{
            console.log('삭제 에러:',error);
@@ -283,26 +259,22 @@ $('#submit').click(function(){
      }
     });
     
-
     function getDate(dateNumber){
      var date = new Date(dateNumber);
      return date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate();
-     
-    }////////////////
-    
+    }
     
     function answerLoad() {
     	$('.answer-count').load(location.href+' .answer-count');
     	$('.no-answer').load(location.href+' .no-answer');
     }
-
-
-//메모글 삭제
-function qnaDelete(key){
-   if(confirm("삭제하시겠습니까?")){
-      location.replace("<c:url value="QNAViewDelete.do?qno="/>"+key);
-   }
-}
+    
+    // 게시물 삭제
+    function qnaDelete(key){
+    	if(confirm("삭제하시겠습니까?")){
+    		location.replace("<c:url value="QNAViewDelete.do?qno="/>"+key);
+    		}
+    	}
 
 </script>
 

@@ -23,24 +23,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class AnswerController {
 
 	@Autowired
-	private AnswerServiceImpl answerService;
+	private AnswerServiceImpl answerService;	
 
-	@PostMapping(value = "Write.do")
-	public Map write(@ModelAttribute("id") String id, @RequestParam Map map) {
-
-		map.put("id", "ADMIN2");
-		// 서비스 호출
-		int newAno = answerService.qnaWrite(map);
-		map.put("Ano", newAno);
-		String name = answerService.findNameByKey(map);
-		map.put("name", name);
-		// 데이타 반환]
-		// 1.String반환시
-		// return String.format("{\"lno\":\"%s\",\"name\":\"%s\"}",newLno,name);
-		// 2.MAP반환시
-		return map;
-	}//////////// write
-
+	// 댓글 목록
 	@PostMapping(value = "List.do", produces = "text/plain; charset=UTF-8")
 	public Map list(@ModelAttribute("id") String id, @RequestParam Map map) throws JsonProcessingException {
 		// 서비스 호출
@@ -58,6 +43,24 @@ public class AnswerController {
 		return map;
 	}
 	
+	// 댓글 등록
+	@PostMapping(value = "Write.do")
+	public Map write(@ModelAttribute("id") String id, @RequestParam Map map) {
+
+		map.put("id", "ADMIN2");
+		// 서비스 호출
+		int newAno = answerService.qnaWrite(map);
+		map.put("Ano", newAno);
+		String name = answerService.findNameByKey(map);
+		map.put("name", name);
+		// 데이타 반환]
+		// 1.String반환시
+		// return String.format("{\"lno\":\"%s\",\"name\":\"%s\"}",newLno,name);
+		// 2.MAP반환시
+		return map;
+	}//////////// write
+
+	// 댓글 수정
 	@PostMapping(value="Edit.do")
 	public Map edit(@ModelAttribute("id") String id,@RequestParam Map map) {
 		//서비스 호출
@@ -67,6 +70,7 @@ public class AnswerController {
 		return map;
 	}
 
+	// 댓글 삭제
 	@PostMapping(value = "Delete.do")
 	public Map delete(@ModelAttribute("id") String id, @RequestParam Map map) {
 
@@ -76,8 +80,7 @@ public class AnswerController {
 		return map;
 	}//////////// write
 	
-	
-	//댓글 삭제
+	// 댓글 전부 삭제
 	@PostMapping("AnswerAllDelete.do")
 	@ResponseBody
 	public Map answerAllDelete(@RequestBody Map map){
@@ -90,5 +93,4 @@ public class AnswerController {
 		return resultMap;
 	}
 	
-
 }
