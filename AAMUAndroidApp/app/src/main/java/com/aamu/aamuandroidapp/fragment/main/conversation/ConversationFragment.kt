@@ -28,9 +28,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
-import com.aamu.aamuandroidapp.components.chat.ConversationContent
-import com.aamu.aamuandroidapp.data.exampleUiState
-import com.aamu.aamuandroidapp.ui.theme.JetchatTheme
+import com.aamu.aamuandroidapp.components.chatlist.chat.ConversationContent
 
 
 class ConversationFragment : Fragment() {

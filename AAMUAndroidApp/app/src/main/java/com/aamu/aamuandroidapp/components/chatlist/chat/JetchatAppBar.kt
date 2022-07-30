@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
-package com.aamu.aamuandroidapp.components.chat
+package com.aamu.aamuandroidapp.components.chatlist.chat
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults

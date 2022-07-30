@@ -1,4 +1,4 @@
-package com.aamu.aamuandroidapp.components.chat
+package com.aamu.aamuandroidapp.components.chatlist.chat
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -12,18 +12,15 @@ import com.aamu.aamuandroidapp.data.api.AAMUDIGraph
 import com.aamu.aamuandroidapp.data.api.repositories.AAMURepository
 import com.aamu.aamuandroidapp.data.api.response.AAMUChatingMessageResponse
 import com.aamu.aamuandroidapp.util.contextL
-import com.aamu.aamuandroidapp.util.getToken
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.gmail.bishoybasily.stomp.lib.Event
 import com.gmail.bishoybasily.stomp.lib.StompClient
 import io.reactivex.disposables.Disposable
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import okhttp3.Interceptor
 import okhttp3.OkHttpClient
-import okhttp3.Protocol
-import java.lang.Exception
+import java.util.*
 import java.util.concurrent.TimeUnit
+import kotlin.collections.HashMap
 
 
 class ConversationViewModelFactory() : ViewModelProvider.Factory{
@@ -38,8 +35,6 @@ class ConversationViewModel : ViewModel() {
     val messageList = MutableLiveData<List<AAMUChatingMessageResponse>>()
     val errorLiveData = MutableLiveData<String>()
 
-
-
     private val map : HashMap<String,String> = HashMap()
 
     private lateinit var stompConnection: Disposable
@@ -47,8 +42,7 @@ class ConversationViewModel : ViewModel() {
     private lateinit var stomp : StompClient
 
     init {
-
-        map.put("roomno","1");
+        map.put("roomno","8");
         viewModelScope.launch {
             aamuRepository.getChatMessageList(map)
                 .collect{aamumessageList->
@@ -95,10 +89,6 @@ class ConversationViewModel : ViewModel() {
                 }
             }
         }
-
-
-
-
     }
 
 
@@ -107,6 +97,9 @@ class ConversationViewModel : ViewModel() {
         val id : String? = preferences.getString("id",null)
         map.put("authid",id ?: "");
         map.put("missage",content)
+        val dateTime: Date = Calendar.getInstance().time
+        val dateTimeAsLong: Long = dateTime.time
+        map.put("senddate",dateTimeAsLong.toString())
         val mapper = jacksonObjectMapper()
         stomp.send("/app/chat/message",mapper.writeValueAsString(map)).subscribe{
             Log.i("com.aamu.aamu","뭔가가 : " + it.toString())

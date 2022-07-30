@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.aamu.aamuandroidapp.components.chat
+package com.aamu.aamuandroidapp.components.chatlist.chat
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -178,7 +178,7 @@ private fun UserInputText(
                         modifier = Modifier
                             .align(Alignment.CenterStart)
                             .padding(start = 32.dp),
-                        text = "Message #composers",
+                        text = "메시지를 입력해주세요",
                         style = MaterialTheme.typography.bodyLarge.copy(color = disableContentColor)
                     )
                 }
