@@ -11,7 +11,8 @@ import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
 import axios from "axios";
 import Edit from "./ModalGroup/Edit/Edit";
 import { confirmAlert } from "react-confirm-alert";
-
+import { useDispatch } from "react-redux";
+import { addForChatInfo } from "../../redux/store";
 function FeedSetting({
   val,
   setlist,
@@ -40,7 +41,7 @@ function FeedSetting({
 
   //     return formData;
   //   }
-
+  let dispatch = useDispatch();
   function post(comment, setfeedComments) {
     //유효성 검사를 통과하고 게시버튼 클릭시 발생하는 함수
     // feedComments = val.commuComment;
@@ -246,7 +247,15 @@ function FeedSetting({
               )}
               {comeditModal && <Edit val={val} setlist={setlist} seteditModal={seteditModal} />}
             </div>
-            <div className="share-icon">
+            <div
+              className="share-icon"
+              onClick={() => {
+                getChatRoom(val, dispatch);
+                setTimeout(() => {
+                  setShowChat(!showChat);
+                }, 100);
+              }}
+            >
               <i className="fa-regular fa-paper-plane fa-2x"></i>
             </div>
           </div>
@@ -308,6 +317,17 @@ function FeedSetting({
       </div>
     </div>
   );
+}
+async function getChatRoom(val, dispatch) {
+  await axios
+    .post("/aamurest/chat/room?fromid=" + sessionStorage.getItem("username") + "&toid=" + val.id)
+    .then((resp) => {
+      console.log(resp);
+      dispatch(addForChatInfo({ ...resp.data, id: val.id }));
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 }
 const Container1 = styled.div`
   position: fixed;
