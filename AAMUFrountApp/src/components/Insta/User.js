@@ -296,6 +296,7 @@ function User({ setlist, setloading, searchb, setSearchb, inputValue, setinputVa
       <div className="information2">
         <p>ⓒ 2022 INSTAGRAM</p>
       </div>
+      {showChat && <Chat />}
     </div>
   );
 }
