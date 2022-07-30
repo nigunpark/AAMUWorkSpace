@@ -26,9 +26,9 @@ function App() {
   const [whereUrl, setWhereUrl] = useState(false);
   const [searchb, setSearchb] = useState([]);
   const [inputValue, setinputValue] = useState("");
-  const [list,setlist] = useState([]);
-  const [forReRender, setForReRender] = useState(false)
-  
+  const [list, setlist] = useState([]);
+  const [forReRender, setForReRender] = useState(false);
+
   const handleScroll = () => {
     if (window.scrollY > 950 && window.scrollY < 2500) setScrollNav(true);
     else setScrollNav(false);
@@ -59,7 +59,7 @@ function App() {
                 searchb={searchb}
                 setSearchb={setSearchb}
                 list={list}
-                setlist={setlist}                
+                setlist={setlist}
                 forReRender={forReRender}
                 setForReRender={setForReRender}
               />
@@ -89,7 +89,10 @@ function App() {
         <Route path="/test" element={<Test />} />
         <Route path="/Detailmodal" element={<DetailModal />} />
 
-        <Route path="/oauth/callback/kakao" element={<KakaoRedirectHandler />} />
+        <Route
+          path="/oauth/callback/kakao"
+          element={<KakaoRedirectHandler />}
+        />
       </Routes>
     </div>
   );
