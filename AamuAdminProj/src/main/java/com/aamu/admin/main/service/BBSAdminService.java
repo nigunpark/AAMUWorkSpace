@@ -18,6 +18,11 @@ public interface BBSAdminService {
 	//전체 리뷰 목록
 	ListPagingData<ReviewAdminDTO> reviewSelectList(Map map,HttpServletRequest req,int nowPage);
 	
+	//전체 리뷰 수
+	int reviewGetTotalRecordCount(Map map);
+	
 	//리뷰 삭제
 	int reviewDelete(Map map);
+	
+	
 }

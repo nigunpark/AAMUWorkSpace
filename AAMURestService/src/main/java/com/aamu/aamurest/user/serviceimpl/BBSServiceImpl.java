@@ -22,6 +22,9 @@ public class BBSServiceImpl implements BBSService{
 
 	@Autowired
 	private TransactionTemplate transactionTemplate;
+	
+	@Autowired
+	private MainDAO mainDao;
 
 	//글 목록
 	@Override
@@ -48,7 +51,12 @@ public class BBSServiceImpl implements BBSService{
 	public BBSDTO bbsSelectOne(int rbn) {
 		BBSDTO dto = dao.bbsSelectOne(rbn);
 		List<RouteDTO>routes = dao.selectRouteList(rbn);
-		return dao.bbsSelectOne(rbn);
+		for(RouteDTO route:routes) {
+			route.setDto(mainDao.selectOnePlace(route.getContentid()));
+		}
+		dto.setRouteList(routes);
+		dto.setPlanner(mainDao.selectPlannerOne(rbn));
+		return dto;
 	}
 
 	//글 등록
@@ -118,13 +126,15 @@ public class BBSServiceImpl implements BBSService{
 	public int reviewInsert(Map map) {
 		return dao.reviewInsert(map);
 	}
-
+	
+	/*
 	//리뷰 수정
 	@Override
 	public int reviewUpdate(Map map) {
 		return dao.reviewUpdate(map);
 	}
-
+	*/
+	
 	//리뷰 삭제
 	@Override
 	public int reviewDelete(Map map) {

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
@@ -77,8 +78,11 @@ public class BBSController {
 	//글 하나 선택
 	@GetMapping("/bbs/SelectOne/{rbn}")
 	public BBSDTO bbsSelectOne(@PathVariable int rbn, HttpServletRequest req) {
+		System.out.println("선택:"+rbn);
 		BBSDTO dto=bbsService.bbsSelectOne(rbn);
+		System.out.println("머가나오나"+dto);
 		//모든 리뷰 가져오기
+		System.out.println("리뷰리스트에 뭐가 있을까?"+bbsService.reviewList(rbn));
 		dto.setReviewList(bbsService.reviewList(rbn));
 		//모든 사진 가져오기
 		//dto.setPhoto(bbsService.bbsSelectPhotoList(rbn));
@@ -120,14 +124,15 @@ public class BBSController {
 
 	//리뷰 등록 <성공>
 	@PostMapping("/review/edit")
-	public Map reviewInsert(@RequestParam Map map) {
-	int affected=bbsService.reviewInsert(map);
-	Map resultMap = new HashMap();
-	if(affected==1) resultMap.put("result", "insertSuccess");
-	else resultMap.put("result", "insertNotSuccess");
-	return resultMap;
+	public Map reviewInsert(@RequestBody Map map) {
+		System.out.println("map rbn이 넘어오나:"+map.get("rbn"));
+		int affected=bbsService.reviewInsert(map);
+		Map resultMap = new HashMap();
+		if(affected==1) resultMap.put("result", "insertSuccess");
+		else resultMap.put("result", "insertNotSuccess");
+		return resultMap;
 	}
-
+	/*
 	//리뷰 수정 <성공>
 	@PutMapping("/review/edit")
     public Map reviewUpdate(@RequestParam Map map) {
@@ -138,7 +143,7 @@ public class BBSController {
 		else
 			resultMap.put("result", "updateNotSuccess");
 		return resultMap;
-	}
+	}*/
 
 	//리뷰 삭제 <성공>
 	@DeleteMapping("/review/edit")
@@ -150,7 +155,7 @@ public class BBSController {
 		else
 			resultMap.put("result", "deleteNotSuccess");
 		return resultMap;
-
+		
 	}
 	
 	/*

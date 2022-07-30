@@ -32,11 +32,9 @@ public class CommuDAO {
 	}
 	
 	//글 목록용_검색 총 게시물
-	public int commuTotalCount(Map map) {
-		return template.selectOne("commuTotalCount",map);
+	public int commuSearchTotalCount(Map map) {
+		return template.selectOne("commuSearchTotalCount",map);
 	}
-	
-	
 	
 	//글 검색용
 	public List<String> commuSearachList(Map map){
@@ -200,6 +198,11 @@ public class CommuDAO {
 	//commutag테이블에 lno에 따른 레코드 삭제
 	public int commuDeleteCommuTag(Map map) {
 		return template.delete("commuDeleteCommuTag",map);
+	}
+	
+	//팔로우, 팔로잉
+	public int commuFollower(Map map) {
+		return template.insert("commuFollower",map);
 	}
 
 
