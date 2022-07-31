@@ -1,9 +1,6 @@
 package com.aamu.aamuandroidapp.data.api.repositories
 
-import com.aamu.aamuandroidapp.data.api.response.AAMUChatingMessageResponse
-import com.aamu.aamuandroidapp.data.api.response.AAMUGarmResponse
-import com.aamu.aamuandroidapp.data.api.response.AAMUPlaceResponse
-import com.aamu.aamuandroidapp.data.api.response.AAMUPlannerSelectOne
+import com.aamu.aamuandroidapp.data.api.response.*
 import kotlinx.coroutines.flow.Flow
 
 interface AAMURepository {
@@ -17,4 +14,6 @@ interface AAMURepository {
     suspend fun getChatMessageList(map : Map<String,String>) : Flow<List<AAMUChatingMessageResponse>>
 
     suspend fun getGramList(id : String) : Flow<List<AAMUGarmResponse>>
+
+    suspend fun getBBSList() : Flow<List<AAMUBBSResponse>>
 }

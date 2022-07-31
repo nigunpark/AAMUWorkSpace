@@ -51,7 +51,7 @@ fun AAMUgramHome(
         Scaffold(
             topBar = {
                 TopAppBar(
-                    title = { Text(text = "AAMUGRAM") },
+                    title = { Text(text = "이런곳은 어때") },
                     backgroundColor = MaterialTheme.colors.surface,
                     contentColor = MaterialTheme.colors.onSurface,
                     elevation = 8.dp,

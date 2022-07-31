@@ -113,4 +113,15 @@ class AAMURepositoryImpl(
     }.catch {
         emit(emptyList<AAMUGarmResponse>())
     }.flowOn(Dispatchers.IO)
+
+    override suspend fun getBBSList(): Flow<List<AAMUBBSResponse>> = flow<List<AAMUBBSResponse>> {
+        val response = aamuApi.getBBSList()
+        if (response.isSuccessful){
+            emit(response.body() ?: emptyList<AAMUBBSResponse>())
+        }
+        else
+            emit(emptyList<AAMUBBSResponse>())
+    }.catch {
+        emit(emptyList<AAMUBBSResponse>())
+    }.flowOn(Dispatchers.IO)
 }

@@ -6,8 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.ui.platform.ComposeView
-import com.aamu.aamuandroidapp.R
-import com.aamu.aamuandroidapp.components.routebbs.RouteBBSHome
+import com.aamu.aamuandroidapp.components.routebbs.RouteBBSScreen
+import com.aamu.aamuandroidapp.ui.theme.ComposeCookBookTheme
 
 class RouteBBSFragment : Fragment() {
 
@@ -17,7 +17,9 @@ class RouteBBSFragment : Fragment() {
     ): View = ComposeView(inflater.context).apply {
 
         setContent {
-            RouteBBSHome()
+            ComposeCookBookTheme {
+                RouteBBSScreen()
+            }
         }
     }
 }

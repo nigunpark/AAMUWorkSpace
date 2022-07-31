@@ -42,6 +42,9 @@ interface AAMUApi {
     @GET("gram/selectList")
     suspend fun getGramList(@Query("id") id : String) : Response<List<AAMUGarmResponse>>
 
+    @GET("bbs/SelectList")
+    suspend fun getBBSList() : Response<List<AAMUBBSResponse>>
+
     companion object {
         private const val BASE_URL = "http://192.168.45.107:8080/aamurest/"
 
