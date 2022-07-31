@@ -17,10 +17,12 @@ const Content = () => {
   let [list, setList] = useState("");
   const [showCBModal, setShowCBModal] = useState(false);
   function chatbotModal() {
-    console.log("content안", reduxState.forChatBotData.length);
+    if (reduxState.forChatBotData.bool === true) {
+      setShowCBModal(true);
+    }
   }
   useEffect(() => {
-    console.log("useEffect", reduxState.forChatBotData);
+    console.log("useEffect", reduxState.forChatBotData.length);
     axios
       .get("/aamurest/bbs/SelectList", {
         headers: {
@@ -29,16 +31,13 @@ const Content = () => {
       })
       .then((resp) => {
         // setList(resp.data);
-        console.log("글 목록이 왔는지 : ", resp.data);
         setListData(resp.data);
       })
       .catch((error) => {
         console.log((error) => console.log("글 목록 가져오기 실패", error));
       });
-    if (reduxState.forChatBotData.length !== undefined) {
-      setShowCBModal(true);
-    }
-    console.log("forChatBotData", reduxState.forChatBotData);
+    console.log("useEffect밑", reduxState.forChatBotData);
+    chatbotModal();
   }, []);
 
   return (
