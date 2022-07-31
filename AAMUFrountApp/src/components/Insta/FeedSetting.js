@@ -117,7 +117,7 @@ function FeedSetting({
     axios
       .get("/aamurest/gram/like", {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${token}`, 
         },
         params: {
           lno: parseInt(val.lno),
