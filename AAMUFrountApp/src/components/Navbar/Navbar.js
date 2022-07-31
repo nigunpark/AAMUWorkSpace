@@ -15,6 +15,7 @@ const Navbar = ({ scrollNav, whereUrl }) => {
   const handleClick = () => setClick(!click);
   const closeMoblieMenu = () => setClick(false);
   const [showChatBot, setShowChatBot] = useState(false);
+
   let navigate = useNavigate();
   let location = useLocation();
   useEffect(() => {
