@@ -8,6 +8,7 @@ import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationManager
 import android.os.Build
+import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import androidx.compose.ui.platform.LocalContext
@@ -16,6 +17,11 @@ import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import com.gmail.bishoybasily.stomp.lib.Event
+import com.gmail.bishoybasily.stomp.lib.StompClient
+import io.reactivex.disposables.Disposable
+import okhttp3.OkHttpClient
+import java.util.concurrent.TimeUnit
 
 fun Activity.setStatusBarTransparent() {
     window.apply {
@@ -44,6 +50,9 @@ fun Activity.setStatusBarOrigin() {
     }
 }
 lateinit var contextL : Context
+
+
+
 fun setContextapp(context: Context){
     contextL = context
 }
@@ -76,7 +85,41 @@ fun getLatLng(): Location? {
     return currentLatLng
 }
 
+lateinit var stomp : CustomStompClient
+private lateinit var stompConnection: Disposable
 
+fun stompConnection() {
+    val url = "ws://192.168.0.19:8080/aamurest/ws/chat/websocket"
+    val intervalMillis = 1000L
+    val client = OkHttpClient.Builder()
+        .readTimeout(10, TimeUnit.SECONDS)
+        .writeTimeout(10, TimeUnit.SECONDS)
+        .connectTimeout(10, TimeUnit.SECONDS)
+        .build()
+
+    stomp = CustomStompClient(client,intervalMillis).apply {
+        this@apply.url = url
+    }
+
+    stompConnection = stomp.connect().subscribe() {
+        when (it.type) {
+            Event.Type.OPENED -> {
+                Log.i("com.aamu.aamu","열림")
+
+            }
+            Event.Type.CLOSED -> {
+                Log.i("com.aamu.aamu","닫힘")
+            }
+            Event.Type.ERROR -> {
+                Log.i("com.aamu.aamu","에러")
+            }
+        }
+    }
+}
+
+fun stompDisconnect(){
+    stompConnection.dispose()
+}
 
 
 
