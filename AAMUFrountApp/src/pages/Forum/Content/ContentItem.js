@@ -34,17 +34,24 @@ const ContentItem = ({ detail, index, setShowCBModal, isOpen, setIsOpen }) => {
     star += Number(obj.rate);
   });
   star = Math.round((star / detail.reviewList.length) * 10) / 10;
-
   return (
     <>
       <li className="card__item_minCon" onClick={onClickModal}>
         <div className="card__item__link_minCon">
           <figure className="card__item__info_minCon">
             <div className="card__item__img-container_minCon">
-              <img src={detail.photo[0]} alt="카드이미지" className="card__item__img_minCon" />
+              <img
+                src={
+                  detail.photo[0] == undefined
+                    ? "/images/no-image.jpg"
+                    : detail.photo[0]
+                }
+                alt="카드이미지"
+                className="card__item__img_minCon"
+              />
             </div>
             <div className="card__item__rating_minCon">
-              <img src="/images/star.jpg" style={{ width: "30px" }} />
+              <img src="/images/star.png" style={{ width: "30px" }} />
               {detail.reviewList.length == 0 ? 0 : star}
 
               <span className="idSpan_minCon" style={{ marginLeft: "auto" }}>

@@ -50,8 +50,8 @@ const Content = () => {
 
           <p className="card__desc_minCon">
             자신만의 여행계획을 세우고 남들과
-            <span className="content-btn">
-              <Link to="/myPage">공유해봐</Link>
+            <span className="myPage-link">
+              <Link to="/myPage"> 공유해봐</Link>
             </span>
           </p>
           <FSearch />

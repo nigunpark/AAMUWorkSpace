@@ -93,6 +93,16 @@ public interface CommuService<T> {
 	
 	//팔로우, 팔로잉
 	int commuFollower(Map map);
-
-
+	
+	//마이페이지용_id에 따른 
+	List<CommuDTO> commuMyPageList(Map map);
+	
+	//마이페이지용_토탈카운트 셋팅 (해당 id의 총 글 갯수)
+	int commuTotalCount(Map map);
+	
+	//마이페이지용_나를 팔로우하는 계정 수 셋팅
+	int commuFollowerCount(Map map);
+	
+	//마이페이지용_내가 팔로잉하는 계정 수 셋팅
+	int commuFollowingCount(Map map);
 }

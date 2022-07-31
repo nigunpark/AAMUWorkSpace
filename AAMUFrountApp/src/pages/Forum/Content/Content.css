@@ -20,7 +20,7 @@
 }
 .card__items_minCon {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   /* border: 2px solid red; */
   padding-top: 70px;
   gap: 1rem;
@@ -29,6 +29,12 @@
 .card__item_minCon {
   display: flex;
   flex: 1;
+}
+
+.myPage-link a:hover {
+  transition: 0.1s;
+  border-bottom: 3px solid var(--orange);
+  border-radius: 5px;
 }
 
 .card__item__info_minCon {
