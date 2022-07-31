@@ -7,7 +7,7 @@ import { Rating } from "@mui/material";
 import axios from "axios";
 import "./BookMark.css";
 import { useDispatch, useSelector } from "react-redux";
-import { addWholeBlackBox } from "../../../redux/store";
+import { addChatBotData, addWholeBlackBox } from "../../../redux/store";
 
 const DetailModal = ({ setIsOpen, detailRbn, postDay, setShowCBModal }) => {
   function dateFormat(date) {
@@ -19,12 +19,7 @@ const DetailModal = ({ setIsOpen, detailRbn, postDay, setShowCBModal }) => {
   }
 
   let username = sessionStorage.getItem("username");
-
-  let [tempObj, setTempObj] = useState({ review: "", reviewId: "", star: "" });
-
   let [star, setStar] = useState(0); //사용자가 입력하는 별점
-  let [commentStar, setCommentStar] = useState([]); //commentStar에 별점 저장
-
   let [comment, setComment] = useState(""); // comment 사용자가 입력하는 댓글
   let [feedComments, setFeedComments] = useState([]); // feedComments 댓글 리스트 저장
   let [isValid, setIsValid] = useState(false); // 댓글 게시가능여부 (유효성 검사)
@@ -36,7 +31,7 @@ const DetailModal = ({ setIsOpen, detailRbn, postDay, setShowCBModal }) => {
   const [photo, setPhoto] = useState([]);
   const [detailRoute, setDetailRoute] = useState([]);
   // const [rno, setRno] = useState(0);
-
+  let dispatch = useDispatch();
   useEffect(() => {
     const $body = document.querySelector("body");
     $body.style.overflow = "hidden";
@@ -318,6 +313,7 @@ const DetailModal = ({ setIsOpen, detailRbn, postDay, setShowCBModal }) => {
                   className="learn-more_exit"
                   type="button"
                   onClick={(e) => {
+                    dispatch(addChatBotData({}));
                     setIsOpen(false);
                     setShowCBModal(false);
                   }}
