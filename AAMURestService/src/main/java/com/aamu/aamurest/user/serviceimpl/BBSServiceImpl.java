@@ -34,7 +34,7 @@ public class BBSServiceImpl implements BBSService{
 
 		for(BBSDTO dto:bbsList) {
 			int rbn = dto.getRbn();
-			dto.setReviewList(dao.reviewList(rbn));
+			dto.setReviewList(dao.reviewSelectList(rbn));
 			returnList.add(dto);
 		}
 		return returnList;
@@ -113,22 +113,25 @@ public class BBSServiceImpl implements BBSService{
 	}
 
 	/*---------------------------------------------------*/
-
+	
+	
 	//글 상세보기_모든 리뷰 보기
 	@Override
 	public List<ReviewDTO> reviewList(int rbn) {
-		
+		/*
 		List<ReviewDTO> reviewList = dao.reviewSelectList();
 		List<ReviewDTO> returnList = new Vector<>();
 
-		for(BBSDTO dto:bbsList) {
-			int rbn = dto.getRbn();
-			dto.setReviewList(dao.reviewList(rbn));
+		for(ReviewDTO dto:reviewList) {
+			int rno = dto.getRno();
+			dto.setReviewList(dao.reviewSelectList(rno));
 			returnList.add(dto);
 		}
 		return returnList;
+		*/
+		return dao.reviewSelectList(rbn);
 	}
-
+	
 
 	//리뷰 등록
 	@Override
