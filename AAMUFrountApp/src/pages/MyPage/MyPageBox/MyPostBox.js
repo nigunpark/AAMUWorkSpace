@@ -238,7 +238,7 @@ const MyPostBox = ({ selectRbn, setClickTab }) => {
           onClick={(e) => (e.target.value = null)}
         />
         <label className="write-picture-label" for="upload">
-          Img Upload
+          Img UP
         </label>
       </div>
 
@@ -291,7 +291,7 @@ const MyPostBox = ({ selectRbn, setClickTab }) => {
         {canSubmit() ? (
           <button
             style={{ color: "black" }}
-            className="navbar-btn"
+            className="write-up"
             type="button"
             onClick={() => {
               let write = uploadFile(showImagesFile);
@@ -306,7 +306,7 @@ const MyPostBox = ({ selectRbn, setClickTab }) => {
               );
             }}
           >
-            공유하기
+            업로드
           </button>
         ) : (
           <button type="button" disabled>
