@@ -21,10 +21,9 @@ function FeedSetting({
   setloading,
   showChat,
   setShowChat,
-
 }) {
   let profileRef = useRef();
- 
+
   let replyRef = useRef();
   let editRef = useRef();
   const [editModal, seteditModal] = useState(false);
@@ -227,23 +226,23 @@ function FeedSetting({
               {commentModal && (
                 // <Container1>
                 //   <Overlay
-                    // ref={commentRef}
-                    // onClick={(e) => {
-                    //   e.stopPropagation();
-                    //   if (e.target == commentRef.current) setcommentModal(false);
-                    // }}
-                  // >
-                    <Comment
-                      onClick={() => {
-                        setcommentModal(false);
-                      }}
-                      setcommentModal={setcommentModal}
-                      seteditModal={seteditModal}
-                      val={val}
-                      forReRender={forReRender}
-                      setForReRender={setForReRender}
-                      setlist={setlist}
-                    />
+                // ref={commentRef}
+                // onClick={(e) => {
+                //   e.stopPropagation();
+                //   if (e.target == commentRef.current) setcommentModal(false);
+                // }}
+                // >
+                <Comment
+                  onClick={() => {
+                    setcommentModal(false);
+                  }}
+                  setcommentModal={setcommentModal}
+                  seteditModal={seteditModal}
+                  val={val}
+                  forReRender={forReRender}
+                  setForReRender={setForReRender}
+                  setlist={setlist}
+                />
                 //   </Overlay>
                 // </Container1>
               )}
@@ -324,7 +323,7 @@ async function getChatRoom(val, dispatch) {
   await axios
     .post("/aamurest/chat/room?fromid=" + sessionStorage.getItem("username") + "&toid=" + val.id)
     .then((resp) => {
-      console.log(resp);
+      console.log("resp.data", resp.data);
       dispatch(addForChatInfo({ ...resp.data, id: val.id }));
     })
     .catch((err) => {
