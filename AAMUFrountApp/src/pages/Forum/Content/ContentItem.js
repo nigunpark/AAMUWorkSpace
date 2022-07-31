@@ -10,7 +10,6 @@ const ContentItem = ({ detail, index, setShowCBModal, isOpen, setIsOpen }) => {
   //   console.log("detail :", detail);
   //   console.log("리뷰 데이터 :", detail.reviewList);
 
-  console.log("val", detail);
   const detailPostDate = new Date(detail.postdate);
 
   function dateFormat(date) {
