@@ -1,0 +1,60 @@
+.qnaWrite__container {
+  padding-top: 80px;
+}
+.qnaWrite {
+  /* padding-top: 80px; */
+  max-width: 1000px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.qnaWrite__title {
+  margin-top: 30px;
+}
+.qnaWrite__title-input {
+  margin-top: 10px;
+  /* padding: 5px; */
+  border: 2px solid rgba(128, 128, 128, 0.8);
+  border-radius: 5px;
+  width: 60%;
+}
+.qnaWrite__title-input input {
+  padding: 5px;
+  height: 30px;
+  font-size: 15px;
+  width: 550px;
+}
+.qnaWrite__content-input {
+  margin-top: 10px;
+  height: 430px;
+  border: 2px solid rgba(128, 128, 128, 0.8);
+  border-radius: 5px;
+  padding: 5px;
+  font-size: 15px;
+}
+.qnaWrite__content-input textarea {
+  border: none;
+  outline: none;
+}
+.qnaWrite__content-btn {
+  display: flex;
+  justify-content: end;
+}
+
+.qnaWrite__content-btnSpan {
+  padding: 4px 15px;
+  font-weight: bold;
+  border-radius: 5px;
+  color: black;
+  border: 2px solid var(--skyblue);
+}
+
+.qnaWrite__content-btnSpan:hover {
+  background-color: white;
+  border: 2px solid var(--skyblue);
+  background-color: var(--skyblue);
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
