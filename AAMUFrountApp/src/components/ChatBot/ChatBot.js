@@ -27,15 +27,22 @@ const ChatBot = ({ showChatBot, chatArr }) => {
               return (
                 <p className={val.bool ? "chatBotBox bot" : "chatBotBox"}>
                   <span
-                    style={val.rbn !== null ? { color: "blue" } : { color: "black" }}
+                    // style={val.rbn !== null ? { color: "blue" } : { color: "black" }}
                     className="chatBotBox__span"
                     onClick={() => {
                       goRecommend(val);
                     }}
                   >
                     {val.message}
+                    <br />
                   </span>
-                  <span>{val.title}</span>
+                  {val.title !== undefined && (
+                    <>
+                      <a href={`https://place.map.kakao.com/${val.kakaokey}`} target="_blank">
+                        <span className="chatBotBox__innerSpan">{val.title}</span>
+                      </a>
+                    </>
+                  )}
                 </p>
               );
             })}
