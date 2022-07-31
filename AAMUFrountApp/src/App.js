@@ -21,7 +21,9 @@ import Chat from "./components/Chat/Chat";
 import QnA from "./components/QnA/QnA";
 
 import CommentSearch from "./components/Insta/ModalGroup/Comment/CommentSearch";
-
+import QnADetail from "./components/QnA/QnADetail";
+import QnAWrite from "./components/QnA/QnAWrite";
+import QnAEdit from "./components/QnA/QnAEdit";
 
 function App() {
   let location = useLocation();
@@ -51,6 +53,9 @@ function App() {
           <Route path="/mainPage/:currPosition" element={<MainPage />} />
           <Route path="/forum" element={<Forum />} />
           <Route path="/qna" element={<QnA />} />
+          <Route path="/qnaDetail" element={<QnADetail />} />
+          <Route path="/qnaWrite" element={<QnAWrite />} />
+          <Route path="/qnaEdit" element={<QnAEdit />} />
 
           {/* <Route path="/review" element={<Board />} /> */}
           {/* <Route path="/Insta" element={<Main />} /> */}
@@ -88,10 +93,10 @@ function App() {
               />
             }
           />
-          <Route path="/CommentSearch" 
-          element={<CommentSearch 
-          forReRender={forReRender}
-          setForReRender={setForReRender}/>} />
+          <Route
+            path="/CommentSearch"
+            element={<CommentSearch forReRender={forReRender} setForReRender={setForReRender} />}
+          />
           <Route path="/myPage" element={<MyPage />} />
         </Route>
         {/* <Route path="/chat" element={<Chat />} /> */}

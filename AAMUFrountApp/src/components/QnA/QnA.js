@@ -1,20 +1,32 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./QnA.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleDown, faCircleQuestion } from "@fortawesome/free-solid-svg-icons";
 import Pagination from "./Pagination";
+import { Link } from "react-router-dom";
+import { post } from "jquery";
 const QnA = () => {
-  const [posts, setPosts] = useState([]);
+  const [posts, setPosts] = useState([
+    <QnABbsOne />,
+    <QnABbsOne />,
+    <QnABbsOne />,
+    <QnABbsOne />,
+    <QnABbsOne />,
+    <QnABbsOne />,
+    <QnABbsOne />,
+    <QnABbsOne />,
+  ]);
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [postsPerPage, setPostsPerPage] = useState(10);
+  const [postsPerPage, setPostsPerPage] = useState(5);
   const indexOfLast = currentPage * postsPerPage;
   const indexOfFirst = indexOfLast - postsPerPage;
-  const currentPosts = (posts) => {
+  const getcurrentPosts = (posts) => {
     let currentPosts = 0;
     currentPosts = posts.slice(indexOfFirst, indexOfLast);
     return currentPosts;
   };
+  useEffect(() => {}, []);
   return (
     <div className="qna__container">
       <div className="qna__header">
@@ -34,21 +46,31 @@ const QnA = () => {
         </div>
         <div className="qna__qnaBoard">
           <h3>&lt;&nbsp;Q&amp;A 게시판&nbsp;&gt;</h3>
+          <Link to="/qnaWrite">
+            <div className="qna__Board-writeBtn">
+              <span>글쓰기</span>
+            </div>
+          </Link>
           <div className="qna__qnaBoard-contents">
+            {getcurrentPosts(posts).map((val, i) => {
+              return val;
+            })}
+            {/* <QnABbsOne />
             <QnABbsOne />
             <QnABbsOne />
             <QnABbsOne />
             <QnABbsOne />
             <QnABbsOne />
             <QnABbsOne />
-            <QnABbsOne />
-            <QnABbsOne />
+            <QnABbsOne /> */}
           </div>
-          <Pagination
-            postsPerPage={postsPerPage}
-            totalPosts={posts.length}
-            paginate={setCurrentPage}
-          />
+          <div className="qna__pagination">
+            <Pagination
+              postsPerPage={postsPerPage}
+              totalPosts={posts.length}
+              setCurrentPage={setCurrentPage}
+            />
+          </div>
         </div>
       </div>
     </div>
