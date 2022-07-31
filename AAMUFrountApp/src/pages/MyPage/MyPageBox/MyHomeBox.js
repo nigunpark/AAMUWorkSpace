@@ -28,7 +28,7 @@ const MyHomeBox = ({ setClickTab, planList, rbn, setSelectRbn }) => {
     day = day >= 10 ? day : "0" + day;
     return date.getFullYear() + "-" + month + "-" + day;
   }
-
+  // console.log("MyHomeBox :", rbn);
   let reduxState = useSelector((state) => state);
   let dispatch = useDispatch();
 
@@ -36,6 +36,8 @@ const MyHomeBox = ({ setClickTab, planList, rbn, setSelectRbn }) => {
   const onModalSelect = () => {
     setModalOpen(true);
   };
+
+  // console.log("planList :", planList.isBBS);
 
   return (
     <>
@@ -49,19 +51,29 @@ const MyHomeBox = ({ setClickTab, planList, rbn, setSelectRbn }) => {
           setIsOpen={setIsOpen}
           setSelectRbn={setSelectRbn}
           setClickTab={setClickTab}
+          bbs={planList.isBBS}
         />
       ) : null}
-
+      {/* 홈에 표시되는 박스 */}
       <div className="MyBoxContainer" onClick={onModalSelect}>
         <div className="MyBox">
+          {planList.isBBS == 1 ? (
+            <img
+              style={{
+                position: "absolute",
+                width: "40px",
+                left: "85%",
+                top: "2%",
+              }}
+              className="starImg"
+              src="/images/star.png"
+            />
+          ) : null}
           <img className="instaImg" src={planList.smallImage} />
+
           <div style={{ fontSize: "20px" }}>{planList.title}</div>
 
-          <div>
-            {planList.plannerdate} (rbn :{rbn})
-          </div>
-
-          <div style={{ marginLeft: "170px" }}>{dateFormat(postDate)}</div>
+          <div>{planList.plannerdate}</div>
         </div>
       </div>
       {isOpen && (
@@ -88,7 +100,46 @@ function MyBoxList({
   setIsOpen,
   setSelectRbn,
   setClickTab,
+  bbs,
 }) {
+  const bbsDelte = () => {
+    let token = sessionStorage.getItem("token");
+    axios
+      .delete("/aamurest/bbs/edit", {
+        params: {
+          rbn: rbn,
+        },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((resp) => {
+        console.log("삭제 성공 :", resp.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const listDelete = () => {
+    let token = sessionStorage.getItem("token");
+    axios
+      .delete("/aamurest/planner/edit", {
+        params: {
+          rbn: rbn,
+        },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((resp) => {
+        console.log("삭제 성공 :", resp.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   return (
     <div className="myBox-List">
       <div className="myBox-List-overlay">
@@ -105,16 +156,60 @@ function MyBoxList({
         >
           일정확인/수정
         </div>
-        <div
-          className="myBox-List-Post"
-          onClick={() => {
-            setClickTab(10);
-            setSelectRbn(rbn);
-          }}
-        >
-          공유하기
-        </div>
-        <div className="myBox-List-Delete">삭제하기</div>
+        {bbs == 0 ? (
+          <div
+            className="myBox-List-Post"
+            onClick={() => {
+              setClickTab(10);
+              setSelectRbn(rbn);
+            }}
+          >
+            공유하기
+          </div>
+        ) : (
+          <div
+            className="myBox-List-Post"
+            onClick={() => {
+              let bool = window.confirm("공유한 글을 삭제 하시겠습니까?");
+              if (bool) {
+                bbsDelte();
+                setModalOpen(false);
+              } else {
+                setModalOpen(false);
+              }
+            }}
+          >
+            공유취소
+          </div>
+        )}
+
+        {bbs == 0 ? (
+          <div
+            className="myBox-List-Delete"
+            onClick={() => {
+              let bool = window.confirm("여행경로를 삭제 하시겠습니까?");
+              if (bool) {
+                listDelete();
+                setModalOpen(false);
+              } else {
+                setModalOpen(false);
+              }
+            }}
+          >
+            삭제하기
+          </div>
+        ) : (
+          <div
+            className="myBox-List-Edit"
+            onClick={() => {
+              setClickTab(11);
+              setSelectRbn(rbn);
+            }}
+          >
+            수정하기
+          </div>
+        )}
+
         <div
           className="myBox-List-back"
           onClick={(e) => {
@@ -126,42 +221,6 @@ function MyBoxList({
       </div>
     </div>
   );
-}
-
-function getTimeSetArr(newFromWooJae, planList, setNewTimeSet) {
-  // let lengths = planList.title.substring(
-  //   planList.title.indexOf("일") - 1,
-  //   planList.title.indexOf("일")
-  // );
-  // console.log("lengths", lengths);
-  // // if (newFromWooJae.length === 0) return;
-  // let tempArr = new Array(lengths).fill(0);
-  // tempArr.forEach((val, index) => {
-  //   let bbcT = newFromWooJae[index][`day${index + 1}`][0].starttime / (1000 * 60);
-  //   if (bbcT >= 13 * 60) {
-  //     console.log("위");
-  //     let temp = {
-  //       ampm: "오후",
-  //       time: bbcT / 60 - 12,
-  //       fullDate: new Date(`2022-01-01 ${bbcT / 60}:${bbcT % 60}`),
-  //       min: bbcT % 60,
-  //       day: index + 1,
-  //     };
-  //     // dispatch(changeTimeSetObj(temp));
-  //     setNewTimeSet((curr) => [...curr, temp]);
-  //   } else {
-  //     console.log("아래");
-  //     let temp = {
-  //       ampm: "오전",
-  //       time: bbcT / 60,
-  //       fullDate: new Date(`2022-01-01 ${bbcT / 60}:${bbcT % 60}`),
-  //       min: bbcT % 60,
-  //       day: index + 1,
-  //     };
-  //     // dispatch(changeTimeSetObj(temp));
-  //     setNewTimeSet((curr) => [...curr, temp]);
-  //   }
-  // });
 }
 
 async function excAxios(
