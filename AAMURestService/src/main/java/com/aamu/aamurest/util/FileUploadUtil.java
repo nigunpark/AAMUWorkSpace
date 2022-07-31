@@ -29,7 +29,7 @@ public class FileUploadUtil {
 		List<String> filePath = new Vector<>();
 		for(String filename : filenames) {
 			String requesturl = request.getRequestURL().toString().replace(request.getRequestURI(), "/aamurest"+pathString);
-			filePath.add(requesturl+File.separator+filename);
+			filePath.add(requesturl+"/"+filename);
 		}
 		return filePath;
 	}
@@ -51,7 +51,7 @@ public class FileUploadUtil {
 	}
 	public static String requestOneFile(String filename,String path,HttpServletRequest req){
 
-		String requesturl = req.getRequestURL().toString().replace(req.getRequestURI(), "/aamurest"+path)+File.separator+filename;
+		String requesturl = req.getRequestURL().toString().replace(req.getRequestURI(), "/aamurest"+path)+"/"+filename;
 
 		return requesturl;
 	}

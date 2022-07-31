@@ -33,12 +33,8 @@ class GramFragment : Fragment() {
         navControllerHost = Navigation.findNavController(view)
 
         binding.gramCompose.setContent {
-            val posts = remember { DemoDataProvider.tweetList.filter { it.tweetImageId != 0 } }
-            val profiles = remember { DemoDataProvider.tweetList }
             ComposeCookBookTheme {
                 AAMUgramHome(
-                    posts = posts,
-                    profiles = profiles,
                     onLikeClicked = {},
                     onCommentsClicked = {},
                     onSendClicked = {},

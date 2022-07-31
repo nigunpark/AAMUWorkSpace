@@ -15,11 +15,13 @@ import com.aamu.aamuandroidapp.data.DemoDataProvider
 import com.aamu.aamuandroidapp.data.model.Tweet
 import com.aamu.aamuandroidapp.components.gram.profile.ProfileSection
 import com.aamu.aamuandroidapp.components.gram.profile.ProfileSectionSizes
+import com.aamu.aamuandroidapp.data.api.response.AAMUGarmResponse
+import java.text.SimpleDateFormat
 
 @Composable
 fun PostItem(
-    post: Tweet,
-    isLiked: Boolean,
+    gram: AAMUGarmResponse,
+    isLiked: Boolean?,
     onLikeClicked: () -> Unit,
     onCommentsClicked: () -> Unit,
     onSendClicked: () -> Unit,
@@ -31,8 +33,8 @@ fun PostItem(
             .padding(8.dp)
     ) {
         ProfileSection(
-            firstImageId = post.authorImageId,
-            text = post.author,
+            firstImageId = gram.userprofile,
+            text = gram.id ?: "",
             size = ProfileSectionSizes.medium(),
             iconRight = {
                 Icon(
@@ -42,29 +44,39 @@ fun PostItem(
             }
         )
         PostImage(
-            imageId = post.tweetImageId,
-            contentDescription = post.text,
+            imageId = gram.photo?.getOrNull(0),
+            contentDescription = gram.title,
             modifier = Modifier.padding(top = 8.dp)
         )
         PostInteractionBar(
-            isLiked = isLiked,
+            isLiked = isLiked ?: false,
             onLikeClicked = onLikeClicked,
             onCommentsClicked = onCommentsClicked,
             onSendClicked = onSendClicked,
         )
-        ProfileSection(
-            firstImageId = post.authorImageId,
-            text = "Liked by ${DemoDataProvider.tweet.author} and ${DemoDataProvider.tweet.likesCount} others"
-        )
+        if(gram.commuCommentList?.size == 0){
+            ProfileSection(
+                firstImageId = null,
+                text = "아직 아무도 좋아요를 누르지 않았어요"
+            )
+        }
+        else {
+            ProfileSection(
+                firstImageId = gram.commuCommentList?.getOrNull(0)?.userprofile,
+                text = "${gram.commuComment?.id}님이 댓글을 달고 ${gram.likecount}명이 좋아요를 눌렀어요"
+            )
+        }
         CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
             Text(
-                text = "View all ${post.commentsCount} comments",
+                text = "${gram.commuCommentList?.size}개의 댓글이 달렸어요",
                 style = MaterialTheme.typography.caption,
                 modifier = Modifier.padding(top = 4.dp),
                 color = MaterialTheme.colors.onSurface.copy(alpha = LocalContentAlpha.current)
             )
+            val formatter = SimpleDateFormat("yyyy년 MM월 dd일")
+            val time = formatter.format(gram.postdate)
             Text(
-                text = "${post.time} ago",
+                text = "${time} 포스팅됨",
                 style = MaterialTheme.typography.caption,
                 modifier = Modifier.padding(top = 4.dp),
                 color = MaterialTheme.colors.onSurface.copy(alpha = LocalContentAlpha.current)
@@ -76,11 +88,11 @@ fun PostItem(
 @Preview
 @Composable
 fun PostItemPreview() {
-    PostItem(
-        post = DemoDataProvider.tweet,
-        isLiked = true,
-        onLikeClicked = {},
-        onCommentsClicked = {},
-        onSendClicked = {}
-    )
+//    PostItem(
+//        post = DemoDataProvider.tweet,
+//        isLiked = true,
+//        onLikeClicked = {},
+//        onCommentsClicked = {},
+//        onSendClicked = {}
+//    )
 }

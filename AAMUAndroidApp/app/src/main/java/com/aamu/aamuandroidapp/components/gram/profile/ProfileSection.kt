@@ -18,7 +18,7 @@ import com.aamu.aamuandroidapp.data.DemoDataProvider
 
 @Composable
 fun ProfileSection(
-    @DrawableRes firstImageId: Int,
+    firstImageId: String?,
     text: String,
     modifier: Modifier = Modifier,
     iconRight: @Composable () -> Unit = {},
@@ -28,11 +28,13 @@ fun ProfileSection(
         modifier = modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        ProfilePicture(
-            imageId = firstImageId,
-            contentDescription = null,
-            size = size.profileIconSize
-        )
+        if(firstImageId != null) {
+            ProfilePicture(
+                imageId = firstImageId,
+                contentDescription = null,
+                size = size.profileIconSize
+            )
+        }
         Text(
             text = text,
             style = size.textStyle,
@@ -64,23 +66,23 @@ object ProfileSectionSizes {
     )
 }
 
-@Preview
-@Composable
-fun ProfileInfoPreview() {
-    ProfileSection(
-        firstImageId = DemoDataProvider.tweetList.first().authorImageId,
-        text = DemoDataProvider.tweetList.first().author,
-        size = ProfileSectionSizes.medium(),
-        iconRight = { Icon(imageVector = Icons.Default.MoreVert, contentDescription = null) }
-    )
-}
-
-@Preview
-@Composable
-fun LikesSectionPreview() {
-    val tweet = DemoDataProvider.tweetList.first()
-    ProfileSection(
-        firstImageId = tweet.authorImageId,
-        text = "Liked by ${tweet.author} and ${tweet.likesCount} others"
-    )
-}
+//@Preview
+//@Composable
+//fun ProfileInfoPreview() {
+//    ProfileSection(
+//        firstImageId = DemoDataProvider.tweetList.first().authorImageId,
+//        text = DemoDataProvider.tweetList.first().author,
+//        size = ProfileSectionSizes.medium(),
+//        iconRight = { Icon(imageVector = Icons.Default.MoreVert, contentDescription = null) }
+//    )
+//}
+//
+//@Preview
+//@Composable
+//fun LikesSectionPreview() {
+//    val tweet = DemoDataProvider.tweetList.first()
+//    ProfileSection(
+//        firstImageId = tweet.authorImageId,
+//        text = "Liked by ${tweet.author} and ${tweet.likesCount} others"
+//    )
+//}

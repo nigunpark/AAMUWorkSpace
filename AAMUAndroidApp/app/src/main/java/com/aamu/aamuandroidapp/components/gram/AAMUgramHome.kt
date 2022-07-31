@@ -15,36 +15,43 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.aamu.aamuandroidapp.R
+import com.aamu.aamuandroidapp.components.aamuplan.AAMUPlanViewModel
+import com.aamu.aamuandroidapp.components.aamuplan.AAMUPlanViewModelFactory
 import com.aamu.aamuandroidapp.data.DemoDataProvider
 import com.aamu.aamuandroidapp.data.model.Tweet
 import com.aamu.aamuandroidapp.components.gram.posts.PostList
-import com.aamu.aamuandroidapp.components.gram.stories.StoryList
-import com.aamu.aamuandroidapp.components.gram.stories.StoryPopup
 
 @Composable
 fun AAMUgramHome(
-    posts: List<Tweet>,
-    profiles: List<Tweet>,
     onLikeClicked: () -> Unit,
     onCommentsClicked: () -> Unit,
     onSendClicked: () -> Unit,
     onProfileClicked: () -> Unit,
     onMessagingClicked: () -> Unit
 ) {
-    var showStory = remember { mutableStateOf(false) }
+
+    val viewModel : AAMUgramViewModel = viewModel(
+        factory = AAMUgramViewModelFactory(LocalContext.current)
+    )
+
+    val gramList by viewModel.aamuGramList.observeAsState(emptyList())
 
     Box(modifier = Modifier.fillMaxSize()) {
         Scaffold(
             topBar = {
                 TopAppBar(
-                    title = { Text(text = "Instagram") },
+                    title = { Text(text = "AAMUGRAM") },
                     backgroundColor = MaterialTheme.colors.surface,
                     contentColor = MaterialTheme.colors.onSurface,
                     elevation = 8.dp,
@@ -69,16 +76,8 @@ fun AAMUgramHome(
             content = {
                 Surface(modifier = Modifier.padding(it)) {
                     Column {
-                        StoryList(
-                            profiles = profiles,
-                            onProfileClicked = {
-                                showStory.value = true
-                                onProfileClicked.invoke()
-                            }
-                        )
-                        Divider()
                         PostList(
-                            posts = posts,
+                            gramList = gramList,
                             onLikeClicked = onLikeClicked,
                             onCommentsClicked = onCommentsClicked,
                             onSendClicked = onSendClicked
@@ -87,28 +86,19 @@ fun AAMUgramHome(
                 }
             }
         )
-        AnimatedVisibility(
-            visible = showStory.value,
-            enter = expandVertically() + fadeIn(),
-            exit = shrinkVertically() + fadeOut()
-        ) {
-            StoryPopup(imageIds = DemoDataProvider.itemList.take(5)) {
-                showStory.value = false
-            }
-        }
     }
 }
 
 @Preview
 @Composable
 fun PreviewInstagramHome() {
-    AAMUgramHome(
-        posts = DemoDataProvider.tweetList.filter { it.tweetImageId != 0 },
-        profiles = DemoDataProvider.tweetList,
-        onLikeClicked = {},
-        onCommentsClicked = {},
-        onSendClicked = {},
-        onProfileClicked = {},
-        onMessagingClicked = {}
-    )
+//    AAMUgramHome(
+//        posts = DemoDataProvider.tweetList.filter { it.tweetImageId != 0 },
+//        profiles = DemoDataProvider.tweetList,
+//        onLikeClicked = {},
+//        onCommentsClicked = {},
+//        onSendClicked = {},
+//        onProfileClicked = {},
+//        onMessagingClicked = {}
+//    )
 }

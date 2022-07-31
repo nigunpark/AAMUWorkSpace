@@ -1,10 +1,7 @@
 package com.aamu.aamuandroidapp.data.api
 
 import android.widget.Toast
-import com.aamu.aamuandroidapp.data.api.response.AAMUChatingMessageResponse
-import com.aamu.aamuandroidapp.data.api.response.AAMUPlaceResponse
-import com.aamu.aamuandroidapp.data.api.response.AAMUPlannerSelectOne
-import com.aamu.aamuandroidapp.data.api.response.AAMUUserResponse
+import com.aamu.aamuandroidapp.data.api.response.*
 import com.aamu.aamuandroidapp.util.contextL
 import com.aamu.aamuandroidapp.util.getToken
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
@@ -42,8 +39,11 @@ interface AAMUApi {
     @GET("chat/room")
     suspend fun getChatMessageList(@QueryMap map : Map<String,String>): Response<List<AAMUChatingMessageResponse>>
 
+    @GET("gram/selectList")
+    suspend fun getGramList(@Query("id") id : String) : Response<List<AAMUGarmResponse>>
+
     companion object {
-        private const val BASE_URL = "http://192.168.0.19:8080/aamurest/"
+        private const val BASE_URL = "http://192.168.45.107:8080/aamurest/"
 
         operator fun invoke():AAMUApi{
             val requestInterceptor  = Interceptor{ chain ->

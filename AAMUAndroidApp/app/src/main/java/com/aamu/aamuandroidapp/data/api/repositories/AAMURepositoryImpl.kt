@@ -4,10 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
 import com.aamu.aamuandroidapp.data.api.AAMUApi
-import com.aamu.aamuandroidapp.data.api.response.AAMUChatingMessageResponse
-import com.aamu.aamuandroidapp.data.api.response.AAMUPlaceResponse
-import com.aamu.aamuandroidapp.data.api.response.AAMUPlannerSelectOne
-import com.aamu.aamuandroidapp.data.api.response.AAMUUserResponse
+import com.aamu.aamuandroidapp.data.api.response.*
 import com.aamu.aamuandroidapp.data.api.userLogin
 import com.aamu.aamuandroidapp.util.contextL
 import kotlinx.coroutines.Dispatchers
@@ -104,5 +101,16 @@ class AAMURepositoryImpl(
             emit(emptyList<AAMUChatingMessageResponse>())
     }.catch {
         emit(emptyList<AAMUChatingMessageResponse>())
+    }.flowOn(Dispatchers.IO)
+
+    override suspend fun getGramList(id: String): Flow<List<AAMUGarmResponse>> = flow<List<AAMUGarmResponse>> {
+        val response = aamuApi.getGramList(id)
+        if (response.isSuccessful){
+            emit(response.body() ?: emptyList<AAMUGarmResponse>())
+        }
+        else
+            emit(emptyList<AAMUGarmResponse>())
+    }.catch {
+        emit(emptyList<AAMUGarmResponse>())
     }.flowOn(Dispatchers.IO)
 }

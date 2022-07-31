@@ -7,19 +7,29 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.compose.rememberAsyncImagePainter
+import coil.request.ImageRequest
+import com.aamu.aamuandroidapp.R
 import com.aamu.aamuandroidapp.data.DemoDataProvider
 
 @Composable
 fun PostImage(
-    @DrawableRes imageId: Int,
+    imageId: String?,
     contentDescription: String?,
     modifier: Modifier = Modifier
 ) {
     Image(
-        painter = painterResource(id = imageId),
+        painter = rememberAsyncImagePainter(
+            model = ImageRequest.Builder(LocalContext.current)
+                .data(imageId ?: R.drawable.no_image)
+                .crossfade(true)
+                .build(),
+            contentScale = ContentScale.Crop
+        ),
         modifier = modifier.fillMaxWidth().height(450.dp),
         contentDescription = contentDescription,
         contentScale = ContentScale.Crop
@@ -30,7 +40,7 @@ fun PostImage(
 @Composable
 fun PostImagePreview() {
     PostImage(
-        imageId = DemoDataProvider.tweetList.first { it.tweetImageId != 0 }.tweetImageId,
+        imageId = null,
         contentDescription = null
     )
 }
