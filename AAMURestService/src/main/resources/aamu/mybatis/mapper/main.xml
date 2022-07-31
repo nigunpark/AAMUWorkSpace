@@ -137,8 +137,12 @@
 	<select id="countRouteBBS" parameterType="int" resultType="int">
 		SELECT COUNT(*) FROM routebbs where rbn=#{rbn}
 	</select>
-	<select id="searchPlanner" parameterType="String" resultType="int">
+	<select id="searchPlanner" parameterType="String" resultType="String">
 		SELECT rbn FROM routebbs WHERE rbn in(SELECT rbn from routeboard WHERE title LIKE '%'||#{message}||'%')
+	</select>
+	<select id="searchMostRoute" parameterType="Map" resultType="String">
+		SELECT contentid FROM route WHERE contentid in
+		(select contentid from places where areacode=#{areacode} and contenttypeid=#{contenttypeid}) and ROWNUM = ${rownum} group by contentid ORDER BY count(contentid) DESC
 	</select>
 
 </mapper>

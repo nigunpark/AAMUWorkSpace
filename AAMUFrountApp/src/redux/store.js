@@ -318,6 +318,17 @@ let forChatInfo = createSlice({
 });
 export let { addForChatInfo } = forChatInfo.actions;
 
+let forChatBotData = createSlice({
+  name: "forChatBotData",
+  initialState: {},
+  reducers: {
+    addChatBotData(state, action) {
+      return action.payload;
+    },
+  },
+});
+export let { addChatBotData } = forChatBotData.actions;
+
 export default configureStore({
   reducer: {
     localNameForMarker: localNameForMarker.reducer,
@@ -339,6 +350,7 @@ export default configureStore({
     wholeBlackBox: wholeBlackBox.reducer,
     profileImg: profileImg.reducer,
     forChatInfo: forChatInfo.reducer,
+    forChatBotData: forChatBotData.reducer,
   },
   //planTripTime.js 168번줄쯤의 fullDate를 위한 serializable무시
   middleware: (getDefaultMiddleware) =>

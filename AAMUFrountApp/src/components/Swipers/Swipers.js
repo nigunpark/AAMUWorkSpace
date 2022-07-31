@@ -34,13 +34,14 @@ const Swipers = () => {
             >
               {forSwiper.map((val, i) => {
                 return (
-                  <SwiperSlide>
+                  <SwiperSlide key={val.kakaokey}>
                     <SwipersItem
                       style={{ fontSize: "13px" }}
                       src={val.bigimage}
                       text={val.title}
                       label={`${getLocalName(val.areacode)}`}
                       path="/"
+                      val={val}
                     />
                   </SwiperSlide>
                 );

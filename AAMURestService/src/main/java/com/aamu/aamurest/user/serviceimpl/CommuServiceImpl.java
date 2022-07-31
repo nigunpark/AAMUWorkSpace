@@ -344,7 +344,37 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 	//팔로우, 팔로잉
 	@Override
 	public int commuFollower(Map map) {
-		return dao.commuFollower(map);
+		int affected=dao.commuIsExistFollower(map); //follower테이블에 있는가? 있으면1 없으면0
+		if(affected==0)
+			return dao.commuInsertFollower(map);
+		else
+			return dao.commuDeleteFollower(map);
+	}
+	
+	//마이페이지용_id에 따른 
+	@Override
+	public List<CommuDTO> commuMyPageList(Map map) {
+		return dao.commuMyPageList(map);
+	}
+	
+	//마이페이지용_토탈카운트 셋팅 (해당 id의 총 글 갯수)
+	@Override
+	public int commuTotalCount(Map map) {
+		map.put("table", "community");
+		return dao.commuTotalCount(map);
+	}
+	
+	//마이페이지용_나를 팔로우하는 계정 수 셋팅
+	@Override
+	public int commuFollowerCount(Map map) {
+		map.put("table", "follower");
+		return dao.commuTotalCount(map);
+	}
+	
+	//마이페이지용_내가 팔로잉하는 계정 수 셋팅
+	@Override
+	public int commuFollowingCount(Map map) {
+		return dao.commuFollowingCount(map);
 	}
 	
 	////////////////////////////////////////////////////////공통 메소드

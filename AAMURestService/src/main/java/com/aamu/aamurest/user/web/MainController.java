@@ -37,6 +37,7 @@ import com.aamu.aamurest.user.service.RouteDTO;
 import com.aamu.aamurest.user.service.api.KakaoKey;
 import com.aamu.aamurest.user.service.api.KakaoKey.Document;
 import com.aamu.aamurest.user.service.api.KakaoReview;
+import com.aamu.aamurest.user.serviceimpl.MainServiceImpl;
 import com.aamu.aamurest.util.FileUploadUtil;
 
 @RestController
@@ -606,21 +607,45 @@ public class MainController {
 		Map returnMap = responseEntity.getBody();
 		String message = returnMap.get("message").toString();
 		returnMap.put("bool", true);
-		int rbn = 0;
+		returnMap.put("rbn", null);
+		String rbn = null;
 		if(message.contains("searchRoute")) {
 			message = message.split("searchRoute")[0].trim();
-			System.out.println(message);
+			System.out.println("마지막 응답 메시지:"+message);
 			rbn = service.searchPlanner(message);
-			if(rbn == 0) message = "죄송합니다 알맞은 플래너가 없습니다";
-			else message = "/forum/"+rbn;
+			if(rbn == null) message = "죄송합니다 알맞은 플래너가 없습니다.";
+			else {
+				message = message+"로 추천하는 여행 플래너 입니다!";
+				returnMap.put("rbn",rbn);
+				int rbnInt = Integer.parseInt(rbn);
+				PlannerDTO dto = service.selectPlannerOne(rbnInt);
+				returnMap.put("planner", dto);
+			}
+				
 			
 			returnMap.put("message", message);
 		}
 		else if(message.contains("searchPlace")){
 			message = message.split("searchPlace")[0].trim();
-
-			if(rbn == 0) message = "죄송합니다 해당 하는 장소를 찾을수 없네요";
-			else message = "/forum/"+rbn;
+			String area = message.split("\\s")[0];
+			String contenttype = message.split("\\s")[1];
+			System.out.println("지역:"+area);
+			System.out.println("장소:"+contenttype);
+			returnMap.put("message", message);
+			Map codeMap = MainServiceImpl.switchArea(area, contenttype);
+			System.out.println(codeMap);
+			codeMap.put("rownum", 1);
+			String contentid = service.searchMostRoute(codeMap);
+			if(contentid!=null) {
+				AttractionDTO dto = service.selectOnePlace(Integer.parseInt(contentid));
+				returnMap.put("message","현재 AAMU에서 추천하는"+contenttype+"입니다");
+				returnMap.put("title",dto.getTitle());
+				returnMap.put("kakaokey", dto.getKakaokey());
+			}
+			else {
+				returnMap.put("message","죄송합니다 현재 추천할만한 장소가 업습니다.");
+			}
+			
 		}
 		return returnMap;
 	}
