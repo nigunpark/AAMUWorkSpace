@@ -14,7 +14,7 @@ const ChatBot = ({ showChatBot, chatArr }) => {
   function goRecommend(val) {
     if (val.rbn !== null) {
       dispatch(addChatBotData(val));
-      setTimeout(navigate("/forum"), 100);
+      navigate("/forum");
     }
   }
   return (
@@ -35,6 +35,7 @@ const ChatBot = ({ showChatBot, chatArr }) => {
                   >
                     {val.message}
                   </span>
+                  <span>{val.title}</span>
                 </p>
               );
             })}
