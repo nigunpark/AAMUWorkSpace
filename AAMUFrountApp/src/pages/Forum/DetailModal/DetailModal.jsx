@@ -44,7 +44,6 @@ const DetailModal = ({ setIsOpen, detailRbn, postDay }) => {
     return () => ($body.style.overflow = "auto");
   }, []);
 
-  // console.log("detailRbn 글번호 넘어왔나 :", detailRbn);
   useEffect(() => {
     let token = sessionStorage.getItem("token");
     axios
@@ -61,7 +60,7 @@ const DetailModal = ({ setIsOpen, detailRbn, postDay }) => {
         setPhoto(resp.data.photo);
         setFeedComments(resp.data.reviewList);
         setDetailRoute(resp.data.routeList);
-        setUserId(resp.data.id);
+        // setUserId(resp.data.id);
       })
       .catch((error) => {
         console.log((error) => console.log("게시판 상세보기 실패", error));
@@ -133,33 +132,7 @@ const DetailModal = ({ setIsOpen, detailRbn, postDay }) => {
   }
 
   let reviewPost = (e) => {
-    // setTempObj((curr)=>{return {...curr, star:star, review:comment, reviewId:sessionStorage.getItem('token')}});
-    // setFeedComments([...feedComments, tempObj]);
-
-    // 전개연산자를 사용해서 feedComments에 담겨있는 댓글과
-    // commentStar에 담겨있는 별점 가져오기
-    // const copyFeedComments = [...feedComments];
-    // const copyStar = [...commentStar];
-
-    // console.log('comment 추가됬나 확인 :',comment);
-    // console.log('star 값 저장됬나 확인 :',star);
-
-    //`${comment}`
-    //`${star}`
-    //${detailRbn}/${id}/${rate}/${review}
-
-    post();
-
-    //기존 댓글 배열이 담긴 copyFeedComments에 사용자가 입력한 comment 를 push
-    // copyFeedComments.push(comment);
-
-    //기존 별점 배열이 담긴 copyStar에 사용자가 입력한 star 를 push
-    // copyStar.push(star);
-
-    //사용자가 입력한 댓글을 포함시켜서 setFeedComments을 변경
-    // setFeedComments(copyFeedComments);
-    //사용자가 입력한 별점을 포함시켜서 setCommentStar을 변경
-    // setCommentStar(copyStar);
+    post(); // 리뷰 axios post
 
     //사용자가 입력한 댓글창과 별점 초기화
     setComment("");
@@ -167,17 +140,7 @@ const DetailModal = ({ setIsOpen, detailRbn, postDay }) => {
     setIsValid(false);
   };
 
-  // console.log('입력한 댓글 저장 확인 :', feedComments);
-  // console.log('입력한 별점 저장 확인 :', star);
-
   const reviewDelete = (rno) => {
-    // console.log('feedComments : ', feedComments);
-
-    // setFeedComments(feedComments.filter((e, index) => index !== no));
-    // setCommentStar(commentStar.filter((e, index) => index !== no));
-
-    // filter 이거가지고 검색기능 가능할듯
-
     let token = sessionStorage.getItem("token");
     axios
       .delete("/aamurest/review/edit", {
@@ -223,7 +186,6 @@ const DetailModal = ({ setIsOpen, detailRbn, postDay }) => {
             }}
           >
             <Name>삭제</Name>
-            {console.log("feedComments 삭제 되나요 :", feedComments)}
           </EditDelte>
         ) : null}
       </div>
