@@ -132,8 +132,9 @@ public class MainDAO {
 		return template.update("updateImage",map);
 	}
 
-	public int searchPlanner(String message) {
-
+	public String searchPlanner(String message) {
+		//String rbn = String.valueOf(template.selectOne("searchPlanner",message));
+		//System.out.println(rbn);
 		return template.selectOne("searchPlanner",message);
 	}
 
@@ -141,6 +142,8 @@ public class MainDAO {
 		
 		return template.selectOne("countRouteBBS",rbn);
 	}
-
+	public String searchMostRoute(Map map) {
+		return template.selectOne("searchMostRoute", map);
+	}
 
 }
