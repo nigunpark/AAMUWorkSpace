@@ -778,14 +778,32 @@ a {
   float: right;
   font-weight: bold;
   cursor: pointer;
-  background-color: transparent;
+  border: 2px solid #ffd670;
   border-radius: 0.5rem;
   padding: 0 1em;
+  color: #001d3d;
 }
 .write-picture-label:hover {
   // border: none;
   transition: 0.2s;
-  background: var(--mainColor);
+  color: white;
+  background-color: #ffd670;
+}
+
+.write-up {
+  font-size: 20px;
+  float: right;
+  font-weight: bold;
+  cursor: pointer;
+  border-bottom: 2px solid #ffd670;
+  border-radius: 0.5rem;
+  padding: 0 1em;
+  color: #001d3d;
+}
+.write-up:hover {
+  transition: 0.2s;
+  color: white;
+  background-color: #ffd670;
 }
 
 .write-section {
@@ -861,11 +879,15 @@ a {
   cursor: pointer;
   text-align: center;
   width: 100%;
-  border-bottom: 1px solid orange;
+  // border-bottom: 1px solid orange;
 }
 .myBox-List-Post {
-  margin-top: 5px;
+  margin-top: 15px;
   cursor: pointer;
+}
+.myBox-List-Post-Delete {
+  cursor: pointer;
+  color: red;
 }
 .myBox-List-Delete {
   margin-top: 5px;
@@ -873,7 +895,7 @@ a {
   color: red;
 }
 .myBox-List-Edit {
-  margin-top: 5px;
+  margin-top: 15px;
   cursor: pointer;
   color: orange;
 }
@@ -889,11 +911,11 @@ a {
 .theme-modal {
   position: absolute;
   display: auto;
-  width: 200px;
+  width: 190px;
   height: 150px;
   z-index: 100;
-  top: 450px;
-  left: 75%;
+  top: 55%;
+  left: 85%;
   right: 0;
   bottom: 0;
   display: flex;
@@ -934,6 +956,18 @@ a {
     opacity: 0;
   }
   100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+@keyframes slide-in-left {
+  0% {
+    -webkit-transform: translateX(-1000px);
+    transform: translateX(-1000px);
+    opacity: 0;
+  }
+  100% {
+    -webkit-transform: translateX(0);
     transform: translateX(0);
     opacity: 1;
   }
