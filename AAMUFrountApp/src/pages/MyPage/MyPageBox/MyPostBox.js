@@ -5,7 +5,7 @@ import { addWholeBlackBox } from "../../../redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-const MyPostBox = ({ selectRbn }) => {
+const MyPostBox = ({ selectRbn, setClickTab }) => {
   let navigate = useNavigate();
 
   const [detailPostData, setDetailPostData] = useState({});
@@ -14,10 +14,7 @@ const MyPostBox = ({ selectRbn }) => {
 
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [tag, setTag] = useState();
   const [detailRbn, setDetailRbn] = useState(0);
-  const themeid = 1;
-  let [writeTag, setWriteTag] = useState([]);
 
   //--------------------------------이미지 시작--------------------------------
   const [showImages, setShowImages] = useState([]);
@@ -50,34 +47,6 @@ const MyPostBox = ({ selectRbn }) => {
     setShowImages(showImages.filter((_, index) => index !== id));
   };
   //--------------------------------이미지 끝--------------------------------
-
-  // useEffect(async () => {
-  //   try {
-  //     let token = sessionStorage.getItem("token");
-
-  //     let resp = await axios.get("/aamurest/planner/selectonemap", {
-  //       params: {
-  //         rbn: selectRbn,
-  //       },
-  //       headers: {
-  //         Authorization: `Bearer ${token}`,
-  //       },
-  //     });
-  //     console.log("글 작성 페이지에서 상세경로 데이터 확인 : ", resp.data);
-  //     setDetailPostData(resp.data);
-  //     setDetailRbn(resp.data.rbn);
-  //     setDetailTitle(resp.data.title);
-
-  //     let keys = Object.keys(resp.data.routeMap);
-  //     let values = Object.values(resp.data.routeMap);
-  //     let keyValueData = Object.entries(resp.data.routeMap).map((val, idx) => {
-  //       return { [keys[idx]]: values[idx] };
-  //     });
-  //     setDetailRoute(keyValueData);
-  //   } catch (error) {
-  //     console.log((error) => console.log("상세경로 가져오기 실패", error));
-  //   }
-  // }, []);
 
   const getPlanData = async () => {
     try {
@@ -307,7 +276,6 @@ const MyPostBox = ({ selectRbn }) => {
         <button type="button" className="theme-section" onClick={onClickModal}>
           {postTheme == 0 ? "테마를 선택하세요" : postTheme}
         </button>
-
         {isOpen == true ? (
           <Theme
             setIsOpen={setIsOpen}
@@ -333,7 +301,8 @@ const MyPostBox = ({ selectRbn }) => {
                 content,
                 detailRbn,
                 navigate,
-                postThemeNum
+                postThemeNum,
+                setClickTab
               );
             }}
           >
@@ -349,8 +318,8 @@ const MyPostBox = ({ selectRbn }) => {
     </div>
   );
 };
-// className="slide-in-left" edf2f4
-// box-shadow: 0 0 0 2px #e9ebec, 0 0 0 11px #fcfdfe;
+
+//projects-section 여기에 relative 줬음
 function Theme({ setIsOpen, themes, setPostTheme, setPostThemeNum }) {
   return (
     <div className="theme-modal">
@@ -384,20 +353,6 @@ function DetailSetting({ fromWooJaeData, periodIndex, obj, i }) {
   const [upTime, setUpTime] = useState(0);
   const [downTime, setDownTime] = useState(0);
   let dispatch = useDispatch();
-
-  // if (i === 0) {
-  //   let firstAccum = getNAccumDetailTime(periodIndex, reduxState, obj);
-  //   setUpTime(firstAccum);
-  //   setDownTime(firstAccum + obj.atime / 1000 / 60);
-  //   fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i + 1].starttime =
-  //     firstAccum + obj.atime / 1000 / 60;
-  //   const forBlackBoxRedux = getTimes(
-  //     periodIndex,
-  //     firstAccum,
-  //     firstAccum + obj.atime / 1000 / 60
-  //   );
-  //   dispatch(addWholeBlackBox(forBlackBoxRedux));
-  // }
 
   useEffect(() => {
     if (i !== 0) {
@@ -482,19 +437,6 @@ function getTimes(periodIndex, st, et) {
   };
 }
 
-// function getNAccumDetailTime(periodIndex, reduxState, obj) {
-//   let sumTime;
-//   let sTime = reduxState.timeSetObj.find((val) => {
-//     return val.day === periodIndex + 1;
-//   });
-//   if (sTime.ampm === "오후" && sTime.time >= 1 && sTime.time <= 11) {
-//     sumTime = (sTime.time + 12) * 60 + sTime.min + obj.mtime / 1000 / 60;
-//   } else {
-//     sumTime = sTime.time * 60 + sTime.min + obj.mtime / 1000 / 60;
-//   }
-//   return sumTime;
-// }
-
 function uploadFile(showImages) {
   //이미지 업로드
   let formData = new FormData(); // formData 객체를 생성한다.
@@ -503,7 +445,15 @@ function uploadFile(showImages) {
   }
   return formData;
 }
-function bordWrite(write, title, content, detailRbn, navigate, postThemeNum) {
+function bordWrite(
+  write,
+  title,
+  content,
+  detailRbn,
+  navigate,
+  postThemeNum,
+  setClickTab
+) {
   write.append("id", sessionStorage.getItem("username"));
   write.append("title", title);
   write.append("content", content);
@@ -522,11 +472,13 @@ function bordWrite(write, title, content, detailRbn, navigate, postThemeNum) {
       console.log(resp.data.result);
       if (resp.data.result === "insertSuccess") {
         alert("글이 저장되었습니다");
-        let bool = window.confirm("게시판으로 이동하겠습니까?");
-        if (bool) navigate("/forum");
+        navigate("/forum");
+        // let bool = window.confirm("게시판으로 이동하겠습니까?");
+        // if (bool) navigate("/forum");
+        // if (!bool) setClickTab(0);
       } else {
         alert("저장오류가 발생했습니다. 관리자에게 문의하세요");
-        navigate("/myPage");
+        navigate("/");
       }
     })
     .catch((error) => {
