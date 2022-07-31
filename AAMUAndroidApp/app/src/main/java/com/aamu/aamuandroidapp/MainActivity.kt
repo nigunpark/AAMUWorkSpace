@@ -11,6 +11,8 @@ import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import com.aamu.aamuandroidapp.databinding.ActivityMainBinding
 import com.aamu.aamuandroidapp.util.setContextapp
+import com.aamu.aamuandroidapp.util.stompConnection
+import com.aamu.aamuandroidapp.util.stompDisconnect
 import com.kakao.sdk.common.KakaoSdk
 import java.security.MessageDigest
 
@@ -49,7 +51,11 @@ class MainActivity : AppCompatActivity() {
 
         }
         KakaoSdk.init(this, "c55ed90259ce1795a67bdc259d5642f1")
+        stompConnection()
     }
 
-
+    override fun onDestroy() {
+        stompDisconnect()
+        super.onDestroy()
+    }
 }

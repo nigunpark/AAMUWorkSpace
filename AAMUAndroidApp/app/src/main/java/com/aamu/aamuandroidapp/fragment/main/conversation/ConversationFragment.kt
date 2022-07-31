@@ -28,10 +28,15 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.aamu.aamuandroidapp.components.chatlist.chat.ConversationContent
+import com.aamu.aamuandroidapp.components.chatlist.chat.ConversationViewModel
+import com.aamu.aamuandroidapp.components.chatlist.chat.ConversationViewModelFactory
 
 
 class ConversationFragment : Fragment() {
+
+    private lateinit var conversationViewModel: ConversationViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -53,7 +58,11 @@ class ConversationFragment : Fragment() {
         }
 
         setContent {
+            conversationViewModel = viewModel(
+                factory = ConversationViewModelFactory("8")
+            )
             ConversationContent(
+                viewModel= conversationViewModel,
                 // Add padding so that we are inset from any navigation bars
                 modifier = Modifier.windowInsetsPadding(
                     WindowInsets
@@ -71,5 +80,6 @@ class ConversationFragment : Fragment() {
         } else {
             requireActivity().window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_UNSPECIFIED or WindowManager.LayoutParams.SOFT_INPUT_STATE_UNSPECIFIED)
         }
+        conversationViewModel.unSubscribe()
     }
 }

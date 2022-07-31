@@ -59,11 +59,9 @@ import java.util.*
 //@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ConversationContent(
+    viewModel : ConversationViewModel,
     modifier: Modifier = Modifier,
 ) {
-    val viewModel: ConversationViewModel = viewModel(
-        factory = ConversationViewModelFactory()
-    )
 
     val messageList by viewModel.messageList.observeAsState(emptyList())
 

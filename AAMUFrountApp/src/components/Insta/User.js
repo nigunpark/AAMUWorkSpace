@@ -10,7 +10,16 @@ import { Link } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import SearchSelect from "./ModalGroup/Search/SearchSelect";
 import Chat from "../Chat/Chat";
-function User({val, setlist, setloading, searchb, setSearchb, inputValue, setinputValue, showChat }) {
+function User({
+  val,
+  setlist,
+  setloading,
+  searchb,
+  setSearchb,
+  inputValue,
+  setinputValue,
+  showChat,
+}) {
   const modalRef = useRef();
   const notimodalRef = useRef();
   const outside = useRef();
@@ -19,9 +28,7 @@ function User({val, setlist, setloading, searchb, setSearchb, inputValue, setinp
   const [follow, setFollowing] = useState(false);
   const [search, setsearch] = useState(false);
   const [square, setsquare] = useState(false);
-
   const [userModal, setUserModal] = useState("");
-
   const [title, settitle] = useState([]);
   // const [searchb, setSearchb] = useState([]);
   const [searchText, setsearchText] = useState(false);
@@ -110,7 +117,7 @@ function User({val, setlist, setloading, searchb, setSearchb, inputValue, setinp
   };
   return (
     <div>
-      {showChat && <Chat />}
+      {showChat && <Chat showChat={showChat} />}
       <div className="userSearch">
         <SearchSelect setSearchb={setSearchb} />
         <div

@@ -12,6 +12,7 @@ import com.aamu.aamuandroidapp.data.api.AAMUDIGraph
 import com.aamu.aamuandroidapp.data.api.repositories.AAMURepository
 import com.aamu.aamuandroidapp.data.api.response.AAMUChatingMessageResponse
 import com.aamu.aamuandroidapp.util.contextL
+import com.aamu.aamuandroidapp.util.stomp
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.gmail.bishoybasily.stomp.lib.Event
 import com.gmail.bishoybasily.stomp.lib.StompClient
@@ -23,13 +24,13 @@ import java.util.concurrent.TimeUnit
 import kotlin.collections.HashMap
 
 
-class ConversationViewModelFactory() : ViewModelProvider.Factory{
+class ConversationViewModelFactory(val roomno : String) : ViewModelProvider.Factory{
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return ConversationViewModel() as T
+        return ConversationViewModel(roomno) as T
     }
 }
 
-class ConversationViewModel : ViewModel() {
+class ConversationViewModel(roomno : String) : ViewModel() {
     private val aamuRepository : AAMURepository = AAMUDIGraph.createAAMURepository()
 
     val messageList = MutableLiveData<List<AAMUChatingMessageResponse>>()
@@ -37,12 +38,11 @@ class ConversationViewModel : ViewModel() {
 
     private val map : HashMap<String,String> = HashMap()
 
-    private lateinit var stompConnection: Disposable
+
     private lateinit var topic: Disposable
-    private lateinit var stomp : StompClient
 
     init {
-        map.put("roomno","8");
+        map.put("roomno",roomno)
         viewModelScope.launch {
             aamuRepository.getChatMessageList(map)
                 .collect{aamumessageList->
@@ -55,42 +55,8 @@ class ConversationViewModel : ViewModel() {
                     }
                 }
         }
-
-        val url = "ws://192.168.45.107:8080/aamurest/ws/chat/websocket"
-        val intervalMillis = 1000L
-        val client = OkHttpClient.Builder()
-            .readTimeout(10, TimeUnit.SECONDS)
-            .writeTimeout(10, TimeUnit.SECONDS)
-            .connectTimeout(10, TimeUnit.SECONDS)
-            .build()
-
-        stomp = StompClient(client,intervalMillis).apply { this@apply.url = url }
-
-        stomp.connect().subscribe() {
-            when (it.type) {
-                Event.Type.OPENED -> {
-                    Log.i("com.aamu.aamu","열림")
-                    topic = stomp.join("/queue/chat/message/"+map.get("roomno")).subscribe{
-
-                        val mapper = jacksonObjectMapper()
-                        val message : AAMUChatingMessageResponse = mapper.readValue(it,AAMUChatingMessageResponse::class.java)
-
-                        Log.i("com.aamu.aamu","뭔가옴 : " + message)
-                        val tempList : MutableList<AAMUChatingMessageResponse>? = messageList.value?.toMutableList()
-                        tempList?.add(0,message)
-                        messageList.postValue(tempList?.toList())
-                    }
-                }
-                Event.Type.CLOSED -> {
-                    Log.i("com.aamu.aamu","닫힘")
-                }
-                Event.Type.ERROR -> {
-                    Log.i("com.aamu.aamu","에러")
-                }
-            }
-        }
+        subscribe()
     }
-
 
     fun sendMessage(content : String){
         val preferences : SharedPreferences = contextL.getSharedPreferences("usersInfo", Context.MODE_PRIVATE)
@@ -101,8 +67,28 @@ class ConversationViewModel : ViewModel() {
         val dateTimeAsLong: Long = dateTime.time
         map.put("senddate",dateTimeAsLong.toString())
         val mapper = jacksonObjectMapper()
+
         stomp.send("/app/chat/message",mapper.writeValueAsString(map)).subscribe{
             Log.i("com.aamu.aamu","뭔가가 : " + it.toString())
         }
+    }
+
+    fun subscribe(){
+        val preferences : SharedPreferences = contextL.getSharedPreferences("usersInfo", Context.MODE_PRIVATE)
+        val userid : String? = preferences.getString("id",null)
+        topic = stomp.join("/queue/chat/message/"+map.get("roomno"),userid.toString()).subscribe{
+
+            val mapper = jacksonObjectMapper()
+            val message : AAMUChatingMessageResponse = mapper.readValue(it,AAMUChatingMessageResponse::class.java)
+
+            Log.i("com.aamu.aamu","뭔가옴 : " + message)
+            val tempList : MutableList<AAMUChatingMessageResponse>? = messageList.value?.toMutableList()
+            tempList?.add(0,message)
+            messageList.postValue(tempList?.toList())
+        }
+    }
+
+    fun unSubscribe(){
+        topic.dispose()
     }
 }
