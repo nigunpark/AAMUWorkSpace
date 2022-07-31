@@ -6,17 +6,21 @@ import FSearch from "../FSearch/FSearch";
 import axios from "axios";
 
 import dummy from "../DB/contentdata.json";
-
+import { useSelector } from "react-redux";
+import DetailModal from "../DetailModal/DetailModal";
 const Content = () => {
+  let reduxState = useSelector((state) => state);
   //let navigate = useNavigate();
-
   const [listData, setListData] = useState([]);
-
+  const [isOpen, setIsOpen] = useState(false);
   let token = sessionStorage.getItem("token");
-
   let [list, setList] = useState("");
-
+  const [showCBModal, setShowCBModal] = useState(false);
+  function chatbotModal() {
+    console.log("content안", reduxState.forChatBotData.length);
+  }
   useEffect(() => {
+    console.log("useEffect", reduxState.forChatBotData);
     axios
       .get("/aamurest/bbs/SelectList", {
         headers: {
@@ -31,6 +35,10 @@ const Content = () => {
       .catch((error) => {
         console.log((error) => console.log("글 목록 가져오기 실패", error));
       });
+    if (reduxState.forChatBotData.length !== undefined) {
+      setShowCBModal(true);
+    }
+    console.log("forChatBotData", reduxState.forChatBotData);
   }, []);
 
   return (
@@ -51,11 +59,27 @@ const Content = () => {
 
           <ul className="card__items_minCon">
             {listData.map((val, idx) => {
-              return <ContentItem detail={val} index={idx} />;
+              return (
+                <ContentItem
+                  detail={val}
+                  index={idx}
+                  setShowCBModal={setShowCBModal}
+                  isOpen={isOpen}
+                  setIsOpen={setIsOpen}
+                />
+              );
             })}
           </ul>
         </div>
       </div>
+      {showCBModal && (
+        <DetailModal
+          setShowCBModal={setShowCBModal}
+          detailRbn={reduxState.forChatBotData.rbn}
+          setIsOpen={setIsOpen}
+          // postDay={new Date(reduxState.forChatBotData.planner.routeDate)}
+        />
+      )}
     </div>
   );
 };

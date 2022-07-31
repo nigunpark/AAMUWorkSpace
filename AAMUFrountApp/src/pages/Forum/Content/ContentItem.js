@@ -3,13 +3,14 @@ import { Link } from "react-router-dom";
 import React, { useState } from "react";
 import DetailModal from "../DetailModal/DetailModal";
 
-const ContentItem = ({ detail, index }) => {
+const ContentItem = ({ detail, index, setShowCBModal, isOpen, setIsOpen }) => {
   // console.log("ContentItem dummy :",dummy.reviewdata);
   // console.log("keys : ",keys);
 
   //   console.log("detail :", detail);
   //   console.log("리뷰 데이터 :", detail.reviewList);
 
+  console.log("val", detail);
   const detailPostDate = new Date(detail.postdate);
 
   function dateFormat(date) {
@@ -21,7 +22,6 @@ const ContentItem = ({ detail, index }) => {
   }
   const postDay = dateFormat(detailPostDate);
 
-  const [isOpen, setIsOpen] = useState(false);
   const detailRbn = detail.rbn; // rbn 값 저장 잘 됨
 
   const onClickModal = () => {
@@ -87,6 +87,7 @@ const ContentItem = ({ detail, index }) => {
       {isOpen == true ? (
         <DetailModal
           postDay={postDay}
+          setShowCBModal={setShowCBModal}
           setIsOpen={setIsOpen}
           detailRbn={detailRbn}
         />

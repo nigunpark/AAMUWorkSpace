@@ -2,11 +2,21 @@ import React, { useEffect, useRef, useState } from "react";
 import "./ChatBot.css";
 import styled, { keyframes } from "styled-components";
 import axios from "axios";
+import { useDispatch } from "react-redux";
+import { addChatBotData } from "../../redux/store";
+import { useNavigate } from "react-router-dom";
 // let chatArr = [];
 const ChatBot = ({ showChatBot, chatArr }) => {
   let inputRef = useRef();
+  let dispatch = useDispatch();
+  let navigate = useNavigate();
   const [chats, setChats] = useState([]);
-
+  function goRecommend(val) {
+    if (val.rbn !== null) {
+      dispatch(addChatBotData(val));
+      setTimeout(navigate("/forum"), 100);
+    }
+  }
   return (
     <Container>
       <Content>
@@ -16,7 +26,15 @@ const ChatBot = ({ showChatBot, chatArr }) => {
             {chats.map((val, i) => {
               return (
                 <p className={val.bool ? "chatBotBox bot" : "chatBotBox"}>
-                  <span className="chatBotBox__span">{val.message}</span>
+                  <span
+                    style={val.rbn !== null ? { color: "blue" } : { color: "black" }}
+                    className="chatBotBox__span"
+                    onClick={() => {
+                      goRecommend(val);
+                    }}
+                  >
+                    {val.message}
+                  </span>
                 </p>
               );
             })}
@@ -37,9 +55,9 @@ const ChatBot = ({ showChatBot, chatArr }) => {
             onKeyDown={(e) => {
               if (e.key === "Enter") {
                 chatArr.push({ message: inputRef.current.value, bool: false });
-                inputRef.current.value = "";
                 setChats(chatArr);
                 chatBotConn(inputRef, chats, setChats, chatArr);
+                inputRef.current.value = "";
               }
             }}
           />
@@ -47,9 +65,9 @@ const ChatBot = ({ showChatBot, chatArr }) => {
             className="chatBot__input-btn"
             onClick={() => {
               chatArr.push({ message: inputRef.current.value, bool: false });
-              inputRef.current.value = "";
               setChats(chatArr);
               chatBotConn(inputRef, chats, setChats, chatArr);
+              inputRef.current.value = "";
             }}
           >
             보내기
@@ -76,6 +94,7 @@ function chatBotConn(inputRef, chats, setChats, chatArr) {
     )
     .then((resp) => {
       chatArr.push(resp.data);
+      console.log("resp", resp.data);
       setChats([...chatArr]);
     })
     .catch((err) => {

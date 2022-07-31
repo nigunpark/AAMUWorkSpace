@@ -74,19 +74,19 @@ public class CommuController {
 				}
 				dto.setTname(sharptTagList);
 			}
-			//토탈카운트
+			//써치토탈카운트
 			//System.out.println("포함되어있냐"+map.keySet().contains("searchColumn"));
 			if(map.keySet().contains("searchColumn")) { 
 				dto.setSearchtotalcount(commuService.commuSearchTotalCount(map));
 			}
 			//코멘트 프로필사진 셋팅
 			if(commentdto!=null) {
-				commentdto.setUserprofile(FileUploadUtil.requestOneFile(commuService.commuSelectUserProf(commentdto.getId()), "/resources/commuUpload", req));
+				commentdto.setUserprofile(FileUploadUtil.requestOneFile(commuService.commuSelectUserProf(commentdto.getId()), "/resources/userUpload", req));
 			}
 			//포토 셋팅
 			dto.setPhoto(FileUploadUtil.requestFilePath(commuService.commuSelectPhotoList(dto.getLno()), "/resources/commuUpload", req));
 			//글쓴이-프로필 사진 가져와서 dto에 셋팅
-			dto.setUserprofile(FileUploadUtil.requestOneFile(commuService.commuSelectUserProf(dto.getId()), "/resources/commuUpload", req));
+			dto.setUserprofile(FileUploadUtil.requestOneFile(commuService.commuSelectUserProf(dto.getId()), "/resources/userUpload", req));
 			
 		}/////for
 		System.out.println("몇개 넘어가니:"+list.size());
@@ -352,7 +352,74 @@ public class CommuController {
 	}
 	
 	//마이페이지용_id에 따른 
+	@GetMapping("/gram/mypage")
+	public List<CommuDTO> commuMyPageList(@RequestParam Map map, HttpServletRequest req) {
+		//map에 id:로그인한 사람 id
+		List<CommuDTO> list = commuService.commuMyPageList(map);
+		for(CommuDTO dto : list) {
+			//포토 셋팅
+			dto.setPhoto(FileUploadUtil.requestFilePath(commuService.commuSelectPhotoList(dto.getLno()), "/resources/commuUpload", req));
+			//글쓴이-프로필 사진 가져와서 dto에 셋팅
+			dto.setUserprofile(FileUploadUtil.requestOneFile(commuService.commuSelectUserProf(dto.getId()), "/resources/userUpload", req));
+			//마이페이지용_토탈카운트 셋팅 (해당 id의 총 글 갯수)
+			dto.setTotalcount(commuService.commuTotalCount(map));
+			//마이페이지용_나를 팔로우하는 계정 수 셋팅
+			dto.setFollowercount(commuService.commuFollowerCount(map));
+			//내가 팔로잉하는 계정 수 셋팅
+			dto.setFollowingcount(commuService.commuFollowingCount(map));
+		}
+		return list;
+	}
 	
-
+	/*
+	 //글 목록용
+	@GetMapping("/gram/selectList")
+	public List<CommuDTO> commuSelectList(@RequestParam Map map, HttpServletRequest req){
+		//검색할 때는 맵으로 써치워드 써치컬럼을 받고, id는 isLike때문에 받는거다. lno는 dto에서 뽑아온다
+		//cid가 넘어오면 마이페이지 id에 따른 글 뿌려주기
+		System.out.println("셀렉트 리스트 id:"+map.get("id"));
+		System.out.println("셀렉트 리스트 searchColumn:"+map.get("searchColumn"));
+		System.out.println("셀렉트 리스트 searchWord:"+map.get("searchWord"));
+		//List<CommuDTO> list();
+		//list=글 목록들
+		List<CommuDTO> list = commuService.commuSelectList(map);
+		for(CommuDTO dto : list) {//글 목록들 list에서 하나씩 꺼내서 dto에 담는다
+			//코멘트한개 셋팅 
+			dto.setCommuComment(commuService.commuCommentSelectOne(dto.getLno()));
+			//코멘트의 프로필 셋팅
+			CommuCommentDTO commentdto=dto.getCommuComment();
+			//전체 코멘트 셋팅
+			//모든 댓글 가져오기
+			List<CommuCommentDTO> commentList=commuService.commuCommentList(dto.getLno());
+			dto.setCommuCommentList(commentList);
+			//커뮤태그에 레코드 1이상이면 태그네임 셋팅하기 
+			int CountTag=commuService.selectCountCommuTag(dto.getLno());
+			if(CountTag>0) {
+				List<String> tagList=commuService.commuSelectTagName(dto.getLno()); //서울,서울여행 이니까 #붙여야됨
+				List<String> sharptTagList = new Vector<>();
+				for(String tag:tagList) {
+					String sharpTag="#"+tag; //#서울을 붙이기
+					sharptTagList.add(sharpTag); //새로운 배열에 담아서 전달
+				}
+				dto.setTname(sharptTagList);
+			}
+			//토탈카운트
+			//System.out.println("포함되어있냐"+map.keySet().contains("searchColumn"));
+			if(map.keySet().contains("searchColumn")) { 
+				dto.setSearchtotalcount(commuService.commuSearchTotalCount(map));
+			}
+			//코멘트 프로필사진 셋팅
+			if(commentdto!=null) {
+				commentdto.setUserprofile(FileUploadUtil.requestOneFile(commuService.commuSelectUserProf(commentdto.getId()), "/resources/commuUpload", req));
+			}
+			//포토 셋팅
+			dto.setPhoto(FileUploadUtil.requestFilePath(commuService.commuSelectPhotoList(dto.getLno()), "/resources/commuUpload", req));
+			//글쓴이-프로필 사진 가져와서 dto에 셋팅
+			dto.setUserprofile(FileUploadUtil.requestOneFile(commuService.commuSelectUserProf(dto.getId()), "/resources/commuUpload", req));
+			
+		}/////for
+		System.out.println("몇개 넘어가니:"+list.size());
+		return list;
+	}////////////////commuSelectList*/
 
 }

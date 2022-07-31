@@ -9,7 +9,7 @@ import "./BookMark.css";
 import { useDispatch, useSelector } from "react-redux";
 import { addWholeBlackBox } from "../../../redux/store";
 
-const DetailModal = ({ setIsOpen, detailRbn, postDay }) => {
+const DetailModal = ({ setIsOpen, detailRbn, postDay, setShowCBModal }) => {
   function dateFormat(date) {
     let month = date.getMonth() + 1;
     let day = date.getDate();
@@ -281,6 +281,7 @@ const DetailModal = ({ setIsOpen, detailRbn, postDay }) => {
                   type="button"
                   onClick={(e) => {
                     setIsOpen(false);
+                    setShowCBModal(false);
                   }}
                 >
                   exit
@@ -320,9 +321,7 @@ const DetailModal = ({ setIsOpen, detailRbn, postDay }) => {
                   setComment(e.target.value);
                 }} //리뷰창 변할때마다 setComment를 통해 comment의 값 변경
                 onKeyUp={(e) => {
-                  e.target.value.length > 0
-                    ? setIsValid(true)
-                    : setIsValid(false);
+                  e.target.value.length > 0 ? setIsValid(true) : setIsValid(false);
                   // console.log(isValid);
                 }} //사용자가 리뷰를 작성했을 때 빈공간인지 확인하여 유효성 검사
                 value={comment}
@@ -404,39 +403,26 @@ function DetailSetting({ fromWooJaeData, periodIndex, obj, i }) {
   useEffect(() => {
     if (i !== 0) {
       setUpTime(
-        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime +
-          obj.mtime / 1000 / 60
+        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime + obj.mtime / 1000 / 60
       );
       setDownTime(
         fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime +
           obj.mtime / 1000 / 60 +
-          fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].atime /
-            1000 /
-            60
+          fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].atime / 1000 / 60
       );
       let forBlackBoxRedux = getTimes(
         periodIndex,
-        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime +
-          obj.mtime / 1000 / 60,
+        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime + obj.mtime / 1000 / 60,
         fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime +
           obj.mtime / 1000 / 60 +
-          fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].atime /
-            1000 /
-            60
+          fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].atime / 1000 / 60
       );
       dispatch(addWholeBlackBox(forBlackBoxRedux));
-      if (
-        i !==
-        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)].length - 1
-      ) {
-        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][
-          i + 1
-        ].starttime =
+      if (i !== fromWooJaeData[periodIndex]["day" + (periodIndex + 1)].length - 1) {
+        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i + 1].starttime =
           fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime +
           obj.mtime / 1000 / 60 +
-          fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].atime /
-            1000 /
-            60;
+          fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].atime / 1000 / 60;
       }
     }
   }, []);

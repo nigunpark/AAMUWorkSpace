@@ -46,6 +46,7 @@
   box-shadow: var(--lightShadow);
   padding: 5px;
   border-radius: 5px;
+  font-size: 14px;
 }
 .chatBotContent::-webkit-scrollbar {
   width: 4px;

@@ -200,9 +200,34 @@ public class CommuDAO {
 		return template.delete("commuDeleteCommuTag",map);
 	}
 	
-	//팔로우, 팔로잉
-	public int commuFollower(Map map) {
-		return template.insert("commuFollower",map);
+	//팔로우, 팔로잉_insert용
+	public int commuInsertFollower(Map map) {
+		return template.insert("commuInsertFollower",map);
+	}
+	
+	//팔로우, 팔로잉_팔로잉 누른 사람이 follower테이블에 존재하는지 판단
+	public int commuIsExistFollower(Map map) {
+		return template.selectOne("commuIsExistFollower",map);
+	}
+	
+	//팔로우, 팔로잉_delete용
+	public int commuDeleteFollower(Map map) {
+		return template.delete("commuDeleteFollower",map);
+	}
+	
+	//마이페이지용_id에 따른 
+	public List<CommuDTO> commuMyPageList(Map map){
+		return template.selectList("commuMyPageList",map);
+	}
+	
+	//마이페이지용_토탈카운트 셋팅 (해당 id의 총 글 갯수)
+	public int commuTotalCount(Map map) {
+		return template.selectOne("commuTotalCount",map);
+	}
+	
+	//마이페이지용_내가 팔로잉하는 계정 수 셋팅
+	public int commuFollowingCount(Map map) {
+		return template.selectOne("commuFollowingCount",map);
 	}
 
 
