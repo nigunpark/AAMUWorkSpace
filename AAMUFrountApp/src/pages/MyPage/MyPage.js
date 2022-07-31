@@ -7,7 +7,7 @@ import MyProfileBox from "./MyPageBox/MyProfileBox";
 import MyInstaBox from "./MyPageBox/MyInstaBox";
 import MyMessageBar from "./MyMessageBar/MyMessageBar";
 import styled from "styled-components";
-import { faStar } from "@fortawesome/free-regular-svg-icons";
+import { faImage, faStar } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 const MyPage = () => {
@@ -65,7 +65,7 @@ const MyPage = () => {
     if (clickTab === 0) {
       home.current.classList.add("active");
       two.current.classList.remove("active");
-      three.current.classList.remove("active");
+      // three.current.classList.remove("active");
       setting.current.classList.remove("active");
 
       homeBox.current.classList.add("jsListView");
@@ -73,7 +73,7 @@ const MyPage = () => {
     } else if (clickTab === 1) {
       home.current.classList.remove("active");
       two.current.classList.add("active");
-      three.current.classList.remove("active");
+      // three.current.classList.remove("active");
       setting.current.classList.remove("active");
 
       homeBox.current.classList.remove("jsListView");
@@ -81,7 +81,7 @@ const MyPage = () => {
     } else if (clickTab === 2) {
       home.current.classList.remove("active");
       two.current.classList.remove("active");
-      three.current.classList.add("active");
+      // three.current.classList.add("active");
       setting.current.classList.remove("active");
 
       homeBox.current.classList.remove("jsListView");
@@ -89,7 +89,7 @@ const MyPage = () => {
     } else if (clickTab === 3) {
       home.current.classList.remove("active");
       two.current.classList.remove("active");
-      three.current.classList.remove("active");
+      // three.current.classList.remove("active");
       setting.current.classList.add("active");
 
       homeBox.current.classList.remove("jsListView");
@@ -147,11 +147,11 @@ const MyPage = () => {
               viewBox="0 0 24 24"
             >
               <defs />
-              <i class="fa-brands fa-instagram"></i>
+              <FontAwesomeIcon icon={faImage} />
             </svg>
           </button>
 
-          <button
+          {/* <button
             ref={three}
             className="app-sidebar-link"
             onClick={() => {
@@ -170,13 +170,9 @@ const MyPage = () => {
               strokeLinejoin="round"
               className="feather feather-calendar"
             >
-              {/* <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
-              <line x1="16" y1="2" x2="16" y2="6" />
-              <line x1="8" y1="2" x2="8" y2="6" />
-              <line x1="3" y1="10" x2="21" y2="10" /> */}
               <FontAwesomeIcon icon={faStar} />
             </svg>
-          </button>
+          </button> */}
 
           <button
             ref={setting}
@@ -217,13 +213,12 @@ const MyPage = () => {
             />
           </div>
           <div ref={homeBox} className="project-boxes">
-            {" "}
-            {/* jsListView jsGridView */}
-            {/* <MyHomeBox/> */}
             <TabContent
               clickTab={clickTab}
               setClickTab={setClickTab}
               planList={planList}
+              setPlanList={setPlanList}
+              setUpload={setUpload}
             />
           </div>
         </div>
@@ -255,7 +250,13 @@ function Title({ clickTab }) {
 }
 
 //-----------------------------------------------------------------------
-function TabContent({ clickTab, setClickTab, planList }) {
+function TabContent({
+  clickTab,
+  setClickTab,
+  planList,
+  setPlanList,
+  setUpload,
+}) {
   const [selectRbn, setSelectRbn] = useState();
   const [modalOpen, setModalOpen] = useState(false);
 
@@ -277,6 +278,8 @@ function TabContent({ clickTab, setClickTab, planList }) {
                 planList={val}
                 rbn={val.rbn}
                 setSelectRbn={setSelectRbn}
+                setPlanList={setPlanList}
+                setUpload={setUpload}
               />
             );
           })}
