@@ -14,7 +14,14 @@ import {
   resetMonthNDate,
 } from "../../../redux/store";
 
-const MyHomeBox = ({ setClickTab, planList, rbn, setSelectRbn }) => {
+const MyHomeBox = ({
+  setClickTab,
+  planList,
+  rbn,
+  setSelectRbn,
+  setPlanList,
+  setUpload,
+}) => {
   const [fromWooJaeData, setFromWooJaeData] = useState([]);
   const [newFromWooJae, setNewFromWooJae] = useState([]);
   const [newTimeSet, setNewTimeSet] = useState([]);
@@ -52,6 +59,8 @@ const MyHomeBox = ({ setClickTab, planList, rbn, setSelectRbn }) => {
           setSelectRbn={setSelectRbn}
           setClickTab={setClickTab}
           bbs={planList.isBBS}
+          setPlanList={setPlanList}
+          setUpload={setUpload}
         />
       ) : null}
       {/* 홈에 표시되는 박스 */}
@@ -101,6 +110,8 @@ function MyBoxList({
   setSelectRbn,
   setClickTab,
   bbs,
+  setPlanList,
+  setUpload,
 }) {
   const bbsDelte = () => {
     let token = sessionStorage.getItem("token");
@@ -115,6 +126,7 @@ function MyBoxList({
       })
       .then((resp) => {
         console.log("삭제 성공 :", resp.data);
+        selectList();
       })
       .catch((error) => {
         console.log(error);
@@ -134,11 +146,42 @@ function MyBoxList({
       })
       .then((resp) => {
         console.log("삭제 성공 :", resp.data);
+        selectList();
       })
       .catch((error) => {
         console.log(error);
       });
   };
+
+  async function selectList() {
+    let token = sessionStorage.getItem("token");
+
+    await axios
+      .get("/aamurest/planner/selectList", {
+        params: {
+          id: sessionStorage.getItem("username"),
+        },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((resp) => {
+        setPlanList(resp.data);
+        console.log("데이터 확인 : ", resp.data);
+
+        setUpload(
+          resp.data.reduce((acc, obj) => {
+            const { isBBS } = obj;
+            acc[isBBS] = acc[isBBS] ?? [];
+            acc[isBBS].push(obj);
+            return acc;
+          }, {})
+        );
+      })
+      .catch((error) => {
+        console.log((error) => console.log("여행경로 가져오기 실패", error));
+      });
+  }
 
   return (
     <div className="myBox-List">
@@ -168,18 +211,13 @@ function MyBoxList({
           </div>
         ) : (
           <div
-            className="myBox-List-Post"
+            className="myBox-List-Edit"
             onClick={() => {
-              let bool = window.confirm("공유한 글을 삭제 하시겠습니까?");
-              if (bool) {
-                bbsDelte();
-                setModalOpen(false);
-              } else {
-                setModalOpen(false);
-              }
+              setClickTab(11);
+              setSelectRbn(rbn);
             }}
           >
-            공유취소
+            수정하기
           </div>
         )}
 
@@ -200,13 +238,18 @@ function MyBoxList({
           </div>
         ) : (
           <div
-            className="myBox-List-Edit"
+            className="myBox-List-Post-Delete"
             onClick={() => {
-              setClickTab(11);
-              setSelectRbn(rbn);
+              let bool = window.confirm("게시한 글을 삭제 하시겠습니까?");
+              if (bool) {
+                bbsDelte();
+                setModalOpen(false);
+              } else {
+                setModalOpen(false);
+              }
             }}
           >
-            수정하기
+            게시글 삭제
           </div>
         )}
 
