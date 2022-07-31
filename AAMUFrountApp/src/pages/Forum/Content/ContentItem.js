@@ -3,13 +3,14 @@ import { Link } from "react-router-dom";
 import React, { useState } from "react";
 import DetailModal from "../DetailModal/DetailModal";
 
-const ContentItem = ({ detail, index }) => {
+const ContentItem = ({ detail, index, setShowCBModal, isOpen, setIsOpen }) => {
   // console.log("ContentItem dummy :",dummy.reviewdata);
   // console.log("keys : ",keys);
 
   //   console.log("detail :", detail);
   //   console.log("리뷰 데이터 :", detail.reviewList);
 
+  console.log("val", detail);
   const detailPostDate = new Date(detail.postdate);
 
   function dateFormat(date) {
@@ -21,7 +22,6 @@ const ContentItem = ({ detail, index }) => {
   }
   const postDay = dateFormat(detailPostDate);
 
-  const [isOpen, setIsOpen] = useState(false);
   const detailRbn = detail.rbn; // rbn 값 저장 잘 됨
 
   const onClickModal = () => {
@@ -42,11 +42,7 @@ const ContentItem = ({ detail, index }) => {
         <div className="card__item__link_minCon">
           <figure className="card__item__info_minCon">
             <div className="card__item__img-container_minCon">
-              <img
-                src={detail.photo[0]}
-                alt="카드이미지"
-                className="card__item__img_minCon"
-              />
+              <img src={detail.photo[0]} alt="카드이미지" className="card__item__img_minCon" />
             </div>
             <div className="card__item__rating_minCon">
               <img src="/images/star.jpg" style={{ width: "30px" }} />
@@ -84,6 +80,7 @@ const ContentItem = ({ detail, index }) => {
       {isOpen == true ? (
         <DetailModal
           postDay={postDay}
+          setShowCBModal={setShowCBModal}
           setIsOpen={setIsOpen}
           detailRbn={detailRbn}
         />
