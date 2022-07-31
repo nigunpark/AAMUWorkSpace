@@ -7,9 +7,9 @@ import { Rating } from "@mui/material";
 import axios from "axios";
 import "./BookMark.css";
 import { useDispatch, useSelector } from "react-redux";
-import { addWholeBlackBox } from "../../../redux/store";
+import { addChatBotData, addWholeBlackBox } from "../../../redux/store";
 
-const DetailModal = ({ setIsOpen, detailRbn, postDay }) => {
+const DetailModal = ({ setIsOpen, detailRbn, postDay, setShowCBModal }) => {
   function dateFormat(date) {
     let month = date.getMonth() + 1;
     let day = date.getDate();
@@ -19,12 +19,7 @@ const DetailModal = ({ setIsOpen, detailRbn, postDay }) => {
   }
 
   let username = sessionStorage.getItem("username");
-
-  let [tempObj, setTempObj] = useState({ review: "", reviewId: "", star: "" });
-
   let [star, setStar] = useState(0); //사용자가 입력하는 별점
-  let [commentStar, setCommentStar] = useState([]); //commentStar에 별점 저장
-
   let [comment, setComment] = useState(""); // comment 사용자가 입력하는 댓글
   let [feedComments, setFeedComments] = useState([]); // feedComments 댓글 리스트 저장
   let [isValid, setIsValid] = useState(false); // 댓글 게시가능여부 (유효성 검사)
@@ -36,7 +31,7 @@ const DetailModal = ({ setIsOpen, detailRbn, postDay }) => {
   const [photo, setPhoto] = useState([]);
   const [detailRoute, setDetailRoute] = useState([]);
   // const [rno, setRno] = useState(0);
-
+  let dispatch = useDispatch();
   useEffect(() => {
     const $body = document.querySelector("body");
     $body.style.overflow = "hidden";
@@ -44,7 +39,6 @@ const DetailModal = ({ setIsOpen, detailRbn, postDay }) => {
     return () => ($body.style.overflow = "auto");
   }, []);
 
-  // console.log("detailRbn 글번호 넘어왔나 :", detailRbn);
   useEffect(() => {
     let token = sessionStorage.getItem("token");
     axios
@@ -61,7 +55,7 @@ const DetailModal = ({ setIsOpen, detailRbn, postDay }) => {
         setPhoto(resp.data.photo);
         setFeedComments(resp.data.reviewList);
         setDetailRoute(resp.data.routeList);
-        setUserId(resp.data.id);
+        // setUserId(resp.data.id);
       })
       .catch((error) => {
         console.log((error) => console.log("게시판 상세보기 실패", error));
@@ -133,33 +127,7 @@ const DetailModal = ({ setIsOpen, detailRbn, postDay }) => {
   }
 
   let reviewPost = (e) => {
-    // setTempObj((curr)=>{return {...curr, star:star, review:comment, reviewId:sessionStorage.getItem('token')}});
-    // setFeedComments([...feedComments, tempObj]);
-
-    // 전개연산자를 사용해서 feedComments에 담겨있는 댓글과
-    // commentStar에 담겨있는 별점 가져오기
-    // const copyFeedComments = [...feedComments];
-    // const copyStar = [...commentStar];
-
-    // console.log('comment 추가됬나 확인 :',comment);
-    // console.log('star 값 저장됬나 확인 :',star);
-
-    //`${comment}`
-    //`${star}`
-    //${detailRbn}/${id}/${rate}/${review}
-
-    post();
-
-    //기존 댓글 배열이 담긴 copyFeedComments에 사용자가 입력한 comment 를 push
-    // copyFeedComments.push(comment);
-
-    //기존 별점 배열이 담긴 copyStar에 사용자가 입력한 star 를 push
-    // copyStar.push(star);
-
-    //사용자가 입력한 댓글을 포함시켜서 setFeedComments을 변경
-    // setFeedComments(copyFeedComments);
-    //사용자가 입력한 별점을 포함시켜서 setCommentStar을 변경
-    // setCommentStar(copyStar);
+    post(); // 리뷰 axios post
 
     //사용자가 입력한 댓글창과 별점 초기화
     setComment("");
@@ -167,17 +135,7 @@ const DetailModal = ({ setIsOpen, detailRbn, postDay }) => {
     setIsValid(false);
   };
 
-  // console.log('입력한 댓글 저장 확인 :', feedComments);
-  // console.log('입력한 별점 저장 확인 :', star);
-
   const reviewDelete = (rno) => {
-    // console.log('feedComments : ', feedComments);
-
-    // setFeedComments(feedComments.filter((e, index) => index !== no));
-    // setCommentStar(commentStar.filter((e, index) => index !== no));
-
-    // filter 이거가지고 검색기능 가능할듯
-
     let token = sessionStorage.getItem("token");
     axios
       .delete("/aamurest/review/edit", {
@@ -223,7 +181,6 @@ const DetailModal = ({ setIsOpen, detailRbn, postDay }) => {
             }}
           >
             <Name>삭제</Name>
-            {console.log("feedComments 삭제 되나요 :", feedComments)}
           </EditDelte>
         ) : null}
       </div>
@@ -318,7 +275,9 @@ const DetailModal = ({ setIsOpen, detailRbn, postDay }) => {
                   className="learn-more_exit"
                   type="button"
                   onClick={(e) => {
+                    dispatch(addChatBotData({}));
                     setIsOpen(false);
+                    setShowCBModal(false);
                   }}
                 >
                   exit
@@ -358,9 +317,7 @@ const DetailModal = ({ setIsOpen, detailRbn, postDay }) => {
                   setComment(e.target.value);
                 }} //리뷰창 변할때마다 setComment를 통해 comment의 값 변경
                 onKeyUp={(e) => {
-                  e.target.value.length > 0
-                    ? setIsValid(true)
-                    : setIsValid(false);
+                  e.target.value.length > 0 ? setIsValid(true) : setIsValid(false);
                   // console.log(isValid);
                 }} //사용자가 리뷰를 작성했을 때 빈공간인지 확인하여 유효성 검사
                 value={comment}
@@ -442,39 +399,26 @@ function DetailSetting({ fromWooJaeData, periodIndex, obj, i }) {
   useEffect(() => {
     if (i !== 0) {
       setUpTime(
-        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime +
-          obj.mtime / 1000 / 60
+        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime + obj.mtime / 1000 / 60
       );
       setDownTime(
         fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime +
           obj.mtime / 1000 / 60 +
-          fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].atime /
-            1000 /
-            60
+          fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].atime / 1000 / 60
       );
       let forBlackBoxRedux = getTimes(
         periodIndex,
-        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime +
-          obj.mtime / 1000 / 60,
+        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime + obj.mtime / 1000 / 60,
         fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime +
           obj.mtime / 1000 / 60 +
-          fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].atime /
-            1000 /
-            60
+          fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].atime / 1000 / 60
       );
       dispatch(addWholeBlackBox(forBlackBoxRedux));
-      if (
-        i !==
-        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)].length - 1
-      ) {
-        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][
-          i + 1
-        ].starttime =
+      if (i !== fromWooJaeData[periodIndex]["day" + (periodIndex + 1)].length - 1) {
+        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i + 1].starttime =
           fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime +
           obj.mtime / 1000 / 60 +
-          fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].atime /
-            1000 /
-            60;
+          fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].atime / 1000 / 60;
       }
     }
   }, []);

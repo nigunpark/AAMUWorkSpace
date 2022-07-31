@@ -5,7 +5,8 @@ import { addWholeBlackBox } from "../../../redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-const MyPostBox = ({ selectRbn, setClickTab }) => {
+const MyEditBox = ({ selectRbn }) => {
+  console.log("수정버튼 selectRbn :", selectRbn);
   let navigate = useNavigate();
 
   const [detailPostData, setDetailPostData] = useState({});
@@ -14,7 +15,14 @@ const MyPostBox = ({ selectRbn, setClickTab }) => {
 
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [detailRbn, setDetailRbn] = useState(0);
+  const [rbn, setDetailRbn] = useState(0);
+  useEffect(() => {
+    setDetailRbn(selectRbn);
+  }, []);
+
+  console.log("title :", title);
+  console.log("content :", content);
+  console.log("rbn :", rbn);
 
   //--------------------------------이미지 시작--------------------------------
   const [showImages, setShowImages] = useState([]);
@@ -48,41 +56,43 @@ const MyPostBox = ({ selectRbn, setClickTab }) => {
   };
   //--------------------------------이미지 끝--------------------------------
 
-  const getPlanData = async () => {
-    try {
-      let token = sessionStorage.getItem("token");
-
-      let resp = await axios.get("/aamurest/planner/selectonemap", {
-        params: {
-          rbn: selectRbn,
-        },
+  useEffect(() => {
+    let token = sessionStorage.getItem("token");
+    axios
+      .get(`/aamurest/bbs/SelectOne/${selectRbn}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      });
-      console.log("글 작성 페이지에서 상세경로 데이터 확인 : ", resp.data);
-      setDetailPostData(resp.data);
-      setDetailRbn(resp.data.rbn);
-      setDetailTitle(resp.data.title);
+      })
+      .then((resp) => {
+        console.log("수정할 데이터 불러오기 : ", resp.data);
+        setTitle(resp.data.title);
+        setContent(resp.data.content);
 
-      let keys = Object.keys(resp.data.routeMap);
-      let values = Object.values(resp.data.routeMap);
-      let keyValueData = Object.entries(resp.data.routeMap).map((val, idx) => {
-        return { [keys[idx]]: values[idx] };
-      });
-      setDetailRoute(keyValueData);
-    } catch (error) {
-      console.log((error) => console.log("상세경로 가져오기 실패", error));
-    }
-  };
-  console.log("detailRoute 제발111 :", detailRoute);
+        setPostTheme(resp.data.themename); // 테마 가져온거 기본 세팅하기
+        setShowImages(resp.data.photo); // 업로드했던 사진 세팅하기
 
-  useEffect(() => {
-    getPlanData();
+        setDetailRoute(resp.data.routeList);
+      })
+      .catch((error) => {
+        console.log((error) =>
+          console.log("수정할 데이터 불러오기 실패", error)
+        );
+      });
   }, []);
 
-  // console.log("detailPostData :", detailPostData);
-  console.log("detailRoute :", detailRoute);
+  const dRoute = detailRoute.reduce((acc, obj) => {
+    const { day } = obj;
+    acc[day] = acc[day] ?? [];
+    acc[day].push(obj);
+    return acc;
+  }, {});
+
+  let keys = Object.keys(dRoute);
+  let values = Object.values(dRoute);
+  let routeData = Object.entries(dRoute).map((val, idx) => {
+    return { ["day" + keys[idx]]: values[idx] };
+  });
 
   const [isOpen, setIsOpen] = useState(false);
   const onClickModal = () => {
@@ -150,12 +160,10 @@ const MyPostBox = ({ selectRbn, setClickTab }) => {
   return (
     <div className="MyWrite-container">
       <div className="write-box plan">
-        <div className="plan-title">{detailTitle} 여행경로</div>
+        {/* <div className="plan-title">여행경로</div> */}
 
         <div>
-          {detailRoute.map((route, idx) => {
-            console.log("route 외부 map:", route);
-
+          {routeData.map((route, idx) => {
             return (
               <div key={idx} className="detail-plan">
                 <span className="paln-date">{idx + 1} 일차</span>
@@ -189,7 +197,10 @@ const MyPostBox = ({ selectRbn, setClickTab }) => {
                             </div>
                             <div style={{ marginLeft: "1px" }}>
                               <div
-                                style={{ fontSize: "15px", marginTop: "10px" }}
+                                style={{
+                                  fontSize: "15px",
+                                  marginTop: "10px",
+                                }}
                               >
                                 {obj.dto.title}
                               </div>
@@ -198,7 +209,7 @@ const MyPostBox = ({ selectRbn, setClickTab }) => {
                         </div>
                         <div className="plan-clock">
                           <DetailSetting
-                            fromWooJaeData={detailRoute}
+                            fromWooJaeData={routeData}
                             obj={obj}
                             key={i}
                             i={i}
@@ -229,7 +240,7 @@ const MyPostBox = ({ selectRbn, setClickTab }) => {
       </div>
 
       <div className="write-box">
-        <input
+        {/* <input
           multiple
           className="write-picture-input"
           type="file"
@@ -238,8 +249,8 @@ const MyPostBox = ({ selectRbn, setClickTab }) => {
           onClick={(e) => (e.target.value = null)}
         />
         <label className="write-picture-label" for="upload">
-          Img UP
-        </label>
+          Img Upload
+        </label> */}
       </div>
 
       {/* <div className="write-box">
@@ -254,7 +265,6 @@ const MyPostBox = ({ selectRbn, setClickTab }) => {
               className="swing-in-top-fwd"
               src={image}
               alt={`${image}-${id}`}
-              onClick={() => handleDeleteImage(id)}
             />
           ))
         )}
@@ -276,6 +286,7 @@ const MyPostBox = ({ selectRbn, setClickTab }) => {
         <button type="button" className="theme-section" onClick={onClickModal}>
           {postTheme == 0 ? "테마를 선택하세요" : postTheme}
         </button>
+
         {isOpen == true ? (
           <Theme
             setIsOpen={setIsOpen}
@@ -287,39 +298,29 @@ const MyPostBox = ({ selectRbn, setClickTab }) => {
       </div>
 
       <div className="write-box" style={{ textAlign: "end" }}>
-        {/* <div className='detail-button'> */}
-        {canSubmit() ? (
-          <button
-            style={{ color: "black" }}
-            className="write-up"
-            type="button"
-            onClick={() => {
-              let write = uploadFile(showImagesFile);
-              bordWrite(
-                write,
-                title,
-                content,
-                detailRbn,
-                navigate,
-                postThemeNum,
-                setClickTab
-              );
-            }}
-          >
-            업로드
-          </button>
-        ) : (
-          <button type="button" disabled>
-            제목과 내용 그리고 테마를 모두 입력하세요
-          </button>
-        )}
-        {/* </div> */}
+        <button
+          style={{ color: "black" }}
+          className="navbar-btn"
+          type="button"
+          onClick={() => {
+            // let write = uploadFile(showImagesFile);
+            bordWrite(
+              // write,
+              title,
+              content,
+              rbn,
+              navigate,
+              postThemeNum
+            );
+          }}
+        >
+          수정하기
+        </button>
       </div>
     </div>
   );
 };
 
-//projects-section 여기에 relative 줬음
 function Theme({ setIsOpen, themes, setPostTheme, setPostThemeNum }) {
   return (
     <div className="theme-modal">
@@ -436,53 +437,34 @@ function getTimes(periodIndex, st, et) {
       .padStart(2, "0"),
   };
 }
-
-function uploadFile(showImages) {
-  //이미지 업로드
-  let formData = new FormData(); // formData 객체를 생성한다.
-  for (let i = 0; i < showImages.length; i++) {
-    formData.append("multifiles", showImages[i]); // 반복문을 활용하여 파일들을 formData 객체에 추가한다
-  }
-  return formData;
-}
-function bordWrite(
-  write,
-  title,
-  content,
-  detailRbn,
-  navigate,
-  postThemeNum,
-  setClickTab
-) {
-  write.append("id", sessionStorage.getItem("username"));
-  write.append("title", title);
-  write.append("content", content);
-  write.append("rbn", detailRbn);
-  write.append("themeid", postThemeNum);
-
+function bordWrite(title, content, rbn, navigate) {
   let token = sessionStorage.getItem("token");
   axios
-    .post("/aamurest/bbs/edit", write, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "multipart/form-data",
+    .put(
+      `/aamurest/bbs/edit`,
+      {
+        rbn: rbn,
+        title: title,
+        content: content,
       },
-    })
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    )
     .then((resp) => {
-      console.log(resp.data.result);
-      if (resp.data.result === "insertSuccess") {
+      console.log(resp.data);
+      if (resp.data.result === "updateSuccess") {
         alert("글이 저장되었습니다");
         navigate("/forum");
-        // let bool = window.confirm("게시판으로 이동하겠습니까?");
-        // if (bool) navigate("/forum");
-        // if (!bool) setClickTab(0);
       } else {
         alert("저장오류가 발생했습니다. 관리자에게 문의하세요");
         navigate("/");
       }
     })
     .catch((error) => {
-      console.log(error);
+      console.log((error) => console.log("수정 실패", error));
     });
 }
 
@@ -494,4 +476,4 @@ const Imgs = styled.img`
   position: relative;
 `;
 
-export default MyPostBox;
+export default MyEditBox;

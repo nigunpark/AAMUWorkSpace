@@ -6,17 +6,23 @@ import FSearch from "../FSearch/FSearch";
 import axios from "axios";
 
 import dummy from "../DB/contentdata.json";
-
+import { useSelector } from "react-redux";
+import DetailModal from "../DetailModal/DetailModal";
 const Content = () => {
+  let reduxState = useSelector((state) => state);
   //let navigate = useNavigate();
-
   const [listData, setListData] = useState([]);
-
+  const [isOpen, setIsOpen] = useState(false);
   let token = sessionStorage.getItem("token");
-
   let [list, setList] = useState("");
-
+  const [showCBModal, setShowCBModal] = useState(false);
+  function chatbotModal() {
+    if (reduxState.forChatBotData.bool === true) {
+      setShowCBModal(true);
+    }
+  }
   useEffect(() => {
+    console.log("useEffect", reduxState.forChatBotData.length);
     axios
       .get("/aamurest/bbs/SelectList", {
         headers: {
@@ -25,12 +31,13 @@ const Content = () => {
       })
       .then((resp) => {
         // setList(resp.data);
-        console.log("글 목록이 왔는지 : ", resp.data);
         setListData(resp.data);
       })
       .catch((error) => {
         console.log((error) => console.log("글 목록 가져오기 실패", error));
       });
+    console.log("useEffect밑", reduxState.forChatBotData);
+    chatbotModal();
   }, []);
 
   return (
@@ -43,19 +50,35 @@ const Content = () => {
 
           <p className="card__desc_minCon">
             자신만의 여행계획을 세우고 남들과
-            <span className="content-btn">
-              <Link to="/myPage">공유해봐</Link>
+            <span className="myPage-link">
+              <Link to="/myPage"> 공유해봐</Link>
             </span>
           </p>
           <FSearch />
 
           <ul className="card__items_minCon">
             {listData.map((val, idx) => {
-              return <ContentItem detail={val} index={idx} />;
+              return (
+                <ContentItem
+                  detail={val}
+                  index={idx}
+                  setShowCBModal={setShowCBModal}
+                  isOpen={isOpen}
+                  setIsOpen={setIsOpen}
+                />
+              );
             })}
           </ul>
         </div>
       </div>
+      {showCBModal && (
+        <DetailModal
+          setShowCBModal={setShowCBModal}
+          detailRbn={reduxState.forChatBotData.rbn}
+          setIsOpen={setIsOpen}
+          // postDay={new Date(reduxState.forChatBotData.planner.routeDate)}
+        />
+      )}
     </div>
   );
 };

@@ -5,16 +5,9 @@ const SwipersItem = (props) => {
   return (
     <>
       <li className="swiper__item">
-        <Link to={props.path} className="swiper__item__link">
-          <figure
-            className="swiper__item__pic-wrap"
-            data-category={props.label}
-          >
-            <img
-              src={props.src}
-              alt="travel image"
-              className="swiper__item__img"
-            />
+        <Link to="/" className="swiper__item__link">
+          <figure className="swiper__item__pic-wrap" data-category={props.label}>
+            <img src={props.src} alt="travel image" className="swiper__item__img" />
           </figure>
           <div className="swiper__item__info">
             <h5 className="swiper__item__text">{props.text}</h5>
@@ -24,5 +17,10 @@ const SwipersItem = (props) => {
     </>
   );
 };
+//  <a
+// // href={`https://place.map.kakao.com/${val.kakaokey}`}
+// href={`https://map.kakao.com/link/search/${props.val.kakaokey}`}
+// target="_blank"
+// />
 
 export default SwipersItem;

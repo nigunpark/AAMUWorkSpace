@@ -1,8 +1,10 @@
 import React from "react";
+import { useEffect } from "react";
 import CardItem from "./CardItem";
 import "./Cards.css";
 const Cards = () => {
   const forMapTestArr = [1, 2, 3, 5];
+  useEffect(() => {}, []);
   return (
     <div className="Cards">
       <div className="card__container">
@@ -10,9 +12,7 @@ const Cards = () => {
           <h1 className="card__title">
             당신도 이제는 여행 Creator<span> !</span>
           </h1>
-          <p className="card__desc">
-            자신만의 여행계획을 세우고 남들과 공유해봐
-          </p>
+          <p className="card__desc">자신만의 여행계획을 세우고 남들과 공유해봐</p>
 
           <ul className="card__items">
             {forMapTestArr.map((val, index) => {

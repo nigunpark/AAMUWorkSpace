@@ -2,7 +2,7 @@
   /* max-width: 1200px; */
   /* height: auto; */
   /* border: 1px solid red; */
-  margin-top: 100px;
+  padding-top: 80px;
   height: 100vh;
 }
 .qna__header {
@@ -70,13 +70,35 @@
 .qna__qnaBoard {
   max-width: 1100px;
   margin: 90px auto;
+  border: 1px solid white;
 }
 
 .qna__qnaBoard h3 {
   text-align: center;
   font-size: 23px;
-  margin-bottom: 30px;
+  margin-bottom: 10px;
 }
+.qna__Board-writeBtn {
+  display: flex;
+  justify-content: end;
+  margin-bottom: 20px;
+}
+.qna__Board-writeBtn span {
+  padding: 5px 15px;
+  background-color: var(--orange);
+  border-radius: 5px;
+  color: white;
+  border: 2px solid var(--orange);
+}
+
+.qna__Board-writeBtn span:hover {
+  background-color: white;
+  border: 2px solid var(--orange);
+  color: black;
+  cursor: pointer;
+  font-weight: bold;
+}
+
 .qna__one {
   border: 2px solid var(--skyblue);
   padding: 15px;
@@ -85,6 +107,12 @@
   grid-template-columns: 10% auto 10%;
   align-items: center;
   gap: 20px;
+}
+.qna__one:hover {
+  background-color: var(--skyblue);
+
+  color: white;
+  cursor: pointer;
 }
 
 .qna__one-title {
@@ -103,7 +131,7 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
-  padding-bottom: 100px;
+  padding-bottom: 20px;
 }
 .accordian-arrow-icon {
   font-size: 15px;
@@ -131,4 +159,20 @@
 }
 .accordian-open .value__accordion-arrow .accordian-arrow-icon {
   transform: rotate(-180deg);
+}
+.qna__pagination {
+  margin-bottom: 20px;
+}
+.qnaDetail {
+  padding-top: 80px;
+  max-width: 1200px;
+  margin: 0 auto;
+  border: 1px solid red;
+}
+
+.qnaAnswer__content-btns {
+  display: flex;
+  justify-content: end;
+  gap: 1rem;
+  margin-bottom: 20px;
 }

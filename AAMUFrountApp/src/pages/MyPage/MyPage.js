@@ -1,12 +1,13 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import "./MyPage.scss";
 import MyPostBox from "./MyPageBox/MyPostBox";
+import MyEditBox from "./MyPageBox/MyEditBox";
 import MyHomeBox from "./MyPageBox/MyHomeBox";
 import MyProfileBox from "./MyPageBox/MyProfileBox";
 import MyInstaBox from "./MyPageBox/MyInstaBox";
 import MyMessageBar from "./MyMessageBar/MyMessageBar";
 import styled from "styled-components";
-import { faStar } from "@fortawesome/free-regular-svg-icons";
+import { faImage, faStar } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 const MyPage = () => {
@@ -23,11 +24,13 @@ const MyPage = () => {
   // /aamurest/planner/selectOne
 
   const [planList, setPlanList] = useState([]);
+  // 업로드한 게시글 개수 카운트
+  const [upload, setUpload] = useState({});
 
-  useEffect(() => {
+  async function selectList() {
     let token = sessionStorage.getItem("token");
 
-    axios
+    await axios
       .get("/aamurest/planner/selectList", {
         params: {
           id: sessionStorage.getItem("username"),
@@ -39,19 +42,30 @@ const MyPage = () => {
       .then((resp) => {
         setPlanList(resp.data);
         console.log("데이터 확인 : ", resp.data);
+
+        setUpload(
+          resp.data.reduce((acc, obj) => {
+            const { isBBS } = obj;
+            acc[isBBS] = acc[isBBS] ?? [];
+            acc[isBBS].push(obj);
+            return acc;
+          }, {})
+        );
       })
       .catch((error) => {
         console.log((error) => console.log("여행경로 가져오기 실패", error));
       });
-  }, []);
+  }
 
-  // console.log("받아온 데이터 저장 확인 :", planList);
+  useEffect(() => {
+    selectList();
+  }, []);
 
   useEffect(() => {
     if (clickTab === 0) {
       home.current.classList.add("active");
       two.current.classList.remove("active");
-      three.current.classList.remove("active");
+      // three.current.classList.remove("active");
       setting.current.classList.remove("active");
 
       homeBox.current.classList.add("jsListView");
@@ -59,7 +73,7 @@ const MyPage = () => {
     } else if (clickTab === 1) {
       home.current.classList.remove("active");
       two.current.classList.add("active");
-      three.current.classList.remove("active");
+      // three.current.classList.remove("active");
       setting.current.classList.remove("active");
 
       homeBox.current.classList.remove("jsListView");
@@ -67,7 +81,7 @@ const MyPage = () => {
     } else if (clickTab === 2) {
       home.current.classList.remove("active");
       two.current.classList.remove("active");
-      three.current.classList.add("active");
+      // three.current.classList.add("active");
       setting.current.classList.remove("active");
 
       homeBox.current.classList.remove("jsListView");
@@ -75,7 +89,7 @@ const MyPage = () => {
     } else if (clickTab === 3) {
       home.current.classList.remove("active");
       two.current.classList.remove("active");
-      three.current.classList.remove("active");
+      // three.current.classList.remove("active");
       setting.current.classList.add("active");
 
       homeBox.current.classList.remove("jsListView");
@@ -133,11 +147,11 @@ const MyPage = () => {
               viewBox="0 0 24 24"
             >
               <defs />
-              <i class="fa-brands fa-instagram"></i>
+              <FontAwesomeIcon icon={faImage} />
             </svg>
           </button>
 
-          <button
+          {/* <button
             ref={three}
             className="app-sidebar-link"
             onClick={() => {
@@ -156,13 +170,9 @@ const MyPage = () => {
               strokeLinejoin="round"
               className="feather feather-calendar"
             >
-              {/* <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
-              <line x1="16" y1="2" x2="16" y2="6" />
-              <line x1="8" y1="2" x2="8" y2="6" />
-              <line x1="3" y1="10" x2="21" y2="10" /> */}
               <FontAwesomeIcon icon={faStar} />
             </svg>
-          </button>
+          </button> */}
 
           <button
             ref={setting}
@@ -196,39 +206,24 @@ const MyPage = () => {
           </div>
           <div className="projects-section-line">
             {/* <MyHomeTopLine/> */}
-            <TabTopLine clickTab={clickTab} planList={planList} />
+            <TabTopLine
+              clickTab={clickTab}
+              planList={planList}
+              uploadCount={upload}
+            />
           </div>
           <div ref={homeBox} className="project-boxes">
-            {" "}
-            {/* jsListView jsGridView */}
-            {/* <MyHomeBox/> */}
             <TabContent
               clickTab={clickTab}
               setClickTab={setClickTab}
               planList={planList}
+              setPlanList={setPlanList}
+              setUpload={setUpload}
             />
           </div>
         </div>
 
         <div className="messages-section">
-          {/* <button className="messages-close">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="feather feather-x-circle"
-            >
-              <circle cx="12" cy="12" r="10" />
-              <line x1="15" y1="9" x2="9" y2="15" />
-              <line x1="9" y1="9" x2="15" y2="15" />
-            </svg>
-          </button> */}
           <div className="projects-section-header">
             <p>알림</p>
           </div>
@@ -244,12 +239,7 @@ const MyPage = () => {
 function Title({ clickTab }) {
   //타이틀
   if (clickTab === 0) {
-    return (
-      <>
-        <div className="projects-title">MyPage</div>
-        <p className="time">December, 12</p>
-      </>
-    );
+    return <div className="projects-title">MyPage</div>;
   } else if (clickTab === 1) {
     return <div className="projects-title">Insta</div>;
   } else if (clickTab === 2) {
@@ -260,34 +250,21 @@ function Title({ clickTab }) {
 }
 
 //-----------------------------------------------------------------------
-function TabContent({ clickTab, setClickTab, planList }) {
+function TabContent({
+  clickTab,
+  setClickTab,
+  planList,
+  setPlanList,
+  setUpload,
+}) {
   const [selectRbn, setSelectRbn] = useState();
   const [modalOpen, setModalOpen] = useState(false);
+
+  // console.log("TabContent selectRbn :", selectRbn);
+
   const onModalSelect = () => {
     setModalOpen(true);
   };
-  // console.log('등록한 이미지:',showImages);
-  // console.log('등록한 이미지 1:',showImages[0]);
-  // console.log('등록한 이미지 2:',showImages[1]);
-  // console.log('입력한 제목:',title);
-  // console.log('입력한 내용:',content);
-  // console.log('입력한 태그:',tag);
-  // console.log('selectRbn 1 :', selectRbn);
-
-  // let myImgs = showImages.map((showImages, imgIndex)=>{
-  //   console.log('인덱스:',imgIndex,' 값:',showImages);
-
-  // let myImgs = showImages.map((showImages, imgIndex) => {
-  //   console.log("인덱스:", imgIndex, " 값:", showImages);
-
-  //   return { imgIndex: showImages };
-  // });
-  //   return {imgIndex:showImages};
-  // });
-  // console.log('저장된 myImgs:',myImgs);
-
-  // const randomNum = ['#fee4cb', '#ffd6ff', '#d6f6dd'].length;
-  // const imgNum = Math.floor(Math.random() * randomNum)+1;
 
   if (clickTab === 0) {
     // 홈
@@ -301,6 +278,8 @@ function TabContent({ clickTab, setClickTab, planList }) {
                 planList={val}
                 rbn={val.rbn}
                 setSelectRbn={setSelectRbn}
+                setPlanList={setPlanList}
+                setUpload={setUpload}
               />
             );
           })}
@@ -390,37 +369,24 @@ function TabContent({ clickTab, setClickTab, planList }) {
     return <MyProfileBox />;
   } else if (clickTab === 10) {
     //-----------------------글작성------------------------
-    return <MyPostBox selectRbn={selectRbn} />;
+    return <MyPostBox selectRbn={selectRbn} setClickTab={setClickTab} />;
   } else if (clickTab === 11) {
+    //------------글수정-------------
+    return <MyEditBox selectRbn={selectRbn} />;
+  } else if (clickTab === 12) {
     //------------인스타 게시글 수정-------------
     return; //<MyInstaBox />;
   }
 }
 
-// const write = () => {
+function TabTopLine({ clickTab, planList, uploadCount }) {
+  let count = 0;
+  // console.log("uploadCount :", uploadCount[1] == undefined);
 
-//   // 입력한 태그를 # 으로 잘라서 배열로 새로 저장함
-//   setWriteTag(tag.split('#'));
-//   writeTag.splice(0,1);
-//   // console.log('writeTag : ',writeTag);
+  if (planList.length != 0) {
+    if (uploadCount[1] != undefined) count = uploadCount[1].length;
+  }
 
-//   let token = sessionStorage.getItem("token");
-
-//   axios.post("",{
-//     //저장한 여행경로 고유번호(고유아이디)값 추가해야함 (no 같은거)
-//     title: `${title}`,
-//     content: `${content}`,
-//     tag: `${writeTag}`,
-//     showImages:`${myImgs}`
-
-//   },{
-//     headers: {
-//       Authorization: `Bearer ${token}`,
-//       }
-//   });
-// };
-
-function TabTopLine({ clickTab, planList }) {
   //서브 타이틀
   if (clickTab === 0) {
     return (
@@ -431,7 +397,7 @@ function TabTopLine({ clickTab, planList }) {
         </div>
 
         <div className="item-status">
-          <span className="status-number">0</span>
+          <span className="status-number">{count}</span>
           <span className="status-type">Upload</span>
         </div>
       </div>

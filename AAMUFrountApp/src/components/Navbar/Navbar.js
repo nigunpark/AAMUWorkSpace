@@ -16,6 +16,7 @@ const Navbar = ({ scrollNav, whereUrl }) => {
   const closeMoblieMenu = () => setClick(false);
   const [showChatBot, setShowChatBot] = useState(false);
   let navigate = useNavigate();
+  let location = useLocation();
   useEffect(() => {
     if (showChatBot === false) chatArr = [];
   }, [showChatBot]);
@@ -33,29 +34,29 @@ const Navbar = ({ scrollNav, whereUrl }) => {
             </Link>
           </div>
           <ul className={click ? "nav-menu active" : "nav-menu"}>
-            <li>
+            {/* <li>
               <Link to="/" className="nav-links" onClick={closeMoblieMenu}>
                 Home
               </Link>
-            </li>
+            </li> */}
             <li>
-              <Link to="/chat" className="nav-links" onClick={closeMoblieMenu}>
-                ChatTest
+              <Link to="/WholeMap" className="nav-links" onClick={closeMoblieMenu}>
+                여행떠나기
               </Link>
             </li>
             <li>
               <Link to="/Insta" className="nav-links" onClick={closeMoblieMenu}>
-                Insta
+                이런곳은 어때
+              </Link>
+            </li>
+            <li>
+              <Link to="/forum" className="nav-links" onClick={closeMoblieMenu}>
+                이런여행 어때
               </Link>
             </li>
             <li>
               <Link to="/qna" className="nav-links" onClick={closeMoblieMenu}>
                 QnA
-              </Link>
-            </li>
-            <li>
-              <Link to="/forum" className="nav-links" onClick={closeMoblieMenu}>
-                forum
               </Link>
             </li>
           </ul>
@@ -84,7 +85,9 @@ const Navbar = ({ scrollNav, whereUrl }) => {
         </div>
       </nav>
       <Outlet />
-      <ChatBotBtn setShowChatBot={setShowChatBot} showChatBot={showChatBot} />
+      {location.pathname.indexOf("mainPage") !== 1 && (
+        <ChatBotBtn setShowChatBot={setShowChatBot} showChatBot={showChatBot} />
+      )}
     </div>
   );
 };
