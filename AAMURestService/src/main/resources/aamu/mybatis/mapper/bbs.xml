@@ -46,7 +46,7 @@
 	 	DELETE FROM routebbs WHERE rbn=#{rbn}
 	 </delete>
 	 
-	 <!--                            리뷰                              -->
+	 <!--                            리뷰                                   -->
 	 
 	 <!-- 리뷰 등록 -->
 	 <insert id="reviewInsert" parameterType="map">
@@ -68,5 +68,21 @@
 	 <delete id="reviewDelete" parameterType="map">
 	 	DELETE FROM ratereview WHERE rno=#{rno}
 	 </delete>
+	
+	 <!--                           평점                                      -->
+	 
+	 <!-- 평점 평균 구하기 -->
+	<select id="getRateAverage" resultType="double">
+  		SELECT avg(rate)
+  		FROM ratereview
+  		WHERE rbn = #{rbn}
+  	</select>
+  	
+	 <!-- 평점 평균 반영 -->
+	<update id="updateRate">
+		UPDATE routebbs
+		SET rateavg = #{rateavg}
+		WHERE rbn = #{rbn}
+	</update>
 		
 </mapper>

@@ -27,5 +27,5 @@ public class BBSDTO {
 	private PlannerDTO planner; 
 	private List<RouteDTO> routeList;
 	private List<ReviewDTO> reviewList;
-	private double rateavg; //평점 등록
+	private double rateavg; //평균 평점
 }
