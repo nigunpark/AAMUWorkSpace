@@ -40,5 +40,7 @@ public interface BBSService {
 	
 	//리뷰 삭제
 	int reviewDelete(Map map);
-
+	
+	//평균 평점 
+	int rateUpdate(Map map);
 }

@@ -18,5 +18,6 @@ public class PlannerDTO {
 	private String plannerdate;
 	private Map<String,List<RouteDTO>> routeMap=null;
 	private String smallImage;
+	private String bigImage;
 	private int isBBS;
 }

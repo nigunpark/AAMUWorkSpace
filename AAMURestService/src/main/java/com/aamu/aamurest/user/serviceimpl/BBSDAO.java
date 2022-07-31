@@ -52,10 +52,10 @@ public class BBSDAO {
 		return template.delete("bbsDelete",map);
 	}
 
-	/*----------------------------------------------------*/
+	/*----------------------------------------------------------*/
 
 	//글 상세보기_모든 리뷰 보기
-	public List<ReviewDTO> reviewList(int rbn) {
+	public List<ReviewDTO> reviewSelectList(int rbn) {
 		return template.selectList("reviewList",rbn);
 	}
 
@@ -76,16 +76,27 @@ public class BBSDAO {
 		return template.delete("reviewDelete",map);
 	}
 		
+	//경로 가져오기
+	public List<RouteDTO> selectRouteList(int rbn) {
+		return template.selectList("selectRouteList",rbn);
+	}
+	
+	/*----------------------------------------------------------*/
 	//테마 등록
 	public int themeInsert(BBSDTO theme) {
 		return template.insert("themeInsert",theme);
 	}
 	
-	//경로 가져오기
-	public List<RouteDTO> selectRouteList(int rbn) {
-		return template.selectList("selectRouteList",rbn);
+	//테마 사진 하나 뿌려주기
+	public BBSDTO themeSelectOne(Map map) {
+		return template.selectOne("themeSelectOne",map);
 	}
-
+	
+	//평점 업데이트
+	public int rateUpdate(Map map) {
+		return 0;
+	}
+	
 
 }
 

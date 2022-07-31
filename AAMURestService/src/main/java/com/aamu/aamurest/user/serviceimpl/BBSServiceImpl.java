@@ -117,7 +117,16 @@ public class BBSServiceImpl implements BBSService{
 	//글 상세보기_모든 리뷰 보기
 	@Override
 	public List<ReviewDTO> reviewList(int rbn) {
-		return dao.reviewList(rbn);
+		
+		List<ReviewDTO> reviewList = dao.reviewSelectList();
+		List<ReviewDTO> returnList = new Vector<>();
+
+		for(BBSDTO dto:bbsList) {
+			int rbn = dto.getRbn();
+			dto.setReviewList(dao.reviewList(rbn));
+			returnList.add(dto);
+		}
+		return returnList;
 	}
 
 
@@ -139,6 +148,21 @@ public class BBSServiceImpl implements BBSService{
 	@Override
 	public int reviewDelete(Map map) {
 		return dao.reviewDelete(map);
+	}
+	
+	//평균 평점
+	
+	/*---------------------------------------------------*/
+	
+	//테마 사진 하나 뿌려주기
+	public BBSDTO themeSelectOne(Map map) {
+		return dao.themeSelectOne(map);
+	}
+	
+	//평균 평점 업데이트
+	@Override
+	public int rateUpdate(Map map) {
+		return dao.rateUpdate(map);
 	}
 
 

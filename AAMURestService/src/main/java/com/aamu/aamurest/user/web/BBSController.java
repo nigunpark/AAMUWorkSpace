@@ -54,10 +54,26 @@ public class BBSController {
 		}
 		return list;
 	}
-
+	
+	//글 하나 선택
+	@GetMapping("/bbs/SelectOne/{rbn}")
+	public BBSDTO bbsSelectOne(@PathVariable int rbn, HttpServletRequest req) {
+		System.out.println("선택:"+rbn);
+		BBSDTO dto=bbsService.bbsSelectOne(rbn);
+		
+		System.out.println("머가나오나"+dto);
+		//모든 리뷰 가져오기
+		System.out.println("리뷰리스트에 뭐가 있을까?"+bbsService.reviewList(rbn));
+		dto.setReviewList(bbsService.reviewList(rbn));
+		//모든 사진 가져오기
+		//dto.setPhoto(bbsService.bbsSelectPhotoList(rbn));
+		dto.setPhoto(FileUploadUtil.requestFilePath(bbsService.bbsSelectPhotoList(dto.getRbn()), "/resources/bbsUpload", req));
+		return dto;
+	}
+	
 	//글 등록 <성공>
-	@PostMapping("/bbs/edit")
-	public Map bbsInsert(@RequestParam List<MultipartFile> multifiles, @RequestParam Map map, HttpServletRequest req) {
+		@PostMapping("/bbs/edit")
+		public Map bbsInsert(@RequestParam List<MultipartFile> multifiles, @RequestParam Map map, HttpServletRequest req) {
 		System.out.println("등록:"+map);
 		//서버의 물리적 경로 얻기
 		String path=req.getSession().getServletContext().getRealPath("/resources/bbsUpload");
@@ -73,35 +89,21 @@ public class BBSController {
 		else resultMap.put("result", "insertNotSuccess");
 		
 		return resultMap;
-	}
-
-	//글 하나 선택
-	@GetMapping("/bbs/SelectOne/{rbn}")
-	public BBSDTO bbsSelectOne(@PathVariable int rbn, HttpServletRequest req) {
-		System.out.println("선택:"+rbn);
-		BBSDTO dto=bbsService.bbsSelectOne(rbn);
-		System.out.println("머가나오나"+dto);
-		//모든 리뷰 가져오기
-		System.out.println("리뷰리스트에 뭐가 있을까?"+bbsService.reviewList(rbn));
-		dto.setReviewList(bbsService.reviewList(rbn));
-		//모든 사진 가져오기
-		//dto.setPhoto(bbsService.bbsSelectPhotoList(rbn));
-		dto.setPhoto(FileUploadUtil.requestFilePath(bbsService.bbsSelectPhotoList(dto.getRbn()), "/resources/bbsUpload", req));
-		return dto;
-	}
+		}
 
 	//글 수정 <성공>
 	@PutMapping("/bbs/edit")
-    public Map bbsUpdate(@RequestParam Map map) {
+    public Map bbsUpdate(@RequestBody Map map) {
+		System.out.println("글 수정:"+map);
 		int bbsUpdateAffected=bbsService.bbsUpdate(map);
-		Map resultMap = new HashMap();
+		Map resultMap = new HashMap<> ();
 		if(bbsUpdateAffected==1)
 			resultMap.put("result", "updateSuccess");
 		else
 			resultMap.put("result", "updateNotSuccess");
 		return resultMap;
 	}
-
+	
 	//글 삭제 <성공>
 	@DeleteMapping("/bbs/edit")
 	public Map bbsDelete(@RequestParam Map map) {
@@ -114,6 +116,7 @@ public class BBSController {
 		return resultMap;
 
 	}
+	
 	/*
 	//리뷰 목록
 	@GetMapping("/review/SelectList")
@@ -132,6 +135,7 @@ public class BBSController {
 		else resultMap.put("result", "insertNotSuccess");
 		return resultMap;
 	}
+	
 	/*
 	//리뷰 수정 <성공>
 	@PutMapping("/review/edit")
@@ -158,15 +162,13 @@ public class BBSController {
 		
 	}
 	
-	/*
-	//테마 사진 등록
-	@GetMapping("/theme/SelectOne{themeid}")
+	//테마 사진 하나 뿌려주기
+	@GetMapping("/theme/SelectOne/{themeid}")
 	public BBSDTO themeSelectOne(@RequestParam Map map,HttpServletRequest req) {
 		BBSDTO dto = bbsService.themeSelectOne(map);
 		dto.setThemeimg(FileUploadUtil.requestOneFile(dto.getThemeimg(), "/resources/themeUpload", req));
 		return dto;
 	}
-	*/
-
+	
 }
 
