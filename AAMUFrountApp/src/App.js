@@ -120,6 +120,7 @@ function changeLocation(location, setWhereUrl) {
     location.pathname.indexOf("myPage") === 1 ||
     location.pathname.indexOf("Insta") === 1 ||
     location.pathname.indexOf("qna") === 1
+    // location.pathname.indexOf("WholeMap") === 1
   )
     setWhereUrl(true);
   else setWhereUrl(false);
