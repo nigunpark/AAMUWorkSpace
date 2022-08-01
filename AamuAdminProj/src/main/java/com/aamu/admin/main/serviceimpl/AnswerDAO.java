@@ -19,12 +19,12 @@ public class AnswerDAO {
 	public List<AnswerDTO> selectList(Map map) {
 		return template.selectList("answerSelectList", map);
 	}
-	
+
 	// 이름 찾기
 	public String findNameByKey(Map map) {
 		return template.selectOne("answerFindNameByKey", map);
 	}
-	
+
 	// 댓글 등록
 	public int insert(Map map) {
 		template.insert("answerInsert", map);

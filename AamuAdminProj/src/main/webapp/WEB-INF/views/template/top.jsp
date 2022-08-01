@@ -38,10 +38,10 @@
         </div>
         <div>
           <a class="navbar-brand brand-logo" href="<c:url value="main.do"/>">
-            <img src="images/logo.svg" alt="logo" />
+            <img src="<c:url value="/resources/images/AAMU_150_Circle.png"/>" alt="mapping=/resources/**" />
           </a>
           <a class="navbar-brand brand-logo-mini" href="<c:url value="main.do"/>">
-            <img src="images/logo-mini.svg" alt="logo" />
+            <img src="<c:url value="/resources/images/AAMU_100_Circle.png"/>" alt="mapping=/resources/**" />
           </a>
         </div>
       </div>

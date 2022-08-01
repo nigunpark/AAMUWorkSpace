@@ -103,8 +103,8 @@ pageContext.setAttribute("newLineChar", "\n");
 									<tbody class="table-sm down-file-body" id="answer-list">
 										<c:if test="${empty record.answer}" var="isEmpty">
 											<tr>
-												<td colspan="4"><span class="no-answer">등록된 댓글이
-														없습니다.</span></td>
+												<td colspan="4" id="answer-list"><span
+													class="no-answer">등록된 댓글이 없습니다.</span></td>
 											</tr>
 										</c:if>
 										<c:if test="${not isEmpty }">
@@ -249,10 +249,11 @@ $('#submit').click(function(){
            data:"ano="+ano,
            dataType:'json'
         }).done(data=>{
+        	
            console.log('삭제 성공:',data);
-           answerLoad();
            // tr 태그 제거
            this_.parent().parent().remove();
+           answerLoad();
         }).fail(error=>{
            console.log('삭제 에러:',error);
         });
@@ -268,6 +269,7 @@ $('#submit').click(function(){
     	$('.answer-count').load(location.href+' .answer-count');
     	$('.no-answer').load(location.href+' .no-answer');
     }
+
     
     // 게시물 삭제
     function qnaDelete(key){

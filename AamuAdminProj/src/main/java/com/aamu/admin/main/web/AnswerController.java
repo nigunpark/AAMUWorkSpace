@@ -23,7 +23,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class AnswerController {
 
 	@Autowired
-	private AnswerServiceImpl answerService;	
+	private AnswerServiceImpl answerService;
 
 	// 댓글 목록
 	@PostMapping(value = "List.do", produces = "text/plain; charset=UTF-8")
@@ -42,7 +42,7 @@ public class AnswerController {
 		System.out.println(map);
 		return map;
 	}
-	
+
 	// 댓글 등록
 	@PostMapping(value = "Write.do")
 	public Map write(@ModelAttribute("id") String id, @RequestParam Map map) {
@@ -61,12 +61,12 @@ public class AnswerController {
 	}//////////// write
 
 	// 댓글 수정
-	@PostMapping(value="Edit.do")
-	public Map edit(@ModelAttribute("id") String id,@RequestParam Map map) {
-		//서비스 호출
+	@PostMapping(value = "Edit.do")
+	public Map edit(@ModelAttribute("id") String id, @RequestParam Map map) {
+		// 서비스 호출
 		answerService.answerUpdate(map);
-		
-		//데이타 반환]		
+
+		// 데이타 반환]
 		return map;
 	}
 
@@ -79,18 +79,20 @@ public class AnswerController {
 		// 데이타 반환]
 		return map;
 	}//////////// write
-	
+
 	// 댓글 전부 삭제
 	@PostMapping("AnswerAllDelete.do")
 	@ResponseBody
-	public Map answerAllDelete(@RequestBody Map map){
-		int affected=answerService.answerAllDelete(map);
-		//데이타 반환
+	public Map answerAllDelete(@RequestBody Map map) {
+		int affected = answerService.answerAllDelete(map);
+		// 데이타 반환
 		Map resultMap = new HashMap();
-		System.out.println("affected:"+affected);
-		if(affected==1) resultMap.put("result", "Success");
-		else resultMap.put("result", "NotSuccess");
+		System.out.println("affected:" + affected);
+		if (affected == 1)
+			resultMap.put("result", "Success");
+		else
+			resultMap.put("result", "NotSuccess");
 		return resultMap;
 	}
-	
+
 }
