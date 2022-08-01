@@ -19,17 +19,17 @@ function SearchList({ searchb, inputValue }) {
     // setcomments(copyFeedComments);//copyFeedComments 담겨있을 comment를 setfeedComments로 변경
     let token = sessionStorage.getItem("token");
     axios
-      .get('/aamurest/gram/SelectOne', {
+      .get("/aamurest/gram/SelectOne", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-        params:{
-          id:sessionStorage.getItem('username'),
-          lno:lno
-        }
+        params: {
+          id: sessionStorage.getItem("username"),
+          lno: lno,
+        },
       })
       .then((resp) => {
-        console.log(resp.data)
+        console.log(resp.data);
         setcomments(resp.data);
       })
       .catch((error) => {
@@ -51,8 +51,7 @@ function SearchList({ searchb, inputValue }) {
           <div style={{ paddingLeft: "20px" }}>
             <p className="user-id">{inputValue}</p>
             <p className="user-name">
-              게시물{" "}
-              <strong style={{ color: "black" }}>{searchb.length}</strong>
+              게시물 <strong style={{ color: "black" }}>{searchb.length}</strong>
             </p>
           </div>
         </User>
@@ -64,28 +63,27 @@ function SearchList({ searchb, inputValue }) {
                   <InstaImg
                     onClick={(e) => {
                       commentModal1(setcomments, val.lno);
-                      setList(val)
+                      setList(val);
                       setcommentModal(!commentModal);
                     }}
                     src={val.photo[0]}
                   />
-                  
                 </InstarBox>
               </>
             );
           })}
           {commentModal && (
-                    <CommentSearch
-                      list={list}
-                      commentModal={commentModal}
-                      comment={comment}
-                      setComment={setComment}
-                      comments={comments}
-                      setcomments={setcomments}
-                      setcommentModal={setcommentModal}
-                      commentModal1={commentModal1}
-                    />
-                  )}
+            <CommentSearch
+              list={list}
+              commentModal={commentModal}
+              comment={comment}
+              setComment={setComment}
+              comments={comments}
+              setcomments={setcomments}
+              setcommentModal={setcommentModal}
+              commentModal1={commentModal1}
+            />
+          )}
         </MyInstar>
       </Grid>
     </MyInstaContainer>
