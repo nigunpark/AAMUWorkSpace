@@ -151,4 +151,17 @@ public class MainDAO {
 		return template.selectList("searchTopPlaces", map);
 	}
 
+	public int insertTheme(Map map) {
+		
+		return template.insert("insertTheme", map);
+	}
+
+	public List<String> getUserTheme(Map map) {
+		
+		return template.selectList("getUserTheme",map);
+	}
+	public List<String> getAllUser(){
+		return template.selectList("getAllUser");
+	}
+
 }

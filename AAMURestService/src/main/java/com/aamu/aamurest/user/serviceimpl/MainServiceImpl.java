@@ -639,4 +639,33 @@ public class MainServiceImpl implements MainService{
 		
 		return dao.searchTopPlaces(map);
 	}
+	@Override
+	public int insertTheme(Map map) {
+		
+		return dao.insertTheme(map);
+	}
+	@Override
+	public List<String> getUserTheme(Map map) {
+		List<String> standTheme = dao.getUserTheme(map);
+		int stand = standTheme.size();
+		String resultId = null;
+		double result = 0;
+		for(String id:dao.getAllUser()) {
+			map.put("id", id);
+			List<String> compareTheme = dao.getUserTheme(map);
+			double ins = standTheme.size()/compareTheme.size()+MainServiceImpl.intersection(standTheme, compareTheme);
+			if(result<ins) {
+				result = ins;
+				resultId = id;
+			}
+		}
+		
+		return standTheme;
+	}
+	
+	public static int intersection(List<String> list1,List<String> list2){
+		
+		list1.retainAll(list2);
+		return list1.size();
+	}
 }

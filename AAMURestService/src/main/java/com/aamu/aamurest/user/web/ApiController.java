@@ -1,5 +1,6 @@
 package com.aamu.aamurest.user.web;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.aamu.aamurest.user.service.AttractionDTO;
 import com.aamu.aamurest.user.service.MainService;
@@ -30,6 +32,7 @@ import com.aamu.aamurest.user.service.api.Info;
 import com.aamu.aamurest.user.service.api.KakaoKey;
 import com.aamu.aamurest.user.service.api.Places;
 import com.aamu.aamurest.user.service.api.Places.Item;
+import com.aamu.aamurest.util.FileUploadUtil;
 
 @RestController
 @PropertySource("classpath:aamu/resources/api.properties")
@@ -329,6 +332,18 @@ public class ApiController {
 
 		}
 
+		return affected;
+	}
+	@PostMapping("theme/insert")
+	public int theme(@RequestParam Map map, @RequestParam MultipartFile themeimg,HttpServletRequest req) throws IllegalStateException, IOException {
+		int affected = 0;
+		String path = req.getSession().getServletContext().getRealPath("/resources/themeImage");
+		String filename = FileUploadUtil.oneFile(themeimg, path);
+
+		map.put("themeimg", filename);
+		System.out.println(map);
+		affected = service.insertTheme(map);
+		
 		return affected;
 	}
 }

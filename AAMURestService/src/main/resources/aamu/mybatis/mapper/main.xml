@@ -148,4 +148,7 @@
 		SELECT contentid FROM route WHERE contentid in
 		(select contentid from places where areacode=#{areacode} and contenttypeid=#{contenttypeid}) and ROWNUM = ${rownum} group by contentid ORDER BY count(contentid) DESC
 	</select>
+	<insert id="insertTheme" parameterType="Map">
+		Insert into theme values (SEQ_THE.nextval,#{themename},#{themeimg})
+	</insert>
 </mapper>

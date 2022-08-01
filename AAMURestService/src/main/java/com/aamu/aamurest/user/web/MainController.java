@@ -567,13 +567,17 @@ public class MainController {
 		return list;
 	}
 	@GetMapping("/main/mainelement")
-	public Map<String,Map<String,List>> mainElement(){
+	public Map<String,Map<String,List>> mainElement(@RequestParam Map map){
 
-		Map<String,Map<String,List>> map = new HashMap<>();
+		Map<String,Map<String,List>> basicMap = new HashMap<>();
 		Map<String,List> mapElement = new HashMap<>();
 		List<AttractionDTO> list = service.selectMainPlaceList();
+		if(map.get("id")!=null) {
+			service.getUserTheme(map);
+		}
+		
 		mapElement.put("places", list);
-		map.put("placesInfo", mapElement );
+		basicMap.put("placesInfo", mapElement);
 
 		return map;
 
