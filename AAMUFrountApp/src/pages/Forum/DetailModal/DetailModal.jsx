@@ -9,7 +9,7 @@ import "./BookMark.css";
 import { useDispatch, useSelector } from "react-redux";
 import { addChatBotData, addWholeBlackBox } from "../../../redux/store";
 
-const DetailModal = ({ setIsOpen, detailRbn, postDay, setShowCBModal }) => {
+const DetailModal = ({ postDay, detailRbn, setIsOpen, setShowCBModal }) => {
   function dateFormat(date) {
     let month = date.getMonth() + 1;
     let day = date.getDate();
@@ -154,7 +154,7 @@ const DetailModal = ({ setIsOpen, detailRbn, postDay, setShowCBModal }) => {
       });
   };
 
-  const CommentList = ({ val, setFeedComments }) => {
+  const CommentList = ({ val, setFeedComments, setIsOpen }) => {
     const rno = val.rno;
     // console.log("리뷰정보 :", rno);
     return (
