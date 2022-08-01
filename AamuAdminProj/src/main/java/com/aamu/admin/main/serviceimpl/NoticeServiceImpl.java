@@ -66,13 +66,13 @@ public class NoticeServiceImpl implements NoticeService {
 		record.setContent(record.getContent().replace("\r\n", "<br/>"));
 		return record;
 	}
-	
+
 	// 게시물 등록
 	@Override
 	public int noticeWrite(Map map) {
 		return dao.noticeWrite(map);
 	}
-	
+
 	// 게시물 수정
 	@Override
 	public int noticeEdit(Map map) throws Exception {
@@ -96,7 +96,7 @@ public class NoticeServiceImpl implements NoticeService {
 		} else
 			return 0;
 	}
-	
+
 	// 상세 보기에서 삭제
 	public int noticeViewDelete(Map map) {
 		return dao.noticeViewDelete(map);
@@ -107,5 +107,5 @@ public class NoticeServiceImpl implements NoticeService {
 	public int noticeCount(Map map) throws Exception {
 		return dao.noticeCount(map);
 	}
-	
+
 }
