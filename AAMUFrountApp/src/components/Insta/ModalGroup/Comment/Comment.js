@@ -48,14 +48,19 @@ function Comment({
     setcomments(copyFeedComments); //copyFeedComments 담겨있을 comment를 setfeedComments로 변경
     let token = sessionStorage.getItem("token");
     axios
-      .get(`/aamurest/gram/SelectOne/${val.lno}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+    .get('/aamurest/gram/SelectOne', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      params:{
+        id:sessionStorage.getItem('username'),
+        lno:val.lno
+      }
       })
       .then((resp) => {
         setcomments(resp.data.commuCommentList);
-        console.log("cno", comments);
+        console.log("cno", resp.data.commuCommentList);
+        console.log("val",val.userprofile);
       })
       .catch((error) => {
         console.log(error);
@@ -195,7 +200,7 @@ function Comment({
         >
           <div style={{ display: "flex", flexDirection: "row" }}>
             <p className="userName">
-              <strong>{sessionStorage.getItem("username")}</strong>
+              <strong>{val.id}</strong>
             </p>
             <p className="userName">{val.reply}</p>
           </div>
@@ -282,7 +287,7 @@ function Comment({
                 </div>
                 <div>
                   <p className="user-id">
-                    <strong>{sessionStorage.getItem("username")}</strong>
+                    <strong>{val.id}</strong>
                   </p>
                 </div>
               </div>
@@ -340,7 +345,7 @@ function Comment({
                           <strong
                             style={{ fontSize: "13px", marginRight: "5px" }}
                           >
-                            {sessionStorage.getItem("username")}
+                            {val.id}
                           </strong>
                           <span style={{ fontFamily: "normal" }}>
                             {val.content}
