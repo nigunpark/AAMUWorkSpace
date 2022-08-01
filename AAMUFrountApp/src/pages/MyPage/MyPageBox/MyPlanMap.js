@@ -52,7 +52,7 @@ const MyPlanMap = ({ currPosition, fromWooJaeData, forDayLine, setSavePlan }) =>
     // });
   }, []);
   useEffect(() => {
-    // if (dMap === null) return;
+    if (dMap === null) return;
     console.log("reduxState.tripPeriod", reduxState.tripPeriod);
     let linePath = [];
     let forMarkers = [];
@@ -64,11 +64,11 @@ const MyPlanMap = ({ currPosition, fromWooJaeData, forDayLine, setSavePlan }) =>
         fromWooJaeData[index]["day" + (index + 1)].map((obj, i) => {
           tempForMarkers.push({
             title: obj.dto.title,
-            latlng: new kakao.maps.LatLng(obj.dto.mapx, obj.dto.mapy),
+            latlng: new kakao.maps.LatLng(obj.dto.mapy, obj.dto.mapx),
             contenttypeid: obj.contenttypeid,
             contentid: obj.contentid,
           });
-          tempArr.push(new kakao.maps.LatLng(obj.dto.mapx, obj.dto.mapy));
+          tempArr.push(new kakao.maps.LatLng(obj.dto.mapy, obj.dto.mapx));
         });
 
         linePath.push(tempArr);
@@ -167,7 +167,7 @@ const MyPlanMap = ({ currPosition, fromWooJaeData, forDayLine, setSavePlan }) =>
         });
       }
     }
-    // dMap.relayout();
+    dMap.relayout();
   }, [fromWooJaeData, forDayLine]);
   return (
     <div
