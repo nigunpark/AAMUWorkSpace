@@ -15,14 +15,7 @@ import "../Upload/UploadSwiper.css";
 import dayjs from "dayjs";
 import { CommentsDisabled } from "@mui/icons-material";
 
-function Comment({
-  val,
-  setlist,
-  forReRender,
-  setForReRender,
-  seteditModal,
-  setcommentModal,
-}) {
+function Comment({ val, setlist, forReRender, setForReRender, seteditModal, setcommentModal }) {
   let menuRef = useRef();
   let replyRef = useRef();
   let commentRef = useRef();
@@ -133,7 +126,7 @@ function Comment({
   }
 
   let [deleteOne1, setdeleteOne1] = useState(false);
-//   let [cno, setCno] = useState();
+  //   let [cno, setCno] = useState();
   function deleteOne(cno) {
     //업로드 버튼 누르고 화면 새로고침
     let token = sessionStorage.getItem("token");
@@ -153,7 +146,7 @@ function Comment({
       .then((resp) => {
         setdeleteOne1(resp.data); //성공 여부가 온다 true false
         // alert('삭제되었습니다!')
-        feedList(setlist, setloading);
+        // feedList(setlist, setloading);
       })
       .catch((error) => {
         console.log(error);
@@ -204,9 +197,7 @@ function Comment({
             />
           </div>
           <div style={{ fontSize: "10px", color: "#a5a5a5", marginTop: "8px" }}>
-            <p className="postDate">
-              {dayjs(val.postdate).format("YYYY/MM/DD")}
-            </p>
+            <p className="postDate">{dayjs(val.postdate).format("YYYY/MM/DD")}</p>
           </div>
         </div>
       </div>
@@ -317,14 +308,10 @@ function Comment({
                           <span> {val.ctitle}</span>
                         </p>
                         <p className="userName">
-                          <strong
-                            style={{ fontSize: "13px", marginRight: "5px" }}
-                          >
+                          <strong style={{ fontSize: "13px", marginRight: "5px" }}>
                             {sessionStorage.getItem("username")}
                           </strong>
-                          <span style={{ fontFamily: "normal" }}>
-                            {val.content}
-                          </span>
+                          <span style={{ fontFamily: "normal" }}>{val.content}</span>
                         </p>
                       </div>
                     </div>
@@ -361,10 +348,7 @@ function Comment({
                   }}
                 >
                   {val.islike ? (
-                    <i
-                      className="fa-solid fa-heart fa-2x"
-                      style={{ color: "red" }}
-                    ></i>
+                    <i className="fa-solid fa-heart fa-2x" style={{ color: "red" }}></i>
                   ) : (
                     <i className="fa-regular fa-heart fa-2x"></i>
                   )}
@@ -405,9 +389,7 @@ function Comment({
               <button
                 className={
                   //클래스명을 comment창의 글자 길에 따라서 다르게 주면서 버튼색에 css디자인을 줄 수 있음
-                  comment.length > 0
-                    ? "submitCommentActive"
-                    : "submitCommentInactive"
+                  comment.length > 0 ? "submitCommentActive" : "submitCommentInactive"
                 }
                 onClick={() => {
                   post(comment);
