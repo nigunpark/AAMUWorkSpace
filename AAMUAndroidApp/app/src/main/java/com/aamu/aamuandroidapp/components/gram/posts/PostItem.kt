@@ -62,7 +62,7 @@ fun PostItem(
         }
         else {
             ProfileSection(
-                firstImageId = gram.commuCommentList?.getOrNull(0)?.userprofile,
+                firstImageId = gram.commuComment?.userprofile,
                 text = "${gram.commuComment?.id}님이 댓글을 달고 ${gram.likecount}명이 좋아요를 눌렀어요"
             )
         }

@@ -111,7 +111,7 @@ list,
       .post(
         "/aamurest/gram/comment/edit",
         {
-          id: sessionStorage.getItem("username"),
+          id: list.id,
           reply: comment,
           lno: list.lno,
         },
@@ -270,7 +270,7 @@ list,
                 </div>
                 <div>
                   <p className="user-id">
-                    <strong>{sessionStorage.getItem("username")}</strong>
+                    <strong>{list.id}</strong>
                   </p>
                 </div>
               </div>
@@ -319,7 +319,7 @@ list,
                           <strong
                             style={{ fontSize: "13px", marginRight: "5px" }}
                           >
-                            {sessionStorage.getItem("username")}
+                            {list.id}
                           </strong>
                           <span style={{ fontFamily: "normal" }}>
                             {list.content}

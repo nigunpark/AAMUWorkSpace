@@ -84,7 +84,7 @@ function Comment({ val, setlist, forReRender, setForReRender, seteditModal, setc
         },
         params: {
           lno: parseInt(val.lno),
-          id: sessionStorage.getItem("username"),
+          id: val.id,
         },
       })
       .then((resp) => {
@@ -108,7 +108,7 @@ function Comment({ val, setlist, forReRender, setForReRender, seteditModal, setc
       .post(
         "/aamurest/gram/comment/edit",
         {
-          id: sessionStorage.getItem("username"),
+          id: val.id,
           reply: comment,
           lno: val.lno,
         },
@@ -139,7 +139,7 @@ function Comment({ val, setlist, forReRender, setForReRender, seteditModal, setc
   let [deleteOne1, setdeleteOne1] = useState(false);
   let [cno, setCno] = useState();
 
-  const id = sessionStorage.getItem("username");
+ 
 
   function deleteOne(replyOne) {
     let token = sessionStorage.getItem("token");
