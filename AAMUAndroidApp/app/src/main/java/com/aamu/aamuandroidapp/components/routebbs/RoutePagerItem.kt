@@ -44,7 +44,7 @@ fun RoutePagerItem(
     isSelected: Boolean,
     offset: Float,
 //    addToWatchList: () -> Unit,
-//    openMovieDetail: () -> Unit
+    openBBSDetail: () -> Unit
 ) {
     val animateHeight = getOffsetBasedValue(
         selectedValue = 645,
@@ -74,7 +74,7 @@ fun RoutePagerItem(
         shape = RoundedCornerShape(16.dp),
         backgroundColor = Color.White,
         contentColor = Color.Black,
-//        onClick = { openMovieDetail.invoke() },
+        onClick = { openBBSDetail.invoke() },
     ) {
         Column {
             Image(

@@ -41,13 +41,6 @@ class MainFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentMainBinding.inflate(layoutInflater)
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        navControllerHost = Navigation.findNavController(view)
 
         binding.bottomNav.apply {
             add(MeowBottomNavigation.Model(1, R.drawable.ic_home))
@@ -66,6 +59,14 @@ class MainFragment : Fragment() {
                 4 -> replace(InfoFragment())
             }
         }
+
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        navControllerHost = Navigation.findNavController(view)
 
         permissionUtils = PermissionUtils(requireContext(), requireActivity(), permissions)
 

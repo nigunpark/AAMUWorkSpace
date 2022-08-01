@@ -62,7 +62,7 @@ class ConversationFragment : Fragment() {
         }
         setContent {
             conversationViewModel = viewModel(
-                factory = ConversationViewModelFactory("8")
+                factory = ConversationViewModelFactory("10")
             )
             ConversationContent(
                 viewModel= conversationViewModel,

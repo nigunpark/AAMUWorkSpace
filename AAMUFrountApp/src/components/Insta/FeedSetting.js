@@ -11,7 +11,7 @@ import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
 import axios from "axios";
 import Edit from "./ModalGroup/Edit/Edit";
 import { confirmAlert } from "react-confirm-alert";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addForChatInfo } from "../../redux/store";
 function FeedSetting({
   val,
@@ -44,6 +44,7 @@ function FeedSetting({
   //     return formData;
   //   }
   let dispatch = useDispatch();
+  let reduxState = useSelector((state) => state);
   function post(comment, setfeedComments) {
     //유효성 검사를 통과하고 게시버튼 클릭시 발생하는 함수
     // feedComments = val.commuComment;
@@ -263,7 +264,7 @@ function FeedSetting({
             <div
               className="share-icon"
               onClick={() => {
-                getChatRoom(val, dispatch);
+                getChatRoom(val, dispatch, reduxState);
                 setTimeout(() => {
                   setShowChat(!showChat);
                 }, 100);

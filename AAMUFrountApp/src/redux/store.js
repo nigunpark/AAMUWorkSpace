@@ -312,7 +312,8 @@ let forChatInfo = createSlice({
   initialState: {},
   reducers: {
     addForChatInfo(state, action) {
-      return action.payload;
+      let actions = action.payload;
+      return { ...state, ...actions };
     },
   },
 });
