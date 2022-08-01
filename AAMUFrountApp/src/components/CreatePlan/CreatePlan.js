@@ -60,8 +60,6 @@ const CreatePlan = ({ setShowCratePlan, currPosition, fromWooJaeData, setFromWoo
         </Modal>
         {savePlan && (
           <SavePlan
-            auSure={auSure}
-            setAuSure={setAuSure}
             setSavePlan={setSavePlan}
             fromWooJaeData={fromWooJaeData}
             currPosition={currPosition}
