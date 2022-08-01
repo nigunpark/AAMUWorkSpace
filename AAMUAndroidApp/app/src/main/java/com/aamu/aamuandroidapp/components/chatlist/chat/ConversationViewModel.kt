@@ -61,11 +61,13 @@ class ConversationViewModel(roomno : String) : ViewModel() {
     fun sendMessage(content : String){
         val preferences : SharedPreferences = contextL.getSharedPreferences("usersInfo", Context.MODE_PRIVATE)
         val id : String? = preferences.getString("id",null)
+        val authpro : String? = preferences.getString("profile",null)
         map.put("authid",id ?: "");
         map.put("missage",content)
         val dateTime: Date = Calendar.getInstance().time
         val dateTimeAsLong: Long = dateTime.time
         map.put("senddate",dateTimeAsLong.toString())
+        map.put("authpro",authpro ?: "")
         val mapper = jacksonObjectMapper()
 
         stomp.send("/app/chat/message",mapper.writeValueAsString(map)).subscribe{

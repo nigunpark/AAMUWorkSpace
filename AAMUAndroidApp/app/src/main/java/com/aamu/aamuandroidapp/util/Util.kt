@@ -73,13 +73,13 @@ fun getLatLng(): Location? {
         contextL,
         Manifest.permission.ACCESS_COARSE_LOCATION
     )
-    val locatioNProvider = LocationManager.NETWORK_PROVIDER
+    val locatioNProvider = LocationManager.GPS_PROVIDER
     val locatioNManager = contextL.getSystemService(Context.LOCATION_SERVICE) as LocationManager?
     if (hasFineLocationPermission == PackageManager.PERMISSION_GRANTED &&
         hasCoarseLocationPermission == PackageManager.PERMISSION_GRANTED
     ) {
         currentLatLng = locatioNManager?.getLastKnownLocation(locatioNProvider)
-            ?: locatioNManager?.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+            ?: locatioNManager?.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
     }
 
     return currentLatLng
