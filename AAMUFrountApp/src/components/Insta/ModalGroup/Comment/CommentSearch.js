@@ -22,7 +22,8 @@ list,
   setcommentModal,
   setcomments
   ,forReRender,
-   setForReRender
+   setForReRender,
+  //  commentModal1
 
 }) {
   let menuRef = useRef();
@@ -53,26 +54,30 @@ list,
   };
 
 
-  function commentModal2(setcomments) {
-    console.log("searchb.eelno", list.lno);
-    // const copyFeedComments = [...comments];//feedComments에 담겨있던 댓글 받아옴
-    // copyFeedComments.push(comment);//copyFeedComments에 있는 기존 댓글에 push하기 위함
-    // setcomments(copyFeedComments);//copyFeedComments 담겨있을 comment를 setfeedComments로 변경
-    let token = sessionStorage.getItem("token");
-    axios
-      .get(`/aamurest/gram/SelectOne/${list.lno}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((resp) => {
-        console.log(resp.data)
-        setcomments(resp.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
+  // function commentModal1(setcomments) {
+  //   console.log("searchb.eelno", list.lno);
+  //   // const copyFeedComments = [...comments];//feedComments에 담겨있던 댓글 받아옴
+  //   // copyFeedComments.push(comment);//copyFeedComments에 있는 기존 댓글에 push하기 위함
+  //   // setcomments(copyFeedComments);//copyFeedComments 담겨있을 comment를 setfeedComments로 변경
+  //   let token = sessionStorage.getItem("token");
+  //   axios
+  //     .get('/aamurest/gram/SelectOne', {
+    // headers: {
+    //   Authorization: `Bearer ${token}`,
+    // },
+    // params:{
+    //   id:sessionStorage.getItem('username'),
+    //   lno:lno
+    // }
+  //     })
+  //     .then((resp) => {
+  //       console.log(resp.data)
+  //       setcomments(resp.data);
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     });
+  // }
 
   // const [forReRender, setForReRender] = useState(false);
   function fillLike(setForReRender,forReRender) {
@@ -121,7 +126,8 @@ list,
         console.log("resp.data", resp.data.reply);
         const copyComments = [...replyOne];
         setcomments(copyComments);
-        commentModal2(setcomments)
+        setForReRender(!forReRender);
+        // commentModal1(setcomments)
       })
       .catch((error) => {
         console.log(error);
@@ -130,9 +136,45 @@ list,
     setComment(""); //사용자 댓글창을 빈 댓글 창으로 초기화
   }
 
+  let [deleteOne1, setdeleteOne1] = useState(false);
+  let [replyTwo, setreplyTwo] = useState('');
+  function deleteTwo(replyTwo) {
+    let token = sessionStorage.getItem("token");
+    // setcomments(comments.filter(recommendContents =>{
+    //   return recommendContents.id !== id;
+    // }))commuCommentList
+    console.log("val.lno", list.lno);
+    console.log("val.cno", replyTwo);
+    axios
+      .delete(
+        "/aamurest/gram/comment/edit",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          params: {
+            lno: list.lno,
+            cno: parseInt(replyTwo),
+          },
+        }
+      )
+      .then((resp) => {
+        console.log(resp.data);
+        setdeleteOne1(resp.data); //성공 여부가 온다 true false
+        // alert('삭제되었습니다!')
+        // commentModal1(setcomments)
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+
   const CommentList = ({ list }) => {
     return (
-      <div className="recommend-contents">
+      <div className="recommend-contents" onClick={(e) => {
+        setreplyTwo(list.cno);
+      }}>
         <img className="likeimg" src={list.userprofile} alt="추사" />
         <div
           style={{
@@ -145,7 +187,7 @@ list,
         >
           <div style={{ display: "flex", flexDirection: "row" }}>
             <p className="userName">
-              <strong>{sessionStorage.getItem("username")}</strong>
+              <strong>{list.id}</strong>
             </p>
             <p className="userName">{list.reply}</p>
           </div>
@@ -166,7 +208,8 @@ list,
                 }}
               ></i>
             )}
-            <i className="fa-regular fa-trash-can"></i>
+            <i className="fa-regular fa-trash-can"
+            onClick={()=>{deleteTwo(replyTwo)}}></i>
           </div>
           <div style={{ fontSize: "10px", color: "#a5a5a5", marginTop: "8px" }}>
             <p className="postDate">
