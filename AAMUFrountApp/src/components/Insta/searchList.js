@@ -24,6 +24,7 @@ function SearchList({ searchb, inputValue }) {
         },
       })
       .then((resp) => {
+        console.log(resp.data)
         setcomments(resp.data);
       })
       .catch((error) => {
@@ -59,7 +60,6 @@ function SearchList({ searchb, inputValue }) {
                     onClick={(e) => {
                       commentModal1(setcomments, val.lno);
                       setList(val)
-                      console.log(val);
                       setcommentModal(!commentModal);
                     }}
                     src={val.photo[0]}
