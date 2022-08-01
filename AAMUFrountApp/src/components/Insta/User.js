@@ -153,7 +153,7 @@ function User({
       </div>
       <div className="user">
         <img
-          src="/images/user.jpg"
+          src={sessionStorage.getItem("userimg")}
           alt="프사"
           onError={(e) => {
             e.stopPropagation();
