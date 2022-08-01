@@ -18,6 +18,7 @@ pageContext.setAttribute("newLineChar", "\n");
 					<div class="tab-content tab-content-basic">
 
 						<!-- 템플릿 시작 -->
+						<div class="tab-content-top">
 
 						<table class="table table-bordered">
 							<tbody class="table-sm">
@@ -87,9 +88,10 @@ pageContext.setAttribute("newLineChar", "\n");
 									id="submit" />
 							</div>
 						</form>
-
+</div>
+<div class="tab-content-bottom">
 						<!-- 댓글 목록 -->
-						<div class="answer-index row d-flex justify-content-center mt-3">
+						<div class="answer-index row d-flex justify-content-center">
 							<div class="col-sm-8">
 								<table class="table table-hover text-center">
 									<thead>
@@ -130,7 +132,7 @@ pageContext.setAttribute("newLineChar", "\n");
 								</table>
 							</div>
 						</div>
-
+</div>
 						<!-- 템플릿 종료 -->
 
 					</div>
@@ -143,13 +145,34 @@ pageContext.setAttribute("newLineChar", "\n");
 </div>
 
 <style>
+
+.tab-content-top {
+padding: 1.5rem 2.187rem 1.5rem 3.5rem;
+	border-radius: 20px;
+	-webkit-box-shadow: 0 0 0 0 rgb(90 113 208/ 11%), 0 4px 16px 0
+		rgb(167 175 183/ 33%);
+}
+
+.tab-content-bottom {
+
+margin-top: 30px;
+border-radius: 20px;
+-webkit-box-shadow: 0 0 0 0 rgb(90 113 208/ 11%), 0 4px 16px 0
+		rgb(167 175 183/ 33%);
+padding: 1.5rem 2.187rem 1.5rem 3.5rem;
+}
+
 .col-sm-8 {
 	width: 100% !important;
 }
 
 .answer-index {
-	padding: 10px 15px 10px 15px;
-	border: 1px solid #dee2e6;
+
+	
+}
+
+.table-hover > tbody > tr:hover{
+	--bs-table-accent-bg: transparent !important;
 }
 
 .btn-warning {
@@ -170,7 +193,7 @@ pageContext.setAttribute("newLineChar", "\n");
 
 .answer-index thead th {
 	border-bottom: 2px solid #ccc !important;
-	padding-bottom: 30px;
+	padding-bottom: 20px;
 }
 
 .answer-index tr {

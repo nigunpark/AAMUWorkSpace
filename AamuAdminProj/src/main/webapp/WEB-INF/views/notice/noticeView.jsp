@@ -10,6 +10,7 @@
 				<div class="home-tab">
 					<div class="tab-content tab-content-basic">
 						<!--여기부터 내용을 넣으시오-->
+						<div class="tab-content-top">
 						<table class="table table-bordered">
 							<tbody class="table-sm">
 								<tr>
@@ -55,7 +56,7 @@
 								class="btn btn-success">목록</a>
 
 						</div>
-
+</div>
 						<!--------------------- 내용의 끝 부분입니다------------------------------------>
 					</div>
 				</div>
@@ -65,6 +66,19 @@
 	</div>
 	<!--main-panel-->
 </div>
+
+<style>
+
+
+.tab-content-top {
+padding: 1.5rem 2.187rem 1.5rem 3.5rem;
+	border-radius: 20px;
+	-webkit-box-shadow: 0 0 0 0 rgb(90 113 208/ 11%), 0 4px 16px 0
+		rgb(167 175 183/ 33%);
+}
+
+
+</style>
 
 
 <script>

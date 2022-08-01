@@ -23,6 +23,12 @@
   <script src="<c:url value="/resources/vendors/bootstrap-datepicker/bootstrap-datepicker.min.js"/>"></script>
   <!-- commu_plugins:css _체크박스v모양 나오게 -->
   <link rel="stylesheet" href="<c:url value="/resources/vendors/ti-icons/css/themify-icons.css"/>">
+  
+  <style>
+  
+  .navbar .navbar-brand-wrapper .navbar-brand img {height: auto;}
+  
+  </style>
 
 </head>
 
@@ -38,7 +44,7 @@
         </div>
         <div>
           <a class="navbar-brand brand-logo" href="<c:url value="main.do"/>">
-            <img src="<c:url value="/resources/images/AAMU_150_Circle.png"/>" alt="mapping=/resources/**" />
+            <img src="<c:url value="/resources/images/AAMU_100_TEXT.png"/>" alt="mapping=/resources/**" />
           </a>
           <a class="navbar-brand brand-logo-mini" href="<c:url value="main.do"/>">
             <img src="<c:url value="/resources/images/AAMU_100_Circle.png"/>" alt="mapping=/resources/**" />
