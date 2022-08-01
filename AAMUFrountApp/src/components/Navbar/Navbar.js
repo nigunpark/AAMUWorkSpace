@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Link, useNavigate, useLocation, NavLink } from "react-router-dom";
 import "./Navbar.css";
 import { Outlet } from "react-router-dom";
 import styled, { keyframes } from "styled-components";
@@ -15,7 +15,10 @@ const Navbar = ({ scrollNav, whereUrl }) => {
   const handleClick = () => setClick(!click);
   const closeMoblieMenu = () => setClick(false);
   const [showChatBot, setShowChatBot] = useState(false);
-
+  const activeStyle = {
+    color: "var(--orange)",
+    fontWeight: "bold",
+  };
   let navigate = useNavigate();
   let location = useLocation();
   useEffect(() => {
@@ -29,11 +32,14 @@ const Navbar = ({ scrollNav, whereUrl }) => {
         }
       >
         <div className="navbar-container">
-          <div className="navbar-logo">
-            <Link to="/">
-              <h1>AAMU</h1>
-            </Link>
-          </div>
+          <Link to="/">
+            {/* <div className="navbar-logo"> */}
+            {/* <h1>AAMU</h1> */}
+            <div>
+              <img className="logoImg" src="/images/aamuLogo.png" />
+            </div>
+            {/* </div> */}
+          </Link>
           <ul className={click ? "nav-menu active" : "nav-menu"}>
             {/* <li>
               <Link to="/" className="nav-links" onClick={closeMoblieMenu}>
@@ -41,24 +47,44 @@ const Navbar = ({ scrollNav, whereUrl }) => {
               </Link>
             </li> */}
             <li>
-              <Link to="/WholeMap" className="nav-links" onClick={closeMoblieMenu}>
+              <NavLink
+                to="/WholeMap"
+                className="nav-links"
+                onClick={closeMoblieMenu}
+                style={({ isActive }) => (isActive ? activeStyle : undefined)}
+              >
                 여행떠나기
-              </Link>
+              </NavLink>
             </li>
             <li>
-              <Link to="/Insta" className="nav-links" onClick={closeMoblieMenu}>
+              <NavLink
+                to="/Insta"
+                className="nav-links"
+                onClick={closeMoblieMenu}
+                style={({ isActive }) => (isActive ? activeStyle : undefined)}
+              >
                 이런곳은 어때
-              </Link>
+              </NavLink>
             </li>
             <li>
-              <Link to="/forum" className="nav-links" onClick={closeMoblieMenu}>
+              <NavLink
+                to="/forum"
+                className="nav-links"
+                onClick={closeMoblieMenu}
+                style={({ isActive }) => (isActive ? activeStyle : undefined)}
+              >
                 이런여행 어때
-              </Link>
+              </NavLink>
             </li>
             <li>
-              <Link to="/qna" className="nav-links" onClick={closeMoblieMenu}>
+              <NavLink
+                to="/qna"
+                className="nav-links"
+                onClick={closeMoblieMenu}
+                style={({ isActive }) => (isActive ? activeStyle : undefined)}
+              >
                 QnA
-              </Link>
+              </NavLink>
             </li>
           </ul>
           <div className="navbar-btn-container">
