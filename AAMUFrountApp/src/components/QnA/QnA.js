@@ -115,16 +115,15 @@ function QnAaccoridan() {
       <div className="value__accordion-item">
         <header className="value__accordion-header">
           <FontAwesomeIcon icon={faCircleQuestion} className="value__accordion-icon" />
-          <h3 className="value__accordion-title">
-            집에가고싶어집에가고싶어집에가고싶어집에가고싶어
-          </h3>
+          <h3 className="value__accordion-title">자주찾는 질문제목입니다</h3>
           <div className="value__accordion-arrow">
             <FontAwesomeIcon icon={faAngleDown} className="accordian-arrow-icon" />
           </div>
         </header>
         <div className="value__accordion-content">
           <p className="value__accordion-description">
-            하기싫어하기싫어하기싫어하기싫어하기싫어하기싫어하기싫어하기싫어하기싫어하기싫어하기싫어하기싫어하기싫어하기싫어하기싫어하기싫어하기싫어하기싫어하기싫어하기싫어하기싫어하기싫어하기싫어
+            자주찾는 질문내용입니다.자주찾는 질문내용입니다.자주찾는 질문내용입니다.자주찾는
+            질문내용입니다.
           </p>
         </div>
       </div>
