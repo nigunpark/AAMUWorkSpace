@@ -41,14 +41,19 @@ function Comment({ val, setlist, forReRender, setForReRender, seteditModal, setc
     setcomments(copyFeedComments); //copyFeedComments 담겨있을 comment를 setfeedComments로 변경
     let token = sessionStorage.getItem("token");
     axios
-      .get(`/aamurest/gram/SelectOne/${val.lno}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+    .get('/aamurest/gram/SelectOne', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      params:{
+        id:sessionStorage.getItem('username'),
+        lno:val.lno
+      }
       })
       .then((resp) => {
         setcomments(resp.data.commuCommentList);
-        console.log("cno", comments);
+        console.log("cno", resp.data.commuCommentList);
+        console.log("val",val.userprofile);
       })
       .catch((error) => {
         console.log(error);
@@ -186,7 +191,7 @@ function Comment({ val, setlist, forReRender, setForReRender, seteditModal, setc
         >
           <div style={{ display: "flex", flexDirection: "row" }}>
             <p className="userName">
-              <strong>{sessionStorage.getItem("username")}</strong>
+              <strong>{val.id}</strong>
             </p>
             <p className="userName">{val.reply}</p>
           </div>
@@ -271,7 +276,7 @@ function Comment({ val, setlist, forReRender, setForReRender, seteditModal, setc
                 </div>
                 <div>
                   <p className="user-id">
-                    <strong>{sessionStorage.getItem("username")}</strong>
+                    <strong>{val.id}</strong>
                   </p>
                 </div>
               </div>
@@ -326,8 +331,10 @@ function Comment({ val, setlist, forReRender, setForReRender, seteditModal, setc
                           <span> {val.ctitle}</span>
                         </p>
                         <p className="userName">
-                          <strong style={{ fontSize: "13px", marginRight: "5px" }}>
-                            {sessionStorage.getItem("username")}
+                          <strong
+                            style={{ fontSize: "13px", marginRight: "5px" }}
+                          >
+                            {val.id}
                           </strong>
                           <span style={{ fontFamily: "normal" }}>{val.content}</span>
                         </p>
