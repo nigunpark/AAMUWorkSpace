@@ -136,7 +136,7 @@ fun ActionButton(
     Box(modifier = modifier) {
         FloatingActionButton(
             onClick = {
-
+                mapviewModel.getRcentPlaces()
             },
             modifier = Modifier
                 .size(width = 50.dp, height = 50.dp)

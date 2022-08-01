@@ -16,6 +16,9 @@
 
 package com.aamu.aamuandroidapp.components.chatlist.chat
 
+import android.content.Context
+import android.view.View
+import android.view.inputmethod.InputMethodManager
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -41,6 +44,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.semantics.SemanticsPropertyKey
 import androidx.compose.ui.semantics.SemanticsPropertyReceiver
 import androidx.compose.ui.semantics.contentDescription
@@ -50,8 +54,10 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
 import com.aamu.aamuandroidapp.ui.theme.cyan200
 import com.aamu.aamuandroidapp.ui.theme.cyan700
+import com.aamu.aamuandroidapp.util.contextL
 
 enum class InputSelector {
     NONE,

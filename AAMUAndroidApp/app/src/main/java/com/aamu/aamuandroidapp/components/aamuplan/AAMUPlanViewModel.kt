@@ -83,9 +83,10 @@ class AAMUPlanViewModel(context : Context) : ViewModel(), MapView.POIItemEventLi
     }
 
     fun getRcentPlaces() = viewModelScope.launch {
-        aamuRepository.getRecentPlace(
-            mapView.mapCenterPoint.mapPointGeoCoord.latitude,
-            mapView.mapCenterPoint.mapPointGeoCoord.longitude)
+        mapView.removeAllPOIItems()
+        mapView.removeAllPolylines()
+        val location : Location? = getLatLng()
+        aamuRepository.getRecentPlace(location?.latitude ?:33.450701,location?.longitude ?:126.570667)
             .collect { aamuplaces ->
                 if (aamuplaces.isNotEmpty()){
                     recentPlaces.value = aamuplaces
@@ -107,9 +108,9 @@ class AAMUPlanViewModel(context : Context) : ViewModel(), MapView.POIItemEventLi
 
                 mapView.addPOIItem(mCustomMarker)
                 mapView.selectPOIItem(mCustomMarker, true)
-                mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(recentPlace.mapy!!,recentPlace.mapx!!), true)
             }
         }
+        mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(location?.latitude ?:33.450701,location?.longitude ?:126.570667), true)
     }
 
     fun getPlannerSelectOne(rbn : Int) = viewModelScope.launch {

@@ -6,19 +6,13 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Divider
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -31,6 +25,7 @@ import com.aamu.aamuandroidapp.components.aamuplan.AAMUPlanViewModelFactory
 import com.aamu.aamuandroidapp.data.DemoDataProvider
 import com.aamu.aamuandroidapp.data.model.Tweet
 import com.aamu.aamuandroidapp.components.gram.posts.PostList
+import com.aamu.aamuandroidapp.ui.theme.cyan200
 
 @Composable
 fun AAMUgramHome(
@@ -46,6 +41,7 @@ fun AAMUgramHome(
     )
 
     val gramList by viewModel.aamuGramList.observeAsState(emptyList())
+    val error by viewModel.errorLiveData.observeAsState()
 
     Box(modifier = Modifier.fillMaxSize()) {
         Scaffold(
@@ -75,15 +71,31 @@ fun AAMUgramHome(
             },
             content = {
                 Surface(modifier = Modifier.padding(it)) {
-                    Column {
-                        PostList(
-                            gramList = gramList,
-                            onLikeClicked = onLikeClicked,
-                            onCommentsClicked = onCommentsClicked,
-                            onSendClicked = onSendClicked
-                        )
+                    Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+                        if (gramList.isNotEmpty()) {
+                            PostList(
+                                gramList = gramList,
+                                onLikeClicked = onLikeClicked,
+                                onCommentsClicked = onCommentsClicked,
+                                onSendClicked = onSendClicked
+                            )
+                        } else {
+                            if (error.isNullOrEmpty()) {
+                                CircularProgressIndicator(
+                                    modifier = Modifier.padding(24.dp),
+                                    color = cyan200
+                                )
+                            } else {
+                                Text(
+                                    text = error ?: "Unknown error",
+                                    modifier = Modifier,
+                                    color = MaterialTheme.colors.error
+                                )
+                            }
+                        }
                     }
                 }
+
             }
         )
     }

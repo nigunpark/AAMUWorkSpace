@@ -13,7 +13,7 @@ import com.aamu.aamuandroidapp.ui.theme.modifiers.verticalGradientBackground
 import com.aamu.aamuandroidapp.ui.theme.purple
 
 @Composable
-fun DatingChatScreen() {
+fun AAMUChatScreen() {
     val items = AlbumsDataProvider.albums.take(6)
     Column(
         modifier = Modifier
@@ -26,7 +26,7 @@ fun DatingChatScreen() {
             items(
                 items = items,
                 itemContent = {
-                    DatingChatItem(it)
+                    AAMUChatItem(it)
                 }
             )
         }
@@ -36,6 +36,6 @@ fun DatingChatScreen() {
 
 @Preview
 @Composable
-fun PreviewDatingChatScreen() {
-    DatingChatScreen()
+fun PreviewAAMUChatScreen() {
+    AAMUChatScreen()
 }

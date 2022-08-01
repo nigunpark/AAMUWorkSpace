@@ -27,11 +27,14 @@ import android.view.WindowManager
 import androidx.compose.foundation.layout.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
+import androidx.core.view.WindowCompat
+import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.aamu.aamuandroidapp.components.chatlist.chat.ConversationContent
 import com.aamu.aamuandroidapp.components.chatlist.chat.ConversationViewModel
 import com.aamu.aamuandroidapp.components.chatlist.chat.ConversationViewModelFactory
+import com.aamu.aamuandroidapp.databinding.FragmentHomeBinding
 
 
 class ConversationFragment : Fragment() {
@@ -46,17 +49,17 @@ class ConversationFragment : Fragment() {
         layoutParams = LayoutParams(MATCH_PARENT, MATCH_PARENT)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            requireActivity().window.setDecorFitsSystemWindows(false)
-            container?.rootView?.setOnApplyWindowInsetsListener { _, insets ->
+            WindowCompat.setDecorFitsSystemWindows(requireActivity().window, false)
+            this.rootView?.setOnApplyWindowInsetsListener { _, insets ->
                 val imeHeight = insets.getInsets(android.view.WindowInsets.Type.ime()).bottom
-                val bottomInset : Int = if (imeHeight == 0) 0 else imeHeight
-                container?.rootView?.setPadding(0, 0, 0, bottomInset)
+                val navigationHeight = insets.getInsets(android.view.WindowInsets.Type.navigationBars()).bottom
+                val bottomInset = if (imeHeight == 0) navigationHeight else imeHeight
+                this.rootView?.setPadding(0, 0, 0, bottomInset)
                 insets
             }
         } else {
-            requireActivity().window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN or WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+            requireActivity().window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
         }
-
         setContent {
             conversationViewModel = viewModel(
                 factory = ConversationViewModelFactory("8")
@@ -64,11 +67,12 @@ class ConversationFragment : Fragment() {
             ConversationContent(
                 viewModel= conversationViewModel,
                 // Add padding so that we are inset from any navigation bars
-                modifier = Modifier.windowInsetsPadding(
-                    WindowInsets
-                        .navigationBars
-                        .only(WindowInsetsSides.Horizontal + WindowInsetsSides.Top)
-                )
+                modifier = Modifier
+//                    .windowInsetsPadding(
+//                    WindowInsets
+//                        .navigationBars
+//                        .only(WindowInsetsSides.Horizontal + WindowInsetsSides.Top)
+//                )
             )
         }
     }
@@ -76,9 +80,9 @@ class ConversationFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            requireActivity().window.setDecorFitsSystemWindows(true)
+            WindowCompat.setDecorFitsSystemWindows(requireActivity().window, true)
         } else {
-            requireActivity().window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_UNSPECIFIED or WindowManager.LayoutParams.SOFT_INPUT_STATE_UNSPECIFIED)
+            requireActivity().window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
         }
         conversationViewModel.unSubscribe()
     }
