@@ -175,14 +175,14 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 
 	//글 하나 뿌려주는 용
 	@Override
-	public CommuDTO commuSelectOne(String lno) {
-		CommuDTO dto=dao.commuSelectOne(lno);
-		List<CommuCommentDTO> list=dao.commuCommentList(lno);
+	public CommuDTO commuSelectOne(Map map) {
+		CommuDTO dto=dao.commuSelectOne(map);
+		List<CommuCommentDTO> list=dao.commuCommentList(map.get("lno").toString());
 		dto.setCommuCommentList(list);
 		//태그 셋팅
-		int CountTag=dao.selectCountCommuTag(lno);
+		int CountTag=dao.selectCountCommuTag(map.get("lno").toString());
 		if(CountTag>0) {
-			List<String> tagList=dao.commuSelectTagName(lno); //서울,서울여행 이니까 #붙여야됨
+			List<String> tagList=dao.commuSelectTagName(map.get("lno").toString()); //서울,서울여행 이니까 #붙여야됨
 			List<String> sharptTagList = new Vector<>();
 			for(String tag:tagList) {
 				String sharpTag="#"+tag; //#서울을 붙이기
@@ -190,6 +190,9 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 			}
 			dto.setTname(sharptTagList);
 		}
+		//좋아요 셋팅
+		if(dao.commuLikeSelect(map)==1) dto.setIslike(true);
+		else dto.setIslike(false);
 		return dto;
 	}
 	

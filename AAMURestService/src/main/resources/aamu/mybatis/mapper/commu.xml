@@ -74,7 +74,7 @@
 	-->
 	
 	<!-- 글 하나 뿌려주는 용-->
-	<select id="commuSelectOne" resultType="commuDTO" parameterType="String">
+	<select id="commuSelectOne" resultType="commuDTO" parameterType="Map">
 		SELECT c.*,cp.contentid,p.title FROM community c
 		JOIN commuplace cp ON c.lno=cp.lno 
 		JOIN places p ON cp.contentid=p.contentid 
