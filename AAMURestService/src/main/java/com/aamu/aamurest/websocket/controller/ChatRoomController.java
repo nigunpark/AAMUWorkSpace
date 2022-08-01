@@ -3,6 +3,9 @@ package com.aamu.aamurest.websocket.controller;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Vector;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +20,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.aamu.aamurest.user.service.ChatRoomDTO;
 import com.aamu.aamurest.user.service.ChatingMessageDTO;
+import com.aamu.aamurest.util.FileUploadUtil;
 
 @RestController
 @RequestMapping("/chat")
@@ -27,8 +31,14 @@ public class ChatRoomController {
 	
 	//채팅방 목록 조회
 	@GetMapping(value = "/rooms")
-    public List<ChatRoomDTO> rooms(@RequestParam Map map){
-        return template.selectList("chatroomslist", map);
+    public List<ChatRoomDTO> rooms(@RequestParam Map map,HttpServletRequest req){
+		List<ChatRoomDTO> rooms = new Vector<>();
+		rooms = template.selectList("chatroomslist", map);
+		for(ChatRoomDTO dto : rooms) {
+			dto.setFrompro(FileUploadUtil.requestOneFile(dto.getFrompro(), "/resources/userUpload", req));
+			dto.setTopro(FileUploadUtil.requestOneFile(dto.getTopro(), "/resources/userUpload", req));
+		}
+        return rooms;
     }
 	
 	//채팅방 개설
@@ -49,7 +59,13 @@ public class ChatRoomController {
 	
 	//채팅방 조회
 	@GetMapping("/room")
-    public List<ChatingMessageDTO> getRoom(@RequestParam Map map){
-        return template.selectList("chatroomslistone", map);
+    public List<ChatingMessageDTO> getRoom(@RequestParam Map map,HttpServletRequest req){
+		
+		List<ChatingMessageDTO> rooms = new Vector<>();
+		rooms = template.selectList("chatroomslistone", map);
+		for(ChatingMessageDTO dto : rooms) {
+			dto.setAuthpro(FileUploadUtil.requestOneFile(dto.getAuthpro(), "/resources/userUpload", req));
+		}
+        return rooms;
     }
 }
