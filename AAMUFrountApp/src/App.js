@@ -17,19 +17,27 @@ import JoinStep1 from "./components/Join/JoinStep1.js";
 import JoinStep2 from "./components/Join/JoinStep2.js";
 import SearchList from "./components/Insta/SearchList";
 import Chat from "./components/Chat/Chat";
-
 import QnA from "./components/QnA/QnA";
-
 import CommentSearch from "./components/Insta/ModalGroup/Comment/CommentSearch";
 import QnADetail from "./components/QnA/QnADetail";
 import QnAWrite from "./components/QnA/QnAWrite";
 import QnAEdit from "./components/QnA/QnAEdit";
-
+import SockJS from "sockjs-client";
+import * as StompJs from "@stomp/stompjs";
+import { useDispatch } from "react-redux";
+import { addForChatInfo } from "./redux/store";
 function App() {
+  let dispatch = useDispatch();
   let location = useLocation();
+  const client = useRef({});
   useEffect(() => {
     changeLocation(location, setWhereUrl);
   }, [location]);
+  useEffect(() => {
+    if (sessionStorage.getItem("username") !== null) {
+      connect();
+    }
+  }, [sessionStorage.getItem("username")]);
   const [scrollNav, setScrollNav] = useState(false);
   const [whereUrl, setWhereUrl] = useState(false);
   const [searchb, setSearchb] = useState([]);
@@ -41,8 +49,40 @@ function App() {
     if (window.scrollY > 950 && window.scrollY < 2500) setScrollNav(true);
     else setScrollNav(false);
   };
-
   window.addEventListener("scroll", handleScroll);
+
+  const subscribe = () => {
+    client.current.subscribe(`/notification/${sessionStorage.getItem("username")}`, ({ body }) => {
+      // setChatMessages((_chatMessages) => [..._chatMessages, JSON.parse(body)]);
+      console.log("body", body);
+    });
+  };
+  //채팅연결
+  const connect = () => {
+    // client.current = new StompJs.Client();
+    client.current = new StompJs.Client({
+      brokerURL: "ws://192.168.0.19:8080/aamurest/ws/chat/websocket",
+      // connectHeaders: {
+      //   "auth-token": "spring-chat-auth-token",
+      // },
+      debug: function (str) {
+        console.log(str);
+      },
+      // reconnectDelay: 5000,
+      // heartbeatIncoming: 4000,
+      // heartbeatOutgoing: 4000,
+      onConnect: () => {
+        console.log("connect됨");
+        subscribe();
+      },
+      onStompError: (frame) => {
+        console.error("error", frame);
+      },
+    });
+    dispatch(addForChatInfo({ client: client.current }));
+    console.log("curr", client.current);
+    client.current.activate();
+  };
 
   return (
     <div>
