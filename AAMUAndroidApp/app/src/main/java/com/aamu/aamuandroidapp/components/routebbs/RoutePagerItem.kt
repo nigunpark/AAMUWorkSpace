@@ -80,7 +80,7 @@ fun RoutePagerItem(
             Image(
                 painter = rememberAsyncImagePainter(
                     model = ImageRequest.Builder(LocalContext.current)
-                        .data(bbs.photo?.get(0) ?: R.drawable.no_image)
+                        .data(bbs.photo?.getOrNull(0) ?: R.drawable.no_image)
                         .crossfade(true)
                         .build(),
                     contentScale = ContentScale.Crop

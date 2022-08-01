@@ -20,11 +20,11 @@ list,
   comment,
   setComment,
   setcommentModal,
-  setcomments,
-  setForReRender,
-  forReRender,
+  setcomments
+  ,forReRender,
+   setForReRender
+
 }) {
-    console.log(list);
   let menuRef = useRef();
   let replyRef = useRef();
   let commentRef1 = useRef();
@@ -51,7 +51,31 @@ list,
     slidesToShow: 1,
     slidesToScroll: 1,
   };
-  function fillLike(setForReRender, forReRender) {
+
+
+  function commentModal2(setcomments) {
+    console.log("searchb.eelno", list.lno);
+    // const copyFeedComments = [...comments];//feedComments에 담겨있던 댓글 받아옴
+    // copyFeedComments.push(comment);//copyFeedComments에 있는 기존 댓글에 push하기 위함
+    // setcomments(copyFeedComments);//copyFeedComments 담겨있을 comment를 setfeedComments로 변경
+    let token = sessionStorage.getItem("token");
+    axios
+      .get(`/aamurest/gram/SelectOne/${list.lno}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((resp) => {
+        console.log(resp.data)
+        setcomments(resp.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  // const [forReRender, setForReRender] = useState(false);
+  function fillLike(setForReRender,forReRender) {
     //백이랑 인스타 리스드를 뿌려주기 위한 axios
 
     let token = sessionStorage.getItem("token");
@@ -59,10 +83,6 @@ list,
       .get("/aamurest/gram/like", {
         headers: {
           Authorization: `Bearer ${token}`,
-        },
-        params: {
-          lno: parseInt(list.lno),
-          id: sessionStorage.getItem("username"),
         },
       })
       .then((resp) => {
@@ -101,7 +121,7 @@ list,
         console.log("resp.data", resp.data.reply);
         const copyComments = [...replyOne];
         setcomments(copyComments);
-        // commentModal(setcomments)
+        commentModal2(setcomments)
       })
       .catch((error) => {
         console.log(error);
@@ -113,7 +133,7 @@ list,
   const CommentList = ({ list }) => {
     return (
       <div className="recommend-contents">
-        <img className="likeimg" src="/img/bk.jpg" alt="추사" />
+        <img className="likeimg" src={list.userprofile} alt="추사" />
         <div
           style={{
             width: "100%",
@@ -146,7 +166,7 @@ list,
                 }}
               ></i>
             )}
-            <i class="fa-regular fa-trash-can"></i>
+            <i className="fa-regular fa-trash-can"></i>
           </div>
           <div style={{ fontSize: "10px", color: "#a5a5a5", marginTop: "8px" }}>
             <p className="postDate">
@@ -198,7 +218,7 @@ list,
               <div className="search-contents">
                 <div className="gradient">
                   <img
-                    src="'/img/bk.jpg ' ?? '/images/user.jpg'"
+                    src={list.userprofile}
                     alt="프사"
                     onError={(e) => {
                       e.target.src = "/images/user.jpg";
@@ -226,7 +246,7 @@ list,
                 <div className="recommend-contents">
                   <img
                     className="userimg"
-                    src="'/img/bk.jpg ' ?? '/images/user.jpg'"
+                    src={list.userprofile}
                     alt="프사"
                     onError={(e) => {
                       e.target.src = "/images/user.jpg";
@@ -293,7 +313,7 @@ list,
                   className="heart-icon"
                   onClick={(e) => {
                     e.stopPropagation();
-                    fillLike(setForReRender, forReRender);
+                    fillLike(setForReRender,forReRender);
                   }}
                 >
                   {list.islike ? (
@@ -321,8 +341,8 @@ list,
                 <h3>{dayjs(new Date(list.postdate)).format("YYYY/MM/DD")}</h3>
               </div>
             </div>
-            <div className="comment">
-              <input
+            <div className="comment1">
+            <input
                 type="text"
                 ref={replyRef}
                 className="inputComment_"

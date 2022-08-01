@@ -10,11 +10,12 @@ const Modal = ({val,setModalShow,seteditModal , setlist}) => {
     let editRef = useRef();
     const [goEdit, setgoEdit] = useState(false);
     const [loading, setloading] = useState(false);
+    const [godown, setgodown] = useState(false);
     
 
     function menuModalRef(e){//메뉴 모달 나왔을때 주변 눌러도 꺼지게 만들기
         e.stopPropagation();
-        if (e.target != menuRef.current) setgoEdit(false);
+        if (e.target === menuRef.current) setModalShow(false);
         
     }
     
@@ -61,13 +62,13 @@ const Modal = ({val,setModalShow,seteditModal , setlist}) => {
       }
   return (
     <Container >
-        <Overlay>
+        <Overlay ref={menuRef} >
             <ModalWrap >
-                <Contents  ref={menuRef} >
+                <Contents  >
                         <Button type="button" className='edit' ref={editRef} onClick={(e)=>{e.stopPropagation(); setModalShow(false); seteditModal(true) }}>수정하기</Button>
                        
                         <Button type="button" className='delete' onClick={(e)=>{e.stopPropagation(); setModalShow(false);   deleteOne() }}>삭제하기</Button>
-                        <Button type="button" className='cancel'>취소하기</Button>    
+                        <Button type="button" className='cancel' onClick={()=>{setModalShow(false)}}>취소하기</Button>    
                                   
                 </Contents>
             </ModalWrap>

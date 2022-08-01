@@ -634,4 +634,9 @@ public class MainServiceImpl implements MainService{
 		
 		return dao.searchMostRoute(map);
 	}
+	@Override
+	public List<String> searchTopPlaces(Map map) {
+		
+		return dao.searchTopPlaces(map);
+	}
 }

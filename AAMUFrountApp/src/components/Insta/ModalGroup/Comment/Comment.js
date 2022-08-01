@@ -15,14 +15,7 @@ import "../Upload/UploadSwiper.css";
 import dayjs from "dayjs";
 import { CommentsDisabled } from "@mui/icons-material";
 
-function Comment({
-  val,
-  setlist,
-  forReRender,
-  setForReRender,
-  seteditModal,
-  setcommentModal,
-}) {
+function Comment({ val, setlist, forReRender, setForReRender, seteditModal, setcommentModal }) {
   let menuRef = useRef();
   let replyRef = useRef();
   let commentRef = useRef();
@@ -30,6 +23,7 @@ function Comment({
   const [modalShow, setModalShow] = useState(false);
   const [reply, setReply] = useState(false);
   let [comment, setComment] = useState("");
+  const [replyOne, setreplyOne] = useState("");
 
   let [isValid, setisValid] = useState(false);
 
@@ -54,6 +48,7 @@ function Comment({
       })
       .then((resp) => {
         setcomments(resp.data.commuCommentList);
+        console.log("cno", comments);
       })
       .catch((error) => {
         console.log(error);
@@ -132,28 +127,38 @@ function Comment({
     setComment(""); //사용자 댓글창을 빈 댓글 창으로 초기화
   }
 
+  const handleonChange = (e) => {
+    setreplyOne("comments.cno", comments.cno);
+  };
+
   let [deleteOne1, setdeleteOne1] = useState(false);
-//   let [cno, setCno] = useState();
-  function deleteOne(cno) {
-    //업로드 버튼 누르고 화면 새로고침
+  let [cno, setCno] = useState();
+
+  const id = sessionStorage.getItem("username");
+
+  function deleteOne(replyOne) {
     let token = sessionStorage.getItem("token");
+    // setcomments(comments.filter(recommendContents =>{
+    //   return recommendContents.id !== id;
+    // }))commuCommentList
+    console.log("val.lno", val.lno);
+    console.log("val.cno", replyOne);
     axios
-      .delete(
-        "/aamurest/gram/comment/edit",
-        {
-          lno: val.lno,
-          cno: val.cno,
+      .delete("/aamurest/gram/comment/edit", {
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      )
+        params: {
+          lno: val.lno,
+          cno: parseInt(replyOne),
+        },
+      })
       .then((resp) => {
+        console.log(resp.data);
         setdeleteOne1(resp.data); //성공 여부가 온다 true false
         // alert('삭제되었습니다!')
-        feedList(setlist, setloading);
+        // feedList(setlist, setloading);
+        commentModal(setcomments);
       })
       .catch((error) => {
         console.log(error);
@@ -162,8 +167,14 @@ function Comment({
 
   let CommentList = ({ val }) => {
     return (
-      <div className="recommend-contents">
-        <img className="likeimg" src="./img/bk.jpg" alt="추사" />
+      <div
+        className="recommendContents"
+        key={val.id}
+        onClick={(e) => {
+          setreplyOne(val.cno);
+        }}
+      >
+        <img className="likeimg" src={val.userprofile} alt="추사" />
         <div
           style={{
             width: "100%",
@@ -197,16 +208,14 @@ function Comment({
               ></i>
             )}
             <i
-              class="fa-regular fa-trash-can"
-              onClick={() => {
-                deleteOne();
+              className="fa-regular fa-trash-can"
+              onClick={(e) => {
+                deleteOne(replyOne);
               }}
             />
           </div>
           <div style={{ fontSize: "10px", color: "#a5a5a5", marginTop: "8px" }}>
-            <p className="postDate">
-              {dayjs(val.postdate).format("YYYY/MM/DD")}
-            </p>
+            <p className="postDate">{dayjs(val.postdate).format("YYYY/MM/DD")}</p>
           </div>
         </div>
       </div>
@@ -253,7 +262,7 @@ function Comment({
               <div className="search-contents">
                 <div className="gradient">
                   <img
-                    src="'/img/bk.jpg ' ?? '/images/user.jpg'"
+                    src={val.userprofile}
                     alt="프사"
                     onError={(e) => {
                       e.target.src = "/images/user.jpg";
@@ -287,10 +296,10 @@ function Comment({
             </div>
             <div className="recommend">
               <div className="recommend-down">
-                <div className="recommend-contents">
+                <div className="recommendContents">
                   <img
                     className="userimg"
-                    src="'/img/bk.jpg ' ?? '/images/user.jpg'"
+                    src={val.userprofile}
                     alt="프사"
                     onError={(e) => {
                       e.target.src = "/images/user.jpg";
@@ -317,14 +326,10 @@ function Comment({
                           <span> {val.ctitle}</span>
                         </p>
                         <p className="userName">
-                          <strong
-                            style={{ fontSize: "13px", marginRight: "5px" }}
-                          >
+                          <strong style={{ fontSize: "13px", marginRight: "5px" }}>
                             {sessionStorage.getItem("username")}
                           </strong>
-                          <span style={{ fontFamily: "normal" }}>
-                            {val.content}
-                          </span>
+                          <span style={{ fontFamily: "normal" }}>{val.content}</span>
                         </p>
                       </div>
                     </div>
@@ -361,10 +366,7 @@ function Comment({
                   }}
                 >
                   {val.islike ? (
-                    <i
-                      className="fa-solid fa-heart fa-2x"
-                      style={{ color: "red" }}
-                    ></i>
+                    <i className="fa-solid fa-heart fa-2x" style={{ color: "red" }}></i>
                   ) : (
                     <i className="fa-regular fa-heart fa-2x"></i>
                   )}
@@ -405,9 +407,7 @@ function Comment({
               <button
                 className={
                   //클래스명을 comment창의 글자 길에 따라서 다르게 주면서 버튼색에 css디자인을 줄 수 있음
-                  comment.length > 0
-                    ? "submitCommentActive"
-                    : "submitCommentInactive"
+                  comment.length > 0 ? "submitCommentActive" : "submitCommentInactive"
                 }
                 onClick={() => {
                   post(comment);

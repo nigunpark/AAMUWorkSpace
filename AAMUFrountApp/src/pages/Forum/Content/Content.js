@@ -16,6 +16,7 @@ const Content = () => {
   let token = sessionStorage.getItem("token");
   let [list, setList] = useState("");
   const [showCBModal, setShowCBModal] = useState(false);
+  const [detailOne, setDetail] = useState({});
   function chatbotModal() {
     if (reduxState.forChatBotData.bool === true) {
       setShowCBModal(true);
@@ -60,6 +61,7 @@ const Content = () => {
             {listData.map((val, idx) => {
               return (
                 <ContentItem
+                  // setDetail={setDetail}
                   detail={val}
                   index={idx}
                   setShowCBModal={setShowCBModal}
@@ -79,6 +81,15 @@ const Content = () => {
           // postDay={new Date(reduxState.forChatBotData.planner.routeDate)}
         />
       )}
+      {/* {isOpen == true ? (
+        <DetailModal
+          // detailOne={detailOne}
+          postDay={postDay}
+          setShowCBModal={setShowCBModal}
+          setIsOpen={setIsOpen}
+          detailRbn={detailRbn}
+        />
+      ) : null} */}
     </div>
   );
 };

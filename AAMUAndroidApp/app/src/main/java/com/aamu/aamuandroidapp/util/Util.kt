@@ -89,7 +89,7 @@ lateinit var stomp : CustomStompClient
 private lateinit var stompConnection: Disposable
 
 fun stompConnection() {
-    val url = "ws://192.168.45.107:8080/aamurest/ws/chat/websocket"
+    val url = "ws://192.168.0.19:8080/aamurest/ws/chat/websocket"
     val intervalMillis = 1000L
     val client = OkHttpClient.Builder()
         .readTimeout(10, TimeUnit.SECONDS)
@@ -105,7 +105,6 @@ fun stompConnection() {
         when (it.type) {
             Event.Type.OPENED -> {
                 Log.i("com.aamu.aamu","열림")
-
             }
             Event.Type.CLOSED -> {
                 Log.i("com.aamu.aamu","닫힘")

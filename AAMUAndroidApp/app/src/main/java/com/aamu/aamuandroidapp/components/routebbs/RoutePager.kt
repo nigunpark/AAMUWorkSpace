@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.aamu.aamuandroidapp.ui.theme.cyan200
 import com.aamu.aamuandroidapp.util.carousel.Pager
 import com.aamu.aamuandroidapp.util.carousel.PagerState
 import kotlin.math.abs
@@ -57,7 +58,8 @@ fun RoutePager(
     } else {
         if (error.isNullOrEmpty()) {
             CircularProgressIndicator(
-                modifier = Modifier.padding(24.dp)
+                modifier = Modifier.padding(24.dp),
+                color = cyan200
             )
         } else {
             Text(

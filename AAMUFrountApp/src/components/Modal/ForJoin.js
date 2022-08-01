@@ -13,7 +13,7 @@ const flip = keyframes`
 
 const Container = styled.div`
   position: fixed;
-  background-image: url("/images/tropical.jpg");
+  background-image: url("/images/background.png");
   background-repeat: no-repeat;
   background-size: cover;
   top: 0;
