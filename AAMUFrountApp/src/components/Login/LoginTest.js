@@ -1,10 +1,5 @@
 import styled from "@emotion/styled";
-import {
-  faHouse,
-  faKey,
-  faUnlockKeyhole,
-  faUser,
-} from "@fortawesome/free-solid-svg-icons";
+import { faHouse, faKey, faUnlockKeyhole, faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Typography } from "@mui/material";
 import axios from "axios";
@@ -32,10 +27,7 @@ const LoginTest = () => {
           </Link>
           <Title>
             <div className="loginTitle__container">
-              <FontAwesomeIcon
-                icon={faUnlockKeyhole}
-                className="loginLockIcon"
-              />
+              <FontAwesomeIcon icon={faUnlockKeyhole} className="loginLockIcon" />
               <h1>Login</h1>
             </div>
             <p style={{ color: "gray" }}>welcome to AAMU</p>
@@ -131,11 +123,7 @@ function Copyright(props) {
   return (
     <Typography variant="body2" color="text.warning" align="center" {...props}>
       {"Copyright © "}
-      <Link
-        color="inherit"
-        to="https://localhost:3000/"
-        style={{ color: "var(--orange)" }}
-      >
+      <Link color="inherit" to="https://localhost:3000/" style={{ color: "var(--orange)" }}>
         AAMU
       </Link>{" "}
       {new Date().getFullYear()}
@@ -152,10 +140,7 @@ const login = (idRef, pwdRef, navigate, setShowValid, dispatch) => {
       idRef.current.parentElement.classList.remove("validation");
     }, 1100);
     return false;
-  } else if (
-    idRef.current.value.length !== 0 &&
-    pwdRef.current.value.length === 0
-  ) {
+  } else if (idRef.current.value.length !== 0 && pwdRef.current.value.length === 0) {
     pwdRef.current.parentElement.classList.add("validation");
     pwdRef.current.focus();
     setTimeout(() => {
@@ -193,9 +178,9 @@ const flip = keyframes`
 `;
 const Container = styled.div`
   position: fixed;
-  // background-image: url("/images/travel.jpg");
-  // background-repeat: no-repeat;
-  // background-size: cover;
+  // background-image: url("/images/loginBg.png");
+  background-repeat: no-repeat;
+  background-size: cover;
   top: 0;
   left: 0;
   width: 100%;
