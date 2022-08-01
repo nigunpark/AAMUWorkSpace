@@ -11,7 +11,8 @@ const ContentItem = ({ detail, index, setShowCBModal, isOpen, setIsOpen }) => {
   //   console.log("리뷰 데이터 :", detail.reviewList);
 
   const detailPostDate = new Date(detail.postdate);
-
+  const postDay = dateFormat(detailPostDate);
+  const detailRbn = detail.rbn; // rbn 값 저장 잘 됨
   function dateFormat(date) {
     let month = date.getMonth() + 1;
     let day = date.getDate();
@@ -19,9 +20,6 @@ const ContentItem = ({ detail, index, setShowCBModal, isOpen, setIsOpen }) => {
     day = day >= 10 ? day : "0" + day;
     return date.getFullYear() + "-" + month + "-" + day;
   }
-  const postDay = dateFormat(detailPostDate);
-
-  const detailRbn = detail.rbn; // rbn 값 저장 잘 됨
 
   const onClickModal = () => {
     setIsOpen(true);
@@ -41,11 +39,7 @@ const ContentItem = ({ detail, index, setShowCBModal, isOpen, setIsOpen }) => {
           <figure className="card__item__info_minCon">
             <div className="card__item__img-container_minCon">
               <img
-                src={
-                  detail.photo[0] == undefined
-                    ? "/images/no-image.jpg"
-                    : detail.photo[0]
-                }
+                src={detail.photo[0] == undefined ? "/images/no-image.jpg" : detail.photo[0]}
                 alt="카드이미지"
                 className="card__item__img_minCon"
               />
@@ -86,9 +80,9 @@ const ContentItem = ({ detail, index, setShowCBModal, isOpen, setIsOpen }) => {
       {isOpen == true ? (
         <DetailModal
           postDay={postDay}
+          detailRbn={detailRbn}
           setShowCBModal={setShowCBModal}
           setIsOpen={setIsOpen}
-          detailRbn={detailRbn}
         />
       ) : null}
     </>
