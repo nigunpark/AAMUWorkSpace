@@ -175,8 +175,9 @@ public class CommuController {
 	public List<String> commuTag(@RequestParam Map map){
 		return commuService.commuTag(map);
 	}
-
-	//글 하나 뿌려주는 용
+	
+	/*
+	//글 하나 뿌려주는 용----------------------------원본
 	@GetMapping("/gram/SelectOne/{lno}")
 	public CommuDTO commuSelectOne(@PathVariable String lno, HttpServletRequest req) {
 		System.out.println("셀렉트원lno:"+lno);
@@ -195,9 +196,10 @@ public class CommuController {
 		dto.setCommuCommentList(commentList);
 		return dto;
 	}
+	*/ 
 	
-	/*
-	 //글 하나 뿌려주는 용
+	
+	//글 하나 뿌려주는 용 -수정용
 	@GetMapping("/gram/SelectOne")
 	public CommuDTO commuSelectOne(@RequestParam Map map, HttpServletRequest req) {
 		System.out.println("셀렉트원 map:"+map);
@@ -205,18 +207,18 @@ public class CommuController {
 		//모든 사진 가져와서 dto에 셋팅
 		dto.setPhoto(FileUploadUtil.requestFilePath(commuService.commuSelectPhotoList(dto.getLno()), "/resources/commuUpload", req));
 		//글쓴이-프로필 사진 가져와서 dto에 셋팅
-		dto.setUserprofile(FileUploadUtil.requestOneFile(commuService.commuSelectUserProf(dto.getId()), "/resources/commuUpload", req));
+		dto.setUserprofile(FileUploadUtil.requestOneFile(commuService.commuSelectUserProf(dto.getId()), "/resources/userUpload", req));
 		//모든 댓글 가져오기
-		List<CommuCommentDTO> commentList=commuService.commuCommentList(lno);
+		List<CommuCommentDTO> commentList=commuService.commuCommentList(map.get("lno").toString());
 		//댓글-프로필 사진 가져와서 dto에 셋팅
 		for(CommuCommentDTO commentDto:commentList) {
 			//System.out.println(commuService.commuSelectUserProf(commentDto.getId()));
-			commentDto.setUserprofile(FileUploadUtil.requestOneFile(commuService.commuSelectUserProf(commentDto.getId()), "/resources/commuUpload", req));
+			commentDto.setUserprofile(FileUploadUtil.requestOneFile(commuService.commuSelectUserProf(commentDto.getId()), "/resources/userUpload", req));
 		}
 		dto.setCommuCommentList(commentList);
 		return dto;
 	}
-	 */
+	
 
 	//글 수정용: List ver
 	/*

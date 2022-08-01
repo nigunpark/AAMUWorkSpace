@@ -44,7 +44,7 @@ public interface CommuService<T> {
 	List<String> commuTag(Map map);
 
 	//글 하나 뿌려주는 용
-	CommuDTO commuSelectOne(String lno);
+	CommuDTO commuSelectOne(Map map);
 
 	//글 하나 뿌려주는 용_모든 댓글 뿌려주기
 	List<CommuCommentDTO> commuCommentList(String lno);

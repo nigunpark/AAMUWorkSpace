@@ -72,8 +72,8 @@ public class CommuDAO {
 	*/
 
 	//글 하나 뿌려주는 용
-	public CommuDTO commuSelectOne(String lno) {
-		return template.selectOne("commuSelectOne",lno);
+	public CommuDTO commuSelectOne(Map map) {
+		return template.selectOne("commuSelectOne",map);
 	}
 
 	//글 하나 뿌려주는 용_모든 댓글 뿌려주기

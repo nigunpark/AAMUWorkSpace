@@ -17,7 +17,7 @@ import com.aamu.aamuandroidapp.ui.theme.typography
 import kotlin.random.Random
 
 @Composable
-fun DatingChatItem(album: Album) {
+fun AAMUChatItem(album: Album) {
     Card(
         modifier = Modifier
             .padding(6.dp)
