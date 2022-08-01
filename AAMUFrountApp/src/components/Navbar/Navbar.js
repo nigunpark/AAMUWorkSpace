@@ -147,7 +147,6 @@ function UserBadge() {
   };
   window.addEventListener("click", handleUserModal);
   let reduxState = useSelector((state) => state);
-
   return (
     <>
       <Container>
@@ -156,7 +155,7 @@ function UserBadge() {
             style={{ boxShadow: "var(--shadow)" }}
             ref={userRef}
             className="userImg"
-            src={reduxState.profileImg ?? "/images/user.jpg"}
+            src={sessionStorage.getItem("userimg") ?? "/images/user.jpg"}
             alt="유저이미지"
             onError={(e) => {
               e.target.src = "/images/user.jpg";
