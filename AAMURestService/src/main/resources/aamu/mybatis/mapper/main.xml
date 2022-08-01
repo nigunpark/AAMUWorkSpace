@@ -144,5 +144,8 @@
 		SELECT contentid FROM route WHERE contentid in
 		(select contentid from places where areacode=#{areacode} and contenttypeid=#{contenttypeid}) and ROWNUM = ${rownum} group by contentid ORDER BY count(contentid) DESC
 	</select>
-
+	<select id="searchTopPlaces" parameterType="Map" resultType="String">
+		SELECT contentid FROM route WHERE contentid in
+		(select contentid from places where areacode=#{areacode} and contenttypeid=#{contenttypeid}) and ROWNUM = ${rownum} group by contentid ORDER BY count(contentid) DESC
+	</select>
 </mapper>
