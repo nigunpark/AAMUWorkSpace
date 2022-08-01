@@ -161,7 +161,7 @@ function User({
           }}
         />
         <div>
-          <p className="user-id">{sessionStorage.getItem("username")}</p>
+          <p className="user-id">{val.id}</p>
           <p className="user-name">김영현</p>
         </div>
 
