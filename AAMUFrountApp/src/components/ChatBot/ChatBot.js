@@ -29,9 +29,6 @@ const ChatBot = ({ showChatBot, chatArr }) => {
                   <span
                     // style={val.rbn !== null ? { color: "blue" } : { color: "black" }}
                     className="chatBotBox__span"
-                    onClick={() => {
-                      goRecommend(val);
-                    }}
                   >
                     {val.message}
                     <br />
@@ -41,6 +38,18 @@ const ChatBot = ({ showChatBot, chatArr }) => {
                       <a href={`https://place.map.kakao.com/${val.kakaokey}`} target="_blank">
                         <span className="chatBotBox__innerSpan">{val.title}</span>
                       </a>
+                    </>
+                  )}
+                  {val.route !== undefined && (
+                    <>
+                      <span
+                        className="chatBotBox__innerSpan"
+                        onClick={() => {
+                          goRecommend(val);
+                        }}
+                      >
+                        {val.route}
+                      </span>
                     </>
                   )}
                 </p>
