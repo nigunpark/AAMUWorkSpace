@@ -19,19 +19,23 @@ import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.aamu.aamuandroidapp.R
+import com.aamu.aamuandroidapp.data.api.response.AAMUBBSResponse
+import com.aamu.aamuandroidapp.fragment.main.sub.RouteBBSHomeInteractionEvents
 import com.aamu.aamuandroidapp.ui.theme.cyan200
 import com.aamu.aamuandroidapp.ui.theme.cyan700
 import com.aamu.aamuandroidapp.ui.theme.extensions.generateDominantColorState
 import com.aamu.aamuandroidapp.ui.theme.modifiers.verticalGradientBackground
 import com.aamu.aamuandroidapp.ui.theme.typography
 
+
+
 @Composable
-fun RouteBBSScreen() {
-    RouteBBSScreenContent()
+fun RouteBBSScreen(routeBBSHomeInteractionEvents: (RouteBBSHomeInteractionEvents) -> Unit) {
+    RouteBBSScreenContent(routeBBSHomeInteractionEvents)
 }
 
 @Composable
-fun RouteBBSScreenContent() {
+fun RouteBBSScreenContent(routeBBSHomeInteractionEvents: (RouteBBSHomeInteractionEvents) -> Unit) {
     //TODO dynamic gradient from poster via coil right now It's just getting from local images
     val imageId = remember { mutableStateOf(R.drawable.camelia) }
     val context = LocalContext.current
@@ -57,6 +61,8 @@ fun RouteBBSScreenContent() {
                 modifier = Modifier.padding(16.dp)
             )
         }
-        item { RoutePager(imageId) }
+        item { RoutePager(imageId,routeBBSHomeInteractionEvents) }
     }
 }
+
+
