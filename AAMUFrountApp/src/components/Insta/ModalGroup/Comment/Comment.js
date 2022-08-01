@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import React, { useEffect, useRef, useState } from "react";
-import Profile from "../Profile";
+// import Profile from "../Profile";
 import MenuModal from "../MenuModal";
 import axios from "axios";
 import "../Slider/slick.css";
@@ -84,7 +84,7 @@ function Comment({ val, setlist, forReRender, setForReRender, seteditModal, setc
         },
         params: {
           lno: parseInt(val.lno),
-          id: val.id,
+          id: sessionStorage.getItem('username'),
         },
       })
       .then((resp) => {
@@ -108,7 +108,7 @@ function Comment({ val, setlist, forReRender, setForReRender, seteditModal, setc
       .post(
         "/aamurest/gram/comment/edit",
         {
-          id: val.id,
+          id: sessionStorage.getItem('username'),
           reply: comment,
           lno: val.lno,
         },
@@ -139,15 +139,34 @@ function Comment({ val, setlist, forReRender, setForReRender, seteditModal, setc
   let [deleteOne1, setdeleteOne1] = useState(false);
   let [cno, setCno] = useState();
 
- 
+  function feedList() {
+    //백이랑 인스타 리스드를 뿌려주기 위한 axios
+    let token = sessionStorage.getItem("token");
+    axios
+      .get("/aamurest/gram/selectList", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        params: {
+          id: sessionStorage.getItem("username"),
+        },
+      })
+      .then((resp) => {
+        console.log(resp.data);
+        setlist(resp.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
 
-  function deleteOne(replyOne) {
+  function deleteOne(replyOne,cno) {
     let token = sessionStorage.getItem("token");
     // setcomments(comments.filter(recommendContents =>{
     //   return recommendContents.id !== id;
     // }))commuCommentList
     console.log("val.lno", val.lno);
-    console.log("val.cno", replyOne);
+    console.log("val.cno", cno);
     axios
       .delete("/aamurest/gram/comment/edit", {
         headers: {
@@ -155,7 +174,7 @@ function Comment({ val, setlist, forReRender, setForReRender, seteditModal, setc
         },
         params: {
           lno: val.lno,
-          cno: parseInt(replyOne),
+          cno: cno,
         },
       })
       .then((resp) => {
@@ -164,6 +183,7 @@ function Comment({ val, setlist, forReRender, setForReRender, seteditModal, setc
         // alert('삭제되었습니다!')
         // feedList(setlist, setloading);
         commentModal(setcomments);
+        feedList()
       })
       .catch((error) => {
         console.log(error);
@@ -174,9 +194,9 @@ function Comment({ val, setlist, forReRender, setForReRender, seteditModal, setc
     return (
       <div
         className="recommendContents"
-        key={val.id}
+        key={sessionStorage.getItem('username')}
         onClick={(e) => {
-          setreplyOne(val.cno);
+          // console.log(val.cno);
         }}
       >
         <img className="likeimg" src={val.userprofile} alt="추사" />
@@ -191,7 +211,7 @@ function Comment({ val, setlist, forReRender, setForReRender, seteditModal, setc
         >
           <div style={{ display: "flex", flexDirection: "row" }}>
             <p className="userName">
-              <strong>{val.id}</strong>
+              <strong>{sessionStorage.getItem('username')}</strong>
             </p>
             <p className="userName">{val.reply}</p>
           </div>
@@ -215,8 +235,9 @@ function Comment({ val, setlist, forReRender, setForReRender, seteditModal, setc
             <i
               className="fa-regular fa-trash-can"
               onClick={(e) => {
-                deleteOne(replyOne);
+                deleteOne(replyOne,val.cno);
               }}
+             
             />
           </div>
           <div style={{ fontSize: "10px", color: "#a5a5a5", marginTop: "8px" }}>
@@ -276,7 +297,7 @@ function Comment({ val, setlist, forReRender, setForReRender, seteditModal, setc
                 </div>
                 <div>
                   <p className="user-id">
-                    <strong>{val.id}</strong>
+                    <strong>{sessionStorage.getItem('username')}</strong>
                   </p>
                 </div>
               </div>
@@ -334,7 +355,7 @@ function Comment({ val, setlist, forReRender, setForReRender, seteditModal, setc
                           <strong
                             style={{ fontSize: "13px", marginRight: "5px" }}
                           >
-                            {val.id}
+                            {sessionStorage.getItem('username')}
                           </strong>
                           <span style={{ fontFamily: "normal" }}>{val.content}</span>
                         </p>

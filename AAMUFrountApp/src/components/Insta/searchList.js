@@ -7,12 +7,12 @@ import CommentSearch from "./ModalGroup/Comment/CommentSearch";
 
 function SearchList({ searchb, inputValue }) {
   let commentRef = useRef();
-  const [list, setList] = useState([]);
+  const [val, setList] = useState([]);
   const [commentModal, setcommentModal] = useState(false);
   let [comment, setComment] = useState("");
   const [comments, setcomments] = useState([]);
 
-  function commentModal1(setcomments, lno,id) {
+  function commentModal1(setcomments, lno) {
     console.log("searchb.eelno", lno);
     // const copyFeedComments = [...comments];//feedComments에 담겨있던 댓글 받아옴
     // copyFeedComments.push(comment);//copyFeedComments에 있는 기존 댓글에 push하기 위함
@@ -24,7 +24,7 @@ function SearchList({ searchb, inputValue }) {
           Authorization: `Bearer ${token}`,
         },
         params:{
-          id:id,
+          id:sessionStorage.getItem('username'),
           lno:lno
         }
       })
@@ -63,7 +63,7 @@ function SearchList({ searchb, inputValue }) {
                 <InstarBox>
                   <InstaImg
                     onClick={(e) => {
-                      commentModal1(setcomments, val.lno,val.id);
+                      commentModal1(setcomments, val.lno);
                       setList(val)
                       setcommentModal(!commentModal);
                     }}
@@ -76,7 +76,7 @@ function SearchList({ searchb, inputValue }) {
           })}
           {commentModal && (
                     <CommentSearch
-                      list={list}
+                    val={val}
                       commentModal={commentModal}
                       comment={comment}
                       setComment={setComment}
