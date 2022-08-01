@@ -85,13 +85,12 @@ public class QNAServiceImpl implements QNAService<QNADTO> {
 		return dao.qnaEdit(map);
 	}
 
-
 	// 조회 수 카운트
 	@Override
 	public int qnaCount(Map map) throws Exception {
 		return dao.qnaCount(map);
 	}
-	
+
 	// 이름 찾기
 	@Override
 	public String findNameByKey(Map map) {
@@ -122,7 +121,7 @@ public class QNAServiceImpl implements QNAService<QNADTO> {
 
 		return affected;
 	}
-	
+
 	// 상세 보기에서 게시물 삭제
 	@Override
 	public int qnaViewDelete(Map map) {
@@ -141,14 +140,14 @@ public class QNAServiceImpl implements QNAService<QNADTO> {
 		// TODO Auto-generated method stub
 		return 0;
 	}
-	
+
 	// 댓글 수정
 	@Override
 	public int answerUpdate(Map map) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
-	
+
 	// 댓글 삭제
 	@Override
 	public int answerDelete(Map map) {

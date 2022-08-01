@@ -193,9 +193,30 @@ public class CommuController {
 			commentDto.setUserprofile(FileUploadUtil.requestOneFile(commuService.commuSelectUserProf(commentDto.getId()), "/resources/commuUpload", req));
 		}
 		dto.setCommuCommentList(commentList);
-		System.out.println("셀렉트원 디티오 넘어가니:"+dto);
 		return dto;
 	}
+	
+	/*
+	 //글 하나 뿌려주는 용
+	@GetMapping("/gram/SelectOne")
+	public CommuDTO commuSelectOne(@RequestParam Map map, HttpServletRequest req) {
+		System.out.println("셀렉트원 map:"+map);
+		CommuDTO dto=commuService.commuSelectOne(map);
+		//모든 사진 가져와서 dto에 셋팅
+		dto.setPhoto(FileUploadUtil.requestFilePath(commuService.commuSelectPhotoList(dto.getLno()), "/resources/commuUpload", req));
+		//글쓴이-프로필 사진 가져와서 dto에 셋팅
+		dto.setUserprofile(FileUploadUtil.requestOneFile(commuService.commuSelectUserProf(dto.getId()), "/resources/commuUpload", req));
+		//모든 댓글 가져오기
+		List<CommuCommentDTO> commentList=commuService.commuCommentList(lno);
+		//댓글-프로필 사진 가져와서 dto에 셋팅
+		for(CommuCommentDTO commentDto:commentList) {
+			//System.out.println(commuService.commuSelectUserProf(commentDto.getId()));
+			commentDto.setUserprofile(FileUploadUtil.requestOneFile(commuService.commuSelectUserProf(commentDto.getId()), "/resources/commuUpload", req));
+		}
+		dto.setCommuCommentList(commentList);
+		return dto;
+	}
+	 */
 
 	//글 수정용: List ver
 	/*
@@ -261,7 +282,7 @@ public class CommuController {
 	//댓글 생성용 - Map ver
 	@PostMapping("/gram/comment/edit")
 	public Map commuCommentInsert(@RequestBody Map map) {
-		System.out.println("댓글생성 reply:"+map.get("reply"));
+		System.out.println("댓글생성 map:"+map);
 		int affected=commuService.commuCommentInsert(map);
 		Map resultMap = new HashMap<> ();
 		if(affected == 1) {
@@ -288,12 +309,16 @@ public class CommuController {
 	//댓글 삭제용
 	@DeleteMapping("/gram/comment/edit")
 	public Map commuCommentDelete(@RequestParam Map map) {
+		System.out.println("댓글 삭제용 map:"+map);
+		System.out.println("댓글 삭제용 cno:"+map.get("cno"));
+		System.out.println("댓글 삭제용 lno:"+map.get("lno"));
 		int affected=commuService.commuCommentDelete(map);
 		//rcount -1
 		//int RcMinusAffected=commuService.commuRcMinusUpdate(map);
 		Map resultMap = new HashMap();
 		if(affected==1) resultMap.put("isSuccess", true);
 		else resultMap.put("isSuccess", false);
+		System.out.println("댓글 resultMap:"+resultMap);
 		return resultMap;
 	}
 

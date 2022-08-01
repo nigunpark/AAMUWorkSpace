@@ -146,4 +146,9 @@ public class MainDAO {
 		return template.selectOne("searchMostRoute", map);
 	}
 
+	public List<String> searchTopPlaces(Map map) {
+
+		return template.selectList("searchTopPlaces", map);
+	}
+
 }

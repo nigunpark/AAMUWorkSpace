@@ -9,10 +9,11 @@ class WebHook(Resource):
         loc = parameters['loc']
         place = parameters['place']
         print('진행하자')
-        if place.find('박')==-1:
-            print('숙소나 여행지')
-            return jsonify({'fulfillmentText': '{} {}searchPlace'.format(loc, parameters['place'])})
-        else:
-            print('경로추천')
-            return jsonify({'fulfillmentText': '{} {}searchRoute'.format(loc, parameters['place'])})
+        if place in parameters:
+            if place.find('박')==-1:
+                print('숙소나 여행지')
+                return jsonify({'fulfillmentText': '{} {}searchPlace'.format(loc, parameters['place'])})
+            else:
+                print('경로추천')
+                return jsonify({'fulfillmentText': '{} {}searchRoute'.format(loc, parameters['place'])})
         #returnStr = '/porum/'+rbn

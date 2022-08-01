@@ -15,7 +15,7 @@ import DetailModal from "./pages/Forum/DetailModal/DetailModal";
 import KakaoRedirectHandler from "./components/Login/Kakao/KakaoRedirectHandler";
 import JoinStep1 from "./components/Join/JoinStep1.js";
 import JoinStep2 from "./components/Join/JoinStep2.js";
-// import SearchList from "./components/Insta/SearchList";
+import SearchList from "./components/Insta/SearchList";
 import Chat from "./components/Chat/Chat";
 
 import QnA from "./components/QnA/QnA";
@@ -78,7 +78,7 @@ function App() {
               />
             }
           />
-          {/* <Route
+          <Route
             path="/Insta/searchList"
             element={
               <SearchList
@@ -92,7 +92,7 @@ function App() {
                 setForReRender={setForReRender}
               />
             }
-          /> */}
+          />
           <Route
             path="/CommentSearch"
             element={<CommentSearch forReRender={forReRender} setForReRender={setForReRender} />}

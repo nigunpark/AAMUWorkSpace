@@ -49,5 +49,7 @@ public interface MainService{
 	String searchPlanner(String message);
 	
 	String searchMostRoute(Map map);
+	
+	List<String> searchTopPlaces(Map map);
 
 }

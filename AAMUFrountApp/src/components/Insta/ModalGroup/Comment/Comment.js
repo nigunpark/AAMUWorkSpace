@@ -23,6 +23,7 @@ function Comment({ val, setlist, forReRender, setForReRender, seteditModal, setc
   const [modalShow, setModalShow] = useState(false);
   const [reply, setReply] = useState(false);
   let [comment, setComment] = useState("");
+  const [replyOne, setreplyOne] = useState("");
 
   let [isValid, setisValid] = useState(false);
 
@@ -47,6 +48,7 @@ function Comment({ val, setlist, forReRender, setForReRender, seteditModal, setc
       })
       .then((resp) => {
         setcomments(resp.data.commuCommentList);
+        console.log("cno", comments);
       })
       .catch((error) => {
         console.log(error);
@@ -125,28 +127,38 @@ function Comment({ val, setlist, forReRender, setForReRender, seteditModal, setc
     setComment(""); //사용자 댓글창을 빈 댓글 창으로 초기화
   }
 
+  const handleonChange = (e) => {
+    setreplyOne("comments.cno", comments.cno);
+  };
+
   let [deleteOne1, setdeleteOne1] = useState(false);
-  //   let [cno, setCno] = useState();
-  function deleteOne(cno) {
-    //업로드 버튼 누르고 화면 새로고침
+  let [cno, setCno] = useState();
+
+  const id = sessionStorage.getItem("username");
+
+  function deleteOne(replyOne) {
     let token = sessionStorage.getItem("token");
+    // setcomments(comments.filter(recommendContents =>{
+    //   return recommendContents.id !== id;
+    // }))commuCommentList
+    console.log("val.lno", val.lno);
+    console.log("val.cno", replyOne);
     axios
-      .delete(
-        "/aamurest/gram/comment/edit",
-        {
-          lno: val.lno,
-          cno: val.cno,
+      .delete("/aamurest/gram/comment/edit", {
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      )
+        params: {
+          lno: val.lno,
+          cno: parseInt(replyOne),
+        },
+      })
       .then((resp) => {
+        console.log(resp.data);
         setdeleteOne1(resp.data); //성공 여부가 온다 true false
         // alert('삭제되었습니다!')
         // feedList(setlist, setloading);
+        commentModal(setcomments);
       })
       .catch((error) => {
         console.log(error);
@@ -155,8 +167,14 @@ function Comment({ val, setlist, forReRender, setForReRender, seteditModal, setc
 
   let CommentList = ({ val }) => {
     return (
-      <div className="recommend-contents">
-        <img className="likeimg" src="./img/bk.jpg" alt="추사" />
+      <div
+        className="recommendContents"
+        key={val.id}
+        onClick={(e) => {
+          setreplyOne(val.cno);
+        }}
+      >
+        <img className="likeimg" src={val.userprofile} alt="추사" />
         <div
           style={{
             width: "100%",
@@ -190,9 +208,9 @@ function Comment({ val, setlist, forReRender, setForReRender, seteditModal, setc
               ></i>
             )}
             <i
-              class="fa-regular fa-trash-can"
-              onClick={() => {
-                deleteOne();
+              className="fa-regular fa-trash-can"
+              onClick={(e) => {
+                deleteOne(replyOne);
               }}
             />
           </div>
@@ -244,7 +262,7 @@ function Comment({ val, setlist, forReRender, setForReRender, seteditModal, setc
               <div className="search-contents">
                 <div className="gradient">
                   <img
-                    src="'/img/bk.jpg ' ?? '/images/user.jpg'"
+                    src={val.userprofile}
                     alt="프사"
                     onError={(e) => {
                       e.target.src = "/images/user.jpg";
@@ -278,10 +296,10 @@ function Comment({ val, setlist, forReRender, setForReRender, seteditModal, setc
             </div>
             <div className="recommend">
               <div className="recommend-down">
-                <div className="recommend-contents">
+                <div className="recommendContents">
                   <img
                     className="userimg"
-                    src="'/img/bk.jpg ' ?? '/images/user.jpg'"
+                    src={val.userprofile}
                     alt="프사"
                     onError={(e) => {
                       e.target.src = "/images/user.jpg";

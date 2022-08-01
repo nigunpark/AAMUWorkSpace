@@ -10,6 +10,7 @@
 				<div class="home-tab">
 					<div class="tab-content tab-content-basic">
 						<!--여기부터 내용을 넣으시오-->
+						<div class="tab-content-top">
 						<form method="post"
 							action="<c:url value="QNAEdit.do?qno=${record.qno}"/>">
 
@@ -25,9 +26,11 @@
 								<textarea class="form-control" rows="10" name="content"
 								 placeholder="내용을 입력하세요." onkeydown="resize(this)" onkeyup="resize(this)">${record.content }</textarea>
 							</div>
-							
-							<button type="submit" class="btn btn-primary text-white">등록</button>
+							<div class="text-center justify-content-center">
+							<button type="submit" class="btn btn-info text-white">수정 완료</button>
+							</div>
 						</form>
+						</div>
 						<!--------------------- 내용의 끝 부분입니다------------------------------------>
 					</div>
 				</div>
@@ -45,6 +48,13 @@ textarea.form-control{
     min-height: 10rem;
     overflow-y: hidden;
     resize: none;
+}
+
+.tab-content-top {
+padding: 1.5rem 2.187rem 1.5rem 3.5rem;
+	border-radius: 20px;
+	-webkit-box-shadow: 0 0 0 0 rgb(90 113 208/ 11%), 0 4px 16px 0
+		rgb(167 175 183/ 33%);
 }
 
 </style>

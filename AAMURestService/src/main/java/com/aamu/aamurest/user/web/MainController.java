@@ -615,11 +615,12 @@ public class MainController {
 			rbn = service.searchPlanner(message);
 			if(rbn == null) message = "죄송합니다 알맞은 플래너가 없습니다.";
 			else {
-				message = message+"로 추천하는 여행 플래너 입니다!";
+				returnMap.put("route", message+" (CLICK)");
 				returnMap.put("rbn",rbn);
 				int rbnInt = Integer.parseInt(rbn);
 				PlannerDTO dto = service.selectPlannerOne(rbnInt);
 				returnMap.put("planner", dto);
+				message = "AAMU에서 추천하는 여행 플래너!";
 			}
 				
 			

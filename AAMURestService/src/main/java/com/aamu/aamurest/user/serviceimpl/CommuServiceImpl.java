@@ -192,6 +192,27 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 		}
 		return dto;
 	}
+	
+	/*
+	 //글 하나 뿌려주는 용
+	@Override
+	public CommuDTO commuSelectOne(Map map) {
+		CommuDTO dto=dao.commuSelectOne(map);
+		List<CommuCommentDTO> list=dao.commuCommentList(map.get("lno").toString());
+		dto.setCommuCommentList(list);
+		//태그 셋팅
+		int CountTag=dao.selectCountCommuTag(lno);
+		if(CountTag>0) {
+			List<String> tagList=dao.commuSelectTagName(lno); //서울,서울여행 이니까 #붙여야됨
+			List<String> sharptTagList = new Vector<>();
+			for(String tag:tagList) {
+				String sharpTag="#"+tag; //#서울을 붙이기
+				sharptTagList.add(sharpTag); //새로운 배열에 담아서 전달
+			}
+			dto.setTname(sharptTagList);
+		}
+	
+	 * */
 
 	//글 하나 뿌려주는 용_모든 댓글 뿌려주기
 	@Override
