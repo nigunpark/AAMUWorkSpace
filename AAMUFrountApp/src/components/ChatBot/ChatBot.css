@@ -37,9 +37,13 @@
 .chatBotBox {
   text-align: end;
   margin-top: 20px;
+  display: flex;
+  justify-content: end;
 }
 .bot {
   text-align: start;
+  display: flex;
+  justify-content: start;
 }
 .chatBotBox__span {
   background-color: var(--blueWhite);

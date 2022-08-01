@@ -23,7 +23,7 @@
 	
 	<!-- 글 목록용_사진 뿌려주기 -->
 	<select id="commuSelectPhotoList" parameterType="String" resultType="String">
-		SELECT photo FROM commuphoto WHERE lno=#{lno}
+		SELECT photo FROM commuphoto WHERE lno=#{lno} ORDER BY lno DESC
 	</select>
 	
 	<!-- 글 목록용_검색 총 게시물수 -->
