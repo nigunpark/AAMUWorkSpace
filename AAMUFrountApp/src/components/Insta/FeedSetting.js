@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import React, { useEffect, useRef, useState } from "react";
-import Profile from "./ModalGroup/Profile";
+import Profile from "./ProfileModal";
 import MenuModal from "./ModalGroup/MenuModal";
 import Comment from "./ModalGroup/Comment/Comment";
 import Slider from "react-slick";
@@ -23,7 +23,6 @@ function FeedSetting({
   setShowChat,
 }) {
   let profileRef = useRef();
-
   let replyRef = useRef();
   let editRef = useRef();
   const [editModal, seteditModal] = useState(false);
@@ -34,6 +33,8 @@ function FeedSetting({
 
   let [userName] = useState("hacker");
   let [comment, setComment] = useState("");
+  let [id, setid] = useState("");
+  let [reply, setreply] = useState("");
   let [feedComments, setfeedComments] = useState([]);
   let [isValid, setisValid] = useState(false);
   // function uploadReply(replyUp){//이미지 업로드
@@ -57,7 +58,7 @@ function FeedSetting({
     // temp.append('id',sessionStorage.getItem('username'))
     // temp.append('reply',replyRef.current.value)
     // temp.append('lno',val.lno)
-
+    console.log(111);
     let token = sessionStorage.getItem("token");
     axios
       .post(
@@ -74,14 +75,16 @@ function FeedSetting({
         }
       )
       .then((resp) => {
-        console.log("resp.data", resp.data.reply);
+        console.log("resp.data.reply", resp.data.reply);
+        console.log("resp.data.id", resp.data.id);
+        console.log("resp.data", resp.data);
+        val.commuComment = resp.data;
+        // val.commuComment = resp.data.reply;
         setfeedComments(resp.data);
-        val.commuComment.reply = resp.data.reply;
-        val.commuComment.id = resp.data.id;
         setForReRender(!forReRender);
       })
       .catch((error) => {
-        console.log(error);
+        console.log("error", error);
       });
 
     setComment(""); //사용자 댓글창을 빈 댓글 창으로 초기화
@@ -99,8 +102,10 @@ function FeedSetting({
   let CommentList = ({ val }) => {
     return (
       <div className="writing">
-        <span className="id">{val.commuComment === null ? null : val.commuComment.id}</span>
-        <span>{val.commuComment === null ? null : val.commuComment.reply}</span>
+        <span className="id">
+          {val.commuComment===null?null:val.commuComment.id}
+        </span>
+        <span>{val.commuComment===null?null:val.commuComment.reply}</span>
       </div>
     );
   };
@@ -170,7 +175,10 @@ function FeedSetting({
             )}
           </div>
           <div className="dot">
-            <i className="fa-solid fa-ellipsis fa-2x" onClick={() => setModalShow(!modalShow)}></i>
+            <i
+              className="fa-solid fa-ellipsis fa-2x"
+              onClick={() => setModalShow(!modalShow)}
+            ></i>
             {modalShow && (
               <MenuModal
                 setlist={setlist}
@@ -179,7 +187,9 @@ function FeedSetting({
                 val={val}
               />
             )}
-            {editModal && <Edit val={val} setlist={setlist} seteditModal={seteditModal} />}
+            {editModal && (
+              <Edit val={val} setlist={setlist} seteditModal={seteditModal} />
+            )}
           </div>
         </div>
         <div className="location">
@@ -207,7 +217,10 @@ function FeedSetting({
               }}
             >
               {val.islike ? (
-                <i className="fa-solid fa-heart fa-2x" style={{ color: "red" }}></i>
+                <i
+                  className="fa-solid fa-heart fa-2x"
+                  style={{ color: "red" }}
+                ></i>
               ) : (
                 <i className="fa-regular fa-heart fa-2x"></i>
               )}
@@ -244,7 +257,9 @@ function FeedSetting({
                 //   </Overlay>
                 // </Container1>
               )}
-              {comeditModal && <Edit val={val} setlist={setlist} seteditModal={seteditModal} />}
+              {comeditModal && (
+                <Edit val={val} setlist={setlist} seteditModal={seteditModal} />
+              )}
             </div>
             <div
               className="share-icon"
@@ -271,7 +286,7 @@ function FeedSetting({
             <span>{val.ctitle}</span>
           </div>
           <div className="feeds-writing">
-            <span className="id">{val.id}</span>
+            <span className="id">{sessionStorage.getItem("username")}</span>
             <span>{val.content}</span>
           </div>
           {<CommentList val={val} />}
@@ -302,7 +317,9 @@ function FeedSetting({
           <button
             className={
               //클래스명을 comment창의 글자 길에 따라서 다르게 주면서 버튼색에 css디자인을 줄 수 있음
-              comment.length > 0 ? "submitCommentActive" : "submitCommentInactive"
+              comment.length > 0
+                ? "submitCommentActive"
+                : "submitCommentInactive"
             }
             onClick={() => {
               post(comment, setfeedComments);
@@ -319,7 +336,12 @@ function FeedSetting({
 }
 async function getChatRoom(val, dispatch) {
   await axios
-    .post("/aamurest/chat/room?fromid=" + sessionStorage.getItem("username") + "&toid=" + val.id)
+    .post(
+      "/aamurest/chat/room?fromid=" +
+        sessionStorage.getItem("username") +
+        "&toid=" +
+        val.id
+    )
     .then((resp) => {
       console.log("resp.data", resp.data);
       dispatch(addForChatInfo({ ...resp.data, id: val.id }));

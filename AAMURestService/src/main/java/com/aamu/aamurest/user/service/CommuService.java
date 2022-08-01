@@ -92,7 +92,7 @@ public interface CommuService<T> {
 	int commuLikecountSelect(Map map);
 	
 	//팔로우, 팔로잉
-	int commuFollower(Map map);
+	Map commuFollower(Map map);
 	
 	//마이페이지용_id에 따른 
 	List<CommuDTO> commuMyPageList(Map map);
