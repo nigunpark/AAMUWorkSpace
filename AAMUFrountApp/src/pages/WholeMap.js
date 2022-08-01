@@ -2,14 +2,7 @@ import React, { useState } from "react";
 import "../components/WholeMap/WholeMap.css";
 import WholeMapCoords from "../components/WholeMap/WholeMapCoords.js";
 import WholeMapLocalData from "../components/WholeMap/WholeMapLocalData.js";
-import {
-  Container,
-  Contents,
-  Overlay,
-  Title,
-  Close,
-  Body,
-} from "../components/Modal/Modal.js";
+import { Container, Contents, Overlay, Title, Close, Body } from "../components/Modal/Modal.js";
 import PopularLocation from "../components/PopularLocation/PopularLocation";
 import { Link, useNavigate } from "react-router-dom";
 import { changeLnfM } from "../redux/store";
@@ -86,14 +79,7 @@ function Modal({ setModalState, localName, localId }) {
         <Body>
           <div className="local__modal__img">
             <Link to={`/mainPage/` + localName}>
-              <img
-                src={
-                  process.env.PUBLIC_URL +
-                  "/images/localImages/" +
-                  localId +
-                  ".png"
-                }
-              />
+              <img src={process.env.PUBLIC_URL + "/images/localImages/" + localId + ".png"} />
             </Link>
           </div>
           <ul className="local__modal__ul">
