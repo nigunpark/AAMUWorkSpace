@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import session from "redux-persist/lib/storage/session";
 import styled from "styled-components";
 import CommentSearch from "./ModalGroup/Comment/CommentSearch";
 
@@ -18,10 +19,14 @@ function SearchList({ searchb, inputValue }) {
     // setcomments(copyFeedComments);//copyFeedComments 담겨있을 comment를 setfeedComments로 변경
     let token = sessionStorage.getItem("token");
     axios
-      .get(`/aamurest/gram/SelectOne/${lno}`, {
+      .get('/aamurest/gram/SelectOne', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
+        params:{
+          id:sessionStorage.getItem('username'),
+          lno:lno
+        }
       })
       .then((resp) => {
         console.log(resp.data)
@@ -78,6 +83,7 @@ function SearchList({ searchb, inputValue }) {
                       comments={comments}
                       setcomments={setcomments}
                       setcommentModal={setcommentModal}
+                      commentModal1={commentModal1}
                     />
                   )}
         </MyInstar>
