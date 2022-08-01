@@ -46,12 +46,26 @@
 }
 
 .navbar-logo {
+  position: relative;
+  width: 150px;
+  height: 35px;
   margin-left: 2rem;
 }
-
-.navbar-logo h1 {
-  color: white;
+.logoImg {
+  filter: drop-shadow(2px 2px 1px rgba(255, 255, 255, 1));
 }
+/* .navbar-logo img {
+  position: absolute;
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+  border-radius: 5px;
+  filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.4));
+} */
+
+/* .navbar-logo h1 {
+  color: white;
+} */
 
 .navbar-btn-container {
   margin-right: 2rem;
@@ -67,7 +81,7 @@
   border-radius: 0.5rem;
   color: white;
   font-size: 15px;
-  font-weight: bold;
+  /* font-weight: bold; */
   cursor: pointer;
 }
 
@@ -93,6 +107,7 @@
 .nav-links {
   font-size: 20px;
   color: white;
+  font-weight: bold;
 }
 
 .navbar-menu-icon {
