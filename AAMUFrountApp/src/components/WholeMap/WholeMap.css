@@ -1,5 +1,4 @@
 .WholeMap {
-  /* background-image: url("/public/images/bg1.png"); */
   background: rgba(0, 0, 0, 0.8);
   /* background: var(--mainColor); */
   /* background-repeat: no-repeat; */
@@ -12,6 +11,7 @@
   width: 100%;
   display: flex;
   justify-content: center;
+  background-image: url("/public/images/sea2.gif");
 }
 
 .wholeMap__img__container {
