@@ -7,6 +7,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.lifecycle.MutableLiveData
@@ -160,7 +161,7 @@ class AAMUPlanViewModel(context : Context) : ViewModel(), MapView.POIItemEventLi
         }
         val polyLine : MapPolyline = MapPolyline()
         polyLine.addPoints(mapPoint.toTypedArray())
-        polyLine.lineColor = Color(0xAAf44336).hashCode()
+        polyLine.lineColor = Color(0xAAf44336).toArgb()
         mapView.addPolyline(polyLine)
 
         mapView.fitMapViewAreaToShowMapPoints(mapPoint.toTypedArray())

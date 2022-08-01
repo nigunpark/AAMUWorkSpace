@@ -16,9 +16,9 @@ class RouteBBSDetailFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? = ComposeView(inflater.context).apply {
-//        val args: RouteBBSDetailFragmentArgs by navArgs()
+        val args: RouteBBSDetailFragmentArgs by navArgs()
         setContent {
-//            RouteBBSDetail(args.rbn)
+            RouteBBSDetail(args.rbn)
         }
     }
 }

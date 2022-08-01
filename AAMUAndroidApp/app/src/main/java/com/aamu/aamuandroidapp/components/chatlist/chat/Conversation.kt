@@ -104,6 +104,7 @@ fun ConversationContent(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChannelNameBar(
     channelName: String,

@@ -36,10 +36,8 @@ class MainFragment : Fragment() {
         Manifest.permission.ACCESS_COARSE_LOCATION
     )
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
         binding = FragmentMainBinding.inflate(layoutInflater)
 
         binding.bottomNav.apply {
@@ -59,6 +57,12 @@ class MainFragment : Fragment() {
                 4 -> replace(InfoFragment())
             }
         }
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
 
         return binding.root
     }

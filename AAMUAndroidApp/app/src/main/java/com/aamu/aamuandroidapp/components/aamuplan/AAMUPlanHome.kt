@@ -5,6 +5,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -142,7 +143,7 @@ fun ActionButton(
                 .size(width = 50.dp, height = 50.dp)
                 .offset(x = (-20).dp, y = 5.dp),
             backgroundColor = Color.White,
-            shape = Shapes.Full
+            shape = CircleShape
         ) {
             Row() {
                 androidx.compose.material3.Icon(

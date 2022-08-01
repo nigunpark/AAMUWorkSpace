@@ -18,15 +18,13 @@ package com.aamu.aamuandroidapp.components.chatlist.chat
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.material3.CenterAlignedTopAppBar
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.TopAppBarScrollBehavior
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun JetchatAppBar(
     modifier: Modifier = Modifier,
@@ -35,7 +33,8 @@ fun JetchatAppBar(
 ) {
     val backgroundColors = TopAppBarDefaults.centerAlignedTopAppBarColors()
     val backgroundColor = backgroundColors.containerColor(
-        scrollFraction = scrollBehavior?.scrollFraction ?: 0f
+//        scrollFraction = scrollBehavior?.scrollFraction ?: 0f
+    0f
     ).value
     val foregroundColors = TopAppBarDefaults.centerAlignedTopAppBarColors(
         containerColor = Color.Transparent,
@@ -51,12 +50,14 @@ fun JetchatAppBar(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Preview
 @Composable
 fun JetchatAppBarPreview() {
     JetchatAppBar(title = { Text("Preview!") })
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Preview
 @Composable
 fun JetchatAppBarPreviewDark() {

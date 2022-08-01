@@ -27,8 +27,6 @@ class RouteBBSFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View = ComposeView(inflater.context).apply {
 
-        navControllerHost = Navigation.findNavController(rootView)
-
         setContent {
             ComposeCookBookTheme {
                 RouteBBSScreen(routeBBSHomeInteractionEvents = { event ->
@@ -38,13 +36,18 @@ class RouteBBSFragment : Fragment() {
         }
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        navControllerHost = Navigation.findNavController(view)
+    }
+
     private fun handleInteractionEvents(
         interactionEvents: RouteBBSHomeInteractionEvents
     ) {
         when (interactionEvents) {
             is RouteBBSHomeInteractionEvents.OpenBBSDetail -> {
-//                val action = MainFragmentDirections.actionMainFragmentToRouteBBSDetailFragment(interactionEvents.bbs.rbn!!)
-//                navControllerHost.navigate(action)
+                val action = MainFragmentDirections.actionMainFragmentToRouteBBSDetailFragment(interactionEvents.bbs.rbn!!)
+                navControllerHost.navigate(action)
             }
         }
     }
