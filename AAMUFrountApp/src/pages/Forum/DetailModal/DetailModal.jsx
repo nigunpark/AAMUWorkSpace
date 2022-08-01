@@ -160,7 +160,7 @@ const DetailModal = ({ postDay, detailRbn, setIsOpen, setShowCBModal }) => {
     return (
       <div>
         <Stars>
-          <img src="/images/star.jpg" style={{ width: "30px" }} />
+          <img src="/images/star.png" style={{ width: "30px" }} />
           {val.rate}
         </Stars>
 
@@ -317,7 +317,9 @@ const DetailModal = ({ postDay, detailRbn, setIsOpen, setShowCBModal }) => {
                   setComment(e.target.value);
                 }} //리뷰창 변할때마다 setComment를 통해 comment의 값 변경
                 onKeyUp={(e) => {
-                  e.target.value.length > 0 ? setIsValid(true) : setIsValid(false);
+                  e.target.value.length > 0
+                    ? setIsValid(true)
+                    : setIsValid(false);
                   // console.log(isValid);
                 }} //사용자가 리뷰를 작성했을 때 빈공간인지 확인하여 유효성 검사
                 value={comment}
@@ -399,26 +401,39 @@ function DetailSetting({ fromWooJaeData, periodIndex, obj, i }) {
   useEffect(() => {
     if (i !== 0) {
       setUpTime(
-        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime + obj.mtime / 1000 / 60
+        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime +
+          obj.mtime / 1000 / 60
       );
       setDownTime(
         fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime +
           obj.mtime / 1000 / 60 +
-          fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].atime / 1000 / 60
+          fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].atime /
+            1000 /
+            60
       );
       let forBlackBoxRedux = getTimes(
         periodIndex,
-        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime + obj.mtime / 1000 / 60,
+        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime +
+          obj.mtime / 1000 / 60,
         fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime +
           obj.mtime / 1000 / 60 +
-          fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].atime / 1000 / 60
+          fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].atime /
+            1000 /
+            60
       );
       dispatch(addWholeBlackBox(forBlackBoxRedux));
-      if (i !== fromWooJaeData[periodIndex]["day" + (periodIndex + 1)].length - 1) {
-        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i + 1].starttime =
+      if (
+        i !==
+        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)].length - 1
+      ) {
+        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][
+          i + 1
+        ].starttime =
           fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime +
           obj.mtime / 1000 / 60 +
-          fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].atime / 1000 / 60;
+          fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].atime /
+            1000 /
+            60;
       }
     }
   }, []);
@@ -528,7 +543,7 @@ const DetailOverlay = styled.div`
   position: absolute;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.6);
+  background-color: rgba(255, 255, 255, 0.1);
 `;
 
 const DetailModalWrap = styled.div`
