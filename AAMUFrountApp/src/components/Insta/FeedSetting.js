@@ -62,7 +62,7 @@ function FeedSetting({
       .post(
         "/aamurest/gram/comment/edit",
         {
-          id: sessionStorage.getItem("username"),
+          id: val.id,
           reply: comment,
           lno: val.lno,
         },
@@ -118,7 +118,7 @@ function FeedSetting({
         },
         params: {
           lno: parseInt(val.lno),
-          id: sessionStorage.getItem("username"),
+          id: val.id,
         },
       })
       .then((resp) => {
