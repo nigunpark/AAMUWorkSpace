@@ -31,6 +31,7 @@ function FeedSetting({
   const [modalShow, setModalShow] = useState(false);
   const [profileModal, setprofileModal] = useState(false);
   const [commentModal, setcommentModal] = useState(false);
+  
   let [userName] = useState("hacker");
   let [comment, setComment] = useState("");
   let [feedComments, setfeedComments] = useState([]);
