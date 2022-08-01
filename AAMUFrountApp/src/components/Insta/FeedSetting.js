@@ -66,21 +66,17 @@ function FeedSetting({
           lno: val.lno,
         },
         {
-          id: sessionStorage.getItem("username"),
-          reply: comment,
-          lno: val.lno,
-        },
-        {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
       )
       .then((resp) => {
-        console.log("resp.data", resp.data);
+        console.log("resp.data", resp.data.reply);
         setfeedComments(resp.data);
         val.commuComment.reply = resp.data.reply;
         val.commuComment.id = resp.data.id;
+        setForReRender(!forReRender);
       })
       .catch((error) => {
         console.log(error);
@@ -101,8 +97,8 @@ function FeedSetting({
   let CommentList = ({ val }) => {
     return (
       <div className="writing">
-        <span className="id">{val.commuComment == null ? null : val.commuComment.id}</span>
-        <span>{val.commuComment == null ? null : val.commuComment.reply}</span>
+        <span className="id">{val.commuComment === null ? null : val.commuComment.id}</span>
+        <span>{val.commuComment === null ? null : val.commuComment.reply}</span>
       </div>
     );
   };
@@ -140,7 +136,7 @@ function FeedSetting({
       <div className="feeds-setting">
         <div className="title-profile">
           <img
-            src="/images/user.jpg"
+            src={val.userprofile}
             alt="프사"
             onError={(e) => {
               e.stopPropagation();
