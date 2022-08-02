@@ -10,13 +10,13 @@ import com.aamu.aamuandroidapp.data.api.AAMUDIGraph
 import com.aamu.aamuandroidapp.data.api.repositories.AAMURepository
 import kotlinx.coroutines.launch
 
-class RouteBBSDetailViewModelFactory(val context: Context) : ViewModelProvider.Factory{
+class RouteBBSDetailViewModelFactory(val context: Context,val rbn : Int) : ViewModelProvider.Factory{
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return RouteBBSDetailViewModel(context) as T
+        return RouteBBSDetailViewModel(context,rbn) as T
     }
 }
 
-class RouteBBSDetailViewModel(context: Context) : ViewModel(){
+class RouteBBSDetailViewModel(context: Context,rbn: Int) : ViewModel(){
 
     private val aamuRepository : AAMURepository = AAMUDIGraph.createAAMURepository()
 
@@ -24,7 +24,7 @@ class RouteBBSDetailViewModel(context: Context) : ViewModel(){
 
     init {
         viewModelScope.launch {
-
+            
         }
     }
 }
