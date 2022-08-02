@@ -140,7 +140,7 @@ public class BBSController {
 		int rbn = Integer.parseInt(map.get("rbn").toString());
 		List<ReviewDTO> list = bbsService.reviewList(rbn);
 		double total = Double.parseDouble(map.get("rate").toString());
-		if(list.size() == 0) {
+		if(list.size() != 0) {
 			for(ReviewDTO dto:list) {
 				total += dto.getRate();
 			}

@@ -27,6 +27,7 @@
 											<thead>
 												<tr>
 													<th class="col-1">장소 번호</th>
+													<th class="col-1">이미지</th>
 													<th>주소</th>
 													<th class="col-4">장소명</th>		
 													<th class="col-1">지역 번호</th>
@@ -44,6 +45,7 @@
 													<c:forEach var="record" items="${placelist}" varStatus="loop">
 														<tr>
 															<td>${record.contentid}</td>
+															<td class=""><img src="${record.smallimage}" alt="No Img"></td>
 															<td>${record.addr}</td>
 															<td>${record.title}</td>
 															<td>${record.areacode}</td>
@@ -115,7 +117,9 @@ $('#crawll').click(function(){
 		data: placejson,
 		contentType:"application/json", //데이타 보낼 때
 		dataType: "json" //데이타 받을 때 
-	}).done(data=>{(console.log('저장 성공'),data)}).fail(e=>{console.log('실패',e)})
+	}).done(data=>{console.log('저장 성공',data);
+		location.reload();
+		}).fail(e=>{console.log('실패',e)})
 });
   </script>
 </body>

@@ -43,6 +43,7 @@ import com.aamu.admin.main.service.api.KakaoKey;
 import com.aamu.admin.main.service.api.Places;
 import com.aamu.admin.main.service.api.Places.Item;
 import com.aamu.admin.main.serviceimpl.MainServiceImpl;
+import com.aamu.admin.util.DataUtil;
 
 @Controller
 @PropertySource("classpath:admin/resources/api.properties")
@@ -348,9 +349,10 @@ public class MainController {
 		return"/back/backupcomplete";
 	}
 	@GetMapping("selectlocation.do")
-	public String selectlocation(@RequestParam Map map,Model model) {
+	public String selectlocation(@RequestParam Map map,Model model,HttpServletRequest req) {
 		
-		List<AttractionDTO> list = service.selectLocation(map);
+		List<AttractionDTO> list = DataUtil.changeAttr(service.selectLocation(map), req);
+
 		model.addAttribute("placelist", list);
 		model.addAttribute("totalcount",list.size());
 		return "/back/backupcomplete";
