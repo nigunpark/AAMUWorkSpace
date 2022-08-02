@@ -10,6 +10,8 @@ import styled from "styled-components";
 import { faImage, faStar } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
+import CommentSearch from "../../components/Insta/ModalGroup/Comment/CommentSearch";
+import MyEdit from "../../components/Insta/ModalGroup/Edit/MyEdit";
 const MyPage = () => {
   let [clickTab, setClickTab] = useState(0);
 
@@ -57,8 +59,34 @@ const MyPage = () => {
       });
   }
 
+  const [myInstar, setMyInstar] = useState([]);
+  const [myLno, setMyLno] = useState(0);
+
+  async function searchBar() {
+    let token = sessionStorage.getItem("token");
+    let serchId = "id";
+    await axios
+      .get("/aamurest/gram/selectList", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        params: {
+          searchColumn: serchId,
+          searchWord: sessionStorage.getItem("username"),
+        },
+      })
+      .then((resp) => {
+        console.log("인스타 내 글 가져오기", resp.data);
+        setMyInstar(resp.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
   useEffect(() => {
     selectList();
+    searchBar();
   }, []);
 
   useEffect(() => {
@@ -96,6 +124,9 @@ const MyPage = () => {
       homeBox.current.classList.remove("jsGridView");
     }
   }, [clickTab]);
+
+  const [val, setList] = useState([]);
+  const [editModal, seteditModal] = useState(false);
   return (
     <div className="app-container">
       <div className="app-header"></div>
@@ -210,6 +241,7 @@ const MyPage = () => {
               clickTab={clickTab}
               planList={planList}
               uploadCount={upload}
+              myInstar={myInstar}
             />
           </div>
           <div ref={homeBox} className="project-boxes">
@@ -219,6 +251,15 @@ const MyPage = () => {
               planList={planList}
               setPlanList={setPlanList}
               setUpload={setUpload}
+              myInstar={myInstar}
+              setMyLno={setMyLno}
+              myLno={myLno}
+              setMyInstar={setMyInstar}
+              val={val}
+              setList={setList}
+              editModal={editModal}
+              seteditModal={seteditModal}
+              searchBar={searchBar}
             />
           </div>
         </div>
@@ -256,15 +297,45 @@ function TabContent({
   planList,
   setPlanList,
   setUpload,
+  myInstar,
+  setMyLno,
+  myLno,
+  setMyInstar,
+  val,
+  setList,
+  editModal,
+  seteditModal,
+  searchBar,
 }) {
   const [selectRbn, setSelectRbn] = useState();
   const [modalOpen, setModalOpen] = useState(false);
 
-  // console.log("TabContent selectRbn :", selectRbn);
+  const [commentModal, setcommentModal] = useState(false);
+  let [comment, setComment] = useState("");
+  const [comments, setcomments] = useState([]);
 
-  const onModalSelect = () => {
-    setModalOpen(true);
-  };
+  function commentModal1(setcomments, lno) {
+    let token = sessionStorage.getItem("token");
+    axios
+      .get("/aamurest/gram/SelectOne", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        params: {
+          id: sessionStorage.getItem("username"),
+          lno: lno,
+        },
+      })
+      .then((resp) => {
+        console.log("여긴가요:", resp.data);
+        setcomments(resp.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  // console.log("TabContent selectRbn :", selectRbn);
 
   if (clickTab === 0) {
     // 홈
@@ -288,98 +359,85 @@ function TabContent({
     );
   } else if (clickTab === 1) {
     //인스타
-    let num = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
     return (
-      <div className="myInstaContainer">
-        <div className="myInstar">
-          {num.map((val, idx) => {
-            return (
-              <>
-                {modalOpen == true ? (
-                  <MyBoxList
-                    setModalOpen={setModalOpen}
-                    setClickTab={setClickTab}
-                  />
-                ) : null}
-                <div className="instarBox" onClick={onModalSelect}>
-                  <img className="instaImg" src={`/images/img-${val}.jpg`} />
-                </div>
-              </>
-            );
-          })}
+      <>
+        <div className="myInstaContainer">
+          <div className="myInstar">
+            {myInstar.map((val, idx) => {
+              return (
+                <>
+                  <div
+                    className="instarBox"
+                    onClick={() => {
+                      setModalOpen(true);
+                      setMyLno(val.lno);
+                      setList(val);
+                    }}
+                  >
+                    <img className="instaImg" src={val.photo[0]} />
+                  </div>
+                </>
+              );
+            })}
+
+            {modalOpen == true ? (
+              <MyBoxList
+                setModalOpen={setModalOpen}
+                setClickTab={setClickTab}
+                seteditModal={seteditModal}
+                setMyLno={setMyLno}
+                myLno={myLno}
+                val={val}
+                setList={setList}
+                setcomments={setcomments}
+                commentModal1={commentModal1}
+                setcommentModal={setcommentModal}
+                searchBar={searchBar}
+              />
+            ) : null}
+
+            {commentModal && (
+              <CommentSearch
+                val={val}
+                commentModal={commentModal}
+                comment={comment}
+                setComment={setComment}
+                comments={comments}
+                setcomments={setcomments}
+                setcommentModal={setcommentModal}
+                commentModal1={commentModal1}
+              />
+            )}
+
+            {editModal && (
+              <MyEdit
+                val={val}
+                setlist={setMyInstar}
+                seteditModal={seteditModal}
+                searchBar={searchBar}
+              />
+            )}
+          </div>
         </div>
-      </div>
+      </>
     );
   } else if (clickTab === 2) {
     //즐겨찾기
-    return (
-      <div className="project-box-wrapper">
-        <div className="project-box">
-          <div className="project-box-header">
-            <span>December 10, 2020 저장일</span>
-
-            <div className="more-wrapper">
-              <button className="project-btn-more">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="feather feather-more-vertical"
-                >
-                  <circle cx="12" cy="12" r="1" />
-                  <circle cx="12" cy="5" r="1" />
-                  <circle cx="12" cy="19" r="1" />
-                </svg>
-              </button>
-            </div>
-          </div>
-
-          <div className="project-box-content-header">
-            <img className="MapImgSize" src="/images/imageMap.png" />
-          </div>
-
-          <div className="box-progress-wrapper">
-            <p className="box-progress-header">제목</p>
-            <div className="box-progress-bar">
-              <span className="box-progress"></span>
-            </div>
-          </div>
-
-          <div className="project-box-footer">
-            <div className="participants"></div>
-
-            <div className="detail-button">
-              <button className="learn-more" type="button">
-                삭제
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
+    return null;
   } else if (clickTab === 3) {
     //----------------------프로필------------------------
-    return <MyProfileBox />;
+    return <MyProfileBox setClickTab={setClickTab} />;
   } else if (clickTab === 10) {
     //-----------------------글작성------------------------
     return <MyPostBox selectRbn={selectRbn} setClickTab={setClickTab} />;
   } else if (clickTab === 11) {
     //------------글수정-------------
     return <MyEditBox selectRbn={selectRbn} />;
-  } else if (clickTab === 12) {
-    //------------인스타 게시글 수정-------------
-    return; //<MyInstaBox />;
   }
 }
 
-function TabTopLine({ clickTab, planList, uploadCount }) {
+function TabTopLine({ clickTab, planList, uploadCount, myInstar }) {
   let count = 0;
   // console.log("uploadCount :", uploadCount[1] == undefined);
 
@@ -403,7 +461,14 @@ function TabTopLine({ clickTab, planList, uploadCount }) {
       </div>
     );
   } else if (clickTab === 1) {
-    return null;
+    return (
+      <div className="projects-status">
+        <div className="item-status">
+          <span className="status-number">{myInstar.length}</span>
+          <span className="status-type">Total</span>
+        </div>
+      </div>
+    );
   } else if (clickTab === 2) {
     return (
       <div className="projects-status">
@@ -420,31 +485,83 @@ function TabTopLine({ clickTab, planList, uploadCount }) {
   }
 }
 
-function MyBoxList({ setModalOpen, setClickTab }) {
+function MyBoxList({
+  setModalOpen,
+  setClickTab,
+  seteditModal,
+  setMyLno,
+  myLno,
+  val,
+  setList,
+  setcomments,
+  commentModal1,
+  setcommentModal,
+  searchBar,
+}) {
+  function deleteOne() {
+    let token = sessionStorage.getItem("token");
+    axios
+      .delete(`/aamurest/gram/edit/${val.lno}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((resp) => {
+        // setdeleteOnee(resp.data); //성공 여부가 온다 true false
+        alert("삭제되었습니다!");
+        // feedList(setlist);
+        searchBar();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
   return (
-    <div className="myBox-List-two">
-      <div className="myBox-List-overlay">
-        <div className="myBox-List-Plan">내 글 보기</div>
-        <div
-          className="myBox-List-Post"
-          onClick={() => {
-            // setModalOpen(false);
-            // setClickTab(11);
-          }}
-        >
-          수정 하기
-        </div>
-        <div className="myBox-List-Delete">삭제하기</div>
-        <div
-          className="myBox-List-back"
-          onClick={(e) => {
-            setModalOpen(false);
-          }}
-        >
-          취소
+    <>
+      <div className="myBox-List-two">
+        <div className="myBox-List-overlay">
+          <div
+            className="myBox-List-Plan"
+            onClick={() => {
+              commentModal1(setcomments, val.lno);
+              setList(val);
+              setcommentModal(true);
+              setModalOpen(false);
+            }}
+          >
+            내 글 보기
+          </div>
+          <div
+            className="myBox-List-Post"
+            onClick={() => {
+              seteditModal(true);
+              setModalOpen(false);
+            }}
+          >
+            수정 하기
+          </div>
+          <div
+            className="myBox-List-Delete"
+            onClick={() => {
+              deleteOne();
+              setModalOpen(false);
+            }}
+          >
+            삭제하기
+          </div>
+          <div
+            className="myBox-List-back"
+            onClick={(e) => {
+              setModalOpen(false);
+              setMyLno(0);
+            }}
+          >
+            취소
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 
