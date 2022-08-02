@@ -1,5 +1,6 @@
 package com.aamu.aamurest.user.serviceimpl;
 
+import java.util.List;
 import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
@@ -37,6 +38,11 @@ public class UsersDAO {
 	public int insertAuth(Map map) {
 
 		return template.insert("insertAuth", map);
+	}
+
+	public List<Map> selectAllTheme() {
+
+		return template.selectList("selectAllTheme");
 	}
 
 }

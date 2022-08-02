@@ -25,10 +25,10 @@ public class StompChatClient {
 	private SqlSessionTemplate template;
 	
 	@MessageMapping("/chat/message")
-	public void message(ChatingMessageDTO message,HttpServletRequest req) {
+	public void message(ChatingMessageDTO message) {
 		template.insert("message",message);
 		template.update("updatelastmsg", message);
-		message.setAuthpro(FileUploadUtil.requestOneFile(template.selectOne("messagepro",message), "/resources/userUpload", req));
+		//message.setAuthpro(FileUploadUtil.requestOneFile(template.selectOne("messagepro",message), "/resources/userUpload", req));
 		messagingTemplate.convertAndSend("/queue/chat/message/"+message.getRoomno(), message);
 	}
 }

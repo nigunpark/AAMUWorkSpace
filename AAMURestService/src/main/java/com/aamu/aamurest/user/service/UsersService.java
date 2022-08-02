@@ -1,5 +1,6 @@
 package com.aamu.aamurest.user.service;
 
+import java.util.List;
 import java.util.Map;
 
 public interface UsersService {
@@ -10,5 +11,7 @@ public interface UsersService {
 	int updateUser(Map map);
 
 	int checkId(String id);
+
+	List<Map> selectAllTheme();
 
 }

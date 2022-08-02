@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import React, { useEffect, useRef, useState } from "react";
-import Profile from "../Profile";
+// import Profile from "../Profile";
 import MenuModal from "../MenuModal";
 import axios from "axios";
 import "../Slider/slick.css";
@@ -16,7 +16,7 @@ import dayjs from "dayjs";
 import { CommentsDisabled } from "@mui/icons-material";
 
 function CommentSearch({
-list,
+  val,
   comment,
   setComment,
   setcommentModal,
@@ -26,7 +26,10 @@ list,
   //  commentModal1
 
 }) {
-  let menuRef = useRef();
+
+
+
+   let menuRef = useRef();
   let replyRef = useRef();
   let commentRef1 = useRef();
 
@@ -54,30 +57,37 @@ list,
   };
 
 
-  // function commentModal1(setcomments) {
-  //   console.log("searchb.eelno", list.lno);
-  //   // const copyFeedComments = [...comments];//feedComments에 담겨있던 댓글 받아옴
-  //   // copyFeedComments.push(comment);//copyFeedComments에 있는 기존 댓글에 push하기 위함
-  //   // setcomments(copyFeedComments);//copyFeedComments 담겨있을 comment를 setfeedComments로 변경
-  //   let token = sessionStorage.getItem("token");
-  //   axios
-  //     .get('/aamurest/gram/SelectOne', {
-    // headers: {
-    //   Authorization: `Bearer ${token}`,
-    // },
-    // params:{
-    //   id:sessionStorage.getItem('username'),
-    //   lno:lno
-    // }
-  //     })
-  //     .then((resp) => {
-  //       console.log(resp.data)
-  //       setcomments(resp.data);
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //     });
-  // }
+  function commentModal2(setcomments) {
+    console.log("searchb.eelno", val.lno);
+    // const copyFeedComments = [...comments];//feedComments에 담겨있던 댓글 받아옴
+    // copyFeedComments.push(comment);//copyFeedComments에 있는 기존 댓글에 push하기 위함
+    // setcomments(copyFeedComments);//copyFeedComments 담겨있을 comment를 setfeedComments로 변경
+    let token = sessionStorage.getItem("token");
+    axios
+      .get('/aamurest/gram/SelectOne', {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    params:{
+      id:sessionStorage.getItem('username'),
+      lno:val.lno
+    }
+      })
+      .then((resp) => {
+        console.log('setcomments',resp.data.commuCommentList)
+        val.commuCommentList = resp.data.commuCommentList
+        
+        setcomments(resp.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  useEffect(() => {
+    commentModal2(setcomments);
+  }, []);
+
 
   // const [forReRender, setForReRender] = useState(false);
   function fillLike(setForReRender,forReRender) {
@@ -92,8 +102,8 @@ list,
       })
       .then((resp) => {
         console.log(resp.data);
-        list.islike = resp.data.isLike;
-        list.likecount = resp.data.likecount;
+        val.islike = resp.data.isLike;
+        val.likecount = resp.data.likecount;
         setForReRender(!forReRender);
       })
       .catch((error) => {
@@ -111,9 +121,9 @@ list,
       .post(
         "/aamurest/gram/comment/edit",
         {
-          id: sessionStorage.getItem("username"),
+          id: sessionStorage.getItem('username'),
           reply: comment,
-          lno: list.lno,
+          lno: val.lno,
         },
         {
           headers: {
@@ -126,8 +136,8 @@ list,
         console.log("resp.data", resp.data.reply);
         const copyComments = [...replyOne];
         setcomments(copyComments);
-        setForReRender(!forReRender);
-        // commentModal1(setcomments)
+        // setForReRender(!forReRender);
+        commentModal2(setcomments)
       })
       .catch((error) => {
         console.log(error);
@@ -138,13 +148,13 @@ list,
 
   let [deleteOne1, setdeleteOne1] = useState(false);
   let [replyTwo, setreplyTwo] = useState('');
-  function deleteTwo(replyTwo) {
+  function deleteTwo(replyTwo,cno) {
     let token = sessionStorage.getItem("token");
     // setcomments(comments.filter(recommendContents =>{
     //   return recommendContents.id !== id;
     // }))commuCommentList
-    console.log("val.lno", list.lno);
-    console.log("val.cno", replyTwo);
+    console.log("val.lno", val.lno);
+    console.log("val.cno", cno);
     axios
       .delete(
         "/aamurest/gram/comment/edit",
@@ -153,8 +163,8 @@ list,
             Authorization: `Bearer ${token}`,
           },
           params: {
-            lno: list.lno,
-            cno: parseInt(replyTwo),
+            lno: val.lno,
+            cno: cno,
           },
         }
       )
@@ -162,7 +172,7 @@ list,
         console.log(resp.data);
         setdeleteOne1(resp.data); //성공 여부가 온다 true false
         // alert('삭제되었습니다!')
-        // commentModal1(setcomments)
+        commentModal2(setcomments)
       })
       .catch((error) => {
         console.log(error);
@@ -170,12 +180,11 @@ list,
   }
 
 
-  const CommentList = ({ list }) => {
+  const CommentList = ({ val }) => {
     return (
-      <div className="recommend-contents" onClick={(e) => {
-        setreplyTwo(list.cno);
-      }}>
-        <img className="likeimg" src={list.userprofile} alt="추사" />
+      <div className="recommend-contents">
+        <img className="likeimg" 
+        src={val.userprofile} alt="추사" />
         <div
           style={{
             width: "100%",
@@ -187,9 +196,9 @@ list,
         >
           <div style={{ display: "flex", flexDirection: "row" }}>
             <p className="userName">
-              <strong>{list.id}</strong>
+              <strong>{sessionStorage.getItem('username')}</strong>
             </p>
-            <p className="userName">{list.reply}</p>
+            <p className="userName">{val.reply}</p>
           </div>
           <div className="comment-heart">
             {commentHeart ? (
@@ -209,11 +218,11 @@ list,
               ></i>
             )}
             <i className="fa-regular fa-trash-can"
-            onClick={()=>{deleteTwo(replyTwo)}}></i>
+            onClick={()=>{deleteTwo(replyTwo,val.cno) }}></i>
           </div>
           <div style={{ fontSize: "10px", color: "#a5a5a5", marginTop: "8px" }}>
             <p className="postDate">
-              {dayjs(list.postdate).format("YYYY/MM/DD")}
+              {dayjs(val.postdate).format("YYYY/MM/DD")}
             </p>
           </div>
         </div>
@@ -243,7 +252,7 @@ list,
                 pagination={{ clickable: true }}
                 scrollbar={{ draggable: true }}
               >
-                {list.photo.map((image, i) => {
+                {val.photo.map((image, i) => {
                   return (
                     <SwiperSlide>
                       <li>
@@ -261,7 +270,7 @@ list,
               <div className="search-contents">
                 <div className="gradient">
                   <img
-                    src={list.userprofile}
+                    src={val.userprofile}
                     alt="프사"
                     onError={(e) => {
                       e.target.src = "/images/user.jpg";
@@ -270,7 +279,7 @@ list,
                 </div>
                 <div>
                   <p className="user-id">
-                    <strong>{sessionStorage.getItem("username")}</strong>
+                    <strong>{sessionStorage.getItem('username')}</strong>
                   </p>
                 </div>
               </div>
@@ -289,7 +298,7 @@ list,
                 <div className="recommend-contents">
                   <img
                     className="userimg"
-                    src={list.userprofile}
+                    src={val.userprofile}
                     alt="프사"
                     onError={(e) => {
                       e.target.src = "/images/user.jpg";
@@ -313,16 +322,16 @@ list,
                       <div className="feeds-title">
                         <p>
                           <span className="userName">제목 </span>
-                          <span> {list.ctitle}</span>
+                          <span> {val.ctitle}</span>
                         </p>
                         <p className="userName">
                           <strong
                             style={{ fontSize: "13px", marginRight: "5px" }}
                           >
-                            {sessionStorage.getItem("username")}
+                            {sessionStorage.getItem('username')}
                           </strong>
                           <span style={{ fontFamily: "normal" }}>
-                            {list.content}
+                            {val.content}
                           </span>
                         </p>
                       </div>
@@ -335,16 +344,16 @@ list,
                       }}
                     >
                       <p className="postDate">
-                        {dayjs(new Date(list.postdate)).format("YYYY/MM/DD")}
+                        {dayjs(new Date(val.postdate)).format("YYYY/MM/DD")}
                       </p>
                     </div>
                   </div>
                 </div>
-                {list.commuCommentList.map((list, i) => {
+                {val.commuCommentList.map((val, i) => {
                   //feedComments에 담겨있을 댓글 값을 CommentList 컴포넌트에 담아서 가져온다
                   return (
                     <CommentList //CommentList 컴포넌트는 반복적으로 추가되는 사용자 댓글 하나하나를 담고있는 박스
-                    list={list}
+                    val={val}
                     />
                   );
                 })}
@@ -359,7 +368,7 @@ list,
                     fillLike(setForReRender,forReRender);
                   }}
                 >
-                  {list.islike ? (
+                  {val.islike ? (
                     <i
                       className="fa-solid fa-heart fa-2x"
                       style={{ color: "red" }}
@@ -377,11 +386,11 @@ list,
               </div>
               <div className="likeCount">
                 <h3>
-                  <strong>좋아요 {list.likecount}개</strong>
+                  <strong>좋아요 {val.likecount}개</strong>
                 </h3>
               </div>
               <div className="postDate">
-                <h3>{dayjs(new Date(list.postdate)).format("YYYY/MM/DD")}</h3>
+                <h3>{dayjs(new Date(val.postdate)).format("YYYY/MM/DD")}</h3>
               </div>
             </div>
             <div className="comment1">

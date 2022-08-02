@@ -31,4 +31,13 @@
 	<select id="checkId" parameterType="String" resultType="int">
 		SELECT COUNT(*) FROM users WHERE id=#{id}
 	</select>
+	<select id="selectAllTheme" resultType="Map">
+		SELECT * FROM theme
+	</select>
+	<select id="getUserTheme" parameterType="Map" resultType="String">
+		SELECT themename FROM theme WHERE id=#{id}
+	</select>
+	<select id="getAllUser" resultType="String">
+		SELECT id FROM users;
+	</select>
 </mapper>

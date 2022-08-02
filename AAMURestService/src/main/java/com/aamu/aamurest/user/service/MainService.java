@@ -52,4 +52,8 @@ public interface MainService{
 	
 	List<String> searchTopPlaces(Map map);
 
+	int insertTheme(Map map);
+
+	List<String> getUserTheme(Map map);
+
 }

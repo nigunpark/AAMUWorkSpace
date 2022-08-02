@@ -36,18 +36,9 @@ class MainFragment : Fragment() {
         Manifest.permission.ACCESS_COARSE_LOCATION
     )
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
         binding = FragmentMainBinding.inflate(layoutInflater)
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        navControllerHost = Navigation.findNavController(view)
 
         binding.bottomNav.apply {
             add(MeowBottomNavigation.Model(1, R.drawable.ic_home))
@@ -66,6 +57,20 @@ class MainFragment : Fragment() {
                 4 -> replace(InfoFragment())
             }
         }
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        navControllerHost = Navigation.findNavController(view)
 
         permissionUtils = PermissionUtils(requireContext(), requireActivity(), permissions)
 

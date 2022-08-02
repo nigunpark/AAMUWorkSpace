@@ -2,7 +2,10 @@ package com.aamu.aamurest.user.web;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -67,6 +70,16 @@ public class UserController {
 	public int checkId(@RequestParam String id) {
 		System.out.println(id);
 		return service.checkId(id);
+	}
+	@GetMapping("/users/theme")
+	public List<Map> getTheme(HttpServletRequest req) {
+		List<Map> list = service.selectAllTheme();
+
+		for(Map map:list) {
+			map.put("themeimg",FileUploadUtil.requestOneFile(map.get("THEMEIMG").toString(),"/resources/themeImage", req));
+		}
+		return list;
+		
 	}
 
 

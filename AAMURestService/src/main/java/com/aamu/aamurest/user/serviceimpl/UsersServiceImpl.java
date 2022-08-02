@@ -1,5 +1,6 @@
 package com.aamu.aamurest.user.serviceimpl;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.transaction.support.TransactionTemplate;
 
 import com.aamu.aamurest.user.service.UsersDTO;
 import com.aamu.aamurest.user.service.UsersService;
+import com.aamu.aamurest.util.FileUploadUtil;
 
 @Service
 public class UsersServiceImpl implements UsersService{
@@ -41,6 +43,12 @@ public class UsersServiceImpl implements UsersService{
 	public int checkId(String id) {
 
 		return dao.checkId(id);
+	}
+
+	@Override
+	public List<Map> selectAllTheme() {
+		
+		return dao.selectAllTheme();
 	}
 
 

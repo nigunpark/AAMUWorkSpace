@@ -46,7 +46,7 @@ public class CommuController {
 	//글 목록용
 	@GetMapping("/gram/selectList")
 	public List<CommuDTO> commuSelectList(@RequestParam Map map, HttpServletRequest req){
-		//검색할 때는 맵으로 써치워드 써치컬럼을 받고, id는 isLike때문에 받는거다. lno는 dto에서 뽑아온다
+		//검색할 때는 맵으로 써치워드 써치컬럼을 받고, id(로그인한 사람의 id)는 isLike때문에 받는거다. lno는 dto에서 뽑아온다
 		//cid가 넘어오면 마이페이지 id에 따른 글 뿌려주기
 		System.out.println("셀렉트 리스트 id:"+map.get("id"));
 		System.out.println("셀렉트 리스트 searchColumn:"+map.get("searchColumn"));
@@ -55,7 +55,10 @@ public class CommuController {
 		//list=글 목록들
 		List<CommuDTO> list = commuService.commuSelectList(map);
 		for(CommuDTO dto : list) {//글 목록들 list에서 하나씩 꺼내서 dto에 담는다
-			//코멘트한개 셋팅 
+			//코멘트한개 셋팅
+//			if(commuService.commuCommentSelectOne(dto.getLno())==null) {
+//				dto.set
+//			} 빈문자열 셋팅
 			dto.setCommuComment(commuService.commuCommentSelectOne(dto.getLno()));
 			//코멘트의 프로필 셋팅
 			CommuCommentDTO commentdto=dto.getCommuComment();
@@ -87,6 +90,10 @@ public class CommuController {
 			dto.setPhoto(FileUploadUtil.requestFilePath(commuService.commuSelectPhotoList(dto.getLno()), "/resources/commuUpload", req));
 			//글쓴이-프로필 사진 가져와서 dto에 셋팅
 			dto.setUserprofile(FileUploadUtil.requestOneFile(commuService.commuSelectUserProf(dto.getId()), "/resources/userUpload", req));
+			//마이페이지용_나를 팔로우하는 계정 수 셋팅
+			dto.setFollowercount(commuService.commuFollowerCount(map));
+			//내가 팔로잉하는 계정 수 셋팅
+			dto.setFollowingcount(commuService.commuFollowingCount(map));
 			
 		}/////for
 		System.out.println("몇개 넘어가니:"+list.size());
@@ -102,7 +109,7 @@ public class CommuController {
 	}
 	*/
 	//글 검색용_searchColumn:id,ctitle,tname로 검색
-	@GetMapping("/gram/search/selectList")
+	@GetMapping("/gram/search/selectList") 
 	public List<String> commuSearachList(@RequestParam Map map){
 		System.out.println("검색 searchColumn:"+map.get("searchColumn"));
 		System.out.println("검색 searchWord:"+map.get("searchWord"));
@@ -163,7 +170,7 @@ public class CommuController {
 
 	//글 생성용_장소 뿌려주기
 	@GetMapping("/gram/place/selectList")
-	public List<Map> commuPlaceList(@RequestParam Map map) {
+	public List<Map> commuPlaceList(@RequestParam Map map) { //searchWord:
 		List<Map> list=commuService.commuPlaceList(map);
 		return list;
 	}
@@ -172,7 +179,7 @@ public class CommuController {
 	//tname이라는 키값으로 #여행이 넘어와 
 	//TAGS테이블에 있으면 TNO,TNAME 키값으로 뿌려주고 COMMUTAG에 저장 //없으면 INSERT TAGS테이블 COMMUTAG테이블
 	@GetMapping("/gram/tag")
-	public List<String> commuTag(@RequestParam Map map){
+	public List<String> commuTag(@RequestParam Map map){//tname:
 		return commuService.commuTag(map);
 	}
 	
@@ -201,7 +208,7 @@ public class CommuController {
 	
 	//글 하나 뿌려주는 용 -수정용
 	@GetMapping("/gram/SelectOne")
-	public CommuDTO commuSelectOne(@RequestParam Map map, HttpServletRequest req) {
+	public CommuDTO commuSelectOne(@RequestParam Map map, HttpServletRequest req) {//id(로그인한사람 id 왜냐?isLike때문에), lno(글의 lno)
 		System.out.println("셀렉트원 map:"+map);
 		CommuDTO dto=commuService.commuSelectOne(map);
 		//모든 사진 가져와서 dto에 셋팅
@@ -283,7 +290,7 @@ public class CommuController {
 	
 	//댓글 생성용 - Map ver
 	@PostMapping("/gram/comment/edit")
-	public Map commuCommentInsert(@RequestBody Map map) {
+	public Map commuCommentInsert(@RequestBody Map map) {//id,lno,reply 넘어옴
 		System.out.println("댓글생성 map:"+map);
 		int affected=commuService.commuCommentInsert(map);
 		Map resultMap = new HashMap<> ();
@@ -297,7 +304,7 @@ public class CommuController {
 	
 	//댓글 수정용
 	@PutMapping("/gram/comment/edit")
-	public Map commuCommentUpdate(@RequestBody Map map) {
+	public Map commuCommentUpdate(@RequestBody Map map) {//reply, cno
 		System.out.println("(cc)map:"+map);
 		int commuCommentUpdateAffected=commuService.commuCommentUpdate(map);
 		Map resultMap = new HashMap();
@@ -310,7 +317,7 @@ public class CommuController {
 
 	//댓글 삭제용
 	@DeleteMapping("/gram/comment/edit")
-	public Map commuCommentDelete(@RequestParam Map map) {
+	public Map commuCommentDelete(@RequestParam Map map) {//lno, cno
 		System.out.println("댓글 삭제용 map:"+map);
 		System.out.println("댓글 삭제용 cno:"+map.get("cno"));
 		System.out.println("댓글 삭제용 lno:"+map.get("lno"));
@@ -349,7 +356,7 @@ public class CommuController {
 	*/
 	//글 좋아요 누르기
 	@GetMapping("/gram/like")
-	public Map commuLike(@RequestParam Map map) {
+	public Map commuLike(@RequestParam Map map) {//id, lno
 		Boolean affected=commuService.commuLike(map);
 		//community테이블의 selectone likecount
 		int likecount=commuService.commuLikecountSelect(map);
@@ -370,17 +377,15 @@ public class CommuController {
 	//팔로우, 팔로잉 
 	@PostMapping("/gram/follower")
 	public Map commuFollower(@RequestBody Map map) {
+		System.out.println("팔로우 map:"+map);
 		//map에 id:로그인한사람이 누른 id follower:내 id
-		int affected=commuService.commuFollower(map);
-		Map resultMap = new HashMap();
-		if(affected==1) resultMap.put("isSuccess", true);
-		else resultMap.put("isSuccess", false);
+		Map resultMap=commuService.commuFollower(map);
 		return resultMap;
 	}
 	
 	//마이페이지용_id에 따른 
 	@GetMapping("/gram/mypage")
-	public List<CommuDTO> commuMyPageList(@RequestParam Map map, HttpServletRequest req) {
+	public List<CommuDTO> commuMyPageList(@RequestParam Map map, HttpServletRequest req) {//id
 		//map에 id:로그인한 사람 id
 		List<CommuDTO> list = commuService.commuMyPageList(map);
 		for(CommuDTO dto : list) {

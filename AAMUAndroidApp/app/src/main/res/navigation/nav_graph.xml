@@ -40,6 +40,13 @@
             app:destination="@id/conversationFragment"
             app:popUpTo="@id/mainFragment"
             app:popUpToInclusive="false" />
+        <action
+            android:id="@+id/action_mainFragment_to_routeBBSDetailFragment"
+            app:destination="@id/routeBBSDetailFragment"
+            app:popUpTo="@id/mainFragment"
+            app:popUpToInclusive="false" >
+        </action>
+
     </fragment>
     <fragment
         android:id="@+id/plannerFragment"
@@ -50,4 +57,14 @@
         android:id="@+id/conversationFragment"
         android:name="com.aamu.aamuandroidapp.fragment.main.conversation.ConversationFragment"
         android:label="ConversationFragment" />
+    <fragment
+        android:id="@+id/routeBBSDetailFragment"
+        android:name="com.aamu.aamuandroidapp.fragment.main.routebbs.RouteBBSDetailFragment"
+        android:label="RouteBBSDetailFragment" >
+        <argument
+            android:name="rbn"
+            app:argType="integer"
+            android:defaultValue="0" />
+    </fragment>
+
 </navigation>

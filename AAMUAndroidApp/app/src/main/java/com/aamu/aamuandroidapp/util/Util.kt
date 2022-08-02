@@ -73,13 +73,13 @@ fun getLatLng(): Location? {
         contextL,
         Manifest.permission.ACCESS_COARSE_LOCATION
     )
-    val locatioNProvider = LocationManager.NETWORK_PROVIDER
+    val locatioNProvider = LocationManager.GPS_PROVIDER
     val locatioNManager = contextL.getSystemService(Context.LOCATION_SERVICE) as LocationManager?
     if (hasFineLocationPermission == PackageManager.PERMISSION_GRANTED &&
         hasCoarseLocationPermission == PackageManager.PERMISSION_GRANTED
     ) {
         currentLatLng = locatioNManager?.getLastKnownLocation(locatioNProvider)
-            ?: locatioNManager?.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+            ?: locatioNManager?.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
     }
 
     return currentLatLng
@@ -89,7 +89,7 @@ lateinit var stomp : CustomStompClient
 private lateinit var stompConnection: Disposable
 
 fun stompConnection() {
-    val url = "ws://192.168.0.19:8080/aamurest/ws/chat/websocket"
+    val url = "ws://192.168.45.107:8080/aamurest/ws/chat/websocket"
     val intervalMillis = 1000L
     val client = OkHttpClient.Builder()
         .readTimeout(10, TimeUnit.SECONDS)
@@ -112,6 +112,7 @@ fun stompConnection() {
             Event.Type.ERROR -> {
                 Log.i("com.aamu.aamu","에러")
             }
+            else -> {}
         }
     }
 }

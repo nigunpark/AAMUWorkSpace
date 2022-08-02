@@ -367,12 +367,31 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 	
 	//팔로우, 팔로잉
 	@Override
-	public int commuFollower(Map map) {
+	public Map commuFollower(Map map) {
 		int affected=dao.commuIsExistFollower(map); //follower테이블에 있는가? 있으면1 없으면0
-		if(affected==0)
-			return dao.commuInsertFollower(map);
-		else
-			return dao.commuDeleteFollower(map);
+		Map resulMap = new HashMap<>();
+		if(affected==0) { //follower테이블에 없다 따라서 넣어줘야됨
+			int insertAffected=dao.commuInsertFollower(map);
+			if(insertAffected==1) {
+				resulMap.put("FollowerSuccess", true);
+				return resulMap;
+			}
+			else {
+				resulMap.put("FollowerSuccess", false);
+				return resulMap;
+			}
+		}
+		else { //follower테이블에 있다 따라서 삭제
+			int deleteAffected=dao.commuDeleteFollower(map);
+			if(deleteAffected==1) {
+				resulMap.put("FollowerCancelSuccess", true);
+				return resulMap;
+			}
+			else {
+				resulMap.put("FollowerCancelSuccess", true);
+				return resulMap;
+			}
+		}
 	}
 	
 	//마이페이지용_id에 따른 
