@@ -144,7 +144,7 @@ public class BBSController {
 			for(ReviewDTO dto:list) {
 				total += dto.getRate();
 			}
-			total = Math.round(total / (list.size())*10);
+			total = Math.round(total / (list.size()+1)*10);
 			total = total/10;
 		}
 		
