@@ -13,6 +13,7 @@ import Edit from "./ModalGroup/Edit/Edit";
 import { confirmAlert } from "react-confirm-alert";
 import { useDispatch, useSelector } from "react-redux";
 import { addForChatInfo } from "../../redux/store";
+import FeedMenuModal from "./ModalGroup/feedMenuModal";
 function FeedSetting({
   val,
   setlist,
@@ -58,7 +59,6 @@ function FeedSetting({
     // temp.append('id',sessionStorage.getItem('username'))
     // temp.append('reply',replyRef.current.value)
     // temp.append('lno',val.lno)
-    console.log(111);
     let token = sessionStorage.getItem("token");
     axios
       .post(
@@ -103,9 +103,9 @@ function FeedSetting({
     return (
       <div className="writing">
         <span className="id">
-          {val.commuComment===null?null:val.commuComment.id}
+          {val.commuComment === null ? null : val.commuComment.id}
         </span>
-        <span>{val.commuComment===null?null:val.commuComment.reply}</span>
+        <span>{val.commuComment === null ? null : val.commuComment.reply}</span>
       </div>
     );
   };
@@ -138,6 +138,8 @@ function FeedSetting({
       });
   }
 
+  
+
   return (
     <div>
       <div className="feeds-setting">
@@ -163,14 +165,16 @@ function FeedSetting({
             {profileModal && (
               <div
                 ref={profileRef}
-                onMouseOver={() => {
+                onMouseOver={(e) => {
                   setprofileModal(true);
                 }}
-                onMouseOut={() => {
+                onMouseOut={(e) => {
                   setprofileModal(false);
                 }}
               >
-                <Profile val={val}></Profile>
+                <Profile
+                  val={val}
+                ></Profile>
               </div>
             )}
           </div>
@@ -180,7 +184,7 @@ function FeedSetting({
               onClick={() => setModalShow(!modalShow)}
             ></i>
             {modalShow && (
-              <MenuModal
+              <FeedMenuModal
                 setlist={setlist}
                 setModalShow={setModalShow}
                 seteditModal={seteditModal}
