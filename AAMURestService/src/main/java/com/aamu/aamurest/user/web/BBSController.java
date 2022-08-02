@@ -184,7 +184,7 @@ public class BBSController {
 	}
 	
 	//검색결과 목록
-	@GetMapping("/getSearchList")
+	//@GetMapping("/getSearchList")
 	
 	//테마 사진 하나 뿌려주기
 	@GetMapping("/theme/SelectOne/{themeid}")
