@@ -12,8 +12,9 @@ import lombok.Setter;
 public class ReviewDTO {
 	private int rbn;
 	private String id; //리뷰 작성자
-	private int rate; //평점
+	private double rate; //평점
 	private String review;
 	private java.sql.Date ratedate; //리뷰 작성날짜
-	private String rno;
+	private int rno;
+	
 }

@@ -37,6 +37,7 @@ public class BBSServiceImpl implements BBSService{
 			dto.setReviewList(dao.reviewSelectList(rbn));
 			returnList.add(dto);
 		}
+		
 		return returnList;
 	}
 
@@ -114,25 +115,33 @@ public class BBSServiceImpl implements BBSService{
 
 	/*---------------------------------------------------*/
 	
-	
-	//글 상세보기_모든 리뷰 보기
+	/*
 	@Override
-	public List<ReviewDTO> reviewList(int rbn) {
-		/*
-		List<ReviewDTO> reviewList = dao.reviewSelectList();
-		List<ReviewDTO> returnList = new Vector<>();
-
-		for(ReviewDTO dto:reviewList) {
-			int rno = dto.getRno();
-			dto.setReviewList(dao.reviewSelectList(rno));
-			returnList.add(dto);
+	public double setRate(int rbn) {
+		Double rateAvg = BBSService.getRateAvg(rbn);
+		
+		if(rateAvg == null) {
+			rateAvg = 0.0;
 		}
-		return returnList;
-		*/
-		return dao.reviewSelectList(rbn);
-	}
+		
+		rateAvg = (double) (Math.round(rateAvg*10));
+		rateAvg = rateAvg/10;
+		
+		ReviewDTO dto = new ReviewDTO();
+		dto.setRbn(rbn);
+		dto.setRateAvg(rateAvg);
+		
+		BBSService.updateRateAvg(dto);
+		
+		return dao.setRate(rbn);
+	} */
 	
-
+	//리뷰 목록
+		@Override
+		public List<ReviewDTO> reviewList(int rbn) {
+			return dao.reviewSelectList(rbn);
+		}
+		
 	//리뷰 등록
 	@Override
 	public int reviewInsert(Map map) {
@@ -161,12 +170,15 @@ public class BBSServiceImpl implements BBSService{
 	public BBSDTO themeSelectOne(Map map) {
 		return dao.themeSelectOne(map);
 	}
-	
-	//평균 평점 업데이트
+
+
 	@Override
-	public int rateUpdate(Map map) {
-		return dao.rateUpdate(map);
+	public int updateRate(Map map) {
+		return dao.updateRate(map);
 	}
+	
+	
+	
 
-
+	
 }

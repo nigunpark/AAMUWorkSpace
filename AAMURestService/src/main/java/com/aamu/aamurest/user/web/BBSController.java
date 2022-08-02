@@ -61,7 +61,7 @@ public class BBSController {
 		System.out.println("선택:"+rbn);
 		BBSDTO dto=bbsService.bbsSelectOne(rbn);
 		
-		System.out.println("머가나오나"+dto);
+		System.out.println("머가나오나:"+dto);
 		//모든 리뷰 가져오기
 		System.out.println("리뷰리스트에 뭐가 있을까?"+bbsService.reviewList(rbn));
 		dto.setReviewList(bbsService.reviewList(rbn));
@@ -118,17 +118,37 @@ public class BBSController {
 	}
 	
 	/*
-	//리뷰 목록
-	@GetMapping("/review/SelectList")
-	public List<ReviewDTO> reviewSelectList(@RequestParam Map map){
-		List<ReviewDTO> list = bbsService.reviewList(map);
-		return list;
-	} */
+	//평균 평점 반영
+	@PutMapping("/review/edit/{rbn}")
+	public Map updateRate(@PathVariable int rbn, HttpServletRequest req, @RequestParam Map map){
+		double ReviewUpdateAffected = bbsService.updateRate(rbn);
+		Map resultMap = new HashMap();
+		if(ReviewUpdateAffected==1)
+			resultMap.put("result", "updateSuccess");
+		else
+			resultMap.put("result", "updateNotSuccess");
+
+		return resultMap;
+	}
+	*/
 
 	//리뷰 등록 <성공>
+	//평균 평점 반영 <성공>
 	@PostMapping("/review/edit")
 	public Map reviewInsert(@RequestBody Map map) {
-		System.out.println("map rbn이 넘어오나:"+map.get("rbn"));
+		System.out.println("map이 넘어오나:"+map);
+		int rbn = Integer.parseInt(map.get("rbn").toString());
+		List<ReviewDTO> list = bbsService.reviewList(rbn);
+		//BBSDTO bbsdto = bbsService.bbsSelectOne(rbn);
+		list.size();
+		double total=0;
+		for(ReviewDTO dto:list) {
+			total += dto.getRate();
+		}
+		total = Math.round(total / (list.size())*10);
+		total = total/10;
+		map.put("rateavg", total);
+		bbsService.updateRate(map);
 		int affected=bbsService.reviewInsert(map);
 		Map resultMap = new HashMap();
 		if(affected==1) resultMap.put("result", "insertSuccess");
@@ -161,6 +181,9 @@ public class BBSController {
 		return resultMap;
 		
 	}
+	
+	//검색
+	//@GetMapping("/getSearc")
 	
 	//테마 사진 하나 뿌려주기
 	@GetMapping("/theme/SelectOne/{themeid}")
