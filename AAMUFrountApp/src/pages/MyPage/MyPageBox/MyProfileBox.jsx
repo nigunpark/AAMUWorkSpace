@@ -4,8 +4,10 @@ import styled from "styled-components";
 import DaumPostcode from "react-daum-postcode";
 import axios from "axios";
 import { Avatar } from "antd";
+import { useNavigate } from "react-router-dom";
 
-const MyProfileBox = () => {
+const MyProfileBox = ({ setClickTab }) => {
+  let navigate = useNavigate();
   const [userProfile, setUserProfile] = useState();
 
   // const {gender} = userProfile;
@@ -172,11 +174,15 @@ const MyProfileBox = () => {
       </MyUpdateImg>
 
       <MyUpdateProfile>
-        <div style={{ fontSize: "14px", display: "flex", flexDirection: "row" }}>
+        <div
+          style={{ fontSize: "14px", display: "flex", flexDirection: "row" }}
+        >
           <div>이름</div>
           <div style={{ marginLeft: "200px" }}>아이디</div>
         </div>
-        <div style={{ fontSize: "14px", display: "flex", flexDirection: "row" }}>
+        <div
+          style={{ fontSize: "14px", display: "flex", flexDirection: "row" }}
+        >
           <Name>{name}</Name>
           {/* {userProfile.name} */}
           <Id>{userId}</Id>
@@ -240,7 +246,9 @@ const MyProfileBox = () => {
           />
         </EmailContainer>
 
-        <div style={{ fontSize: "14px", display: "flex", flexDirection: "row" }}>
+        <div
+          style={{ fontSize: "14px", display: "flex", flexDirection: "row" }}
+        >
           주소
           <div style={{ marginLeft: "auto" }}>
             <AddrBtn
@@ -269,7 +277,11 @@ const MyProfileBox = () => {
               setDetailAddr={setDetailAddr}
             />
           ) : (
-            <Addr zoneCode={zoneCode} address={address} detailAddr={detailAddr} />
+            <Addr
+              zoneCode={zoneCode}
+              address={address}
+              detailAddr={detailAddr}
+            />
           )}
         </div>
         <div style={{ textAlign: "end", marginTop: "50px" }}>
@@ -285,7 +297,9 @@ const MyProfileBox = () => {
                 introduce,
                 pwd,
                 gender,
-                name
+                name,
+                navigate,
+                setClickTab
               );
             }}
           >
@@ -306,7 +320,18 @@ function uploadFile(showImages) {
   return formData;
 }
 
-function profileUpdate(profiles, phoneNum, email, addr, introduce, pwd, gender, name) {
+function profileUpdate(
+  profiles,
+  phoneNum,
+  email,
+  addr,
+  introduce,
+  pwd,
+  gender,
+  name,
+  navigate,
+  setClickTab
+) {
   profiles.append("addrid", addr);
   profiles.append("email", email);
   profiles.append("gender", gender);
@@ -325,7 +350,9 @@ function profileUpdate(profiles, phoneNum, email, addr, introduce, pwd, gender, 
       },
     })
     .then((resp) => {
-      if (resp.data === 1) alert("프로필 수정이 완료되었습니다.");
+      if (resp.data === 1) {
+        alert("프로필 수정이 완료되었습니다.");
+      }
       console.log("resp.data", resp.data);
       //   return resp.data;
     })
@@ -377,7 +404,10 @@ function EditAddr({
         </span>
       </div>
       <div>
-        <div className="join__stepTwo-input-common" style={{ width: "100%", marginBottom: "10px" }}>
+        <div
+          className="join__stepTwo-input-common"
+          style={{ width: "100%", marginBottom: "10px" }}
+        >
           <input
             style={{ marginLeft: "3px" }}
             type="text"
@@ -428,7 +458,8 @@ const AddresApi = ({ setIsOpenPost, setAddress, setZoneCode }) => {
         extraAddr += data.bname;
       }
       if (data.buildingName !== "") {
-        extraAddr += extraAddr !== "" ? `, ${data.buildingName}` : data.buildingName;
+        extraAddr +=
+          extraAddr !== "" ? `, ${data.buildingName}` : data.buildingName;
       }
       fullAddr += extraAddr !== "" ? ` (${extraAddr})` : "";
     }
@@ -481,7 +512,10 @@ function Addr({ zoneCode, address, detailAddr }) {
         </div>
       </div>
       <div>
-        <div className="join__stepTwo-input-common" style={{ width: "100%", marginBottom: "10px" }}>
+        <div
+          className="join__stepTwo-input-common"
+          style={{ width: "100%", marginBottom: "10px" }}
+        >
           <input
             style={{ marginLeft: "3px" }}
             type="text"

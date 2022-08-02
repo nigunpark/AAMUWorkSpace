@@ -161,7 +161,7 @@ function User({
           }}
         />
         <div>
-          <p className="user-id">{sessionStorage.getItem('username')}</p>
+          <p className="user-id">{sessionStorage.getItem("username")}</p>
           <p className="user-name">김영현</p>
         </div>
 
@@ -173,7 +173,11 @@ function User({
         >
           <div className="heart">
             {heart ? (
-              <i className=" fa-solid fa-heart fa-2x" ref={notimodalRef} style={{ color: "black" }}>
+              <i
+                className=" fa-solid fa-heart fa-2x"
+                ref={notimodalRef}
+                style={{ color: "black" }}
+              >
                 <NotificationModal></NotificationModal>
               </i>
             ) : (

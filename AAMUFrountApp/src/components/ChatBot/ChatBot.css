@@ -73,7 +73,7 @@
 }
 @keyframes slide_chatBotBox__span {
   0% {
-    transform: translateY(200px);
+    transform: translateY(50px);
     opacity: 0;
   }
   100% {

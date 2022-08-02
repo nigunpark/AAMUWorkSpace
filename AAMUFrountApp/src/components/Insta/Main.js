@@ -51,7 +51,10 @@ function Main({
           <Story></Story>   
         </div> */}
       <div className="margin-value">
-        <div className="main-left" style={{ display: "flex", flexDirection: "column" }}>
+        <div
+          className="main-left"
+          style={{ display: "flex", flexDirection: "column" }}
+        >
           {loading && <Spinner />}
           {list.map((val, i) => {
             return (

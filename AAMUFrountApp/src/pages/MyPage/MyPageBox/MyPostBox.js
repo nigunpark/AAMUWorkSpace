@@ -154,8 +154,6 @@ const MyPostBox = ({ selectRbn, setClickTab }) => {
 
         <div>
           {detailRoute.map((route, idx) => {
-            console.log("route 외부 map:", route);
-
             return (
               <div key={idx} className="detail-plan">
                 <span className="paln-date">{idx + 1} 일차</span>
@@ -188,9 +186,7 @@ const MyPostBox = ({ selectRbn, setClickTab }) => {
                               />
                             </div>
                             <div style={{ marginLeft: "1px" }}>
-                              <div
-                                style={{ fontSize: "15px", marginTop: "10px" }}
-                              >
+                              <div style={{ fontSize: "15px", marginTop: "10px" }}>
                                 {obj.dto.title}
                               </div>
                             </div>
@@ -295,15 +291,7 @@ const MyPostBox = ({ selectRbn, setClickTab }) => {
             type="button"
             onClick={() => {
               let write = uploadFile(showImagesFile);
-              bordWrite(
-                write,
-                title,
-                content,
-                detailRbn,
-                navigate,
-                postThemeNum,
-                setClickTab
-              );
+              bordWrite(write, title, content, detailRbn, navigate, postThemeNum, setClickTab);
             }}
           >
             업로드
@@ -357,39 +345,26 @@ function DetailSetting({ fromWooJaeData, periodIndex, obj, i }) {
   useEffect(() => {
     if (i !== 0) {
       setUpTime(
-        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime +
-          obj.mtime / 1000 / 60
+        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime + obj.mtime / 1000 / 60
       );
       setDownTime(
         fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime +
           obj.mtime / 1000 / 60 +
-          fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].atime /
-            1000 /
-            60
+          fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].atime / 1000 / 60
       );
       let forBlackBoxRedux = getTimes(
         periodIndex,
-        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime +
-          obj.mtime / 1000 / 60,
+        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime + obj.mtime / 1000 / 60,
         fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime +
           obj.mtime / 1000 / 60 +
-          fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].atime /
-            1000 /
-            60
+          fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].atime / 1000 / 60
       );
       dispatch(addWholeBlackBox(forBlackBoxRedux));
-      if (
-        i !==
-        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)].length - 1
-      ) {
-        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][
-          i + 1
-        ].starttime =
+      if (i !== fromWooJaeData[periodIndex]["day" + (periodIndex + 1)].length - 1) {
+        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i + 1].starttime =
           fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime +
           obj.mtime / 1000 / 60 +
-          fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].atime /
-            1000 /
-            60;
+          fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].atime / 1000 / 60;
       }
     }
   }, []);
@@ -445,15 +420,7 @@ function uploadFile(showImages) {
   }
   return formData;
 }
-function bordWrite(
-  write,
-  title,
-  content,
-  detailRbn,
-  navigate,
-  postThemeNum,
-  setClickTab
-) {
+function bordWrite(write, title, content, detailRbn, navigate, postThemeNum, setClickTab) {
   write.append("id", sessionStorage.getItem("username"));
   write.append("title", title);
   write.append("content", content);

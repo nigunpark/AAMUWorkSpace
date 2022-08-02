@@ -11,7 +11,6 @@ const Search = ({
   setShowSearchedData,
 }) => {
   const [searchWord, setSearchWord] = useState("");
-
   let searchRef = useRef();
   return (
     <>
@@ -20,20 +19,15 @@ const Search = ({
           ref={searchRef}
           type="text"
           placeholder="검색어를 입력하세요"
-          onClick={() => {
-            setShowSearchedData(true);
-          }}
-          onKeyUp={(e) => {
+          onKeyDown={(e) => {
             e.stopPropagation();
-
-            setSearchWord(e.target.value);
-            searching(
-              e,
-              areaCode,
-              forSearchTypeId,
-              searchWord,
-              setSearchedData
-            );
+            if (e.key === "Enter") {
+              setShowSearchedData(true);
+              setSearchWord(e.target.value);
+              searching(e, areaCode, forSearchTypeId, searchWord, setSearchedData);
+            }
+          }}
+          onChange={(e) => {
             if (e.target.value.length === 0) setShowSearchedData(false);
           }}
         />
