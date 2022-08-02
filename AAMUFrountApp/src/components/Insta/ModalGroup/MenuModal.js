@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import Spinner from "../Spinner";
 
 
-const Modal = ({val,setModalShow,seteditModal , setlist}) => {
+const Modal = ({val,setModalShow,seteditModal , setlist,setcommentModal}) => {
     let menuRef = useRef();
     let editRef = useRef();
     const [goEdit, setgoEdit] = useState(false);
@@ -34,32 +34,19 @@ const Modal = ({val,setModalShow,seteditModal , setlist}) => {
         .then((resp) => {
             setdeleteOnee(resp.data);//성공 여부가 온다 true false
             // alert('삭제되었습니다!')
-            feedList(setlist,setloading)
+            setcommentModal(false);
+            setlist((curr) => {
+              return curr.filter((item) => {
+                return item.lno != val.lno;
+              });
+            });
           })
           .catch((error) => {
             console.log(error);
           });
       }
  
-      function feedList(setlist,setloading) {
-  
-        //업로드 버튼 누르고 화면 새로고침
-        let token = sessionStorage.getItem("token");
-        axios
-          .get("/aamurest/gram/selectList", {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          })
-          .then((resp) => {
-            console.log(resp.data);
-            setlist(resp.data);
-            setloading(false);
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      }
+      
   return (
     <Container >
         <Overlay ref={menuRef} >
