@@ -60,7 +60,6 @@ const Content = () => {
                 </span>
               </p>
             </div>
-
             {/* <FSearch /> */}
           </div>
           <div className="search__container__minCon">
