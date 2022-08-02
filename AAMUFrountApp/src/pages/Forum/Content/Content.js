@@ -4,26 +4,32 @@ import "./Content.css";
 import { Link, useNavigate } from "react-router-dom";
 import FSearch from "../FSearch/FSearch";
 import axios from "axios";
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import dummy from "../DB/contentdata.json";
 import { useSelector } from "react-redux";
 import DetailModal from "../DetailModal/DetailModal";
+import Spinner from "../../../components/Insta/Spinner";
+import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 const Content = () => {
   let reduxState = useSelector((state) => state);
   //let navigate = useNavigate();
   const [listData, setListData] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   let token = sessionStorage.getItem("token");
   let [list, setList] = useState("");
   const [showCBModal, setShowCBModal] = useState(false);
-  const [detailOne, setDetail] = useState({});
+  const [detailOne, setDetailOne] = useState({});
+  const [kindOfSearch, setKindOfSearch] = useState("");
   function chatbotModal() {
     if (reduxState.forChatBotData.bool === true) {
       setShowCBModal(true);
     }
   }
+  // console.log("detailOne", detailOne);
+  // console.log("?forChatBotData?", reduxState.forChatBotData);
   useEffect(() => {
-    console.log("useEffect", reduxState.forChatBotData.length);
     axios
       .get("/aamurest/bbs/SelectList", {
         headers: {
@@ -37,40 +43,58 @@ const Content = () => {
       .catch((error) => {
         console.log((error) => console.log("글 목록 가져오기 실패", error));
       });
-    console.log("useEffect밑", reduxState.forChatBotData);
     chatbotModal();
-  }, []);
+  }, [isOpen]);
 
   return (
     <div className="Cards_minCon">
       <div className="card__container_minCon">
         <div className="card__wrapper_minCon">
-          <h1 className="card__title_minCon">
-            당신도 이제는 여행 Creator<span>!</span>
-          </h1>
+          <div className="card__top_minCon">
+            <div>
+              <h2 className="card__title_minCon">여행플랜 공유 게시판</h2>
+              <p className="card__desc_minCon">
+                자신만의 여행계획을
+                <span className="myPage-link">
+                  <Link to="/myPage"> 공유해보자</Link>
+                </span>
+              </p>
+            </div>
 
-          <p className="card__desc_minCon">
-            자신만의 여행계획을 세우고 남들과
-            <span className="myPage-link">
-              <Link to="/myPage"> 공유해봐</Link>
-            </span>
-          </p>
-          <FSearch />
-
-          <ul className="card__items_minCon">
+            {/* <FSearch /> */}
+          </div>
+          <div className="search__container__minCon">
+            <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+              <InputLabel id="demo-select-small">검색</InputLabel>
+              <Select
+                labelId="demo-select-small"
+                id="demo-select-small"
+                value={kindOfSearch}
+                label="검색"
+                onChange={(e) => {
+                  setKindOfSearch(e.target.value);
+                }}
+              >
+                <MenuItem value="">
+                  <em>없음</em>
+                </MenuItem>
+                <MenuItem value="id">아이디</MenuItem>
+                <MenuItem value="theme">테마</MenuItem>
+                <MenuItem value="title">제목</MenuItem>
+              </Select>
+            </FormControl>
+            <div className="search__warpper__minCon">
+              <input type="text" placeholder="검색어를 입력하세요" />
+              <span>
+                <FontAwesomeIcon icon={faMagnifyingGlass} className="search__i__minCon" />
+              </span>
+            </div>
+          </div>
+          <div className="card__items_minCon">
             {listData.map((val, idx) => {
-              return (
-                <ContentItem
-                  // setDetail={setDetail}
-                  detail={val}
-                  index={idx}
-                  setShowCBModal={setShowCBModal}
-                  isOpen={isOpen}
-                  setIsOpen={setIsOpen}
-                />
-              );
+              return <ContentItem setDetailOne={setDetailOne} detail={val} setIsOpen={setIsOpen} />;
             })}
-          </ul>
+          </div>
         </div>
       </div>
       {showCBModal && (
@@ -78,18 +102,18 @@ const Content = () => {
           setShowCBModal={setShowCBModal}
           detailRbn={reduxState.forChatBotData.rbn}
           setIsOpen={setIsOpen}
-          // postDay={new Date(reduxState.forChatBotData.planner.routeDate)}
+          setIsLoading={setIsLoading}
         />
       )}
-      {/* {isOpen == true ? (
+      {isOpen && (
         <DetailModal
-          // detailOne={detailOne}
-          postDay={postDay}
+          detailOne={detailOne}
           setShowCBModal={setShowCBModal}
           setIsOpen={setIsOpen}
-          detailRbn={detailRbn}
+          setIsLoading={setIsLoading}
         />
-      ) : null} */}
+      )}
+      {/* {isLoading && <Spinner />} */}
     </div>
   );
 };
