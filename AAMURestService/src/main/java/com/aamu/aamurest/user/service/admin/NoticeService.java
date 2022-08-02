@@ -17,17 +17,14 @@ public interface NoticeService<T> {
 	// 게시물 검색
 	List<String> noticeSearachList(Map map);
 
+	// 상세 보기
+	NoticeDTO noticeSelectOne(Map map);
+
 	// 게시물 등록
 	int noticeInsert(Map map);
 
-	// 게시물 상세 보기
-	NoticeDTO noticeSelectOne(Map map);
-
 	// 게시물 수정
 	int noticeUpdate(Map map);
-
-	// 게시물 삭제
-	int noticeDelete(String nno);
 
 	// 게시물 삭제
 	int noticeDelete(Map map);
