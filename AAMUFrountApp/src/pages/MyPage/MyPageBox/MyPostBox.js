@@ -60,7 +60,7 @@ const MyPostBox = ({ selectRbn, setClickTab }) => {
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log("글 작성 페이지에서 상세경로 데이터 확인 : ", resp.data);
+      // console.log("글 작성 페이지에서 상세경로 데이터 확인 : ", resp.data);
       setDetailPostData(resp.data);
       setDetailRbn(resp.data.rbn);
       setDetailTitle(resp.data.title);
@@ -75,14 +75,9 @@ const MyPostBox = ({ selectRbn, setClickTab }) => {
       console.log((error) => console.log("상세경로 가져오기 실패", error));
     }
   };
-  console.log("detailRoute 제발111 :", detailRoute);
-
   useEffect(() => {
     getPlanData();
   }, []);
-
-  // console.log("detailPostData :", detailPostData);
-  console.log("detailRoute :", detailRoute);
 
   const [isOpen, setIsOpen] = useState(false);
   const onClickModal = () => {
@@ -154,7 +149,7 @@ const MyPostBox = ({ selectRbn, setClickTab }) => {
 
         <div>
           {detailRoute.map((route, idx) => {
-            console.log("route 외부 map:", route);
+            // console.log("route 외부 map:", route);
 
             return (
               <div key={idx} className="detail-plan">
@@ -330,7 +325,7 @@ function Theme({ setIsOpen, themes, setPostTheme, setPostThemeNum }) {
               className="theme-modal-select"
               value={val.themeId}
               onClick={(e) => {
-                console.log("테마 e.target.value :", val.themeId);
+                // console.log("테마 e.target.value :", val.themeId);
                 setPostThemeNum(val.themeId);
                 setPostTheme(val.themeName);
                 setIsOpen(false);
@@ -469,7 +464,7 @@ function bordWrite(
       },
     })
     .then((resp) => {
-      console.log(resp.data.result);
+      // console.log(resp.data.result);
       if (resp.data.result === "insertSuccess") {
         alert("글이 저장되었습니다");
         navigate("/forum");
