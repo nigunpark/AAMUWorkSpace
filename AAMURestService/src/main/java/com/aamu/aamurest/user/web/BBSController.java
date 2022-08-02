@@ -139,14 +139,15 @@ public class BBSController {
 		System.out.println("map이 넘어오나:"+map);
 		int rbn = Integer.parseInt(map.get("rbn").toString());
 		List<ReviewDTO> list = bbsService.reviewList(rbn);
-		//BBSDTO bbsdto = bbsService.bbsSelectOne(rbn);
-		list.size();
-		double total=0;
-		for(ReviewDTO dto:list) {
-			total += dto.getRate();
+		double total = Double.parseDouble(map.get("rate").toString());
+		if(list.size() == 0) {
+			for(ReviewDTO dto:list) {
+				total += dto.getRate();
+			}
+			total = Math.round(total / (list.size())*10);
+			total = total/10;
 		}
-		total = Math.round(total / (list.size())*10);
-		total = total/10;
+		
 		map.put("rateavg", total);
 		bbsService.updateRate(map);
 		int affected=bbsService.reviewInsert(map);
@@ -182,8 +183,8 @@ public class BBSController {
 		
 	}
 	
-	//검색
-	//@GetMapping("/getSearc")
+	//검색결과 목록
+	@GetMapping("/getSearchList")
 	
 	//테마 사진 하나 뿌려주기
 	@GetMapping("/theme/SelectOne/{themeid}")
