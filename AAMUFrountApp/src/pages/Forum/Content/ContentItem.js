@@ -35,11 +35,7 @@ const ContentItem = ({ detail, setDetailOne, setIsOpen }) => {
           <figure className="card__item__info_minCon">
             <div className="card__item__img-container_minCon">
               <img
-                src={
-                  detail.photo[0] == undefined
-                    ? "/images/no-image.jpg"
-                    : detail.photo[0]
-                }
+                src={detail.photo[0] == undefined ? "/images/no-image.jpg" : detail.photo[0]}
                 alt="카드이미지"
                 className="card__item__img_minCon"
               />
@@ -50,7 +46,9 @@ const ContentItem = ({ detail, setDetailOne, setIsOpen }) => {
                 {/* <img src="/images/star.png" style={{ width: "30px" }} /> */}
                 <div>
                   <FontAwesomeIcon icon={faStar} style={{ marginRight: "3px", color: "gold" }} />
-                  {detail.reviewList.length === 0 ? 0 : star}
+                  <span style={{ fontWeight: "bold" }}>
+                    {detail.reviewList.length === 0 ? 0 : star}
+                  </span>
                 </div>
                 <span className="idSpan_minCon">{detail.id}님의 plan</span>
               </div>

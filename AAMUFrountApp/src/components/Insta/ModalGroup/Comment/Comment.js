@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import React, { useEffect, useRef, useState } from "react";
-// import Profile from "../Profile";
 import MenuModal from "../MenuModal";
 import axios from "axios";
 import "../Slider/slick.css";
@@ -15,15 +14,24 @@ import "../Upload/UploadSwiper.css";
 import dayjs from "dayjs";
 import { CommentsDisabled } from "@mui/icons-material";
 
-function Comment({ val, setlist, forReRender, setForReRender, seteditModal, setcommentModal }) {
+function Comment({
+  val,
+  setlist,
+  forReRender,
+  setForReRender,
+  seteditModal,
+  setcommentModal,
+}) {
   let menuRef = useRef();
-  let replyRef = useRef();
+  let replyRef = useRef("");
+  let deleteRef = useRef();
   let commentRef = useRef();
   const [commentHeart, setCommentHeart] = useState(false);
   const [modalShow, setModalShow] = useState(false);
   const [reply, setReply] = useState(false);
   let [comment, setComment] = useState("");
-  const [replyOne, setreplyOne] = useState("");
+  let [commentbb, setCommentbb] = useState("");
+  // const [replyOne, setreplyOne] = useState("");
 
   let [isValid, setisValid] = useState(false);
 
@@ -34,45 +42,35 @@ function Comment({ val, setlist, forReRender, setForReRender, seteditModal, setc
   window.addEventListener("click", menuModalRef);
 
   const [comments, setcomments] = useState([]);
-
   function commentModal(setcomments) {
-    const copyFeedComments = [...comments]; //feedComments에 담겨있던 댓글 받아옴
-    copyFeedComments.push(comment); //copyFeedComments에 있는 기존 댓글에 push하기 위함
-    setcomments(copyFeedComments); //copyFeedComments 담겨있을 comment를 setfeedComments로 변경
+    console.log(comment);
+    // const copyFeedComments = [...comments]; //feedComments에 담겨있던 댓글 받아옴
+    // copyFeedComments.push(comment); //copyFeedComments에 있는 기존 댓글에 push하기 위함
+    setcomments([...comments]); //copyFeedComments 담겨있을 comment를 setfeedComments로 변경
     let token = sessionStorage.getItem("token");
     axios
-    .get('/aamurest/gram/SelectOne', {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      params:{
-        id:sessionStorage.getItem('username'),
-        lno:val.lno
-      }
+      .get("/aamurest/gram/SelectOne", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        params: {
+          id: sessionStorage.getItem("username"),
+          lno: val.lno,
+        },
       })
       .then((resp) => {
         setcomments(resp.data.commuCommentList);
-        console.log("cno", resp.data.commuCommentList);
-        console.log("val",val.userprofile);
       })
       .catch((error) => {
         console.log(error);
       });
-    setComment("");
+      replyRef.current.value = "";
   }
 
   useEffect(() => {
     commentModal(setcomments);
   }, []);
 
-  const settings = {
-    //이미지 슬라이드
-    dots: true,
-    infinite: false,
-    speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-  };
   function fillLike(setForReRender, forReRender) {
     //백이랑 인스타 리스드를 뿌려주기 위한 axios
 
@@ -84,7 +82,7 @@ function Comment({ val, setlist, forReRender, setForReRender, seteditModal, setc
         },
         params: {
           lno: parseInt(val.lno),
-          id: sessionStorage.getItem('username'),
+          id: sessionStorage.getItem("username"),
         },
       })
       .then((resp) => {
@@ -100,7 +98,7 @@ function Comment({ val, setlist, forReRender, setForReRender, seteditModal, setc
 
   const [commentss, setcommentss] = useState("");
 
-  function post(comment) {
+  function post(replyRef) {
     //유효성 검사를 통과하고 게시버튼 클릭시 발생하는 함수
 
     let token = sessionStorage.getItem("token");
@@ -108,8 +106,8 @@ function Comment({ val, setlist, forReRender, setForReRender, seteditModal, setc
       .post(
         "/aamurest/gram/comment/edit",
         {
-          id: sessionStorage.getItem('username'),
-          reply: comment,
+          id: sessionStorage.getItem("username"),
+          reply: replyRef.current.value,
           lno: val.lno,
         },
         {
@@ -122,49 +120,25 @@ function Comment({ val, setlist, forReRender, setForReRender, seteditModal, setc
         const replyOne = resp.data.reply;
         console.log("resp.data", resp.data.reply);
         const copyComments = [...replyOne];
-        setcomments(copyComments);
+        setcomments({...comments,copyComments});
         commentModal(setcomments);
       })
       .catch((error) => {
         console.log(error);
       });
 
-    setComment(""); //사용자 댓글창을 빈 댓글 창으로 초기화
+      replyRef.current.value = ""; //사용자 댓글창을 빈 댓글 창으로 초기화
   }
 
-  const handleonChange = (e) => {
-    setreplyOne("comments.cno", comments.cno);
-  };
+  // const handleonChange = (e) => {
+  //   setreplyOne("comments.cno", comments.cno);
+  // };
 
   let [deleteOne1, setdeleteOne1] = useState(false);
   let [cno, setCno] = useState();
-
-  function feedList() {
-    //백이랑 인스타 리스드를 뿌려주기 위한 axios
+  function deleteOne(cno) {
     let token = sessionStorage.getItem("token");
-    axios
-      .get("/aamurest/gram/selectList", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        params: {
-          id: sessionStorage.getItem("username"),
-        },
-      })
-      .then((resp) => {
-        console.log(resp.data);
-        setlist(resp.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
 
-  function deleteOne(replyOne,cno) {
-    let token = sessionStorage.getItem("token");
-    // setcomments(comments.filter(recommendContents =>{
-    //   return recommendContents.id !== id;
-    // }))commuCommentList
     console.log("val.lno", val.lno);
     console.log("val.cno", cno);
     axios
@@ -178,75 +152,21 @@ function Comment({ val, setlist, forReRender, setForReRender, seteditModal, setc
         },
       })
       .then((resp) => {
-        console.log(resp.data);
-        setdeleteOne1(resp.data); //성공 여부가 온다 true false
-        // alert('삭제되었습니다!')
-        // feedList(setlist, setloading);
-        commentModal(setcomments);
-        feedList()
+        setcomments((curr) => {
+          return curr.filter((item) => {
+            return item.cno != cno;
+          });
+        });
+        // commentModal(setcomments);
+        // feedList();
       })
       .catch((error) => {
         console.log(error);
       });
   }
 
-  let CommentList = ({ val }) => {
-    return (
-      <div
-        className="recommendContents"
-        key={sessionStorage.getItem('username')}
-        onClick={(e) => {
-          // console.log(val.cno);
-        }}
-      >
-        <img className="likeimg" src={val.userprofile} alt="추사" />
-        <div
-          style={{
-            width: "100%",
-            display: "flex",
-            flexDirection: "column",
-            marginTop: "10px",
-            marginLeft: "10px",
-          }}
-        >
-          <div style={{ display: "flex", flexDirection: "row" }}>
-            <p className="userName">
-              <strong>{sessionStorage.getItem('username')}</strong>
-            </p>
-            <p className="userName">{val.reply}</p>
-          </div>
-          <div className="comment-heart">
-            {commentHeart ? (
-              <i
-                className="fa-solid fa-heart"
-                onClick={() => {
-                  setCommentHeart(!commentHeart);
-                }}
-                style={{ color: "red" }}
-              />
-            ) : (
-              <i
-                className="fa-regular fa-heart"
-                onClick={() => {
-                  setCommentHeart(!commentHeart);
-                }}
-              ></i>
-            )}
-            <i
-              className="fa-regular fa-trash-can"
-              onClick={(e) => {
-                deleteOne(replyOne,val.cno);
-              }}
-             
-            />
-          </div>
-          <div style={{ fontSize: "10px", color: "#a5a5a5", marginTop: "8px" }}>
-            <p className="postDate">{dayjs(val.postdate).format("YYYY/MM/DD")}</p>
-          </div>
-        </div>
-      </div>
-    );
-  };
+  // let CommentList = ({ val }) => {
+  // };
 
   return (
     <Container1>
@@ -297,7 +217,7 @@ function Comment({ val, setlist, forReRender, setForReRender, seteditModal, setc
                 </div>
                 <div>
                   <p className="user-id">
-                    <strong>{sessionStorage.getItem('username')}</strong>
+                    <strong>{sessionStorage.getItem("username")}</strong>
                   </p>
                 </div>
               </div>
@@ -309,6 +229,7 @@ function Comment({ val, setlist, forReRender, setForReRender, seteditModal, setc
                 ></i>
                 {modalShow && (
                   <MenuModal
+                  setcommentModal={setcommentModal}
                     setlist={setlist}
                     setModalShow={setModalShow}
                     seteditModal={seteditModal}
@@ -355,9 +276,11 @@ function Comment({ val, setlist, forReRender, setForReRender, seteditModal, setc
                           <strong
                             style={{ fontSize: "13px", marginRight: "5px" }}
                           >
-                            {sessionStorage.getItem('username')}
+                            {sessionStorage.getItem("username")}
                           </strong>
-                          <span style={{ fontFamily: "normal" }}>{val.content}</span>
+                          <span style={{ fontFamily: "normal" }}>
+                            {val.content}
+                          </span>
                         </p>
                       </div>
                     </div>
@@ -377,9 +300,73 @@ function Comment({ val, setlist, forReRender, setForReRender, seteditModal, setc
                 {comments.map((val, i) => {
                   //feedComments에 담겨있을 댓글 값을 CommentList 컴포넌트에 담아서 가져온다
                   return (
-                    <CommentList //CommentList 컴포넌트는 반복적으로 추가되는 사용자 댓글 하나하나를 담고있는 박스
-                      val={val}
-                    />
+                    <div
+                      className="recommendContents"
+                      key={sessionStorage.getItem("username")}
+                      onClick={(e) => {
+                        // console.log(val.cno);
+                      }}
+                    >
+                      <img
+                        className="likeimg"
+                        src={val.userprofile}
+                        alt="추사"
+                      />
+                      <div
+                        style={{
+                          width: "100%",
+                          display: "flex",
+                          flexDirection: "column",
+                          marginTop: "10px",
+                          marginLeft: "10px",
+                        }}
+                      >
+                        <div style={{ display: "flex", flexDirection: "row" }}>
+                          <p className="userName">
+                            <strong>
+                              {sessionStorage.getItem("username")}
+                            </strong>
+                          </p>
+                          <p className="userName">{val.reply}</p>
+                        </div>
+                        <div className="comment-heart">
+                          {commentHeart ? (
+                            <i
+                              className="fa-solid fa-heart"
+                              onClick={() => {
+                                setCommentHeart(!commentHeart);
+                              }}
+                              style={{ color: "red" }}
+                            />
+                          ) : (
+                            <i
+                              className="fa-regular fa-heart"
+                              onClick={() => {
+                                setCommentHeart(!commentHeart);
+                              }}
+                            ></i>
+                          )}
+                          <i
+                            className="fa-regular fa-trash-can"
+                            ref={deleteRef}
+                            onClick={(e) => {
+                              deleteOne(val.cno);
+                            }}
+                          />
+                        </div>
+                        <div
+                          style={{
+                            fontSize: "10px",
+                            color: "#a5a5a5",
+                            marginTop: "8px",
+                          }}
+                        >
+                          <p className="postDate">
+                            {dayjs(val.postdate).format("YYYY/MM/DD")}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
                   );
                 })}
               </div>
@@ -394,7 +381,10 @@ function Comment({ val, setlist, forReRender, setForReRender, seteditModal, setc
                   }}
                 >
                   {val.islike ? (
-                    <i className="fa-solid fa-heart fa-2x" style={{ color: "red" }}></i>
+                    <i
+                      className="fa-solid fa-heart fa-2x"
+                      style={{ color: "red" }}
+                    ></i>
                   ) : (
                     <i className="fa-regular fa-heart fa-2x"></i>
                   )}
@@ -421,25 +411,28 @@ function Comment({ val, setlist, forReRender, setForReRender, seteditModal, setc
                 ref={replyRef}
                 className="inputComment_"
                 placeholder="댓글 달기..."
-                onChange={(e) => {
-                  setComment(e.target.value); //댓글 창의 상태가 변할때마다 setComment를 통해 comment값을 바꿔준다
-                }}
+                style={{ width: "90%" }}
+                // onChange={(e) => {
+                //   setComment(e.target.value); //댓글 창의 상태가 변할때마다 setComment를 통해 comment값을 바꿔준다
+                // }}
                 onKeyUp={(e) => {
                   e.target.value.length > 0 //사용자가 키를 눌렀다 떼었을때 길이가 0을 넘는 값인지 유효성 검사 결과 값을 담는다
                     ? setisValid(true)
                     : setisValid(false);
                 }}
-                value={comment}
+                // value={comment}
               />
 
               <button
-                className={
-                  //클래스명을 comment창의 글자 길에 따라서 다르게 주면서 버튼색에 css디자인을 줄 수 있음
-                  comment.length > 0 ? "submitCommentActive" : "submitCommentInactive"
-                }
+                // className={
+                //   //클래스명을 comment창의 글자 길에 따라서 다르게 주면서 버튼색에 css디자인을 줄 수 있음
+                //   comment.length > 0
+                //     ? "submitCommentActive"
+                //     : "submitCommentInactive"
+                // }
                 onClick={() => {
-                  post(comment);
-                  setReply(!reply);
+                  post(replyRef);
+                  // setReply(!reply);
                 }} //클릭하면 위서 선언한 post함수를 실행하여 feedComments에 담겨서 re-rendering 된 댓글창을 확인할 수 있다
                 disabled={isValid ? false : true} //사용자가 아무것도 입력하지 않았을 경우 게시를 할 수 없도록
                 type="button"

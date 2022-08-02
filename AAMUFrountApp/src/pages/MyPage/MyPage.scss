@@ -720,13 +720,12 @@ a {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  // margin: auto 0;
   align-items: center;
-  font-size: 15px;
-
+  font-size: 14px;
   width: 53px;
   height: 100%;
-  // border: 1px solid var(--skyblue);
+  border: 1px solid var(--skyblue);
+  box-shadow: var(--lightShadow);
   background-color: rgba(0, 180, 216, 0.6);
   color: white;
   border-radius: 5px;

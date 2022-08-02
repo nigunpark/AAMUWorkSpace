@@ -91,12 +91,16 @@ public class BBSDAO {
 	public BBSDTO themeSelectOne(Map map) {
 		return template.selectOne("themeSelectOne",map);
 	}
-
+	
+	//평점 업데이트
 	public int updateRate(Map map) {
 		return template.update("updateRate",map);
 	}
 	
-
+	//검색 결과
+	public List<BBSDTO> searchList(Map map){
+		return template.selectList("searchList",map);
+	}
 
 
 }
