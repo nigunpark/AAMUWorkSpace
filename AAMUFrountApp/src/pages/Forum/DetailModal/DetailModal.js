@@ -205,7 +205,7 @@ const DetailModal = ({ detailOne, setIsOpen, setShowCBModal, setIsLoading }) => 
         </span>
         <p>{val.review}</p>
         {username == val.id ? (
-          <div style={{ marginLeft: "110px", border: "none" }}>
+          <div style={{ marginLeft: "180px", border: "none" }}>
             <Name
               onClick={() => {
                 reviewDelete(rno);
