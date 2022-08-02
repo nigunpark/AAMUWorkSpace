@@ -2,16 +2,12 @@ import { Rating, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
 import React, { useState } from "react";
 import DetailModal from "../DetailModal/DetailModal";
+import { faStar } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-const ContentItem = ({ detail, index, setShowCBModal, isOpen, setIsOpen }) => {
-  // console.log("ContentItem dummy :",dummy.reviewdata);
-  // console.log("keys : ",keys);
-
-  //   console.log("detail :", detail);
-  //   console.log("리뷰 데이터 :", detail.reviewList);
-
-  const detailPostDate = new Date(detail.postdate);
-  const postDay = dateFormat(detailPostDate);
+const ContentItem = ({ detail, setDetailOne, setIsOpen }) => {
+  let day = new Date(detail.postdate);
+  const postDay = dateFormat(day);
   const detailRbn = detail.rbn; // rbn 값 저장 잘 됨
   function dateFormat(date) {
     let month = date.getMonth() + 1;
@@ -20,21 +16,21 @@ const ContentItem = ({ detail, index, setShowCBModal, isOpen, setIsOpen }) => {
     day = day >= 10 ? day : "0" + day;
     return date.getFullYear() + "-" + month + "-" + day;
   }
-
-  const onClickModal = () => {
-    setIsOpen(true);
-  };
-
   //   목록에서 보여줄 평균 별점
   let star = 0;
   detail.reviewList.forEach((obj, i) => {
-    // console.log('11',typeof Number(obj.star))
     star += Number(obj.rate);
   });
   star = Math.round((star / detail.reviewList.length) * 10) / 10;
   return (
     <>
-      <li className="card__item_minCon" onClick={onClickModal}>
+      <div
+        className="card__item_minCon"
+        onClick={() => {
+          setDetailOne(detail);
+          setIsOpen(true);
+        }}
+      >
         <div className="card__item__link_minCon">
           <figure className="card__item__info_minCon">
             <div className="card__item__img-container_minCon">
@@ -44,47 +40,51 @@ const ContentItem = ({ detail, index, setShowCBModal, isOpen, setIsOpen }) => {
                 className="card__item__img_minCon"
               />
             </div>
-            <div className="card__item__rating_minCon">
-              <img src="/images/star.png" style={{ width: "30px" }} />
-              {detail.reviewList.length == 0 ? 0 : star}
 
-              <span className="idSpan_minCon" style={{ marginLeft: "auto" }}>
-                {detail.id}님의 plan
-              </span>
-            </div>
-            {/* style={{ display: "flex", flexDirection: "row" }} */}
-            <div>
-              <h3
+            <div className="card__item__bottom">
+              <div className="card__item__rating_minCon">
+                {/* <img src="/images/star.png" style={{ width: "30px" }} /> */}
+                <div>
+                  <FontAwesomeIcon icon={faStar} style={{ marginRight: "3px", color: "gold" }} />
+                  {detail.reviewList.length === 0 ? 0 : star}
+                </div>
+                <span className="idSpan_minCon">{detail.id}님의 plan</span>
+              </div>
+              {/* style={{ display: "flex", flexDirection: "row" }} */}
+              <div>
+                <h4
+                  style={{
+                    width: "100%",
+                    overflow: "hidden",
+                  }}
+                >
+                  {detail.title}
+                </h4>
+              </div>
+              <div
                 style={{
-                  width: "100%",
-                  overflow: "hidden",
+                  display: "flex",
+                  color: "#8e8e8e",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  fontSize: "11px",
                 }}
               >
-                {detail.title}
-              </h3>
-            </div>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                fontSize: "12.5px",
-                color: "#8e8e8e",
-              }}
-            >
-              <p>{detail.themename}</p>
-              <div style={{ marginLeft: "auto" }}>{postDay}</div>
+                <p style={{ fontWeight: "bold" }}>{detail.themename}</p>
+                <div>{postDay}</div>
+              </div>
             </div>
           </figure>
         </div>
-      </li>
-      {isOpen == true ? (
+      </div>
+      {/* {isOpen == true ? (
         <DetailModal
           postDay={postDay}
           detailRbn={detailRbn}
           setShowCBModal={setShowCBModal}
           setIsOpen={setIsOpen}
         />
-      ) : null}
+      ) : null} */}
     </>
   );
 };
