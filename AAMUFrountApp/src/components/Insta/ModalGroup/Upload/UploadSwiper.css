@@ -4,28 +4,27 @@
   background: #fff;
 }
 
-.swiper__title{
+.swiper__title {
   text-align: left;
   font-size: 50px;
   color: var(--orange);
   /* text-shadow: 0 0.5px 0.5px var(--gray) */
 }
-.swiper__desc{
+.swiper__desc {
   font-size: 20px;
   font-weight: bold;
   margin-top: 10px;
   letter-spacing: 4px;
 }
 
-
 .swiper__container {
-/* display: flex;
+  /* display: flex;
 justify-content: space-between;
 align-items: center; */
   max-width: 1200px;
   width: 90%;
   margin: 0 auto;
-} 
+}
 
 .swiper__wrapper {
   position: relative;
@@ -34,44 +33,47 @@ align-items: center; */
 
 .swiperUi {
   position: relative;
-  width:65%;
+  width: 65%;
   height: 100%;
-
 }
 .swiperUi3 {
   position: relative;
-  width:65%;
+  width: 65%;
   height: 100%;
-
 }
-.previewPic1{
+.previewPic1 {
   width: 100%;
   height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-
- 
+  position: relative;
 }
-.swiperContainer{
+.swiperContainer {
   position: absolute;
   width: 100%;
   height: 100%;
 }
-.swiperContainer3{
+.swiperContainer3 {
   position: absolute;
   width: 100%;
   height: 100%;
 }
 
-
-.divimage{
+.divimage {
   width: 100%;
   position: absolute;
   height: 100%;
-  border-radius:  7px 0 0 7px;   
+  border-radius: 7px 0 0 7px;
 }
-.swiperContainer1{
+.swiperContainer1 {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  right: 1px;
+  bottom: 0px;
+}
+.swiperContainer1_My {
   position: absolute;
   width: 100%;
   height: 100%;
@@ -79,11 +81,11 @@ align-items: center; */
   bottom: 0px;
 }
 
-.divimage1{
+.divimage1 {
   width: 100%;
   position: absolute;
   height: 100%;
-  border-radius: 0 0 0 7px;   
+  border-radius: 0 0 0 7px;
 }
 
 .swiper__item {
