@@ -51,8 +51,7 @@ function SearchList({ searchb, inputValue }) {
           <div style={{ paddingLeft: "20px" }}>
             <p className="user-id">{inputValue}</p>
             <p className="user-name">
-              게시물{" "}
-              <strong style={{ color: "black" }}>{searchb.length}</strong>
+              게시물 <strong style={{ color: "black" }}>{searchb.length}</strong>
             </p>
           </div>
         </User>
