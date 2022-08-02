@@ -16,11 +16,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
+import com.aamu.aamurest.user.service.AttractionDTO;
 import com.aamu.aamurest.user.service.BBSDTO;
 import com.aamu.aamurest.user.service.ReviewDTO;
 import com.aamu.aamurest.user.service.UsersDTO;
@@ -116,21 +118,6 @@ public class BBSController {
 		return resultMap;
 
 	}
-	
-	/*
-	//평균 평점 반영
-	@PutMapping("/review/edit/{rbn}")
-	public Map updateRate(@PathVariable int rbn, HttpServletRequest req, @RequestParam Map map){
-		double ReviewUpdateAffected = bbsService.updateRate(rbn);
-		Map resultMap = new HashMap();
-		if(ReviewUpdateAffected==1)
-			resultMap.put("result", "updateSuccess");
-		else
-			resultMap.put("result", "updateNotSuccess");
-
-		return resultMap;
-	}
-	*/
 
 	//리뷰 등록 <성공>
 	//평균 평점 반영 <성공>
@@ -183,9 +170,15 @@ public class BBSController {
 		
 	}
 	
-	//검색결과 목록
-	//@GetMapping("/getSearchList")
+	//검색 결과
+	@GetMapping("bbs/searchList")
+	@ResponseBody
+	public List<BBSDTO> searchList(@RequestParam Map map, HttpServletRequest req) {
+		List<BBSDTO> lists = bbsService.searchList(map);
+		return lists;	
+	}
 	
+	/*
 	//테마 사진 하나 뿌려주기
 	@GetMapping("/theme/SelectOne/{themeid}")
 	public BBSDTO themeSelectOne(@RequestParam Map map,HttpServletRequest req) {
@@ -193,6 +186,6 @@ public class BBSController {
 		dto.setThemeimg(FileUploadUtil.requestOneFile(dto.getThemeimg(), "/resources/themeUpload", req));
 		return dto;
 	}
-	
+	*/
 }
 

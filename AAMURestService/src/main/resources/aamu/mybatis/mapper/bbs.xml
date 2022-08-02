@@ -77,4 +77,19 @@
 		SET rateavg = #{rateavg}
 		WHERE rbn = #{rbn}
 	</update>
+	
+	<!-- 검색 결과 -->
+	<!-- 
+	<select id="searchList" parameterType="Map" resultType="BBSDTO">
+		SELECT rbbs.* FROM routebbs rbbs JOIN ${searchtable} i ON i.contentid = p.contentid WHERE ${searchcolumn} LIKE '%'||#{searchword}||'%'
+	</select>
+	 -->
+	 
+	 <!-- 북마크 설정 -->
+	 <select id="bbsBookmarkSelect" parameterType="Map" resultType="int">
+		SELECT count(*) from bookmark WHERE id=#{id} AND rbn=#{rbn}
+	</select>
+	
+	<!-- 북마크 해제 -->
+	 
 </mapper>

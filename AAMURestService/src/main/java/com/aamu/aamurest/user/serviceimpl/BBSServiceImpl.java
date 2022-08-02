@@ -5,10 +5,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;
 
+import com.aamu.aamurest.user.service.AttractionDTO;
 import com.aamu.aamurest.user.service.BBSDTO;
 import com.aamu.aamurest.user.service.BBSService;
 import com.aamu.aamurest.user.service.ReviewDTO;
@@ -137,10 +140,10 @@ public class BBSServiceImpl implements BBSService{
 	} */
 	
 	//리뷰 목록
-		@Override
-		public List<ReviewDTO> reviewList(int rbn) {
-			return dao.reviewSelectList(rbn);
-		}
+	@Override
+	public List<ReviewDTO> reviewList(int rbn) {
+		return dao.reviewSelectList(rbn);
+	}
 		
 	//리뷰 등록
 	@Override
@@ -171,14 +174,22 @@ public class BBSServiceImpl implements BBSService{
 		return dao.themeSelectOne(map);
 	}
 
-
+	//평점 업데이트
 	@Override
 	public int updateRate(Map map) {
 		return dao.updateRate(map);
 	}
 	
-	
-	
-
+	//검색 결과
+	@Override
+	public List<BBSDTO> searchList(Map map) {
+		return dao.searchList(map);
+	}
+	/*
+	@Override
+	public Boolean bookmark(Map map) {
+		return dao.bookmark(map);
+	}
+	*/
 	
 }
