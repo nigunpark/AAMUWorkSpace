@@ -165,7 +165,7 @@ const MyPage = () => {
               setClickTab(1);
             }}
           >
-            <i className="fa-brands fa-instagram" style={{ width: "50px" }}></i>
+            <i className="fa-brands fa-instagram fa-2x"></i>
           </button>
 
           {/* <button
