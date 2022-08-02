@@ -8,6 +8,7 @@ from api.webhook import WebHook
 from api.saveplaces import SavePlaces
 from api.imgcrawll import Imgcrawll
 from api.recommendapi import RecommendApi
+from api.weather import Weather
 app =Flask(__name__)
 app.config['JSON_AS_ASCII']=False
 
@@ -20,5 +21,6 @@ api.add_resource(WebHook,'/webhook')
 api.add_resource(SavePlaces,'/saveplaces')
 api.add_resource(Imgcrawll,'/imgcrawll')
 api.add_resource(RecommendApi,'/recommend')
+api.add_resource(Weather,'/weather')
 if __name__ == '__main__':
     app.run(debug=True)

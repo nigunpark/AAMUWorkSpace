@@ -59,6 +59,7 @@ function get(setForSwiper) {
   axios
     .get("/aamurest/main/mainelement")
     .then((resp) => {
+      console.log("resp.data", resp.data);
       setForSwiper(Object.values(resp.data)[0].places);
     })
     .catch((err) => {

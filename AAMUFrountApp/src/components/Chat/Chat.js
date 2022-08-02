@@ -40,7 +40,7 @@ const Chat = ({ showChat }) => {
     reduxState.forChatInfo.client.subscribe(
       `/queue/chat/message/${reduxState.forChatInfo.roomno}`,
       (message) => {
-        console.log("?", JSON.parse(message.body));
+        console.log(JSON.parse(message.body));
         setChats((curr) => {
           return [...curr, JSON.parse(message.body)];
         });
@@ -48,53 +48,57 @@ const Chat = ({ showChat }) => {
     );
   }
   let inputRef = useRef();
+  let bodyRef = useRef();
   console.log("리렌더링 채팅");
+  // console.log("bodyRef", bodyRef.current.scrollTop);
   return (
     <Container>
       {/* <InnnerContainer> */}
       <Content>
         <Title>{reduxState.forChatInfo.id}님과 대화</Title>
-        <Body>
-          {chats.map((val, i) => {
-            return (
-              <div
-                className={
-                  val.authid !== sessionStorage.getItem("username") ? "chatBox box" : "chatBox"
-                }
-              >
+        <Body ref={bodyRef}>
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            {chats.map((val, i) => {
+              return (
                 <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    gap: "5px",
-                  }}
+                  className={
+                    val.authid !== sessionStorage.getItem("username") ? "chatBox box" : "chatBox"
+                  }
                 >
-                  <div className="chat__profile__img-container">
-                    {/* <img
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      gap: "5px",
+                    }}
+                  >
+                    <div className="chat__profile__img-container">
+                      {/* <img
                       className="chat__profile__img"
                       src={val.autopro ?? "/images/no-image.jpg"}
                       onError={(e) => {
                         e.target.src = "/images/no-image.jpg";
                       }}
                     /> */}
-                    <span>
-                      {new Date().getHours() > 12 ? "오후" : "오전"}
-                      {new Date().getHours() > 12
-                        ? new Date().getHours() - 12
-                        : new Date().getHours()}
-                      :{new Date().getMinutes()}
+                      <span className="chatBox__time-span">
+                        {new Date().getHours() > 12 ? "오후" : "오전"}
+                        {new Date().getHours() > 12
+                          ? new Date().getHours() - 12
+                          : new Date().getHours()}
+                        :{new Date().getMinutes().toString().padStart(2, "0")}
+                      </span>
+                    </div>
+
+                    <span className="chatBox__span">
+                      {val.missage}
+                      <br />
                     </span>
                   </div>
-
-                  <span className="chatBox__span">
-                    {val.missage}
-                    <br />
-                  </span>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
         </Body>
 
         <div className="chatBot__input-container">
@@ -104,23 +108,30 @@ const Chat = ({ showChat }) => {
             ref={inputRef}
             onKeyDown={(e) => {
               if (e.key === "Enter") {
-                sendChat(inputRef, client, reduxState, setChats);
-                // setChats({ missage: inputRef.current.value });
-                getChats();
+                let newChat = {
+                  missage: e.target.value,
+                  authid: sessionStorage.getItem("username"),
+                };
+                setChats((curr) => [...curr, newChat]);
+                sendChat(inputRef, reduxState);
+                e.target.value = "";
+
+                // getChats();
                 // chatArr.push({ message: inputRef.current.value, bool: false });
                 // chatArr = [...chatArr];
-                inputRef.current.value = "";
               }
             }}
           />
           <span
             className="chatBot__input-btn"
             onClick={(e) => {
-              sendChat(inputRef, client, reduxState);
-              // chatArr.push({ message: inputRef.current.value, bool: false });
-              // chatArr = [...chatArr];
-              // setChats(chatArr);
-              inputRef.current.value = "";
+              let newChat = {
+                missage: e.target.value,
+                authid: sessionStorage.getItem("username"),
+              };
+              setChats((curr) => [...curr, newChat]);
+              sendChat(inputRef, reduxState);
+              e.target.value = "";
             }}
           >
             보내기
@@ -131,8 +142,8 @@ const Chat = ({ showChat }) => {
     </Container>
   );
 };
-function sendChat(inputRef, client, reduxState, setChats) {
-  console.log("sendChat");
+
+function sendChat(inputRef, reduxState) {
   reduxState.forChatInfo.client.publish({
     destination: "/app/chat/message",
     body: JSON.stringify({
@@ -187,5 +198,10 @@ const Body = styled.div`
   border-radius: 7px;
   display: flex;
   flex-direction: column-reverse;
+  // justify-content: end;
+  overflow-y: auto;
+  &::-webkit-scrollbar {
+    width: 3px;
+  }
 `;
 export default Chat;
