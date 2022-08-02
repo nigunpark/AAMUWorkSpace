@@ -90,10 +90,12 @@ public class MainController {
 		header.add("Authorization", "KakaoAK "+kakaokey);
 		HttpEntity httpEntity = new HttpEntity<>(header);
 		for(int i=0;i<list.size();i++) {
-			int contentid = list.get(i).getContentid();
-			AttractionDTO placeInfo = service.selectOnePlace(contentid,req);
-			list.get(i).setDto(placeInfo);
-
+			System.out.println(list.get(i).getContentid());
+			if(list.get(i).getContentid()!=0) {
+				int contentid = list.get(i).getContentid();
+				AttractionDTO placeInfo = service.selectOnePlace(contentid,req);
+				list.get(i).setDto(placeInfo);
+			}
 			if(list.get(i).getDay()!=0) {
 				int hotelDay = list.get(i).getDay();
 				Collections.swap(list, hotelDay-1, i);
