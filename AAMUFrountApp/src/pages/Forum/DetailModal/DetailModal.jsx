@@ -5,7 +5,6 @@ import "../Board2/DetailButton.scss";
 import { Link } from "react-router-dom";
 import { Rating } from "@mui/material";
 import axios from "axios";
-import "./BookMark.css";
 import { useDispatch, useSelector } from "react-redux";
 import { addChatBotData, addWholeBlackBox } from "../../../redux/store";
 
@@ -24,6 +23,8 @@ const DetailModal = ({ postDay, detailRbn, setIsOpen, setShowCBModal }) => {
   let [feedComments, setFeedComments] = useState([]); // feedComments 댓글 리스트 저장
   let [isValid, setIsValid] = useState(false); // 댓글 게시가능여부 (유효성 검사)
 
+  // let bookMarkRef = useRef(0);
+  const [bookMark, setBookMark] = useState(0);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [theme, setTheme] = useState("");
@@ -133,6 +134,13 @@ const DetailModal = ({ postDay, detailRbn, setIsOpen, setShowCBModal }) => {
     setComment("");
     setStar(0);
     setIsValid(false);
+  };
+
+  const onBookMark = (e) => {
+    setBookMark(1);
+  };
+  const onReBookMark = (e) => {
+    setBookMark(0);
   };
 
   const reviewDelete = (rno) => {
@@ -258,16 +266,39 @@ const DetailModal = ({ postDay, detailRbn, setIsOpen, setShowCBModal }) => {
 
           <DetailTitle>
             <span>
-              <div className="anim-icon star">
+              {/* <div className="anim-icon star">
                 <input
                   type="checkbox"
                   id="star"
                   onClick={(e) => {
                     console.log("북마크 체크 여부 :", e.currentTarget.checked);
+                    if (e.currentTarget.checked == true) {
+                      onBookMark();
+                    } else {
+                      onReBookMark();
+                    }
                   }}
                 />
                 <label for="star"></label>
-              </div>
+                {console.log("북마크 체크 여부 :", bookMark)}
+              </div> */}
+              <span
+                className="bookSpan"
+                onClick={(e) => {
+                  if (bookMark == 0) {
+                    onBookMark();
+                  } else {
+                    onReBookMark();
+                  }
+                }}
+              >
+                {bookMark == 1 ? (
+                  <img src="/images/star.png" className="bookMark" />
+                ) : (
+                  <img src="/images/star-off.png" className="bookMark" />
+                )}
+                {console.log("북마크 체크 여부 :", bookMark)}
+              </span>
               {/* 여기가 글 작성할때 쓴 제목 */}
               {title}
               <div className="detail-button">
