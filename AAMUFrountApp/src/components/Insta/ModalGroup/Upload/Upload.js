@@ -7,7 +7,7 @@ import SearchModal from "./SearchModal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperPlane } from "@fortawesome/free-regular-svg-icons";
 import { Link, useNavigate } from "react-router-dom";
-import Slider from "react-slick";
+import Hashtag from "../../Hashtag";
 import "../Slider/slick-theme.css";
 import "../Slider/slick.css";
 import { SwiperSlide, Swiper } from "swiper/react";
@@ -322,6 +322,7 @@ const Uploader = ({ setsquare, setlist, setloading }) => {
                 position: "relative",
               }}
             ></textarea>
+            <Hashtag/>
           </div>
           <div
             style={{

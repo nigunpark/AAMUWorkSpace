@@ -5,7 +5,7 @@ import session from "redux-persist/lib/storage/session";
 import styled from "styled-components";
 import CommentSearch from "./ModalGroup/Comment/CommentSearch";
 
-function SearchList({ searchb, inputValue }) {
+function SearchList({ searchb, inputValue ,forReRender,setForReRender}) {
   let commentRef = useRef();
   const [val, setList] = useState([]);
   const [commentModal, setcommentModal] = useState(false);
@@ -73,17 +73,16 @@ function SearchList({ searchb, inputValue }) {
             );
           })}
           {commentModal && (
-            <CommentSearch
-              val={val}
-              commentModal={commentModal}
-              comment={comment}
-              setComment={setComment}
-              comments={comments}
-              setcomments={setcomments}
-              setcommentModal={setcommentModal}
-              commentModal1={commentModal1}
-            />
-          )}
+                    <CommentSearch
+                    val={val}
+                    comments={comments}
+                      comment={comment}
+                      setcomments={setcomments}
+                      setcommentModal={setcommentModal}
+                      forReRender={forReRender}
+                      setForReRender={setForReRender}
+                    />
+                  )}
         </MyInstar>
       </Grid>
     </MyInstaContainer>

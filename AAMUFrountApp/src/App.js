@@ -123,19 +123,11 @@ function App() {
             element={
               <SearchList
                 inputValue={inputValue}
-                setinputValue={setinputValue}
                 searchb={searchb}
-                setSearchb={setSearchb}
-                list={list}
-                setlist={setlist}
                 forReRender={forReRender}
                 setForReRender={setForReRender}
               />
             }
-          />
-          <Route
-            path="/CommentSearch"
-            element={<CommentSearch forReRender={forReRender} setForReRender={setForReRender} />}
           />
           <Route path="/myPage" element={<MyPage />} />
         </Route>
