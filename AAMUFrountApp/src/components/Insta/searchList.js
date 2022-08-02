@@ -19,17 +19,17 @@ function SearchList({ searchb, inputValue }) {
     // setcomments(copyFeedComments);//copyFeedComments 담겨있을 comment를 setfeedComments로 변경
     let token = sessionStorage.getItem("token");
     axios
-      .get('/aamurest/gram/SelectOne', {
+      .get("/aamurest/gram/SelectOne", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-        params:{
-          id:sessionStorage.getItem('username'),
-          lno:lno
-        }
+        params: {
+          id: sessionStorage.getItem("username"),
+          lno: lno,
+        },
       })
       .then((resp) => {
-        console.log(resp.data)
+        console.log(resp.data);
         setcomments(resp.data);
       })
       .catch((error) => {
@@ -64,28 +64,27 @@ function SearchList({ searchb, inputValue }) {
                   <InstaImg
                     onClick={(e) => {
                       commentModal1(setcomments, val.lno);
-                      setList(val)
+                      setList(val);
                       setcommentModal(!commentModal);
                     }}
                     src={val.photo[0]}
                   />
-                  
                 </InstarBox>
               </>
             );
           })}
           {commentModal && (
-                    <CommentSearch
-                    val={val}
-                      commentModal={commentModal}
-                      comment={comment}
-                      setComment={setComment}
-                      comments={comments}
-                      setcomments={setcomments}
-                      setcommentModal={setcommentModal}
-                      commentModal1={commentModal1}
-                    />
-                  )}
+            <CommentSearch
+              val={val}
+              commentModal={commentModal}
+              comment={comment}
+              setComment={setComment}
+              comments={comments}
+              setcomments={setcomments}
+              setcommentModal={setcommentModal}
+              commentModal1={commentModal1}
+            />
+          )}
         </MyInstar>
       </Grid>
     </MyInstaContainer>
