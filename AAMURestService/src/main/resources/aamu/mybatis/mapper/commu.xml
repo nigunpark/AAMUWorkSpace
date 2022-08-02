@@ -170,27 +170,27 @@
 	
 	<!-- 팔로우, 팔로잉_insert용 -->
 	<insert id="commuInsertFollower" parameterType="Map">
-		INSERT INTO follower VALUES (#{id},#{follower})
+		INSERT INTO follower VALUES (#{follower},#{id})
 	</insert>
 	
 	<!-- 팔로우, 팔로잉_팔로잉 누른 사람이 follower테이블에 존재하는지 판단 -->
 	<select id="commuIsExistFollower" parameterType="Map" resultType="int">
-		SELECT COUNT(*) FROM follower WHERE id=#{id} AND follower=#{follower}
+		SELECT COUNT(*) FROM follower WHERE id=#{follower} AND follower=#{id}
 	</select>
 	
 	<!-- 팔로우, 팔로잉_delete용 -->
 	<delete id="commuDeleteFollower" parameterType="Map">
-		DELETE follower WHERE id=#{id} AND follower=#{follower}
+		DELETE follower WHERE id=#{follower} AND follower=#{id}
 	</delete>
 	
 	<!-- 마이페이지용_id에 따른 -->
 	<select id="commuMyPageList" resultType="CommuDTO">
-		SELECT * FROM community WHERE id=#{id} ORDER BY lno DESC
+		SELECT * FROM community WHERE id=#{follower} ORDER BY lno DESC
 	</select>
 	
 	<!-- 마이페이지용_토탈카운트 셋팅 (해당 id의 총 글 갯수) -->
 	<select id="commuTotalCount" parameterType="Map" resultType="int">
-		SELECT COUNT(*) FROM ${table} WHERE id=#{id}
+		SELECT COUNT(*) FROM ${table} WHERE id=#{follower}
 	</select>
 	
 	<!-- 마이페이지용_내가 팔로잉하는 계정 수 셋팅 -->

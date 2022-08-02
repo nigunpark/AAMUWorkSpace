@@ -15,7 +15,7 @@ import com.aamu.aamurest.user.service.CommuDTO;
 import com.aamu.aamurest.user.service.admin.NoticeDTO;
 import com.aamu.aamurest.user.service.admin.NoticeService;
 
-@Service("noticeService")
+@Service
 public class NoticeServiceImpl implements NoticeService<NoticeDTO> {
 
 	@Autowired
@@ -28,9 +28,9 @@ public class NoticeServiceImpl implements NoticeService<NoticeDTO> {
 	@Override
 	public List<NoticeDTO> noticeSelectList(Map map) {
 		List<NoticeDTO> lists = dao.noticeSelectList(map);
-		
-		System.out.println("이런: "+lists);
-		
+
+		System.out.println("이런: " + lists);
+
 		// isLike셋팅
 		List<NoticeDTO> returnLists = new Vector();
 		for (int i = 0; i < lists.size(); i++) {
@@ -38,10 +38,9 @@ public class NoticeServiceImpl implements NoticeService<NoticeDTO> {
 			map.put("nno", dto.getNno());
 			returnLists.add(dto);
 		}
-		
-		System.out.println("아악: "+returnLists);
-		
-		
+
+		System.out.println("아악: " + returnLists);
+
 		return returnLists;
 	}
 
@@ -74,6 +73,13 @@ public class NoticeServiceImpl implements NoticeService<NoticeDTO> {
 		}
 	}
 
+	// 상세 보기
+	@Override
+	public NoticeDTO noticeSelectOne(Map map) {
+		NoticeDTO dto = dao.noticeSelectOne(map);
+		return dto;
+	}
+
 	// 게시물 등록
 	@Override
 	public int noticeInsert(Map map) {
@@ -86,13 +92,6 @@ public class NoticeServiceImpl implements NoticeService<NoticeDTO> {
 			return 0;
 	}
 
-	// 상세 보기
-	@Override
-	public NoticeDTO noticeSelectOne(Map map) {
-		NoticeDTO dto = dao.noticeSelectOne(map);
-		return dto;
-	}
-
 	// 게시물 수정
 	@Override
 	public int noticeUpdate(Map map) {
@@ -103,13 +102,6 @@ public class NoticeServiceImpl implements NoticeService<NoticeDTO> {
 	@Override
 	public int noticeDelete(Map map) {
 		return dao.noticeDelete(map);
-	}
-
-	// 게시물 삭제
-	@Override
-	public int noticeDelete(String nno) {
-		// TODO Auto-generated method stub
-		return 0;
 	}
 
 }

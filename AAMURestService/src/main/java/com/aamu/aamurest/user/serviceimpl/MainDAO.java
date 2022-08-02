@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import com.aamu.aamurest.user.service.AttractionDTO;
 import com.aamu.aamurest.user.service.PlannerDTO;
 import com.aamu.aamurest.user.service.RouteDTO;
+import com.aamu.aamurest.user.service.UsersDTO;
 
 @Repository
 public class MainDAO {
@@ -162,6 +163,11 @@ public class MainDAO {
 	}
 	public List<String> getAllUser(){
 		return template.selectList("getAllUser");
+	}
+
+	public UsersDTO getUserChar(Map map) {
+		
+		return template.selectOne("selectOneUser",map);
 	}
 
 }

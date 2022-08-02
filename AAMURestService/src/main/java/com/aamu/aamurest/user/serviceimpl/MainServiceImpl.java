@@ -1,5 +1,6 @@
 package com.aamu.aamurest.user.serviceimpl;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +16,7 @@ import com.aamu.aamurest.user.service.AttractionDTO;
 import com.aamu.aamurest.user.service.MainService;
 import com.aamu.aamurest.user.service.PlannerDTO;
 import com.aamu.aamurest.user.service.RouteDTO;
+import com.aamu.aamurest.user.service.UsersDTO;
 import com.aamu.aamurest.util.FileUploadUtil;
 
 @Service
@@ -248,13 +250,13 @@ public class MainServiceImpl implements MainService{
 		return list;
 	}
 	@Override
-	public List<AttractionDTO> selectAttrSigungu(Map map) {
-
-		return dao.selectAttrSigungu(map);
+	public List<AttractionDTO> selectAttrSigungu(Map map,HttpServletRequest req) {
+		
+		return changeAttr(dao.selectAttrSigungu(map),req);
 	}
 ///////////////////////////////////////////////////search place impl
 	@Override
-	public List<AttractionDTO> searchTwoPlace(Map map) {
+	public List<AttractionDTO> searchTwoPlace(Map map,HttpServletRequest req) {
 
 		switch(map.get("contenttypeid").toString()) {
 		case "12":
@@ -271,13 +273,13 @@ public class MainServiceImpl implements MainService{
 			map.put("searchtable", "dinerinfo");
 			break;
 		}
-		return dao.searchTwoPlace(map);
+		return changeAttr(dao.searchTwoPlace(map), req);
 	}
 
 	@Override
-	public List<AttractionDTO> searchOnePlace(Map map) {
+	public List<AttractionDTO> searchOnePlace(Map map,HttpServletRequest req) {
 
-		return dao.searchOnePlace(map);
+		return changeAttr(dao.searchOnePlace(map), req);
 	}
 ///////////////////////////////////////////////////update place impl
 	@Override
@@ -385,9 +387,9 @@ public class MainServiceImpl implements MainService{
 	}
 	////////////////////////////////////selectone place
 	@Override
-	public AttractionDTO selectOnePlace(int contentid) {
-
-		return dao.selectOnePlace(contentid);
+	public AttractionDTO selectOnePlace(int contentid,HttpServletRequest req) {
+		AttractionDTO dto = changeOneAttr(dao.selectOnePlace(contentid), req);	
+		return dto;
 	}
 	@Override
 	public int checkPlace(Map map) {
@@ -426,7 +428,7 @@ public class MainServiceImpl implements MainService{
 	}
 
 	@Override
-	public List<AttractionDTO> getRecentPlaceAll(Map map) {
+	public List<AttractionDTO> getRecentPlaceAll(Map map,HttpServletRequest req) {
 		List<AttractionDTO> lists = dao.getRecentPlaceAll(map);
 		List<AttractionDTO> returnList = new Vector<>();
 		for(int i=0;i<lists.size();i++) {
@@ -436,22 +438,22 @@ public class MainServiceImpl implements MainService{
 			case 28:
 				map.put("selecttable", "placesinfo");
 				map.put("contentid", dto.getContentid());
-				dto = dao.selectPlace(map);
+				dto = changeOneAttr(dao.selectPlace(map), req);
 				break;
 			case 15:
 				map.put("selecttable", "eventinfo");
 				map.put("contentid", dto.getContentid());
-				dto = dao.selectPlace(map);
+				dto = changeOneAttr(dao.selectPlace(map), req);
 				break;
 			case 32:
 				map.put("selecttable", "hotelinfo");
 				map.put("contentid", dto.getContentid());
-				dto = dao.selectPlace(map);
+				dto = changeOneAttr(dao.selectPlace(map), req);
 				break;
 			case 39:
 				map.put("selecttable", "dinerinfo");
 				map.put("contentid", dto.getContentid());
-				dto = dao.selectPlace(map);
+				dto = changeOneAttr(dao.selectPlace(map), req);
 				break;
 			}
 			returnList.add(dto);
@@ -498,12 +500,13 @@ public class MainServiceImpl implements MainService{
 		return returnList;
 	}
 	@Override
-	public PlannerDTO selectPlannerOne(int rbn) {
+	public PlannerDTO selectPlannerOne(int rbn,HttpServletRequest req) {
 		PlannerDTO dto = dao.selectPlannerOne(rbn);
 		List<RouteDTO>routes =  dao.selectRouteList(rbn);
 		List<RouteDTO> routes2 = new Vector<>();
 		for(RouteDTO route:routes) {
-			route.setDto(dao.selectOnePlace(route.getContentid()));
+			AttractionDTO aDto =  dao.selectOnePlace(route.getContentid());
+			route.setDto(changeOneAttr(aDto, req));
 			routes2.add(route);
 		}
 		dto.setRoute(routes2);
@@ -511,7 +514,7 @@ public class MainServiceImpl implements MainService{
 		return dto;
 	}
 	@Override
-	public List<AttractionDTO> selectMainPlaceList() {
+	public List<AttractionDTO> selectMainPlaceList(HttpServletRequest req) {
 
 		return dao.selectMainPlaceList();
 	}
@@ -525,22 +528,36 @@ public class MainServiceImpl implements MainService{
 		List<AttractionDTO> returnList = new Vector<>();
 
 		for(AttractionDTO dto:list) {
-			String title = dto.getTitle().toString();
+			String title = dto.getTitle();
 			if(title!=null && dto.getSmallimage()!=null) {
 				if(!(dto.getSmallimage().toString().contains("http")) && dto.getSmallimage()!=null) 
 					dto.setSmallimage(FileUploadUtil.requestOneFile(dto.getSmallimage(),"/resources/hotelImage",req));
 				
-				if(title!=null && title.contains("\\[") &&!(title.split("\\[")[0].equals("")))
+				if(title!=null && title.contains("[") &&!(title.split("\\[")[0].equals("")))
 					dto.setTitle(title.split("\\[")[0]);
 				
-				if(title!=null && title.contains("\\(")&&!(title.split("\\(")[0].equals("")))
+				if(title!=null && title.contains("(")&&!(title.split("\\(")[0].equals("")))
 					dto.setTitle(title.split("\\(")[0]);
-				returnList.add(dto);
 			}
-			
+			returnList.add(dto);
 		}
 		
 		return returnList;
+	}
+	public AttractionDTO changeOneAttr(AttractionDTO dto,HttpServletRequest req) {
+		String title = dto.getTitle();
+		if(title!=null && dto.getSmallimage()!=null) {
+			if(!(dto.getSmallimage().toString().contains("http")) && dto.getSmallimage()!=null) 
+				dto.setSmallimage(FileUploadUtil.requestOneFile(dto.getSmallimage(),"/resources/hotelImage",req));
+			
+			if(title!=null && title.contains("\\[") &&!(title.split("\\[")[0].equals("")))
+				dto.setTitle(title.split("\\[")[0]);
+			
+			if(title!=null && title.contains("\\(")&&!(title.split("\\(")[0].equals("")))
+				dto.setTitle(title.split("\\(")[0]);
+		}
+		return dto;
+		
 	}
 	@Override
 	public String searchPlanner(String message) {
@@ -647,16 +664,25 @@ public class MainServiceImpl implements MainService{
 	@Override
 	public List<String> getUserTheme(Map map) {
 		List<String> standTheme = dao.getUserTheme(map);
+		UsersDTO dto = dao.getUserChar(map);
+		LocalDate now = LocalDate.now();
+		int age = now.getYear()-Integer.parseInt(dto.getSocialnum().substring(0, 2))+1900;
+		age = age-age%10;
+		String standId = map.get("id").toString();
+		standTheme.add(String.valueOf(age));
+		standTheme.add(dto.getGender());
 		int stand = standTheme.size();
 		String resultId = null;
 		double result = 0;
 		for(String id:dao.getAllUser()) {
-			map.put("id", id);
-			List<String> compareTheme = dao.getUserTheme(map);
-			double ins = standTheme.size()/compareTheme.size()+MainServiceImpl.intersection(standTheme, compareTheme);
-			if(result<ins) {
-				result = ins;
-				resultId = id;
+			if(!(standId.equals(id))){
+				map.put("id", id);
+				List<String> compareTheme = dao.getUserTheme(map);
+				double ins = intersection(standTheme, compareTheme)/standTheme.size()+compareTheme.size();
+				if(result<ins) {
+					result = ins;
+					resultId = id;
+				}
 			}
 		}
 		

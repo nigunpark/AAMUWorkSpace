@@ -19,7 +19,7 @@ public class BBSDTO {
 	private String content;
 	private java.sql.Date postdate;
 	private int themeid;
-	private String themename;
+	private String themename; //테마 이름
 	private String themeimg; //테마 이미지
 	private String id; //작성자
 	private List<String> photo;
@@ -28,4 +28,8 @@ public class BBSDTO {
 	private List<RouteDTO> routeList;
 	private List<ReviewDTO> reviewList;
 	private double rateavg; //평균 평점
+	private double total; //평점 총점
+	private String type; //입력값 타입
+	private String keyword; //입력 단어
+	
 }

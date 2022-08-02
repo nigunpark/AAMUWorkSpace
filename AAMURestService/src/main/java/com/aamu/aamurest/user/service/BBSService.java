@@ -29,7 +29,7 @@ public interface BBSService {
 
 	//글 상세보기_모든 리뷰 보기
 	List<ReviewDTO> reviewList(int rbn);
-
+	
 	//리뷰 등록
 	int reviewInsert(Map map);
 	
@@ -41,6 +41,23 @@ public interface BBSService {
 	//리뷰 삭제
 	int reviewDelete(Map map);
 	
-	//평균 평점 
-	int rateUpdate(Map map);
+	int updateRate(Map map);
+	
+	/*
+	//평균 평점 반영
+	public static int updateRateAvg(ReviewDTO dto) {
+		return 0;
+	}
+	
+	public static Double getRateAvg(int rbn) {
+		return null;
+	}
+
+	double setRate(int rbn);
+	*/
+
+
+
+	
+
 }

@@ -17,8 +17,6 @@
 			WHERE ${searchColumn} LIKE '%' || #{searchWord} || '%'
 		</if>
 		ORDER BY nno DESC) T)
-		WHERE R BETWEEN
-		#{start} AND #{end}
 	</select>
 
 	<!-- 게시물 수 카운트 -->

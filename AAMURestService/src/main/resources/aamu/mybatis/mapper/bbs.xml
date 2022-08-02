@@ -13,10 +13,7 @@
 	<select id="bbsSelectPhotoList" parameterType="int" resultType="String">
 		SELECT photo FROM routebbsphoto WHERE rbn=#{rbn}
 	</select>
-	<!-- 리뷰 목록 -->
-	 <select id="reviewList" parameterType="int" resultType="ReviewDTO" >
-		SELECT * FROM ratereview WHERE rbn=#{rbn}
-	</select>
+	
 	
 	<!-- 글 하나 선택 -->
 	<select id="bbsSelectOne" parameterType="int" resultType="BBSDTO">
@@ -48,12 +45,16 @@
 	 
 	 <!--                            리뷰                                   -->
 	 
+	 <!-- 리뷰 목록 -->
+	 <select id="reviewSelectList" parameterType="int" resultType="ReviewDTO" >
+		SELECT * FROM ratereview WHERE rbn=#{rbn}	
+	</select>
+	
 	 <!-- 리뷰 등록 -->
 	 <insert id="reviewInsert" parameterType="map">
 	 	INSERT INTO ratereview VALUES (#{rbn},#{id},#{rate},#{review},SYSDATE,SEQ_REV.nextval)
 	 </insert>
-	 
-	  
+	   
 	 <!-- 리뷰 수정 -->
 	 <!--
 	 <update id="reviewUpdate" parameterType="map">
@@ -68,21 +69,12 @@
 	 <delete id="reviewDelete" parameterType="map">
 	 	DELETE FROM ratereview WHERE rno=#{rno}
 	 </delete>
-	
-	 <!--                           평점                                      -->
-	 
-	 <!-- 평점 평균 구하기 -->
-	<select id="getRateAverage" resultType="double">
-  		SELECT avg(rate)
-  		FROM ratereview
-  		WHERE rbn = #{rbn}
-  	</select>
   	
-	 <!-- 평점 평균 반영 -->
-	<update id="updateRate">
+	 <!-- 평점 평균 반영 --> 
+
+	<update id="updateRate" parameterType="map">
 		UPDATE routebbs
 		SET rateavg = #{rateavg}
 		WHERE rbn = #{rbn}
 	</update>
-		
 </mapper>

@@ -18,8 +18,7 @@ public class NoticeDAO {
 
 	// 게시물 목록
 	public List<NoticeDTO> noticeSelectList(Map map) {
-		
-		System.out.println("힝"+map);
+		System.out.println("목록: " + map);
 		return template.selectList("noticeSelectList", map);
 	}
 

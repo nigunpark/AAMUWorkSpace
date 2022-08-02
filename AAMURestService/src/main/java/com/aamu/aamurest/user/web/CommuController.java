@@ -11,6 +11,12 @@ import java.util.Vector;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -380,16 +386,18 @@ public class CommuController {
 		System.out.println("팔로우 map:"+map);
 		//map에 id:로그인한사람이 누른 id follower:내 id
 		Map resultMap=commuService.commuFollower(map);
+		System.out.println("팔로우 결과값:"+resultMap);
 		return resultMap;
 	}
 	
 	//마이페이지용_id에 따른 
 	@GetMapping("/gram/mypage")
-	public List<CommuDTO> commuMyPageList(@RequestParam Map map, HttpServletRequest req) {//id
-		//map에 id:로그인한 사람 id
+	public List<CommuDTO> commuMyPageList(@RequestParam Map map, HttpServletRequest req) {//
+		System.out.println("mypage map:"+map);
+		//map에 follow: 세션id, id:글쓴이id
 		List<CommuDTO> list = commuService.commuMyPageList(map);
 		for(CommuDTO dto : list) {
-			//포토 셋팅
+			//포토 셋팅 //dto.getlno는 글의lno
 			dto.setPhoto(FileUploadUtil.requestFilePath(commuService.commuSelectPhotoList(dto.getLno()), "/resources/commuUpload", req));
 			//글쓴이-프로필 사진 가져와서 dto에 셋팅
 			dto.setUserprofile(FileUploadUtil.requestOneFile(commuService.commuSelectUserProf(dto.getId()), "/resources/userUpload", req));
@@ -399,59 +407,30 @@ public class CommuController {
 			dto.setFollowercount(commuService.commuFollowerCount(map));
 			//내가 팔로잉하는 계정 수 셋팅
 			dto.setFollowingcount(commuService.commuFollowingCount(map));
+			
 		}
 		return list;
 	}
 	
-	/*
-	 //글 목록용
-	@GetMapping("/gram/selectList")
-	public List<CommuDTO> commuSelectList(@RequestParam Map map, HttpServletRequest req){
-		//검색할 때는 맵으로 써치워드 써치컬럼을 받고, id는 isLike때문에 받는거다. lno는 dto에서 뽑아온다
-		//cid가 넘어오면 마이페이지 id에 따른 글 뿌려주기
-		System.out.println("셀렉트 리스트 id:"+map.get("id"));
-		System.out.println("셀렉트 리스트 searchColumn:"+map.get("searchColumn"));
-		System.out.println("셀렉트 리스트 searchWord:"+map.get("searchWord"));
-		//List<CommuDTO> list();
-		//list=글 목록들
-		List<CommuDTO> list = commuService.commuSelectList(map);
-		for(CommuDTO dto : list) {//글 목록들 list에서 하나씩 꺼내서 dto에 담는다
-			//코멘트한개 셋팅 
-			dto.setCommuComment(commuService.commuCommentSelectOne(dto.getLno()));
-			//코멘트의 프로필 셋팅
-			CommuCommentDTO commentdto=dto.getCommuComment();
-			//전체 코멘트 셋팅
-			//모든 댓글 가져오기
-			List<CommuCommentDTO> commentList=commuService.commuCommentList(dto.getLno());
-			dto.setCommuCommentList(commentList);
-			//커뮤태그에 레코드 1이상이면 태그네임 셋팅하기 
-			int CountTag=commuService.selectCountCommuTag(dto.getLno());
-			if(CountTag>0) {
-				List<String> tagList=commuService.commuSelectTagName(dto.getLno()); //서울,서울여행 이니까 #붙여야됨
-				List<String> sharptTagList = new Vector<>();
-				for(String tag:tagList) {
-					String sharpTag="#"+tag; //#서울을 붙이기
-					sharptTagList.add(sharpTag); //새로운 배열에 담아서 전달
-				}
-				dto.setTname(sharptTagList);
-			}
-			//토탈카운트
-			//System.out.println("포함되어있냐"+map.keySet().contains("searchColumn"));
-			if(map.keySet().contains("searchColumn")) { 
-				dto.setSearchtotalcount(commuService.commuSearchTotalCount(map));
-			}
-			//코멘트 프로필사진 셋팅
-			if(commentdto!=null) {
-				commentdto.setUserprofile(FileUploadUtil.requestOneFile(commuService.commuSelectUserProf(commentdto.getId()), "/resources/commuUpload", req));
-			}
-			//포토 셋팅
-			dto.setPhoto(FileUploadUtil.requestFilePath(commuService.commuSelectPhotoList(dto.getLno()), "/resources/commuUpload", req));
-			//글쓴이-프로필 사진 가져와서 dto에 셋팅
-			dto.setUserprofile(FileUploadUtil.requestOneFile(commuService.commuSelectUserProf(dto.getId()), "/resources/commuUpload", req));
-			
-		}/////for
-		System.out.println("몇개 넘어가니:"+list.size());
-		return list;
-	}////////////////commuSelectList*/
+	/////////////////////////////////////////////////////////////날씨 크롤링
+	@GetMapping("/weather")
+	public Map weather(@RequestParam Map map) {
+		String uri="http://192.168.0.7:5020/weather";
+		MultiValueMap<String,String> requestBody = new LinkedMultiValueMap<>();
+		HttpHeaders header = new HttpHeaders();
+		header.add("Content-Type", "application/json");
+		requestBody.add("searchWord", map.get("searchWord").toString());
+		HttpEntity httpEntity = new HttpEntity<>(requestBody,header);
+		
+		ResponseEntity<Map> responseEntity =
+				restTemplate.exchange(uri, HttpMethod.POST,httpEntity, Map.class);
+		System.out.println(responseEntity.getBody());
+		Map returnMap = responseEntity.getBody();
+		returnMap.get("weathers");
+		
+		
+		return returnMap;
+	}
+	
 
 }
