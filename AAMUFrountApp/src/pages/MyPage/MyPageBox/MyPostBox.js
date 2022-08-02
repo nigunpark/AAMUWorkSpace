@@ -60,7 +60,7 @@ const MyPostBox = ({ selectRbn, setClickTab }) => {
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log("글 작성 페이지에서 상세경로 데이터 확인 : ", resp.data);
+      // console.log("글 작성 페이지에서 상세경로 데이터 확인 : ", resp.data);
       setDetailPostData(resp.data);
       setDetailRbn(resp.data.rbn);
       setDetailTitle(resp.data.title);
@@ -75,14 +75,9 @@ const MyPostBox = ({ selectRbn, setClickTab }) => {
       console.log((error) => console.log("상세경로 가져오기 실패", error));
     }
   };
-  console.log("detailRoute 제발111 :", detailRoute);
-
   useEffect(() => {
     getPlanData();
   }, []);
-
-  // console.log("detailPostData :", detailPostData);
-  console.log("detailRoute :", detailRoute);
 
   const [isOpen, setIsOpen] = useState(false);
   const onClickModal = () => {
@@ -154,6 +149,8 @@ const MyPostBox = ({ selectRbn, setClickTab }) => {
 
         <div>
           {detailRoute.map((route, idx) => {
+            // console.log("route 외부 map:", route);
+
             return (
               <div key={idx} className="detail-plan">
                 <span className="paln-date">{idx + 1} 일차</span>
@@ -186,7 +183,9 @@ const MyPostBox = ({ selectRbn, setClickTab }) => {
                               />
                             </div>
                             <div style={{ marginLeft: "1px" }}>
-                              <div style={{ fontSize: "15px", marginTop: "10px" }}>
+                              <div
+                                style={{ fontSize: "15px", marginTop: "10px" }}
+                              >
                                 {obj.dto.title}
                               </div>
                             </div>
@@ -291,7 +290,15 @@ const MyPostBox = ({ selectRbn, setClickTab }) => {
             type="button"
             onClick={() => {
               let write = uploadFile(showImagesFile);
-              bordWrite(write, title, content, detailRbn, navigate, postThemeNum, setClickTab);
+              bordWrite(
+                write,
+                title,
+                content,
+                detailRbn,
+                navigate,
+                postThemeNum,
+                setClickTab
+              );
             }}
           >
             업로드
@@ -318,7 +325,7 @@ function Theme({ setIsOpen, themes, setPostTheme, setPostThemeNum }) {
               className="theme-modal-select"
               value={val.themeId}
               onClick={(e) => {
-                console.log("테마 e.target.value :", val.themeId);
+                // console.log("테마 e.target.value :", val.themeId);
                 setPostThemeNum(val.themeId);
                 setPostTheme(val.themeName);
                 setIsOpen(false);
@@ -345,26 +352,39 @@ function DetailSetting({ fromWooJaeData, periodIndex, obj, i }) {
   useEffect(() => {
     if (i !== 0) {
       setUpTime(
-        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime + obj.mtime / 1000 / 60
+        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime +
+          obj.mtime / 1000 / 60
       );
       setDownTime(
         fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime +
           obj.mtime / 1000 / 60 +
-          fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].atime / 1000 / 60
+          fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].atime /
+            1000 /
+            60
       );
       let forBlackBoxRedux = getTimes(
         periodIndex,
-        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime + obj.mtime / 1000 / 60,
+        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime +
+          obj.mtime / 1000 / 60,
         fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime +
           obj.mtime / 1000 / 60 +
-          fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].atime / 1000 / 60
+          fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].atime /
+            1000 /
+            60
       );
       dispatch(addWholeBlackBox(forBlackBoxRedux));
-      if (i !== fromWooJaeData[periodIndex]["day" + (periodIndex + 1)].length - 1) {
-        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i + 1].starttime =
+      if (
+        i !==
+        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)].length - 1
+      ) {
+        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][
+          i + 1
+        ].starttime =
           fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime +
           obj.mtime / 1000 / 60 +
-          fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].atime / 1000 / 60;
+          fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].atime /
+            1000 /
+            60;
       }
     }
   }, []);
@@ -420,7 +440,15 @@ function uploadFile(showImages) {
   }
   return formData;
 }
-function bordWrite(write, title, content, detailRbn, navigate, postThemeNum, setClickTab) {
+function bordWrite(
+  write,
+  title,
+  content,
+  detailRbn,
+  navigate,
+  postThemeNum,
+  setClickTab
+) {
   write.append("id", sessionStorage.getItem("username"));
   write.append("title", title);
   write.append("content", content);
@@ -436,7 +464,7 @@ function bordWrite(write, title, content, detailRbn, navigate, postThemeNum, set
       },
     })
     .then((resp) => {
-      console.log(resp.data.result);
+      // console.log(resp.data.result);
       if (resp.data.result === "insertSuccess") {
         alert("글이 저장되었습니다");
         navigate("/forum");

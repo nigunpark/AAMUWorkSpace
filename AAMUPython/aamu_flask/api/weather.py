@@ -14,7 +14,7 @@ import requests
 from bs4 import BeautifulSoup
 
 from flask_restful import Resource,reqparse
-from flask import make_response,request
+from flask import jsonify,make_response,request
 
 class Weather(Resource):
     def get(self):
@@ -52,6 +52,8 @@ class Weather(Resource):
                 weather = dict(zip(['date', 'lowTemp', 'highTemp'], [date, lowTemp, highTemp]))  # [,,] weahter라는 키로
                 list_.append(weather)
                 print(list_)
+
+            return jsonify({'data':list_})
             # weathers={'weathers':weather}
 
             # print('[날씨]')
@@ -67,7 +69,7 @@ class Weather(Resource):
             # 브라우저 닫기
             driver.quit()
 
-        return jsonify({'weathers':list_})
+
 
 
 

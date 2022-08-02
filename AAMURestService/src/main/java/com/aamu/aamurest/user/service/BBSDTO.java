@@ -1,7 +1,6 @@
 package com.aamu.aamurest.user.service;
 
 import java.util.List;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,5 +30,6 @@ public class BBSDTO {
 	private double total; //평점 총점
 	private String type; //입력값 타입
 	private String keyword; //입력 단어
+	private boolean bookmark; //북마크
 	
 }

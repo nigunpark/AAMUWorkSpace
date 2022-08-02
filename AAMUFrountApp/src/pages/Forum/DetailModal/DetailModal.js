@@ -12,7 +12,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faX } from "@fortawesome/free-solid-svg-icons";
 import { faBookmark } from "@fortawesome/free-solid-svg-icons";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
-const DetailModal = ({ detailOne, setIsOpen, setShowCBModal, setIsLoading }) => {
+const DetailModal = ({
+  detailOne,
+  setIsOpen,
+  setShowCBModal,
+  setIsLoading,
+}) => {
   // console.log("detailOne", detailOne);
   function dateFormat(date) {
     let month = date.getMonth() + 1;
@@ -63,7 +68,7 @@ const DetailModal = ({ detailOne, setIsOpen, setShowCBModal, setIsLoading }) => 
         setPhoto(resp.data.photo);
         setFeedComments(resp.data.reviewList);
         setDetailRoute(resp.data.routeList);
-        // setUserId(resp.data.id);
+        setUserId(resp.data.id);
         let month = resp.data.planner.plannerdate.substring(
           resp.data.planner.plannerdate.indexOf("월") - 1,
           resp.data.planner.plannerdate.indexOf("월")
@@ -195,11 +200,19 @@ const DetailModal = ({ detailOne, setIsOpen, setShowCBModal, setIsLoading }) => 
     return (
       <div>
         <Stars>
-          <FontAwesomeIcon icon={faStar} style={{ marginRight: "3px", color: "gold" }} />
+          <FontAwesomeIcon
+            icon={faStar}
+            style={{ marginRight: "3px", color: "gold" }}
+          />
           <span>{val.rate.toString().padEnd(3, ".0")}</span>
         </Stars>
         <span
-          style={{ display: "flex", alignItems: "center", fontSize: "14px", marginLeft: "5px" }}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            fontSize: "14px",
+            marginLeft: "5px",
+          }}
         >
           {val.id}
         </span>
@@ -262,7 +275,8 @@ const DetailModal = ({ detailOne, setIsOpen, setShowCBModal, setIsLoading }) => 
                 return (
                   <div key={idx} className="detail-plan">
                     <div className="paln-date">
-                      {idx + 1}일차 ({plannerDate.month}월 {plannerDate.date + idx}일&nbsp;
+                      {idx + 1}일차 ({plannerDate.month}월{" "}
+                      {plannerDate.date + idx}일&nbsp;
                       {getDow(plannerDate.dow)})
                     </div>
                     {
@@ -356,7 +370,10 @@ const DetailModal = ({ detailOne, setIsOpen, setShowCBModal, setIsLoading }) => 
                   </span>
                 </div>
                 <div>
-                  <FontAwesomeIcon icon={faBookmark} className="detail__plan-bookMark" />
+                  <FontAwesomeIcon
+                    icon={faBookmark}
+                    className="detail__plan-bookMark"
+                  />
                   <i class="fa-regular fa-bookmark detail__plan-bookMark"></i>
                 </div>
               </div>
@@ -393,10 +410,18 @@ const DetailModal = ({ detailOne, setIsOpen, setShowCBModal, setIsLoading }) => 
               )}
             </div>
             <Tag>
-              <Date>작성일. {dateFormat(new window.Date(detailOne.postdate))}</Date>
+              <Date>
+                작성일. {dateFormat(new window.Date(detailOne.postdate))}
+              </Date>
               tag : #{theme}
             </Tag>
-            {isReviewId === 1 ? (
+            {sessionStorage.getItem("username") == userId ? (
+              <input
+                type="text"
+                placeholder="글쓴이는 리뷰가 안되요!"
+                disabled
+              />
+            ) : isReviewId === 1 ? (
               <input type="text" placeholder="리뷰는 하나만!" disabled />
             ) : (
               <input
@@ -404,24 +429,30 @@ const DetailModal = ({ detailOne, setIsOpen, setShowCBModal, setIsLoading }) => 
                 placeholder="리뷰 달기..."
                 ref={commentRef}
                 onKeyUp={(e) => {
-                  e.target.value.length > 0 ? setIsValid(true) : setIsValid(false);
+                  e.target.value.length > 0
+                    ? setIsValid(true)
+                    : setIsValid(false);
                 }} //사용자가 리뷰를 작성했을 때 빈공간인지 확인하여 유효성 검사
               />
             )}
+
             {/* DetailButton.scss */}
             <div className="detail-button">
-              <span
-                ref={reviewBtn}
-                className="detail__plan__review-btn"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  reviewPost(commentRef);
-                  commentRef.current.value = "";
-                  e.target.style.display = "none";
-                }}
-              >
-                리뷰등록하기
-              </span>
+              {sessionStorage.getItem("username") == userId ? null : (
+                <span
+                  ref={reviewBtn}
+                  className="detail__plan__review-btn"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    reviewPost(commentRef);
+                    commentRef.current.value = "";
+                    e.target.style.display = "none";
+                  }}
+                >
+                  리뷰등록하기
+                </span>
+              )}
+
               {/* {isReviewId == 1 ? null : isValid ? (
                 <button
                   className="learn-more"
@@ -477,26 +508,39 @@ function DetailSetting({ fromWooJaeData, periodIndex, obj, i }) {
   useEffect(() => {
     if (i !== 0) {
       setUpTime(
-        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime + obj.mtime / 1000 / 60
+        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime +
+          obj.mtime / 1000 / 60
       );
       setDownTime(
         fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime +
           obj.mtime / 1000 / 60 +
-          fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].atime / 1000 / 60
+          fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].atime /
+            1000 /
+            60
       );
       let forBlackBoxRedux = getTimes(
         periodIndex,
-        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime + obj.mtime / 1000 / 60,
+        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime +
+          obj.mtime / 1000 / 60,
         fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime +
           obj.mtime / 1000 / 60 +
-          fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].atime / 1000 / 60
+          fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].atime /
+            1000 /
+            60
       );
       dispatch(addWholeBlackBox(forBlackBoxRedux));
-      if (i !== fromWooJaeData[periodIndex]["day" + (periodIndex + 1)].length - 1) {
-        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i + 1].starttime =
+      if (
+        i !==
+        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)].length - 1
+      ) {
+        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][
+          i + 1
+        ].starttime =
           fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime +
           obj.mtime / 1000 / 60 +
-          fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].atime / 1000 / 60;
+          fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].atime /
+            1000 /
+            60;
       }
     }
   }, []);
@@ -580,7 +624,9 @@ const Chat = ({ detailOne }) => {
               return (
                 <div
                   className={
-                    val.authid !== sessionStorage.getItem("username") ? "chatBox box" : "chatBox"
+                    val.authid !== sessionStorage.getItem("username")
+                      ? "chatBox box"
+                      : "chatBox"
                   }
                 >
                   <div
@@ -604,7 +650,11 @@ const Chat = ({ detailOne }) => {
                         {new window.Date().getHours() > 12
                           ? new window.Date().getHours() - 12
                           : new window.Date().getHours()}
-                        :{new window.Date().getMinutes().toString().padStart(2, "0")}
+                        :
+                        {new window.Date()
+                          .getMinutes()
+                          .toString()
+                          .padStart(2, "0")}
                       </span>
                     </div>
 
@@ -692,7 +742,8 @@ const Container = styled.div`
   top: 47px;
   right: 20px;
   transition: 0.3s;
-  animation: ${swing_chat} 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.5s both;
+  animation: ${swing_chat} 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.5s
+    both;
 `;
 const InnnerContainer = styled.div`
   position: relative;
