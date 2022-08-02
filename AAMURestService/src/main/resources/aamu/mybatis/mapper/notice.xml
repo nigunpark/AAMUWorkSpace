@@ -4,4 +4,65 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="aamu.mybatis.mapper.notice">
 
+	<!-- 게시물 목록 -->
+	<select id="noticeSelectList" resultType="NoticeDTO" parameterType="Map">
+		SELECT * FROM
+		(SELECT T.*, ROWNUM R FROM (
+		SELECT n. *, name FROM
+		Notice
+		n
+		JOIN
+		users u ON n.id=u.id
+		<if test="searchColumn != null">
+			WHERE ${searchColumn} LIKE '%' || #{searchWord} || '%'
+		</if>
+		ORDER BY nno DESC) T)
+	</select>
+
+	<!-- 게시물 수 카운트 -->
+	<select id="noticeSearchTotalCount" parameterType="Map"
+		resultType="int">
+		SELECT COUNT(*) FROM Notice
+	</select>
+
+	<!-- 상세 보기 -->
+	<select id="noticeSelectOne" resultType="NoticeDTO"
+		parameterType="Map">
+		SELECT n.*, name FROM users u JOIN notice n ON u.id =
+		n.id
+		WHERE nno=#{nno}
+	</select>
+
+	<!-- 게시물 검색 -->
+	<select id="noticeSearachList" parameterType="Map"
+		resultType="String">
+		SELECT ${searchColumn} FROM ${table} WHERE ${searchColumn}
+		LIKE '%'||#{searchWord}||'%'
+	</select>
+
+	<!-- 게시물 등록 -->
+	<insert id="noticeInsert" parameterType="Map">
+		INSERT INTO notice
+		VALUES
+		(SEQ_NNO.NEXTVAL,
+		#{title},
+		#{content},
+		SYSDATE,
+		DEFAULT,
+		#{id})
+	</insert>
+
+	<!-- 게시물 수정 -->
+	<update id="noticeUpdate" parameterType="Map">
+		UPDATE notice SET
+		title=#{title},content=#{content} WHERE nno=#{nno}
+	</update>
+
+	<!-- 게시물 삭제 -->
+	<delete id="noticeDelete" parameterType="Map">
+		DELETE notice WHERE
+		nno =
+		#{nno}
+	</delete>
+
 </mapper>
