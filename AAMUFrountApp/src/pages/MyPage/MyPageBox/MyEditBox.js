@@ -58,9 +58,9 @@ const MyEditBox = ({ selectRbn }) => {
   };
   //--------------------------------이미지 끝--------------------------------
 
-  useEffect(() => {
+  async function getSelectOne() {
     let token = sessionStorage.getItem("token");
-    axios
+    await axios
       .get(`/aamurest/bbs/SelectOne/${selectRbn}`, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -81,6 +81,10 @@ const MyEditBox = ({ selectRbn }) => {
           console.log("수정할 데이터 불러오기 실패", error)
         );
       });
+  }
+
+  useEffect(() => {
+    getSelectOne();
   }, []);
 
   const dRoute = detailRoute.reduce((acc, obj) => {
@@ -237,7 +241,7 @@ const MyEditBox = ({ selectRbn }) => {
           type="text"
           className="wirte-title"
           placeholder="제목을 입력하세요"
-          // value={title}
+          value={title}
           ref={titleRef}
         />
       </div>
@@ -281,7 +285,7 @@ const MyEditBox = ({ selectRbn }) => {
           name="content"
           className="write-section"
           placeholder="글 쓰기"
-          // value={content}
+          value={content}
           ref={contentRef}
         />
         <div className="box-gab"></div>
@@ -310,8 +314,8 @@ const MyEditBox = ({ selectRbn }) => {
             // let write = uploadFile(showImagesFile);
             bordWrite(
               // write,
-              titleRef,
-              contentRef,
+              title,
+              content,
               rbn,
               navigate,
               postThemeNum
@@ -441,15 +445,18 @@ function getTimes(periodIndex, st, et) {
       .padStart(2, "0"),
   };
 }
-function bordWrite(titleRef, contentRef, rbn, navigate) {
+function bordWrite(title, content, rbn, navigate) {
+  // console.log("titleRef :", titleRef.current.value);
+  // console.log("contentRef :", contentRef.current.value);
   let token = sessionStorage.getItem("token");
+
   axios
     .put(
       `/aamurest/bbs/edit`,
       {
         rbn: rbn,
-        title: titleRef,
-        content: contentRef,
+        title: title,
+        content: content,
       },
       {
         headers: {
