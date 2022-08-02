@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { addWholeBlackBox } from "../../../redux/store";
 import { useDispatch, useSelector } from "react-redux";
@@ -14,7 +14,9 @@ const MyEditBox = ({ selectRbn }) => {
   const [detailRoute, setDetailRoute] = useState([]);
 
   const [title, setTitle] = useState("");
+  let titleRef = useRef();
   const [content, setContent] = useState("");
+  let contentRef = useRef();
   const [rbn, setDetailRbn] = useState(0);
   useEffect(() => {
     setDetailRbn(selectRbn);
@@ -235,7 +237,8 @@ const MyEditBox = ({ selectRbn }) => {
           type="text"
           className="wirte-title"
           placeholder="제목을 입력하세요"
-          value={title}
+          // value={title}
+          ref={titleRef}
         />
       </div>
 
@@ -278,7 +281,8 @@ const MyEditBox = ({ selectRbn }) => {
           name="content"
           className="write-section"
           placeholder="글 쓰기"
-          value={content}
+          // value={content}
+          ref={contentRef}
         />
         <div className="box-gab"></div>
 
@@ -306,8 +310,8 @@ const MyEditBox = ({ selectRbn }) => {
             // let write = uploadFile(showImagesFile);
             bordWrite(
               // write,
-              title,
-              content,
+              titleRef,
+              contentRef,
               rbn,
               navigate,
               postThemeNum
@@ -437,15 +441,15 @@ function getTimes(periodIndex, st, et) {
       .padStart(2, "0"),
   };
 }
-function bordWrite(title, content, rbn, navigate) {
+function bordWrite(titleRef, contentRef, rbn, navigate) {
   let token = sessionStorage.getItem("token");
   axios
     .put(
       `/aamurest/bbs/edit`,
       {
         rbn: rbn,
-        title: title,
-        content: content,
+        title: titleRef,
+        content: contentRef,
       },
       {
         headers: {
