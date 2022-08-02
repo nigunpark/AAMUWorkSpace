@@ -43,7 +43,7 @@ const MyPage = () => {
       })
       .then((resp) => {
         setPlanList(resp.data);
-        console.log("데이터 확인 : ", resp.data);
+        // console.log("데이터 확인 : ", resp.data);
 
         setUpload(
           resp.data.reduce((acc, obj) => {
@@ -76,7 +76,7 @@ const MyPage = () => {
         },
       })
       .then((resp) => {
-        console.log("인스타 내 글 가져오기", resp.data);
+        // console.log("인스타 내 글 가져오기", resp.data);
         setMyInstar(resp.data);
       })
       .catch((error) => {
@@ -165,21 +165,7 @@ const MyPage = () => {
               setClickTab(1);
             }}
           >
-            <svg
-              className="link-icon feather feather-pie-chart"
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              fill="none"
-              stroke="currentColor"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              viewBox="0 0 24 24"
-            >
-              <defs />
-              <FontAwesomeIcon icon={faImage} />
-            </svg>
+            <i className="fa-brands fa-instagram" style={{ width: "50px" }}></i>
           </button>
 
           {/* <button
@@ -327,7 +313,7 @@ function TabContent({
         },
       })
       .then((resp) => {
-        console.log("여긴가요:", resp.data);
+        // console.log("여긴가요:", resp.data);
         setcomments(resp.data);
       })
       .catch((error) => {
