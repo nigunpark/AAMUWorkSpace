@@ -282,9 +282,9 @@ public class ApiController {
 	}
 
 	@PutMapping("/places/edit")
-	public List<AttractionDTO> search(@RequestBody Map map){
+	public List<AttractionDTO> search(@RequestBody Map map,HttpServletRequest req){
 		System.out.println(map.get("searchWord"));
-		List<AttractionDTO> lists =service.searchOnePlace(map);
+		List<AttractionDTO> lists =service.searchOnePlace(map,req);
 
 		for(AttractionDTO dto: lists) {
 			if(!(dto.getUrl().contains("http"))) {
@@ -302,10 +302,10 @@ public class ApiController {
 		return lists;
 	}
 	@PutMapping("/data/update")
-	public int searchAll(@RequestBody Map<String,String> map){
+	public int searchAll(@RequestBody Map<String,String> map,HttpServletRequest req){
 		int affected = 0;
 
-		List<AttractionDTO> lists =service.searchOnePlace(map);
+		List<AttractionDTO> lists =service.searchOnePlace(map,req);
 
 
 		for(AttractionDTO dto: lists) {
@@ -334,7 +334,7 @@ public class ApiController {
 
 		return affected;
 	}
-	@PostMapping("theme/insert")
+	@PostMapping("/theme/insert")
 	public int theme(@RequestParam Map map, @RequestParam MultipartFile themeimg,HttpServletRequest req) throws IllegalStateException, IOException {
 		int affected = 0;
 		String path = req.getSession().getServletContext().getRealPath("/resources/themeImage");

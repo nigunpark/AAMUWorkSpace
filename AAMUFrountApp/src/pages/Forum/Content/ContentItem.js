@@ -39,7 +39,11 @@ const ContentItem = ({ detail, index, setShowCBModal, isOpen, setIsOpen }) => {
           <figure className="card__item__info_minCon">
             <div className="card__item__img-container_minCon">
               <img
-                src={detail.photo[0] == undefined ? "/images/no-image.jpg" : detail.photo[0]}
+                src={
+                  detail.photo[0] == undefined
+                    ? "/images/no-image.jpg"
+                    : detail.photo[0]
+                }
                 alt="카드이미지"
                 className="card__item__img_minCon"
               />

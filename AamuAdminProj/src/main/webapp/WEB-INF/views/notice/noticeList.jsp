@@ -134,7 +134,6 @@
 td.admin-title a {
 	text-decoration: none;
 	color: black;
-	font-weight: bold;
 }
 </style>
 
