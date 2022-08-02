@@ -550,10 +550,10 @@ public class MainServiceImpl implements MainService{
 			if(!(dto.getSmallimage().toString().contains("http")) && dto.getSmallimage()!=null) 
 				dto.setSmallimage(FileUploadUtil.requestOneFile(dto.getSmallimage(),"/resources/hotelImage",req));
 			
-			if(title!=null && title.contains("\\[") &&!(title.split("\\[")[0].equals("")))
+			if(title!=null && title.contains("[") &&!(title.split("\\[")[0].equals("")))
 				dto.setTitle(title.split("\\[")[0]);
 			
-			if(title!=null && title.contains("\\(")&&!(title.split("\\(")[0].equals("")))
+			if(title!=null && title.contains("(")&&!(title.split("\\(")[0].equals("")))
 				dto.setTitle(title.split("\\(")[0]);
 		}
 		return dto;
