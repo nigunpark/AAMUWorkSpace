@@ -18,16 +18,12 @@ import { CommentsDisabled } from "@mui/icons-material";
 function CommentSearch({
   val,
   comment,
-  setComment,
   setcommentModal,
-  setcomments
-  ,forReRender,
-   setForReRender,
-  //  commentModal1
+  setcomments,
+  forReRender,
+  setForReRender
 
 }) {
-
-
 
    let menuRef = useRef();
   let replyRef = useRef();
@@ -56,12 +52,13 @@ function CommentSearch({
     slidesToScroll: 1,
   };
 
-
+  // const [comments, setcomments] = useState([]);
   function commentModal2(setcomments) {
     console.log("searchb.eelno", val.lno);
     // const copyFeedComments = [...comments];//feedComments에 담겨있던 댓글 받아옴
     // copyFeedComments.push(comment);//copyFeedComments에 있는 기존 댓글에 push하기 위함
     // setcomments(copyFeedComments);//copyFeedComments 담겨있을 comment를 setfeedComments로 변경
+    // setcomments([...comments]);
     let token = sessionStorage.getItem("token");
     axios
       .get('/aamurest/gram/SelectOne', {
@@ -76,12 +73,13 @@ function CommentSearch({
       .then((resp) => {
         console.log('setcomments',resp.data.commuCommentList)
         val.commuCommentList = resp.data.commuCommentList
-        
+        val.isLike = resp.data.islike
         setcomments(resp.data);
       })
       .catch((error) => {
         console.log(error);
       });
+      replyRef.current.value = "";
   }
 
   useEffect(() => {
@@ -90,7 +88,7 @@ function CommentSearch({
 
 
   // const [forReRender, setForReRender] = useState(false);
-  function fillLike(setForReRender,forReRender) {
+  function fillLike() {
     //백이랑 인스타 리스드를 뿌려주기 위한 axios
 
     let token = sessionStorage.getItem("token");
@@ -99,10 +97,13 @@ function CommentSearch({
         headers: {
           Authorization: `Bearer ${token}`,
         },
+        params: {
+          lno: parseInt(val.lno),
+          id: sessionStorage.getItem("username"),
+        },
       })
       .then((resp) => {
-        console.log(resp.data);
-        val.islike = resp.data.isLike;
+        val.isLike = resp.data.isLike;
         val.likecount = resp.data.likecount;
         setForReRender(!forReRender);
       })
@@ -113,7 +114,7 @@ function CommentSearch({
 
   const [commentss, setcommentss] = useState("");
 
-  function post(comment) {
+  function post(replyRef) {
     //유효성 검사를 통과하고 게시버튼 클릭시 발생하는 함수
 
     let token = sessionStorage.getItem("token");
@@ -122,7 +123,7 @@ function CommentSearch({
         "/aamurest/gram/comment/edit",
         {
           id: sessionStorage.getItem('username'),
-          reply: comment,
+          reply: replyRef.current.value,
           lno: val.lno,
         },
         {
@@ -136,14 +137,13 @@ function CommentSearch({
         console.log("resp.data", resp.data.reply);
         const copyComments = [...replyOne];
         setcomments(copyComments);
-        // setForReRender(!forReRender);
+        setForReRender(!forReRender);
         commentModal2(setcomments)
       })
       .catch((error) => {
         console.log(error);
       });
-
-    setComment(""); //사용자 댓글창을 빈 댓글 창으로 초기화
+      replyRef.current.value = "";
   }
 
   let [deleteOne1, setdeleteOne1] = useState(false);
@@ -180,55 +180,11 @@ function CommentSearch({
   }
 
 
-  const CommentList = ({ val }) => {
-    return (
-      <div className="recommend-contents">
-        <img className="likeimg" 
-        src={val.userprofile} alt="추사" />
-        <div
-          style={{
-            width: "100%",
-            display: "flex",
-            flexDirection: "column",
-            marginTop: "10px",
-            marginLeft: "10px",
-          }}
-        >
-          <div style={{ display: "flex", flexDirection: "row" }}>
-            <p className="userName">
-              <strong>{sessionStorage.getItem('username')}</strong>
-            </p>
-            <p className="userName">{val.reply}</p>
-          </div>
-          <div className="comment-heart">
-            {commentHeart ? (
-              <i
-                className="fa-solid fa-heart"
-                onClick={() => {
-                  setCommentHeart(!commentHeart);
-                }}
-                style={{ color: "red" }}
-              />
-            ) : (
-              <i
-                className="fa-regular fa-heart"
-                onClick={() => {
-                  setCommentHeart(!commentHeart);
-                }}
-              ></i>
-            )}
-            <i className="fa-regular fa-trash-can"
-            onClick={()=>{deleteTwo(replyTwo,val.cno) }}></i>
-          </div>
-          <div style={{ fontSize: "10px", color: "#a5a5a5", marginTop: "8px" }}>
-            <p className="postDate">
-              {dayjs(val.postdate).format("YYYY/MM/DD")}
-            </p>
-          </div>
-        </div>
-      </div>
-    );
-  };
+  // const CommentList = ({ val }) => {
+  //   return (
+      
+  //   );
+  // };
 
   return (
     <Container1>
@@ -352,9 +308,51 @@ function CommentSearch({
                 {val.commuCommentList.map((val, i) => {
                   //feedComments에 담겨있을 댓글 값을 CommentList 컴포넌트에 담아서 가져온다
                   return (
-                    <CommentList //CommentList 컴포넌트는 반복적으로 추가되는 사용자 댓글 하나하나를 담고있는 박스
-                    val={val}
-                    />
+                    <div className="recommend-contents">
+                      <img className="likeimg" 
+                      src={val.userprofile} alt="추사" />
+                      <div
+                        style={{
+                          width: "100%",
+                          display: "flex",
+                          flexDirection: "column",
+                          marginTop: "10px",
+                          marginLeft: "10px",
+                        }}
+                      >
+                        <div style={{ display: "flex", flexDirection: "row" }}>
+                          <p className="userName">
+                            <strong>{sessionStorage.getItem('username')}</strong>
+                          </p>
+                          <p className="userName">{val.reply}</p>
+                        </div>
+                        <div className="comment-heart">
+                          {commentHeart ? (
+                            <i
+                              className="fa-solid fa-heart"
+                              onClick={() => {
+                                setCommentHeart(!commentHeart);
+                              }}
+                              style={{ color: "red" }}
+                            />
+                          ) : (
+                            <i
+                              className="fa-regular fa-heart"
+                              onClick={() => {
+                                setCommentHeart(!commentHeart);
+                              }}
+                            ></i>
+                          )}
+                          <i className="fa-regular fa-trash-can"
+                          onClick={()=>{deleteTwo(replyTwo,val.cno) }}></i>
+                        </div>
+                        <div style={{ fontSize: "10px", color: "#a5a5a5", marginTop: "8px" }}>
+                          <p className="postDate">
+                            {dayjs(val.postdate).format("YYYY/MM/DD")}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
                   );
                 })}
               </div>
@@ -365,10 +363,10 @@ function CommentSearch({
                   className="heart-icon"
                   onClick={(e) => {
                     e.stopPropagation();
-                    fillLike(setForReRender,forReRender);
+                    fillLike();
                   }}
                 >
-                  {val.islike ? (
+                  {val.isLike ? (
                     <i
                       className="fa-solid fa-heart fa-2x"
                       style={{ color: "red" }}
@@ -399,15 +397,16 @@ function CommentSearch({
                 ref={replyRef}
                 className="inputComment_"
                 placeholder="댓글 달기..."
-                onChange={(e) => {
-                  setComment(e.target.value); //댓글 창의 상태가 변할때마다 setComment를 통해 comment값을 바꿔준다
-                }}
+                style={{ width: "90%" }}
+                // onChange={(e) => {
+                //   setComment(e.target.value); //댓글 창의 상태가 변할때마다 setComment를 통해 comment값을 바꿔준다
+                // }}
                 onKeyUp={(e) => {
                   e.target.value.length > 0 //사용자가 키를 눌렀다 떼었을때 길이가 0을 넘는 값인지 유효성 검사 결과 값을 담는다
                     ? setisValid(true)
                     : setisValid(false);
                 }}
-                value={comment}
+                // value={comment}
               />
 
               <button
@@ -418,8 +417,8 @@ function CommentSearch({
                     : "submitCommentInactive"
                 }
                 onClick={() => {
-                  post(comment);
-                  setReply(!reply);
+                  post(replyRef);
+                  // setReply(!reply);
                 }} //클릭하면 위서 선언한 post함수를 실행하여 feedComments에 담겨서 re-rendering 된 댓글창을 확인할 수 있다
                 disabled={isValid ? false : true} //사용자가 아무것도 입력하지 않았을 경우 게시를 할 수 없도록
                 type="button"
