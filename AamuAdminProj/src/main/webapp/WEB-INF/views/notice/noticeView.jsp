@@ -19,7 +19,7 @@
 								</tr>
 								<tr>
 									<th class="w-25 bg-dark text-white text-center">제목</th>
-									<td><b>${record.title}</b></td>
+									<td>${record.title}</td>
 								</tr>
 								<tr>
 									<th class="w-25 bg-dark text-white text-center">공지</th>
@@ -85,7 +85,7 @@ padding: 1.5rem 2.187rem 1.5rem 3.5rem;
 
 //메모글 삭제
 function noticeDelete(key){
-	if(confirm("삭제 할래요?")){
+	if(confirm("삭제하시겠습니까?")){
 		location.replace("<c:url value="NoticeViewDelete.do?nno="/>"+key);
 	}
 }
