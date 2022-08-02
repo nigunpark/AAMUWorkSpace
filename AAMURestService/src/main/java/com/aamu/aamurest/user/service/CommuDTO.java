@@ -36,4 +36,5 @@ public class CommuDTO {
 	private int totalcount;
 	private int followercount;
 	private int followingcount;
+	private Boolean isFollower;
 }

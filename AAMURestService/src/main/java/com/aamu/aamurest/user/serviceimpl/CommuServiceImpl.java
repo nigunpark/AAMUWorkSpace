@@ -373,23 +373,21 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 		if(affected==0) { //follower테이블에 없다 따라서 넣어줘야됨
 			int insertAffected=dao.commuInsertFollower(map);
 			if(insertAffected==1) {
-				resulMap.put("FollowerSuccess", true);
+				resulMap.put("isFollower", true);
 				return resulMap;
 			}
 			else {
-				resulMap.put("FollowerSuccess", false);
-				return resulMap;
+				return null;
 			}
 		}
 		else { //follower테이블에 있다 따라서 삭제
 			int deleteAffected=dao.commuDeleteFollower(map);
 			if(deleteAffected==1) {
-				resulMap.put("FollowerCancelSuccess", true);
+				resulMap.put("isFollower", false);
 				return resulMap;
 			}
 			else {
-				resulMap.put("FollowerCancelSuccess", true);
-				return resulMap;
+				return null;
 			}
 		}
 	}
@@ -397,7 +395,13 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 	//마이페이지용_id에 따른 
 	@Override
 	public List<CommuDTO> commuMyPageList(Map map) {
-		return dao.commuMyPageList(map);
+		List<CommuDTO> lists=dao.commuMyPageList(map);
+		for(CommuDTO list:lists) {
+			int affected=dao.commuIsExistFollower(map);
+			if(affected == 1) list.setIsFollower(true); 
+			else list.setIsFollower(false); 
+		}
+		return lists;
 	}
 	
 	//마이페이지용_토탈카운트 셋팅 (해당 id의 총 글 갯수)
