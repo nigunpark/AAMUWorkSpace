@@ -430,7 +430,7 @@ a {
   .projects-section-header {
     position: sticky;
     top: 0;
-    z-index: 1;
+    z-index: 0;
     padding: 32px 24px 0 24px;
     background-color: var(--projects-section);
   }
@@ -614,6 +614,15 @@ a {
       flex: 1;
     }
   }
+}
+.bookMark {
+  width: 35px;
+  margin-right: 15px;
+  cursor: pointer;
+}
+.bookSpan :hover {
+  transition: 0.3s;
+  transform: scale(1.1);
 }
 .myInstaContainer {
   display: grid;

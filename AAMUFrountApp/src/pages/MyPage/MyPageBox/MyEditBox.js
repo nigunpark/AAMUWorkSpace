@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { addWholeBlackBox } from "../../../redux/store";
 import { useDispatch, useSelector } from "react-redux";
@@ -14,7 +14,9 @@ const MyEditBox = ({ selectRbn }) => {
   const [detailRoute, setDetailRoute] = useState([]);
 
   const [title, setTitle] = useState("");
+  let titleRef = useRef();
   const [content, setContent] = useState("");
+  let contentRef = useRef();
   const [rbn, setDetailRbn] = useState(0);
   useEffect(() => {
     setDetailRbn(selectRbn);
@@ -56,9 +58,9 @@ const MyEditBox = ({ selectRbn }) => {
   };
   //--------------------------------이미지 끝--------------------------------
 
-  useEffect(() => {
+  async function getSelectOne() {
     let token = sessionStorage.getItem("token");
-    axios
+    await axios
       .get(`/aamurest/bbs/SelectOne/${selectRbn}`, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -79,6 +81,10 @@ const MyEditBox = ({ selectRbn }) => {
           console.log("수정할 데이터 불러오기 실패", error)
         );
       });
+  }
+
+  useEffect(() => {
+    getSelectOne();
   }, []);
 
   const dRoute = detailRoute.reduce((acc, obj) => {
@@ -236,6 +242,7 @@ const MyEditBox = ({ selectRbn }) => {
           className="wirte-title"
           placeholder="제목을 입력하세요"
           value={title}
+          ref={titleRef}
         />
       </div>
 
@@ -279,6 +286,7 @@ const MyEditBox = ({ selectRbn }) => {
           className="write-section"
           placeholder="글 쓰기"
           value={content}
+          ref={contentRef}
         />
         <div className="box-gab"></div>
 
@@ -438,7 +446,10 @@ function getTimes(periodIndex, st, et) {
   };
 }
 function bordWrite(title, content, rbn, navigate) {
+  // console.log("titleRef :", titleRef.current.value);
+  // console.log("contentRef :", contentRef.current.value);
   let token = sessionStorage.getItem("token");
+
   axios
     .put(
       `/aamurest/bbs/edit`,

@@ -20,119 +20,119 @@ pageContext.setAttribute("newLineChar", "\n");
 						<!-- 템플릿 시작 -->
 						<div class="tab-content-top">
 
-						<table class="table table-bordered">
-							<tbody class="table-sm">
-								<tr>
-									<th class="w-25 bg-dark text-white text-center">번호</th>
-									<td>${record.qno}</td>
-								</tr>
-								<tr>
-									<th class="w-25 bg-dark text-white text-center">제목</th>
-									<td><b>${record.title}</b></td>
-								</tr>
-								<tr>
-									<th class="w-25 bg-dark text-white text-center">문의</th>
-									<td>${record.name}(${record.id})</td>
-								</tr>
-								<!-- 댓글 수에 따라서 답변 대기 및 완료로 전환 -->
-								<tr>
-									<th class="w-25 bg-dark text-white text-center">답변</th>
-									<td><span class="answer-count"><c:set var="ac"
-												value="${record.answerCount}" /> <c:choose>
-												<c:when test="${ac == 0}">
-													<label class="badge badge-danger">대기</label>
-												</c:when>
-												<c:otherwise>
-													<label class="badge badge-success">완료</label>
-												</c:otherwise>
-											</c:choose></span></td>
-								</tr>
-								<tr>
-									<th class="w-25 bg-dark text-white text-center">날짜</th>
-									<td>${record.qdate}</td>
-								</tr>
-								<tr>
-									<th class="w-25 bg-dark text-white text-center">조회</th>
-									<td>${record.qcount}</td>
-								</tr>
-								<tr>
-									<th class="bg-dark text-white text-center" colspan="2">내용</th>
-								</tr>
-								<tr>
-									<td colspan="2">${record.content}</td>
-								</tr>
-							</tbody>
-						</table>
+							<table class="table table-bordered">
+								<tbody class="table-sm">
+									<tr>
+										<th class="w-25 bg-dark text-white text-center">번호</th>
+										<td>${record.qno}</td>
+									</tr>
+									<tr>
+										<th class="w-25 bg-dark text-white text-center">제목</th>
+										<td>${record.title}</td>
+									</tr>
+									<tr>
+										<th class="w-25 bg-dark text-white text-center">문의</th>
+										<td>${record.name}(${record.id})</td>
+									</tr>
+									<!-- 댓글 수에 따라서 답변 대기 및 완료로 전환 -->
+									<tr>
+										<th class="w-25 bg-dark text-white text-center">답변</th>
+										<td><span class="answer-count"><c:set var="ac"
+													value="${record.answerCount}" /> <c:choose>
+													<c:when test="${ac == 0}">
+														<label class="badge badge-danger">대기</label>
+													</c:when>
+													<c:otherwise>
+														<label class="badge badge-success">완료</label>
+													</c:otherwise>
+												</c:choose></span></td>
+									</tr>
+									<tr>
+										<th class="w-25 bg-dark text-white text-center">날짜</th>
+										<td>${record.qdate}</td>
+									</tr>
+									<tr>
+										<th class="w-25 bg-dark text-white text-center">조회</th>
+										<td>${record.qcount}</td>
+									</tr>
+									<tr>
+										<th class="bg-dark text-white text-center" colspan="2">내용</th>
+									</tr>
+									<tr>
+										<td colspan="2">${record.content}</td>
+									</tr>
+								</tbody>
+							</table>
 
-						<!-- 수정/삭제/목록 컨트롤 버튼 -->
-						<div class="text-center mt-4">
-							<a href="<c:url value="QNAEdit.do?qno=${record.qno}"/>"
-								class="btn btn-success">수정</a> <a
-								href="javascript:qnaDelete(${record.qno})"
-								class="qna-delete btn btn-success">삭제</a> <a
-								href="<c:url value="QNA.do?nowPage="/><c:out value="${param.nowPage}" default="1"/>"
-								class="btn btn-success">목록</a>
-						</div>
-
-						<!-- 댓글 입력 -->
-						<form id="form" class="col-sm-12  justify-content-center mt-3">
-							<input type="hidden" name="qno" value="${record.qno}" />
-
-							<!-- 댓글 수정 -->
-							<input type="hidden" name="ano" />
-							<textarea id="answer" name="answer"
-								class="form-control w-20 h-25" rows="10"
-								placeholder="내용을 입력하세요."></textarea>
-							<div class="d-flex justify-content-center">
-								<input type="button" class="btn btn-info mt-3" value="댓글 등록"
-									id="submit" />
+							<!-- 수정/삭제/목록 컨트롤 버튼 -->
+							<div class="text-center mt-4">
+								<a href="<c:url value="QNAEdit.do?qno=${record.qno}"/>"
+									class="btn btn-success">수정</a> <a
+									href="javascript:qnaDelete(${record.qno})"
+									class="qna-delete btn btn-success">삭제</a> <a
+									href="<c:url value="QNA.do?nowPage="/><c:out value="${param.nowPage}" default="1"/>"
+									class="btn btn-success">목록</a>
 							</div>
-						</form>
-</div>
-<div class="tab-content-bottom">
-						<!-- 댓글 목록 -->
-						<div class="answer-index row d-flex justify-content-center">
-							<div class="col-sm-8">
-								<table class="table table-hover text-center">
-									<thead>
-										<tr>
-											<th class="col-2">작성</th>
-											<th>내용</th>
-											<th class="col-2">날짜</th>
-											<th class="col-2">액션</th>
-										</tr>
-									</thead>
-									<tbody class="table-sm down-file-body" id="answer-list">
-										<c:if test="${empty record.answer}" var="isEmpty">
+
+							<!-- 댓글 입력 -->
+							<form id="form" class="col-sm-12  justify-content-center mt-3">
+								<input type="hidden" name="qno" value="${record.qno}" />
+
+								<!-- 댓글 수정 -->
+								<input type="hidden" name="ano" />
+								<textarea id="answer" name="answer"
+									class="form-control w-20 h-25" rows="10"
+									placeholder="내용을 입력하세요."></textarea>
+								<div class="d-flex justify-content-center">
+									<input type="button" class="btn btn-info mt-3" value="댓글 등록"
+										id="submit" />
+								</div>
+							</form>
+						</div>
+						<div class="tab-content-bottom">
+							<!-- 댓글 목록 -->
+							<div class="answer-index row d-flex justify-content-center">
+								<div class="col-sm-8">
+									<table class="table table-hover text-center">
+										<thead>
 											<tr>
-												<td colspan="4" id="answer-list"><span
-													class="no-answer">등록된 댓글이 없습니다.</span></td>
+												<th class="col-2">작성</th>
+												<th>내용</th>
+												<th class="col-2">날짜</th>
+												<th class="col-2">액션</th>
 											</tr>
-										</c:if>
-										<c:if test="${not isEmpty }">
-											<c:forEach items="${record.answer}" var="item">
+										</thead>
+										<tbody class="table-sm down-file-body" id="answer-list">
+											<c:if test="${empty record.answer}" var="isEmpty">
 												<tr>
-													<c:set var="titleClass"
-														value="${\"ADMIN2\"==item.id ? 'answer' : ''}" />
-													<c:set var="inactive"
-														value="${\"ADMIN2\"==item.id ? '' : 'disabled'}" />
-													<td>${item.name}(${item.id})</td>
-													<td class="text-left ${titleClass}" title="${item.ano}">
-														${fn:replace(item.answer, newLineChar, "<br/>")}</td>
-													<td>${item.adate }</td>
-													<td>
-														<button class="btn btn-sm btn-warning edit-answer"
-															title="${item.ano}" value="${item.answer }">수정</button>
-														<button class="btn btn-sm btn-danger delete">삭제</button>
-													</td>
+													<td colspan="4" id="answer-list"><span
+														class="no-answer">등록된 댓글이 없습니다.</span></td>
 												</tr>
-											</c:forEach>
-										</c:if>
-									</tbody>
-								</table>
+											</c:if>
+											<c:if test="${not isEmpty }">
+												<c:forEach items="${record.answer}" var="item">
+													<tr>
+														<c:set var="titleClass"
+															value="${\"ADMIN2\"==item.id ? 'answer' : ''}" />
+														<c:set var="inactive"
+															value="${\"ADMIN2\"==item.id ? '' : 'disabled'}" />
+														<td>${item.name}(${item.id})</td>
+														<td class="text-left ${titleClass}" title="${item.ano}">
+															${fn:replace(item.answer, newLineChar, "<br/>")}</td>
+														<td>${item.adate }</td>
+														<td>
+															<button class="btn btn-sm btn-warning edit-answer"
+																title="${item.ano}" value="${item.answer }">수정</button>
+															<button class="btn btn-sm btn-danger delete">삭제</button>
+														</td>
+													</tr>
+												</c:forEach>
+											</c:if>
+										</tbody>
+									</table>
+								</div>
 							</div>
 						</div>
-</div>
 						<!-- 템플릿 종료 -->
 
 					</div>
@@ -145,21 +145,19 @@ pageContext.setAttribute("newLineChar", "\n");
 </div>
 
 <style>
-
 .tab-content-top {
-padding: 1.5rem 2.187rem 1.5rem 3.5rem;
+	padding: 1.5rem 2.187rem 1.5rem 3.5rem;
 	border-radius: 20px;
 	-webkit-box-shadow: 0 0 0 0 rgb(90 113 208/ 11%), 0 4px 16px 0
 		rgb(167 175 183/ 33%);
 }
 
 .tab-content-bottom {
-
-margin-top: 30px;
-border-radius: 20px;
--webkit-box-shadow: 0 0 0 0 rgb(90 113 208/ 11%), 0 4px 16px 0
+	margin-top: 30px;
+	border-radius: 20px;
+	-webkit-box-shadow: 0 0 0 0 rgb(90 113 208/ 11%), 0 4px 16px 0
 		rgb(167 175 183/ 33%);
-padding: 1.5rem 2.187rem 1.5rem 3.5rem;
+	padding: 1.5rem 2.187rem 1.5rem 3.5rem;
 }
 
 .col-sm-8 {
@@ -167,12 +165,11 @@ padding: 1.5rem 2.187rem 1.5rem 3.5rem;
 }
 
 .answer-index {
-
 	
 }
 
-.table-hover > tbody > tr:hover{
-	--bs-table-accent-bg: transparent !important;
+.table-hover>tbody>tr:hover { -
+	-bs-table-accent-bg: transparent !important;
 }
 
 .btn-warning {

@@ -103,9 +103,9 @@ function FeedSetting({
     return (
       <div className="writing">
         <span className="id">
-          {val.commuComment===null?null:val.commuComment.id}
+          {val.commuComment === null ? null : val.commuComment.id}
         </span>
-        <span>{val.commuComment===null?null:val.commuComment.reply}</span>
+        <span>{val.commuComment === null ? null : val.commuComment.reply}</span>
       </div>
     );
   };

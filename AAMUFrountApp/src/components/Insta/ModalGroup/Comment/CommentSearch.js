@@ -20,16 +20,12 @@ function CommentSearch({
   comment,
   setComment,
   setcommentModal,
-  setcomments
-  ,forReRender,
-   setForReRender,
+  setcomments,
+  forReRender,
+  setForReRender,
   //  commentModal1
-
 }) {
-
-
-
-   let menuRef = useRef();
+  let menuRef = useRef();
   let replyRef = useRef();
   let commentRef1 = useRef();
 
@@ -56,7 +52,6 @@ function CommentSearch({
     slidesToScroll: 1,
   };
 
-
   function commentModal2(setcomments) {
     console.log("searchb.eelno", val.lno);
     // const copyFeedComments = [...comments];//feedComments에 담겨있던 댓글 받아옴
@@ -64,19 +59,19 @@ function CommentSearch({
     // setcomments(copyFeedComments);//copyFeedComments 담겨있을 comment를 setfeedComments로 변경
     let token = sessionStorage.getItem("token");
     axios
-      .get('/aamurest/gram/SelectOne', {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-    params:{
-      id:sessionStorage.getItem('username'),
-      lno:val.lno
-    }
+      .get("/aamurest/gram/SelectOne", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        params: {
+          id: sessionStorage.getItem("username"),
+          lno: val.lno,
+        },
       })
       .then((resp) => {
-        console.log('setcomments',resp.data.commuCommentList)
-        val.commuCommentList = resp.data.commuCommentList
-        
+        console.log("setcomments", resp.data.commuCommentList);
+        val.commuCommentList = resp.data.commuCommentList;
+
         setcomments(resp.data);
       })
       .catch((error) => {
@@ -88,9 +83,8 @@ function CommentSearch({
     commentModal2(setcomments);
   }, []);
 
-
   // const [forReRender, setForReRender] = useState(false);
-  function fillLike(setForReRender,forReRender) {
+  function fillLike(setForReRender, forReRender) {
     //백이랑 인스타 리스드를 뿌려주기 위한 axios
 
     let token = sessionStorage.getItem("token");
@@ -121,7 +115,7 @@ function CommentSearch({
       .post(
         "/aamurest/gram/comment/edit",
         {
-          id: sessionStorage.getItem('username'),
+          id: sessionStorage.getItem("username"),
           reply: comment,
           lno: val.lno,
         },
@@ -137,7 +131,7 @@ function CommentSearch({
         const copyComments = [...replyOne];
         setcomments(copyComments);
         // setForReRender(!forReRender);
-        commentModal2(setcomments)
+        commentModal2(setcomments);
       })
       .catch((error) => {
         console.log(error);
@@ -147,8 +141,8 @@ function CommentSearch({
   }
 
   let [deleteOne1, setdeleteOne1] = useState(false);
-  let [replyTwo, setreplyTwo] = useState('');
-  function deleteTwo(replyTwo,cno) {
+  let [replyTwo, setreplyTwo] = useState("");
+  function deleteTwo(replyTwo, cno) {
     let token = sessionStorage.getItem("token");
     // setcomments(comments.filter(recommendContents =>{
     //   return recommendContents.id !== id;
@@ -156,35 +150,30 @@ function CommentSearch({
     console.log("val.lno", val.lno);
     console.log("val.cno", cno);
     axios
-      .delete(
-        "/aamurest/gram/comment/edit",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          params: {
-            lno: val.lno,
-            cno: cno,
-          },
-        }
-      )
+      .delete("/aamurest/gram/comment/edit", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        params: {
+          lno: val.lno,
+          cno: cno,
+        },
+      })
       .then((resp) => {
         console.log(resp.data);
         setdeleteOne1(resp.data); //성공 여부가 온다 true false
         // alert('삭제되었습니다!')
-        commentModal2(setcomments)
+        commentModal2(setcomments);
       })
       .catch((error) => {
         console.log(error);
       });
   }
 
-
   const CommentList = ({ val }) => {
     return (
       <div className="recommend-contents">
-        <img className="likeimg" 
-        src={val.userprofile} alt="추사" />
+        <img className="likeimg" src={val.userprofile} alt="추사" />
         <div
           style={{
             width: "100%",
@@ -196,7 +185,7 @@ function CommentSearch({
         >
           <div style={{ display: "flex", flexDirection: "row" }}>
             <p className="userName">
-              <strong>{sessionStorage.getItem('username')}</strong>
+              <strong>{sessionStorage.getItem("username")}</strong>
             </p>
             <p className="userName">{val.reply}</p>
           </div>
@@ -217,8 +206,12 @@ function CommentSearch({
                 }}
               ></i>
             )}
-            <i className="fa-regular fa-trash-can"
-            onClick={()=>{deleteTwo(replyTwo,val.cno) }}></i>
+            <i
+              className="fa-regular fa-trash-can"
+              onClick={() => {
+                deleteTwo(replyTwo, val.cno);
+              }}
+            ></i>
           </div>
           <div style={{ fontSize: "10px", color: "#a5a5a5", marginTop: "8px" }}>
             <p className="postDate">
@@ -279,7 +272,7 @@ function CommentSearch({
                 </div>
                 <div>
                   <p className="user-id">
-                    <strong>{sessionStorage.getItem('username')}</strong>
+                    <strong>{sessionStorage.getItem("username")}</strong>
                   </p>
                 </div>
               </div>
@@ -328,7 +321,7 @@ function CommentSearch({
                           <strong
                             style={{ fontSize: "13px", marginRight: "5px" }}
                           >
-                            {sessionStorage.getItem('username')}
+                            {sessionStorage.getItem("username")}
                           </strong>
                           <span style={{ fontFamily: "normal" }}>
                             {val.content}
@@ -353,7 +346,7 @@ function CommentSearch({
                   //feedComments에 담겨있을 댓글 값을 CommentList 컴포넌트에 담아서 가져온다
                   return (
                     <CommentList //CommentList 컴포넌트는 반복적으로 추가되는 사용자 댓글 하나하나를 담고있는 박스
-                    val={val}
+                      val={val}
                     />
                   );
                 })}
@@ -365,7 +358,7 @@ function CommentSearch({
                   className="heart-icon"
                   onClick={(e) => {
                     e.stopPropagation();
-                    fillLike(setForReRender,forReRender);
+                    fillLike(setForReRender, forReRender);
                   }}
                 >
                   {val.islike ? (
@@ -394,7 +387,7 @@ function CommentSearch({
               </div>
             </div>
             <div className="comment1">
-            <input
+              <input
                 type="text"
                 ref={replyRef}
                 className="inputComment_"

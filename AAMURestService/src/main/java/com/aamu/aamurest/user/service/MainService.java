@@ -11,23 +11,23 @@ public interface MainService{
 
 	int plannerInsert(PlannerDTO dto);
 
-	PlannerDTO selectPlannerOne(int rbn);
+	PlannerDTO selectPlannerOne(int rbn,HttpServletRequest req);
 
-	List<AttractionDTO> selectMainPlaceList();
+	List<AttractionDTO> selectMainPlaceList(HttpServletRequest req);
 
 	List<AttractionDTO> selectPlacesList(Map map,HttpServletRequest req);
 
-	List<AttractionDTO> selectAttrSigungu(Map map);
+	List<AttractionDTO> selectAttrSigungu(Map map,HttpServletRequest req);
 
-	List<AttractionDTO> searchTwoPlace(Map map);
+	List<AttractionDTO> searchTwoPlace(Map map,HttpServletRequest req);
 
-	List<AttractionDTO> searchOnePlace(Map map);
+	List<AttractionDTO> searchOnePlace(Map map,HttpServletRequest req);
 
 	int updateUrl(AttractionDTO dto);
 
 	int updatePlaces(Map map);
 
-	AttractionDTO selectOnePlace(int contentid);
+	AttractionDTO selectOnePlace(int contentid,HttpServletRequest req);
 
 	int checkPlace(Map map);
 
@@ -38,7 +38,7 @@ public interface MainService{
 	int deletePlanner(int rbn);
 
 
-	List<AttractionDTO> getRecentPlaceAll(Map map);
+	List<AttractionDTO> getRecentPlaceAll(Map map,HttpServletRequest req);
 
 	double getRecentPlaceOne(Map map);
 

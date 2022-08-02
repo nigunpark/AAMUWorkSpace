@@ -31,6 +31,8 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.aamu.aamurest.user.service.AttractionDTO;
+import com.aamu.aamurest.user.service.BBSDTO;
+import com.aamu.aamurest.user.service.BBSService;
 import com.aamu.aamurest.user.service.MainService;
 import com.aamu.aamurest.user.service.PlannerDTO;
 import com.aamu.aamurest.user.service.RouteDTO;
@@ -53,6 +55,9 @@ public class MainController {
 
 	@Autowired
 	private RestTemplate restTemplate;
+	
+	@Autowired
+	private BBSService bbsService;
 
 	@PostMapping("/planner/edit")
 	public int plannerInsert(@RequestBody PlannerDTO dto) {
@@ -76,7 +81,7 @@ public class MainController {
 		return affected;
 	}
 	@PostMapping("/planner/data")
-	public PlannerDTO plannerData(@RequestBody PlannerDTO dto) {
+	public PlannerDTO plannerData(@RequestBody PlannerDTO dto,HttpServletRequest req) {
 		List<RouteDTO> list = dto.getRoute();
 		int tripDay = list.get(0).getDay();
 		int setDay =0;
@@ -86,7 +91,7 @@ public class MainController {
 		HttpEntity httpEntity = new HttpEntity<>(header);
 		for(int i=0;i<list.size();i++) {
 			int contentid = list.get(i).getContentid();
-			AttractionDTO placeInfo = service.selectOnePlace(contentid);
+			AttractionDTO placeInfo = service.selectOnePlace(contentid,req);
 			list.get(i).setDto(placeInfo);
 
 			if(list.get(i).getDay()!=0) {
@@ -104,7 +109,7 @@ public class MainController {
 		list.get(tripDay-1).setContenttypeid(list.get(tripDay-2).getContenttypeid());
 		for(RouteDTO route:list) {
 			int contentid = route.getContentid();
-			AttractionDTO placeInfo = service.selectOnePlace(contentid);
+			AttractionDTO placeInfo = service.selectOnePlace(contentid,req);
 			route.setDto(placeInfo);
 			if(route.getContenttypeid()!=32) {
 				route.setMtime(1000*60*30);
@@ -320,18 +325,18 @@ public class MainController {
 	}
 
 	@GetMapping("/planner/selectone")
-	public PlannerDTO selectPlannerOne(@RequestParam int rbn) {
+	public PlannerDTO selectPlannerOne(@RequestParam int rbn,HttpServletRequest req) {
 
-		PlannerDTO dto = service.selectPlannerOne(rbn);
+		PlannerDTO dto = service.selectPlannerOne(rbn,req);
 
 		return dto;
 	}
 
 	@GetMapping("/planner/selectonemap")
-	public PlannerDTO selectMapPlannerOne(@RequestParam int rbn){
+	public PlannerDTO selectMapPlannerOne(@RequestParam int rbn,HttpServletRequest req){
 
 		Map<String,List<RouteDTO>> map = new TreeMap<>();
-		PlannerDTO dto = service.selectPlannerOne(rbn);
+		PlannerDTO dto = service.selectPlannerOne(rbn,req);
 
 		List<RouteDTO> routes =  dto.getRoute();
 		int max= 0 ;
@@ -434,7 +439,7 @@ public class MainController {
 				map.put("selecttable", "dinerinfo");
 				break;
 			}
-			list = service.selectAttrSigungu(map);
+			list = service.selectAttrSigungu(map,req);
 		}
 		else {
 
@@ -490,17 +495,17 @@ public class MainController {
 	}
 
 	@GetMapping("/info/search")
-	public List<AttractionDTO> search(@RequestParam Map map){
+	public List<AttractionDTO> search(@RequestParam Map map,HttpServletRequest req){
 
-		List<AttractionDTO> lists =service.searchTwoPlace(map);
+		List<AttractionDTO> lists =service.searchTwoPlace(map,req);
 
 		return lists;
 	}
 	@GetMapping("/info/recentplace")
-	public List<AttractionDTO> getRecentPlace(@RequestParam Map map){
+	public List<AttractionDTO> getRecentPlace(@RequestParam Map map,HttpServletRequest req){
 		if(map.get("distance")==null) map.put("distance", 3);
 
-		List<AttractionDTO> lists = service.getRecentPlaceAll(map);
+		List<AttractionDTO> lists = service.getRecentPlaceAll(map,req);
 
 		return lists;
 	}
@@ -567,11 +572,11 @@ public class MainController {
 		return list;
 	}
 	@GetMapping("/main/mainelement")
-	public Map<String,Map<String,List>> mainElement(@RequestParam Map map){
+	public Map<String,Map<String,List>> mainElement(@RequestParam Map map,HttpServletRequest req){
 
 		Map<String,Map<String,List>> basicMap = new HashMap<>();
 		Map<String,List> mapElement = new HashMap<>();
-		List<AttractionDTO> list = service.selectMainPlaceList();
+		List<AttractionDTO> list = service.selectMainPlaceList(req);
 		if(map.get("id")!=null) {
 			service.getUserTheme(map);
 		}
@@ -579,11 +584,11 @@ public class MainController {
 		mapElement.put("places", list);
 		basicMap.put("placesInfo", mapElement);
 
-		return map;
+		return basicMap;
 
 	}
 	@PostMapping("/img/upload")
-	public int imgUpload(@RequestParam Map map,@RequestParam MultipartFile files,HttpServletRequest req) throws IllegalStateException, IOException {
+	public Map imgUpload(@RequestParam Map map,@RequestParam MultipartFile files,HttpServletRequest req) throws IllegalStateException, IOException {
 		int affected = 0;
 		System.out.println(map.get("contentid"));
 		System.out.println(files);
@@ -591,10 +596,11 @@ public class MainController {
 		String filename = FileUploadUtil.oneFile(files, path);
 		map.put("smallimage", filename);
 		affected = service.updateImage(map);
-		return affected;
+		map.put("smallimage", FileUploadUtil.requestOneFile(filename, "/resources/hotelImage", req));
+		return map;
 	}
 	@PostMapping("/main/chatbot")
-	public Map mainChatbot(@RequestBody Map map) {
+	public Map mainChatbot(@RequestBody Map map,HttpServletRequest req) {
 		System.out.println(map);
 		String uri="http://192.168.0.19:5020/message";
 		MultiValueMap<String,String> requestBody = new LinkedMultiValueMap<>();
@@ -622,7 +628,7 @@ public class MainController {
 				returnMap.put("route", message+" (CLICK)");
 				returnMap.put("rbn",rbn);
 				int rbnInt = Integer.parseInt(rbn);
-				PlannerDTO dto = service.selectPlannerOne(rbnInt);
+				BBSDTO dto = bbsService.bbsSelectOne(rbnInt);
 				returnMap.put("planner", dto);
 				message = "AAMU에서 추천하는 여행 플래너!";
 			}
@@ -642,7 +648,7 @@ public class MainController {
 			codeMap.put("rownum", 1);
 			String contentid = service.searchMostRoute(codeMap);
 			if(contentid!=null) {
-				AttractionDTO dto = service.selectOnePlace(Integer.parseInt(contentid));
+				AttractionDTO dto = service.selectOnePlace(Integer.parseInt(contentid),req);
 				returnMap.put("message","현재 AAMU에서 추천하는"+contenttype+"입니다");
 				returnMap.put("title",dto.getTitle());
 				returnMap.put("kakaokey", dto.getKakaokey());
