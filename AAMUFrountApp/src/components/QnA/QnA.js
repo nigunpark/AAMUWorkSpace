@@ -5,6 +5,7 @@ import { faAngleDown, faCircleQuestion } from "@fortawesome/free-solid-svg-icons
 import Pagination from "./Pagination";
 import { Link } from "react-router-dom";
 import { post } from "jquery";
+import axios from "axios";
 const QnA = () => {
   const [posts, setPosts] = useState([
     <QnABbsOne />,
@@ -26,7 +27,24 @@ const QnA = () => {
     currentPosts = posts.slice(indexOfFirst, indexOfLast);
     return currentPosts;
   };
-  useEffect(() => {}, []);
+  function getQna() {
+    let token = sessionStorage.getItem("token");
+    axios
+      .get("/aamurest/qna/list", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((resp) => {
+        console.log(resp.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+  useEffect(() => {
+    getQna();
+  }, []);
   return (
     <div className="qna__container">
       <div className="qna__header">
