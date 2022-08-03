@@ -53,8 +53,11 @@ const Profile = ({val}) =>  {
         },
       })
       .then((resp) => {
+        console.log(resp.data[0].totalcount);
+        console.log(resp.data[0].followercount);
+        console.log(resp.data[0].followingcount);
         setisFollower(resp.data[0].isFollower);
-        setuserPro(resp.data);
+        setuserPro(resp.data[0].totalcount);
         val.followercount=resp.data[0].followercount;
         val.followingcount=resp.data[0].followingcount;
         setphoto(resp.data[0].photo[0]);
@@ -87,7 +90,7 @@ const Profile = ({val}) =>  {
                   <div className='row'>
                     <div className='profileSecond'>
                         <p className="user-id">게시물</p>
-                        <p className="user-name">{userPro.length}</p>
+                        <p className="user-name">{userPro}</p>
                     </div>
                     <div className='profileSecond'>
                         <p className="user-id">팔로워</p>
