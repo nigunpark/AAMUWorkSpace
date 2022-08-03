@@ -42,14 +42,16 @@ class Weather(Resource):
                 date = driver.find_elements(By.CSS_SELECTOR,
                                             'div.list_box._weekly_weather > ul > li > div > div.cell_date > span > span')[i].text[:4]
                 lowTemp = driver.find_elements(By.CSS_SELECTOR,
-                                               'div.list_box._weekly_weather > ul > li > div > div.cell_temperature > span > span.lowest')[i].text
+                                               'div.list_box._weekly_weather > ul > li > div > div.cell_temperature > span > span.lowest')[i].text[5:8]
                 highTemp = driver.find_elements(By.CSS_SELECTOR,
-                                                'div.list_box._weekly_weather > ul > li > div > div.cell_temperature > span > span.highest')[i].text
+                                                'div.list_box._weekly_weather > ul > li > div > div.cell_temperature > span > span.highest')[i].text[5:8]
+                weatherState = driver.find_elements(By.CSS_SELECTOR,
+                                                    'div.list_box._weekly_weather > ul > li > div > div.cell_weather > span:nth-child(1) > i > span')[i].text
 
 
                 realDate = '2022.' + date
                 if searchDate == realDate:
-                    weather = dict(zip(['date', 'lowTemp', 'highTemp'], [realDate, lowTemp, highTemp]))  # [,,] weahter라는 키로
+                    weather = dict(zip(['date', 'lowTemp', 'highTemp', 'weatherState'], [realDate, lowTemp, highTemp, weatherState]))  # [,,] weahter라는 키로
                     list_.append(weather)
                     print(list_)
             return jsonify({'weather':list_})

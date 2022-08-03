@@ -187,7 +187,7 @@ public class CommuController {
 	//TAGS테이블에 있으면 TNO,TNAME 키값으로 뿌려주고 COMMUTAG에 저장 //없으면 INSERT TAGS테이블 COMMUTAG테이블
 	@GetMapping("/gram/tag")
 	public List<String> commuTag(@RequestParam Map map){//tname:
-		System.out.println("태그 map:"+map);
+		System.out.println("태그검색 map:"+map);
 		return commuService.commuTag(map);
 	}
 	
