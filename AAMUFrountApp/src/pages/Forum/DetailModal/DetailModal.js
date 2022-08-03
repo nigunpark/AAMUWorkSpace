@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import styled, { keyframes } from "styled-components";
 import Notice from "../Notice/Notice";
 import "../Board2/DetailButton.scss";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Rating } from "@mui/material";
 import axios from "axios";
 import "./BookMark.css";
@@ -18,6 +18,7 @@ const DetailModal = ({
   setShowCBModal,
   setIsLoading,
 }) => {
+  let navigate = useNavigate();
   // console.log("detailOne", detailOne);
   function dateFormat(date) {
     let month = date.getMonth() + 1;
@@ -41,6 +42,7 @@ const DetailModal = ({
   const [showChat, setShowChat] = useState(false);
   const [plannerDate, setPlannerDate] = useState({});
   const [detailRoute, setDetailRoute] = useState([]);
+  const [myBookMark, setMyBookMark] = useState(false);
   // const [rno, setRno] = useState(0);
   let dispatch = useDispatch();
   useEffect(() => {
@@ -188,11 +190,39 @@ const DetailModal = ({
         },
       })
       .then((resp) => {
-        console.log("삭제 성공 :", resp.data);
+        console.log("리뷰 삭제 성공 (DetailModal.js)");
+        alert("리뷰가 삭제되었어요.");
       })
       .catch((error) => {
         console.log(error);
       });
+  };
+
+  const bookMarkOne = (mark) => {
+    let token = sessionStorage.getItem("token");
+    axios
+      .post(
+        "",
+        {
+          id: sessionStorage.getItem("username"),
+          rbn: detailOne.rbn,
+          북마크key: mark,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then((resp) => {
+        console.log("북마크 추가/취소 성공 (DetailModal.js)", resp.data);
+        let bool = window.confirm("마이페이지로 이동하시겠어요?");
+        if (bool) {
+          navigate("/myPage");
+          // setClickTab(2);
+        }
+      })
+      .catch();
   };
 
   const CommentList = ({ val, setFeedComments, setIsOpen }) => {
@@ -370,11 +400,24 @@ const DetailModal = ({
                   </span>
                 </div>
                 <div>
-                  <FontAwesomeIcon
-                    icon={faBookmark}
-                    className="detail__plan-bookMark"
-                  />
-                  <i class="fa-regular fa-bookmark detail__plan-bookMark"></i>
+                  {myBookMark == false ? (
+                    <i
+                      class="fa-regular fa-bookmark detail__plan-bookMark"
+                      onClick={() => {
+                        setMyBookMark(true);
+                        bookMarkOne(true);
+                      }}
+                    ></i>
+                  ) : (
+                    <FontAwesomeIcon
+                      icon={faBookmark}
+                      className="detail__plan-bookMark"
+                      onClick={() => {
+                        setMyBookMark(false);
+                        bookMarkOne(false);
+                      }}
+                    />
+                  )}
                 </div>
               </div>
             </div>

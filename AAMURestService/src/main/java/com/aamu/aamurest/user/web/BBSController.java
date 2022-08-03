@@ -52,7 +52,6 @@ public class BBSController {
 			//dto.setPhoto(dao.bbsSelectPhotoList(rbn));
 			//모든 리뷰 가져오기
 			dto.setReviewList(bbsService.reviewList(dto.getRbn()));
-			
 		}
 		return list;
 	}
@@ -116,7 +115,23 @@ public class BBSController {
 		else
 			resultMap.put("result", "deleteNotSuccess");
 		return resultMap;
-
+	}
+	
+	
+	//글 북마크하기
+	@GetMapping("/bbs/bookmark")
+	public Map bbsBookmark(@RequestParam Map map) {//id, rbn
+		Boolean affected=bbsService.bbsBookmark(map);
+		Map resultMap = new HashMap();
+		if(affected) { //true면
+			resultMap.put("bookmark", true);
+			resultMap.put("rbn", map.get("rbn"));
+		}
+		else {
+			resultMap.put("bookmark", false);
+			resultMap.put("rbn", map.get("rbn"));
+		}
+		return resultMap;
 	}
 
 	//리뷰 등록 <성공>

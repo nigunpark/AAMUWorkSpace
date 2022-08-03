@@ -26,6 +26,7 @@ import SockJS from "sockjs-client";
 import * as StompJs from "@stomp/stompjs";
 import { useDispatch } from "react-redux";
 import { addForChatInfo } from "./redux/store";
+import JoinStep3 from "./components/Join/JoinStep3";
 function App() {
   let dispatch = useDispatch();
   let location = useLocation();
@@ -52,10 +53,13 @@ function App() {
   window.addEventListener("scroll", handleScroll);
 
   const subscribe = () => {
-    client.current.subscribe(`/notification/${sessionStorage.getItem("username")}`, ({ body }) => {
-      // setChatMessages((_chatMessages) => [..._chatMessages, JSON.parse(body)]);
-      console.log("body", body);
-    });
+    client.current.subscribe(
+      `/notification/${sessionStorage.getItem("username")}`,
+      ({ body }) => {
+        // setChatMessages((_chatMessages) => [..._chatMessages, JSON.parse(body)]);
+        console.log("body", body);
+      }
+    );
   };
   //채팅연결
   const connect = () => {
@@ -129,17 +133,21 @@ function App() {
               />
             }
           />
-          <Route path="/myPage" element={<MyPage />} />
+          <Route path="/myPage" element={<MyPage searchb={searchb} />} />
         </Route>
         {/* <Route path="/chat" element={<Chat />} /> */}
         <Route path="/login" element={<LoginTest />}></Route>
         <Route path="/join" element={<JoinStep1 />} />
         <Route path="/joinTwo" element={<JoinStep2 />} />
+        <Route path="/joinThree" element={<JoinStep3 />} />
         <Route path="/login" element={<LoginTest />} />
         <Route path="/test" element={<Test />} />
         <Route path="/Detailmodal" element={<DetailModal />} />
 
-        <Route path="/oauth/callback/kakao" element={<KakaoRedirectHandler />} />
+        <Route
+          path="/oauth/callback/kakao"
+          element={<KakaoRedirectHandler />}
+        />
       </Routes>
     </div>
   );

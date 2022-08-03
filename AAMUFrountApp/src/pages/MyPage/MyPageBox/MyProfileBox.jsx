@@ -35,6 +35,7 @@ const MyProfileBox = ({ setClickTab }) => {
   const [isOpenPost, setIsOpenPost] = useState(false);
 
   const [showImages, setShowImages] = useState([]); //이미지
+  const [showImagesFile, setShowImagesFile] = useState([]);
 
   //이메일
   let [emailFrist, setEmailFrist] = useState("");
@@ -57,11 +58,20 @@ const MyProfileBox = ({ setClickTab }) => {
   //이미지 등록
   const handleAddImages = (e) => {
     const imageLists = e.target.files;
-    let imageUrlLists = [...showImages];
 
-    for (let i = 0; i < imageLists.length; i++) {
-      const currentImageUrl = URL.createObjectURL(imageLists[i]);
-      imageUrlLists.push(currentImageUrl);
+    // if (imageLists.length == 0) {
+    //   imageLists = { showImages };
+    // }
+    let imageUrlLists = [...showImages];
+    let imgs = [...showImagesFile];
+
+    if (imageLists.length != 0) {
+      for (let i = 0; i < imageLists.length; i++) {
+        const currentImageUrl = URL.createObjectURL(imageLists[i]);
+        imageUrlLists.push(currentImageUrl);
+
+        imgs.push(imageLists[i]);
+      }
     }
 
     if (imageUrlLists.length > 1) {
@@ -69,9 +79,14 @@ const MyProfileBox = ({ setClickTab }) => {
       imageUrlLists = imageUrlLists.slice(0, 1);
     }
     setShowImages(imageUrlLists);
+    setShowImagesFile(imgs);
 
     let formData = new FormData();
     formData.append("userprofile", e.target.files[0]);
+
+    console.log("e.target.files :", e.target.files);
+    console.log("제발 :", showImages.blob);
+
     return formData;
   };
 
@@ -111,6 +126,7 @@ const MyProfileBox = ({ setClickTab }) => {
 
         setIntroduce(resp.data.self);
         setShowImages(resp.data.userprofile.split());
+        // setProfile(resp.data.userprofile.split());
         setName(resp.data.name);
         setGender(resp.data.gender);
         setUserId(resp.data.id);
@@ -120,8 +136,8 @@ const MyProfileBox = ({ setClickTab }) => {
       });
   }, []);
 
-  // console.log('userProfile :',userProfile.userprofile.split());
-  // console.log('showImages :',showImages);
+  console.log("showImagesFile -----:", showImagesFile.length);
+  console.log("showImages :", showImages.length);
   let [profiles, setProfile] = useState([]);
   return (
     <MyProfileContainer>
@@ -287,19 +303,19 @@ const MyProfileBox = ({ setClickTab }) => {
         <div style={{ textAlign: "end", marginTop: "50px" }}>
           <UpdateBtn
             type="button"
-            onClick={() => {
+            onClick={(e) => {
               // let profile = uploadFile(showImages);
-              let checkSuc = profileUpdate(
+              // handleAddImages(e);
+              profileUpdate(
                 profiles,
+                // profile,
                 phoneNum,
                 email,
                 addr,
                 introduce,
                 pwd,
                 gender,
-                name,
-                navigate,
-                setClickTab
+                name
               );
             }}
           >
@@ -313,25 +329,29 @@ const MyProfileBox = ({ setClickTab }) => {
 
 function uploadFile(showImages) {
   //이미지 업로드
-  let formData = new FormData(); // formData 객체를 생성한다.
-  for (let i = 0; i < showImages.length; i++) {
-    formData.append("userprofile", showImages[i]); // 반복문을 활용하여 파일들을 formData 객체에 추가한다
-  }
+  let formData = new FormData();
+  formData.append("userprofile", showImages);
+
   return formData;
 }
 
 function profileUpdate(
   profiles,
+  profile,
   phoneNum,
   email,
   addr,
   introduce,
   pwd,
   gender,
-  name,
-  navigate,
-  setClickTab
+  name
 ) {
+  console.log("profiles 등록버튼 눌렀을 : ", profile);
+
+  if (profiles.length == 0) {
+    profiles = new FormData();
+    console.log(profiles);
+  }
   profiles.append("addrid", addr);
   profiles.append("email", email);
   profiles.append("gender", gender);
@@ -340,7 +360,6 @@ function profileUpdate(
   profiles.append("phonenum", phoneNum);
   profiles.append("pwd", pwd);
   profiles.append("self", introduce);
-
   let token = sessionStorage.getItem("token");
   axios
     .post("/aamurest/users/upload", profiles, {

@@ -252,15 +252,15 @@ let joinData = createSlice({
   name: "joinData",
   initialState: {
     id: "",
-    pwd: "",
-    img: "",
-    name: "",
-    birth: "",
-    gender: "",
-    phonenum: "",
     email: "",
-    addr: "",
+    pwd: "",
+    name: "",
+    gender: "",
+    socialnum: "",
+    phonenum: "",
+    addrid: "",
     self: "",
+    userprofile: null,
   },
   reducers: {
     addStepOne(state, action) {
@@ -269,13 +269,13 @@ let joinData = createSlice({
     },
     addStepTwo(state, action) {
       state.name = action.payload[0];
-      state.birth = action.payload[1];
+      state.socialnum = action.payload[1];
       state.gender = action.payload[2];
       state.phonenum = action.payload[3];
       state.email = action.payload[4];
-      state.addr = action.payload[5];
+      state.addrid = action.payload[5];
       state.self = action.payload[6];
-      state.img = action.payload[7];
+      state.userprofile = action.payload[7];
     },
   },
 });

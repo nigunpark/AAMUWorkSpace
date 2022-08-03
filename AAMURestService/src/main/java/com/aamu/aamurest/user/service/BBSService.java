@@ -23,7 +23,21 @@ public interface BBSService {
 
 	//글 삭제
 	int bbsDelete(Map map);
-
+	
+	//글 북마크
+	Boolean bbsBookmark(Map map);
+	
+	//글 북마크 목록
+	List bbsBookmarkList(Map map);
+	
+	//글 북마크 목록_하나 선택
+	int bbsSelectBookmark(Map map);
+	
+	//글 검색
+	//String searchList(String message);
+	
+	//글 검색 목록
+	List<BBSDTO> searchList(Map map);
 
 	/*----------------------------------------------------*/
 
@@ -43,14 +57,5 @@ public interface BBSService {
 	
 	//평점 업데이트
 	int updateRate(Map map);
-	
-	//검색 결과
-	List<BBSDTO> searchList(Map map);
-	
-	//북마크 설정
-	//Boolean bookmark(Map map);
-	
-	//북마크 해제
-	
-	
+
 }

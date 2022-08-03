@@ -62,6 +62,36 @@ public class BBSServiceImpl implements BBSService{
 		dto.setPlanner(mainDao.selectPlannerOne(rbn));
 		return dto;
 	}
+	
+	//글 북마크하기
+	@Override
+	public Boolean bbsBookmark(Map map) {
+	int bbsSelectBookmarkAffected=dao.bbsSBookmark(map); //1이면 좋아요누른id가 존재하는거 0이면 처음누른거
+	int bbsMookmarkInsertAffected, bbsBookmarkUpdateAffected = 0, bbsBookmarkDeleteAffected=0;
+	//Map resultMap = new HashMap();
+	//글 북마크_insert(bookmark 테이블)
+	if(bbsSelectBookmarkAffected==0) {//0이면 해당id로 처음 누른거니까 likeboard-insert community-update 둘다 진행
+		//bookmark테이블에 insert
+		bbsMookmarkInsertAffected=dao.bbsBookmarkInsert(map);
+		if(bbsMookmarkInsertAffected==1 && bbsBookmarkUpdateAffected==1) return true;
+		else return null;
+	}
+	//글 북마크 취소_delete(bookmark테이블),
+	else {//이미 bookmark테이블에 있는데 또 누를 경우 == 북마크 취소
+		bbsBookmarkDeleteAffected=dao.bbsBookmarkDelete(map);
+		if(bbsBookmarkDeleteAffected==1 && bbsBookmarkUpdateAffected==1) return false;
+		else return null;
+		}
+	}
+	
+	//글 북마크 목록
+	 
+	
+	//글 북마크_하나 선택	
+	@Override
+	public int bbsSelectBookmark(Map map) {
+		return dao.bbsSBookmark(map);
+	}
 
 	//글 등록
 	@Override
@@ -84,7 +114,8 @@ public class BBSServiceImpl implements BBSService{
 		else
 			return 0;
 	}
-	/*transaction 처리중
+	//transaction 처리중
+	/*
 	//테마 등록
 	@Override
 	public int themeInsert(BBSDTO dto) {
@@ -113,31 +144,25 @@ public class BBSServiceImpl implements BBSService{
 	//글 삭제
 	@Override
 	public int bbsDelete(Map map) {
-		return dao.bbsDelete(map);
+		int affected = 0;
+		affected = transactionTemplate.execute(tx->{
+			map.put("table", "routebbsphoto");
+			dao.bbsDelete(map);
+			map.put("table", "ratereview");
+			dao.bbsDelete(map);
+			map.put("table", "routebbs");
+			return dao.bbsDelete(map);
+		});
+		return affected;
+	}
+	
+	//글 검색
+	@Override
+	public List<BBSDTO> searchList(Map map) {
+		return dao.searchList(map);
 	}
 
 	/*---------------------------------------------------*/
-	
-	/*
-	@Override
-	public double setRate(int rbn) {
-		Double rateAvg = BBSService.getRateAvg(rbn);
-		
-		if(rateAvg == null) {
-			rateAvg = 0.0;
-		}
-		
-		rateAvg = (double) (Math.round(rateAvg*10));
-		rateAvg = rateAvg/10;
-		
-		ReviewDTO dto = new ReviewDTO();
-		dto.setRbn(rbn);
-		dto.setRateAvg(rateAvg);
-		
-		BBSService.updateRateAvg(dto);
-		
-		return dao.setRate(rbn);
-	} */
 	
 	//리뷰 목록
 	@Override
@@ -165,8 +190,6 @@ public class BBSServiceImpl implements BBSService{
 		return dao.reviewDelete(map);
 	}
 	
-	//평균 평점
-	
 	/*---------------------------------------------------*/
 	
 	//테마 사진 하나 뿌려주기
@@ -179,17 +202,18 @@ public class BBSServiceImpl implements BBSService{
 	public int updateRate(Map map) {
 		return dao.updateRate(map);
 	}
-	
-	//검색 결과
+
 	@Override
-	public List<BBSDTO> searchList(Map map) {
-		return dao.searchList(map);
+	public List bbsBookmarkList(Map map) {
+		return dao.bbsBookmarkList(map);
 	}
-	/*
-	@Override
-	public Boolean bookmark(Map map) {
-		return dao.bookmark(map);
-	}
-	*/
-	
+
+	/*@Override
+	public String searchList(String message) {
+		return dao.searchList(message);
+	}*/
+
 }
+	
+	
+

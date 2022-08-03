@@ -1,6 +1,5 @@
 package com.aamu.aamurest.user.serviceimpl.admin;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
@@ -9,9 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;
 
-import com.aamu.aamurest.user.service.BBSDTO;
-import com.aamu.aamurest.user.service.CommuCommentDTO;
-import com.aamu.aamurest.user.service.CommuDTO;
 import com.aamu.aamurest.user.service.admin.NoticeDTO;
 import com.aamu.aamurest.user.service.admin.NoticeService;
 

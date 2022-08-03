@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.aamu.aamurest.user.service.UsersDTO;
 import com.aamu.aamurest.user.service.UsersService;
 import com.aamu.aamurest.util.FileUploadUtil;
+import com.aamu.aamurest.util.UserUtil;
 
 @RestController
 @CrossOrigin
@@ -31,8 +32,9 @@ public class UserController {
 
 
 	@PostMapping("/users/edit")
-	public int join(@RequestParam Map map,@RequestParam MultipartFile userprofile,HttpServletRequest req) throws IllegalStateException, IOException {
-
+	public int join(@RequestParam Map map,@RequestParam MultipartFile userprofile,@RequestParam List theme,HttpServletRequest req) throws IllegalStateException, IOException {
+		System.out.println(map);
+		map.put("theme", theme);
 		int affected=0;
 		String path = req.getSession().getServletContext().getRealPath("/resources/userUpload");
 		String photo = FileUploadUtil.oneFile(userprofile, path);
@@ -44,16 +46,21 @@ public class UserController {
 		return affected;
 	}
 	@PostMapping("/users/upload")
-	public int updateUser(@RequestParam Map map,@RequestParam MultipartFile userprofile,HttpServletRequest req) throws IllegalStateException, IOException {
+	public int updateUser(@RequestParam Map map,@RequestParam(required = false) MultipartFile userprofile,HttpServletRequest req) throws IllegalStateException, IOException {
 
 		int affected=0;
 		System.out.println(map);
-		String path = req.getSession().getServletContext().getRealPath("/resources/userUpload");
+		System.out.println(userprofile);
 		UsersDTO dto = service.selectOneUser(map);
-		File oldFile = new File(path+File.separator+dto.getUserprofile());
-		oldFile.delete();
-		String photo = FileUploadUtil.oneFile(userprofile, path);
-		map.put("userprofile",photo);
+		String originalProfile = dto.getUserprofile();
+		String path = req.getSession().getServletContext().getRealPath("/resources/userUpload");
+		if(userprofile!=null) {
+			File oldFile = new File(path+File.separator+originalProfile);
+			oldFile.delete();
+			String photo = FileUploadUtil.oneFile(userprofile, path);
+			map.put("userprofile",photo);
+		}
+		else map.put("userprofile", originalProfile);
 		affected = service.updateUser(map);
 
 		return affected;

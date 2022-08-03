@@ -419,7 +419,30 @@ public class MainController {
 
 		return dto;
 	}
-
+	@GetMapping("/info/oneplace")
+	public AttractionDTO attractionOne(@RequestParam Map map,HttpServletRequest req) {
+		AttractionDTO dto = new AttractionDTO();
+		switch(map.get("contenttypeid").toString()) {
+			case "12":
+			case "28":
+				map.put("selecttable", "placesinfo");
+				dto=service.selectPlace(map, req);
+				break;
+			case "15":
+				map.put("selecttable", "eventinfo");
+				dto=service.selectPlace(map, req);
+				break;
+			case "32":
+				map.put("selecttable", "hotelinfo");
+				dto=service.selectPlace(map, req);
+				break;
+			case "39":
+				map.put("selecttable", "dinerinfo");
+				dto=service.selectPlace(map, req);
+				break;
+		}
+		return dto;
+	}
 	@GetMapping("/info/places")
 	public List<AttractionDTO> attractionList(@RequestParam Map map,HttpServletRequest req){
 
