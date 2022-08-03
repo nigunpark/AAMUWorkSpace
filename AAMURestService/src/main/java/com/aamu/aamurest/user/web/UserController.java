@@ -50,12 +50,17 @@ public class UserController {
 
 		int affected=0;
 		System.out.println(map);
-		String path = req.getSession().getServletContext().getRealPath("/resources/userUpload");
+		System.out.println(userprofile);
 		UsersDTO dto = service.selectOneUser(map);
-		File oldFile = new File(path+File.separator+dto.getUserprofile());
-		oldFile.delete();
-		String photo = FileUploadUtil.oneFile(userprofile, path);
-		map.put("userprofile",photo);
+		String originalProfile = dto.getUserprofile();
+		String path = req.getSession().getServletContext().getRealPath("/resources/userUpload");
+		if(!(userprofile.toString().contains(originalProfile))) {
+			File oldFile = new File(path+File.separator+originalProfile);
+			oldFile.delete();
+			String photo = FileUploadUtil.oneFile(userprofile, path);
+			map.put("userprofile",photo);
+		}
+		else map.put("userprofile", originalProfile);
 		affected = service.updateUser(map);
 
 		return affected;
