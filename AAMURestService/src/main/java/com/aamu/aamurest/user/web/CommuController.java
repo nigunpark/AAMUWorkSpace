@@ -2,6 +2,7 @@ package com.aamu.aamurest.user.web;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -186,6 +187,7 @@ public class CommuController {
 	//TAGS테이블에 있으면 TNO,TNAME 키값으로 뿌려주고 COMMUTAG에 저장 //없으면 INSERT TAGS테이블 COMMUTAG테이블
 	@GetMapping("/gram/tag")
 	public List<String> commuTag(@RequestParam Map map){//tname:
+		System.out.println("태그 map:"+map);
 		return commuService.commuTag(map);
 	}
 	
@@ -382,9 +384,9 @@ public class CommuController {
 	
 	//팔로우, 팔로잉 
 	@PostMapping("/gram/follower")
-	public Map commuFollower(@RequestBody Map map) {
+	public Map commuFollower(@RequestBody Map map) {//id,follower
 		System.out.println("팔로우 map:"+map);
-		//map에 id:로그인한사람이 누른 id follower:내 id
+		//map에 id:세션id follower:글쓴이id
 		Map resultMap=commuService.commuFollower(map);
 		System.out.println("팔로우 결과값:"+resultMap);
 		return resultMap;
@@ -394,7 +396,7 @@ public class CommuController {
 	@GetMapping("/gram/mypage")
 	public List<CommuDTO> commuMyPageList(@RequestParam Map map, HttpServletRequest req) {//
 		System.out.println("mypage map:"+map);
-		//map에 follow: 세션id, id:글쓴이id
+		//map에 id:세션id  follower:글쓴이id
 		List<CommuDTO> list = commuService.commuMyPageList(map);
 		for(CommuDTO dto : list) {
 			//포토 셋팅 //dto.getlno는 글의lno
@@ -412,25 +414,39 @@ public class CommuController {
 		return list;
 	}
 	
+
+	
+	
+	
+	
 	/////////////////////////////////////////////////////////////날씨 크롤링
 	
-	/*
+	
 	@GetMapping("/weather")
-	public Map weather(@RequestParam Map map) {
-		String uri="http://192.168.0.7:5020/weather?";
+	public Map weather(@RequestParam Map map) { //searhWord 지역 searchDate 
+		System.out.println("날씨지역 searchWord:"+map);
+		String searchWord=map.get("searchWord").toString();
+		String searchDate=map.get("searchDate").toString();
+		//String[] searchDate=searchDates.split(",");
+		//System.out.println(searchDate);
+		
+		String uri="http://192.168.0.7:5020/weather?searchWord="+searchWord+"&searchDate="+searchDate;
 		HttpHeaders header = new HttpHeaders();
 		header.add("Content-Type", "application/json");
-		HttpEntity httpEntity = new HttpEntity<>(requestBody,header);
+		HttpEntity httpEntity = new HttpEntity<>(header);
 		
 		ResponseEntity<Map> responseEntity =
-				restTemplate.exchange(uri, HttpMethod.POST,httpEntity, Map.class);
+				restTemplate.exchange(uri, HttpMethod.GET,httpEntity, Map.class);
 		System.out.println(responseEntity.getBody());
 		Map returnMap = responseEntity.getBody();
-		returnMap.get("weathers");
-		
+		returnMap.get("weather");
 		
 		return returnMap;
-	}*/
+	}
+	
+	
+	
+	
 	
 
 }

@@ -397,7 +397,7 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 	public List<CommuDTO> commuMyPageList(Map map) {
 		List<CommuDTO> lists=dao.commuMyPageList(map);
 		for(CommuDTO list:lists) {
-			int affected=dao.commuIsExistFollower(map);
+			int affected=dao.commuIsExistFollower(map); //세션아이디가 글쓴이아이디 1이면 
 			if(affected == 1) list.setIsFollower(true); 
 			else list.setIsFollower(false); 
 		}
@@ -411,19 +411,20 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 		return dao.commuTotalCount(map);
 	}
 	
-	//마이페이지용_나를 팔로우하는 계정 수 셋팅
+	//마이페이지용_나를 팔로우하는 계정 수 셋팅(followercount)
 	@Override
 	public int commuFollowerCount(Map map) {
 		map.put("table", "follower");
 		return dao.commuTotalCount(map);
 	}
 	
-	//마이페이지용_내가 팔로잉하는 계정 수 셋팅
+	//마이페이지용_내가 팔로잉하는 계정 수 셋팅 (followingcount)
 	@Override
 	public int commuFollowingCount(Map map) {
 		return dao.commuFollowingCount(map);
 	}
 	
+
 	////////////////////////////////////////////////////////공통 메소드
 	
 	//insertCommuTag 메소드
