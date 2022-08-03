@@ -1,7 +1,11 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { faRectangleXmark } from "@fortawesome/free-solid-svg-icons";
+import {
+  faRectangleXmark,
+  faShareNodes,
+  faSquareShareNodes,
+} from "@fortawesome/free-solid-svg-icons";
 import MyCreatePlanLeft from "./MyCreatePlanLeft";
 import CreatePlanMap from "../../../components/CreatePlan/CreatePlanMap";
 import { useParams } from "react-router-dom";
@@ -9,6 +13,7 @@ import axios from "axios";
 import MyPlanMap from "./MyPlanMap";
 import { useDispatch, useSelector } from "react-redux";
 import { addMonthNDate, changeTripPeriod, resetMonthNDate } from "../../../redux/store";
+import { faHourglass } from "@fortawesome/free-regular-svg-icons";
 
 const MyHomeBox = ({ setClickTab, planList, rbn, setSelectRbn, setPlanList, setUpload }) => {
   const [fromWooJaeData, setFromWooJaeData] = useState([]);
@@ -17,6 +22,7 @@ const MyHomeBox = ({ setClickTab, planList, rbn, setSelectRbn, setPlanList, setU
   const [currPosition, setCurrPosition] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const postDate = new Date(planList.routeDate);
+  const [forDimmed, setForDimmed] = useState({});
   function dateFormat(date) {
     let month = date.getMonth() + 1;
     let day = date.getDate();
@@ -32,9 +38,36 @@ const MyHomeBox = ({ setClickTab, planList, rbn, setSelectRbn, setPlanList, setU
   const onModalSelect = () => {
     setModalOpen(true);
   };
-
   // console.log("planList :", planList.isBBS);
 
+  useEffect(() => {
+    let sMonth = planList.plannerdate.substring(
+      planList.plannerdate.indexOf("월") - 2,
+      planList.plannerdate.indexOf("월")
+    );
+    let sDate = planList.plannerdate.substring(
+      planList.plannerdate.indexOf("일") - 2,
+      planList.plannerdate.indexOf("일")
+    );
+    let eMonth = planList.plannerdate.substring(
+      planList.plannerdate.lastIndexOf("월") - 2,
+      planList.plannerdate.lastIndexOf("월")
+    );
+    let eDate = planList.plannerdate.substring(
+      planList.plannerdate.lastIndexOf("일") - 2,
+      planList.plannerdate.lastIndexOf("일")
+    );
+    let start = new Date(`${new Date().getFullYear()}-${sMonth}-${sDate}`);
+    let end = new Date(`${new Date().getFullYear()}-${eMonth}-${eDate}`);
+    setForDimmed({ start, end });
+  }, []);
+  function doneOrStillOpacity() {
+    if (forDimmed.end < new Date()) {
+      return "0.3";
+    } else {
+      return "1";
+    }
+  }
   return (
     <>
       {modalOpen == true ? (
@@ -53,25 +86,59 @@ const MyHomeBox = ({ setClickTab, planList, rbn, setSelectRbn, setPlanList, setU
         />
       ) : null}
       {/* 홈에 표시되는 박스 */}
+
       <div className="MyBoxContainer" onClick={onModalSelect}>
         <div className="MyBox">
-          {planList.isBBS == 1 ? (
+          <div className="myBox__img-container">
             <img
+              className="instaImg"
+              src={planList.smallImage}
               style={{
-                position: "absolute",
-                width: "40px",
-                left: "85%",
-                top: "2%",
+                opacity: doneOrStillOpacity(),
               }}
-              className="starImg"
-              src="/images/star.png"
             />
-          ) : null}
-          <img className="instaImg" src={planList.smallImage} />
+          </div>
 
-          <div style={{ fontSize: "20px" }}>{planList.title}</div>
+          <div>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <div
+                className="myBox__title"
+                style={{
+                  opacity: doneOrStillOpacity(),
+                }}
+              >
+                {planList.title}
+              </div>
+              <div className="myBox__icons">
+                {forDimmed.start <= new Date() && forDimmed.end >= new Date() && (
+                  <FontAwesomeIcon icon={faHourglass} className="glassIcon" />
+                )}
 
-          <div>{planList.plannerdate}</div>
+                {planList.isBBS == 1 ? (
+                  // <img
+                  //   style={{
+                  //     position: "absolute",
+                  //     width: "40px",
+                  //     left: "85%",
+                  //     top: "2%",
+                  //   }}
+                  //   className="starImg"
+                  //   src="/images/star.png"
+                  // />
+                  // <FontAwesomeIcon icon={faHourglass} className="starImg" />
+
+                  <FontAwesomeIcon icon={faSquareShareNodes} className="shareIcon" />
+                ) : null}
+              </div>
+            </div>
+            <div
+              style={{
+                opacity: doneOrStillOpacity(),
+              }}
+            >
+              {planList.plannerdate}
+            </div>
+          </div>
         </div>
       </div>
       {isOpen && (
@@ -114,6 +181,9 @@ function MyBoxList({
         },
       })
       .then((resp) => {
+        if (resp.data) {
+          alert("삭제 성공했습니다");
+        } else alert("삭제 실패했습니다");
         console.log("삭제 성공 :", resp.data);
         selectList();
       })
@@ -189,7 +259,7 @@ function MyBoxList({
         >
           일정확인/수정
         </div>
-        {bbs == 0 ? (
+        {bbs === 0 ? (
           <div
             className="myBox-List-Post"
             onClick={() => {
@@ -224,7 +294,7 @@ function MyBoxList({
               }
             }}
           >
-            삭제하기
+            여행경로 삭제
           </div>
         ) : (
           <div
