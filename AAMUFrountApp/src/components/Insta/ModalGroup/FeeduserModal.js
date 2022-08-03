@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import Spinner from "../Spinner";
 
 
-const FeedMenuModal = ({val,setModalShow,seteditModal , setlist}) => {
+const FeeduserModal = ({val,setModalShow,seteditModal , setlist}) => {
     let menuRef = useRef();
     let editRef = useRef();
     const [goEdit, setgoEdit] = useState(false);
@@ -49,15 +49,29 @@ const FeedMenuModal = ({val,setModalShow,seteditModal , setlist}) => {
   return (
     <Container >
         <Overlay ref={menuRef} >
+        {val.id === sessionStorage.getItem('username')?
             <ModalWrap >
                 <Contents  >
-                        <Button type="button" className='edit' ref={editRef} onClick={(e)=>{e.stopPropagation(); setModalShow(false); seteditModal(true) }}>수정하기</Button>
-                       
+                 
+                        <Button type="button" className='edit' ref={editRef} onClick={(e)=>{e.stopPropagation(); setModalShow(false); seteditModal(true) }}>수정하기</Button>                       
                         <Button type="button" className='delete' onClick={(e)=>{e.stopPropagation(); setModalShow(false);   deleteOne() }}>삭제하기</Button>
                         <Button type="button" className='cancel' onClick={()=>{setModalShow(false)}}>취소하기</Button>    
-                                  
+                         
+                               
                 </Contents>
             </ModalWrap>
+            :
+            <ModalWrap >
+                <Contents  >
+                 
+                       
+                        <Button type="button" className='cancel' onClick={()=>{setModalShow(false)}}>취소하기</Button>    
+                         
+                               
+                </Contents>
+            </ModalWrap>
+}
+          
         </Overlay>
     </Container>
   )
@@ -120,4 +134,4 @@ const Button = styled.div`
     border-bottom: 0.5px solid rgb(220, 220, 220);
 `
 
-export default FeedMenuModal
+export default FeeduserModal

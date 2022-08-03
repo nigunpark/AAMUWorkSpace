@@ -217,7 +217,7 @@ function Comment({
                 </div>
                 <div>
                   <p className="user-id">
-                    <strong>{sessionStorage.getItem("username")}</strong>
+                    <strong>{val.id}</strong>
                   </p>
                 </div>
               </div>
@@ -276,7 +276,7 @@ function Comment({
                           <strong
                             style={{ fontSize: "13px", marginRight: "5px" }}
                           >
-                            {sessionStorage.getItem("username")}
+                            {val.id}
                           </strong>
                           <span style={{ fontFamily: "normal" }}>
                             {val.content}

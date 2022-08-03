@@ -193,7 +193,7 @@ const [inputValue,setinputValue] = useState('');
                     {/* {showNext ?  */}
                     <div className='side'>
                       <div className="title-profile">
-                          <img src="'/img/bk.jpg ' ?? '/images/user.jpg'" alt="프사" onError={(e)=>{e.target.src='/images/user.jpg'}}/>                
+                          <img src={sessionStorage.getItem("userimg")} alt="프사" onError={(e)=>{e.target.src='/images/user.jpg'}}/>                
                           <span>{sessionStorage.getItem('username')}</span> 
                       </div>
                       <div>

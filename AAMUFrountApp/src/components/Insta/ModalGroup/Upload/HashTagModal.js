@@ -3,7 +3,7 @@ import React from 'react'
 import styled from 'styled-components';
 
 
-function SearchModal({search,setinputValue,setHasText}){
+function HashTagModal({tagItem,setShowWrite,settaginput}){
     
 
   return (
@@ -11,13 +11,11 @@ function SearchModal({search,setinputValue,setHasText}){
     // <SearchAll>
         <Searchengine>
             <Searchcontents>
-            
-            {search.map((val,i)=>{return <P onClick={(e)=>{
+            {tagItem.map((val,i)=>{return <P onClick={(e)=>{
                 e.stopPropagation();
-                setinputValue(e.target.textContent)
-                setHasText(false)}              
-              }>{val.TITLE}</P>
-                
+                settaginput(e.target.textContent)
+                setShowWrite(false)}              
+              }>{val}</P>
                }
             
               )}
@@ -65,4 +63,4 @@ function SearchModal({search,setinputValue,setHasText}){
     }
  `
     
-export default SearchModal
+export default HashTagModal

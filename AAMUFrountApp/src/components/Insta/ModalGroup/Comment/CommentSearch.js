@@ -216,7 +216,7 @@ function CommentSearch({ val, comment, setcommentModal, setcomments }) {
                 </div>
                 <div>
                   <p className="user-id">
-                    <strong>{sessionStorage.getItem("username")}</strong>
+                    <strong>{val.id}</strong>
                   </p>
                 </div>
               </div>
@@ -262,8 +262,10 @@ function CommentSearch({ val, comment, setcommentModal, setcomments }) {
                           <span> {val.ctitle}</span>
                         </p>
                         <p className="userName">
-                          <strong style={{ fontSize: "13px", marginRight: "5px" }}>
-                            {sessionStorage.getItem("username")}
+                          <strong
+                            style={{ fontSize: "13px", marginRight: "5px" }}
+                          >
+                            {val.id}
                           </strong>
                           <span style={{ fontFamily: "normal" }}>{val.content}</span>
                         </p>

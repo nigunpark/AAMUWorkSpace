@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 import SearchSelect from "./ModalGroup/Search/SearchSelect";
 import Chat from "../Chat/Chat";
 function User({
-  val,
+  list,
   setlist,
   setloading,
   searchb,
@@ -207,6 +207,7 @@ function User({
               />
               <WriteModal
                 onClick={() => setsquare(false)}
+                list={list}
                 setsquare={setsquare}
                 setlist={setlist}
                 setloading={setloading}

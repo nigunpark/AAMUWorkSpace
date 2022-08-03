@@ -17,11 +17,13 @@ import "swiper/css"; //basic
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "../Upload/UploadSwiper.css";
+import HashTagModal from "./HashTagModal";
 
-const Uploader = ({ setsquare, setlist, setloading }) => {
+const Uploader = ({ list, setsquare, setlist, setloading }) => {
   let searchRef = useRef();
   let titleRef = useRef();
   let textareaRef = useRef();
+  let hashRef = useRef();
   let navigate = useNavigate();
   const [hide, setHide] = useState(false);
   const [upload, setupload] = useState(false);
@@ -31,6 +33,10 @@ const Uploader = ({ setsquare, setlist, setloading }) => {
   const [show] = useState(false);
   const [hasText, setHasText] = useState(false);
   const [inputValue, setinputValue] = useState("");
+  const [taginput, settaginput] = useState("");
+
+  const [tagItem, setTagItem] = useState([]);
+  const [tagList, setTagList] = useState([]);
 
   //이미지 하나 업로드시
   // const [image, setImage] = useState({//초기 이미지 세팅 및 변수
@@ -79,6 +85,20 @@ const Uploader = ({ setsquare, setlist, setloading }) => {
     //myImage원본에 덮어씌우기
   };
 
+  
+  const submitTagItem = () => {
+    let updatedTagList = [...tagList]
+    updatedTagList.push(taginput)
+    setTagList(updatedTagList)
+    // settaginput('')
+  }
+
+  const deleteTagItem = e => {
+    const deleteTagItem = e.target.parentElement.firstChild.innerText
+    const filteredTagList = tagList.filter(taginput => taginput !== deleteTagItem)
+    setTagList(filteredTagList)
+  }
+
   //이미지 삭제
   // const deleteFileImage = () =>{
   //   URL.revokeObjectURL(fileImage);
@@ -103,7 +123,6 @@ const Uploader = ({ setsquare, setlist, setloading }) => {
     URL.revokeObjectURL(myImage);
     setHide(false);
   };
-
   useEffect(() => {
     // 컴포넌트가 언마운트되면 createObjectURL()을 통해 생성한 기존 URL을 폐기
     return () => {
@@ -200,6 +219,7 @@ const Uploader = ({ setsquare, setlist, setloading }) => {
               titleRef,
               textareaRef,
               searchRef,
+              hashRef,
               search
             );
             setsquare(false);
@@ -284,7 +304,7 @@ const Uploader = ({ setsquare, setlist, setloading }) => {
         <div className="side">
           <div className="title-profile">
             <img
-              src="'/img/bk.jpg ' ?? '/images/user.jpg'"
+              src={sessionStorage.getItem("userimg")}
               alt="프사"
               onError={(e) => {
                 e.stopPropagation();
@@ -322,7 +342,6 @@ const Uploader = ({ setsquare, setlist, setloading }) => {
                 position: "relative",
               }}
             ></textarea>
-            <Hashtag/>
           </div>
           <div
             style={{
@@ -337,6 +356,66 @@ const Uploader = ({ setsquare, setlist, setloading }) => {
               (<span id="nowByte">0</span>/1000bytes)
             </sup>
           </div>
+
+          {/* <div
+            className="uploadLocation"
+            onClick={() => {
+              setShowWrite(!showWrite);
+            }}
+          >
+            <input
+              onKeyUp={(e) => hashTag(e, setTagList)}
+              value={taginput}
+              onChange={(e) => {
+                e.stopPropagation();
+                settaginput(e.target.value);
+                setShowWrite(true);
+              }}
+              placeholder="해시태그 추가"
+              type="text"
+              ref={hashRef}
+            />
+            {showWrite && (
+              <HashTagModal
+                tagList={tagList}
+                setShowWrite={setShowWrite}
+                settaginput={settaginput}
+              />
+            )}
+            <i>#</i>
+          </div> */}
+
+      <div>
+            <div>
+              
+              <input
+                onKeyUp={(e) => {hashTag(e, setTagList) ;submitTagItem()}}
+                type='text'
+                placeholder='Press enter to add tags'
+                tabIndex={2}
+                onChange={(e) => {e.stopPropagation();
+                  settaginput(e.target.value);
+                  setShowWrite(true);}}
+                value={taginput}
+              />
+              {tagList.map((taginput, index) => {
+                return (
+                  <div key={index}>
+                    <p  ref={hashRef}>{taginput}</p>
+                    {/* <button onClick={deleteTagItem}>X</button> */}
+                  </div>
+                )
+              })}
+            </div>
+            {showWrite && (
+              <HashTagModal
+              tagItem={tagItem}
+                setShowWrite={setShowWrite}
+                settaginput={settaginput}
+              />
+            )}
+          </div>
+
           <div
             className="uploadLocation"
             onClick={() => {
@@ -355,15 +434,17 @@ const Uploader = ({ setsquare, setlist, setloading }) => {
               type="text"
               ref={searchRef}
             />
-            {hasText ? (
+            {hasText && (
               <SearchModal
                 search={search}
                 setHasText={setHasText}
                 setinputValue={setinputValue}
               />
-            ) : null}
+            )}
             <i className="fa-solid fa-location-dot"></i>
           </div>
+
+          {/* <Hashtag tagItem={tagItem} setTagItem={setTagItem} tagList={tagList} setTagList={setTagList} hashRef={hashRef}/> */}
         </div>
         {/* // :null} */}
       </Body>
@@ -382,8 +463,32 @@ function feedList(setlist, setloading) {
     })
     .then((resp) => {
       console.log(resp.data);
+
       setlist(resp.data);
       setloading(false);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+}
+
+function hashTag(e, setTagList) {
+  let val = e.target.value;
+  // if (e.keyCode != 13) return;
+  //업로드 버튼 누르고 화면 새로고침
+  let token = sessionStorage.getItem("token");
+  axios
+    .get("/aamurest/gram/tag", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      params: {
+        tname: val.substring(val.lastIndexOf("#")),
+      },
+    })
+    .then((resp) => {
+      console.log(resp.data);
+      setTagList(resp.data);
     })
     .catch((error) => {
       console.log(error);
@@ -407,6 +512,7 @@ function gramEdit(
   titleRef,
   textareaRef,
   searchRef,
+  hashRef,
   search
 ) {
   //새 게시물 업로드를 위한 axios
@@ -414,11 +520,12 @@ function gramEdit(
     return val.TITLE === searchRef.current.value;
   });
   console.log("searched:", searched);
-
+  console.log("setTagItem:", hashRef.current.value);
   temp.append("id", sessionStorage.getItem("username"));
   temp.append("ctitle", titleRef.current.value);
   temp.append("content", textareaRef.current.value);
   temp.append("contentid", searched.CONTENTID);
+  temp.append("tname", hashRef.current.value);
 
   let token = sessionStorage.getItem("token");
   axios
@@ -489,7 +596,5 @@ const Nextbtn = styled.button`
   font-size: 13px;
   font-weight: bold;
 `;
-const Center = styled.div`
-  text-align: center;
-`;
+
 export default Uploader;
