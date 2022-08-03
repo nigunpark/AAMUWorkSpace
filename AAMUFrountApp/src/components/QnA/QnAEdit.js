@@ -11,9 +11,14 @@ const QnAEdit = () => {
     console.log(titleRef.current.value);
     let token = sessionStorage.getItem("token");
     axios
-      .post(
-        "",
-        {},
+      .put(
+        "/aamurest/qna/edit",
+        {
+          qno: "",
+          title: titleRef.current.value,
+          content: contentRef.current.value,
+          id: sessionStorage.getItem("username"),
+        },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -27,8 +32,8 @@ const QnAEdit = () => {
   async function getEdit() {
     let token = sessionStorage.getItem("token");
     await axios
-      .get("", {
-        params: {},
+      .get("/aamurest/qna/view", {
+        params: { qno: "" },
         headers: {
           Authorization: `Bearer ${token}`,
         },
