@@ -58,6 +58,10 @@ const MyProfileBox = ({ setClickTab }) => {
   //이미지 등록
   const handleAddImages = (e) => {
     const imageLists = e.target.files;
+
+    // if (imageLists.length == 0) {
+    //   imageLists = { showImages };
+    // }
     let imageUrlLists = [...showImages];
     let imgs = [...showImagesFile];
 
@@ -79,6 +83,10 @@ const MyProfileBox = ({ setClickTab }) => {
 
     let formData = new FormData();
     formData.append("userprofile", e.target.files[0]);
+
+    console.log("e.target.files :", e.target.files);
+    console.log("제발 :", showImages.blob);
+
     return formData;
   };
 
@@ -129,7 +137,7 @@ const MyProfileBox = ({ setClickTab }) => {
   }, []);
 
   console.log("showImagesFile -----:", showImagesFile.length);
-  console.log("showImages :", showImages[0]);
+  console.log("showImages :", showImages.length);
   let [profiles, setProfile] = useState([]);
   return (
     <MyProfileContainer>
@@ -300,18 +308,14 @@ const MyProfileBox = ({ setClickTab }) => {
               // handleAddImages(e);
               profileUpdate(
                 profiles,
+                // profile,
                 phoneNum,
                 email,
                 addr,
                 introduce,
                 pwd,
                 gender,
-                name,
-                navigate,
-                setClickTab,
-                showImages,
-                handleAddImages,
-                setProfile
+                name
               );
             }}
           >
@@ -325,30 +329,29 @@ const MyProfileBox = ({ setClickTab }) => {
 
 function uploadFile(showImages) {
   //이미지 업로드
-  let formData = new FormData(); // formData 객체를 생성한다.
-  for (let i = 0; i < showImages.length; i++) {
-    formData.append("userprofile", showImages[i]); // 반복문을 활용하여 파일들을 formData 객체에 추가한다
-  }
+  let formData = new FormData();
+  formData.append("userprofile", showImages);
+
   return formData;
 }
 
 function profileUpdate(
   profiles,
+  profile,
   phoneNum,
   email,
   addr,
   introduce,
   pwd,
   gender,
-  name,
-  navigate,
-  setClickTab,
-  showImages,
-  handleAddImages,
-  setProfile
+  name
 ) {
-  // console.log("profiles 등록버튼 눌렀을 : ", profiles);
+  console.log("profiles 등록버튼 눌렀을 : ", profile);
 
+  if (profiles.length == 0) {
+    profiles = new FormData();
+    console.log(profiles);
+  }
   profiles.append("addrid", addr);
   profiles.append("email", email);
   profiles.append("gender", gender);
@@ -357,7 +360,6 @@ function profileUpdate(
   profiles.append("phonenum", phoneNum);
   profiles.append("pwd", pwd);
   profiles.append("self", introduce);
-
   let token = sessionStorage.getItem("token");
   axios
     .post("/aamurest/users/upload", profiles, {
