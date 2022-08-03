@@ -16,6 +16,7 @@
 	</select>	
 	
 	<!-- 글 하나 선택 -->
+	<!-- 북마크하기 -->
 	<select id="bbsSelectOne" parameterType="int" resultType="BBSDTO">
 		SELECT rbbs.*,t.*
 		FROM routebbs rbbs
@@ -43,20 +44,20 @@
 	 	DELETE FROM ${table} WHERE rbn=#{rbn}
 	 </delete>
 	 
+	 <!-- 북마크하기 -->
+	 <!--  <select id="bbsSelectBookmark" parameterType="map" resultType="int">
+		SELECT rbbs.* FROM routebbs WHERE id=#{id} AND rbn=#{rbn}
+	</select> -->
+	 
 	 <!-- 북마크 목록 -->
-	<select id="bbsBookmarkList" parameterType="Map" resultType="BBSDTO">
-		SELECT rbbs.*,bm.* from routebbs rbbs JOIN bookmark bm ON rbbs.id=bm.id WHERE rbbs.rbn=#{rbn}
+	<select id="bbsBookmarkList" resultType="BBSDTO">
+		SELECT r.* from routebbs r JOIN bookmark bm ON r.rbn=bm.rbn JOIN users u ON bm.id = u.id
 	</select>
 	
 	<!-- 글 북마크_insert -->
 	<insert id="bbsBookmarkInsert" parameterType="Map">
 		INSERT INTO bookmark VALUES (#{id},#{rbn})
 	</insert>
-	
-	<!-- 글 북마크 목록_하나 선택 -->
-	<select id="bbsSelectBookmark" parameterType="Map">
-		select * from routebbs where id=#{id} AND rbn=#{rbn}
-	</select>
 	
 	<!-- 글 북마크 취소 -->
 	<delete id="bbsBookmarkDelete" parameterType="Map">

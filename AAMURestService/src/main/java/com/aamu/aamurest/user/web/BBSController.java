@@ -73,8 +73,8 @@ public class BBSController {
 	}
 	
 	//글 등록 <성공>
-		@PostMapping("/bbs/edit")
-		public Map bbsInsert(@RequestParam List<MultipartFile> multifiles, @RequestParam Map map, HttpServletRequest req) {
+	@PostMapping("/bbs/edit")
+	public Map bbsInsert(@RequestParam List<MultipartFile> multifiles, @RequestParam Map map, HttpServletRequest req) {
 		System.out.println("등록:"+map);
 		//서버의 물리적 경로 얻기
 		String path=req.getSession().getServletContext().getRealPath("/resources/bbsUpload");
@@ -133,6 +133,21 @@ public class BBSController {
 		}
 		return resultMap;
 	}
+	
+	//글 북마크 목록
+	@GetMapping("/bbs/bookmark/list")
+	public List<BBSDTO> bbsBookmarkList(@RequestParam Map map, HttpServletRequest req){
+		List<BBSDTO> list = bbsService.bbsBookmarkList();
+		System.out.println("list:"+list);
+		for(BBSDTO dto:list) {
+			//모든 사진 가져오기
+			dto.setPhoto(FileUploadUtil.requestFilePath(bbsService.bbsSelectPhotoList(dto.getRbn()), "/resources/bbsUpload", req));
+			//dto.setPhoto(dao.bbsSelectPhotoList(rbn));
+			//모든 리뷰 가져오기
+			dto.setReviewList(bbsService.reviewList(dto.getRbn()));
+		}
+		return list;
+	}
 
 	//리뷰 등록 <성공>
 	//평균 평점 반영 <성공>
@@ -185,11 +200,11 @@ public class BBSController {
 		
 	}
 	
-	//검색 결과
+	//검색 결과 목록
 	@GetMapping("bbs/searchList")
 	@ResponseBody
-	public List<BBSDTO> searchList(@RequestParam Map map, HttpServletRequest req) {
-		List<BBSDTO> lists = bbsService.searchList(map);
+	public List<BBSDTO> searchList(HttpServletRequest req) {
+		List<BBSDTO> lists = bbsService.searchList();
 		return lists;	
 	}
 	
