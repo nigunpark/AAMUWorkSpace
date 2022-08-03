@@ -16,6 +16,7 @@ function Main({
   setForReRender,
 }) {
   const [showChat, setShowChat] = useState(false);
+  const [val, setval] = useState([]);
   function feedList() {
     //백이랑 인스타 리스드를 뿌려주기 위한 axios
     let token = sessionStorage.getItem("token");
@@ -31,6 +32,7 @@ function Main({
       .then((resp) => {
         console.log(resp.data);
         setlist(resp.data);
+        setForReRender(!forReRender)
       })
       .catch((error) => {
         console.log(error);
@@ -66,6 +68,7 @@ function Main({
                 setloading={setloading}
                 setShowChat={setShowChat}
                 showChat={showChat}
+                
               />
             );
           })}
@@ -73,6 +76,7 @@ function Main({
         </div>
         <div className="main-right">
           <User
+          list={list}
             inputValue={inputValue}
             setinputValue={setinputValue}
             setlist={setlist}
