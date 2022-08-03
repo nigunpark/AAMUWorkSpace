@@ -25,10 +25,13 @@ public interface BBSService {
 	int bbsDelete(Map map);
 	
 	//글 북마크
-	Boolean bbsBookmark(int rbn);
+	Boolean bbsBookmark(Map map);
+	
+	//글 북마크 목록
+	List bbsBookmarkList(Map map);
 	
 	//글 북마크 목록_하나 선택
-	int bbsSelectBookmark(int rbn);
+	int bbsSelectBookmark(Map map);
 	
 	//글 검색
 	//String searchList(String message);

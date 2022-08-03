@@ -117,11 +117,11 @@ public class BBSController {
 		return resultMap;
 	}
 	
-	/*
+	
 	//글 북마크하기
 	@GetMapping("/bbs/bookmark")
-	public Map bbsBookmark(@PathVariable int rbn, HttpServletRequest req) {//id, rbn
-		Boolean bookmark=bbsService.bbsBookmark(rbn);
+	public Map bbsBookmark(@RequestParam Map map) {//id, rbn
+		Boolean affected=bbsService.bbsBookmark(map);
 		Map resultMap = new HashMap();
 		if(affected) { //true면
 			resultMap.put("bookmark", true);
@@ -132,7 +132,7 @@ public class BBSController {
 			resultMap.put("rbn", map.get("rbn"));
 		}
 		return resultMap;
-	}*/
+	}
 
 	//리뷰 등록 <성공>
 	//평균 평점 반영 <성공>

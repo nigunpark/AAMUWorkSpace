@@ -38,8 +38,6 @@ public class BBSServiceImpl implements BBSService{
 		for(BBSDTO dto:bbsList) {
 			int rbn = dto.getRbn();
 			dto.setReviewList(dao.reviewSelectList(rbn));
-			if(dao.bbsSelectBookmark(rbn)==1) dto.setBookmark(true);
-			else dto.setBookmark(false);
 			returnList.add(dto);
 		}
 		
@@ -62,37 +60,37 @@ public class BBSServiceImpl implements BBSService{
 		}
 		dto.setRouteList(routes);
 		dto.setPlanner(mainDao.selectPlannerOne(rbn));
-		//북마크 셋팅
-		if(dao.bbsSelectBookmark(rbn)==1) dto.setBookmark(true);
-		else dto.setBookmark(false);
 		return dto;
 	}
 	
-	//글 북마크
+	//글 북마크하기
 	@Override
-	public Boolean bbsBookmark(int rbn) {
-	int bbsSelectBookmarkAffected=dao.bbsSelectBookmark(rbn); //1이면 좋아요누른id가 존재하는거 0이면 처음누른거
+	public Boolean bbsBookmark(Map map) {
+	int bbsSelectBookmarkAffected=dao.bbsSBookmark(map); //1이면 좋아요누른id가 존재하는거 0이면 처음누른거
 	int bbsMookmarkInsertAffected, bbsBookmarkUpdateAffected = 0, bbsBookmarkDeleteAffected=0;
 	//Map resultMap = new HashMap();
 	//글 북마크_insert(bookmark 테이블)
 	if(bbsSelectBookmarkAffected==0) {//0이면 해당id로 처음 누른거니까 likeboard-insert community-update 둘다 진행
 		//bookmark테이블에 insert
-		bbsMookmarkInsertAffected=dao.bbsBookmarkInsert(rbn);
+		bbsMookmarkInsertAffected=dao.bbsBookmarkInsert(map);
 		if(bbsMookmarkInsertAffected==1 && bbsBookmarkUpdateAffected==1) return true;
 		else return null;
 	}
 	//글 북마크 취소_delete(bookmark테이블),
 	else {//이미 bookmark테이블에 있는데 또 누를 경우 == 북마크 취소
-		bbsBookmarkDeleteAffected=dao.bbsBookmarkDelete(rbn);
+		bbsBookmarkDeleteAffected=dao.bbsBookmarkDelete(map);
 		if(bbsBookmarkDeleteAffected==1 && bbsBookmarkUpdateAffected==1) return false;
 		else return null;
 		}
 	}
-
+	
+	//글 북마크 목록
+	 
+	
 	//글 북마크_하나 선택	
 	@Override
-	public int bbsSelectBookmark(int rbn) {
-		return dao.bbsSelectBookmark(rbn);
+	public int bbsSelectBookmark(Map map) {
+		return dao.bbsSBookmark(map);
 	}
 
 	//글 등록
@@ -192,8 +190,6 @@ public class BBSServiceImpl implements BBSService{
 		return dao.reviewDelete(map);
 	}
 	
-	//평균 평점
-	
 	/*---------------------------------------------------*/
 	
 	//테마 사진 하나 뿌려주기
@@ -205,6 +201,11 @@ public class BBSServiceImpl implements BBSService{
 	@Override
 	public int updateRate(Map map) {
 		return dao.updateRate(map);
+	}
+
+	@Override
+	public List bbsBookmarkList(Map map) {
+		return dao.bbsBookmarkList(map);
 	}
 
 	/*@Override
