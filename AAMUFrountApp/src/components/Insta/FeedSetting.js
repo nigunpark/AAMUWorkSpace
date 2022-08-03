@@ -13,7 +13,7 @@ import Edit from "./ModalGroup/Edit/Edit";
 import { confirmAlert } from "react-confirm-alert";
 import { useDispatch, useSelector } from "react-redux";
 import { addForChatInfo } from "../../redux/store";
-import FeedMenuModal from "./ModalGroup/feedMenuModal";
+import FeeduserModal from "./ModalGroup/FeeduserModal";
 function FeedSetting({
   val,
   setlist,
@@ -184,7 +184,7 @@ function FeedSetting({
               onClick={() => setModalShow(!modalShow)}
             ></i>
             {modalShow && (
-              <FeedMenuModal
+              <FeeduserModal
                 setlist={setlist}
                 setModalShow={setModalShow}
                 seteditModal={seteditModal}
