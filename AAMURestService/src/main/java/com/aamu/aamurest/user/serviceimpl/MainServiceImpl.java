@@ -416,9 +416,14 @@ public class MainServiceImpl implements MainService{
 		int affected=0;
 		Map map = new HashMap<>();
 		affected = transactionTemplate.execute(tx->{
-
-				map.put("table", "route");
 				map.put("rbn", rbn);
+				map.put("table", "routebbsphoto");
+				dao.deletePlanner(map);
+				map.put("table", "ratereview");
+				dao.deletePlanner(map);
+				map.put("table", "routebbs");
+				 dao.deletePlanner(map);
+				map.put("table", "route");
 				dao.deletePlanner(map);
 
 				map.put("table", "routeboard");
@@ -693,5 +698,10 @@ public class MainServiceImpl implements MainService{
 		
 		list1.retainAll(list2);
 		return list1.size();
+	}
+	@Override
+	public AttractionDTO selectPlace(Map map, HttpServletRequest req) {
+		
+		return changeOneAttr(dao.selectPlace(map), req);
 	}
 }

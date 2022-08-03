@@ -40,7 +40,6 @@
 		SELECT p.*,i.* FROM places p JOIN ${selecttable} i ON p.contentid=i.contentid WHERE p.contentid=#{contentid}
 	</select>
 	
-	
 	<insert id="plannerInsert" parameterType="planDTO">
 		INSERT INTO routeboard VALUES(SEQ_PLA.NEXTVAL,#{title},SYSDATE,#{id},#{plannerdate})
 		<selectKey keyProperty="rbn" resultType="int" order="AFTER">

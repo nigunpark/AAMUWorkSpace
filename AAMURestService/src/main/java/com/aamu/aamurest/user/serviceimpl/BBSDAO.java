@@ -51,6 +51,26 @@ public class BBSDAO {
 	public int bbsDelete(Map map) {
 		return template.delete("bbsDelete",map);
 	}
+	
+	//글 북마크 목록_하나 선택
+	public int bbsSBookmark(Map map) {
+		return template.selectOne("bbsbookmark",map);
+	}
+	
+	//글 북마크 목록
+	public List bbsBookmarkList(Map map) {
+		return template.selectList("bbsBookmarkList",map);
+	}
+	
+	//글 북마크_insert
+	public int bbsBookmarkInsert(Map map) {
+		return template.insert("bbsBookmarkInsert",map);
+	}
+
+	//글 북마크_delete
+	public int bbsBookmarkDelete(Map map) {
+		return template.delete("bbsBookmarkDelete",map);
+	}
 
 	/*----------------------------------------------------------*/
 
@@ -101,7 +121,11 @@ public class BBSDAO {
 	public List<BBSDTO> searchList(Map map){
 		return template.selectList("searchList",map);
 	}
-
+	/*
+	public Boolean bookmark(Map map){
+		return template.bookmark("bookmark",map);
+	}
+	*/
 
 }
 

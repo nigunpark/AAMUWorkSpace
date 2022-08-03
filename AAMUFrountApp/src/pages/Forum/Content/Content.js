@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import ContentItem from "./ContentItem";
 import "./Content.css";
 import { Link, useNavigate } from "react-router-dom";
@@ -22,6 +22,7 @@ const Content = () => {
   const [showCBModal, setShowCBModal] = useState(false);
   const [detailOne, setDetailOne] = useState({});
   const [kindOfSearch, setKindOfSearch] = useState("");
+  let searchOne = useRef();
   function chatbotModal() {
     if (reduxState.forChatBotData.bool === true) {
       setShowCBModal(true);
@@ -41,10 +42,39 @@ const Content = () => {
         setListData(resp.data);
       })
       .catch((error) => {
-        console.log((error) => console.log("글 목록 가져오기 실패", error));
+        console.log((error) =>
+          console.log("글 목록 가져오기 실패(Content.js) :", error)
+        );
       });
     chatbotModal();
   }, [isOpen]);
+
+  const listSearch = (inSelectText) => {
+    if (kindOfSearch == "" || inSelectText == "") {
+      return alert("검색어와 검색할 주제를 선택해주세요.");
+    }
+    let token = sessionStorage.getItem("token");
+    axios
+      .get("", {
+        params: {
+          검색어key: inSelectText,
+          선택한거key: kindOfSearch,
+        },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((resp) => {
+        console.log("검색한 글 목록(Content.js) :", resp.data);
+        setListData(resp.data);
+        searchOne.current.value = null;
+      })
+      .catch((error) => {
+        console.log((error) =>
+          console.log("검색 목록 가져오기 실패(Content.js) :", error)
+        );
+      });
+  };
 
   return (
     <div className="Cards_minCon">
@@ -81,17 +111,36 @@ const Content = () => {
                 <MenuItem value="theme">테마</MenuItem>
                 <MenuItem value="title">제목</MenuItem>
               </Select>
+              {/* {console.log("kindOfSearch :", kindOfSearch)} */}
             </FormControl>
             <div className="search__warpper__minCon">
-              <input type="text" placeholder="검색어를 입력하세요" />
+              <input
+                type="text"
+                placeholder="검색어를 입력하세요"
+                ref={searchOne}
+              />
               <span>
-                <FontAwesomeIcon icon={faMagnifyingGlass} className="search__i__minCon" />
+                <FontAwesomeIcon
+                  icon={faMagnifyingGlass}
+                  className="search__i__minCon"
+                  onClick={() => {
+                    let inSelectText = searchOne.current.value;
+                    console.log("searchOne :", inSelectText);
+                    listSearch(inSelectText);
+                  }}
+                />
               </span>
             </div>
           </div>
           <div className="card__items_minCon">
             {listData.map((val, idx) => {
-              return <ContentItem setDetailOne={setDetailOne} detail={val} setIsOpen={setIsOpen} />;
+              return (
+                <ContentItem
+                  setDetailOne={setDetailOne}
+                  detail={val}
+                  setIsOpen={setIsOpen}
+                />
+              );
             })}
           </div>
         </div>

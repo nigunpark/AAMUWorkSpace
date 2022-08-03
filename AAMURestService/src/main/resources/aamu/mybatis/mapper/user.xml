@@ -17,6 +17,9 @@
 	<insert id="joinUser" parameterType="Map">
 		INSERT INTO users VALUES(#{id},#{email},#{pwd},#{name},#{gender},#{phonenum},#{addrid},#{self},SYSDATE,#{userprofile},#{socialnum})
 	</insert>
+	<insert id="insertUserTheme" parameterType="Map">
+		INSERT INTO aamuinter VALUES(#{id},#{themeid})
+	</insert>
 	<insert id="insertAuth" parameterType="Map">
 		INSERT INTO AUTHORITY_SECURITY VALUES(#{id},default,default)
 	</insert>

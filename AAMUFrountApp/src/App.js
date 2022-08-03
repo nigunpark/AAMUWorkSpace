@@ -53,10 +53,13 @@ function App() {
   window.addEventListener("scroll", handleScroll);
 
   const subscribe = () => {
-    client.current.subscribe(`/notification/${sessionStorage.getItem("username")}`, ({ body }) => {
-      // setChatMessages((_chatMessages) => [..._chatMessages, JSON.parse(body)]);
-      console.log("body", body);
-    });
+    client.current.subscribe(
+      `/notification/${sessionStorage.getItem("username")}`,
+      ({ body }) => {
+        // setChatMessages((_chatMessages) => [..._chatMessages, JSON.parse(body)]);
+        console.log("body", body);
+      }
+    );
   };
   //채팅연결
   const connect = () => {
@@ -130,7 +133,7 @@ function App() {
               />
             }
           />
-          <Route path="/myPage" element={<MyPage />} />
+          <Route path="/myPage" element={<MyPage searchb={searchb} />} />
         </Route>
         {/* <Route path="/chat" element={<Chat />} /> */}
         <Route path="/login" element={<LoginTest />}></Route>
@@ -141,7 +144,10 @@ function App() {
         <Route path="/test" element={<Test />} />
         <Route path="/Detailmodal" element={<DetailModal />} />
 
-        <Route path="/oauth/callback/kakao" element={<KakaoRedirectHandler />} />
+        <Route
+          path="/oauth/callback/kakao"
+          element={<KakaoRedirectHandler />}
+        />
       </Routes>
     </div>
   );

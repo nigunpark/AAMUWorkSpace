@@ -14,6 +14,7 @@ import MyPlanMap from "./MyPlanMap";
 import { useDispatch, useSelector } from "react-redux";
 import { addMonthNDate, changeTripPeriod, resetMonthNDate } from "../../../redux/store";
 import { faHourglass } from "@fortawesome/free-regular-svg-icons";
+import { addMonthNDate, changeTripPeriod, resetMonthNDate } from "../../../redux/store";
 
 const MyHomeBox = ({ setClickTab, planList, rbn, setSelectRbn, setPlanList, setUpload }) => {
   const [fromWooJaeData, setFromWooJaeData] = useState([]);
