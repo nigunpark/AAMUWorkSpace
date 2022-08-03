@@ -42,6 +42,7 @@
     "react-select": "^5.4.0",
     "react-slick": "^0.29.0",
     "react-sticky-box": "^1.0.2",
+    "react-tagify": "^0.1.4",
     "reactstrap": "^9.1.1",
     "redux-persist": "^6.0.0",
     "sass-loader": "^13.0.2",
@@ -75,5 +76,5 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "http://192.168.0.19:8080"
+  "proxy": "http://192.168.0.7:8080"
 }
