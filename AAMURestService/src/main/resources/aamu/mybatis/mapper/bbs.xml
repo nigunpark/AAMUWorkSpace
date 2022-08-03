@@ -49,12 +49,12 @@
 	</select>
 	
 	<!-- 글 북마크_insert -->
-	<insert id="commuLikeInsert" parameterType="int">
+	<insert id="bbsBookmarkInsert" parameterType="int">
 		INSERT INTO bookmark VALUES (#{id},#{rbn})
 	</insert>
 	
 	<!-- 글 북마크 목록_하나 선택 -->
-	<select id="commuLikecountSelect" parameterType="Map" resultType="int">
+	<select id="bbsSelectBookmark" parameterType="Map" resultType="int">
 		select * from routebbs where id=#{id} AND rbn=#{rbn}
 	</select>
 	
@@ -62,7 +62,7 @@
 	<delete id="bbsBookmarkDelete" parameterType="int">
 		DELETE FROM bookmark WHERE id=#{id} AND rbn=#{rbn}
 	</delete>
-	 
+	  
 	 <!--                            리뷰                                   -->
 	 
 	 <!-- 리뷰 목록 -->

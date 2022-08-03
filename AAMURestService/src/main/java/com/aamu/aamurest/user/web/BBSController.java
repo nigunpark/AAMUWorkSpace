@@ -122,8 +122,6 @@ public class BBSController {
 	@GetMapping("/bbs/bookmark")
 	public Map bbsBookmark(@PathVariable int rbn, HttpServletRequest req) {//id, rbn
 		Boolean bookmark=bbsService.bbsBookmark(rbn);
-		//community테이블의 selectone likecount
-		int likecount=bbsService.commuLikecountSelect(rbn);
 		Map resultMap = new HashMap();
 		if(affected) { //true면
 			resultMap.put("bookmark", true);

@@ -157,6 +157,12 @@ public class BBSServiceImpl implements BBSService{
 		});
 		return affected;
 	}
+	
+	//글 검색
+	@Override
+	public List<BBSDTO> searchList(Map map) {
+		return dao.searchList(map);
+	}
 
 	/*---------------------------------------------------*/
 	
@@ -200,13 +206,11 @@ public class BBSServiceImpl implements BBSService{
 	public int updateRate(Map map) {
 		return dao.updateRate(map);
 	}
-	
-	//검색 결과
-	@Override
-	public List<BBSDTO> searchList(Map map) {
-		return dao.searchList(map);
-	}
 
+	/*@Override
+	public String searchList(String message) {
+		return dao.searchList(message);
+	}*/
 
 }
 	

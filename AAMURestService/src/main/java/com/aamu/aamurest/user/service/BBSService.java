@@ -29,7 +29,12 @@ public interface BBSService {
 	
 	//글 북마크 목록_하나 선택
 	int bbsSelectBookmark(int rbn);
-
+	
+	//글 검색
+	//String searchList(String message);
+	
+	//글 검색 목록
+	List<BBSDTO> searchList(Map map);
 
 	/*----------------------------------------------------*/
 
@@ -49,8 +54,5 @@ public interface BBSService {
 	
 	//평점 업데이트
 	int updateRate(Map map);
-	
-	//검색 결과
-	List<BBSDTO> searchList(Map map);
 
 }
