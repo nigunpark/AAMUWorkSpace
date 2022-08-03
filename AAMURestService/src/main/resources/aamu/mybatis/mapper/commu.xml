@@ -11,8 +11,16 @@
 		JOIN commuplace cp ON c.lno=cp.lno
 		JOIN places p ON cp.contentid=p.contentid
 		<if test="searchColumn != null">
-  	 		WHERE ${searchColumn} LIKE '%'||#{searchWord}||'%' 
-  	 	</if>
+			<choose>
+				<when test='searchColumn == "ctitle"'>
+					WHERE ${searchColumn} LIKE '%'||#{searchWord}||'%'
+				</when>
+				<otherwise>
+					WHERE ${searchColumn} LIKE #{searchWord}
+				</otherwise>
+			</choose>
+		</if>
+		<if test="contentid != null">where p.contentid=#{contentid}</if>
 		ORDER BY c.lno DESC
 	</select>
 	
@@ -34,7 +42,7 @@
 	
 	<!-- 글 검색용 -->
 	<select id="commuSearachList" parameterType="Map" resultType="String">
-		SELECT ${searchColumn} FROM ${table} WHERE ${searchColumn} LIKE '%'||#{searchWord}||'%'
+		SELECT DISTINCT ${searchColumn} FROM ${table} WHERE ${searchColumn} LIKE #{searchWord}||'%'
 	</select>
 	
 	<!-- 글 생성용 -->
@@ -185,7 +193,7 @@
 	
 	<!-- 마이페이지용_id에 따른 -->
 	<select id="commuMyPageList" resultType="CommuDTO">
-		SELECT * FROM community WHERE id=#{follower} ORDER BY lno DESC
+		SELECT * FROM community WHERE id=#{id} ORDER BY lno DESC
 	</select>
 	
 	<!-- 마이페이지용_토탈카운트 셋팅 (해당 id의 총 글 갯수) -->
@@ -195,7 +203,7 @@
 	
 	<!-- 마이페이지용_내가 팔로잉하는 계정 수 셋팅 -->
 	<select id="commuFollowingCount" parameterType="Map" resultType="int">
-		SELECT COUNT(*) FROM follower WHERE follower=#{id}
+		SELECT COUNT(*) FROM follower WHERE follower=#{follower}
 	</select>
 	
 	<!-- @@@@@@@@@@@@@@@@@@@@@@@@@@@@@태그@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ -->
@@ -234,6 +242,8 @@
 	<delete id="commuDeleteCommuTag" parameterType="Map">
 		DELETE commutag WHERE lno=#{lno}
 	</delete>
+	
+
 	
 	
 </mapper>

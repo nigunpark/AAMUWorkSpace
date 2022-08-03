@@ -229,6 +229,8 @@ public class CommuDAO {
 	public int commuFollowingCount(Map map) {
 		return template.selectOne("commuFollowingCount",map);
 	}
+	
+
 
 
 }

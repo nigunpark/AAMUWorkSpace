@@ -58,7 +58,7 @@ public class QNAServiceImpl implements QNAService<QNADTO> {
 		return listPagingData;
 	}
 
-	// 게시믈 수 카운트
+	// 게시물 수 카운트
 	@Override
 	public int qnaGetTotalRecordCount(Map map) {
 		return dao.qnaGetTotalRecordCount(map);

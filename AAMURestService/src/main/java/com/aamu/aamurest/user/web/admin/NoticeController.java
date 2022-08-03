@@ -45,7 +45,7 @@ public class NoticeController {
 	}
 
 	// 게시물 검색
-	@GetMapping("/notice/search/list")
+	@GetMapping("/notice/search")
 	public List<String> noticeSearachList(@RequestParam Map map) {
 		List<String> list = noticeService.noticeSearachList(map);
 		return list;
