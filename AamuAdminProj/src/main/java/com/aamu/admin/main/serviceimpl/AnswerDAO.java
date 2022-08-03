@@ -46,7 +46,7 @@ public class AnswerDAO {
 		return template.delete("answerDeleteByNo", map);
 	}
 
-	// 댓글 전체 삭제
+	// 댓글 전부 삭제
 	public int answerAllDelete(Map map) {
 		return template.delete("answerDeleteByNo", map);
 	}
