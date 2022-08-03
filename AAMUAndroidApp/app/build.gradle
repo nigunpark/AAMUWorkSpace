@@ -115,4 +115,8 @@ dependencies {
     implementation "com.google.accompanist:accompanist-pager:0.12.0"
 
     implementation 'com.github.bishoybasily:stomp:2.0.5'
+
+    implementation 'com.google.accompanist:accompanist-insets:0.23.1'
+    implementation 'com.google.android.exoplayer:exoplayer-core:2.17.1'
+    implementation 'com.google.android.exoplayer:exoplayer-ui:2.17.1'
 }

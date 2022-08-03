@@ -14,7 +14,7 @@ const Modal = ({val,setModalShow,seteditModal , setlist,setcommentModal}) => {
     
 
 
-  window.addEventListener("click", menuModalRef);
+  // window.addEventListener("click", menuModalRef);
 
  
     
