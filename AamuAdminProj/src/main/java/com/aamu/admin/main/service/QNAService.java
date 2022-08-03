@@ -42,7 +42,7 @@ public interface QNAService<T> {
 	// 댓글 삭제
 	int answerDelete(Map map);
 
-	// 댓글 전체 삭제
+	// 댓글 전부 삭제
 	int answerAllDelete(Map map);
 
 }

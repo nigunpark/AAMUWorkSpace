@@ -31,19 +31,19 @@ const JoinStep2 = () => {
   let addrRef = useRef();
   let introduceRef = useRef();
   let navigate = useNavigate();
+  let imgRef = useRef();
   let reduxState = useSelector((state) => {
     return state;
   });
   let dispatch = useDispatch();
-  console.log(reduxState.joinData);
   const [address, setAddress] = useState("");
   const [zoneCode, setZoneCode] = useState("");
   const [isOpenPost, setIsOpenPost] = useState(false);
   const [emailCk, setEmailCk] = useState(false);
   const [eId, setEId] = useState("");
   const [eAddr, setEAddr] = useState("");
-  const [imageFile, setImageFile] = useState([]);
-  console.log("imageFile", imageFile);
+  const [imageFile, setImageFile] = useState(null);
+  console.log("reduxState", reduxState.joinData);
   return (
     <div className="join__step-two">
       <Container>
@@ -82,6 +82,7 @@ const JoinStep2 = () => {
                       <input
                         id="photo"
                         type="file"
+                        ref={imgRef}
                         onChange={(e) => {
                           if (e.target.files && e.target.files[0]) {
                             let reader = new FileReader();
@@ -89,7 +90,7 @@ const JoinStep2 = () => {
                               photoRef.current.src = e.target.result;
                             };
                             reader.readAsDataURL(e.target.files[0]);
-                            setImageFile(addImage(e));
+                            setImageFile(addImage(e, imgRef));
                           } else {
                             photoRef.current.src = "";
                           }
@@ -370,8 +371,8 @@ const JoinStep2 = () => {
                     introduceRef,
                     dispatch,
                     imageFile,
-                    reduxState,
-                    imageFile
+                    imgRef,
+                    navigate
                   );
                 }}
               >
@@ -559,8 +560,8 @@ const SendEmail = ({
   );
 };
 
-const addImage = (e) => {
-  console.log("e.target.files", e.target.files);
+const addImage = (e, imgRef) => {
+  // console.log("e.target.files", e.target.files);
   // const nowImageURL = URL.createObjectURL(e.target.files[0]);
   let formData = new FormData();
   formData.append("userprofile", e.target.files[0]);
@@ -692,7 +693,8 @@ function validation(
   introduceRef,
   dispatch,
   imageFile,
-  reduxState
+  imgRef,
+  navigate
 ) {
   if (nameRef.current.value.trim().length === 0) {
     nameRef.current.parentElement.classList.add("validation");
@@ -759,6 +761,7 @@ function validation(
     } else if (!emailCk) {
       alert("이메일 인증을 해주세요");
     } else {
+      //////////////
       let gender;
       switch (joominGender.current.value) {
         case 1:
@@ -770,9 +773,8 @@ function validation(
       }
       let phoneNum = `${phoneNumF.current.value}-${phoneNumS.current.value}-${phoneNumT.current.value}`;
       let email = `${emailIdRef.current.value}@${emailAddrRef.current.value}`;
-      // let addr = `${zoneCodeRef.current.value}/${addrRef.current.value}/${addrDetailRef.current.value}`;
       let addr = `${zoneCodeRef.current.value}`;
-
+      console.log("imageFile", imageFile);
       dispatch(
         addStepTwo([
           nameRef.current.value,
@@ -782,48 +784,15 @@ function validation(
           email,
           addr,
           introduceRef.current.value,
-          imageFile,
+          imgRef.current.files[0],
         ])
       );
-      let temp = imageFile;
-      temp.append("id", reduxState.joinData.id);
-      temp.append("email", email);
-      temp.append("pwd", reduxState.joinData.pwd);
-      temp.append("name", nameRef.current.value);
-      temp.append("gender", gender);
-      temp.append("socialnum", parseInt(sJoominRef.current.value));
-      temp.append("phonenum", phoneNum);
-      temp.append("addrid", addr);
-      temp.append("self", introduceRef.current.value);
-      temp.append("userprofile", introduceRef.current.value);
-      let token = sessionStorage.getItem("token");
-      axios
-        .post("/aamurest/users/edit", temp, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "multipart/form-data",
-          },
-        })
-        .then((resp) => {
-          console.log(resp.data);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+
+      navigate("/joinThree");
     }
   }
 }
-// nameRef,
-//   sJoominRef,
-//   joominGender,
-//   phoneNumF,
-//   phoneNumS,
-//   phoneNumT,
-//   emailIdRef,
-//   emailAddrRef,
-//   zoneCodeRef,
-//   addrRef,
-//   addrDetailRef
+
 function Copyright(props) {
   return (
     <Typography variant="body2" color="text.warning" align="center" {...props}>

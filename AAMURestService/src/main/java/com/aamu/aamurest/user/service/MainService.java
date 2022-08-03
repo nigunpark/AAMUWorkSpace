@@ -56,4 +56,6 @@ public interface MainService{
 
 	List<String> getUserTheme(Map map);
 
+	AttractionDTO selectPlace(Map map, HttpServletRequest req);
+
 }

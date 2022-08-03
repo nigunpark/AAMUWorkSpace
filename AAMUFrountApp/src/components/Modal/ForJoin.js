@@ -38,7 +38,7 @@ const Overlay = styled.div`
 const Content = styled.div`
   position: relative;
   width: 470px;
-  height: 610px;
+  height: 630px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -52,6 +52,23 @@ const Content = styled.div`
   animation: ${flip} 0.5s cubic-bezier(0.47, 0, 0.745, 0.715) both;
 `;
 const ContentStep2 = styled.div`
+  position: relative;
+  width: 470px;
+  height: 800px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  padding: 0 30px;
+  border-radius: 15px;
+  box-shadow: var(--shadow);
+  margin: auto;
+  background: rgba(255, 255, 255, 0.9);
+  animation: ${flip} 0.5s cubic-bezier(0.47, 0, 0.745, 0.715) both;
+`;
+
+const ContentStep3 = styled.div`
   position: relative;
   width: 470px;
   height: 800px;
@@ -93,4 +110,4 @@ const Footer = styled.div`
   hight: auto;
   bottom: 20px;
 `;
-export { Container, Overlay, Content, ContentStep2, Title, Body, Footer };
+export { Container, Overlay, Content, ContentStep2, ContentStep3, Title, Body, Footer };

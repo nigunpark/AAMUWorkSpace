@@ -26,6 +26,7 @@ import SockJS from "sockjs-client";
 import * as StompJs from "@stomp/stompjs";
 import { useDispatch } from "react-redux";
 import { addForChatInfo } from "./redux/store";
+import JoinStep3 from "./components/Join/JoinStep3";
 function App() {
   let dispatch = useDispatch();
   let location = useLocation();
@@ -138,6 +139,7 @@ function App() {
         <Route path="/login" element={<LoginTest />}></Route>
         <Route path="/join" element={<JoinStep1 />} />
         <Route path="/joinTwo" element={<JoinStep2 />} />
+        <Route path="/joinThree" element={<JoinStep3 />} />
         <Route path="/login" element={<LoginTest />} />
         <Route path="/test" element={<Test />} />
         <Route path="/Detailmodal" element={<DetailModal />} />

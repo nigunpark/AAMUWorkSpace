@@ -9,8 +9,12 @@ const QnAWrite = () => {
     console.log(titleRef.current.value);
     let token = sessionStorage.getItem("token");
     axios.post(
-      "",
-      {},
+      "/aamurest/qna/write",
+      {
+        id: sessionStorage.getItem("username"),
+        title: titleRef.current.value,
+        content: contentRef.current.value,
+      },
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -18,6 +22,7 @@ const QnAWrite = () => {
       }
     );
   };
+  console.log("contentRef.current.value", contentRef.current.value);
   return (
     <div className="qnaWrite__container">
       <div className="qna__header">

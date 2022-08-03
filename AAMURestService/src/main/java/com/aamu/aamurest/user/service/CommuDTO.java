@@ -34,7 +34,7 @@ public class CommuDTO {
 	private List<String> tname;
 	private String name;
 	private int totalcount;
-	private int followercount;
-	private int followingcount;
+	private int followercount; //나를 팔로워하는 숫자
+	private int followingcount; //내가 팔로잉하는 숫자
 	private Boolean isFollower;
 }

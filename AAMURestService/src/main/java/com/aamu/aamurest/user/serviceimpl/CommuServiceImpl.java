@@ -128,8 +128,9 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 		
 		//태그 저장
 		int tagAffected=0;
+		map.get("tname"); //
 		if(map.get("tname")!=null) {
-			tagAffected=insertCommuTagTb(map); //메소드호출
+			tagAffected=insertCommuTagTb(map); //메소드호출 //commutag테이블에 insert
 		}
 
 		if(commuaffected==1 && photoAffected==((List)map.get("photolist")).size())
@@ -157,10 +158,10 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 	@Override
 	public List<String> commuTag(Map map) {
 		List<String> tagLists=dao.commuSelectTag(map);
+		List<String> sharptTagList = new Vector<>();
 		System.out.println("트루일가요?"+tagLists.contains(map.get("tname")));
 		if(tagLists.contains(map.get("tname"))) {
 			System.out.println("tname은 뭘가요?"+map.get("tname"));
-			List<String> sharptTagList = new Vector<>();
 			for(String tag:tagLists) { //서울, 서울여행을 꺼내서 
 				String sharpTag="#"+tag; //#서울을 붙이기
 				sharptTagList.add(sharpTag); //새로운 배열에 담아서 전달
@@ -168,8 +169,7 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 			return sharptTagList;
 		}
 		else {
-			int affected=dao.commuInsertTags(map);
-			return tagLists;
+			return sharptTagList;
 		}
 	}
 
@@ -397,7 +397,7 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 	public List<CommuDTO> commuMyPageList(Map map) {
 		List<CommuDTO> lists=dao.commuMyPageList(map);
 		for(CommuDTO list:lists) {
-			int affected=dao.commuIsExistFollower(map);
+			int affected=dao.commuIsExistFollower(map); //세션아이디가 글쓴이아이디 1이면 
 			if(affected == 1) list.setIsFollower(true); 
 			else list.setIsFollower(false); 
 		}
@@ -411,33 +411,35 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 		return dao.commuTotalCount(map);
 	}
 	
-	//마이페이지용_나를 팔로우하는 계정 수 셋팅
+	//마이페이지용_나를 팔로우하는 계정 수 셋팅(followercount)
 	@Override
 	public int commuFollowerCount(Map map) {
 		map.put("table", "follower");
 		return dao.commuTotalCount(map);
 	}
 	
-	//마이페이지용_내가 팔로잉하는 계정 수 셋팅
+	//마이페이지용_내가 팔로잉하는 계정 수 셋팅 (followingcount)
 	@Override
 	public int commuFollowingCount(Map map) {
 		return dao.commuFollowingCount(map);
 	}
 	
+
 	////////////////////////////////////////////////////////공통 메소드
 	
 	//insertCommuTag 메소드
 	public int insertCommuTagTb(Map map) {
 		int affected=0;
 		String tnameString=map.get("tname").toString();
+		tnameString.replaceAll(" ", "");
 		String[] tnameArr = tnameString.split("#");
 		for(int i=1; i<tnameArr.length;i++) {
 			map.put("tname", tnameArr[i]);
 			System.out.println("메소드 타니?"+map.get("tname"));
-			int tno=dao.selectTnoOfTags(map);
+			int tno=dao.selectTnoOfTags(map); //tags테이블에 tno 셀렉트
 			map.put("tno", tno);
 			System.out.println("메소드 타니? tno"+map.get("tno"));
-			affected=dao.commuInsertCommuTag(map);
+			affected=dao.commuInsertCommuTag(map); //commutag테이블에 저장
 		}
 		return affected;
 	}

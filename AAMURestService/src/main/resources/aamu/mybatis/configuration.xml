@@ -19,7 +19,8 @@
   		<typeAlias type="com.aamu.aamurest.user.service.ChatRoomDTO" alias="chatRoomDTO"/>
   		<typeAlias type="com.aamu.aamurest.user.service.ChatingMessageDTO" alias="chatingMessageDTO"/>
   		<typeAlias type="com.aamu.aamurest.user.service.admin.NoticeDTO" alias="NoticeDTO"/>
-
+  		<typeAlias type="com.aamu.aamurest.user.service.admin.QNADTO" alias="QNADTO"/>
+  		<typeAlias type="com.aamu.aamurest.user.service.admin.AnswerDTO" alias="AnswerDTO"/>
   	</typeAliases>
 	<mappers>
 		<mapper resource="aamu/mybatis/mapper/user.xml" />
@@ -28,5 +29,6 @@
 		<mapper resource="aamu/mybatis/mapper/bbs.xml" />
 		<mapper resource="aamu/mybatis/mapper/chatroom.xml" />
 		<mapper resource="aamu/mybatis/mapper/notice.xml" />
+		<mapper resource="aamu/mybatis/mapper/qna.xml" />
 	</mappers>
 </configuration>

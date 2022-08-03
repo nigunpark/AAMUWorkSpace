@@ -12,12 +12,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faX } from "@fortawesome/free-solid-svg-icons";
 import { faBookmark } from "@fortawesome/free-solid-svg-icons";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
-const DetailModal = ({
-  detailOne,
-  setIsOpen,
-  setShowCBModal,
-  setIsLoading,
-}) => {
+const DetailModal = ({ detailOne, setIsOpen, setShowCBModal, setIsLoading }) => {
   let navigate = useNavigate();
   // console.log("detailOne", detailOne);
   function dateFormat(date) {
@@ -230,10 +225,7 @@ const DetailModal = ({
     return (
       <div>
         <Stars>
-          <FontAwesomeIcon
-            icon={faStar}
-            style={{ marginRight: "3px", color: "gold" }}
-          />
+          <FontAwesomeIcon icon={faStar} style={{ marginRight: "3px", color: "gold" }} />
           <span>{val.rate.toString().padEnd(3, ".0")}</span>
         </Stars>
         <span
@@ -300,17 +292,16 @@ const DetailModal = ({
             <FontAwesomeIcon icon={faX} />
           </span>
           <Plan>
-            <div>
+            <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
               {routeData.map((route, idx) => {
                 return (
                   <div key={idx} className="detail-plan">
                     <div className="paln-date">
-                      {idx + 1}일차 ({plannerDate.month}월{" "}
-                      {plannerDate.date + idx}일&nbsp;
+                      {idx + 1}일차 ({plannerDate.month}월 {plannerDate.date + idx}일&nbsp;
                       {getDow(plannerDate.dow)})
                     </div>
-                    {
-                      route[`day${idx + 1}`].map((obj, i) => {
+                    <div className="plan__over-container">
+                      {route[`day${idx + 1}`].map((obj, i) => {
                         return (
                           <div className="plan__container">
                             <div className="plan-region">
@@ -327,7 +318,15 @@ const DetailModal = ({
                                     }
                                   />
                                 </div>
-                                <div>
+                                <div
+                                  style={{
+                                    display: "flex",
+                                    flexDirection: "column",
+                                    alignItems: "start",
+                                    padding: "5px 0",
+                                    gap: "5px",
+                                  }}
+                                >
                                   <span
                                     style={{
                                       fontSize: "15px",
@@ -336,22 +335,22 @@ const DetailModal = ({
                                   >
                                     {obj.dto.title}
                                   </span>
+                                  <div className="plan-clock">
+                                    <DetailSetting
+                                      fromWooJaeData={routeData}
+                                      obj={obj}
+                                      key={i}
+                                      i={i}
+                                      periodIndex={idx}
+                                    />
+                                  </div>
                                 </div>
                               </div>
                             </div>
-                            <div className="plan-clock">
-                              <DetailSetting
-                                fromWooJaeData={routeData}
-                                obj={obj}
-                                key={i}
-                                i={i}
-                                periodIndex={idx}
-                              />
-                            </div>
                           </div>
                         ); //MyPost_clock
-                      }) //내부 map
-                    }
+                      })}
+                    </div>
                   </div>
                 );
               })}
@@ -429,12 +428,13 @@ const DetailModal = ({
             <div
               style={{
                 position: "relative",
-                border: "1px solid rgba(128, 128, 128, 0.5)",
+                boxShadow: "var(--shadow)",
                 borderRadius: "3px",
                 height: "370px",
+                borderRadius: "10px",
               }}
             >
-              <span className="detail__plan-content-badge">Content</span>
+              {/* <span className="detail__plan-content-badge">Content</span> */}
               <Textarea>
                 <p style={{ padding: "15px 10px" }}>{content}</p>
               </Textarea>
@@ -453,17 +453,11 @@ const DetailModal = ({
               )}
             </div>
             <Tag>
-              <Date>
-                작성일. {dateFormat(new window.Date(detailOne.postdate))}
-              </Date>
+              <Date>작성일. {dateFormat(new window.Date(detailOne.postdate))}</Date>
               tag : #{theme}
             </Tag>
             {sessionStorage.getItem("username") == userId ? (
-              <input
-                type="text"
-                placeholder="글쓴이는 리뷰가 안되요!"
-                disabled
-              />
+              <input type="text" placeholder="글쓴이는 리뷰가 안되요!" disabled />
             ) : isReviewId === 1 ? (
               <input type="text" placeholder="리뷰는 하나만!" disabled />
             ) : (
@@ -472,9 +466,7 @@ const DetailModal = ({
                 placeholder="리뷰 달기..."
                 ref={commentRef}
                 onKeyUp={(e) => {
-                  e.target.value.length > 0
-                    ? setIsValid(true)
-                    : setIsValid(false);
+                  e.target.value.length > 0 ? setIsValid(true) : setIsValid(false);
                 }} //사용자가 리뷰를 작성했을 때 빈공간인지 확인하여 유효성 검사
               />
             )}
@@ -540,10 +532,6 @@ const DetailModal = ({
 };
 
 function DetailSetting({ fromWooJaeData, periodIndex, obj, i }) {
-  let reduxState = useSelector((state) => {
-    return state;
-  });
-
   const [upTime, setUpTime] = useState(0);
   const [downTime, setDownTime] = useState(0);
   let dispatch = useDispatch();
@@ -551,39 +539,26 @@ function DetailSetting({ fromWooJaeData, periodIndex, obj, i }) {
   useEffect(() => {
     if (i !== 0) {
       setUpTime(
-        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime +
-          obj.mtime / 1000 / 60
+        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime + obj.mtime / 1000 / 60
       );
       setDownTime(
         fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime +
           obj.mtime / 1000 / 60 +
-          fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].atime /
-            1000 /
-            60
+          fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].atime / 1000 / 60
       );
       let forBlackBoxRedux = getTimes(
         periodIndex,
-        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime +
-          obj.mtime / 1000 / 60,
+        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime + obj.mtime / 1000 / 60,
         fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime +
           obj.mtime / 1000 / 60 +
-          fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].atime /
-            1000 /
-            60
+          fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].atime / 1000 / 60
       );
       dispatch(addWholeBlackBox(forBlackBoxRedux));
-      if (
-        i !==
-        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)].length - 1
-      ) {
-        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][
-          i + 1
-        ].starttime =
+      if (i !== fromWooJaeData[periodIndex]["day" + (periodIndex + 1)].length - 1) {
+        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i + 1].starttime =
           fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime +
           obj.mtime / 1000 / 60 +
-          fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].atime /
-            1000 /
-            60;
+          fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].atime / 1000 / 60;
       }
     }
   }, []);
@@ -593,18 +568,18 @@ function DetailSetting({ fromWooJaeData, periodIndex, obj, i }) {
       <span>
         {Math.floor(upTime / 60)
           .toString()
-          .padStart(2, "0")}
-        :
+          .padStart(2, "0")}{" "}
+        :{" "}
         {Math.floor(upTime % 60)
           .toString()
           .padStart(2, "0")}
       </span>
-      <span>~</span>
+      <span>&nbsp;~&nbsp;</span>
       <span>
         {Math.floor(downTime / 60)
           .toString()
-          .padStart(2, "0")}
-        :
+          .padStart(2, "0")}{" "}
+        :{" "}
         {Math.floor(downTime % 60)
           .toString()
           .padStart(2, "0")}
@@ -667,9 +642,7 @@ const Chat = ({ detailOne }) => {
               return (
                 <div
                   className={
-                    val.authid !== sessionStorage.getItem("username")
-                      ? "chatBox box"
-                      : "chatBox"
+                    val.authid !== sessionStorage.getItem("username") ? "chatBox box" : "chatBox"
                   }
                 >
                   <div
@@ -693,11 +666,7 @@ const Chat = ({ detailOne }) => {
                         {new window.Date().getHours() > 12
                           ? new window.Date().getHours() - 12
                           : new window.Date().getHours()}
-                        :
-                        {new window.Date()
-                          .getMinutes()
-                          .toString()
-                          .padStart(2, "0")}
+                        :{new window.Date().getMinutes().toString().padStart(2, "0")}
                       </span>
                     </div>
 
@@ -785,8 +754,7 @@ const Container = styled.div`
   top: 47px;
   right: 20px;
   transition: 0.3s;
-  animation: ${swing_chat} 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.5s
-    both;
+  animation: ${swing_chat} 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.5s both;
 `;
 const InnnerContainer = styled.div`
   position: relative;
@@ -829,9 +797,22 @@ const Body = styled.div`
     width: 3px;
   }
 `;
-
+const bounce_modal_plan = keyframes`
+0% {
+  transform: rotateX(70deg);
+  transform-origin: top;
+  opacity: 0;
+}
+100% {
+  transform: rotateX(0deg);
+  transform-origin: top;
+  opacity: 1;
+}
+`;
 const Plan = styled.div`
   position: relative;
+  // background: white;
+  // padding: 0 5px;
   // display: flex;
   // flex-direction: column;
   overflow: auto;
@@ -839,16 +820,19 @@ const Plan = styled.div`
   &::-webkit-scrollbar {
     display: none;
   }
+  animation: ${bounce_modal_plan} 1.7s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+  animation-delay: 0.2s;
 `;
 
 const Textarea = styled.div`
   position: relative;
-  width: 99%;
+  width: 100%;
   height: 370px;
   overflow: auto;
   font-size: 20px;
+  background: white;
   // border: 1px solid rgba(128, 128, 128, 0.5);
-  // border-radius: 3px;
+  border-radius: 7px;
   // box-shadow: 0 0 0 2px #e9ebec, 0 0 0 11px #fcfdfe;
 `;
 // position: fixed; 모달창 열리면 외부 스크롤바 안되게
@@ -875,34 +859,17 @@ const DetailOverlay = styled.div`
   background-color: rgba(0, 0, 0, 0.4);
 `;
 
-const DetailModalWrap = styled.div`
-  display: grid;
-  grid-template-columns: 350px 1200px;
-  border: 1px white solid;
-  height: 90%;
-  overflow: auto;
-  border-radius: 7px;
-  background-color: #fff;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  // left: 42%;
-  transform: translate(-50%, -50%);
-  &::-webkit-scrollbar {
-    display: none;
-  }
-  padding: 5px 10px;
-  transition: 0.3s;
-`;
-
 const DetailTitle = styled.div`
   margin-top: 35px;
+  width: 50%;
   position: relative;
   height: 150px;
   margin-bottom: -80px;
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  // border: 1px solid red;
+  margin-left: auto;
 `;
 
 const DetailReview = styled.div`

@@ -188,8 +188,7 @@
 }
 
 .join__slide-out-right {
-  animation: join__slide-out-right 0.3s cubic-bezier(0.55, 0.085, 0.68, 0.53)
-    both;
+  animation: join__slide-out-right 0.3s cubic-bezier(0.55, 0.085, 0.68, 0.53) both;
 }
 
 .join__slide-in-right {
@@ -309,6 +308,13 @@
   margin-top: 10px;
   display: flex;
   flex-direction: column;
+}
+.joinStep3_title-i {
+  border-radius: 50%;
+  padding: 7px;
+  background-color: var(--orange);
+  color: white;
+  font-size: 20px;
 }
 
 @keyframes join__slide-out-right {

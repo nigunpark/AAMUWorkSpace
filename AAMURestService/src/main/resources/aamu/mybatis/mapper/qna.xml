@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="aamu.mybatis.mapper.qna">
+
+	<!-- 게시물 목록 -->
+	<select id="qnaSelectList" resultType="QNADTO"
+		parameterType="Map">
+		SELECT * FROM
+		(SELECT T.*, ROWNUM R FROM (
+		SELECT q.*,name,(SELECT
+		COUNT(*) FROM answer WHERE qno=q.qno) as answerCount
+		FROM users u JOIN
+		qna q ON u.id=q.id
+		<if test="searchColumn != null">
+			WHERE ${searchColumn} LIKE '%' || #{searchWord} || '%'
+		</if>
+		ORDER BY qno DESC) T)
+	</select>
+
+	<!-- 게시물 수 카운트 -->
+	<select id="qnaSearchTotalCount" parameterType="Map"
+		resultType="int">
+		SELECT COUNT(*) FROM qna q WHERE ${searchColumn}=#{searchWord}
+	</select>
+
+	<!-- 상세 보기 -->
+	<select id="qnaSelectOne" resultType="QNADTO"
+		parameterType="Map">
+		SELECT q.*,name,(SELECT
+		COUNT(*) FROM answer WHERE qno=q.qno)
+		as answerCount
+		FROM users u JOIN qna q ON u.id = q.id
+		WHERE qno=#{qno}
+
+
+	</select>
+
+	<!-- 게시물 검색 -->
+	<select id="qnaSearachList" parameterType="Map"
+		resultType="String">
+		SELECT ${searchColumn} FROM ${table} WHERE ${searchColumn}
+		LIKE '%'||#{searchWord}||'%'
+	</select>
+
+	<!-- 게시물 등록 -->
+	<insert id="qnaInsert" parameterType="Map">
+		INSERT INTO qna VALUES
+		(SEQ_QNA.NEXTVAL,
+		#{id},
+		#{title},
+		#{content},
+		DEFAULT,
+		SYSDATE
+		)
+	</insert>
+
+	<!-- 게시물 수정 -->
+	<update id="qnaUpdate" parameterType="Map">
+		UPDATE qna SET
+		title=#{title},content=#{content} WHERE qno=#{qno}
+	</update>
+
+	<!-- 게시물 삭제 -->
+	<delete id="qnaDelete" parameterType="Map">
+		DELETE qna WHERE
+		qno =
+		#{qno}
+	</delete>
+	
+	
+	<!-- 글 하나 뿌려주는 용_모든 댓글 뿌려주기-->
+	<select id="answerList" parameterType="String" resultType="AnswerDTO" >
+		SELECT * FROM answer WHERE qno=#{qno}
+	</select>
+	
+
+	<!-- 댓글 등록 -->
+	<insert id="answerInsert" parameterType="Map">
+		<selectKey keyProperty="ano" resultType="int" order="BEFORE">
+			SELECT
+			SEQ_ANSWER.NEXTVAL FROM DUAL
+		</selectKey>
+		INSERT INTO answer
+		VALUES(SEQ_ANSWER.CURRVAL,#{qno},#{id},#{answer},SYSDATE)
+	</insert>
+
+	<!-- 댓글 수정 -->
+	<update id="answerUpdate" parameterType="Map">
+		UPDATE answer SET
+		answer=#{answer} WHERE ano = #{ano}
+	</update>
+
+	<!-- 댓글 삭제 -->
+	<delete id="answerDelete" parameterType="Map">
+		DELETE answer WHERE ano
+		= #{ano}
+	</delete>
+
+	<!-- 댓글 전부 삭제 -->
+	<delete id="answerDeleteByNo" parameterType="Map">
+		DELETE answer WHERE
+		qno = #{qno}
+	</delete>
+
+</mapper>

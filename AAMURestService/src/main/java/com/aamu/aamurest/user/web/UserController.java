@@ -46,7 +46,7 @@ public class UserController {
 		return affected;
 	}
 	@PostMapping("/users/upload")
-	public int updateUser(@RequestParam Map map,@RequestParam MultipartFile userprofile,HttpServletRequest req) throws IllegalStateException, IOException {
+	public int updateUser(@RequestParam Map map,@RequestParam(required = false) MultipartFile userprofile,HttpServletRequest req) throws IllegalStateException, IOException {
 
 		int affected=0;
 		System.out.println(map);
@@ -54,7 +54,7 @@ public class UserController {
 		UsersDTO dto = service.selectOneUser(map);
 		String originalProfile = dto.getUserprofile();
 		String path = req.getSession().getServletContext().getRealPath("/resources/userUpload");
-		if(!(userprofile.toString().contains(originalProfile))) {
+		if(userprofile!=null) {
 			File oldFile = new File(path+File.separator+originalProfile);
 			oldFile.delete();
 			String photo = FileUploadUtil.oneFile(userprofile, path);
