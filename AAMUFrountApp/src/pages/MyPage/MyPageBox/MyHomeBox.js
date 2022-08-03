@@ -12,7 +12,6 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import MyPlanMap from "./MyPlanMap";
 import { useDispatch, useSelector } from "react-redux";
-import { addMonthNDate, changeTripPeriod, resetMonthNDate } from "../../../redux/store";
 import { faHourglass } from "@fortawesome/free-regular-svg-icons";
 import { addMonthNDate, changeTripPeriod, resetMonthNDate } from "../../../redux/store";
 
