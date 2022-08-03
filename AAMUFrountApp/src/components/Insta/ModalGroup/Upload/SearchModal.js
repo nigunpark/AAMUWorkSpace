@@ -12,7 +12,7 @@ function SearchModal({search,setinputValue,setHasText}){
         <Searchengine>
             <Searchcontents>
             
-              {search.map((val,i)=>{return <P onClick={(e)=>{
+            {search.map((val,i)=>{return <P onClick={(e)=>{
                 e.stopPropagation();
                 setinputValue(e.target.textContent)
                 setHasText(false)}              
@@ -58,6 +58,7 @@ function SearchModal({search,setinputValue,setHasText}){
     padding-left: 10px;
     align-items: center;
     cursor:pointer;
+    font-size:15px;
 
     &:hover {
       background-color: #e5e5e5;
