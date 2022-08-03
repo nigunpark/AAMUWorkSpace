@@ -53,12 +53,6 @@ public class BBSController {
 			//모든 리뷰 가져오기
 			dto.setReviewList(bbsService.reviewList(dto.getRbn()));
 		}
-		/*
-		//좋아요 셋팅
-		if(dao.commuLikeSelect(map)==1) dto.setIslike(true);
-		else dto.setIslike(false);
-		return dto;
-		*/
 		return list;
 	}
 	
@@ -121,8 +115,26 @@ public class BBSController {
 		else
 			resultMap.put("result", "deleteNotSuccess");
 		return resultMap;
-
 	}
+	
+	/*
+	//글 북마크하기
+	@GetMapping("/bbs/bookmark")
+	public Map bbsBookmark(@PathVariable int rbn, HttpServletRequest req) {//id, rbn
+		Boolean bookmark=bbsService.bbsBookmark(rbn);
+		//community테이블의 selectone likecount
+		int likecount=bbsService.commuLikecountSelect(rbn);
+		Map resultMap = new HashMap();
+		if(affected) { //true면
+			resultMap.put("bookmark", true);
+			resultMap.put("rbn", map.get("rbn"));
+		}
+		else {
+			resultMap.put("bookmark", false);
+			resultMap.put("rbn", map.get("rbn"));
+		}
+		return resultMap;
+	}*/
 
 	//리뷰 등록 <성공>
 	//평균 평점 반영 <성공>

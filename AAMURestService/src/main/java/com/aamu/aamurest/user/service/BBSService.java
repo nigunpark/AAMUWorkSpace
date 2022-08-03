@@ -23,6 +23,12 @@ public interface BBSService {
 
 	//글 삭제
 	int bbsDelete(Map map);
+	
+	//글 북마크
+	Boolean bbsBookmark(int rbn);
+	
+	//글 북마크 목록_하나 선택
+	int bbsSelectBookmark(int rbn);
 
 
 	/*----------------------------------------------------*/
@@ -46,11 +52,5 @@ public interface BBSService {
 	
 	//검색 결과
 	List<BBSDTO> searchList(Map map);
-	
-	//북마크 ON
-	//Boolean bookmark(Map map);
-	
-	//북마크 OFF
-	
-	
+
 }
