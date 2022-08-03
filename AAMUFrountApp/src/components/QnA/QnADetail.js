@@ -19,6 +19,24 @@ const QnADetail = () => {
         console.log(err);
       });
   }
+  const fnDelete = () => {
+    let token = sessionStorage.getItem("token");
+    axios
+      .delete("/aamurest/qna/delete", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        params: {
+          qno: "",
+        },
+      })
+      .then((resp) => {
+        console.log(resp);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   useEffect(() => {
     getDetail();
   }, []);
@@ -56,7 +74,9 @@ const QnADetail = () => {
             수정하기
           </Link>
 
-          <span className="qnaWrite__content-btnSpan">삭제하기</span>
+          <span className="qnaWrite__content-btnSpan" onClick={fnDelete}>
+            삭제하기
+          </span>
         </div>
       </div>
     </div>
