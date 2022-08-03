@@ -35,6 +35,7 @@ const MyProfileBox = ({ setClickTab }) => {
   const [isOpenPost, setIsOpenPost] = useState(false);
 
   const [showImages, setShowImages] = useState([]); //이미지
+  const [showImagesFile, setShowImagesFile] = useState([]);
 
   //이메일
   let [emailFrist, setEmailFrist] = useState("");
@@ -58,10 +59,15 @@ const MyProfileBox = ({ setClickTab }) => {
   const handleAddImages = (e) => {
     const imageLists = e.target.files;
     let imageUrlLists = [...showImages];
+    let imgs = [...showImagesFile];
 
-    for (let i = 0; i < imageLists.length; i++) {
-      const currentImageUrl = URL.createObjectURL(imageLists[i]);
-      imageUrlLists.push(currentImageUrl);
+    if (imageLists.length != 0) {
+      for (let i = 0; i < imageLists.length; i++) {
+        const currentImageUrl = URL.createObjectURL(imageLists[i]);
+        imageUrlLists.push(currentImageUrl);
+
+        imgs.push(imageLists[i]);
+      }
     }
 
     if (imageUrlLists.length > 1) {
@@ -69,6 +75,7 @@ const MyProfileBox = ({ setClickTab }) => {
       imageUrlLists = imageUrlLists.slice(0, 1);
     }
     setShowImages(imageUrlLists);
+    setShowImagesFile(imgs);
 
     let formData = new FormData();
     formData.append("userprofile", e.target.files[0]);
@@ -111,6 +118,7 @@ const MyProfileBox = ({ setClickTab }) => {
 
         setIntroduce(resp.data.self);
         setShowImages(resp.data.userprofile.split());
+        // setProfile(resp.data.userprofile.split());
         setName(resp.data.name);
         setGender(resp.data.gender);
         setUserId(resp.data.id);
@@ -120,8 +128,8 @@ const MyProfileBox = ({ setClickTab }) => {
       });
   }, []);
 
-  // console.log('userProfile :',userProfile.userprofile.split());
-  // console.log('showImages :',showImages);
+  console.log("showImagesFile -----:", showImagesFile.length);
+  console.log("showImages :", showImages[0]);
   let [profiles, setProfile] = useState([]);
   return (
     <MyProfileContainer>
@@ -287,9 +295,10 @@ const MyProfileBox = ({ setClickTab }) => {
         <div style={{ textAlign: "end", marginTop: "50px" }}>
           <UpdateBtn
             type="button"
-            onClick={() => {
+            onClick={(e) => {
               // let profile = uploadFile(showImages);
-              let checkSuc = profileUpdate(
+              // handleAddImages(e);
+              profileUpdate(
                 profiles,
                 phoneNum,
                 email,
@@ -299,7 +308,10 @@ const MyProfileBox = ({ setClickTab }) => {
                 gender,
                 name,
                 navigate,
-                setClickTab
+                setClickTab,
+                showImages,
+                handleAddImages,
+                setProfile
               );
             }}
           >
@@ -330,8 +342,13 @@ function profileUpdate(
   gender,
   name,
   navigate,
-  setClickTab
+  setClickTab,
+  showImages,
+  handleAddImages,
+  setProfile
 ) {
+  // console.log("profiles 등록버튼 눌렀을 : ", profiles);
+
   profiles.append("addrid", addr);
   profiles.append("email", email);
   profiles.append("gender", gender);
