@@ -15,17 +15,8 @@ import "../Upload/UploadSwiper.css";
 import dayjs from "dayjs";
 import { CommentsDisabled } from "@mui/icons-material";
 
-function CommentSearch({
-  val,
-  comment,
-  setcommentModal,
-  setcomments,
-  forReRender,
-  setForReRender
-
-}) {
-
-   let menuRef = useRef();
+function CommentSearch({ val, comment, setcommentModal, setcomments }) {
+  let menuRef = useRef();
   let replyRef = useRef();
   let commentRef1 = useRef();
 
@@ -33,7 +24,7 @@ function CommentSearch({
   const [modalShow, setModalShow] = useState(false);
   const [reply, setReply] = useState(false);
   const [modalSet, setModal] = useState(false);
-
+  const [forReRender, setForReRender] = useState(false);
   let [isValid, setisValid] = useState(false);
 
   function menuModalRef(e) {
@@ -54,7 +45,6 @@ function CommentSearch({
 
   // const [comments, setcomments] = useState([]);
   function commentModal2(setcomments) {
-    console.log("searchb.eelno", val.lno);
     // const copyFeedComments = [...comments];//feedComments에 담겨있던 댓글 받아옴
     // copyFeedComments.push(comment);//copyFeedComments에 있는 기존 댓글에 push하기 위함
     // setcomments(copyFeedComments);//copyFeedComments 담겨있을 comment를 setfeedComments로 변경
@@ -71,15 +61,14 @@ function CommentSearch({
         },
       })
       .then((resp) => {
-        console.log('setcomments',resp.data.commuCommentList)
-        val.commuCommentList = resp.data.commuCommentList
-        val.isLike = resp.data.islike
+        val.commuCommentList = resp.data.commuCommentList;
+        val.isLike = resp.data.islike;
         setcomments(resp.data);
       })
       .catch((error) => {
         console.log(error);
       });
-      replyRef.current.value = "";
+    replyRef.current.value = "";
   }
 
   useEffect(() => {
@@ -104,7 +93,7 @@ function CommentSearch({
       .then((resp) => {
         val.isLike = resp.data.isLike;
         val.likecount = resp.data.likecount;
-        setForReRender(!forReRender);
+        // setForReRender(!forReRender);
       })
       .catch((error) => {
         console.log(error);
@@ -121,7 +110,7 @@ function CommentSearch({
       .post(
         "/aamurest/gram/comment/edit",
         {
-          id: sessionStorage.getItem('username'),
+          id: sessionStorage.getItem("username"),
           reply: replyRef.current.value,
           lno: val.lno,
         },
@@ -133,16 +122,15 @@ function CommentSearch({
       )
       .then((resp) => {
         const replyOne = resp.data.reply;
-        console.log("resp.data", resp.data.reply);
         const copyComments = [...replyOne];
         setcomments(copyComments);
         setForReRender(!forReRender);
-        commentModal2(setcomments)
+        commentModal2(setcomments);
       })
       .catch((error) => {
         console.log(error);
       });
-      replyRef.current.value = "";
+    replyRef.current.value = "";
   }
 
   let [deleteOne1, setdeleteOne1] = useState(false);
@@ -152,8 +140,6 @@ function CommentSearch({
     // setcomments(comments.filter(recommendContents =>{
     //   return recommendContents.id !== id;
     // }))commuCommentList
-    console.log("val.lno", val.lno);
-    console.log("val.cno", cno);
     axios
       .delete("/aamurest/gram/comment/edit", {
         headers: {
@@ -175,10 +161,9 @@ function CommentSearch({
       });
   }
 
-
   // const CommentList = ({ val }) => {
   //   return (
-      
+
   //   );
   // };
 
@@ -277,14 +262,10 @@ function CommentSearch({
                           <span> {val.ctitle}</span>
                         </p>
                         <p className="userName">
-                          <strong
-                            style={{ fontSize: "13px", marginRight: "5px" }}
-                          >
+                          <strong style={{ fontSize: "13px", marginRight: "5px" }}>
                             {sessionStorage.getItem("username")}
                           </strong>
-                          <span style={{ fontFamily: "normal" }}>
-                            {val.content}
-                          </span>
+                          <span style={{ fontFamily: "normal" }}>{val.content}</span>
                         </p>
                       </div>
                     </div>
@@ -305,8 +286,7 @@ function CommentSearch({
                   //feedComments에 담겨있을 댓글 값을 CommentList 컴포넌트에 담아서 가져온다
                   return (
                     <div className="recommend-contents">
-                      <img className="likeimg" 
-                      src={val.userprofile} alt="추사" />
+                      <img className="likeimg" src={val.userprofile} alt="추사" />
                       <div
                         style={{
                           width: "100%",
@@ -318,7 +298,7 @@ function CommentSearch({
                       >
                         <div style={{ display: "flex", flexDirection: "row" }}>
                           <p className="userName">
-                            <strong>{sessionStorage.getItem('username')}</strong>
+                            <strong>{sessionStorage.getItem("username")}</strong>
                           </p>
                           <p className="userName">{val.reply}</p>
                         </div>
@@ -339,13 +319,15 @@ function CommentSearch({
                               }}
                             ></i>
                           )}
-                          <i className="fa-regular fa-trash-can"
-                          onClick={()=>{deleteTwo(replyTwo,val.cno) }}></i>
+                          <i
+                            className="fa-regular fa-trash-can"
+                            onClick={() => {
+                              deleteTwo(replyTwo, val.cno);
+                            }}
+                          ></i>
                         </div>
                         <div style={{ fontSize: "10px", color: "#a5a5a5", marginTop: "8px" }}>
-                          <p className="postDate">
-                            {dayjs(val.postdate).format("YYYY/MM/DD")}
-                          </p>
+                          <p className="postDate">{dayjs(val.postdate).format("YYYY/MM/DD")}</p>
                         </div>
                       </div>
                     </div>
@@ -363,10 +345,7 @@ function CommentSearch({
                   }}
                 >
                   {val.isLike ? (
-                    <i
-                      className="fa-solid fa-heart fa-2x"
-                      style={{ color: "red" }}
-                    ></i>
+                    <i className="fa-solid fa-heart fa-2x" style={{ color: "red" }}></i>
                   ) : (
                     <i className="fa-regular fa-heart fa-2x"></i>
                   )}
@@ -408,9 +387,7 @@ function CommentSearch({
               <button
                 className={
                   //클래스명을 comment창의 글자 길에 따라서 다르게 주면서 버튼색에 css디자인을 줄 수 있음
-                  comment.length > 0
-                    ? "submitCommentActive"
-                    : "submitCommentInactive"
+                  comment.length > 0 ? "submitCommentActive" : "submitCommentInactive"
                 }
                 onClick={() => {
                   post(replyRef);
