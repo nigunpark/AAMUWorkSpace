@@ -45,4 +45,9 @@ public class UsersDAO {
 		return template.selectList("selectAllTheme");
 	}
 
+	public int insertTheme(Map map) {
+		
+		return template.insert("insertTheme", map)
+	}
+
 }

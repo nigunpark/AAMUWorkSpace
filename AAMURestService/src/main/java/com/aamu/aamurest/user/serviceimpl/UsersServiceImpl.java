@@ -10,6 +10,7 @@ import org.springframework.transaction.support.TransactionTemplate;
 import com.aamu.aamurest.user.service.UsersDTO;
 import com.aamu.aamurest.user.service.UsersService;
 import com.aamu.aamurest.util.FileUploadUtil;
+import com.aamu.aamurest.util.UserUtil;
 
 @Service
 public class UsersServiceImpl implements UsersService{
@@ -22,6 +23,11 @@ public class UsersServiceImpl implements UsersService{
 		int affected = 0;
 		affected = transactionTemplate.execute(tx->{
 			dao.joinUser(map);
+			for(Object theme :(List)map.get("theme")) {
+				String themeid = UserUtil.changeTheme(theme.toString());
+				map.put("themeid", themeid);
+				dao.insertTheme(map);
+			}
 			return dao.insertAuth(map);
 		});
 		return affected;
