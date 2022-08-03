@@ -12,7 +12,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import CommentSearch from "../../components/Insta/ModalGroup/Comment/CommentSearch";
 import MyEdit from "../../components/Insta/ModalGroup/Edit/MyEdit";
-const MyPage = () => {
+const MyPage = ({ searchb }) => {
   let [clickTab, setClickTab] = useState(0);
 
   let home = useRef();
@@ -61,7 +61,7 @@ const MyPage = () => {
 
   const [myInstar, setMyInstar] = useState([]);
   const [myLno, setMyLno] = useState(0);
-
+  //searchb
   async function searchBar() {
     let token = sessionStorage.getItem("token");
     let serchId = "id";
