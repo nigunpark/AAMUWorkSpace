@@ -804,17 +804,18 @@ a {
 }
 .MyPost_clock {
   display: flex;
-  flex-direction: column;
+  // flex-direction: column;
   justify-content: center;
   align-items: center;
   font-size: 14px;
-  width: 53px;
-  height: 100%;
-  border: 1px solid var(--skyblue);
+  width: auto;
+  // height: 100%;
+  // border: 1px solid var(--skyblue);
   box-shadow: var(--lightShadow);
   background-color: rgba(0, 180, 216, 0.6);
   color: white;
   border-radius: 5px;
+  padding: 0 5px;
 }
 .write-back {
   background-size: cover;
@@ -827,18 +828,27 @@ a {
   align-items: center;
 }
 .detail-plan {
-  width: 100%;
+  width: 95%;
+  padding: 0 3px;
   font-size: 20px;
   margin-top: 3px;
+  border-radius: 5px;
+  // border: 1px solid white;
+  background-color: white;
+  box-shadow: var(--shadow);
 }
 .paln-date {
   text-align: center;
-  background-color: var(--orange);
-  color: white;
+  border: 2px solid var(--orange);
+  font-weight: bold;
   border-radius: 5px;
+  box-shadow: var(--shadow);
+  font-size: 18px;
+  padding: 3px 0;
+  background-color: white;
 }
 .plan-region {
-  flex: 3;
+  // flex: 3;
 }
 .myPlan-img-container {
   width: 80px;
@@ -852,15 +862,26 @@ a {
   border-radius: 5px;
   box-shadow: var(--lightShadow);
 }
+.plan__over-container {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
 .plan__container {
   display: flex;
-  box-shadow: var(--lightShadow);
+  box-shadow: var(--shadow);
   margin-top: 3px;
+  width: 100%;
+  border-radius: 5px;
+  padding: 3px;
+  background-color: white;
 }
 .myPlan-container {
-  display: grid;
-  grid-template-columns: 35% auto;
-  height: 100%;
+  // display: grid;
+  // grid-template-columns: 35% auto;
+  // height: 100%;
+  display: flex;
+  gap: 1rem;
 }
 
 .wirte-title {
