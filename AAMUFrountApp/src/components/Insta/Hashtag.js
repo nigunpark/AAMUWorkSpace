@@ -1,58 +1,107 @@
-import React from "react";
+import React, { useState } from 'react'
+import styled from 'styled-components'
 
-class Hashtag extends React.Component {
-    constructor() {
-      super();
-      
-      this.state = {
-        tags: [
-          'Tags',
-          'Input'
-        ]
-      };
-    }
-    
-    removeTag = (i) => {
-      const newTags = [ ...this.state.tags ];
-      newTags.splice(i, 1);
-      this.setState({ tags: newTags });
-    }
-  
-    inputKeyDown = (e) => {
-      const val = e.target.value;
-      if (e.key === 'Enter' && val) {
-        if (this.state.tags.find(tag => tag.toLowerCase() === val.toLowerCase())) {
-          return;
-        }
-        this.setState({ tags: [...this.state.tags, val]});
-        this.tagInput.value = null;
-      } else if (e.key === 'Backspace' && !val) {
-        this.removeTag(this.state.tags.length - 1);
-      }
-    }
-  
-    render() {
-      const { tags } = this.state;
-  
-      return (
-        <div className="input-tag">
-          <ul className="input-tag__tags">
-            { tags.map((tag, i) => (
-              <li key={tag}>
-                {tag}
-                <button type="button" onClick={() => { this.removeTag(i); }}>+</button>
-              </li>
-            ))}
-            <li className="input-tag__tags__input"><input type="text" onKeyDown={this.inputKeyDown} ref={c => { this.tagInput = c; }} /></li>
-          </ul>
-        </div>
-      );
+
+
+const Tag = ({tagItem,setTagItem,tagList,setTagList,hashRef}) => {
+ 
+
+  const onKeyPress = e => {
+    if (e.target.value.length !== 0 && e.key === 'Enter') {
+      submitTagItem()
     }
   }
-  
-//   ReactDOM.render(
-//     <Hashtag />,
-//     document.getElementById('content')
-//   );
-  export default Hashtag
-  
+
+  const submitTagItem = () => {
+    let updatedTagList = [...tagList]
+    updatedTagList.push(tagItem)
+    setTagList(updatedTagList)
+    setTagItem('')
+  }
+
+  const deleteTagItem = e => {
+    const deleteTagItem = e.target.parentElement.firstChild.innerText
+    const filteredTagList = tagList.filter(tagItem => tagItem !== deleteTagItem)
+    setTagList(filteredTagList)
+  }
+
+  return (
+    <WholeBox>
+      <TagBox>
+        {tagList.map((tagItem, index) => {
+          return (
+            <TagItem key={index}>
+              <p  ref={hashRef}>{tagItem}</p>
+              <Button onClick={deleteTagItem}>X</Button>
+            </TagItem>
+          )
+        })}
+        <TagInput
+          type='text'
+          placeholder='Press enter to add tags'
+          tabIndex={2}
+          onChange={e => setTagItem(e.target.value)}
+          value={tagItem}
+          onKeyPress={onKeyPress}
+        />
+      </TagBox>
+    </WholeBox>
+  )
+}
+
+const WholeBox = styled.div`
+  padding: 10px;
+  height: 100vh;
+`
+
+const TagBox = styled.div`
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  min-height: 50px;
+  margin: 10px;
+  padding: 0 10px;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+
+  &:focus-within {
+    border-color: tomato;
+  }
+`
+
+const TagItem = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 5px;
+  padding: 5px;
+  background-color: tomato;
+  border-radius: 5px;
+  color: white;
+  font-size: 13px;
+`
+
+
+
+const Button = styled.button`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 15px;
+  height: 15px;
+  margin-left: 5px;
+  background-color: white;
+  border-radius: 50%;
+  color: tomato;
+`
+
+const TagInput = styled.input`
+  display: inline-flex;
+  min-width: 150px;
+  background: transparent;
+  border: none;
+  outline: none;
+  cursor: text;
+`
+
+export default Tag
