@@ -188,12 +188,11 @@ fun PlanListScroll(
         if (planners[mapMakerIndex].dto?.mapx != null
             && planners[mapMakerIndex].dto?.mapy != null
         ) {
-            mapviewModel.setMarker(
-                planners[mapMakerIndex].dto?.title!!,
-                planners[mapMakerIndex].dto?.contentid!!,
-                planners[mapMakerIndex].dto?.mapy!!,
-                planners[mapMakerIndex].dto?.mapx!!
-            )
+            planners[mapMakerIndex].dto?.let {
+                mapviewModel.setMarker(
+                    it
+                )
+            }
         } else {
             mapviewModel.setDayMarker(planners[mapMakerIndex].dto?.title!!)
         }

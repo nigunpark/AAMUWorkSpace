@@ -52,7 +52,13 @@
         android:id="@+id/plannerFragment"
         android:name="com.aamu.aamuandroidapp.fragment.main.planner.PlannerFragment"
         android:label="fragment_planner"
-        tools:layout="@layout/fragment_planner" />
+        tools:layout="@layout/fragment_planner" >
+        <action
+            android:id="@+id/action_plannerFragment_to_placeDetailFragment"
+            app:destination="@id/placeDetailFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right" />
+    </fragment>
     <fragment
         android:id="@+id/conversationFragment"
         android:name="com.aamu.aamuandroidapp.fragment.main.conversation.ConversationFragment"
@@ -65,6 +71,16 @@
             android:name="rbn"
             app:argType="integer"
             android:defaultValue="0" />
+    </fragment>
+    <fragment
+        android:id="@+id/placeDetailFragment"
+        android:name="com.aamu.aamuandroidapp.fragment.main.planner.PlaceDetailFragment"
+        android:label="PlaceDetailFragment" >
+        <argument
+            android:name="place"
+            app:argType="com.aamu.aamuandroidapp.data.api.response.AAMUPlaceResponse"
+            android:defaultValue="@null"
+            />
     </fragment>
 
 </navigation>

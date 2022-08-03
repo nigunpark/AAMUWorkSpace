@@ -22,6 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.aamu.aamuandroidapp.components.aamuplan.PlanDetails.PlanBottomViewPager
 import com.aamu.aamuandroidapp.components.aamuplan.PlanDetails.PlanDetails
 import com.aamu.aamuandroidapp.components.aamuplan.PlanDetails.SideContent
@@ -34,14 +35,14 @@ import net.daum.mf.map.api.MapView
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun AAMUPlanHome(){
+fun AAMUPlanHome(navController : NavController){
     val context : Context = LocalContext.current
     val bottomSheetScaffoldState = rememberBottomSheetScaffoldState()
 
     val coroutineScope = rememberCoroutineScope()
 
     val mapviewModel : AAMUPlanViewModel = viewModel(
-        factory = AAMUPlanViewModelFactory(LocalContext.current)
+        factory = AAMUPlanViewModelFactory(LocalContext.current,navController)
     )
     var topbarhide = remember { mutableStateOf(false) }
     var startMove = remember { mutableStateOf(false) }
@@ -58,10 +59,7 @@ fun AAMUPlanHome(){
                     ActionButton(mapviewModel,
                         Modifier
                             .statusBarsPadding()
-                            .align(Alignment.TopEnd),
-                        topbarhide,
-                        bottomSheetScaffoldState,
-                        coroutineScope)
+                            .align(Alignment.TopEnd))
                     }
                 }
             },
@@ -129,10 +127,7 @@ fun PlanBottomSheet(mapviewModel: AAMUPlanViewModel,
 @Composable
 fun ActionButton(
     mapviewModel : AAMUPlanViewModel,
-    modifier: Modifier,
-    topbarhide : MutableState<Boolean>,
-    bottomSheetScaffoldState: BottomSheetScaffoldState,
-    coroutineScope: CoroutineScope
+    modifier: Modifier
 ){
     Box(modifier = modifier) {
         FloatingActionButton(
@@ -158,7 +153,7 @@ fun ActionButton(
 @Preview
 @Composable
 fun PreviewAAMUPlanHome() {
-    AAMUPlanHome()
+//    AAMUPlanHome()
 }
 
 

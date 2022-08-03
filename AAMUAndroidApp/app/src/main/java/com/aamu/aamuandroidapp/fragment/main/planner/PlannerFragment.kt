@@ -40,7 +40,7 @@ class PlannerFragment : Fragment() {
             if(checkPermission != "Y"){
                 navController.popBackStack()
             }
-            AAMUPlanHome()
+            AAMUPlanHome(navController)
         }
     }
 

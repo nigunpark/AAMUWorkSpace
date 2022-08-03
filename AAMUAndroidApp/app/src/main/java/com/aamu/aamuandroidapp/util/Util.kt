@@ -5,6 +5,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import android.location.Criteria
 import android.location.Location
 import android.location.LocationManager
 import android.os.Build
@@ -73,13 +74,17 @@ fun getLatLng(): Location? {
         contextL,
         Manifest.permission.ACCESS_COARSE_LOCATION
     )
-    val locatioNProvider = LocationManager.GPS_PROVIDER
+
+    val criteria = Criteria().apply {
+        accuracy = Criteria.ACCURACY_FINE
+    }
     val locatioNManager = contextL.getSystemService(Context.LOCATION_SERVICE) as LocationManager?
+    val locatioNProvider = locatioNManager?.getBestProvider(criteria,true)
+
     if (hasFineLocationPermission == PackageManager.PERMISSION_GRANTED &&
         hasCoarseLocationPermission == PackageManager.PERMISSION_GRANTED
     ) {
-        currentLatLng = locatioNManager?.getLastKnownLocation(locatioNProvider)
-            ?: locatioNManager?.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
+        currentLatLng = locatioNManager?.getLastKnownLocation(locatioNProvider!!)
     }
 
     return currentLatLng
@@ -89,7 +94,7 @@ lateinit var stomp : CustomStompClient
 private lateinit var stompConnection: Disposable
 
 fun stompConnection() {
-    val url = "ws://192.168.45.107:8080/aamurest/ws/chat/websocket"
+    val url = "ws://192.168.0.19:8080/aamurest/ws/chat/websocket"
     val intervalMillis = 1000L
     val client = OkHttpClient.Builder()
         .readTimeout(10, TimeUnit.SECONDS)
@@ -119,6 +124,20 @@ fun stompConnection() {
 
 fun stompDisconnect(){
     stompConnection.dispose()
+}
+
+fun getContentTypeId(contenttypeid : Int) : String{
+    return when (contenttypeid) {
+        12 -> "광장지"
+        14 -> "문화시설"
+        15 -> "행사/공연/축제"
+        25 -> "여행코스"
+        28 -> "레포츠"
+        32 -> "숙박"
+        38 -> "쇼핑"
+        39 -> "음식점"
+        else -> "알수 없음"
+    }
 }
 
 

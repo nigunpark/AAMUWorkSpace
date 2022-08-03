@@ -27,6 +27,9 @@ interface AAMUApi {
     @GET("info/recentplace")
     suspend fun getRecentPlace(@Query("placey") placey : Double,@Query("placex") placex : Double) : Response<List<AAMUPlaceResponse>>
 
+    @GET("info/oneplace")
+    suspend fun getPlaceOne(@Query("contentid") contentid : Int,@Query("contenttypeid") contenttypeid : Int) : Response<AAMUPlaceResponse>
+
     @GET("info/recentdiner")
     suspend fun getRecentDiner(@Query("placey") placey : Double,@Query("placex") placex : Double) : Response<List<AAMUPlaceResponse>>
 
@@ -46,7 +49,7 @@ interface AAMUApi {
     suspend fun getBBSList() : Response<List<AAMUBBSResponse>>
 
     companion object {
-        private const val BASE_URL = "http://192.168.45.107:8080/aamurest/"
+        private const val BASE_URL = "http://192.168.0.19:8080/aamurest/"
 
         operator fun invoke():AAMUApi{
             val requestInterceptor  = Interceptor{ chain ->

@@ -57,18 +57,6 @@ import com.guru.fontawesomecomposelib.FaIcon
 import com.guru.fontawesomecomposelib.FaIconType
 import com.guru.fontawesomecomposelib.FaIcons
 
-private fun Context.doLogin(logindata : logindata) {
-    if (invalidInput(logindata.username.text, logindata.password.text)) {
-        logindata.hasError = true
-        logindata.loading = false
-    } else {
-        logindata.loading = true
-        logindata.hasError = false
-        logindata.onLoginSuccess.invoke()
-        logindata.viewModel.doLogin(logindata.username.text, logindata.password.text)
-    }
-}
-
 private fun Context.buildExoPlayer(uri: Uri) =
     ExoPlayer.Builder(this).build().apply {
         setMediaItem(MediaItem.fromUri(uri))

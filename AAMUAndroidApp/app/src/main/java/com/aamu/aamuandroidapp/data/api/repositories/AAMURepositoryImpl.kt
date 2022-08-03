@@ -49,6 +49,19 @@ class AAMURepositoryImpl(
         emit(emptyList<AAMUPlaceResponse>())
     }.flowOn(Dispatchers.IO)
 
+    override suspend fun getPlaceOne(
+        contentid: Int,
+        contenttypeid: Int
+    ): Flow<AAMUPlaceResponse> = flow<AAMUPlaceResponse> {
+        val response = aamuApi.getPlaceOne(contentid,contenttypeid)
+        if(response.isSuccessful){
+            emit(response.body() ?: AAMUPlaceResponse())
+        }
+        else
+            emit(AAMUPlaceResponse())
+    }.catch {
+        emit(AAMUPlaceResponse())
+    }.flowOn(Dispatchers.IO)
 
 
     override suspend fun getRecentDiner(

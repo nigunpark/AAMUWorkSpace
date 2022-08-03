@@ -1,19 +1,22 @@
 package com.aamu.aamuandroidapp.components.aamuplan
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.location.Location
+import android.net.Uri
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
+import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
-import androidx.compose.runtime.MutableState
+import androidx.compose.foundation.layout.*
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.ViewCompositionStrategy
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
+import androidx.compose.ui.platform.*
+import androidx.lifecycle.*
+import androidx.navigation.NavController
 import com.aamu.aamuandroidapp.R
 import com.aamu.aamuandroidapp.data.api.AAMUDIGraph
 import com.aamu.aamuandroidapp.data.api.repositories.AAMURepository
@@ -21,25 +24,29 @@ import com.aamu.aamuandroidapp.data.api.response.AAMUPlaceResponse
 import com.aamu.aamuandroidapp.data.api.response.AAMUPlannerSelectOne
 import com.aamu.aamuandroidapp.data.api.response.Place
 import com.aamu.aamuandroidapp.fragment.main.planner.PlannerFragment
+import com.aamu.aamuandroidapp.fragment.main.planner.PlannerFragmentDirections
 import com.aamu.aamuandroidapp.util.getLatLng
-import com.google.android.gms.location.LocationCallback
-import com.google.android.gms.location.LocationResult
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.plus
 import net.daum.mf.map.api.*
+import java.io.IOException
+import java.io.InputStream
+import java.net.HttpURLConnection
+import java.net.URL
 
-class AAMUPlanViewModelFactory(val context: Context) : ViewModelProvider.Factory{
+
+class AAMUPlanViewModelFactory(val context: Context,val navController : NavController) : ViewModelProvider.Factory{
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return AAMUPlanViewModel(context) as T
+        return AAMUPlanViewModel(context,navController) as T
     }
 }
 
-class AAMUPlanViewModel(context : Context) : ViewModel(), MapView.POIItemEventListener{
+class AAMUPlanViewModel(context : Context,navController : NavController) : ViewModel(), MapView.POIItemEventListener{
 
     private val aamuRepository : AAMURepository = AAMUDIGraph.createAAMURepository()
     private val context = context
     val mapView = MapView(context)
+
+    val viewModelnavController = navController
 
     val recentPlaces = MutableLiveData<List<AAMUPlaceResponse>>()
     val errorLiveData = MutableLiveData<String>()
@@ -47,9 +54,12 @@ class AAMUPlanViewModel(context : Context) : ViewModel(), MapView.POIItemEventLi
     val plannerSelectOne = MutableLiveData<AAMUPlannerSelectOne>()
     val planners = MutableLiveData<MutableList<Place>>()
     val place = MutableLiveData<Place>()
+    val mapPOIItems = MutableLiveData<MapPOIItem>()
 
     init {
         mapView.setCurrentLocationEventListener(PlanListener())
+        mapView.setCalloutBalloonAdapter(CustomCalloutBalloonAdapter(context))
+        mapView.setPOIItemEventListener(this)
         setCurrentMarker()
         viewModelScope.launch {
             aamuRepository.getPlannerSelectList()
@@ -64,6 +74,10 @@ class AAMUPlanViewModel(context : Context) : ViewModel(), MapView.POIItemEventLi
             }
         }
 
+    }
+
+    fun setPOIItem(mapPOIItem :MapPOIItem){
+        mapPOIItems.postValue(mapPOIItem)
     }
 
     fun setCurrentMarker(){
@@ -103,6 +117,7 @@ class AAMUPlanViewModel(context : Context) : ViewModel(), MapView.POIItemEventLi
                 val mCustomMarker :MapPOIItem =MapPOIItem()
                 mCustomMarker.itemName = recentPlace.title
                 mCustomMarker.tag = recentPlace.contentid!!
+                mCustomMarker.userObject = recentPlace
                 mCustomMarker.mapPoint = MapPoint.mapPointWithGeoCoord(recentPlace.mapy!!,recentPlace.mapx!!)
                 mCustomMarker.showAnimationType = MapPOIItem.ShowAnimationType.SpringFromGround
                 mCustomMarker.markerType = MapPOIItem.MarkerType.RedPin
@@ -149,6 +164,7 @@ class AAMUPlanViewModel(context : Context) : ViewModel(), MapView.POIItemEventLi
         val mapPoint : MutableList<MapPoint> = emptyList<MapPoint>().toMutableList()
         for(place in plannerSelectOne.value?.routeMap?.get(title)!!){
             mCustomMarker.itemName = place?.dto?.title
+            mCustomMarker.userObject = place?.dto
             mCustomMarker.mapPoint = MapPoint.mapPointWithGeoCoord(place?.dto?.mapy!!,place?.dto?.mapx!!)
             mapPoint.add(mCustomMarker.mapPoint)
             mCustomMarker.showAnimationType = MapPOIItem.ShowAnimationType.SpringFromGround
@@ -169,14 +185,15 @@ class AAMUPlanViewModel(context : Context) : ViewModel(), MapView.POIItemEventLi
     }
 
 
-    fun setMarker(title : String , contentid : Int , mapy : Double , mapx : Double){
+    fun setMarker(place : AAMUPlaceResponse){
         mapView.removeAllPOIItems()
         mapView.removeAllPolylines()
         mapView.setZoomLevel(5, true)
         val mCustomMarker :MapPOIItem =MapPOIItem()
-        mCustomMarker.itemName = title
-        mCustomMarker.tag = contentid
-        mCustomMarker.mapPoint = MapPoint.mapPointWithGeoCoord(mapy,mapx)
+        mCustomMarker.itemName = place.title
+        mCustomMarker.tag = place.contentid!!
+        mCustomMarker.userObject = place
+        mCustomMarker.mapPoint = MapPoint.mapPointWithGeoCoord(place.mapy!!,place.mapx!!)
         mCustomMarker.showAnimationType = MapPOIItem.ShowAnimationType.SpringFromGround
 
         mCustomMarker.markerType =MapPOIItem.MarkerType.CustomImage
@@ -186,7 +203,7 @@ class AAMUPlanViewModel(context : Context) : ViewModel(), MapView.POIItemEventLi
         mapView.addPOIItem(mCustomMarker)
         mapView.selectPOIItem(mCustomMarker, false)
         mapView.currentLocationTrackingMode=MapView.CurrentLocationTrackingMode.TrackingModeOff
-        mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(mapy,mapx), true)
+        mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(place.mapy!!,place.mapx!!), true)
     }
 
 
@@ -211,6 +228,7 @@ class AAMUPlanViewModel(context : Context) : ViewModel(), MapView.POIItemEventLi
 
         mCustomMarker.mapPoint = MapPoint.mapPointWithGeoCoord(planner.dto?.mapy!!,planner.dto?.mapx!!)
         mCustomMarker.itemName = planner.dto?.title
+        mCustomMarker.userObject = planner.dto
         mCustomMarker.markerType =MapPOIItem.MarkerType.CustomImage
 
         mCustomMarker.customImageResourceId = R.drawable.map_end_icon
@@ -226,9 +244,7 @@ class AAMUPlanViewModel(context : Context) : ViewModel(), MapView.POIItemEventLi
         place.value = planner
     }
 
-    override fun onPOIItemSelected(mapView: MapView?, mapPOIItem: MapPOIItem?) {
-
-    }
+    override fun onPOIItemSelected(mapView: MapView?, mapPOIItem: MapPOIItem?) {}
 
     override fun onCalloutBalloonOfPOIItemTouched(mapView: MapView?, mapPOIItem: MapPOIItem?) {}
 
@@ -237,33 +253,73 @@ class AAMUPlanViewModel(context : Context) : ViewModel(), MapView.POIItemEventLi
         mapPOIItem: MapPOIItem?,
         calloutBalloonButtonType: MapPOIItem.CalloutBalloonButtonType?
     ) {
-        TODO("Not yet implemented")
+        if(mapPOIItem?.userObject != null) {
+            val place: AAMUPlaceResponse = mapPOIItem?.userObject as AAMUPlaceResponse
+            val action =PlannerFragmentDirections.actionPlannerFragmentToPlaceDetailFragment(place)
+            viewModelnavController.navigate(action)
+        }
     }
 
-    override fun onDraggablePOIItemMoved(mapView: MapView?, mapPOIItem: MapPOIItem?, mapPoint: MapPoint?) {
-        TODO("Not yet implemented")
-    }
+    override fun onDraggablePOIItemMoved(mapView: MapView?, mapPOIItem: MapPOIItem?, mapPoint: MapPoint?) {}
 }
 
-class CustomCalloutBalloonAdapter : CalloutBalloonAdapter{
+class CustomCalloutBalloonAdapter(context: Context) : CalloutBalloonAdapter{
 
-    private lateinit var mCalloutBallon : ComposeView
+    private var mCalloutBallon : View
 
-    public fun CustomCalloutBalloonAdapter(){
-        mCalloutBallon = ComposeView(PlannerFragment().requireContext())
+    init {
+        mCalloutBallon = LayoutInflater.from(context).inflate(R.layout.custom_callout_balloon,null)
     }
 
     override fun getCalloutBalloon(mapPOIItem: MapPOIItem?): View {
-        return mCalloutBallon.apply {
-            setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
-            setContent {
+        if(mapPOIItem?.userObject != null) {
+            val place: AAMUPlaceResponse = mapPOIItem?.userObject as AAMUPlaceResponse
 
+            val imageview = mCalloutBallon.findViewById<View>(R.id.badge) as ImageView
+            val title = mCalloutBallon.findViewById(R.id.title) as TextView
+            val desc = mCalloutBallon.findViewById(R.id.desc) as TextView
+            if (place.smallimage?.isNotEmpty() == true) {
+                imageview.setImageBitmap(getBitmapFromURL(place.smallimage))
+            } else {
+                imageview.setImageResource(R.drawable.no_image)
             }
+
+            title.text = place.title
+            desc.text = place.addr
         }
+        else{
+            val imageview = mCalloutBallon.findViewById<View>(R.id.badge) as ImageView
+            val title = mCalloutBallon.findViewById(R.id.title) as TextView
+            val desc = mCalloutBallon.findViewById(R.id.desc) as TextView
+
+            imageview.setImageResource(R.drawable.aamulogoractangle)
+            title.text = "현재 위치"
+            desc.text = "현재 위치에서 여행을 시작하세요"
+        }
+
+        return mCalloutBallon
     }
 
     override fun getPressedCalloutBalloon(mapPOIItem: MapPOIItem?): View? {
         return null
+    }
+
+    fun getBitmapFromURL(src: String?): Bitmap? {
+        return try {
+            Log.e("src", src!!)
+            val url = URL(src)
+            val connection: HttpURLConnection = url.openConnection() as HttpURLConnection
+            connection.setDoInput(true)
+            connection.connect()
+            val input: InputStream = connection.getInputStream()
+            val myBitmap = BitmapFactory.decodeStream(input)
+            Log.e("Bitmap", "returned")
+            myBitmap
+        } catch (e: IOException) {
+            e.printStackTrace()
+            Log.e("Exception", e.message?:"")
+            null
+        }
     }
 
 }
