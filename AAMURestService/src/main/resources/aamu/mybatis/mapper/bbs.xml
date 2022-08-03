@@ -44,7 +44,7 @@
 	 </delete>
 	 
 	 <!-- 북마크 목록 -->
-	<select id="bbsSelectBookmark" parameterType="int" resultType="BBSDTO">
+	<select id="bbsBookmarkList" parameterType="int" resultType="BBSDTO">
 		SELECT rbbs.*,bm.* from routebbs rbbs JOIN bookmark bm ON rbbs.id=bm.id WHERE rbbs.rbn=#{rbn}
 	</select>
 	
@@ -104,12 +104,5 @@
 		SELECT rbbs.* FROM routebbs rbbs JOIN ${searchtable} i ON i.contentid = p.contentid WHERE ${searchcolumn} LIKE '%'||#{searchword}||'%'
 	</select>
 	 -->
-	 
-	 <!-- 북마크 설정 -->
-	 <select id="bbsBookmarkSelect" parameterType="Map" resultType="int">
-		SELECT count(*) from bookmark WHERE id=#{id} AND rbn=#{rbn}
-	</select>
-	
-	<!-- 북마크 해제 -->
 	 
 </mapper>
