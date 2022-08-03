@@ -40,7 +40,7 @@
 	 
 	 <!-- 글 삭제 -->
 	 <delete id="bbsDelete" parameterType="map">
-	 	DELETE FROM routebbs WHERE rbn=#{rbn}
+	 	DELETE FROM ${table} WHERE rbn=#{rbn}
 	 </delete>
 	 
 	 <!--                            리뷰                                   -->

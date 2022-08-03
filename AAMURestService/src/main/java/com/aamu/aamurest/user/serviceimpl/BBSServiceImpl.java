@@ -113,7 +113,16 @@ public class BBSServiceImpl implements BBSService{
 	//글 삭제
 	@Override
 	public int bbsDelete(Map map) {
-		return dao.bbsDelete(map);
+		int affected = 0;
+		affected = transactionTemplate.execute(tx->{
+			map.put("table", "routebbsphoto");
+			dao.bbsDelete(map);
+			map.put("table", "ratereview");
+			dao.bbsDelete(map);
+			map.put("table", "routebbs");
+			return dao.bbsDelete(map);
+		});
+		return affected;
 	}
 
 	/*---------------------------------------------------*/
