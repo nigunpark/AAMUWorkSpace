@@ -52,8 +52,13 @@ public class BBSController {
 			//dto.setPhoto(dao.bbsSelectPhotoList(rbn));
 			//모든 리뷰 가져오기
 			dto.setReviewList(bbsService.reviewList(dto.getRbn()));
-			
 		}
+		/*
+		//좋아요 셋팅
+		if(dao.commuLikeSelect(map)==1) dto.setIslike(true);
+		else dto.setIslike(false);
+		return dto;
+		*/
 		return list;
 	}
 	

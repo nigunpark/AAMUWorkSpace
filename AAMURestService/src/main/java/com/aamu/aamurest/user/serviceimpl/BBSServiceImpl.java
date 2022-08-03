@@ -186,9 +186,18 @@ public class BBSServiceImpl implements BBSService{
 		return dao.searchList(map);
 	}
 	/*
+	//글 북마크
 	@Override
 	public Boolean bookmark(Map map) {
 		return dao.bookmark(map);
+	}
+	
+	//글_북마크 여부	
+	@Override
+	public Boolean bookmark(Map map) {
+		int isLikeaffected=dao.commuLikeSelect(map);
+		if(isLikeaffected == 1) return true;
+		else return false;
 	}
 	*/
 	

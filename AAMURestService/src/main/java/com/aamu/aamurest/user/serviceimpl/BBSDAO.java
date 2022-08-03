@@ -101,7 +101,11 @@ public class BBSDAO {
 	public List<BBSDTO> searchList(Map map){
 		return template.selectList("searchList",map);
 	}
-
+	/*
+	public Boolean bookmark(Map map){
+		return template.bookmark("bookmark",map);
+	}
+	*/
 
 }
 

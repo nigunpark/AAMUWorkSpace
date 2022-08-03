@@ -47,10 +47,10 @@ public interface BBSService {
 	//검색 결과
 	List<BBSDTO> searchList(Map map);
 	
-	//북마크 설정
+	//북마크 ON
 	//Boolean bookmark(Map map);
 	
-	//북마크 해제
+	//북마크 OFF
 	
 	
 }
