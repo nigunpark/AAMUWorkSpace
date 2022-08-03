@@ -699,4 +699,9 @@ public class MainServiceImpl implements MainService{
 		list1.retainAll(list2);
 		return list1.size();
 	}
+	@Override
+	public AttractionDTO selectPlace(Map map, HttpServletRequest req) {
+		
+		return changeOneAttr(dao.selectPlace(map), req);
+	}
 }
