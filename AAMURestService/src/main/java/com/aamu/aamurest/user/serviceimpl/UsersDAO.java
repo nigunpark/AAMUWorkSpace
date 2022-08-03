@@ -47,7 +47,7 @@ public class UsersDAO {
 
 	public int insertTheme(Map map) {
 		
-		return template.insert("insertTheme", map)
+		return template.insert("insertUserTheme", map);
 	}
 
 }

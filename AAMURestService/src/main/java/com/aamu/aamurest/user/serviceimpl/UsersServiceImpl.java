@@ -25,8 +25,10 @@ public class UsersServiceImpl implements UsersService{
 			dao.joinUser(map);
 			for(Object theme :(List)map.get("theme")) {
 				String themeid = UserUtil.changeTheme(theme.toString());
+				System.out.println(themeid);
 				map.put("themeid", themeid);
 				dao.insertTheme(map);
+			
 			}
 			return dao.insertAuth(map);
 		});
