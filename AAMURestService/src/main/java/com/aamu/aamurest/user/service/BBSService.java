@@ -41,23 +41,16 @@ public interface BBSService {
 	//리뷰 삭제
 	int reviewDelete(Map map);
 	
+	//평점 업데이트
 	int updateRate(Map map);
 	
-	/*
-	//평균 평점 반영
-	public static int updateRateAvg(ReviewDTO dto) {
-		return 0;
-	}
+	//검색 결과
+	List<BBSDTO> searchList(Map map);
 	
-	public static Double getRateAvg(int rbn) {
-		return null;
-	}
-
-	double setRate(int rbn);
-	*/
-
-
-
+	//북마크 설정
+	//Boolean bookmark(Map map);
 	
-
+	//북마크 해제
+	
+	
 }

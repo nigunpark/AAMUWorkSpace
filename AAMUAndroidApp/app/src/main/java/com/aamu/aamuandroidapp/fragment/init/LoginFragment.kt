@@ -3,6 +3,7 @@ package com.aamu.aamuandroidapp.fragment.init
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
+import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -19,10 +20,14 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.aamu.aamuandroidapp.R
 import com.aamu.aamuandroidapp.components.login.LoginScreen
+import com.aamu.aamuandroidapp.components.login.LoginVideo
 import com.aamu.aamuandroidapp.components.login.LoginViewModel
 import com.aamu.aamuandroidapp.components.login.LoginViewModelFactory
 import com.aamu.aamuandroidapp.databinding.FragmentLoginBinding
 import com.aamu.aamuandroidapp.util.setContextapp
+import com.aamu.aamuandroidapp.util.setStatusBarOrigin
+import com.aamu.aamuandroidapp.util.setStatusBarTransparent
+import com.google.common.reflect.Reflection
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -60,6 +65,16 @@ class LoginFragment : Fragment() {
 
     }
 
+    override fun onResume() {
+        super.onResume()
+        requireActivity().setStatusBarTransparent()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        requireActivity().setStatusBarOrigin()
+    }
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         requireActivity().onBackPressedDispatcher.addCallback(this, callback)
@@ -78,6 +93,13 @@ class LoginFragment : Fragment() {
         }
 
     }
+
+    private fun getVideoUri(): Uri {
+        val rawId = resources.getIdentifier("travel", "raw", requireActivity().packageName)
+        val videoUri = "android.resource://${requireActivity().packageName}/$rawId"
+        return Uri.parse(videoUri)
+    }
+
     @SuppressLint("UnusedCrossfadeTargetStateParameter")
     @Composable
     fun LoginOnboarding() {
@@ -98,8 +120,15 @@ class LoginFragment : Fragment() {
             }
         }
         else {
-            LoginScreen(loginfail = loginfail){
+//            LoginScreen(loginfail = loginfail){
+//                coroutineScope.launch {
+//                    delay(2000)
+//                    loginfail = true
+//                }
+//            }
+            LoginVideo(videoUri = getVideoUri(), loginfail = loginfail) {
                 coroutineScope.launch {
+                    loginfail = false
                     delay(2000)
                     loginfail = true
                 }

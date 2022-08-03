@@ -5,10 +5,14 @@ import { useNavigate } from 'react-router-dom';
 
 const Profile = ({val}) =>  {
   let [followw, setfolloww] = useState(false);
-  let [follBack, setfollBack] = useState(false);
+  
   let [userPro, setuserPro] = useState(false);
+  let [photo, setphoto] = useState('');
+  let [photo1, setphoto1] = useState('');
+  let [photo2, setphoto2] = useState('');
   let navigater = useNavigate();
-
+ 
+  let [isFollower, setisFollower] = useState();
   function followfolliwing() {
     //유효성 검사를 통과하고 게시버튼 클릭시 발생하는 함수
 
@@ -17,8 +21,8 @@ const Profile = ({val}) =>  {
       .post(
         "/aamurest/gram/follower",
         {
-          follower: sessionStorage.getItem('username'),
-          id:val.id
+          follower: val.id,
+          id:  sessionStorage.getItem("username"),
         },
         {
           headers: {
@@ -28,13 +32,14 @@ const Profile = ({val}) =>  {
       )
       .then((resp) => {
         console.log(resp.data);
-        setfollBack(resp.data);
+        setisFollower(resp.data);
+        userprofile()
       })
       .catch((error) => {
         console.log(error);
       });
   }
-  
+
   function userprofile() {
     let token = sessionStorage.getItem("token");
     axios
@@ -43,15 +48,18 @@ const Profile = ({val}) =>  {
           Authorization: `Bearer ${token}`,
         },
         params: {
-          id:val.id,
+          id: sessionStorage.getItem("username"),
+          follower:val.id,
         },
       })
       .then((resp) => {
-        console.log(resp.data);
+        setisFollower(resp.data[0].isFollower);
         setuserPro(resp.data);
         val.followercount=resp.data[0].followercount;
         val.followingcount=resp.data[0].followingcount;
-        val.photo=resp.data[0].photo[0];
+        setphoto(resp.data[0].photo[0]);
+        setphoto1(resp.data[1].photo[0]);
+        setphoto2(resp.data[2].photo[0]);
       })
       .catch((error) => {
         console.log(error);
@@ -92,22 +100,37 @@ const Profile = ({val}) =>  {
                   </div>
                   <div className='rowpic'>
                     <div>
-                      <img className='profilePic' src={val.photo} alt="스토리 프로필 사진" />
+                      <img className='profilePic' src={photo} alt="스토리 프로필 사진" 
+                      onError={(e) => {
+                        e.stopPropagation();
+                        e.target.src = "/img/image.jpg";
+                      }}/>
                     </div>
                     <div>
-                      <img className='profilePic' src="img/b.jpg" alt="스토리 프로필 사진" />
+                      <img className='profilePic' src={photo1} alt="스토리 프로필 사진" 
+                      onError={(e) => {
+                        e.stopPropagation();
+                        e.target.src =  "/img/image.jpg";
+                      }}/>
                     </div>
                     <div>
-                      <img className='profilePic' src="img/b.jpg" alt="스토리 프로필 사진" />
+                      <img className='profilePic' src={photo2} alt="스토리 프로필 사진" 
+                      onError={(e) => {
+                        e.stopPropagation();
+                        e.target.src =  "/img/image.jpg";
+                      }}/>
                     </div>
                   </div>
                   <div className='rowbutton'>
                     <button className='message'>메세지 보내기</button>
-                    <button className='following' onClick={()=>{followfolliwing();setfolloww(!followw)}}>{
+                    <button className='following'
+                     onClick={(e)=>{ 
+                       e.stopPropagation();
+                       followfolliwing();setfolloww(!followw)}}>{
                       val.id===sessionStorage.getItem('username') 
                       ? 
                       (followw ? navigater("/myPage") : 'Mypage')
-                      : (follBack ? '팔로잉' : '팔로우')
+                      : (isFollower ? '팔로잉' : '팔로우')
                     }</button>
                   </div>
                 </div>

@@ -413,13 +413,13 @@ public class CommuController {
 	}
 	
 	/////////////////////////////////////////////////////////////날씨 크롤링
+	
+	/*
 	@GetMapping("/weather")
 	public Map weather(@RequestParam Map map) {
-		String uri="http://192.168.0.7:5020/weather";
-		MultiValueMap<String,String> requestBody = new LinkedMultiValueMap<>();
+		String uri="http://192.168.0.7:5020/weather?";
 		HttpHeaders header = new HttpHeaders();
 		header.add("Content-Type", "application/json");
-		requestBody.add("searchWord", map.get("searchWord").toString());
 		HttpEntity httpEntity = new HttpEntity<>(requestBody,header);
 		
 		ResponseEntity<Map> responseEntity =
@@ -430,7 +430,7 @@ public class CommuController {
 		
 		
 		return returnMap;
-	}
+	}*/
 	
 
 }

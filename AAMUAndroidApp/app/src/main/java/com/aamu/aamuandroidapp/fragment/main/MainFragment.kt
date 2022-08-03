@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.fragment.app.FragmentTransaction
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.aamu.aamuandroidapp.R
@@ -43,7 +44,7 @@ class MainFragment : Fragment() {
         binding.bottomNav.apply {
             add(MeowBottomNavigation.Model(1, R.drawable.ic_home))
             add(MeowBottomNavigation.Model(2, R.drawable.ic_explore))
-            add(MeowBottomNavigation.Model(3, R.drawable.ic_message))
+            add(MeowBottomNavigation.Model(3, R.drawable.ic_instagram))
             add(MeowBottomNavigation.Model(4, R.drawable.ic_account))
             show(1)
         }
@@ -98,6 +99,7 @@ class MainFragment : Fragment() {
 
     private fun replace(fragmet: Fragment) {
         requireActivity().supportFragmentManager.beginTransaction()
+            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
             .replace(binding.navMainFrame.id, fragmet).commit()
     }
 }

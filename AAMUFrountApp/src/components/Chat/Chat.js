@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import "./Chat.css";
 import SockJS from "sockjs-client";
 import * as StompJs from "@stomp/stompjs";
@@ -156,10 +156,24 @@ function sendChat(inputRef, reduxState) {
   });
   // setChats(chatArr);
 }
+const swing_instaChat = keyframes`
+0% {
+  transform: rotateX(100deg);
+  transform-origin: bottom;
+  opacity: 0;
+}
+100% {
+  transform: rotateX(0);
+  transform-origin: bottom;
+  opacity: 1;
+}
+`;
+
 const Container = styled.div`
   position: absolute;
   z-index: 999;
   top: 410px;
+  animation: ${swing_instaChat} 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
 `;
 const InnnerContainer = styled.div`
   position: relative;
