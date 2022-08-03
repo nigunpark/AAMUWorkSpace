@@ -7,7 +7,13 @@ import MyProfileBox from "./MyPageBox/MyProfileBox";
 import MyInstaBox from "./MyPageBox/MyInstaBox";
 import MyMessageBar from "./MyMessageBar/MyMessageBar";
 import styled from "styled-components";
-import { faImage, faStar } from "@fortawesome/free-regular-svg-icons";
+import {
+  faBookmark,
+  faImage,
+  faMessage,
+  faStar,
+  faThumbsUp,
+} from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import CommentSearch from "../../components/Insta/ModalGroup/Comment/CommentSearch";
@@ -19,7 +25,6 @@ const MyPage = () => {
   let two = useRef();
   let three = useRef();
   let setting = useRef();
-
   let homeBox = useRef();
 
   // /aamurest/planner/selectList
@@ -76,7 +81,7 @@ const MyPage = () => {
         },
       })
       .then((resp) => {
-        // console.log("인스타 내 글 가져오기", resp.data);
+        console.log("인스타 내 글 가져오기", resp.data);
         setMyInstar(resp.data);
       })
       .catch((error) => {
@@ -87,13 +92,13 @@ const MyPage = () => {
   useEffect(() => {
     selectList();
     searchBar();
-  }, []);
+  }, [clickTab]);
 
   useEffect(() => {
     if (clickTab === 0) {
       home.current.classList.add("active");
       two.current.classList.remove("active");
-      // three.current.classList.remove("active");
+      three.current.classList.remove("active");
       setting.current.classList.remove("active");
 
       homeBox.current.classList.add("jsListView");
@@ -101,7 +106,7 @@ const MyPage = () => {
     } else if (clickTab === 1) {
       home.current.classList.remove("active");
       two.current.classList.add("active");
-      // three.current.classList.remove("active");
+      three.current.classList.remove("active");
       setting.current.classList.remove("active");
 
       homeBox.current.classList.remove("jsListView");
@@ -109,7 +114,7 @@ const MyPage = () => {
     } else if (clickTab === 2) {
       home.current.classList.remove("active");
       two.current.classList.remove("active");
-      // three.current.classList.add("active");
+      three.current.classList.add("active");
       setting.current.classList.remove("active");
 
       homeBox.current.classList.remove("jsListView");
@@ -117,7 +122,7 @@ const MyPage = () => {
     } else if (clickTab === 3) {
       home.current.classList.remove("active");
       two.current.classList.remove("active");
-      // three.current.classList.remove("active");
+      three.current.classList.remove("active");
       setting.current.classList.add("active");
 
       homeBox.current.classList.remove("jsListView");
@@ -137,7 +142,8 @@ const MyPage = () => {
           <button
             ref={home}
             className="app-sidebar-link "
-            onClick={() => {
+            onClick={(e) => {
+              e.stopPropagation();
               setClickTab(0);
             }}
           >
@@ -161,7 +167,8 @@ const MyPage = () => {
           <button
             ref={two}
             className="app-sidebar-link"
-            onClick={() => {
+            onClick={(e) => {
+              e.stopPropagation();
               setClickTab(1);
             }}
           >
@@ -192,9 +199,24 @@ const MyPage = () => {
           </button> */}
 
           <button
+            ref={three}
+            className="app-sidebar-link"
+            onClick={(e) => {
+              e.stopPropagation();
+              setClickTab(2);
+            }}
+          >
+            <FontAwesomeIcon
+              icon={faBookmark}
+              style={{ fontSize: "23px" }}
+              className="detail__plan-bookMark"
+            />
+          </button>
+          <button
             ref={setting}
             className="app-sidebar-link"
-            onClick={() => {
+            onClick={(e) => {
+              e.stopPropagation();
               setClickTab(3);
             }}
           >
@@ -252,7 +274,7 @@ const MyPage = () => {
 
         <div className="messages-section">
           <div className="projects-section-header">
-            <p>알림</p>
+            <p>공지사항</p>
           </div>
           <div className="messages">
             <MyMessageBar />
@@ -266,9 +288,9 @@ const MyPage = () => {
 function Title({ clickTab }) {
   //타이틀
   if (clickTab === 0) {
-    return <div className="projects-title">MyPage</div>;
+    return <div className="projects-title">이런여행 어때 게시판 정보</div>;
   } else if (clickTab === 1) {
-    return <div className="projects-title">Insta</div>;
+    return <div className="projects-title">이런곳은 어때 게시판 정보</div>;
   } else if (clickTab === 2) {
     return <div className="projects-title">즐겨찾기</div>;
   } else if (clickTab === 3) {
@@ -313,7 +335,7 @@ function TabContent({
         },
       })
       .then((resp) => {
-        // console.log("여긴가요:", resp.data);
+        console.log("여긴가요:", resp.data);
         setcomments(resp.data);
       })
       .catch((error) => {
@@ -353,15 +375,33 @@ function TabContent({
             {myInstar.map((val, idx) => {
               return (
                 <>
-                  <div
-                    className="instarBox"
-                    onClick={() => {
-                      setModalOpen(true);
-                      setMyLno(val.lno);
-                      setList(val);
-                    }}
-                  >
-                    <img className="instaImg" src={val.photo[0]} />
+                  <div className="instarBox__container">
+                    <div
+                      className="instarBox"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setModalOpen(true);
+                        setMyLno(val.lno);
+                        setList(val);
+                      }}
+                    >
+                      <img className="instaImg" src={val.photo[0]} />
+                      <div>
+                        <div className="instaTitle__container">
+                          <input type="text" value={val.ctitle} className="instaTitle" />
+                        </div>
+                        <div className="insta__info">
+                          <div>
+                            <FontAwesomeIcon icon={faMessage} className="insta__info-icon" />{" "}
+                            <span className="insta__info-content">{val.rcount}</span>
+                          </div>
+                          <div>
+                            <FontAwesomeIcon icon={faThumbsUp} className="insta__info-icon" />
+                            <span className="insta__info-content">{val.likecount}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </>
               );
@@ -424,9 +464,14 @@ function TabContent({
 }
 
 function TabTopLine({ clickTab, planList, uploadCount, myInstar }) {
+  const [totalLike, setTotalLike] = useState(0);
   let count = 0;
   // console.log("uploadCount :", uploadCount[1] == undefined);
-
+  useEffect(() => {
+    myInstar.map((val) => {
+      return setTotalLike((curr) => curr + parseInt(val.likecount));
+    });
+  }, [clickTab]);
   if (planList.length != 0) {
     if (uploadCount[1] != undefined) count = uploadCount[1].length;
   }
@@ -453,6 +498,10 @@ function TabTopLine({ clickTab, planList, uploadCount, myInstar }) {
           <span className="status-number">{myInstar.length}</span>
           <span className="status-type">Total</span>
         </div>
+        {/* <div className="item-status">
+          <span className="status-number">{totalLike}</span>
+          <span className="status-type">Like</span>
+        </div> */}
       </div>
     );
   } else if (clickTab === 2) {
@@ -509,7 +558,8 @@ function MyBoxList({
         <div className="myBox-List-overlay">
           <div
             className="myBox-List-Plan"
-            onClick={() => {
+            onClick={(e) => {
+              e.stopPropagation();
               commentModal1(setcomments, val.lno);
               setList(val);
               setcommentModal(true);
@@ -520,7 +570,8 @@ function MyBoxList({
           </div>
           <div
             className="myBox-List-Post"
-            onClick={() => {
+            onClick={(e) => {
+              e.stopPropagation();
               seteditModal(true);
               setModalOpen(false);
             }}
@@ -529,7 +580,8 @@ function MyBoxList({
           </div>
           <div
             className="myBox-List-Delete"
-            onClick={() => {
+            onClick={(e) => {
+              e.stopPropagation();
               deleteOne();
               setModalOpen(false);
             }}
