@@ -66,32 +66,37 @@ public class BBSServiceImpl implements BBSService{
 	//글 북마크하기
 	@Override
 	public Boolean bbsBookmark(Map map) {
-	int bbsSelectBookmarkAffected=dao.bbsSBookmark(map); //1이면 좋아요누른id가 존재하는거 0이면 처음누른거
-	int bbsMookmarkInsertAffected, bbsBookmarkUpdateAffected = 0, bbsBookmarkDeleteAffected=0;
-	//Map resultMap = new HashMap();
-	//글 북마크_insert(bookmark 테이블)
-	if(bbsSelectBookmarkAffected==0) {//0이면 해당id로 처음 누른거니까 likeboard-insert community-update 둘다 진행
+	int bbsSelectBookmarkAffected=dao.bbsSelectBookmark(map);
+	int bbsMookmarkInsertAffected, bbsBookmarkDeleteAffected=0;
+	Map resultMap = new HashMap();
+
+	if(bbsSelectBookmarkAffected==0) {
 		//bookmark테이블에 insert
 		bbsMookmarkInsertAffected=dao.bbsBookmarkInsert(map);
-		if(bbsMookmarkInsertAffected==1 && bbsBookmarkUpdateAffected==1) return true;
+		if(bbsMookmarkInsertAffected==1) return true;
 		else return null;
 	}
-	//글 북마크 취소_delete(bookmark테이블),
+	//글 북마크 취소_delete(bookmark테이블)
 	else {//이미 bookmark테이블에 있는데 또 누를 경우 == 북마크 취소
 		bbsBookmarkDeleteAffected=dao.bbsBookmarkDelete(map);
-		if(bbsBookmarkDeleteAffected==1 && bbsBookmarkUpdateAffected==1) return false;
+		if(bbsBookmarkDeleteAffected==1) return false;
 		else return null;
 		}
 	}
 	
 	//글 북마크 목록
-	 
-	
-	//글 북마크_하나 선택	
 	@Override
-	public int bbsSelectBookmark(Map map) {
-		return dao.bbsSBookmark(map);
+	public List<BBSDTO> bbsBookmarkList() {
+		List<BBSDTO> bookmarkList = dao.bbsBookmarkList();
+		List<BBSDTO> returnList = new Vector<>();
+		for(BBSDTO dto:bookmarkList) {
+			int rbn = dto.getRbn();
+			dto.setReviewList(dao.reviewSelectList(rbn));
+			returnList.add(dto);
+		}
+		return returnList;
 	}
+
 
 	//글 등록
 	@Override
@@ -158,8 +163,8 @@ public class BBSServiceImpl implements BBSService{
 	
 	//글 검색
 	@Override
-	public List<BBSDTO> searchList(Map map) {
-		return dao.searchList(map);
+	public List<BBSDTO> searchList() {
+		return dao.searchList();
 	}
 
 	/*---------------------------------------------------*/
@@ -203,10 +208,6 @@ public class BBSServiceImpl implements BBSService{
 		return dao.updateRate(map);
 	}
 
-	@Override
-	public List bbsBookmarkList(Map map) {
-		return dao.bbsBookmarkList(map);
-	}
 
 	/*@Override
 	public String searchList(String message) {
