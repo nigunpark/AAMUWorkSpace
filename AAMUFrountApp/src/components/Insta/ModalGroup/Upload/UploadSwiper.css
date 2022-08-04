@@ -48,6 +48,7 @@ align-items: center; */
   justify-content: center;
   align-items: center;
   position: relative;
+  border-radius: 5px;
 }
 .swiperContainer {
   position: absolute;
@@ -64,7 +65,7 @@ align-items: center; */
   width: 100%;
   position: absolute;
   height: 100%;
-  border-radius: 7px 0 0 7px;
+  border-radius: 7px;
 }
 .swiperContainer1 {
   position: absolute;
@@ -85,7 +86,8 @@ align-items: center; */
   width: 100%;
   position: absolute;
   height: 100%;
-  border-radius: 0 0 0 7px;
+  border-radius: 5px;
+  padding: 5px;
 }
 
 .swiper__item {
