@@ -17,6 +17,7 @@ function Main({
 }) {
   const [showChat, setShowChat] = useState(false);
   const [val, setval] = useState([]);
+  
   function feedList() {
     //백이랑 인스타 리스드를 뿌려주기 위한 axios
     let token = sessionStorage.getItem("token");
@@ -60,7 +61,7 @@ function Main({
           {loading && <Spinner />}
           {list.map((val, i) => {
             return (
-              <FeedSetting
+              <FeedSetting key={i}
                 val={val}
                 setlist={setlist}
                 forReRender={forReRender}
