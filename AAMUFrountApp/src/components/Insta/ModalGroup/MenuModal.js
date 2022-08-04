@@ -14,7 +14,7 @@ const Modal = ({val,setModalShow,seteditModal , setlist,setcommentModal}) => {
     
 
 
-  // window.addEventListener("click", menuModalRef);
+  // 
 
  
     
@@ -64,6 +64,7 @@ const Modal = ({val,setModalShow,seteditModal , setlist,setcommentModal}) => {
               type="button"
               className="delete"
               onClick={(e) => {
+                console.log('삭제');
                 e.stopPropagation();
                 setModalShow(false);
                 deleteOne();

@@ -64,7 +64,7 @@ function Comment({
       .catch((error) => {
         console.log(error);
       });
-      replyRef.current.value = "";
+    replyRef.current.value = "";
   }
 
   useEffect(() => {
@@ -120,14 +120,15 @@ function Comment({
         const replyOne = resp.data.reply;
         console.log("resp.data", resp.data.reply);
         const copyComments = [...replyOne];
-        setcomments({...comments,copyComments});
+        setcomments({ ...comments }, copyComments);
         commentModal(setcomments);
+        feedList();
       })
       .catch((error) => {
         console.log(error);
       });
 
-      replyRef.current.value = ""; //사용자 댓글창을 빈 댓글 창으로 초기화
+    replyRef.current.value = ""; //사용자 댓글창을 빈 댓글 창으로 초기화
   }
 
   // const handleonChange = (e) => {
@@ -158,15 +159,35 @@ function Comment({
           });
         });
         // commentModal(setcomments);
-        // feedList();
+        feedList();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+  function feedList() {
+    //백이랑 인스타 리스드를 뿌려주기 위한 axios
+    let token = sessionStorage.getItem("token");
+    axios
+      .get("/aamurest/gram/selectList", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        params: {
+          id: sessionStorage.getItem("username"),
+        },
+      })
+      .then((resp) => {
+        console.log(resp.data);
+        setlist(resp.data);
+        setForReRender(!forReRender)
       })
       .catch((error) => {
         console.log(error);
       });
   }
 
-  // let CommentList = ({ val }) => {
-  // };
+  function handleFocus() {}
 
   return (
     <Container1>
@@ -229,7 +250,7 @@ function Comment({
                 ></i>
                 {modalShow && (
                   <MenuModal
-                  setcommentModal={setcommentModal}
+                    setcommentModal={setcommentModal}
                     setlist={setlist}
                     setModalShow={setModalShow}
                     seteditModal={seteditModal}
@@ -278,10 +299,16 @@ function Comment({
                           >
                             {val.id}
                           </strong>
-                          <span style={{ fontFamily: "normal" }}>
+                          <span style={{ fontFamily: "normal" ,whiteSpace: 'pre-wrap'}}>
                             {val.content}
                           </span>
+                         
                         </p>
+                        {val.tname === null
+                            ? ""
+                            : val.tname.map((tname, i) => {
+                                return <span key={i}>{tname}</span>;
+                              })}
                       </div>
                     </div>
                     <div
@@ -405,7 +432,7 @@ function Comment({
                 <h3>{dayjs(new Date(val.postdate)).format("YYYY/MM/DD")}</h3>
               </div>
             </div>
-            <div className="comment">
+            <div className="commentss">
               <input
                 type="text"
                 ref={replyRef}
@@ -419,19 +446,23 @@ function Comment({
                   e.target.value.length > 0 //사용자가 키를 눌렀다 떼었을때 길이가 0을 넘는 값인지 유효성 검사 결과 값을 담는다
                     ? setisValid(true)
                     : setisValid(false);
+                  // console.log(replyRef.current.value.length>0?'true':'false');
                 }}
                 // value={comment}
               />
 
               <button
-                // className={
-                //   //클래스명을 comment창의 글자 길에 따라서 다르게 주면서 버튼색에 css디자인을 줄 수 있음
-                //   comment.length > 0
-                //     ? "submitCommentActive"
-                //     : "submitCommentInactive"
-                // }
+                className={
+                  //클래스명을 comment창의 글자 길에 따라서 다르게 주면서 버튼색에 css디자인을 줄 수 있음
+                  replyRef.current.value === undefined
+                    ? null
+                    : replyRef.current.value.length > 0
+                    ? "submitCommentActive"
+                    : "submitCommentInactive"
+                }
                 onClick={() => {
                   post(replyRef);
+                  // handleFocus();
                   // setReply(!reply);
                 }} //클릭하면 위서 선언한 post함수를 실행하여 feedComments에 담겨서 re-rendering 된 댓글창을 확인할 수 있다
                 disabled={isValid ? false : true} //사용자가 아무것도 입력하지 않았을 경우 게시를 할 수 없도록

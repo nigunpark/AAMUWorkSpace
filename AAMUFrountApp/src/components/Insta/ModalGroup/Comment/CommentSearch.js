@@ -255,8 +255,19 @@ function CommentSearch({ val, comment, setcommentModal, setcomments }) {
                           <span> {val.ctitle}</span>
                         </p>
                         <p className="userName">
-                          <strong style={{ fontSize: "13px", marginRight: "5px" }}>{val.id}</strong>
-                          <span style={{ fontFamily: "normal" }}>{val.content}</span>
+                          <strong
+                            style={{ fontSize: "13px", marginRight: "5px" }}
+                          >
+                            {val.id}
+                          </strong>
+                          <span style={{ fontFamily: "normal" }}>
+                            {val.content}
+                          </span>
+                          {val.tname === null
+                            ? ""
+                            : val.tname.map((tname, i) => {
+                                return <span key={i}>{tname}</span>;
+                              })}
                         </p>
                       </div>
                     </div>
@@ -277,7 +288,11 @@ function CommentSearch({ val, comment, setcommentModal, setcomments }) {
                   //feedComments에 담겨있을 댓글 값을 CommentList 컴포넌트에 담아서 가져온다
                   return (
                     <div className="recommend-contents">
-                      <img className="likeimg" src={val.userprofile} alt="추사" />
+                      <img
+                        className="likeimg"
+                        src={val.userprofile}
+                        alt="추사"
+                      />
                       <div
                         style={{
                           width: "100%",
@@ -289,7 +304,9 @@ function CommentSearch({ val, comment, setcommentModal, setcomments }) {
                       >
                         <div style={{ display: "flex", flexDirection: "row" }}>
                           <p className="userName">
-                            <strong>{sessionStorage.getItem("username")}</strong>
+                            <strong>
+                              {sessionStorage.getItem("username")}
+                            </strong>
                           </p>
                           <p className="userName">{val.reply}</p>
                         </div>
@@ -317,8 +334,16 @@ function CommentSearch({ val, comment, setcommentModal, setcomments }) {
                             }}
                           ></i>
                         </div>
-                        <div style={{ fontSize: "10px", color: "#a5a5a5", marginTop: "8px" }}>
-                          <p className="postDate">{dayjs(val.postdate).format("YYYY/MM/DD")}</p>
+                        <div
+                          style={{
+                            fontSize: "10px",
+                            color: "#a5a5a5",
+                            marginTop: "8px",
+                          }}
+                        >
+                          <p className="postDate">
+                            {dayjs(val.postdate).format("YYYY/MM/DD")}
+                          </p>
                         </div>
                       </div>
                     </div>
@@ -336,7 +361,10 @@ function CommentSearch({ val, comment, setcommentModal, setcomments }) {
                   }}
                 >
                   {val.isLike ? (
-                    <i className="fa-solid fa-heart fa-2x" style={{ color: "red" }}></i>
+                    <i
+                      className="fa-solid fa-heart fa-2x"
+                      style={{ color: "red" }}
+                    ></i>
                   ) : (
                     <i className="fa-regular fa-heart fa-2x"></i>
                   )}
@@ -378,7 +406,11 @@ function CommentSearch({ val, comment, setcommentModal, setcomments }) {
               <button
                 className={
                   //클래스명을 comment창의 글자 길에 따라서 다르게 주면서 버튼색에 css디자인을 줄 수 있음
-                  comment.length > 0 ? "submitCommentActive" : "submitCommentInactive"
+                  replyRef.current === undefined
+                    ? null
+                    : replyRef.current.value.length > 0
+                    ? "submitCommentActive"
+                    : "submitCommentInactive"
                 }
                 onClick={() => {
                   post(replyRef);
