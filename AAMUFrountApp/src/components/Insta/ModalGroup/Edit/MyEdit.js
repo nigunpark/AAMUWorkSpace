@@ -126,25 +126,14 @@ const MyEdit = ({ setlist, val, seteditModal, searchBar }) => {
       />
       <Contents>
         <FirstLine>
-          <div
-            className="newPosting"
-            style={{ marginLeft: "45%", width: "20%" }}
-          >
+          <div className="newPosting" style={{ marginLeft: "45%", width: "20%" }}>
             <h2>수정하기</h2>
           </div>
           {/* {showNext ?  */}
           <Nextbtn
+            style={{ marginRight: "10px" }}
             onClick={() => {
-              edit(
-                val,
-                setlist,
-                setShowWrite,
-                titleRef,
-                textareaRef,
-                searchRef,
-                search,
-                searchBar
-              );
+              edit(val, setlist, setShowWrite, titleRef, textareaRef, searchRef, search, searchBar);
               seteditModal(false);
               // feedList(setlist)
             }}
@@ -153,11 +142,7 @@ const MyEdit = ({ setlist, val, seteditModal, searchBar }) => {
           </Nextbtn>
         </FirstLine>
         <Body>
-          <form
-            className="picfileframe"
-            style={{ width: "65%" }}
-            encType="multipart/form-data"
-          >
+          <form className="picfileframe" style={{ width: "65%" }} encType="multipart/form-data">
             <input
               id="input-file"
               type="file"
@@ -231,9 +216,7 @@ const MyEdit = ({ setlist, val, seteditModal, searchBar }) => {
               <MyUsername>{sessionStorage.getItem("username")}</MyUsername>
             </div>
             <div>
-              <span style={{ fontWeight: "bold", marginLeft: "10px" }}>
-                제목 :{" "}
-              </span>
+              <span style={{ fontWeight: "bold", marginLeft: "10px" }}>제목 : </span>
               <input
                 ref={titleRef}
                 type="text"
@@ -350,16 +333,7 @@ function feedList(setlist) {
     });
 }
 
-function edit(
-  val,
-  setlist,
-  setShowWrite,
-  titleRef,
-  textareaRef,
-  searchRef,
-  search,
-  searchBar
-) {
+function edit(val, setlist, setShowWrite, titleRef, textareaRef, searchRef, search, searchBar) {
   //새 게시물 업로드를 위한 axios
   let searched = search.find((val, i) => {
     return val.TITLE === searchRef.current.value;
