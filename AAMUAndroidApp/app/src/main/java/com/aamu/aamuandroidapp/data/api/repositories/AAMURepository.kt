@@ -16,6 +16,8 @@ interface AAMURepository {
     suspend fun getChatMessageList(map : Map<String,String>) : Flow<List<AAMUChatingMessageResponse>>
 
     suspend fun getGramList(id : String) : Flow<List<AAMUGarmResponse>>
+    suspend fun getGramByPlaceList(contentid : Int) : Flow<List<AAMUGarmResponse>>
 
     suspend fun getBBSList() : Flow<List<AAMUBBSResponse>>
+    suspend fun getBBSOne( rbn: Int) : Flow<AAMUBBSResponse>
 }

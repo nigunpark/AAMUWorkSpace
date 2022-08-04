@@ -16,7 +16,8 @@ data class AAMUBBSResponse(
     var planner: AAMUPlannerSelectOne? = null,
     var routeList: List<Place>? = null,
     var reviewList: List<Review>? = null,
-    var rateavg: Double? = 0.0
+    var rateavg: Double? = 0.0,
+    var bookmark: Boolean? = false
 )
 
 data class Review(

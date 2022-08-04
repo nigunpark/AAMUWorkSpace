@@ -23,9 +23,9 @@ import com.aamu.aamuandroidapp.data.api.repositories.AAMURepository
 import com.aamu.aamuandroidapp.data.api.response.AAMUPlaceResponse
 import com.aamu.aamuandroidapp.data.api.response.AAMUPlannerSelectOne
 import com.aamu.aamuandroidapp.data.api.response.Place
-import com.aamu.aamuandroidapp.fragment.main.planner.PlannerFragment
-import com.aamu.aamuandroidapp.fragment.main.planner.PlannerFragmentDirections
 import com.aamu.aamuandroidapp.util.getLatLng
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.BitmapImageViewTarget
 import kotlinx.coroutines.launch
 import net.daum.mf.map.api.*
 import java.io.IOException
@@ -44,23 +44,28 @@ class AAMUPlanViewModel(context : Context,navController : NavController) : ViewM
 
     private val aamuRepository : AAMURepository = AAMUDIGraph.createAAMURepository()
     private val context = context
-    val mapView = MapView(context)
+    lateinit var mapView : MapView
 
     val viewModelnavController = navController
 
     val recentPlaces = MutableLiveData<List<AAMUPlaceResponse>>()
+
     val errorLiveData = MutableLiveData<String>()
+
     val plannerSelectList = MutableLiveData<List<AAMUPlannerSelectOne>>()
+
     val plannerSelectOne = MutableLiveData<AAMUPlannerSelectOne>()
+    val isSelectOne = MutableLiveData<Boolean>(false)
+
     val planners = MutableLiveData<MutableList<Place>>()
     val place = MutableLiveData<Place>()
+
+    val detailPlace = MutableLiveData<AAMUPlaceResponse>()
+    val isPlaceDetail = MutableLiveData<Boolean>(false)
+
     val mapPOIItems = MutableLiveData<MapPOIItem>()
 
     init {
-        mapView.setCurrentLocationEventListener(PlanListener())
-        mapView.setCalloutBalloonAdapter(CustomCalloutBalloonAdapter(context))
-        mapView.setPOIItemEventListener(this)
-        setCurrentMarker()
         viewModelScope.launch {
             aamuRepository.getPlannerSelectList()
                 .collect{aamuListPlanner->
@@ -73,11 +78,29 @@ class AAMUPlanViewModel(context : Context,navController : NavController) : ViewM
                     }
             }
         }
-
     }
 
-    fun setPOIItem(mapPOIItem :MapPOIItem){
-        mapPOIItems.postValue(mapPOIItem)
+    fun setInitMap(){
+        mapView.setCurrentLocationEventListener(PlanListener())
+        mapView.setCalloutBalloonAdapter(CustomCalloutBalloonAdapter(context))
+        mapView.setPOIItemEventListener(this)
+        setCurrentMarker()
+    }
+
+    fun setPlanDetailCenter(place : AAMUPlaceResponse){
+        mapView.removeAllPOIItems()
+        mapView.removeAllPolylines()
+        mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(place.mapy!! - 0.05,place.mapx!!),true)
+        val mCustomMarker :MapPOIItem =MapPOIItem()
+        mCustomMarker.itemName = place.title
+        mCustomMarker.mapPoint = MapPoint.mapPointWithGeoCoord(place.mapy!!,place.mapx!!)
+        mCustomMarker.markerType =MapPOIItem.MarkerType.CustomImage
+
+        mCustomMarker.customImageResourceId = R.drawable.map_end_icon
+        mCustomMarker.setCustomImageAutoscale(false)
+
+        mapView.addPOIItem(mCustomMarker)
+        mapView.setZoomLevel(5, true)
     }
 
     fun setCurrentMarker(){
@@ -130,6 +153,7 @@ class AAMUPlanViewModel(context : Context,navController : NavController) : ViewM
     }
 
     fun getPlannerSelectOne(rbn : Int) = viewModelScope.launch {
+        isSelectOne.value = true
         aamuRepository.getPlannerSelectOne(rbn)
             .collect {selectOne ->
                 if (selectOne.rbn != null){
@@ -254,9 +278,11 @@ class AAMUPlanViewModel(context : Context,navController : NavController) : ViewM
         calloutBalloonButtonType: MapPOIItem.CalloutBalloonButtonType?
     ) {
         if(mapPOIItem?.userObject != null) {
-            val place: AAMUPlaceResponse = mapPOIItem?.userObject as AAMUPlaceResponse
-            val action =PlannerFragmentDirections.actionPlannerFragmentToPlaceDetailFragment(place)
-            viewModelnavController.navigate(action)
+            val places: AAMUPlaceResponse = mapPOIItem?.userObject as AAMUPlaceResponse
+            detailPlace.value = places
+            isPlaceDetail.value = true
+//            val action =PlannerFragmentDirections.actionPlannerFragmentToPlaceDetailFragment(place)
+//            viewModelnavController.navigate(action)
         }
     }
 
@@ -279,7 +305,12 @@ class CustomCalloutBalloonAdapter(context: Context) : CalloutBalloonAdapter{
             val title = mCalloutBallon.findViewById(R.id.title) as TextView
             val desc = mCalloutBallon.findViewById(R.id.desc) as TextView
             if (place.smallimage?.isNotEmpty() == true) {
-                imageview.setImageBitmap(getBitmapFromURL(place.smallimage))
+                Glide.with(mCalloutBallon)
+                    .asBitmap()
+                    .load(place.smallimage)
+                    .centerCrop()
+                    .into(BitmapImageViewTarget(imageview))
+
             } else {
                 imageview.setImageResource(R.drawable.no_image)
             }

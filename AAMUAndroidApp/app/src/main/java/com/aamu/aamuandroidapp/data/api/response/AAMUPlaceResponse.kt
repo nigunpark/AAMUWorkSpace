@@ -1,5 +1,7 @@
 package com.aamu.aamuandroidapp.data.api.response
 
+import java.io.Serializable
+
 data class AAMUPlaceResponse(
     var areacode : Int? = null,
     var sigungucode : Int? = null,
@@ -28,7 +30,7 @@ data class AAMUPlaceResponse(
     var table : String? = null,
     var star : Double? = null,
     var commentInfo : List<CommentInfo>? = null
-)
+) : Serializable
 
 data class CommentInfo(
     var aamuPoint : Int? = null,

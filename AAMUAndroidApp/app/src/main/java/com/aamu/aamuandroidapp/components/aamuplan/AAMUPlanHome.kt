@@ -1,6 +1,7 @@
 package com.aamu.aamuandroidapp.components.aamuplan
 
 import android.content.Context
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -12,6 +13,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Shapes
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -23,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.aamu.aamuandroidapp.components.aamuplan.PlaceDetail.PlaceDetail
 import com.aamu.aamuandroidapp.components.aamuplan.PlanDetails.PlanBottomViewPager
 import com.aamu.aamuandroidapp.components.aamuplan.PlanDetails.PlanDetails
 import com.aamu.aamuandroidapp.components.aamuplan.PlanDetails.SideContent
@@ -35,17 +38,17 @@ import net.daum.mf.map.api.MapView
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun AAMUPlanHome(navController : NavController){
+fun AAMUPlanHome(navController : NavController,mapviewModel: AAMUPlanViewModel){
     val context : Context = LocalContext.current
     val bottomSheetScaffoldState = rememberBottomSheetScaffoldState()
 
     val coroutineScope = rememberCoroutineScope()
 
-    val mapviewModel : AAMUPlanViewModel = viewModel(
-        factory = AAMUPlanViewModelFactory(LocalContext.current,navController)
-    )
     var topbarhide = remember { mutableStateOf(false) }
     var startMove = remember { mutableStateOf(false) }
+
+    val isPlaceDetail by mapviewModel.isPlaceDetail.observeAsState()
+
     Box(modifier = Modifier.fillMaxSize()){
         BottomSheetScaffold(
             sheetElevation = 0.dp,
@@ -55,7 +58,7 @@ fun AAMUPlanHome(navController : NavController){
                     Box(modifier = Modifier.fillMaxSize()) {
                         KakaoMap(mapviewModel = mapviewModel)
                     }
-                    if(!topbarhide.value) {
+                    if(!topbarhide.value && isPlaceDetail == false) {
                     ActionButton(mapviewModel,
                         Modifier
                             .statusBarsPadding()
@@ -64,14 +67,17 @@ fun AAMUPlanHome(navController : NavController){
                 }
             },
             sheetContent = {
-                PlanBottomSheet(mapviewModel,coroutineScope,topbarhide,bottomSheetScaffoldState)
+                if(isPlaceDetail==true)
+                    PlaceDetail(mapviewModel,coroutineScope,isPlaceDetail,topbarhide,startMove,bottomSheetScaffoldState)
+                else
+                    PlanBottomSheet(mapviewModel,coroutineScope,topbarhide,bottomSheetScaffoldState)
             },
             drawerGesturesEnabled = bottomSheetScaffoldState.drawerState.isOpen,
             drawerContent = {
                 Spacer(modifier = Modifier.height(WindowInsets.statusBars.asPaddingValues().calculateTopPadding()+56.dp))
                 SideContent(mapviewModel) },
             scaffoldState = bottomSheetScaffoldState,
-            sheetPeekHeight = if(topbarhide.value) 0.dp else 40.dp,
+            sheetPeekHeight = if(topbarhide.value) 0.dp else if(isPlaceDetail==true) 900.dp else 40.dp,
 
         )
         val modifierBottom = Modifier.align(Alignment.BottomCenter)
