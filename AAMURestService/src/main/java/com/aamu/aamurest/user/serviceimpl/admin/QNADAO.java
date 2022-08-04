@@ -55,6 +55,16 @@ public class QNADAO {
 		return template.delete("qnaDelete", map);
 	}
 
+	// 댓글 목록
+	public List<AnswerDTO> answerList(String qno) {
+		return template.selectList("answerList", qno);
+	}
+
+	// 댓글 수 카운트
+	public int answerSearchTotalCount(Map map) {
+		return template.selectOne("answerSearchTotalCount", map);
+	}
+
 	// 댓글 등록
 	public int answerInsert(Map map) {
 		return template.insert("answerInsert", map);
@@ -75,14 +85,9 @@ public class QNADAO {
 		return template.delete("answerDeleteByNo", map);
 	}
 
-	// 상세 보기 - 댓글 목록
-	public List<AnswerDTO> answerList(String qno) {
-		return template.selectList("answerList",qno);
-	}
-
-	// 게시물 목록 - 게시물 수 카운트
-	public int answerSearchTotalCount(Map map) {
-		return template.selectOne("answerSearchTotalCount",map);
+	// 이름 찾기
+	public String findNameByKey(Map map) {
+		return template.selectOne("answerFindNameByKey", map);
 	}
 
 }

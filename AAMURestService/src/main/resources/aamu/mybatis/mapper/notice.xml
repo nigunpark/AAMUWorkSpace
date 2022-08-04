@@ -5,7 +5,8 @@
 <mapper namespace="aamu.mybatis.mapper.notice">
 
 	<!-- 게시물 목록 -->
-	<select id="noticeSelectList" resultType="NoticeDTO" parameterType="Map">
+	<select id="noticeSelectList" resultType="NoticeDTO"
+		parameterType="Map">
 		SELECT * FROM
 		(SELECT T.*, ROWNUM R FROM (
 		SELECT n. *, name FROM

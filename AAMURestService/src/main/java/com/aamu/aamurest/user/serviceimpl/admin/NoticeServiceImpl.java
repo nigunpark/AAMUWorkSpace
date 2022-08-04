@@ -24,19 +24,12 @@ public class NoticeServiceImpl implements NoticeService<NoticeDTO> {
 	@Override
 	public List<NoticeDTO> noticeSelectList(Map map) {
 		List<NoticeDTO> lists = dao.noticeSelectList(map);
-
-		System.out.println("이런: " + lists);
-
-		// isLike셋팅
 		List<NoticeDTO> returnLists = new Vector();
 		for (int i = 0; i < lists.size(); i++) {
 			NoticeDTO dto = lists.get(i);
 			map.put("nno", dto.getNno());
 			returnLists.add(dto);
 		}
-
-		System.out.println("아악: " + returnLists);
-
 		return returnLists;
 	}
 
