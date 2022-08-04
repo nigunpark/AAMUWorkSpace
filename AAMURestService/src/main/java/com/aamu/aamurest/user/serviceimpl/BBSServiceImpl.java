@@ -66,18 +66,18 @@ public class BBSServiceImpl implements BBSService{
 	//글 북마크하기
 	@Override
 	public Boolean bbsBookmark(Map map) {
+		
 	int bbsSelectBookmarkAffected=dao.bbsSelectBookmark(map);
 	int bbsMookmarkInsertAffected, bbsBookmarkDeleteAffected=0;
 	Map resultMap = new HashMap();
 
 	if(bbsSelectBookmarkAffected==0) {
-		//bookmark테이블에 insert
+		System.out.println("여긴옴?");
 		bbsMookmarkInsertAffected=dao.bbsBookmarkInsert(map);
 		if(bbsMookmarkInsertAffected==1) return true;
 		else return null;
 	}
-	//글 북마크 취소_delete(bookmark테이블)
-	else {//이미 bookmark테이블에 있는데 또 누를 경우 == 북마크 취소
+	else { //다시 누를 경우 == 북마크 취소
 		bbsBookmarkDeleteAffected=dao.bbsBookmarkDelete(map);
 		if(bbsBookmarkDeleteAffected==1) return false;
 		else return null;
@@ -86,10 +86,11 @@ public class BBSServiceImpl implements BBSService{
 	
 	//글 북마크 목록
 	@Override
-	public List<BBSDTO> bbsBookmarkList() {
-		List<BBSDTO> bookmarkList = dao.bbsBookmarkList();
+	public List<BBSDTO> bbsBookmarkList(Map map) {
+		List<BBSDTO> bookmarkList = dao.bbsBookmarkList(map);
 		List<BBSDTO> returnList = new Vector<>();
 		for(BBSDTO dto:bookmarkList) {
+			
 			int rbn = dto.getRbn();
 			dto.setReviewList(dao.reviewSelectList(rbn));
 			returnList.add(dto);
@@ -155,16 +156,29 @@ public class BBSServiceImpl implements BBSService{
 			dao.bbsDelete(map);
 			map.put("table", "ratereview");
 			dao.bbsDelete(map);
+			map.put("table", "bookmark");
+			dao.bbsDelete(map);
 			map.put("table", "routebbs");
+			
 			return dao.bbsDelete(map);
 		});
 		return affected;
-	}
+	}	
 	
-	//글 검색
+	//글 검색 목록
 	@Override
-	public List<BBSDTO> searchList() {
-		return dao.searchList();
+	public List<String> bbsSearchList(Map map) {
+		if(map.get("searchColumn").equals("id")) {
+			//map.put("searchWord", map.get("searchWord").toString()); 어퍼케이스 하려고 넣었나?
+			map.put("table", "users");
+			List<String> list=dao.bbsSearchList(map);
+			return list;
+		}
+		else if(map.get("searchColumn").equals("title")){
+			map.put("table", "community");
+			return dao.bbsSearchList(map);
+		}
+		return dao.bbsSearchList(map);
 	}
 
 	/*---------------------------------------------------*/
@@ -207,12 +221,6 @@ public class BBSServiceImpl implements BBSService{
 	public int updateRate(Map map) {
 		return dao.updateRate(map);
 	}
-
-
-	/*@Override
-	public String searchList(String message) {
-		return dao.searchList(message);
-	}*/
 
 }
 	

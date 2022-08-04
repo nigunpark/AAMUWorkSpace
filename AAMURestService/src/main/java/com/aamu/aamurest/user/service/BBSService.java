@@ -28,13 +28,10 @@ public interface BBSService {
 	Boolean bbsBookmark(Map map);
 	
 	//글 북마크 목록
-	List<BBSDTO> bbsBookmarkList();
-	
-	//글 검색
-	//String searchList(String message);
+	List<BBSDTO> bbsBookmarkList(Map map);
 	
 	//글 검색 목록
-	List<BBSDTO> searchList();
+	List<String> bbsSearchList(Map map);
 
 	/*----------------------------------------------------*/
 
@@ -54,5 +51,6 @@ public interface BBSService {
 	
 	//평점 업데이트
 	int updateRate(Map map);
+
 
 }

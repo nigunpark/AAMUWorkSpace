@@ -42,7 +42,7 @@
 	
 	<!-- 글 검색용 -->
 	<select id="commuSearachList" parameterType="Map" resultType="String">
-		SELECT DISTINCT ${searchColumn} FROM ${table} WHERE ${searchColumn} LIKE #{searchWord}||'%'
+		SELECT ${searchColumn} FROM ${table} WHERE ${searchColumn} LIKE #{searchWord}||'%'
 	</select>
 	
 	<!-- 글 생성용 -->

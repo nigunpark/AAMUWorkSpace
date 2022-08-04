@@ -120,14 +120,16 @@ public class BBSController {
 	
 	//글 북마크하기
 	@GetMapping("/bbs/bookmark")
-	public Map bbsBookmark(@RequestParam Map map) {//id, rbn
+	public Map bbsBookmark(@RequestParam Map map) { //id, rbn
 		Boolean affected=bbsService.bbsBookmark(map);
+		
 		Map resultMap = new HashMap();
-		if(affected) { //true면
+		System.out.println("북마크 여부:"+map);
+		if(affected) { //true
 			resultMap.put("bookmark", true);
 			resultMap.put("rbn", map.get("rbn"));
 		}
-		else {
+		else { //false
 			resultMap.put("bookmark", false);
 			resultMap.put("rbn", map.get("rbn"));
 		}
@@ -137,8 +139,8 @@ public class BBSController {
 	//글 북마크 목록
 	@GetMapping("/bbs/bookmark/list")
 	public List<BBSDTO> bbsBookmarkList(@RequestParam Map map, HttpServletRequest req){
-		List<BBSDTO> list = bbsService.bbsBookmarkList();
-		System.out.println("list:"+list);
+		List<BBSDTO> list = bbsService.bbsBookmarkList(map);
+		System.out.println("북마크 목록:"+list);
 		for(BBSDTO dto:list) {
 			//모든 사진 가져오기
 			dto.setPhoto(FileUploadUtil.requestFilePath(bbsService.bbsSelectPhotoList(dto.getRbn()), "/resources/bbsUpload", req));
@@ -148,7 +150,16 @@ public class BBSController {
 		}
 		return list;
 	}
-
+	
+	//글 검색 목록
+	@GetMapping("/bbs/search/list")
+	public List<String> bbsSearchList(@RequestParam Map map){
+		System.out.println("검색 searchColumn:"+map.get("searchColumn"));
+		System.out.println("검색 searchWord:"+map.get("searchWord"));
+		List<String> list=bbsService.bbsSearchList(map);
+		return list;
+	}
+	
 	//리뷰 등록 <성공>
 	//평균 평점 반영 <성공>
 	@PostMapping("/review/edit")
@@ -198,14 +209,6 @@ public class BBSController {
 			resultMap.put("result", "deleteNotSuccess");
 		return resultMap;
 		
-	}
-	
-	//검색 결과 목록
-	@GetMapping("bbs/searchList")
-	@ResponseBody
-	public List<BBSDTO> searchList(HttpServletRequest req) {
-		List<BBSDTO> lists = bbsService.searchList();
-		return lists;	
 	}
 	
 	/*
