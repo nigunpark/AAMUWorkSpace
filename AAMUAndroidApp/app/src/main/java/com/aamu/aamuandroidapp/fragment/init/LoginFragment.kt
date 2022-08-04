@@ -18,6 +18,7 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import com.aamu.aamuandroidapp.R
 import com.aamu.aamuandroidapp.components.login.LoginScreen
 import com.aamu.aamuandroidapp.components.login.LoginVideo
@@ -49,7 +50,7 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        navController = Navigation.findNavController(view)
+        navController = findNavController()
 
 //        binding.cirLoginButton.setOnClickListener{
 //            binding.cirLoginButton.startAnimation()

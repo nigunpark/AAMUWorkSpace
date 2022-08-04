@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.compose.runtime.remember
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import com.aamu.aamuandroidapp.R
 import com.aamu.aamuandroidapp.components.gram.AAMUgramHome
 import com.aamu.aamuandroidapp.data.DemoDataProvider
@@ -30,7 +31,7 @@ class GramFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        navControllerHost = Navigation.findNavController(view)
+        navControllerHost = findNavController()
 
         binding.gramCompose.setContent {
             ComposeCookBookTheme {

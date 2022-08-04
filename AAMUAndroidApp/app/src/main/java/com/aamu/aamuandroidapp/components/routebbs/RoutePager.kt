@@ -1,5 +1,6 @@
 package com.aamu.aamuandroidapp.components.routebbs
 
+import android.util.Log
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -26,17 +27,22 @@ fun RoutePager(
     imageId: MutableState<Int>,
     routeBBSHomeInteractionEvents: (RouteBBSHomeInteractionEvents) -> Unit
 ) {
+
     val viewModel: RouteViewModel = viewModel(
         factory = RouteViewModelFactory(LocalContext.current)
     )
+
     val bbsList by viewModel.aamuBBSList.observeAsState(emptyList())
     val error by viewModel.errorLiveData.observeAsState()
 
     if (bbsList.isNotEmpty()) {
-        val pagerState = remember { PagerState(maxPage = bbsList.size - 1) }
+        val pagerState = remember { PagerState(maxPage = bbsList.size - 1, currentPage = viewModel.currentPage.value!!) }
 
-        Pager(state = pagerState, modifier = Modifier.height(645.dp), orientation = Orientation.Horizontal ,offscreenLimit = 2) {
+        Pager(state = pagerState, modifier = Modifier.height(645.dp), orientation = Orientation.Horizontal ,offscreenLimit = bbsList.size) {
             val bbs = bbsList[commingPage]
+            if (pagerState.currentPage != viewModel.currentPage.value){
+                viewModel.currentPage.value = pagerState.currentPage
+            }
 //            imageId.value = imageIds[pagerState.currentPage]
             val isSelected = pagerState.currentPage == commingPage
 

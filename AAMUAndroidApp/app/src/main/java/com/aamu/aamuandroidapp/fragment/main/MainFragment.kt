@@ -13,6 +13,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.FragmentTransaction
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import com.aamu.aamuandroidapp.R
 import com.aamu.aamuandroidapp.databinding.FragmentMainBinding
 import com.aamu.aamuandroidapp.fragment.main.sub.GramFragment
@@ -71,7 +72,7 @@ class MainFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        navControllerHost = Navigation.findNavController(view)
+        navControllerHost = findNavController()
 
         permissionUtils = PermissionUtils(requireContext(), requireActivity(), permissions)
 

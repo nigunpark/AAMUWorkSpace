@@ -2,14 +2,20 @@ package com.aamu.aamuandroidapp.fragment.main.sub
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import com.aamu.aamuandroidapp.components.routebbs.RouteBBSScreen
+import com.aamu.aamuandroidapp.components.routebbs.RouteViewModel
+import com.aamu.aamuandroidapp.components.routebbs.RouteViewModelFactory
 import com.aamu.aamuandroidapp.data.api.response.AAMUBBSResponse
 import com.aamu.aamuandroidapp.fragment.main.MainFragment
 import com.aamu.aamuandroidapp.fragment.main.MainFragmentDirections
@@ -28,6 +34,10 @@ class RouteBBSFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View = ComposeView(inflater.context).apply {
         setContent {
+            val viewModel: RouteViewModel = viewModel(
+                factory = RouteViewModelFactory(LocalContext.current)
+            )
+            viewModel.getaamuBBSList()
             ComposeCookBookTheme {
                 RouteBBSScreen(routeBBSHomeInteractionEvents = { event ->
                     handleInteractionEvents(event)
@@ -38,7 +48,7 @@ class RouteBBSFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        navControllerHost = Navigation.findNavController(view)
+        navControllerHost = findNavController()
     }
 
     private fun handleInteractionEvents(

@@ -2,6 +2,7 @@ package com.aamu.aamuandroidapp.components.routebbs
 
 import android.content.Context
 import android.widget.Toast
+import androidx.compose.runtime.remember
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -10,6 +11,7 @@ import com.aamu.aamuandroidapp.components.gram.AAMUgramViewModel
 import com.aamu.aamuandroidapp.data.api.AAMUDIGraph
 import com.aamu.aamuandroidapp.data.api.repositories.AAMURepository
 import com.aamu.aamuandroidapp.data.api.response.AAMUBBSResponse
+import com.aamu.aamuandroidapp.util.carousel.PagerState
 import kotlinx.coroutines.launch
 
 class RouteViewModelFactory(val context: Context) : ViewModelProvider.Factory{
@@ -25,7 +27,11 @@ class RouteViewModel(context: Context) : ViewModel(){
     val aamuBBSList = MutableLiveData<List<AAMUBBSResponse>>()
     val errorLiveData = MutableLiveData<String>()
 
-    init {
+    val currentPage = MutableLiveData<Int>(0)
+
+    val context = context
+
+    fun getaamuBBSList(){
         viewModelScope.launch {
             aamuRepository.getBBSList()
                 .collect{ bbsList ->

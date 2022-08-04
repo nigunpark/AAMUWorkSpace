@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import com.aamu.aamuandroidapp.R
 import com.aamu.aamuandroidapp.databinding.FragmentHomeBinding
 import com.aamu.aamuandroidapp.ui.theme.yellow
@@ -46,7 +47,7 @@ class HomeFragment : Fragment() {
                 GoAAMUPlan()
             }
         }
-        navControllerHost = Navigation.findNavController(view)
+        navControllerHost = findNavController()
     }
 
 
