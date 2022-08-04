@@ -15,6 +15,11 @@
 				<when test='searchColumn == "ctitle"'>
 					WHERE ${searchColumn} LIKE '%'||#{searchWord}||'%'
 				</when>
+				<when test='searchColumn == "tname"'>
+					JOIN commutag ct ON c.lno = ct.lno
+        			JOIN tags t ON ct.tno = t.tno
+					WHERE ${searchColumn} LIKE #{searchWord}
+				</when>
 				<otherwise>
 					WHERE ${searchColumn} LIKE #{searchWord}
 				</otherwise>
@@ -36,7 +41,17 @@
 	
 	<!-- 글 목록용_검색 총 게시물수 -->
 	<select id="commuSearchTotalCount" parameterType="Map" resultType="int">
-		SELECT COUNT(*) FROM community c WHERE ${searchColumn}=#{searchWord}
+		SELECT COUNT(*) FROM community c 
+		<choose>
+			<when test='searchColumn == "tname"'>
+				JOIN commutag ct ON c.lno = ct.lno
+				JOIN tags t ON ct.tno = t.tno
+				WHERE ${searchColumn}=#{searchWord}
+			</when>
+			<otherwise>
+				WHERE ${searchColumn}=#{searchWord}
+			</otherwise>
+		</choose>
 	</select>
 	
 	

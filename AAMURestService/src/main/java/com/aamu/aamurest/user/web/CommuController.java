@@ -55,10 +55,15 @@ public class CommuController {
 	public List<CommuDTO> commuSelectList(@RequestParam Map map, HttpServletRequest req){
 		//검색할 때는 맵으로 써치워드 써치컬럼을 받고, id(로그인한 사람의 id)는 isLike때문에 받는거다. lno는 dto에서 뽑아온다
 		//cid가 넘어오면 마이페이지 id에 따른 글 뿌려주기
-		System.out.println("셀렉트 리스트 id:"+map.get("id"));
-		System.out.println("셀렉트 리스트 searchColumn:"+map.get("searchColumn"));
-		System.out.println("셀렉트 리스트 searchWord:"+map.get("searchWord"));
-		//List<CommuDTO> list();
+//		System.out.println("셀렉트 리스트 id:"+map.get("id"));
+//		System.out.println("셀렉트 리스트 searchColumn:"+map.get("searchColumn"));
+//		System.out.println("셀렉트 리스트 searchWord:"+map.get("searchWord"));
+		
+		//만약 #붙여서 태그 넘어올 때 사용
+//		if(map.get("searchColumn").toString().equals("tname")) {
+//			String tname=map.get("searchWord").toString().replaceAll(" ", "").substring(1);
+//			map.put("searchWord", tname);
+//		}
 		//list=글 목록들
 		List<CommuDTO> list = commuService.commuSelectList(map);
 		for(CommuDTO dto : list) {//글 목록들 list에서 하나씩 꺼내서 dto에 담는다
@@ -103,7 +108,7 @@ public class CommuController {
 			dto.setFollowingcount(commuService.commuFollowingCount(map));
 			
 		}/////for
-		System.out.println("몇개 넘어가니:"+list.size());
+//		System.out.println("몇개 넘어가니:"+list.size());
 		return list;
 	}////////////////commuSelectList
 	
@@ -118,8 +123,8 @@ public class CommuController {
 	//글 검색용_searchColumn:id,ctitle,tname로 검색
 	@GetMapping("/gram/search/selectList") 
 	public List<String> commuSearachList(@RequestParam Map map){
-		System.out.println("검색 searchColumn:"+map.get("searchColumn"));
-		System.out.println("검색 searchWord:"+map.get("searchWord"));
+//		System.out.println("검색 searchColumn:"+map.get("searchColumn"));
+//		System.out.println("검색 searchWord:"+map.get("searchWord"));
 		List<String> list=commuService.commuSearachList(map);
 		return list;
 	}
@@ -150,8 +155,9 @@ public class CommuController {
 
 	//글 생성용: true false
 	@PostMapping(value="/gram/edit")
-	public Map commuInsert(@RequestParam List<MultipartFile> multifiles, @RequestParam Map map, HttpServletRequest req) {
-		System.out.println("tname이 오나?"+map.get("tname"));
+	public Map commuInsert(@RequestParam List<MultipartFile> multifiles, @RequestParam Map map, @RequestParam(required = false) List tname, HttpServletRequest req) {
+		System.out.println("컨트롤러 tname:"+tname);
+		System.out.println("id가 오나요?"+map.get("id"));
 		//서버의 물리적 경로 얻기
 		String path=req.getSession().getServletContext().getRealPath("/resources/commuUpload");
 		Map resultMap = new HashMap();
@@ -160,7 +166,9 @@ public class CommuController {
 			List<String> uploads= FileUploadUtil.fileProcess(multifiles, path);
 			map.put("photolist", uploads);
 		} catch (IllegalStateException | IOException e) {e.printStackTrace();}
-
+		if(tname != null) {
+			map.put("tname", tname);
+		}
 		int affected=commuService.commuInsert(map);
 		List<CommuDTO> list = commuService.commuSelectList(map);
 		for(CommuDTO dto : list) {//글 목록들 list에서 하나씩 꺼내서 dto에 담는다
@@ -187,7 +195,7 @@ public class CommuController {
 	//TAGS테이블에 있으면 TNO,TNAME 키값으로 뿌려주고 COMMUTAG에 저장 //없으면 INSERT TAGS테이블 COMMUTAG테이블
 	@GetMapping("/gram/tag")
 	public List<String> commuTag(@RequestParam Map map){//tname:
-		System.out.println("태그검색 map:"+map);
+//		System.out.println("태그검색 map:"+map);
 		return commuService.commuTag(map);
 	}
 	
@@ -217,7 +225,7 @@ public class CommuController {
 	//글 하나 뿌려주는 용 -수정용
 	@GetMapping("/gram/SelectOne")
 	public CommuDTO commuSelectOne(@RequestParam Map map, HttpServletRequest req) {//id(로그인한사람 id 왜냐?isLike때문에), lno(글의 lno)
-		System.out.println("셀렉트원 map:"+map);
+//		System.out.println("셀렉트원 map:"+map);
 		CommuDTO dto=commuService.commuSelectOne(map);
 		//모든 사진 가져와서 dto에 셋팅
 		dto.setPhoto(FileUploadUtil.requestFilePath(commuService.commuSelectPhotoList(dto.getLno()), "/resources/commuUpload", req));
@@ -253,6 +261,7 @@ public class CommuController {
 	@PutMapping("/gram/edit")
 	public Map commuUpdate(@RequestBody Map map) { 
 		System.out.println("글수정 map:"+map);
+		//List<String> list=(List<String>)map.get("tname");
 		int affected=commuService.commuUpdate(map);
 		Map resultMap = new HashMap<> ();
 		if(affected==1) resultMap.put("isSuccess", true);
@@ -281,7 +290,6 @@ public class CommuController {
 	/*
 	@PostMapping("/gram/comment/edit")
 	public List<CommuDTO> commuCommentInsert(@RequestBody Map map, HttpServletRequest req) {
-		System.out.println("댓글생성 map:"+map);
 		int commuCommentAffected=commuService.commuCommentInsert(map);
 		int RcPlusAffected=commuService.commuRcPlusUpdate(map);
 		//list=글 목록들
@@ -299,7 +307,6 @@ public class CommuController {
 	//댓글 생성용 - Map ver
 	@PostMapping("/gram/comment/edit")
 	public Map commuCommentInsert(@RequestBody Map map) {//id,lno,reply 넘어옴
-		System.out.println("댓글생성 map:"+map);
 		int affected=commuService.commuCommentInsert(map);
 		Map resultMap = new HashMap<> ();
 		if(affected == 1) {
@@ -313,7 +320,6 @@ public class CommuController {
 	//댓글 수정용
 	@PutMapping("/gram/comment/edit")
 	public Map commuCommentUpdate(@RequestBody Map map) {//reply, cno
-		System.out.println("(cc)map:"+map);
 		int commuCommentUpdateAffected=commuService.commuCommentUpdate(map);
 		Map resultMap = new HashMap();
 		if(commuCommentUpdateAffected == 1)
@@ -326,16 +332,13 @@ public class CommuController {
 	//댓글 삭제용
 	@DeleteMapping("/gram/comment/edit")
 	public Map commuCommentDelete(@RequestParam Map map) {//lno, cno
-		System.out.println("댓글 삭제용 map:"+map);
-		System.out.println("댓글 삭제용 cno:"+map.get("cno"));
-		System.out.println("댓글 삭제용 lno:"+map.get("lno"));
+		System.out.println("딜리트 map:"+map);
 		int affected=commuService.commuCommentDelete(map);
 		//rcount -1
 		//int RcMinusAffected=commuService.commuRcMinusUpdate(map);
 		Map resultMap = new HashMap();
 		if(affected==1) resultMap.put("isSuccess", true);
 		else resultMap.put("isSuccess", false);
-		System.out.println("댓글 resultMap:"+resultMap);
 		return resultMap;
 	}
 
@@ -385,17 +388,15 @@ public class CommuController {
 	//팔로우, 팔로잉 
 	@PostMapping("/gram/follower")
 	public Map commuFollower(@RequestBody Map map) {//id,follower
-		System.out.println("팔로우 map:"+map);
 		//map에 id:세션id follower:글쓴이id
 		Map resultMap=commuService.commuFollower(map);
-		System.out.println("팔로우 결과값:"+resultMap);
+//		System.out.println("팔로우 결과값:"+resultMap);
 		return resultMap;
 	}
 	
 	//마이페이지용_id에 따른 
 	@GetMapping("/gram/mypage")
 	public List<CommuDTO> commuMyPageList(@RequestParam Map map, HttpServletRequest req) {//
-		System.out.println("mypage map:"+map);
 		//map에 id:세션id  follower:글쓴이id
 		List<CommuDTO> list = commuService.commuMyPageList(map);
 		for(CommuDTO dto : list) {
@@ -423,23 +424,36 @@ public class CommuController {
 	
 	
 	@GetMapping("/weather")
-	public Map weather(@RequestParam Map map) { //searhWord 지역 searchDate 
-		System.out.println("날씨지역 searchWord:"+map);
+	public Map weather(@RequestParam Map map,@RequestParam List<String> searchDates) { //searhWord 지역 searchDate 
 		String searchWord=map.get("searchWord").toString();
-		String searchDate=map.get("searchDate").toString();
-		//String[] searchDate=searchDates.split(",");
-		//System.out.println(searchDate);
+		//List<String> searchDates=(List<String>)map.get("searchDates");
+		System.out.println("searchWord:"+searchWord);
+		System.out.println("searchDates:"+searchDates);
+		String sDateStr = String.join(",", searchDates);
+//		MultiValueMap requestBody = new LinkedMultiValueMap<>();
+//		requestBody.add("searchWord", map.get("searchWord").toString());
+//		requestBody.add("searchDate", searchDate);
+		//2개가 넘어오면 
+		String uri="http://localhost:5020/weather?searchWord="+searchWord+"&searchDate="+sDateStr;
+//		for(String searchDate:searchDates) {
+//			uri+="&searchDate="+searchDate; //"http://localhost:5020/weather?searchWord="+searchWord+"&searchDate="+searchDate;
+//		}
+		System.out.println("uri:"+uri);
+		//int sum=0;
+		//sum+=sum+0; //sum=sum+1; 
+		//String uri= "";
+		//uri+="http://localhost:5020/weather?searchWord="+searchWord;
 		
-		String uri="http://192.168.0.7:5020/weather?searchWord="+searchWord+"&searchDate="+searchDate;
+		//String uri="http://localhost:5020/weather?searchWord="+searchWord+"searchDate=";
 		HttpHeaders header = new HttpHeaders();
 		header.add("Content-Type", "application/json");
-		HttpEntity httpEntity = new HttpEntity<>(header);
+		HttpEntity httpEntity = new HttpEntity<>(/*requestBody,*/header);
 		
 		ResponseEntity<Map> responseEntity =
 				restTemplate.exchange(uri, HttpMethod.GET,httpEntity, Map.class);
-		System.out.println(responseEntity.getBody());
+//		System.out.println(responseEntity.getBody());
 		Map returnMap = responseEntity.getBody();
-		returnMap.get("weather");
+		//returnMap.get("weather");
 		
 		return returnMap;
 	}
