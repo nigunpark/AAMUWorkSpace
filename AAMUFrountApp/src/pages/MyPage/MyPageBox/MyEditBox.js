@@ -208,75 +208,80 @@ const MyEditBox = ({ selectRbn }) => {
         return "토";
     }
   };
+  const delPhoto = (image) => {
+    setShowImages((curr) => {
+      return curr.filter((val) => {
+        return val !== image;
+      });
+    });
+  };
   return (
     <div className="MyWrite-container">
-      <div>
-        <Plan>
-          <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-            {routeData.map((route, idx) => {
-              return (
-                <div key={idx} className="detail-plan">
-                  <div className="paln-date">
-                    {idx + 1}일차 ({plannerDate.month}월 {plannerDate.date + idx}일&nbsp;
-                    {getDow(plannerDate.dow)})
-                  </div>
-                  <div className="plan__over-container">
-                    {route[`day${idx + 1}`].map((obj, i) => {
-                      return (
-                        <div className="plan__container">
-                          <div className="plan-region">
-                            <div className="myPlan-container">
-                              <div className="myPlan-img-container">
-                                <img
-                                  onError={(e) => {
-                                    e.target.src = "/images/no-image.jpg";
-                                  }}
-                                  src={
-                                    obj.dto.smallimage == null
-                                      ? "/images/no-image.jpg"
-                                      : obj.dto.smallimage
-                                  }
-                                />
-                              </div>
-                              <div
+      <Plan>
+        <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+          {routeData.map((route, idx) => {
+            return (
+              <div key={idx} className="detail-plan">
+                <div className="paln-date">
+                  {idx + 1}일차 ({plannerDate.month}월 {plannerDate.date + idx}일&nbsp;
+                  {getDow(plannerDate.dow)})
+                </div>
+                <div className="plan__over-container">
+                  {route[`day${idx + 1}`].map((obj, i) => {
+                    return (
+                      <div className="plan__container">
+                        <div className="plan-region">
+                          <div className="myPlan-container">
+                            <div className="myPlan-img-container">
+                              <img
+                                onError={(e) => {
+                                  e.target.src = "/images/no-image.jpg";
+                                }}
+                                src={
+                                  obj.dto.smallimage == null
+                                    ? "/images/no-image.jpg"
+                                    : obj.dto.smallimage
+                                }
+                              />
+                            </div>
+                            <div
+                              style={{
+                                display: "flex",
+                                flexDirection: "column",
+                                alignItems: "start",
+                                padding: "5px 0",
+                                gap: "5px",
+                              }}
+                            >
+                              <span
                                 style={{
-                                  display: "flex",
-                                  flexDirection: "column",
-                                  alignItems: "start",
-                                  padding: "5px 0",
-                                  gap: "5px",
+                                  fontSize: "15px",
+                                  fontWeight: "bold",
                                 }}
                               >
-                                <span
-                                  style={{
-                                    fontSize: "15px",
-                                    fontWeight: "bold",
-                                  }}
-                                >
-                                  {obj.dto.title}
-                                </span>
-                                <div className="plan-clock">
-                                  <DetailSetting
-                                    fromWooJaeData={routeData}
-                                    obj={obj}
-                                    key={i}
-                                    i={i}
-                                    periodIndex={idx}
-                                  />
-                                </div>
+                                {obj.dto.title}
+                              </span>
+                              <div className="plan-clock">
+                                <DetailSetting
+                                  fromWooJaeData={routeData}
+                                  obj={obj}
+                                  key={i}
+                                  i={i}
+                                  periodIndex={idx}
+                                />
                               </div>
                             </div>
                           </div>
                         </div>
-                      ); //MyPost_clock
-                    })}
-                  </div>
+                      </div>
+                    ); //MyPost_clock
+                  })}
                 </div>
-              );
-            })}
-          </div>
-        </Plan>
-      </div>
+              </div>
+            );
+          })}
+        </div>
+      </Plan>
 
       <div className="editBox__rightSide">
         <div>
@@ -314,12 +319,17 @@ const MyEditBox = ({ selectRbn }) => {
         </div>
         <div style={{ display: "flex", flexDirection: "column", height: "100%", gap: "1rem" }}>
           <div className="write-box add-delete">
-            {showImages.length == 0 ? (
-              <img style={{ width: "400px" }} src="/images/no-image.jpg" />
-            ) : (
-              showImages.map((image, id) => (
-                <>
-                  <div className="previewImage">
+            {showImages.map((image, id) => (
+              <>
+                <div className="previewImage" key={id}>
+                  <FontAwesomeIcon
+                    icon={faCircleXmark}
+                    className="test-i"
+                    onClick={() => delPhoto(image)}
+                  />
+                  <img src={image} alt={`${image}-${id}`} />
+                </div>
+                {/* <div className="previewImage">
                     <FontAwesomeIcon icon={faCircleXmark} className="test-i" />
                     <img src={image} alt={`${image}-${id}`} />
                   </div>
@@ -328,10 +338,6 @@ const MyEditBox = ({ selectRbn }) => {
                     <img src={image} alt={`${image}-${id}`} />
                   </div>
                   <div className="previewImage">
-                    <FontAwesomeIcon icon={faCircleXmark} className="test-i" />
-                    <img src={image} alt={`${image}-${id}`} />
-                  </div>
-                  {/* <div className="previewImage">
                     <FontAwesomeIcon icon={faCircleXmark} className="test-i" />
                     <img src={image} alt={`${image}-${id}`} />
                   </div>
@@ -343,9 +349,8 @@ const MyEditBox = ({ selectRbn }) => {
                     <FontAwesomeIcon icon={faCircleXmark} className="test-i" />
                     <img src={image} alt={`${image}-${id}`} />
                   </div> */}
-                </>
-              ))
-            )}
+              </>
+            ))}
           </div>
 
           <div className="write-box writer">
@@ -355,32 +360,38 @@ const MyEditBox = ({ selectRbn }) => {
               }}
               name="content"
               className="write-section"
-              placeholder="글 쓰기"
+              placeholder="내용을 입력하세요"
               value={content}
               ref={contentRef}
             />
-            <div className="box-gab"></div>
-
-            {/* 테마 */}
-            <button type="button" className="theme-section" onClick={onClickModal}>
-              {postTheme == 0 ? "테마를 선택하세요" : postTheme}
-            </button>
-
-            {isOpen == true ? (
-              <Theme
-                setIsOpen={setIsOpen}
-                themes={themes}
-                setPostTheme={setPostTheme}
-                setPostThemeNum={setPostThemeNum}
-              />
-            ) : null}
           </div>
 
-          <div className="write-box" style={{ textAlign: "end" }}>
-            <button
-              style={{ color: "black" }}
-              className="navbar-btn"
-              type="button"
+          <div className="" style={{ display: "flex", justifyContent: "flex-end", gap: "1rem" }}>
+            <div className="box-gab">
+              {/* 테마 */}
+              <span className="theme-section" onClick={onClickModal}>
+                {/* theme : {postTheme == 0 ? "테마를 선택하세요" : postTheme} */}
+                theme :{" "}
+                <select style={{ width: "100px", textAlign: "center" }}>
+                  <option>봄</option>
+                  <option>여름</option>
+                  <option>호캉스</option>
+                  <option>뭐뭐뭐</option>
+                </select>
+              </span>
+
+              {/* {isOpen == true ? (
+                <Theme
+                  setIsOpen={setIsOpen}
+                  themes={themes}
+                  setPostTheme={setPostTheme}
+                  setPostThemeNum={setPostThemeNum}
+                />
+              ) : null} */}
+            </div>
+            <span
+              style={{ color: "black", textAlign: "center" }}
+              className="edit-btn"
               onClick={() => {
                 // let write = uploadFile(showImagesFile);
                 bordWrite(
@@ -394,7 +405,7 @@ const MyEditBox = ({ selectRbn }) => {
               }}
             >
               수정하기
-            </button>
+            </span>
           </div>
         </div>
       </div>
@@ -421,6 +432,7 @@ const Plan = styled.div`
   // display: flex;
   // flex-direction: column;
   overflow: auto;
+  width: 100%;
   grid-row: 1 / 4;
   &::-webkit-scrollbar {
     display: none;
