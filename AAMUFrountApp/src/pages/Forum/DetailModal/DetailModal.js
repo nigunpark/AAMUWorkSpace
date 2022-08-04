@@ -407,7 +407,7 @@ const DetailModal = ({
                             {detailOne.id}
                           </span>
                         </div>
-                        <div>
+                        <div onClick={bookMarkOne}>
                           {myBookMark == bookbol ? (
                             <FontAwesomeIcon
                               icon={faBookmark}
