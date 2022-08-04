@@ -41,6 +41,7 @@ const Content = () => {
       })
       .then((resp) => {
         // setList(resp.data);
+        console.log("글 목록 가져오기 Content.js) :", resp.data);
         setListData(resp.data);
       })
       .catch((error) => {
@@ -122,7 +123,7 @@ const Content = () => {
   if (bookTF != undefined) {
     bookbol = bookBool.bookmark;
   }
-  console.log("bookbol :", bookbol);
+  console.log("bookbol find:", bookbol);
 
   return (
     <div className="Cards_minCon">
