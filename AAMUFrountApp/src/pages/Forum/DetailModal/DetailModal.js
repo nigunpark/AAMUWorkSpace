@@ -486,7 +486,7 @@ const DetailModal = ({ detailOne, setIsOpen, setShowCBModal, setIsLoading }) => 
                             e.stopPropagation();
                             reviewPost(commentRef);
                             commentRef.current.value = "";
-                            e.target.style.display = "none";
+                            // e.target.style.display = "none";
                           }}
                         >
                           댓글쓰기
