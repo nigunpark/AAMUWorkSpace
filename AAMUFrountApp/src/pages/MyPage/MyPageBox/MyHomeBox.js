@@ -13,9 +13,20 @@ import axios from "axios";
 import MyPlanMap from "./MyPlanMap";
 import { useDispatch, useSelector } from "react-redux";
 import { faHourglass } from "@fortawesome/free-regular-svg-icons";
-import { addMonthNDate, changeTripPeriod, resetMonthNDate } from "../../../redux/store";
+import {
+  addMonthNDate,
+  changeTripPeriod,
+  resetMonthNDate,
+} from "../../../redux/store";
 
-const MyHomeBox = ({ setClickTab, planList, rbn, setSelectRbn, setPlanList, setUpload }) => {
+const MyHomeBox = ({
+  setClickTab,
+  planList,
+  rbn,
+  setSelectRbn,
+  setPlanList,
+  setUpload,
+}) => {
   const [fromWooJaeData, setFromWooJaeData] = useState([]);
   const [newFromWooJae, setNewFromWooJae] = useState([]);
   const [newTimeSet, setNewTimeSet] = useState([]);
@@ -100,7 +111,13 @@ const MyHomeBox = ({ setClickTab, planList, rbn, setSelectRbn, setPlanList, setU
           </div>
 
           <div>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
               <div
                 className="myBox__title"
                 style={{
@@ -110,9 +127,10 @@ const MyHomeBox = ({ setClickTab, planList, rbn, setSelectRbn, setPlanList, setU
                 {planList.title}
               </div>
               <div className="myBox__icons">
-                {forDimmed.start <= new Date() && forDimmed.end >= new Date() && (
-                  <FontAwesomeIcon icon={faHourglass} className="glassIcon" />
-                )}
+                {forDimmed.start <= new Date() &&
+                  forDimmed.end >= new Date() && (
+                    <FontAwesomeIcon icon={faHourglass} className="glassIcon" />
+                  )}
 
                 {planList.isBBS == 1 ? (
                   // <img
@@ -127,7 +145,10 @@ const MyHomeBox = ({ setClickTab, planList, rbn, setSelectRbn, setPlanList, setU
                   // />
                   // <FontAwesomeIcon icon={faHourglass} className="starImg" />
 
-                  <FontAwesomeIcon icon={faSquareShareNodes} className="shareIcon" />
+                  <FontAwesomeIcon
+                    icon={faSquareShareNodes}
+                    className="shareIcon"
+                  />
                 ) : null}
               </div>
             </div>
@@ -326,7 +347,13 @@ function MyBoxList({
   );
 }
 
-async function excAxios(rbn, setNewFromWooJae, dispatch, setCurrPosition, planList) {
+async function excAxios(
+  rbn,
+  setNewFromWooJae,
+  dispatch,
+  setCurrPosition,
+  planList
+) {
   try {
     let token = sessionStorage.getItem("token");
     //   /planner/selectonemap
@@ -383,7 +410,9 @@ async function excAxios(rbn, setNewFromWooJae, dispatch, setCurrPosition, planLi
         break;
     }
     dispatch(resetMonthNDate([]));
-    dispatch(addMonthNDate({ month: fristMonth, date: fristDate, dow: fristDow }));
+    dispatch(
+      addMonthNDate({ month: fristMonth, date: fristDate, dow: fristDow })
+    );
   } catch (error) {
     console.log(error);
   }
@@ -405,12 +434,16 @@ function MyDetailPlan({
   let dispatch = useDispatch();
   useEffect(() => {
     let lengths = parseInt(
-      planList.title.substring(planList.title.indexOf("일") - 1, planList.title.indexOf("일"))
+      planList.title.substring(
+        planList.title.indexOf("일") - 1,
+        planList.title.indexOf("일")
+      )
     );
     let tempArr = new Array(lengths).fill(0);
     dispatch(changeTripPeriod(lengths));
     tempArr.forEach((val, index) => {
-      let bbcT = newFromWooJae[index][`day${index + 1}`][0].starttime / (1000 * 60);
+      let bbcT =
+        newFromWooJae[index][`day${index + 1}`][0].starttime / (1000 * 60);
       if (bbcT >= 13 * 60) {
         let temp = {
           ampm: "오후",

@@ -22,6 +22,7 @@ const Content = () => {
   const [showCBModal, setShowCBModal] = useState(false);
   const [detailOne, setDetailOne] = useState({});
   const [kindOfSearch, setKindOfSearch] = useState("");
+
   let searchOne = useRef();
   function chatbotModal() {
     if (reduxState.forChatBotData.bool === true) {
@@ -30,8 +31,9 @@ const Content = () => {
   }
   // console.log("detailOne", detailOne);
   // console.log("?forChatBotData?", reduxState.forChatBotData);
-  useEffect(() => {
-    axios
+
+  const selectList = async () => {
+    await axios
       .get("/aamurest/bbs/SelectList", {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -39,11 +41,16 @@ const Content = () => {
       })
       .then((resp) => {
         // setList(resp.data);
+        console.log("글 목록 가져오기 Content.js) :", resp.data);
         setListData(resp.data);
       })
       .catch((error) => {
         console.log((error) => console.log("글 목록 가져오기 실패(Content.js) :", error));
       });
+  };
+  useEffect(() => {
+    selectList();
+    bookMarkList();
     chatbotModal();
   }, [isOpen]);
 
@@ -72,6 +79,48 @@ const Content = () => {
       });
   };
 
+  const [myBookMark, setMyBookMark] = useState([]);
+  const bookMarkList = async () => {
+    let token = sessionStorage.getItem("token");
+
+    await axios
+      .get("/aamurest/bbs/bookmark/list", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((resp) => {
+        console.log("북마크 목록 데이터 (Content.js) :", resp.data);
+        setMyBookMark(resp.data);
+      })
+      .catch((error) => {
+        console.log("북마크 목록 실패 (Content.js) :", error);
+      });
+  };
+
+  function isBook(e) {
+    if (e.rbn === detailOne.rbn) {
+      return true;
+    }
+  }
+  function isBookBool(e) {
+    if (e.bookmark === false) {
+      return true;
+    }
+  }
+  const bookTF = myBookMark.find(isBook);
+  const bookBool = myBookMark.find(isBookBool);
+
+  let book;
+  if (bookTF != undefined) {
+    book = bookTF.rbn;
+  }
+  let bookbol;
+  if (bookTF != undefined) {
+    bookbol = bookBool.bookmark;
+  }
+  console.log("bookbol find:", bookbol);
+
   return (
     <div className="Cards_minCon">
       <div className="card__container_minCon">
@@ -86,7 +135,6 @@ const Content = () => {
                 </span>
               </p>
             </div>
-            {/* <FSearch /> */}
           </div>
           <div className="search__container__minCon">
             <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
@@ -128,6 +176,7 @@ const Content = () => {
             {listData.map((val, idx) => {
               return <ContentItem setDetailOne={setDetailOne} detail={val} setIsOpen={setIsOpen} />;
             })}
+            {/* {console.log("내가 누른 글 번호 :", detailOne.rbn)} */}
           </div>
         </div>
       </div>
@@ -137,6 +186,7 @@ const Content = () => {
           detailRbn={reduxState.forChatBotData.rbn}
           setIsOpen={setIsOpen}
           setIsLoading={setIsLoading}
+          bookbol={bookbol}
         />
       )}
       {isOpen && (
@@ -145,6 +195,7 @@ const Content = () => {
           setShowCBModal={setShowCBModal}
           setIsOpen={setIsOpen}
           setIsLoading={setIsLoading}
+          bookbol={bookbol}
         />
       )}
       {/* {isLoading && <Spinner />} */}

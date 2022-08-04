@@ -27,19 +27,12 @@ public class QNAServiceImpl implements QNAService<QNADTO> {
 	@Override
 	public List<QNADTO> qnaSelectList(Map map) {
 		List<QNADTO> lists = dao.qnaSelectList(map);
-
-		System.out.println("이런: " + lists);
-
-		// isLike셋팅
 		List<QNADTO> returnLists = new Vector();
 		for (int i = 0; i < lists.size(); i++) {
 			QNADTO dto = lists.get(i);
 			map.put("qno", dto.getQno());
 			returnLists.add(dto);
 		}
-
-		System.out.println("아악: " + returnLists);
-
 		return returnLists;
 	}
 
@@ -129,7 +122,7 @@ public class QNAServiceImpl implements QNAService<QNADTO> {
 
 	/*
 	 * map.put("table", "answer"); adao.answerAllDelete(map); map.put("table",
-	 * "qna"); dao.qnaDelete(map); return dao.qnaDelete(map); // 게시물 삭제
+	 * "qna"); dao.qnaDelete(map); return dao.qnaDelete(map);
 	 * 
 	 * @Override public int qnaDelete(Map map) { return dao.qnaDelete(map); }
 	 */
