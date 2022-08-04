@@ -12,7 +12,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faX } from "@fortawesome/free-solid-svg-icons";
 import { faBookmark } from "@fortawesome/free-solid-svg-icons";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
-const DetailModal = ({ detailOne, setIsOpen, setShowCBModal, setIsLoading }) => {
+const DetailModal = ({
+  detailOne,
+  setIsOpen,
+  setShowCBModal,
+  setIsLoading,
+  bookbol,
+}) => {
+  const [myBookMark, setMyBookMark] = useState(false);
   let navigate = useNavigate();
   // console.log("detailOne", detailOne);
   function dateFormat(date) {
@@ -37,7 +44,7 @@ const DetailModal = ({ detailOne, setIsOpen, setShowCBModal, setIsLoading }) => 
   const [showChat, setShowChat] = useState(false);
   const [plannerDate, setPlannerDate] = useState({});
   const [detailRoute, setDetailRoute] = useState([]);
-  const [myBookMark, setMyBookMark] = useState(false);
+
   // const [rno, setRno] = useState(0);
   let dispatch = useDispatch();
   useEffect(() => {
@@ -193,31 +200,27 @@ const DetailModal = ({ detailOne, setIsOpen, setShowCBModal, setIsLoading }) => 
       });
   };
 
-  const bookMarkOne = (mark) => {
+  const bookMarkOne = () => {
     let token = sessionStorage.getItem("token");
+    let id = sessionStorage.getItem("username");
+    let rbn = detailOne.rbn;
+
     axios
-      .post(
-        "",
-        {
-          id: sessionStorage.getItem("username"),
-          rbn: detailOne.rbn,
-          북마크key: mark,
+      .get("/aamurest/bbs/bookmark", {
+        params: {
+          id,
+          rbn,
         },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      )
-      .then((resp) => {
-        console.log("북마크 추가/취소 성공 (DetailModal.js)", resp.data);
-        let bool = window.confirm("마이페이지로 이동하시겠어요?");
-        if (bool) {
-          navigate("/myPage");
-          // setClickTab(2);
-        }
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       })
-      .catch();
+      .then((resp) => {
+        console.log("북마크 추가/취소 성공 (DetailModal.js) :", resp.data);
+      })
+      .catch((error) => {
+        console.log("북마크 실패 (DetailModal.js) :", error);
+      });
   };
 
   const CommentList = ({ val, setFeedComments, setIsOpen }) => {
@@ -225,7 +228,10 @@ const DetailModal = ({ detailOne, setIsOpen, setShowCBModal, setIsLoading }) => 
     return (
       <div>
         <Stars>
-          <FontAwesomeIcon icon={faStar} style={{ marginRight: "3px", color: "gold" }} />
+          <FontAwesomeIcon
+            icon={faStar}
+            style={{ marginRight: "3px", color: "gold" }}
+          />
           <span>{val.rate.toString().padEnd(3, ".0")}</span>
         </Stars>
         <span
@@ -275,6 +281,7 @@ const DetailModal = ({ detailOne, setIsOpen, setShowCBModal, setIsLoading }) => 
         return "토";
     }
   };
+
   return (
     <DetailContainer>
       <DetailOverlay>
@@ -292,12 +299,15 @@ const DetailModal = ({ detailOne, setIsOpen, setShowCBModal, setIsLoading }) => 
             <FontAwesomeIcon icon={faX} />
           </span>
           <Plan>
-            <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+            <div
+              style={{ display: "flex", flexDirection: "column", gap: "10px" }}
+            >
               {routeData.map((route, idx) => {
                 return (
                   <div key={idx} className="detail-plan">
                     <div className="paln-date">
-                      {idx + 1}일차 ({plannerDate.month}월 {plannerDate.date + idx}일&nbsp;
+                      {idx + 1}일차 ({plannerDate.month}월{" "}
+                      {plannerDate.date + idx}일&nbsp;
                       {getDow(plannerDate.dow)})
                     </div>
                     <div className="plan__over-container">
@@ -358,17 +368,6 @@ const DetailModal = ({ detailOne, setIsOpen, setShowCBModal, setIsLoading }) => 
           </Plan>
 
           <DetailTitle>
-            {/* <div className="anim-icon star">
-              <input
-                type="checkbox"
-                id="star"
-                onClick={(e) => {
-                  console.log("북마크 체크 여부 :", e.currentTarget.checked);
-                }}
-              />
-              <label for="star"></label>
-            </div> */}
-            {/* 여기가 글 작성할때 쓴 제목 */}
             <span className="detail__plan-title-badge">TITLE</span>
             <div className="detail__plan-title">
               <span>{title}</span>
@@ -398,24 +397,26 @@ const DetailModal = ({ detailOne, setIsOpen, setShowCBModal, setIsLoading }) => 
                     {detailOne.id}
                   </span>
                 </div>
-                <div>
-                  {myBookMark == false ? (
-                    <i
-                      class="fa-regular fa-bookmark detail__plan-bookMark"
-                      onClick={() => {
-                        setMyBookMark(true);
-                        bookMarkOne(true);
-                      }}
-                    ></i>
-                  ) : (
+                <div
+                  onClick={() => {
+                    bookMarkOne();
+                  }}
+                >
+                  {myBookMark == bookbol ? (
                     <FontAwesomeIcon
                       icon={faBookmark}
                       className="detail__plan-bookMark"
                       onClick={() => {
-                        setMyBookMark(false);
-                        bookMarkOne(false);
+                        setMyBookMark(!myBookMark);
                       }}
                     />
+                  ) : (
+                    <i
+                      class="fa-regular fa-bookmark detail__plan-bookMark"
+                      onClick={() => {
+                        setMyBookMark(!myBookMark);
+                      }}
+                    ></i>
                   )}
                 </div>
               </div>
@@ -453,11 +454,17 @@ const DetailModal = ({ detailOne, setIsOpen, setShowCBModal, setIsLoading }) => 
               )}
             </div>
             <Tag>
-              <Date>작성일. {dateFormat(new window.Date(detailOne.postdate))}</Date>
+              <Date>
+                작성일. {dateFormat(new window.Date(detailOne.postdate))}
+              </Date>
               tag : #{theme}
             </Tag>
             {sessionStorage.getItem("username") == userId ? (
-              <input type="text" placeholder="글쓴이는 리뷰가 안되요!" disabled />
+              <input
+                type="text"
+                placeholder="글쓴이는 리뷰가 안되요!"
+                disabled
+              />
             ) : isReviewId === 1 ? (
               <input type="text" placeholder="리뷰는 하나만!" disabled />
             ) : (
@@ -466,7 +473,9 @@ const DetailModal = ({ detailOne, setIsOpen, setShowCBModal, setIsLoading }) => 
                 placeholder="리뷰 달기..."
                 ref={commentRef}
                 onKeyUp={(e) => {
-                  e.target.value.length > 0 ? setIsValid(true) : setIsValid(false);
+                  e.target.value.length > 0
+                    ? setIsValid(true)
+                    : setIsValid(false);
                 }} //사용자가 리뷰를 작성했을 때 빈공간인지 확인하여 유효성 검사
               />
             )}
@@ -539,26 +548,39 @@ function DetailSetting({ fromWooJaeData, periodIndex, obj, i }) {
   useEffect(() => {
     if (i !== 0) {
       setUpTime(
-        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime + obj.mtime / 1000 / 60
+        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime +
+          obj.mtime / 1000 / 60
       );
       setDownTime(
         fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime +
           obj.mtime / 1000 / 60 +
-          fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].atime / 1000 / 60
+          fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].atime /
+            1000 /
+            60
       );
       let forBlackBoxRedux = getTimes(
         periodIndex,
-        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime + obj.mtime / 1000 / 60,
+        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime +
+          obj.mtime / 1000 / 60,
         fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime +
           obj.mtime / 1000 / 60 +
-          fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].atime / 1000 / 60
+          fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].atime /
+            1000 /
+            60
       );
       dispatch(addWholeBlackBox(forBlackBoxRedux));
-      if (i !== fromWooJaeData[periodIndex]["day" + (periodIndex + 1)].length - 1) {
-        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i + 1].starttime =
+      if (
+        i !==
+        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)].length - 1
+      ) {
+        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][
+          i + 1
+        ].starttime =
           fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime +
           obj.mtime / 1000 / 60 +
-          fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].atime / 1000 / 60;
+          fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].atime /
+            1000 /
+            60;
       }
     }
   }, []);
@@ -642,7 +664,9 @@ const Chat = ({ detailOne }) => {
               return (
                 <div
                   className={
-                    val.authid !== sessionStorage.getItem("username") ? "chatBox box" : "chatBox"
+                    val.authid !== sessionStorage.getItem("username")
+                      ? "chatBox box"
+                      : "chatBox"
                   }
                 >
                   <div
@@ -666,7 +690,11 @@ const Chat = ({ detailOne }) => {
                         {new window.Date().getHours() > 12
                           ? new window.Date().getHours() - 12
                           : new window.Date().getHours()}
-                        :{new window.Date().getMinutes().toString().padStart(2, "0")}
+                        :
+                        {new window.Date()
+                          .getMinutes()
+                          .toString()
+                          .padStart(2, "0")}
                       </span>
                     </div>
 
@@ -754,7 +782,8 @@ const Container = styled.div`
   top: 47px;
   right: 20px;
   transition: 0.3s;
-  animation: ${swing_chat} 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.5s both;
+  animation: ${swing_chat} 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.5s
+    both;
 `;
 const InnnerContainer = styled.div`
   position: relative;
@@ -820,7 +849,8 @@ const Plan = styled.div`
   &::-webkit-scrollbar {
     display: none;
   }
-  animation: ${bounce_modal_plan} 1.7s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+  animation: ${bounce_modal_plan} 1.7s cubic-bezier(0.175, 0.885, 0.32, 1.275)
+    both;
   animation-delay: 0.2s;
 `;
 
