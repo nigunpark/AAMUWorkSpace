@@ -133,7 +133,7 @@ function App() {
               />
             }
           />
-          <Route path="/myPage" element={<MyPage searchb={searchb} />} />
+          <Route path="/myPage" element={<MyPage />} />
         </Route>
         {/* <Route path="/chat" element={<Chat />} /> */}
         <Route path="/login" element={<LoginTest />}></Route>
