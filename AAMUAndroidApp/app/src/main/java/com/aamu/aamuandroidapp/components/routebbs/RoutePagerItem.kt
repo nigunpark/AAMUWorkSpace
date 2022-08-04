@@ -115,7 +115,7 @@ fun RoutePagerItem(
                 style = typography.h6.copy(fontSize = 12.sp)
             )
             Text(
-                text = "평점  •  ${bbs.rateavg}/10",
+                text = "평점  •  ${bbs.rateavg}/5",
                 modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
                 style = typography.h6.copy(fontSize = 12.sp, fontWeight = FontWeight.Medium)
             )

@@ -7,12 +7,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.aamu.aamuandroidapp.components.aamuplan.AAMUPlanHome
+import com.aamu.aamuandroidapp.components.aamuplan.AAMUPlanViewModel
+import com.aamu.aamuandroidapp.components.aamuplan.AAMUPlanViewModelFactory
+import com.aamu.aamuandroidapp.components.aamuplan.PlaceDetail.PlaceDetailViewModelFactory
 import com.aamu.aamuandroidapp.databinding.FragmentPlannerBinding
 import com.aamu.aamuandroidapp.util.setStatusBarOrigin
 import com.aamu.aamuandroidapp.util.setStatusBarTransparent
+import net.daum.mf.map.api.MapView
 
 
 class PlannerFragment : Fragment() {
@@ -20,6 +25,11 @@ class PlannerFragment : Fragment() {
     private lateinit var binding: FragmentPlannerBinding
 
     private lateinit var navController : NavController
+
+    private val mapViewModel: AAMUPlanViewModel by activityViewModels<AAMUPlanViewModel> {
+
+        AAMUPlanViewModelFactory(requireContext(),navController)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,14 +43,18 @@ class PlannerFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         navController = Navigation.findNavController(view)
 
+        mapViewModel.mapView = MapView(requireContext())
+        mapViewModel.setInitMap()
         val permission = requireContext().getSharedPreferences("local",Context.MODE_PRIVATE)
         val checkPermission = permission.getString("local","")
+
+
         binding.plannerCompose.setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
         binding.plannerCompose.setContent {
             if(checkPermission != "Y"){
                 navController.popBackStack()
             }
-            AAMUPlanHome(navController)
+            AAMUPlanHome(navController,mapViewModel)
         }
     }
 

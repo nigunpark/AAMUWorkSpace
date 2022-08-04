@@ -127,6 +127,17 @@ class AAMURepositoryImpl(
         emit(emptyList<AAMUGarmResponse>())
     }.flowOn(Dispatchers.IO)
 
+    override suspend fun getGramByPlaceList(contentid: Int): Flow<List<AAMUGarmResponse>> = flow<List<AAMUGarmResponse>> {
+        val response = aamuApi.getGramByPlaceList(contentid)
+        if (response.isSuccessful){
+            emit(response.body() ?: emptyList<AAMUGarmResponse>())
+        }
+        else
+            emit(emptyList<AAMUGarmResponse>())
+    }.catch {
+        emit(emptyList<AAMUGarmResponse>())
+    }.flowOn(Dispatchers.IO)
+
     override suspend fun getBBSList(): Flow<List<AAMUBBSResponse>> = flow<List<AAMUBBSResponse>> {
         val response = aamuApi.getBBSList()
         if (response.isSuccessful){
@@ -136,5 +147,16 @@ class AAMURepositoryImpl(
             emit(emptyList<AAMUBBSResponse>())
     }.catch {
         emit(emptyList<AAMUBBSResponse>())
+    }.flowOn(Dispatchers.IO)
+
+    override suspend fun getBBSOne(rbn: Int): Flow<AAMUBBSResponse> = flow<AAMUBBSResponse> {
+        val response = aamuApi.getBBSOne(rbn)
+        if (response.isSuccessful){
+            emit(response.body() ?: AAMUBBSResponse())
+        }
+        else
+            emit(AAMUBBSResponse())
+    }.catch {
+        emit(AAMUBBSResponse())
     }.flowOn(Dispatchers.IO)
 }

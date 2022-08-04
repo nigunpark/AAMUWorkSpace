@@ -11,25 +11,23 @@ import com.aamu.aamuandroidapp.data.api.repositories.AAMURepository
 import com.aamu.aamuandroidapp.data.api.response.AAMUPlaceResponse
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.plus
+import net.daum.mf.map.api.MapPoint
 import net.daum.mf.map.api.MapView
 
-class PlaceDetailViewModelFactory(val context: Context,val place : AAMUPlaceResponse) : ViewModelProvider.Factory{
+class PlaceDetailViewModelFactory(val context: Context) : ViewModelProvider.Factory{
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return PlaceDetailViewModel(context,place) as T
+        return PlaceDetailViewModel(context) as T
     }
 }
 
-class PlaceDetailViewModel(context: Context,place : AAMUPlaceResponse) : ViewModel(){
+class PlaceDetailViewModel(context: Context) : ViewModel() , MapView.MapViewEventListener{
 
-    val mapView = MapView(context)
     private val aamuRepository : AAMURepository = AAMUDIGraph.createAAMURepository()
-
+    private val context = context
     val placeLiveData = MutableLiveData<AAMUPlaceResponse>()
     val errorLiveData = MutableLiveData<String>()
 
-    init {
-        mapView.removeAllPOIItems()
-        mapView.removeAllPolylines()
+    fun getPlaceOne(place : AAMUPlaceResponse){
         if(place.contentid != null && place.contenttypeid != null) {
             viewModelScope.launch {
                 aamuRepository.getPlaceOne(place.contentid!!, place.contenttypeid!!)
@@ -44,7 +42,7 @@ class PlaceDetailViewModel(context: Context,place : AAMUPlaceResponse) : ViewMod
                     }
             }
             viewModelScope.launch {
-                
+                //카카오리뷰 받아오기
             }
         }
         else{
@@ -52,4 +50,22 @@ class PlaceDetailViewModel(context: Context,place : AAMUPlaceResponse) : ViewMod
             Toast.makeText(context,"장소 받아오는데 실페했습니다", Toast.LENGTH_LONG)
         }
     }
+
+    override fun onMapViewInitialized(mapView: MapView?) {}
+
+    override fun onMapViewCenterPointMoved(mapView: MapView?, mapCenterPoint: MapPoint?) {}
+
+    override fun onMapViewZoomLevelChanged(mapView: MapView?, zoomLevel: Int) {}
+
+    override fun onMapViewSingleTapped(mapView: MapView?, mapPoint: MapPoint?) {}
+
+    override fun onMapViewDoubleTapped(mapView: MapView?, mapPoint: MapPoint?) {}
+
+    override fun onMapViewLongPressed(mapView: MapView?, mapPoint: MapPoint?) {}
+
+    override fun onMapViewDragStarted(mapView: MapView?, mapPoint: MapPoint?) { }
+
+    override fun onMapViewDragEnded(mapView: MapView?, mapPoint: MapPoint?) {}
+
+    override fun onMapViewMoveFinished(mapView: MapView?, mapPoint: MapPoint?) {}
 }

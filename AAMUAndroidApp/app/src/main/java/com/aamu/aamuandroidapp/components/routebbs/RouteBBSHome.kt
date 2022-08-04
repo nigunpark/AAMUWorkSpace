@@ -38,11 +38,6 @@ fun RouteBBSScreen(routeBBSHomeInteractionEvents: (RouteBBSHomeInteractionEvents
 fun RouteBBSScreenContent(routeBBSHomeInteractionEvents: (RouteBBSHomeInteractionEvents) -> Unit) {
     //TODO dynamic gradient from poster via coil right now It's just getting from local images
     val imageId = remember { mutableStateOf(R.drawable.camelia) }
-    val context = LocalContext.current
-    val defaultBitmap =
-        ImageBitmap.imageResource(context.resources, imageId.value).asAndroidBitmap()
-    val currentBitmap = remember { mutableStateOf(defaultBitmap) }
-    val swatch = currentBitmap.value.generateDominantColorState()
     val dominantColors = listOf(Color.White, cyan200)
 
     LazyColumn(

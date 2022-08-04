@@ -45,11 +45,17 @@ interface AAMUApi {
     @GET("gram/selectList")
     suspend fun getGramList(@Query("id") id : String) : Response<List<AAMUGarmResponse>>
 
+    @GET("gram/selectList")
+    suspend fun getGramByPlaceList(@Query("contentid") contentid : Int) : Response<List<AAMUGarmResponse>>
+
     @GET("bbs/SelectList")
     suspend fun getBBSList() : Response<List<AAMUBBSResponse>>
 
+    @GET("bbs/SelectOne/{rbn}")
+    suspend fun getBBSOne(@Path("rbn") rbn: Int) : Response<AAMUBBSResponse>
+
     companion object {
-        private const val BASE_URL = "http://192.168.0.19:8080/aamurest/"
+        private const val BASE_URL = "http://192.168.0.22:8080/aamurest/"
 
         operator fun invoke():AAMUApi{
             val requestInterceptor  = Interceptor{ chain ->

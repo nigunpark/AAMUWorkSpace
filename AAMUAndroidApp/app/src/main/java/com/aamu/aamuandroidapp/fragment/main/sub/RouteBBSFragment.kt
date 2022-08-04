@@ -1,5 +1,6 @@
 package com.aamu.aamuandroidapp.fragment.main.sub
 
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -26,7 +27,6 @@ class RouteBBSFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View = ComposeView(inflater.context).apply {
-
         setContent {
             ComposeCookBookTheme {
                 RouteBBSScreen(routeBBSHomeInteractionEvents = { event ->

@@ -1,5 +1,6 @@
 package com.aamu.aamuandroidapp.components.aamuplan.PlanDetails
 
+import android.annotation.SuppressLint
 import android.content.Context
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.*
@@ -139,6 +140,7 @@ fun PlanDetails(
     }
 }
 
+@SuppressLint("CoroutineCreationDuringComposition")
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun PlanListScroll(
@@ -150,6 +152,8 @@ fun PlanListScroll(
 ){
     val planners by mapviewModel.planners.observeAsState(emptyList())
     val plannerSelectOne by mapviewModel.plannerSelectOne.observeAsState()
+
+    val isSelectOne by mapviewModel.isSelectOne.observeAsState()
 
     val lazyListState = rememberLazyListState()
     val lazyListStateVertical = rememberLazyListState()
@@ -176,6 +180,15 @@ fun PlanListScroll(
             }
         }
     }
+
+    if(isSelectOne == true){
+        coroutineScope.launch {
+            lazyListStateVertical.scrollToItem(0)
+            lazyListState.scrollToItem(0)
+        }
+        mapviewModel.isSelectOne.value = false
+    }
+
     var mapMakerIndex : Int = if(lazyListStateVertical.firstVisibleItemIndex-1 >= 0) lazyListStateVertical.firstVisibleItemIndex-1 else 0
     if(lazyListStateVertical.firstVisibleItemIndex == 0){
         mapviewModel.setCurrentMarker()
