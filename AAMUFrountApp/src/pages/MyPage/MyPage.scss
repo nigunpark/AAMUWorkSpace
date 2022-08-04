@@ -289,19 +289,40 @@ a {
     }
   }
 }
-
+.myEdit__editBtn:hover {
+  color: var(--orange);
+}
+.write-box-title {
+  border: 2px solid rgba(128, 128, 128, 0.5);
+  border-radius: 5px;
+  width: 100%;
+  height: 100%;
+}
+.wirte-title {
+  width: 100%;
+  height: 60px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 25px;
+  overflow: auto;
+  resize: none;
+  border: none;
+}
 .projects-section {
   position: relative;
   flex: 3;
   background-color: var(--projects-section);
   border-radius: 10px;
-  padding: 20px 25px 10px;
+  // padding: 20px 25px 10px;
+  width: 100%;
   overflow: hidden;
   height: 790px;
   display: flex;
   flex-direction: column;
   margin-top: 50px;
   box-shadow: var(--shadow);
+
+  padding: 10px;
 
   &-line {
     display: flex;
@@ -554,92 +575,91 @@ a {
 }
 
 .project-boxes {
-  margin: 0 -8px;
+  // margin: 0 -8px;
+  width: 100%;
   overflow-y: auto;
-
   display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+  // flex-direction: row;
+  // flex-wrap: wrap;
 
-  &.jsGridView {
-    display: flex;
-    flex-wrap: wrap;
+  // &.jsGridView {
+  //   display: flex;
+  //   flex-wrap: wrap;
 
-    .project-box-wrapper {
-      width: 33.3%;
-    }
-    .profile_project-box-wrapper {
-      margin-left: 15%;
-      width: 70%;
-    }
-  }
+  //   .project-box-wrapper {
+  //     width: 33.3%;
+  //   }
+  //   .profile_project-box-wrapper {
+  //     margin-left: 15%;
+  //     width: 70%;
+  //   }
+  // }
 
-  &.jsListView {
-    .project-box {
-      display: flex;
-      border-radius: 10px;
-      position: relative;
-      box-shadow: 0 2px 6px 0 rgba(136, 148, 171, 0.2),
-        0 24px 20px -24px rgba(71, 82, 107, 0.1);
-      transition: 0.1s;
-      * {
-        margin-right: 5px;
-      }
-    }
-    .project-box:hover {
-      transform: scale(1.02);
-    }
+  // &.jsListView {
+  //   .project-box {
+  //     display: flex;
+  //     border-radius: 10px;
+  //     position: relative;
+  //     box-shadow: 0 2px 6px 0 rgba(136, 148, 171, 0.2), 0 24px 20px -24px rgba(71, 82, 107, 0.1);
+  //     transition: 0.1s;
+  //     * {
+  //       margin-right: 5px;
+  //     }
+  //   }
+  //   .project-box:hover {
+  //     transform: scale(1.02);
+  //   }
 
-    .more-wrapper {
-      position: absolute;
-      right: 16px;
-      top: 16px;
-    }
+  //   .more-wrapper {
+  //     position: absolute;
+  //     right: 16px;
+  //     top: 16px;
+  //   }
 
-    .project-box-content-header {
-      order: 1;
-      max-width: 100%;
-      max-height: 80px;
-    }
+  //   .project-box-content-header {
+  //     order: 1;
+  //     max-width: 100%;
+  //     max-height: 80px;
+  //   }
 
-    .project-box-header {
-      order: 2;
-    }
+  //   .project-box-header {
+  //     order: 2;
+  //   }
 
-    .project-box-footer {
-      order: 3;
-      padding-top: 0;
-      flex-direction: column;
-      justify-content: flex-start;
-    }
+  //   .project-box-footer {
+  //     order: 3;
+  //     padding-top: 0;
+  //     flex-direction: column;
+  //     justify-content: flex-start;
+  //   }
 
-    .project-box-footer:after {
-      display: none;
-    }
+  //   .project-box-footer:after {
+  //     display: none;
+  //   }
 
-    .participants {
-      margin-bottom: 8px;
-    }
+  //   .participants {
+  //     margin-bottom: 8px;
+  //   }
 
-    .project-box-content-header p {
-      text-align: left;
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-    }
+  //   .project-box-content-header p {
+  //     text-align: left;
+  //     overflow: hidden;
+  //     white-space: nowrap;
+  //     text-overflow: ellipsis;
+  //   }
 
-    .project-box-header > span {
-      position: absolute;
-      bottom: 16px;
-      left: 16px;
-      font-size: 12px;
-    }
+  //   .project-box-header > span {
+  //     position: absolute;
+  //     bottom: 16px;
+  //     left: 16px;
+  //     font-size: 12px;
+  //   }
 
-    .box-progress-wrapper {
-      order: 3;
-      flex: 1;
-    }
-  }
+  //   .box-progress-wrapper {
+  //     order: 3;
+  //     flex: 1;
+  //   }
+  // }
 }
 .bookMark {
   width: 35px;
@@ -662,6 +682,8 @@ a {
   gap: 7px;
   overflow: auto;
   padding: 5px;
+  height: 100%;
+  width: 100%;
 
   &::-webkit-scrollbar {
     display: none;
@@ -703,7 +725,7 @@ a {
   box-shadow: var(--shadow);
   border-radius: 5px;
   width: 100%;
-  height: 100%;
+  height: 320px;
   padding: 5px;
   transition: 0.1s;
 }
@@ -755,7 +777,7 @@ a {
   // border: 1px solid #e9ebec;
   // background-color: #e9ebec;
   border-radius: 7px;
-  height: 320px;
+  height: 310px;
   box-shadow: var(--lightShadow);
   border: 2px solid white;
   transition: 0.1s;
@@ -802,11 +824,19 @@ a {
 }
 .MyWrite-container {
   // border: solid 1px black;
-  margin: auto;
+  // margin: auto;
   display: grid;
-  grid-template-columns: 300px 400px 300px;
-  grid-template-rows: 50px 400px 80px;
-  gap: 10px;
+  grid-template-columns: 30% auto;
+  // grid-template-columns: 300px auto 300px;
+  // grid-template-rows: 50px 400px 80px;
+  // width: 100%;
+  // gap: 5px;
+}
+.editBox__rightSide {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  width: 73%;
 }
 .write-box {
   &.picture {
@@ -818,15 +848,47 @@ a {
     display: flex;
     flex-direction: column;
     border: none;
+    height: 100%;
   }
   &.add-delete {
+    // position: relative;
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: 135px 135px 135px;
-    grid-row: 2 / 4;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 5px;
+    border-radius: 5px;
+    // grid-template-rows: repeat(3, 1fr);
+    // grid-row: 2 / 4;
     //background-image: url("../../../public/images/no-image.jpg");
-    // border: solid 1px red;
+    border: solid 2px rgba(128, 128, 128, 0.5);
+    padding: 3px;
+    width: 100%;
+    height: 500px;
+    overflow-y: auto;
+    &::-webkit-scrollbar {
+      display: none;
+    }
   }
+  .previewImage {
+    position: relative;
+    width: 16rem;
+    height: auto;
+
+    .test-i {
+      color: var(--orange);
+      position: absolute;
+      top: 5px;
+      right: -2px;
+      cursor: pointer;
+    }
+    img {
+      max-width: 16.5rem;
+      max-height: 17rem;
+      object-fit: cover;
+      border-radius: 5px;
+      border: 1px solid var(--orange);
+    }
+  }
+
   &.plan {
     display: flex;
     flex-direction: column;
@@ -847,7 +909,7 @@ a {
   // height: 100%;
   // border: 1px solid var(--skyblue);
   box-shadow: var(--lightShadow);
-  background-color: rgba(0, 180, 216, 0.6);
+  background-color: black;
   color: white;
   border-radius: 5px;
   padding: 0 5px;
@@ -919,16 +981,6 @@ a {
   gap: 1rem;
 }
 
-.wirte-title {
-  width: 100%;
-  height: 70%;
-  font-size: 20px;
-  overflow: auto;
-  resize: none;
-  border: none;
-  margin-top: 5px;
-  border-bottom: 1px gray solid;
-}
 .write-picture-input {
   display: none;
 }
@@ -1530,116 +1582,116 @@ a {
   }
 }
 
-@media screen and (max-width: 520px) {
-  .projects-section {
-    overflow: auto;
-  }
-  .project-boxes {
-    overflow-y: visible;
-  }
+// @media screen and (max-width: 520px) {
+//   .projects-section {
+//     overflow: auto;
+//   }
+//   .project-boxes {
+//     overflow-y: visible;
+//   }
 
-  .app-sidebar,
-  .app-icon {
-    display: none;
-  }
+//   .app-sidebar,
+//   .app-icon {
+//     display: none;
+//   }
 
-  .app-content {
-    padding: 16px 12px 24px 12px;
-  }
+//   .app-content {
+//     padding: 16px 12px 24px 12px;
+//   }
 
-  .status-number,
-  .status-type {
-    font-size: 10px;
-  }
+//   .status-number,
+//   .status-type {
+//     font-size: 10px;
+//   }
 
-  .view-btn {
-    width: 24px;
-    height: 24px;
-  }
+//   .view-btn {
+//     width: 24px;
+//     height: 24px;
+//   }
 
-  .app-header {
-    padding: 16px 10px;
-  }
+//   .app-header {
+//     padding: 16px 10px;
+//   }
 
-  .search-input {
-    max-width: 120px;
-  }
+//   .search-input {
+//     max-width: 120px;
+//   }
 
-  .project-boxes.jsGridView .project-box-wrapper {
-    width: 100%;
-  }
+//   .project-boxes.jsGridView .project-box-wrapper {
+//     width: 100%;
+//   }
 
-  .projects-section {
-    padding: 24px 16px 0 16px;
-  }
+//   .projects-section {
+//     padding: 24px 16px 0 16px;
+//   }
 
-  .profile-btn img {
-    width: 24px;
-    height: 24px;
-  }
+//   .profile-btn img {
+//     width: 24px;
+//     height: 24px;
+//   }
 
-  .app-header {
-    padding: 10px;
-  }
+//   .app-header {
+//     padding: 10px;
+//   }
 
-  .projects-section-header p,
-  .projects-section-header .time {
-    font-size: 18px;
-  }
+//   .projects-section-header p,
+//   .projects-section-header .time {
+//     font-size: 18px;
+//   }
 
-  .status-type {
-    padding-right: 4px;
+//   .status-type {
+//     padding-right: 4px;
 
-    &:after {
-      display: none;
-    }
-  }
+//     &:after {
+//       display: none;
+//     }
+//   }
 
-  .search-input {
-    font-size: 14px;
-  }
+//   .search-input {
+//     font-size: 14px;
+//   }
 
-  .messages-btn {
-    top: 48px;
-  }
+//   .messages-btn {
+//     top: 48px;
+//   }
 
-  .box-content-header {
-    font-size: 12px;
-    line-height: 16px;
-  }
+//   .box-content-header {
+//     font-size: 12px;
+//     line-height: 16px;
+//   }
 
-  .box-content-subheader {
-    font-size: 12px;
-    line-height: 16px;
-  }
+//   .box-content-subheader {
+//     font-size: 12px;
+//     line-height: 16px;
+//   }
 
-  .project-boxes.jsListView .project-box-header > span {
-    font-size: 10px;
-  }
+//   .project-boxes.jsListView .project-box-header > span {
+//     font-size: 10px;
+//   }
 
-  .box-progress-header {
-    font-size: 12px;
-  }
+//   .box-progress-header {
+//     font-size: 12px;
+//   }
 
-  .box-progress-percentage {
-    font-size: 10px;
-  }
+//   .box-progress-percentage {
+//     font-size: 10px;
+//   }
 
-  .days-left {
-    font-size: 8px;
-    padding: 6px 6px;
-    text-align: center;
-  }
+//   .days-left {
+//     font-size: 8px;
+//     padding: 6px 6px;
+//     text-align: center;
+//   }
 
-  .project-boxes.jsListView .project-box > * {
-    margin-right: 10px;
-  }
+//   .project-boxes.jsListView .project-box > * {
+//     margin-right: 10px;
+//   }
 
-  .project-boxes.jsListView .more-wrapper {
-    right: 2px;
-    top: 10px;
-  }
-}
+//   .project-boxes.jsListView .more-wrapper {
+//     right: 2px;
+//     top: 10px;
+//   }
+// }
 .myBox__img-container {
   width: 100%;
   height: 100%;

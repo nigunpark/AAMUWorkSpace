@@ -18,6 +18,7 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "../Upload/UploadSwiper.css";
 import { confirmAlert } from "react-confirm-alert";
+import { faX } from "@fortawesome/free-solid-svg-icons";
 
 const MyEdit = ({ setlist, val, seteditModal, searchBar }) => {
   let menuRef = useRef();
@@ -101,11 +102,11 @@ const MyEdit = ({ setlist, val, seteditModal, searchBar }) => {
 
   const submit = () => {
     confirmAlert({
-      title: "수정내용을 삭제하시겠습니까?",
+      title: "수정완료 하셨나요?",
       message: "지금 나가면 수정 내용이 저장되지 않습니다.",
       buttons: [
         {
-          label: "삭제",
+          label: "확인",
           onClick: () => {
             seteditModal(false);
           },
@@ -119,45 +120,48 @@ const MyEdit = ({ setlist, val, seteditModal, searchBar }) => {
 
   return (
     <Container>
-      <Overlay
-        onClick={() => {
-          submit();
-        }}
-      />
+      <Overlay />
       <Contents>
         <FirstLine>
-          <div
-            className="newPosting"
-            style={{ marginLeft: "45%", width: "20%" }}
-          >
+          <div className="newPosting" style={{ marginLeft: "45%", width: "20%" }}>
             <h2>수정하기</h2>
           </div>
           {/* {showNext ?  */}
-          <Nextbtn
-            onClick={() => {
-              edit(
-                val,
-                setlist,
-                setShowWrite,
-                titleRef,
-                textareaRef,
-                searchRef,
-                search,
-                searchBar
-              );
-              seteditModal(false);
-              // feedList(setlist)
-            }}
-          >
-            <FontAwesomeIcon icon={faPaperPlane} size="2x" />
+          <Nextbtn style={{ marginRight: "10px" }}>
+            <FontAwesomeIcon
+              icon={faPaperPlane}
+              size="2x"
+              className="myEdit__editBtn"
+              onClick={(e) => {
+                e.stopPropagation();
+                edit(
+                  val,
+                  seteditModal,
+                  setShowWrite,
+                  titleRef,
+                  textareaRef,
+                  searchRef,
+                  search,
+                  searchBar
+                );
+
+                // feedList(setlist)
+              }}
+            />
+            <FontAwesomeIcon
+              className="myEdit__editBtn"
+              icon={faX}
+              size="2x"
+              style={{ marginLeft: "14px" }}
+              onClick={(e) => {
+                e.stopPropagation();
+                submit();
+              }}
+            />
           </Nextbtn>
         </FirstLine>
         <Body>
-          <form
-            className="picfileframe"
-            style={{ width: "65%" }}
-            encType="multipart/form-data"
-          >
+          <form className="picfileframe" style={{ width: "65%" }} encType="multipart/form-data">
             <input
               id="input-file"
               type="file"
@@ -231,9 +235,7 @@ const MyEdit = ({ setlist, val, seteditModal, searchBar }) => {
               <MyUsername>{sessionStorage.getItem("username")}</MyUsername>
             </div>
             <div>
-              <span style={{ fontWeight: "bold", marginLeft: "10px" }}>
-                제목 :{" "}
-              </span>
+              <span style={{ fontWeight: "bold", marginLeft: "10px" }}>제목 : </span>
               <input
                 ref={titleRef}
                 type="text"
@@ -242,6 +244,7 @@ const MyEdit = ({ setlist, val, seteditModal, searchBar }) => {
                   settitle(e.target.value);
                 }}
                 value={title}
+                style={{ width: "70%", textOverflow: "ellipsis" }}
               />
             </div>
             <div>
@@ -352,7 +355,7 @@ function feedList(setlist) {
 
 function edit(
   val,
-  setlist,
+  seteditModal,
   setShowWrite,
   titleRef,
   textareaRef,
@@ -382,12 +385,17 @@ function edit(
       }
     )
     .then((resp) => {
-      console.log(resp.data);
+      console.log("?", resp.data);
       setShowWrite(resp.data);
       searchBar();
+      if (resp.data.isSuccess === true) {
+        alert("수정되었습니다");
+        seteditModal(false);
+      }
       // feedList(setlist);
     })
     .catch((error) => {
+      alert("수정에 실패했습니다. 관리자에게 문의하세요");
       console.log(error);
     });
 }
