@@ -639,6 +639,8 @@ a {
   gap: 7px;
   overflow: auto;
   padding: 5px;
+  height: 100%;
+  width: 100%;
 
   &::-webkit-scrollbar {
     display: none;
@@ -680,7 +682,7 @@ a {
   box-shadow: var(--shadow);
   border-radius: 5px;
   width: 100%;
-  height: 100%;
+  height: 320px;
   padding: 5px;
   transition: 0.1s;
 }
@@ -720,7 +722,7 @@ a {
   // border: 1px solid #e9ebec;
   // background-color: #e9ebec;
   border-radius: 7px;
-  height: 320px;
+  height: 310px;
   box-shadow: var(--lightShadow);
   border: 2px solid white;
   transition: 0.1s;
@@ -812,7 +814,7 @@ a {
   // height: 100%;
   // border: 1px solid var(--skyblue);
   box-shadow: var(--lightShadow);
-  background-color: rgba(0, 180, 216, 0.6);
+  background-color: black;
   color: white;
   border-radius: 5px;
   padding: 0 5px;
