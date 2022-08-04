@@ -18,7 +18,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import CommentSearch from "../../components/Insta/ModalGroup/Comment/CommentSearch";
 import MyEdit from "../../components/Insta/ModalGroup/Edit/MyEdit";
-const MyPage = ({ searchb }) => {
+import ContentItem from "../Forum/Content/ContentItem";
+import MyBookMarkBox from "./MyPageBox/MyBookMarkBox";
+import MyTheme from "./MyPageBox/MyTheme";
+import DetailModal from "../Forum/DetailModal/DetailModal";
+const MyPage = () => {
   let [clickTab, setClickTab] = useState(0);
 
   let home = useRef();
@@ -48,7 +52,6 @@ const MyPage = ({ searchb }) => {
       })
       .then((resp) => {
         setPlanList(resp.data);
-        // console.log("데이터 확인 : ", resp.data);
 
         setUpload(
           resp.data.reduce((acc, obj) => {
@@ -66,7 +69,7 @@ const MyPage = ({ searchb }) => {
 
   const [myInstar, setMyInstar] = useState([]);
   const [myLno, setMyLno] = useState(0);
-  //searchb
+
   async function searchBar() {
     let token = sessionStorage.getItem("token");
     let serchId = "id";
@@ -81,7 +84,7 @@ const MyPage = ({ searchb }) => {
         },
       })
       .then((resp) => {
-        console.log("인스타 내 글 가져오기", resp.data);
+        console.log("인스타 내 글 가져오기 (MyPage.js) :", resp.data);
         setMyInstar(resp.data);
       })
       .catch((error) => {
@@ -89,9 +92,53 @@ const MyPage = ({ searchb }) => {
       });
   }
 
+  const [myThemes, setMyThemes] = useState();
+  async function myTheme() {
+    let token = sessionStorage.getItem("token");
+    await axios
+      .get("", {
+        params: {
+          id: sessionStorage.getItem("username"),
+        },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((resp) => {
+        console.log("나의 테마 (MyPage.js) :", resp.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  const [myBookList, setMyBookList] = useState([]);
+  const [detailOne, setDetailOne] = useState({});
+  const [isOpen, setIsOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const bookMarkList = async () => {
+    let token = sessionStorage.getItem("token");
+
+    await axios
+      .get("/aamurest/bbs/bookmark/list", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((resp) => {
+        console.log("북마크 목록 데이터 (DetailModal.js) :", resp.data);
+        setMyBookList(resp.data);
+      })
+      .catch((error) => {
+        console.log("북마크 목록 실패 (DetailModal.js) :", error);
+      });
+  };
+
   useEffect(() => {
     selectList();
     searchBar();
+    bookMarkList();
+    myTheme();
   }, [clickTab]);
 
   useEffect(() => {
@@ -268,6 +315,12 @@ const MyPage = ({ searchb }) => {
               editModal={editModal}
               seteditModal={seteditModal}
               searchBar={searchBar}
+              myBookList={myBookList}
+              detailOne={detailOne}
+              setDetailOne={setDetailOne}
+              isOpen={isOpen}
+              setIsOpen={setIsOpen}
+              setIsLoading={setIsLoading}
             />
           </div>
         </div>
@@ -288,7 +341,12 @@ const MyPage = ({ searchb }) => {
 function Title({ clickTab }) {
   //타이틀
   if (clickTab === 0) {
-    return <div className="projects-title">이런여행 어때 게시판 정보</div>;
+    return (
+      <>
+        <div className="projects-title">이런여행 어때 게시판 정보</div>
+        <MyTheme />
+      </>
+    );
   } else if (clickTab === 1) {
     return <div className="projects-title">이런곳은 어때 게시판 정보</div>;
   } else if (clickTab === 2) {
@@ -314,7 +372,15 @@ function TabContent({
   editModal,
   seteditModal,
   searchBar,
+  myBookList,
+  detailOne,
+  setDetailOne,
+  isOpen,
+  setIsOpen,
+  setIsLoading,
 }) {
+  const [showCBModal, setShowCBModal] = useState(false);
+
   const [selectRbn, setSelectRbn] = useState();
   const [modalOpen, setModalOpen] = useState(false);
 
@@ -388,16 +454,30 @@ function TabContent({
                       <img className="instaImg" src={val.photo[0]} />
                       <div>
                         <div className="instaTitle__container">
-                          <input type="text" value={val.ctitle} className="instaTitle" />
+                          <input
+                            type="text"
+                            value={val.ctitle}
+                            className="instaTitle"
+                          />
                         </div>
                         <div className="insta__info">
                           <div>
-                            <FontAwesomeIcon icon={faMessage} className="insta__info-icon" />{" "}
-                            <span className="insta__info-content">{val.rcount}</span>
+                            <FontAwesomeIcon
+                              icon={faMessage}
+                              className="insta__info-icon"
+                            />{" "}
+                            <span className="insta__info-content">
+                              {val.rcount}
+                            </span>
                           </div>
                           <div>
-                            <FontAwesomeIcon icon={faThumbsUp} className="insta__info-icon" />
-                            <span className="insta__info-content">{val.likecount}</span>
+                            <FontAwesomeIcon
+                              icon={faThumbsUp}
+                              className="insta__info-icon"
+                            />
+                            <span className="insta__info-content">
+                              {val.likecount}
+                            </span>
                           </div>
                         </div>
                       </div>
@@ -449,8 +529,37 @@ function TabContent({
       </>
     );
   } else if (clickTab === 2) {
-    //즐겨찾기
-    return null;
+    //----------------------북마크------------------------
+    return (
+      <div className="myInstaContainer">
+        <div className="myInstar">
+          {myBookList.map((val, idx) => {
+            return (
+              <MyBookMarkBox
+                setDetailOne={setDetailOne}
+                detail={val}
+                setIsOpen={setIsOpen}
+              />
+            );
+          })}
+
+          {/*
+            ContentItem.js 랑 같음
+            추후에 Content.js 에서 넘기는 데이터랑
+            ContentItem.js 안의 내용이랑 비슷하게 채우면될듯
+          */}
+        </div>
+
+        {isOpen && (
+          <DetailModal
+            detailOne={detailOne}
+            setShowCBModal={setShowCBModal}
+            setIsOpen={setIsOpen}
+            setIsLoading={setIsLoading}
+          />
+        )}
+      </div>
+    );
   } else if (clickTab === 3) {
     //----------------------프로필------------------------
     return <MyProfileBox setClickTab={setClickTab} />;
