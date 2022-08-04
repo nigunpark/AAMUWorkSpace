@@ -161,9 +161,9 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 	public List<String> commuTag(Map map) {
 		List<String> tagLists=dao.commuSelectTag(map);
 		List<String> sharptTagList = new Vector<>();
-		System.out.println("트루일가요?"+tagLists.contains(map.get("tname")));
+//		System.out.println("트루일가요?"+tagLists.contains(map.get("tname")));
 		if(tagLists.contains(map.get("tname"))) {
-			System.out.println("tname은 뭘가요?"+map.get("tname"));
+//			System.out.println("tname은 뭘가요?"+map.get("tname"));
 			for(String tag:tagLists) { //서울, 서울여행을 꺼내서 
 				String sharpTag="#"+tag; //#서울을 붙이기
 				sharptTagList.add(sharpTag); //새로운 배열에 담아서 전달
@@ -272,6 +272,7 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 		int affected=0;
 		Map map = new HashMap<>();
 		affected = transactionTemplate.execute(tx->{
+			
 			map.put("table", "commucomment");
 			map.put("lno", lno);
 			dao.commuDelete(map);
@@ -448,6 +449,7 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 	}*/
 	
 	//insertCommuTag 메소드 ***********보류
+	/*
 	public int insertCommuTagTb(Map map) {
 		int affected=0;
 		String tnameString=map.get("tname").toString();
@@ -478,6 +480,53 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 				System.out.println("메소드 타니? tno"+map.get("tno"));
 				affected=dao.commuInsertCommuTag(map); //2.commutag테이블에 인서트
 				System.out.println("커뮤태그에 인서트 되나?"+affected);
+			}
+		}
+		return affected;
+	}
+	*/
+	
+	public int insertCommuTagTb(Map map) {
+		System.out.println("여기오나?"+map.get("tname"));
+		int affected=0;
+		//List<String> tnameString=(List<String>)map.get("tname");
+		//tnameString.replaceAll(" ", "");
+		List<String> tnameList = new Vector<>();
+		for(String tnameString:(List<String>)map.get("tname")) {
+			String tnameStr = tnameString.replaceAll(" ", "").substring(1); //서울
+			System.out.println("tnameStr:"+tnameStr);
+			tnameList.add(tnameStr);//[서울] [서울,서울여행]
+		}
+//		String sharpTnameString=(String) map.get("tname");//[#서울,#서울여행]
+//		System.out.println("리스트에는 뭐가 들어있을가?"+sharpTnameString);
+//		List<String> tnameList = new Vector<>();
+//		for(String tnameString:sharpTnameString) { //#서울
+//			String tnameStr = tnameString.substring(0); //서울
+//			tnameList.add(tnameStr);//[서울] [서울,서울여행]
+//		}
+		for(int i=0; i<tnameList.size();i++) {
+			map.put("tname", tnameList.get(i));//tname:서울
+			List<String> tagLists=dao.commuSelectTag(map);
+			//System.out.println("list에는?:"+tagLists.get(0).toString());
+			System.out.println("표함되어잇을끼요?"+tagLists.contains("서울"));
+			System.out.println("첫번째는 과연:"+tnameList.get(i));
+			if(tagLists.contains(tnameList.get(i))) {//tags테이블에 있으면
+				map.put("tname", tnameList.get(i));
+//				System.out.println("메소드 타니?"+map.get("tname"));
+				int tno=dao.selectTnoOfTags(map); //tags테이블에 tno 셀렉트
+				map.put("tno", tno);
+//				System.out.println("메소드 타니? tno"+map.get("tno"));
+				affected=dao.commuInsertCommuTag(map); //1. commutag테이블에 저장
+			}
+			else {
+				dao.commuInsertTags(map); //1. tags테이블에 인서트
+				map.put("tname", tnameList.get(i));
+//				System.out.println("메소드 타니?"+map.get("tname"));
+				int tno=dao.selectTnoOfTags(map); //tags테이블에 tno 셀렉트
+				map.put("tno", tno);
+//				System.out.println("메소드 타니? tno"+map.get("tno"));
+				affected=dao.commuInsertCommuTag(map); //2.commutag테이블에 인서트
+//				System.out.println("커뮤태그에 인서트 되나?"+affected);
 			}
 		}
 		return affected;

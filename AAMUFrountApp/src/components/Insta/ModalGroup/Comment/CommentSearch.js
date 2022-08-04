@@ -14,6 +14,8 @@ import "swiper/css/pagination";
 import "../Upload/UploadSwiper.css";
 import dayjs from "dayjs";
 import { CommentsDisabled } from "@mui/icons-material";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faX } from "@fortawesome/free-solid-svg-icons";
 
 function CommentSearch({ val, comment, setcommentModal, setcomments }) {
   let menuRef = useRef();
@@ -45,10 +47,6 @@ function CommentSearch({ val, comment, setcommentModal, setcomments }) {
 
   // const [comments, setcomments] = useState([]);
   function commentModal2(setcomments) {
-    // const copyFeedComments = [...comments];//feedComments에 담겨있던 댓글 받아옴
-    // copyFeedComments.push(comment);//copyFeedComments에 있는 기존 댓글에 push하기 위함
-    // setcomments(copyFeedComments);//copyFeedComments 담겨있을 comment를 setfeedComments로 변경
-    // setcomments([...comments]);
     let token = sessionStorage.getItem("token");
     axios
       .get("/aamurest/gram/SelectOne", {
@@ -75,10 +73,8 @@ function CommentSearch({ val, comment, setcommentModal, setcomments }) {
     commentModal2(setcomments);
   }, []);
 
-  // const [forReRender, setForReRender] = useState(false);
-  function fillLike(setForReRender, forReRender) {
+  function fillLike() {
     //백이랑 인스타 리스드를 뿌려주기 위한 axios
-
     let token = sessionStorage.getItem("token");
     axios
       .get("/aamurest/gram/like", {
@@ -99,8 +95,6 @@ function CommentSearch({ val, comment, setcommentModal, setcomments }) {
         console.log(error);
       });
   }
-
-  const [commentss, setcommentss] = useState("");
 
   function post(replyRef) {
     //유효성 검사를 통과하고 게시버튼 클릭시 발생하는 함수
@@ -137,9 +131,6 @@ function CommentSearch({ val, comment, setcommentModal, setcomments }) {
   let [replyTwo, setreplyTwo] = useState("");
   function deleteTwo(replyTwo, cno) {
     let token = sessionStorage.getItem("token");
-    // setcomments(comments.filter(recommendContents =>{
-    //   return recommendContents.id !== id;
-    // }))commuCommentList
     axios
       .delete("/aamurest/gram/comment/edit", {
         headers: {
@@ -169,13 +160,7 @@ function CommentSearch({ val, comment, setcommentModal, setcomments }) {
 
   return (
     <Container1>
-      <Overlay
-        ref={commentRef1}
-        onClick={(e) => {
-          e.stopPropagation();
-          if (e.target == commentRef1.current) setcommentModal(false);
-        }}
-      >
+      <Overlay ref={commentRef1}>
         <Contents>
           <div className="swiperUi3">
             <ul>
@@ -194,7 +179,6 @@ function CommentSearch({ val, comment, setcommentModal, setcomments }) {
                     <SwiperSlide>
                       <li>
                         <img className="divimage" alt="sample" src={image} />
-                        {/* <img className='divimage' alt="sample" src='/images/bg1.png'/> */}
                       </li>
                     </SwiperSlide>
                   );
@@ -219,6 +203,15 @@ function CommentSearch({ val, comment, setcommentModal, setcomments }) {
                     <strong>{val.id}</strong>
                   </p>
                 </div>
+                <span
+                  className="detail__plan-exit"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setcommentModal(false);
+                  }}
+                >
+                  <FontAwesomeIcon icon={faX} />
+                </span>
               </div>
               {/* <div className="dot1">
                         <i className="fa-solid fa-ellipsis fa-2x"
@@ -267,7 +260,14 @@ function CommentSearch({ val, comment, setcommentModal, setcomments }) {
                           >
                             {val.id}
                           </strong>
-                          <span style={{ fontFamily: "normal" }}>{val.content}</span>
+                          <span style={{ fontFamily: "normal" }}>
+                            {val.content}
+                          </span>
+                          {val.tname === null
+                            ? ""
+                            : val.tname.map((tname, i) => {
+                                return <span key={i}>{tname}</span>;
+                              })}
                         </p>
                       </div>
                     </div>
@@ -288,7 +288,11 @@ function CommentSearch({ val, comment, setcommentModal, setcomments }) {
                   //feedComments에 담겨있을 댓글 값을 CommentList 컴포넌트에 담아서 가져온다
                   return (
                     <div className="recommend-contents">
-                      <img className="likeimg" src={val.userprofile} alt="추사" />
+                      <img
+                        className="likeimg"
+                        src={val.userprofile}
+                        alt="추사"
+                      />
                       <div
                         style={{
                           width: "100%",
@@ -300,7 +304,9 @@ function CommentSearch({ val, comment, setcommentModal, setcomments }) {
                       >
                         <div style={{ display: "flex", flexDirection: "row" }}>
                           <p className="userName">
-                            <strong>{sessionStorage.getItem("username")}</strong>
+                            <strong>
+                              {sessionStorage.getItem("username")}
+                            </strong>
                           </p>
                           <p className="userName">{val.reply}</p>
                         </div>
@@ -328,8 +334,16 @@ function CommentSearch({ val, comment, setcommentModal, setcomments }) {
                             }}
                           ></i>
                         </div>
-                        <div style={{ fontSize: "10px", color: "#a5a5a5", marginTop: "8px" }}>
-                          <p className="postDate">{dayjs(val.postdate).format("YYYY/MM/DD")}</p>
+                        <div
+                          style={{
+                            fontSize: "10px",
+                            color: "#a5a5a5",
+                            marginTop: "8px",
+                          }}
+                        >
+                          <p className="postDate">
+                            {dayjs(val.postdate).format("YYYY/MM/DD")}
+                          </p>
                         </div>
                       </div>
                     </div>
@@ -338,7 +352,7 @@ function CommentSearch({ val, comment, setcommentModal, setcomments }) {
               </div>
             </div>
             <div className="contentIcon">
-              <div className="feeds-icons">
+              {/* <div className="feeds-icons">
                 <div
                   className="heart-icon"
                   onClick={(e) => {
@@ -347,7 +361,10 @@ function CommentSearch({ val, comment, setcommentModal, setcomments }) {
                   }}
                 >
                   {val.isLike ? (
-                    <i className="fa-solid fa-heart fa-2x" style={{ color: "red" }}></i>
+                    <i
+                      className="fa-solid fa-heart fa-2x"
+                      style={{ color: "red" }}
+                    ></i>
                   ) : (
                     <i className="fa-regular fa-heart fa-2x"></i>
                   )}
@@ -358,10 +375,10 @@ function CommentSearch({ val, comment, setcommentModal, setcomments }) {
                 <div className="share-icon">
                   <i className="fa-regular fa-paper-plane fa-2x"></i>
                 </div>
-              </div>
+              </div> */}
               <div className="likeCount">
                 <h3>
-                  <strong>좋아요 {val.likecount}개</strong>
+                  <strong style={{ fontSize: "20px" }}>좋아요 {val.likecount}개</strong>
                 </h3>
               </div>
               <div className="postDate">
@@ -389,7 +406,11 @@ function CommentSearch({ val, comment, setcommentModal, setcomments }) {
               <button
                 className={
                   //클래스명을 comment창의 글자 길에 따라서 다르게 주면서 버튼색에 css디자인을 줄 수 있음
-                  comment.length > 0 ? "submitCommentActive" : "submitCommentInactive"
+                  replyRef.current === undefined
+                    ? null
+                    : replyRef.current.value.length > 0
+                    ? "submitCommentActive"
+                    : "submitCommentInactive"
                 }
                 onClick={() => {
                   post(replyRef);
@@ -440,6 +461,7 @@ const Contents = styled.div`
   display: flex;
   flex-direction: row;
   border-radius: 7px;
+  padding: 5px;
 `;
 
 export default CommentSearch;

@@ -137,7 +137,7 @@ const MyProfileBox = ({ setClickTab }) => {
   }, []);
 
   console.log("showImagesFile -----:", showImagesFile.length);
-  console.log("showImages :", showImages.length);
+  // console.log("showImages :", showImages.length);
   let [profiles, setProfile] = useState([]);
   return (
     <MyProfileContainer>
@@ -199,10 +199,17 @@ const MyProfileBox = ({ setClickTab }) => {
         <div
           style={{ fontSize: "14px", display: "flex", flexDirection: "row" }}
         >
-          <Name>{name}</Name>
-          {/* {userProfile.name} */}
+          <Name>
+            {/* <input
+              type="text"
+              onChange={(e) => {
+                setName(e.target.value);
+              }}
+              value={name}
+            /> */}
+            {name}
+          </Name>
           <Id>{userId}</Id>
-          {/* {userProfile.id} */}
         </div>
 
         <div style={{ fontSize: "14px" }}>비밀번호</div>
@@ -337,7 +344,6 @@ function uploadFile(showImages) {
 
 function profileUpdate(
   profiles,
-  profile,
   phoneNum,
   email,
   addr,
@@ -346,12 +352,11 @@ function profileUpdate(
   gender,
   name
 ) {
-  console.log("profiles 등록버튼 눌렀을 : ", profile);
-
   if (profiles.length == 0) {
     profiles = new FormData();
-    console.log(profiles);
+    console.log("profileUpdate 클릭 후 호출 함수:", profiles);
   }
+
   profiles.append("addrid", addr);
   profiles.append("email", email);
   profiles.append("gender", gender);
@@ -372,11 +377,8 @@ function profileUpdate(
       if (resp.data === 1) {
         alert("프로필 수정이 완료되었습니다.");
       }
-      console.log("resp.data", resp.data);
-      //   return resp.data;
     })
     .catch((error) => {
-      //   alert("프로필 수정이 실패했습니다.");
       console.log(error);
     });
 }
@@ -610,6 +612,12 @@ const Name = styled.div`
   width: 100px;
   margin-bottom: 10px;
   margin-left: 10px;
+  input {
+    font-size: 18px;
+    width: 100px;
+    border: solid 2px gray;
+    border-radius: 0.3em;
+  }
 `;
 const Id = styled.div`
   width: 100px;

@@ -11,7 +11,7 @@ import Hashtag from "../../Hashtag";
 import "../Slider/slick-theme.css";
 import "../Slider/slick.css";
 import { SwiperSlide, Swiper } from "swiper/react";
-import SwipersItem from "../../Swipers/SwipersItem";
+import ReactTooltip from 'react-tooltip';
 import { A11y, Autoplay, Navigation, Pagination, Scrollbar } from "swiper";
 import "swiper/css"; //basic
 import "swiper/css/navigation";
@@ -24,6 +24,7 @@ const Uploader = ({ list, setsquare, setlist, setloading }) => {
   let titleRef = useRef();
   let textareaRef = useRef();
   let hashRef = useRef();
+  let clickRef = useRef();
   let navigate = useNavigate();
   const [hide, setHide] = useState(false);
   const [upload, setupload] = useState(false);
@@ -33,10 +34,13 @@ const Uploader = ({ list, setsquare, setlist, setloading }) => {
   const [show] = useState(false);
   const [hasText, setHasText] = useState(false);
   const [inputValue, setinputValue] = useState("");
-  const [taginput, settaginput] = useState("");
+  const [taginput, settaginput] = useState([]);
 
   const [tagItem, setTagItem] = useState([]);
   const [tagList, setTagList] = useState([]);
+  const [tagModal, settagModal] = useState([]);
+
+  
 
   //이미지 하나 업로드시
   // const [image, setImage] = useState({//초기 이미지 세팅 및 변수
@@ -85,19 +89,31 @@ const Uploader = ({ list, setsquare, setlist, setloading }) => {
     //myImage원본에 덮어씌우기
   };
 
-  
-  const submitTagItem = () => {
-    let updatedTagList = [...tagList]
-    updatedTagList.push(taginput)
-    setTagList(updatedTagList)
-    // settaginput('')
-  }
+  const onKeyPress = (e) => {
+    if(!e.target.value.includes('#')&& e.keyCode === 32 && e.target.value.length !== 0){
+      alert('#을 입력해주세요~!');
+    }
+    if (e.target.value.length !== 0 && e.keyCode === 32 && e.target.value.includes('#') ) {
+        submitTagItem();
+    } 
+  };
 
-  const deleteTagItem = e => {
-    const deleteTagItem = e.target.parentElement.firstChild.innerText
-    const filteredTagList = tagList.filter(taginput => taginput !== deleteTagItem)
-    setTagList(filteredTagList)
-  }
+  const submitTagItem = () => {
+    let updatedTagList = [...tagList];
+    updatedTagList.push(tagItem);
+    setTagList(updatedTagList);
+    console.log("tagList", tagList);
+    setTagItem("");
+  };
+
+  const deleteTagItem = (e) => {
+    let delOne = e.target.parentElement.firstChild.textContent;
+    setTagList((curr) => {
+      return curr.filter((val) => {
+        return val !== delOne;
+      });
+    });
+  };
 
   //이미지 삭제
   // const deleteFileImage = () =>{
@@ -219,7 +235,7 @@ const Uploader = ({ list, setsquare, setlist, setloading }) => {
               titleRef,
               textareaRef,
               searchRef,
-              hashRef,
+              tagList,
               search
             );
             setsquare(false);
@@ -327,7 +343,7 @@ const Uploader = ({ list, setsquare, setlist, setloading }) => {
               className="form-control"
               id="textArea_byteLimit"
               name="textArea_byteLimit"
-              onKeyUp={(e) => fn_checkByte(e)}
+              onKeyUp={(e) => {fn_checkByte(e)}}
               rows="8"
               placeholder="문구입력..."
               style={{
@@ -384,40 +400,8 @@ const Uploader = ({ list, setsquare, setlist, setloading }) => {
             )}
             <i>#</i>
           </div> */}
-
-      <div>
-            <div>
-              
-              <input
-                onKeyUp={(e) => {hashTag(e, setTagList) ;submitTagItem()}}
-                type='text'
-                placeholder='Press enter to add tags'
-                tabIndex={2}
-                onChange={(e) => {e.stopPropagation();
-                  settaginput(e.target.value);
-                  setShowWrite(true);}}
-                value={taginput}
-              />
-              {tagList.map((taginput, index) => {
-                return (
-                  <div key={index}>
-                    <p  ref={hashRef}>{taginput}</p>
-                    {/* <button onClick={deleteTagItem}>X</button> */}
-                  </div>
-                )
-              })}
-            </div>
-            {showWrite && (
-              <HashTagModal
-              tagItem={tagItem}
-                setShowWrite={setShowWrite}
-                settaginput={settaginput}
-              />
-            )}
-          </div>
-
           <div
-            className="uploadLocation"
+            className="uploadLocation2"
             onClick={() => {
               setshowSearch(!showSearch);
             }}
@@ -443,6 +427,53 @@ const Uploader = ({ list, setsquare, setlist, setloading }) => {
             )}
             <i className="fa-solid fa-location-dot"></i>
           </div>
+          <div>
+            <div  className="uploadLocation">
+              {tagList.map((tagItem, index) => {
+                return (
+                  <TagItem key={index}>
+                    <p>{tagItem}</p>
+                    <DDButton
+                      onClick={(e) => {
+                        deleteTagItem(e);
+                      }}
+                    >
+                      X
+                    </DDButton>
+                  </TagItem>
+                );
+              })}
+              <input
+                type="text"
+                data-tip="입력후 스페이스바를 눌러주세요"
+                placeholder="해시태그 추가"
+                tabIndex={2}
+                onChange={(e) => {
+                  e.stopPropagation();
+                  setTagItem(e.target.value);
+                  {tagItem.length > 1 &&
+                  setShowWrite(true);}
+                }}
+                value={tagItem}
+                onKeyUp={(e) => {
+                  hashTag(e, settagModal);
+                  onKeyPress(e);
+                }}
+              />
+              {showWrite && (
+                <HashTagModal
+                  hashRef={hashRef}
+                  tagModal={tagModal}
+                  setShowWrite={setShowWrite}
+                  setTagItem={setTagItem}
+                />
+              )}
+              
+              <i class="fa-solid fa-hashtag"></i>
+            </div>
+          </div>
+          <ReactTooltip />
+          
 
           {/* <Hashtag tagItem={tagItem} setTagItem={setTagItem} tagList={tagList} setTagList={setTagList} hashRef={hashRef}/> */}
         </div>
@@ -472,9 +503,9 @@ function feedList(setlist, setloading) {
     });
 }
 
-function hashTag(e, setTagList) {
+function hashTag(e, settagModal) {
   let val = e.target.value;
-  // if (e.keyCode != 13) return;
+  // submitTagItem()
   //업로드 버튼 누르고 화면 새로고침
   let token = sessionStorage.getItem("token");
   axios
@@ -488,7 +519,7 @@ function hashTag(e, setTagList) {
     })
     .then((resp) => {
       console.log(resp.data);
-      setTagList(resp.data);
+      settagModal(resp.data);
     })
     .catch((error) => {
       console.log(error);
@@ -512,7 +543,7 @@ function gramEdit(
   titleRef,
   textareaRef,
   searchRef,
-  hashRef,
+  tagList,
   search
 ) {
   //새 게시물 업로드를 위한 axios
@@ -520,24 +551,17 @@ function gramEdit(
     return val.TITLE === searchRef.current.value;
   });
   console.log("searched:", searched);
-  console.log("setTagItem:", hashRef.current.value);
+  // console.log("tagList:", tagList);
   temp.append("id", sessionStorage.getItem("username"));
   temp.append("ctitle", titleRef.current.value);
   temp.append("content", textareaRef.current.value);
   temp.append("contentid", searched.CONTENTID);
-  temp.append("tname", hashRef.current.value);
+  temp.append("tname", tagList.join());
 
   let token = sessionStorage.getItem("token");
   axios
     .post(
-      "/aamurest/gram/edit",
-      temp,
-      //  { temp,
-      //   id: sessionStorage.getItem('username'),
-      //   ctitle: titleRef.current.value,
-      //   content: textareaRef.current.value,
-      //   contentid:searched.CONTENTID
-      // },
+      "/aamurest/gram/edit",temp, 
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -595,6 +619,56 @@ const Deletebtn = styled.button`
 const Nextbtn = styled.button`
   font-size: 13px;
   font-weight: bold;
+`;
+
+const TagBox = styled.div`
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  min-height: 50px;
+  margin: 10px;
+  padding: 0 10px;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+
+  &:focus-within {
+    border-color: tomato;
+  }
+`;
+
+const TagItem = styled.div`
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  margin: 5px;
+  padding: 5px;
+  width: fit-content;
+  background-color: orange;
+  border-radius: 5px;
+  color: white;
+  font-size: 13px;
+`;
+
+const DDButton = styled.button`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 15px;
+  height: 15px;
+  margin-left: 5px;
+  background-color: white;
+  border-radius: 50%;
+  color: tomato;
+`;
+
+const TagInput = styled.input`
+  display: inline-flex;
+  min-width: 150px;
+  background: transparent;
+  border: none;
+  outline: none;
+  cursor: text;
 `;
 
 export default Uploader;

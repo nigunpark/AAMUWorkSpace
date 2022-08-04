@@ -1,7 +1,5 @@
 package com.aamu.aamuandroidapp.data.api.response
 
-import java.sql.Date
-
 data class AAMUGarmResponse(
     var lno: String? = null,
     var id: String? = null,
@@ -22,7 +20,8 @@ data class AAMUGarmResponse(
     var name: String? = null,
     var totalcount: Int? = 0,
     var followercount: Int? = 0,
-    var followingcount: Int? = 0
+    var followingcount: Int? = 0,
+    var isFollower: Boolean? = false,
 )
 
 

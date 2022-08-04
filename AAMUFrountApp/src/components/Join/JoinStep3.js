@@ -92,7 +92,7 @@ const JoinStep3 = () => {
   return (
     <div className="join__step-one">
       <Container>
-        <div ref={forSlideRef} className="join__slide-in-left">
+        <div ref={forSlideRef} className="join__slide-in-right">
           <ContentStep3>
             <Link to="/">
               <FontAwesomeIcon className="home-btn" icon={faHouse} />
@@ -153,7 +153,7 @@ const JoinStep3 = () => {
                 );
               })}
             </CheckBoxBody>
-            {checkeds}
+            {/* {checkeds} */}
             <div className="join__next-btn-container">
               <span
                 className="join__next-btn"

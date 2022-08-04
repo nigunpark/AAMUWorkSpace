@@ -1,4 +1,4 @@
-
+from requests import request
 from selenium import webdriver
 #키보드 키값이 정의된 클래스
 from selenium.webdriver.common.keys import Keys
@@ -16,6 +16,8 @@ from bs4 import BeautifulSoup
 from flask_restful import Resource,reqparse
 from flask import jsonify,make_response,request
 
+import ast
+
 class Weather(Resource):
     def get(self):
         try:
@@ -26,8 +28,20 @@ class Weather(Resource):
             service = Service(driver_path)
             driver = webdriver.Chrome(service=service, options=options)
 
+            #스프링에서 보낸 파라미터 받기
             searchWord = request.args['searchWord']
-            searchDate = request.args['searchDate']
+            searchDate = request.args['searchDate'] #[]
+            print(searchWord)
+            print(searchDate)
+
+            # 스프링에서 보낸 requestBody 받기
+            #parser = reqparse.RequestParser()8
+            #parser.add_argument('searchWord')
+            #parser.add_argument('searchDate')
+            #args = parser.parse_args()
+            #searchWord=args['searchWord']
+            #searchDate = args['searchDate'] #리스트
+
 
             # 2.사이트 요청 즉 브라우저로 사이트 로딩
             driver.get(
@@ -50,10 +64,11 @@ class Weather(Resource):
 
 
                 realDate = '2022.' + date
-                if searchDate == realDate:
-                    weather = dict(zip(['date', 'lowTemp', 'highTemp', 'weatherState'], [realDate, lowTemp, highTemp, weatherState]))  # [,,] weahter라는 키로
-                    list_.append(weather)
-                    print(list_)
+                for sDate in searchDate:
+                    if sDate == realDate:
+                        weather = dict(zip(['date', 'lowTemp', 'highTemp', 'weatherState'], [realDate, lowTemp, highTemp, weatherState]))  # [,,] weahter라는 키로
+                        list_.append(weather)
+                        print(list_)
             return jsonify({'weather':list_})
             # weathers={'weathers':weather}
 

@@ -3,17 +3,22 @@ import React from 'react'
 import styled from 'styled-components';
 
 
-function HashTagModal({tagItem,setShowWrite,settaginput}){
-    
-
+function HashTagModal({hashRef,tagModal,setShowWrite,setTagItem}){
+    function handleRef(e){
+      e.stopPropagation();
+      if(e.target.value !== hashRef.current.value) setShowWrite(false)
+    }
+    window.addEventListener("click", handleRef);
   return (
     
     // <SearchAll>
-        <Searchengine>
+        <Searchengine
+        ref={hashRef}>
             <Searchcontents>
-            {tagItem.map((val,i)=>{return <P onClick={(e)=>{
+            {tagModal.map((val,i)=>{return <P 
+                onClick={(e)=>{
                 e.stopPropagation();
-                settaginput(e.target.textContent)
+                setTagItem(e.target.textContent)
                 setShowWrite(false)}              
               }>{val}</P>
                }
@@ -32,7 +37,7 @@ function HashTagModal({tagItem,setShowWrite,settaginput}){
  const Searchengine = styled.div`
     position: absolute;
     width: 35%;
-    height: 300px;
+    height: 200px;
     background-color: transparent;
     right:10px;
     z-index: 9;
@@ -41,6 +46,7 @@ function HashTagModal({tagItem,setShowWrite,settaginput}){
  const Searchcontents = styled.div`
     position: absolute;
     width: 95%;
+    height: 200px;
     display: flex;
     background-color: #fff;
     flex-direction: column;
@@ -52,7 +58,7 @@ function HashTagModal({tagItem,setShowWrite,settaginput}){
     display: flex;
     position: relative;
     width: 100%;
-    height: 50PX;
+    height: 50px;
     padding-left: 10px;
     align-items: center;
     cursor:pointer;

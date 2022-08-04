@@ -12,7 +12,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faX } from "@fortawesome/free-solid-svg-icons";
 import { faBookmark } from "@fortawesome/free-solid-svg-icons";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
-const DetailModal = ({ detailOne, setIsOpen, setShowCBModal, setIsLoading }) => {
+const DetailModal = ({
+  detailOne,
+  setIsOpen,
+  setShowCBModal,
+  setIsLoading,
+  bookbol,
+}) => {
+  const [myBookMark, setMyBookMark] = useState(false);
   let navigate = useNavigate();
   // console.log("detailOne", detailOne);
   function dateFormat(date) {
@@ -23,7 +30,6 @@ const DetailModal = ({ detailOne, setIsOpen, setShowCBModal, setIsLoading }) => 
     return date.getFullYear() + "-" + month + "-" + day;
   }
 
-  let username = sessionStorage.getItem("username");
   let [star, setStar] = useState(0); //사용자가 입력하는 별점
   let [comment, setComment] = useState(""); // comment 사용자가 입력하는 댓글
   let [feedComments, setFeedComments] = useState([]); // feedComments 댓글 리스트 저장
@@ -37,7 +43,7 @@ const DetailModal = ({ detailOne, setIsOpen, setShowCBModal, setIsLoading }) => 
   const [showChat, setShowChat] = useState(false);
   const [plannerDate, setPlannerDate] = useState({});
   const [detailRoute, setDetailRoute] = useState([]);
-  const [myBookMark, setMyBookMark] = useState(false);
+
   // const [rno, setRno] = useState(0);
   let dispatch = useDispatch();
   useEffect(() => {
@@ -108,7 +114,7 @@ const DetailModal = ({ detailOne, setIsOpen, setShowCBModal, setIsLoading }) => 
       });
   }, []);
   function isId(e) {
-    if (e.id == username) {
+    if (e.id == sessionStorage.getItem("username")) {
       return true;
     }
   }
@@ -193,39 +199,38 @@ const DetailModal = ({ detailOne, setIsOpen, setShowCBModal, setIsLoading }) => 
       });
   };
 
-  const bookMarkOne = (mark) => {
+  const bookMarkOne = () => {
     let token = sessionStorage.getItem("token");
+    let id = sessionStorage.getItem("username");
+    let rbn = detailOne.rbn;
+
     axios
-      .post(
-        "",
-        {
-          id: sessionStorage.getItem("username"),
-          rbn: detailOne.rbn,
-          북마크key: mark,
+      .get("/aamurest/bbs/bookmark", {
+        params: {
+          id,
+          rbn,
         },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      )
-      .then((resp) => {
-        console.log("북마크 추가/취소 성공 (DetailModal.js)", resp.data);
-        let bool = window.confirm("마이페이지로 이동하시겠어요?");
-        if (bool) {
-          navigate("/myPage");
-          // setClickTab(2);
-        }
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       })
-      .catch();
+      .then((resp) => {
+        console.log("북마크 추가/취소 성공 (DetailModal.js) :", resp.data);
+      })
+      .catch((error) => {
+        console.log("북마크 실패 (DetailModal.js) :", error);
+      });
   };
 
   const CommentList = ({ val, setFeedComments, setIsOpen }) => {
     const rno = val.rno;
     return (
-      <div>
+      <div className="detail__modal-commentsList">
         <Stars>
-          <FontAwesomeIcon icon={faStar} style={{ marginRight: "3px", color: "gold" }} />
+          <FontAwesomeIcon
+            icon={faStar}
+            style={{ marginRight: "3px", color: "gold" }}
+          />
           <span>{val.rate.toString().padEnd(3, ".0")}</span>
         </Stars>
         <span
@@ -239,8 +244,8 @@ const DetailModal = ({ detailOne, setIsOpen, setShowCBModal, setIsLoading }) => 
           {val.id}
         </span>
         <p>{val.review}</p>
-        {username == val.id ? (
-          <div style={{ marginLeft: "180px", border: "none" }}>
+        {sessionStorage.getItem("username") == val.id ? (
+          <div style={{ color: "red" }}>
             <Name
               onClick={() => {
                 reviewDelete(rno);
@@ -275,29 +280,22 @@ const DetailModal = ({ detailOne, setIsOpen, setShowCBModal, setIsLoading }) => 
         return "토";
     }
   };
+
   return (
     <DetailContainer>
       <DetailOverlay>
         {/* <DetailModalWrap> */}
         <div className="detailModalWrap" ref={modalRef}>
-          <span
-            className="detail__plan-exit"
-            onClick={(e) => {
-              dispatch(addChatBotData({}));
-              setIsOpen(false);
-              setShowCBModal(false);
-              setShowChat(false);
-            }}
-          >
-            <FontAwesomeIcon icon={faX} />
-          </span>
           <Plan>
-            <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+            <div
+              style={{ display: "flex", flexDirection: "column", gap: "10px" }}
+            >
               {routeData.map((route, idx) => {
                 return (
                   <div key={idx} className="detail-plan">
                     <div className="paln-date">
-                      {idx + 1}일차 ({plannerDate.month}월 {plannerDate.date + idx}일&nbsp;
+                      {idx + 1}일차 ({plannerDate.month}월{" "}
+                      {plannerDate.date + idx}일&nbsp;
                       {getDow(plannerDate.dow)})
                     </div>
                     <div className="plan__over-container">
@@ -356,173 +354,182 @@ const DetailModal = ({ detailOne, setIsOpen, setShowCBModal, setIsLoading }) => 
               })}
             </div>
           </Plan>
-
-          <DetailTitle>
-            {/* <div className="anim-icon star">
-              <input
-                type="checkbox"
-                id="star"
-                onClick={(e) => {
-                  console.log("북마크 체크 여부 :", e.currentTarget.checked);
-                }}
-              />
-              <label for="star"></label>
-            </div> */}
-            {/* 여기가 글 작성할때 쓴 제목 */}
-            <span className="detail__plan-title-badge">TITLE</span>
-            <div className="detail__plan-title">
-              <span>{title}</span>
-            </div>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "end",
-                marginRight: "20px",
+          <div>
+            <span
+              className="detail__plan-exit"
+              onClick={(e) => {
+                dispatch(addChatBotData({}));
+                setIsOpen(false);
+                setShowCBModal(false);
+                setShowChat(false);
               }}
             >
-              <div className="detail__plan-underTitle">
-                <div>
-                  by{""}
-                  <span
-                    className="detail__plan-writer"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setShowChat(!showChat);
-                      setTimeout(() => {
-                        if (!showChat) modalRef.current.style.left = "42%";
-                        else modalRef.current.style.left = "50%";
-                      }, 100);
-                    }}
-                  >
-                    {" "}
-                    {detailOne.id}
-                  </span>
-                </div>
-                <div>
-                  {myBookMark == false ? (
-                    <i
-                      class="fa-regular fa-bookmark detail__plan-bookMark"
-                      onClick={() => {
-                        setMyBookMark(true);
-                        bookMarkOne(true);
+              <FontAwesomeIcon icon={faX} />
+            </span>
+            <DetailContents>
+              <div style={{}}>
+                <div className="detail__plan-card-photo">
+                  <Notice photo={photo} />
+
+                  <div className="detail__plan-card">
+                    <div
+                      style={{
+                        fontSize: "20px",
+                        display: "flex",
+                        justifyContent: "space-between",
                       }}
-                    ></i>
-                  ) : (
-                    <FontAwesomeIcon
-                      icon={faBookmark}
-                      className="detail__plan-bookMark"
-                      onClick={() => {
-                        setMyBookMark(false);
-                        bookMarkOne(false);
-                      }}
-                    />
-                  )}
+                    >
+                      <div>
+                        <FontAwesomeIcon
+                          icon={faStar}
+                          style={{ marginRight: "3px", color: "gold" }}
+                        />
+                        <span style={{ fontWeight: "bold" }}>
+                          {detailOne.rateavg === null ? 0 : detailOne.rateavg}
+                        </span>
+                      </div>
+                      <div className="detail__plan-underTitle">
+                        <div>
+                          by{""}
+                          <span
+                            className="detail__plan-writer"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setShowChat(!showChat);
+                              setTimeout(() => {
+                                if (!showChat)
+                                  modalRef.current.style.left = "1%";
+                                else modalRef.current.style.left = "8%";
+                              }, 100);
+                            }}
+                          >
+                            {" "}
+                            {detailOne.id}
+                          </span>
+                        </div>
+                        <div onClick={bookMarkOne}>
+                          {myBookMark == bookbol ? (
+                            <FontAwesomeIcon
+                              icon={faBookmark}
+                              className="detail__plan-bookMark"
+                              onClick={() => {
+                                setMyBookMark(!myBookMark);
+                              }}
+                            />
+                          ) : (
+                            <i
+                              class="fa-regular fa-bookmark detail__plan-bookMark"
+                              onClick={() => {
+                                setMyBookMark(!myBookMark);
+                              }}
+                            ></i>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                    <h4 style={{ fontSize: "23px", fontWeight: "bold" }}>
+                      {detailOne.title}
+                    </h4>
+                    <Tag>
+                      <Date>
+                        작성일.{" "}
+                        {dateFormat(new window.Date(detailOne.postdate))}
+                      </Date>
+                      tag : #{theme}
+                    </Tag>
+                  </div>
+                  <Textarea>
+                    <p style={{ padding: "10px" }}>{content}</p>
+                  </Textarea>
                 </div>
               </div>
-            </div>
-          </DetailTitle>
+              <div className="detail__modal__comments-container">
+                <DetailReview>
+                  {feedComments.map((val, idx) => {
+                    return (
+                      <CommentList
+                        val={val}
+                        setFeedComments={setFeedComments}
+                        // stars={commentStar[idx]}
+                        // userName={userName}
+                        // userComment={commnetArr}
+                        // key={idx}
+                        // index={idx}
+                      />
+                    );
+                  })}
+                </DetailReview>
+                <div>
+                  <div>
+                    {isReviewId == 1 ? null : (
+                      <Rating
+                        name="simple-controlled"
+                        precision={0.5}
+                        onChange={(e, newValue) => {
+                          setStar(newValue);
+                          console.log("newValue", newValue);
+                        }} // 사용자가 선택한만큼 setStar를 통해 star의 값 변경
+                        value={star}
+                      />
+                    )}
+                  </div>
 
-          <DetailContents>
-            <Notice photo={photo} />
-            {/* dummy={dummy.imgsdata} */}
-            <div
-              style={{
-                position: "relative",
-                boxShadow: "var(--shadow)",
-                borderRadius: "3px",
-                height: "370px",
-                borderRadius: "10px",
-              }}
-            >
-              {/* <span className="detail__plan-content-badge">Content</span> */}
-              <Textarea>
-                <p style={{ padding: "15px 10px" }}>{content}</p>
-              </Textarea>
-            </div>
-            <div>
-              {isReviewId == 1 ? null : (
-                <Rating
-                  name="simple-controlled"
-                  precision={0.5}
-                  onChange={(e, newValue) => {
-                    setStar(newValue);
-                    console.log("newValue", newValue);
-                  }} // 사용자가 선택한만큼 setStar를 통해 star의 값 변경
-                  value={star}
-                />
-              )}
-            </div>
-            <Tag>
-              <Date>작성일. {dateFormat(new window.Date(detailOne.postdate))}</Date>
-              tag : #{theme}
-            </Tag>
-            {sessionStorage.getItem("username") == userId ? (
-              <input type="text" placeholder="글쓴이는 리뷰가 안되요!" disabled />
-            ) : isReviewId === 1 ? (
-              <input type="text" placeholder="리뷰는 하나만!" disabled />
-            ) : (
-              <input
-                type="text"
-                placeholder="리뷰 달기..."
-                ref={commentRef}
-                onKeyUp={(e) => {
-                  e.target.value.length > 0 ? setIsValid(true) : setIsValid(false);
-                }} //사용자가 리뷰를 작성했을 때 빈공간인지 확인하여 유효성 검사
-              />
-            )}
+                  <div
+                    style={{ display: "grid", gridTemplateColumns: "auto 15%" }}
+                  >
+                    <div className="detail_modal_input-container">
+                      {sessionStorage.getItem("username") == userId ? (
+                        <input
+                          type="text"
+                          placeholder="글쓴이는 댓글 안되요!"
+                          disabled
+                        />
+                      ) : isReviewId === 1 ? (
+                        <input
+                          type="text"
+                          placeholder="댓글은 하나만!"
+                          disabled
+                        />
+                      ) : (
+                        <input
+                          type="text"
+                          placeholder="댓글 달기..."
+                          ref={commentRef}
+                          onKeyUp={(e) => {
+                            e.target.value.length > 0
+                              ? setIsValid(true)
+                              : setIsValid(false);
+                          }} //사용자가 리뷰를 작성했을 때 빈공간인지 확인하여 유효성 검사
+                        />
+                      )}
+                    </div>
+                    <div className="detail-button">
+                      {sessionStorage.getItem("username") === detailOne.id ? (
+                        <button className="detail__plan__review-btn" disabled>
+                          댓글쓰기
+                        </button>
+                      ) : (
+                        <span
+                          ref={reviewBtn}
+                          className="detail__plan__review-btn"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            reviewPost(commentRef);
+                            commentRef.current.value = "";
+                            // e.target.style.display = "none";
+                          }}
+                        >
+                          댓글쓰기
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </DetailContents>
 
-            {/* DetailButton.scss */}
-            <div className="detail-button">
-              {sessionStorage.getItem("username") == userId ? null : (
-                <span
-                  ref={reviewBtn}
-                  className="detail__plan__review-btn"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    reviewPost(commentRef);
-                    commentRef.current.value = "";
-                    e.target.style.display = "none";
-                  }}
-                >
-                  리뷰등록하기
-                </span>
-              )}
-
-              {/* {isReviewId == 1 ? null : isValid ? (
-                <button
-                  className="learn-more"
-                  type="button"
-                  onClick={(e) => {
-                    reviewPost();
-                  }}
-                >
-                  리뷰 등록
-                </button>
-              ) : (
-                <button className="learn-more" type="button" disabled>
-                  리뷰를 작성하세요
-                </button>
-              )} */}
-            </div>
-          </DetailContents>
-
-          {/* <div style={{border:'1px blue solid'}}>사용목적 미정 공간</div> */}
-
-          <DetailReview>
-            {feedComments.map((val, idx) => {
-              return (
-                <CommentList
-                  val={val}
-                  setFeedComments={setFeedComments}
-                  // stars={commentStar[idx]}
-                  // userName={userName}
-                  // userComment={commnetArr}
-                  // key={idx}
-                  // index={idx}
-                />
-              );
-            })}
-          </DetailReview>
+            {/* <div style={{border:'1px blue solid'}}>사용목적 미정 공간</div> */}
+          </div>
           {/* </DetailModalWrap> */}
         </div>
         {showChat && <Chat detailOne={detailOne} />}
@@ -539,26 +546,39 @@ function DetailSetting({ fromWooJaeData, periodIndex, obj, i }) {
   useEffect(() => {
     if (i !== 0) {
       setUpTime(
-        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime + obj.mtime / 1000 / 60
+        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime +
+          obj.mtime / 1000 / 60
       );
       setDownTime(
         fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime +
           obj.mtime / 1000 / 60 +
-          fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].atime / 1000 / 60
+          fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].atime /
+            1000 /
+            60
       );
       let forBlackBoxRedux = getTimes(
         periodIndex,
-        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime + obj.mtime / 1000 / 60,
+        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime +
+          obj.mtime / 1000 / 60,
         fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime +
           obj.mtime / 1000 / 60 +
-          fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].atime / 1000 / 60
+          fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].atime /
+            1000 /
+            60
       );
       dispatch(addWholeBlackBox(forBlackBoxRedux));
-      if (i !== fromWooJaeData[periodIndex]["day" + (periodIndex + 1)].length - 1) {
-        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i + 1].starttime =
+      if (
+        i !==
+        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)].length - 1
+      ) {
+        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][
+          i + 1
+        ].starttime =
           fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime +
           obj.mtime / 1000 / 60 +
-          fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].atime / 1000 / 60;
+          fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].atime /
+            1000 /
+            60;
       }
     }
   }, []);
@@ -642,7 +662,9 @@ const Chat = ({ detailOne }) => {
               return (
                 <div
                   className={
-                    val.authid !== sessionStorage.getItem("username") ? "chatBox box" : "chatBox"
+                    val.authid !== sessionStorage.getItem("username")
+                      ? "chatBox box"
+                      : "chatBox"
                   }
                 >
                   <div
@@ -666,7 +688,11 @@ const Chat = ({ detailOne }) => {
                         {new window.Date().getHours() > 12
                           ? new window.Date().getHours() - 12
                           : new window.Date().getHours()}
-                        :{new window.Date().getMinutes().toString().padStart(2, "0")}
+                        :
+                        {new window.Date()
+                          .getMinutes()
+                          .toString()
+                          .padStart(2, "0")}
                       </span>
                     </div>
 
@@ -754,7 +780,8 @@ const Container = styled.div`
   top: 47px;
   right: 20px;
   transition: 0.3s;
-  animation: ${swing_chat} 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.5s both;
+  animation: ${swing_chat} 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.5s
+    both;
 `;
 const InnnerContainer = styled.div`
   position: relative;
@@ -820,20 +847,21 @@ const Plan = styled.div`
   &::-webkit-scrollbar {
     display: none;
   }
-  animation: ${bounce_modal_plan} 1.7s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+  animation: ${bounce_modal_plan} 1.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)
+    both;
   animation-delay: 0.2s;
 `;
 
 const Textarea = styled.div`
   position: relative;
+  box-shadow: var(--shadow);
+  border-top: 1px solid rgba(128, 128, 128, 0.4);
   width: 100%;
-  height: 370px;
+  height: 215px;
   overflow: auto;
-  font-size: 20px;
+  font-size: 17px;
   background: white;
-  // border: 1px solid rgba(128, 128, 128, 0.5);
   border-radius: 7px;
-  // box-shadow: 0 0 0 2px #e9ebec, 0 0 0 11px #fcfdfe;
 `;
 // position: fixed; 모달창 열리면 외부 스크롤바 안되게
 const DetailContainer = styled.div`
@@ -873,15 +901,11 @@ const DetailTitle = styled.div`
 `;
 
 const DetailReview = styled.div`
-  margin: 0px 20px;
   font-size: 18px;
-
-  div {
-    display: grid;
-    grid-template-columns: 50px 150px 750px auto;
-    margin-top: 2px;
-    border-bottom: solid 1px #c3cff4;
-  }
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  // border: 1px solid green;
 `;
 const Stars = styled.span`
   // border: 1px solid red;
@@ -905,27 +929,10 @@ const Name = styled.span`
 `;
 
 const DetailContents = styled.div`
-  display: grid;
-  // display: flex;
-  grid-template-columns: repeat(2, 1fr);
-  // grid-template-rows: 400px 50px 50px;
-  // border: 1px solid green;
-  // overflow: auto;
-  margin: 0 10px;
-
-  h1 {
-    font-size: 30px;
-    font-weight: 600;
-  }
-  img {
-    // margin-top: 10px;
-    width: 100%;
-  }
-  input {
-    width: 100%;
-    // margin-left: 10px;
-    font-size: 18px;
-  }
+  display: flex;
+  gap: 10px;
+  width: 100%;
+  height: 100%;
 `;
 const Tag = styled.span`
   font-size: 12.5px;

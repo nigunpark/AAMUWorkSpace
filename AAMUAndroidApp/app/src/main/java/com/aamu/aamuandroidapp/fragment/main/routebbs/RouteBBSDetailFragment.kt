@@ -8,6 +8,8 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import com.aamu.aamuandroidapp.components.routebbs.detail.RouteBBSDetail
+import com.aamu.aamuandroidapp.util.setStatusBarOrigin
+import com.aamu.aamuandroidapp.util.setStatusBarTransparent
 
 class RouteBBSDetailFragment : Fragment() {
 
@@ -20,5 +22,15 @@ class RouteBBSDetailFragment : Fragment() {
         setContent {
             RouteBBSDetail(args.rbn)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        requireActivity().setStatusBarTransparent()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        requireActivity().setStatusBarOrigin()
     }
 }

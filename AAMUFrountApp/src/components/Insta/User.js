@@ -18,7 +18,7 @@ function User({
   setSearchb,
   inputValue,
   setinputValue,
-  showChat,
+  showChat
 }) {
   const modalRef = useRef();
   const notimodalRef = useRef();
@@ -49,6 +49,7 @@ function User({
         params: {
           searchColumn: searchb,
           searchWord: inputValue,
+          
         },
       })
       .then((resp) => {
@@ -75,6 +76,7 @@ function User({
         params: {
           searchColumn: searchb,
           searchWord: inputValue,
+          
         },
       })
       .then((resp) => {
