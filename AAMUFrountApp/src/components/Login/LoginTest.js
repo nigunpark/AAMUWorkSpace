@@ -158,7 +158,7 @@ const login = (idRef, pwdRef, navigate, setShowValid, dispatch) => {
       sessionStorage.setItem("token", resp.data.token);
       sessionStorage.setItem("userimg", resp.data.userprofile);
       sessionStorage.setItem("username", idRef.current.value);
-      navigate(-1);
+      navigate("/");
     })
     .catch((error) => {
       console.log("error:", error);
