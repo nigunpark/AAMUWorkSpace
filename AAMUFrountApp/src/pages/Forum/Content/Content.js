@@ -42,9 +42,7 @@ const Content = () => {
         setListData(resp.data);
       })
       .catch((error) => {
-        console.log((error) =>
-          console.log("글 목록 가져오기 실패(Content.js) :", error)
-        );
+        console.log((error) => console.log("글 목록 가져오기 실패(Content.js) :", error));
       });
     chatbotModal();
   }, [isOpen]);
@@ -70,9 +68,7 @@ const Content = () => {
         searchOne.current.value = null;
       })
       .catch((error) => {
-        console.log((error) =>
-          console.log("검색 목록 가져오기 실패(Content.js) :", error)
-        );
+        console.log((error) => console.log("검색 목록 가져오기 실패(Content.js) :", error));
       });
   };
 
@@ -114,11 +110,7 @@ const Content = () => {
               {/* {console.log("kindOfSearch :", kindOfSearch)} */}
             </FormControl>
             <div className="search__warpper__minCon">
-              <input
-                type="text"
-                placeholder="검색어를 입력하세요"
-                ref={searchOne}
-              />
+              <input type="text" placeholder="검색어를 입력하세요" ref={searchOne} />
               <span>
                 <FontAwesomeIcon
                   icon={faMagnifyingGlass}
@@ -134,13 +126,7 @@ const Content = () => {
           </div>
           <div className="card__items_minCon">
             {listData.map((val, idx) => {
-              return (
-                <ContentItem
-                  setDetailOne={setDetailOne}
-                  detail={val}
-                  setIsOpen={setIsOpen}
-                />
-              );
+              return <ContentItem setDetailOne={setDetailOne} detail={val} setIsOpen={setIsOpen} />;
             })}
           </div>
         </div>
