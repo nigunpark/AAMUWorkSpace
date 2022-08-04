@@ -1,14 +1,14 @@
-import React from 'react'
-import Notice from './Notice/Notice'
-import Content from './Content/Content'
+import React from "react";
+import Notice from "./Notice/Notice";
+import Content from "./Content/Content";
 
 const Forum = () => {
   return (
     <div>
-        {/* <Notice/> */}
-        <Content/>
+      {/* <Notice/> */}
+      <Content />
     </div>
-  )
-}
+  );
+};
 
-export default Forum
+export default Forum;
