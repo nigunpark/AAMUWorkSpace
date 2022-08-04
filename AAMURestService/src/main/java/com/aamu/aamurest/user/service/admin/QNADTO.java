@@ -26,7 +26,7 @@ public class QNADTO {
 
 	private AnswerDTO answer;
 	private List<AnswerDTO> answerList;
-	
+
 	public int searchTotalCount;
-	
+
 }

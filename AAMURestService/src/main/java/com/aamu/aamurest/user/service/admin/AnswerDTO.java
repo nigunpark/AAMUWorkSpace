@@ -13,5 +13,5 @@ public class AnswerDTO {
 	private String answer;
 	private java.sql.Date adate;
 	private String name; // 이름 저장
-	
+
 }

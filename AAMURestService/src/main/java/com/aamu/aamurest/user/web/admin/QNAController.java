@@ -36,30 +36,27 @@ public class QNAController {
 	@Autowired
 	private QNAServiceImpl qnaService;
 
-	
-	
 	// 게시물 목록
 	@GetMapping("/qna/list")
-	public List<QNADTO> qnaSelectList(@RequestParam Map map, HttpServletRequest req){
+	public List<QNADTO> qnaSelectList(@RequestParam Map map, HttpServletRequest req) {
 
 		List<QNADTO> list = qnaService.qnaSelectList(map);
-		for(QNADTO dto : list) {//글 목록들 list에서 하나씩 꺼내서 dto에 담는다
+		for (QNADTO dto : list) {// 글 목록들 list에서 하나씩 꺼내서 dto에 담는다
 
-			//전체 코멘트 셋팅
-			//모든 댓글 가져오기
-			List<AnswerDTO> answerList=qnaService.answerList(dto.getQno());
+			// 전체 코멘트 셋팅
+			// 모든 댓글 가져오기
+			List<AnswerDTO> answerList = qnaService.answerList(dto.getQno());
 			dto.setAnswerList(answerList);
-			//써치토탈카운트
-			//System.out.println("포함되어있냐"+map.keySet().contains("searchColumn"));
-			if(map.keySet().contains("searchColumn")) { 
+			// 써치토탈카운트
+			// System.out.println("포함되어있냐"+map.keySet().contains("searchColumn"));
+			if (map.keySet().contains("searchColumn")) {
 				dto.setSearchTotalCount(qnaService.qnaSearchTotalCount(map));
 			}
-		}/////for
-		System.out.println("몇개 넘어가니:"+list.size());
+		} ///// for
+		System.out.println("몇개 넘어가니:" + list.size());
 		return list;
-	}////////////////commuSelectList
-	
-	
+	}//////////////// commuSelectList
+
 	// 게시물 검색
 	@GetMapping("/qna/search")
 	public List<String> qnaSearachList(@RequestParam Map map) {
@@ -72,7 +69,7 @@ public class QNAController {
 	public QNADTO qnaSelectOne(@RequestParam Map map, HttpServletRequest req) {
 		System.out.println("상세 보기: " + map);
 		QNADTO dto = qnaService.qnaSelectOne(map);
-		List<AnswerDTO> answerList=qnaService.answerList(map.get("qno").toString());
+		List<AnswerDTO> answerList = qnaService.answerList(map.get("qno").toString());
 		dto.setAnswerList(answerList);
 		return dto;
 	}
@@ -102,28 +99,20 @@ public class QNAController {
 			resultMap.put("result", "updateNotSuccess");
 		return resultMap;
 	}
-	
-	
-/*
+
+	/*
+	 * @DeleteMapping("/qna/delete") public Map qnaDelete(@RequestParam Map map) {
+	 * System.out.println("삭제: " + map); int qnaDeleteAffected =
+	 * qnaService.qnaDelete(map); Map resultMap = new HashMap(); if
+	 * (qnaDeleteAffected == 1) resultMap.put("result", "deleteSuccess"); else
+	 * resultMap.put("result", "deleteNotSuccess"); return resultMap; }
+	 */
 
 	// 게시물 삭제
 	@DeleteMapping("/qna/delete")
 	public Map qnaDelete(@RequestParam Map map) {
-		System.out.println("삭제: " + map);
-		int qnaDeleteAffected = qnaService.qnaDelete(map);
-		Map resultMap = new HashMap();
-		if (qnaDeleteAffected == 1)
-			resultMap.put("result", "deleteSuccess");
-		else
-			resultMap.put("result", "deleteNotSuccess");
-		return resultMap;
-	}
-*/
-	
-	@DeleteMapping("/qna/delete")
-	public Map qnaDelete(@RequestParam Map map) {
 		int affected = qnaService.qnaDelete(map);
-		// 데이타 반환
+		// 데이터 반환
 		Map resultMap = new HashMap();
 		System.out.println("affected:" + affected);
 		if (affected == 1)
@@ -134,18 +123,15 @@ public class QNAController {
 	}
 
 	/*
-	// 게시물 삭제
-	@DeleteMapping("/qna/edit/{qno}")
-	public Map qnaDelete(@PathVariable String qno, HttpServletRequest req) {
-		System.out.println("게시물 삭제 qno:"+qno);
-		int affected=qnaService.qnaDelete(qno);
-		Map map = new HashMap<> ();
-		if(affected == 1) map.put("isSuccess", true);
-		else map.put("isSuccess", false);
-		return map;
-	}
-	*/
-	
+	 * // 게시물 삭제
+	 * 
+	 * @DeleteMapping("/qna/edit/{qno}") public Map qnaDelete(@PathVariable String
+	 * qno, HttpServletRequest req) { System.out.println("게시물 삭제 qno:"+qno); int
+	 * affected=qnaService.qnaDelete(qno); Map map = new HashMap<> (); if(affected
+	 * == 1) map.put("isSuccess", true); else map.put("isSuccess", false); return
+	 * map; }
+	 */
+
 	// 댓글 등록
 	@PostMapping("/answer/write")
 	public Map answerInsert(@RequestBody Map map) {
@@ -191,4 +177,5 @@ public class QNAController {
 		System.out.println("댓글 resultMap:" + resultMap);
 		return resultMap;
 	}
+
 }

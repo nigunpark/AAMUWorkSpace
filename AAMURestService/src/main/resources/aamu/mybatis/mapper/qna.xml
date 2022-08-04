@@ -22,19 +22,20 @@
 	<!-- 게시물 수 카운트 -->
 	<select id="qnaSearchTotalCount" parameterType="Map"
 		resultType="int">
-		SELECT COUNT(*) FROM qna q WHERE ${searchColumn}=#{searchWord}
+		SELECT COUNT(*) FROM qna q WHERE
+		${searchColumn}=#{searchWord}
 	</select>
 
 	<!-- 상세 보기 -->
 	<select id="qnaSelectOne" resultType="QNADTO"
 		parameterType="Map">
 		SELECT q.*,name,(SELECT
-		COUNT(*) FROM answer WHERE qno=q.qno)
+		COUNT(*) FROM answer WHERE
+		qno=q.qno)
 		as answerCount
 		FROM users u JOIN qna q ON u.id = q.id
-		WHERE qno=#{qno}
-
-
+		WHERE
+		qno=#{qno}
 	</select>
 
 	<!-- 게시물 검색 -->
@@ -68,13 +69,15 @@
 		qno =
 		#{qno}
 	</delete>
-	
-	
-	<!-- 글 하나 뿌려주는 용_모든 댓글 뿌려주기-->
-	<select id="answerList" parameterType="String" resultType="AnswerDTO" >
-		SELECT * FROM answer WHERE qno=#{qno}
+
+	<!-- 댓글 목록 -->
+	<select id="answerList" parameterType="String"
+		resultType="AnswerDTO">
+		SELECT a.*, name
+		FROM users u JOIN answer a ON u.id=a.id
+		WHERE qno =#{qno}
+		ORDER BY ano DESC
 	</select>
-	
 
 	<!-- 댓글 등록 -->
 	<insert id="answerInsert" parameterType="Map">
@@ -103,5 +106,14 @@
 		DELETE answer WHERE
 		qno = #{qno}
 	</delete>
+
+	<!-- 이름 찾기 -->
+	<select id="answerFindNameByKey" parameterType="Map"
+		resultType="String">
+		SELECT name
+		FROM users u JOIN answer a ON u.id=a.id
+		WHERE ano
+		=#{ano}
+	</select>
 
 </mapper>

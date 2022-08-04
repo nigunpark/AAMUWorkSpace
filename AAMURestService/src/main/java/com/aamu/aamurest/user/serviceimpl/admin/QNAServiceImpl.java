@@ -135,14 +135,23 @@ public class QNAServiceImpl implements QNAService<QNADTO> {
 	 */
 
 	/*
-	 * // 게시물 삭제
-	 * 
 	 * @Override public int qnaDelete(String qno) { int affected=0; Map map = new
 	 * HashMap<>(); affected = transactionTemplate.execute(tx->{ map.put("table",
 	 * "answer"); map.put("qno", qno); dao.qnaDelete(map);
 	 * 
 	 * map.put("table", "qna"); return dao.qnaDelete(map); }); return affected; }
 	 */
+
+	// 댓글 목록
+	public List<AnswerDTO> answerList(String qno) {
+		return dao.answerList(qno);
+	}
+
+	// 댓글 수 카운트
+	@Override
+	public int answerSearchTotalCount(Map map) {
+		return dao.answerSearchTotalCount(map);
+	}
 
 	// 댓글 등록
 	@Override
@@ -152,7 +161,6 @@ public class QNAServiceImpl implements QNAService<QNADTO> {
 			int affectedAnswerInsert = dao.answerInsert(map);
 			return affectedAnswerInsert;
 		});
-
 		return affected;
 	}
 
@@ -173,17 +181,7 @@ public class QNAServiceImpl implements QNAService<QNADTO> {
 		return affected;
 	}
 
-	// 상세 보기 - 댓글 목록
-	public List<AnswerDTO> answerList(String qno) {
-		return dao.answerList(qno);
-	}
-
-	// 글 목록용_토탈 카운트
-	@Override
-	public int answerSearchTotalCount(Map map) {
-		return dao.answerSearchTotalCount(map);
-	}
-
+	// 댓글 전부 삭제
 	@Override
 	public int answerAllDelete(Map map) {
 		int affected = 0;
@@ -199,6 +197,12 @@ public class QNAServiceImpl implements QNAService<QNADTO> {
 			return 1;
 		} else
 			return 0;
+	}
+
+	// 이름 찾기
+	@Override
+	public String findNameByKey(Map map) {
+		return dao.findNameByKey(map);
 	}
 
 }
