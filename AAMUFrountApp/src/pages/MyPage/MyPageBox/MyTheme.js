@@ -1,118 +1,261 @@
-import React, { useState } from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import styled from "styled-components";
+import MyThemeLists from "./MyThemeLists";
 
 const MyTheme = () => {
-  const themeItem = [
-    {
-      themeId: 1,
-      themeName: "봄",
-    },
-    {
-      themeId: 2,
-      themeName: "여름",
-    },
-    {
-      themeId: 3,
-      themeName: "가을",
-    },
-    {
-      themeId: 4,
-      themeName: "겨울",
-    },
-    {
-      themeId: 5,
-      themeName: "산/트레킹",
-    },
-    {
-      themeId: 6,
-      themeName: "바다/해수욕장",
-    },
-    {
-      themeId: 7,
-      themeName: "호캉스",
-    },
-    {
-      themeId: 8,
-      themeName: "자전거",
-    },
-    {
-      themeId: 9,
-      themeName: "섬",
-    },
-    {
-      themeId: 10,
-      themeName: "맛집",
-    },
-    {
-      themeId: 11,
-      themeName: "힐링",
-    },
-    {
-      themeId: 12,
-      themeName: "드라이브",
-    },
-  ];
-
+  const [themeItem, setThemeItem] = useState([]);
+  const [checkeds, setCheckeds] = useState([]);
   const [theme, setTheme] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
 
-  const selectTheme = () => {};
-
   const onClickModal = () => {
     setIsOpen(true);
+    // alert("테마는 최대 5개까지 저장되요!");
+  };
+
+  const getThemes = async () => {
+    let token = sessionStorage.getItem("token");
+    await axios
+      .get("/aamurest/users/theme", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((resp) => {
+        setThemeItem(resp.data);
+      })
+      .catch((err) => {
+        console.log("err", err);
+      });
+  };
+
+  const getMyThemes = async () => {
+    let token = sessionStorage.getItem("token");
+
+    await axios
+      .get("/aamurest/user/theme", {
+        params: {
+          id: sessionStorage.getItem("username"),
+        },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((resp) => {
+        console.log("나의 테마 : ", resp.data);
+        setTheme(resp.data);
+      })
+      .catch((error) => {
+        console.log("나의 테마 가져오기 실패", error);
+      });
+  };
+
+  useEffect(() => {
+    getThemes();
+    getMyThemes();
+  }, [isOpen]);
+
+  const getCheckedBoxes = (checked, val) => {
+    if (checked) setCheckeds([...checkeds, val]);
+    else setCheckeds(checkeds.filter((one) => one !== val));
+  };
+  const doCheck = (e) => {
+    let checkbox = e.target.parentElement.nextSibling.lastChild;
+    if (checkbox.checked) {
+      checkbox.checked = false;
+      e.target.parentElement.parentElement.style.background = "white";
+      e.target.parentElement.parentElement.style.color = "black";
+    } else {
+      checkbox.checked = true;
+      e.target.parentElement.parentElement.style.background = "var(--skyblue)";
+      e.target.parentElement.parentElement.style.color = "white";
+    }
+
+    if (checkeds.length == 4) {
+      alert("테마는 최대 5개까지 저장되요!");
+    }
   };
 
   return (
-    <div className="projects-theme">
-      {theme.map((val, idx) => {
-        return (
-          <div key={idx} className="projects-theme-item">
-            {val}
-          </div>
-        );
-      })}
-      <div className="projects-theme-item">봄</div>
-      <div className="projects-theme-item">봄</div>
+    <div
+      className="projects-theme"
+      onClick={(e) => {
+        e.stopPropagation();
+        onClickModal();
+      }}
+    >
+      <MyThemeLists theme={theme} />
 
-      <div style={{ position: "relative" }}>
-        <svg
-          className="link-icon feather feather-settings"
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          fill="none"
-          stroke="currentColor"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth="2"
-          viewBox="0 0 24 24"
-          style={{ cursor: "pointer" }}
-          onClick={onClickModal}
-        >
-          <defs />
-          <circle cx="12" cy="12" r="3" />
-          <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z" />
-        </svg>
-        {isOpen == true ? (
-          <div className="theme-modal">
-            <div className="theme-modal-overlay">
-              {themeItem.map((val, idx) => {
-                return (
-                  <div
-                    className="theme-modal-select"
-                    onClick={(e) => {
-                      setIsOpen(false);
-                    }}
-                  >
-                    {val.themeName}
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        ) : null}
-      </div>
+      {isOpen == true ? (
+        <ThemeSelect
+          setIsOpen={setIsOpen}
+          getCheckedBoxes={getCheckedBoxes}
+          doCheck={doCheck}
+          themeItem={themeItem}
+          checkeds={checkeds}
+          setCheckeds={setCheckeds}
+        />
+      ) : null}
     </div>
   );
 };
+
+function ThemeSelect({
+  setIsOpen,
+  getCheckedBoxes,
+  doCheck,
+  themeItem,
+  checkeds,
+  setCheckeds,
+}) {
+  const themeEdit = () => {
+    let arrayList = checkeds.join().split(",");
+    const newArr = arrayList.map((val, idx) => {
+      return { theme: val };
+    });
+
+    if (newArr.length >= 5) {
+      newArr.length = 5;
+      console.log("newArr 자르기 후", newArr);
+    }
+
+    let token = sessionStorage.getItem("token");
+    axios
+      .put(
+        "/aamurest/users/updatetheme",
+        {
+          id: sessionStorage.getItem("username"),
+          themes: newArr,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then((resp) => {
+        console.log("테마 수정 성공 :", resp.data);
+        alert("테마가 저장됬어요!");
+      })
+      .catch((error) => {
+        console.log("테마 수정 실패 :", error);
+      });
+  };
+  return (
+    <>
+      <div className="myTheme-List">
+        <div className="myTheme-List-overlay">
+          <CheckBoxBody>
+            {themeItem.map((val, i) => {
+              return (
+                <CheckBox
+                  key={val.THEMEID}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    doCheck(e);
+                    getCheckedBoxes(
+                      e.target.parentElement.nextSibling.lastChild.checked,
+                      e.target.parentElement.nextSibling.lastChild.value
+                    );
+                  }}
+                >
+                  <ImgCon>
+                    <img
+                      src={val.themeimg}
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "cover",
+                        borderRadius: "5px",
+                      }}
+                    />
+                  </ImgCon>
+                  <div
+                    style={{
+                      textAlign: "center",
+                      margin: "2px 0",
+                      fontSize: "14px",
+                    }}
+                  >
+                    <label for={val.THEMENAME}>{val.THEMENAME}</label>
+                    <input
+                      type="checkbox"
+                      id={val.THEMENAME}
+                      value={val.THEMENAME}
+                      onChange={(e) => {
+                        e.stopPropagation();
+                        getCheckedBoxes(e.target.checked, e.target.value);
+                      }}
+                      checked={checkeds.includes(val.THEMENAME) ? true : false}
+                      hidden
+                    />
+                  </div>
+                </CheckBox>
+              );
+            })}
+          </CheckBoxBody>
+          <div style={{ display: "flex", flexDirection: "row", gap: "5px" }}>
+            <div
+              className="myBox-List-back"
+              onClick={(e) => {
+                e.stopPropagation();
+                themeEdit();
+                setIsOpen(false);
+              }}
+            >
+              저장
+            </div>
+            <div
+              className="myBox-List-back"
+              onClick={(e) => {
+                e.stopPropagation();
+                setCheckeds([]);
+                setIsOpen(false);
+              }}
+            >
+              취소
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
+
+const CheckBoxBody = styled.div`
+  position: relative;
+  width: 100%;
+  height: 500px;
+  //   display: flex;
+  //   flex-direction: column;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 5px;
+  overflow-y: auto;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  z-index: 400;
+`;
+const CheckBox = styled.div`
+  //   border: 1px solid rgb(128, 128, 128);
+  box-shadow: var(--lightShadow);
+  border-radius: 5px;
+  width: 100%;
+  height: 190px;
+  padding: 5px;
+  transition: 0.1s;
+  border: 2px solid white;
+  font-weight: bold;
+  &:hover {
+    border: 2px solid var(--skyblue);
+  }
+`;
+const ImgCon = styled.div`
+  //   border: 1px solid red;
+  width: 100%;
+  height: 90%;
+`;
 
 export default MyTheme;
