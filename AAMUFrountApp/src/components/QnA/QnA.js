@@ -34,6 +34,7 @@ const QnA = () => {
         },
       })
       .then((resp) => {
+        console.log("QnA 글 목록 : ", resp.data);
         setPosts(resp.data);
       })
       .catch((err) => {
@@ -72,21 +73,8 @@ const QnA = () => {
             </div>
           </Link>
           <div className="qna__qnaBoard-contents">
-            {getcurrentPosts(posts).map((val, i) => {
-              return <QnABbsOne val={val} navigate={navigate} />;
-
-              //
-            })}
-
             {getcurrentPosts(userQnA).map((val, i) => {
-              return (
-                <QnABbsOne
-                  val={val}
-                  navigate={navigate}
-                  userQnA={userQnA}
-                  i={i}
-                />
-              );
+              return <QnABbsOne val={val} navigate={navigate} />;
             })}
           </div>
           <div className="qna__pagination">
@@ -109,7 +97,7 @@ function QnABbsOne({ val, navigate }) {
         navigate("/qnaDetail", { state: { qno: val.qno } });
       }}
     >
-      <span style={{ textAlign: "center", height: "30px" }}></span>
+      <span style={{ textAlign: "center", height: "30px" }}>{val.qno}</span>
       <span className="qna__one-title">{val.title}</span>
       <span className="qna__one-id">{val.id}</span>
     </div>
