@@ -248,7 +248,9 @@
 .daumPostCode {
   animation: daumPostCode-in-left 0.5s cubic-bezier(0.47, 0, 0.745, 0.715) both;
 }
-
+.daumPostCode_myProfile {
+  animation: daumPostCode_myProfile 0.5s cubic-bezier(0.47, 0, 0.745, 0.715) both;
+}
 .postCodeFind-btn {
   background-color: var(--skyblue);
   font-size: 12px;
@@ -353,6 +355,16 @@
 @keyframes daumPostCode-in-left {
   0% {
     transform: translateX(-200px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+@keyframes daumPostCode_myProfile {
+  0% {
+    transform: translateX(-50px);
     opacity: 0;
   }
   100% {
