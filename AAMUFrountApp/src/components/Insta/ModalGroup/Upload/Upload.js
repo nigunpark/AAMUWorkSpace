@@ -11,7 +11,7 @@ import Hashtag from "../../Hashtag";
 import "../Slider/slick-theme.css";
 import "../Slider/slick.css";
 import { SwiperSlide, Swiper } from "swiper/react";
-import ReactTooltip from 'react-tooltip';
+import ReactTooltip from "react-tooltip";
 import { A11y, Autoplay, Navigation, Pagination, Scrollbar } from "swiper";
 import "swiper/css"; //basic
 import "swiper/css/navigation";
@@ -30,7 +30,7 @@ const Uploader = ({ list, setsquare, setlist, setloading }) => {
   const [upload, setupload] = useState(false);
   const [search, setSearch] = useState([]);
   const [showSearch, setshowSearch] = useState(false);
-  const [showWrite, setShowWrite] = useState([]);
+  const [showWrite, setShowWrite] = useState(false);
   const [show] = useState(false);
   const [hasText, setHasText] = useState(false);
   const [inputValue, setinputValue] = useState("");
@@ -39,8 +39,6 @@ const Uploader = ({ list, setsquare, setlist, setloading }) => {
   const [tagItem, setTagItem] = useState([]);
   const [tagList, setTagList] = useState([]);
   const [tagModal, settagModal] = useState([]);
-
-  
 
   //이미지 하나 업로드시
   // const [image, setImage] = useState({//초기 이미지 세팅 및 변수
@@ -90,12 +88,20 @@ const Uploader = ({ list, setsquare, setlist, setloading }) => {
   };
 
   const onKeyPress = (e) => {
-    if(!e.target.value.includes('#')&& e.keyCode === 32 && e.target.value.length !== 0){
-      alert('#을 입력해주세요~!');
+    if (
+      !e.target.value.includes("#") &&
+      e.keyCode === 32 &&
+      e.target.value.length !== 0
+    ) {
+      alert("#을 입력해주세요~!");
     }
-    if (e.target.value.length !== 0 && e.keyCode === 32 && e.target.value.includes('#') ) {
-        submitTagItem();
-    } 
+    if (
+      e.target.value.length !== 0 &&
+      e.keyCode === 32 &&
+      e.target.value.includes("#")
+    ) {
+      submitTagItem();
+    }
   };
 
   const submitTagItem = () => {
@@ -343,7 +349,9 @@ const Uploader = ({ list, setsquare, setlist, setloading }) => {
               className="form-control"
               id="textArea_byteLimit"
               name="textArea_byteLimit"
-              onKeyUp={(e) => {fn_checkByte(e)}}
+              onKeyUp={(e) => {
+                fn_checkByte(e);
+              }}
               rows="8"
               placeholder="문구입력..."
               style={{
@@ -428,7 +436,7 @@ const Uploader = ({ list, setsquare, setlist, setloading }) => {
             <i className="fa-solid fa-location-dot"></i>
           </div>
           <div>
-            <div  className="uploadLocation">
+            <div className="uploadLocation">
               {tagList.map((tagItem, index) => {
                 return (
                   <TagItem key={index}>
@@ -451,8 +459,7 @@ const Uploader = ({ list, setsquare, setlist, setloading }) => {
                 onChange={(e) => {
                   e.stopPropagation();
                   setTagItem(e.target.value);
-                  {tagItem.length > 1 &&
-                  setShowWrite(true);}
+                   setShowWrite(true);
                 }}
                 value={tagItem}
                 onKeyUp={(e) => {
@@ -468,12 +475,11 @@ const Uploader = ({ list, setsquare, setlist, setloading }) => {
                   setTagItem={setTagItem}
                 />
               )}
-              
+
               <i class="fa-solid fa-hashtag"></i>
             </div>
           </div>
           <ReactTooltip />
-          
 
           {/* <Hashtag tagItem={tagItem} setTagItem={setTagItem} tagList={tagList} setTagList={setTagList} hashRef={hashRef}/> */}
         </div>
@@ -560,15 +566,12 @@ function gramEdit(
 
   let token = sessionStorage.getItem("token");
   axios
-    .post(
-      "/aamurest/gram/edit",temp, 
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "multipart/form-data",
-        },
-      }
-    )
+    .post("/aamurest/gram/edit", temp, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "multipart/form-data",
+      },
+    })
     .then((resp) => {
       console.log(resp.data);
       setupload(resp.data);
