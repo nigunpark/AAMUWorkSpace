@@ -68,10 +68,10 @@
 																</div>
 															</td>
 															<td>${record.qno}</td>
-															<td class="admin-title"><a
-																href="<c:url value="/QNAView.do?qno=${record.qno}&nowPage="/><c:out value="${param.nowPage}" default="1"/>">${record.title}</a>
+															<td class="admin-title"><span class="text-overflow"><a
+																href="<c:url value="/QNAView.do?qno=${record.qno}&nowPage="/><c:out value="${param.nowPage}" default="1"/>">${record.title}</a></span>
 															</td>
-															<td>${record.name}(${record.id})</td>
+															<td><span class="text-overflow">${record.name}(${record.id})</span></td>
 															<td><c:set var="ac" value="${record.answerCount}" />
 																<c:choose>
 																	<c:when test="${ac == 0}">
@@ -139,6 +139,33 @@
 </div>
 
 <style>
+
+table {
+	table-layout: fixed;
+}
+
+table td .text-overflow {
+	line-height: 1.3rem;
+	padding: 0px;
+	text-align: left;
+	white-space: pre-wrap; /* CSS3*/
+	white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
+	white-space: -pre-wrap; /* Opera 4-6 */
+	white-space: -o-pre-wrap; /* Opera 7 */
+	word-wrap: break-all; /* Internet Explorer 5.5+ */
+}
+
+textarea, table td p {
+	line-height: 1.5rem !important;
+	text-align: left;
+	white-space: pre-wrap; /* CSS3*/
+	white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
+	white-space: -pre-wrap; /* Opera 4-6 */
+	white-space: -o-pre-wrap; /* Opera 7 */
+	word-wrap: break-all; /* Internet Explorer 5.5+ */
+}
+
+
 .qna-table {
 	width: 100%;
 }

@@ -23,6 +23,7 @@ function CommentSearch({ val, setForReRender, forReRender, setcommentModal, setc
   let commentRef1 = useRef();
 
   const [commentHeart, setCommentHeart] = useState(false);
+  const [position, setPosition] = useState("");
   const [modalShow, setModalShow] = useState(false);
   const [reply, setReply] = useState(false);
   const [modalSet, setModal] = useState(false);
@@ -277,7 +278,11 @@ function CommentSearch({ val, setForReRender, forReRender, setcommentModal, setc
                   //feedComments에 담겨있을 댓글 값을 CommentList 컴포넌트에 담아서 가져온다
                   return (
                     <div className="recommend-contents">
-                      <img className="likeimg" src={val.userprofile} alt="추사" />
+                      <img
+                        className="likeimg"
+                        src={val.userprofile}
+                        alt="추사"
+                      />
                       <div
                         style={{
                           width: "100%",
@@ -335,7 +340,9 @@ function CommentSearch({ val, setForReRender, forReRender, setcommentModal, setc
                             marginTop: "8px",
                           }}
                         >
-                          <p className="postDate">{dayjs(val.postdate).format("YYYY/MM/DD")}</p>
+                          <p className="postDate">
+                            {dayjs(val.postdate).format("YYYY/MM/DD")}
+                          </p>
                         </div>
                       </div>
                     </div>

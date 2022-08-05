@@ -19,7 +19,7 @@
 								</tr>
 								<tr>
 									<th class="w-25 bg-dark text-white text-center">제목</th>
-									<td>${record.title}</td>
+									<td><span class="text-overflow">${record.title}</span></td>
 								</tr>
 								<tr>
 									<th class="w-25 bg-dark text-white text-center">공지</th>
@@ -40,7 +40,7 @@
 									<th class="bg-dark text-white text-center" colspan="2">내용</th>
 								</tr>
 								<tr>
-									<td colspan="2">${record.content }</td>
+									<td colspan="2"><p>${record.content }</p></td>
 								</tr>
 							</tbody>
 						</table>
@@ -69,9 +69,33 @@
 
 <style>
 
+table {
+	table-layout: fixed;
+}
+
+table td .text-overflow {
+	line-height: 1.3rem;
+	padding: 0px;
+	text-align: left;
+	white-space: pre-wrap; /* CSS3*/
+	white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
+	white-space: -pre-wrap; /* Opera 4-6 */
+	white-space: -o-pre-wrap; /* Opera 7 */
+	word-wrap: break-all; /* Internet Explorer 5.5+ */
+}
+
+textarea, table td p {
+	line-height: 1.5rem !important;
+	text-align: left;
+	white-space: pre-wrap; /* CSS3*/
+	white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
+	white-space: -pre-wrap; /* Opera 4-6 */
+	white-space: -o-pre-wrap; /* Opera 7 */
+	word-wrap: break-all; /* Internet Explorer 5.5+ */
+}
 
 .tab-content-top {
-padding: 1.5rem 2.187rem 1.5rem 3.5rem;
+padding: 1.5rem 1.5rem 1.5rem 1.5rem;
 	border-radius: 20px;
 	-webkit-box-shadow: 0 0 0 0 rgb(90 113 208/ 11%), 0 4px 16px 0
 		rgb(167 175 183/ 33%);
