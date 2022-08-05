@@ -25,7 +25,10 @@ const QnAWrite = () => {
         }
       )
       .then((resp) => {
-        if (resp.data === 1) navigate("/qna");
+        console.log("QnA 등록 :", resp.data);
+        // if (resp.data === 1) navigate("/qna");
+        alert("QnA 등록이 완료되었어요.");
+        navigate("/qna");
       })
       .catch((err) => {
         console.log(err);
@@ -35,7 +38,9 @@ const QnAWrite = () => {
     <div className="qnaWrite__container">
       <div className="qna__header">
         <div className="qna__header__title">궁금한점을 알려주세요</div>
-        <div className="qna__header__subTitle">AAMU는 여러분의 목소리를 듣고싶어요</div>
+        <div className="qna__header__subTitle">
+          AAMU는 여러분의 목소리를 듣고싶어요
+        </div>
       </div>
       <div className="qnaWrite">
         <div className="qnaWrite__title">

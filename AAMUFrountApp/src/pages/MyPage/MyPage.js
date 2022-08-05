@@ -23,6 +23,7 @@ import MyBookMarkBox from "./MyPageBox/MyBookMarkBox";
 import MyTheme from "./MyPageBox/MyTheme";
 import DetailModal from "../Forum/DetailModal/DetailModal";
 import MyThemeLists from "./MyPageBox/MyThemeLists";
+import { Spinner } from "react-bootstrap";
 const MyPage = () => {
   let [clickTab, setClickTab] = useState(0);
 
@@ -483,16 +484,30 @@ function TabContent({
                       <img className="instaImg" src={val.photo[0]} />
                       <div>
                         <div className="instaTitle__container">
-                          <input type="text" value={val.ctitle} className="instaTitle" />
+                          <input
+                            type="text"
+                            value={val.ctitle}
+                            className="instaTitle"
+                          />
                         </div>
                         <div className="insta__info">
                           <div>
-                            <FontAwesomeIcon icon={faMessage} className="insta__info-icon" />{" "}
-                            <span className="insta__info-content">{val.rcount}</span>
+                            <FontAwesomeIcon
+                              icon={faMessage}
+                              className="insta__info-icon"
+                            />{" "}
+                            <span className="insta__info-content">
+                              {val.rcount}
+                            </span>
                           </div>
                           <div>
-                            <FontAwesomeIcon icon={faThumbsUp} className="insta__info-icon" />
-                            <span className="insta__info-content">{val.likecount}</span>
+                            <FontAwesomeIcon
+                              icon={faThumbsUp}
+                              className="insta__info-icon"
+                            />
+                            <span className="insta__info-content">
+                              {val.likecount}
+                            </span>
                           </div>
                         </div>
                       </div>
@@ -549,7 +564,13 @@ function TabContent({
       <div className="myInstaContainer">
         <div className="myInstar">
           {myBookList.map((val, idx) => {
-            return <MyBookMarkBox setDetailOne={setDetailOne} detail={val} setIsOpen={setIsOpen} />;
+            return (
+              <MyBookMarkBox
+                setDetailOne={setDetailOne}
+                detail={val}
+                setIsOpen={setIsOpen}
+              />
+            );
           })}
 
           {/*
