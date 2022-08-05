@@ -5,6 +5,7 @@ import DaumPostcode from "react-daum-postcode";
 import axios from "axios";
 import { Avatar } from "antd";
 import { useNavigate } from "react-router-dom";
+import MyTheme from "./MyTheme";
 
 const MyProfileBox = ({ setClickTab }) => {
   let navigate = useNavigate();
@@ -108,7 +109,7 @@ const MyProfileBox = ({ setClickTab }) => {
         },
       })
       .then((resp) => {
-        console.log("데이터 확인 : ", resp.data);
+        // console.log("데이터 확인 : ", resp.data);
 
         setUserProfile(resp.data);
         setPwd(resp.data.pwd);
@@ -135,9 +136,6 @@ const MyProfileBox = ({ setClickTab }) => {
         console.log((error) => console.log("프로필 가져오기 실패", error));
       });
   }, []);
-
-  console.log("showImagesFile -----:", showImagesFile.length);
-  // console.log("showImages :", showImages.length);
   let [profiles, setProfile] = useState([]);
   return (
     <MyProfileContainer>
@@ -190,9 +188,7 @@ const MyProfileBox = ({ setClickTab }) => {
       </MyUpdateImg>
 
       <MyUpdateProfile>
-        <div
-          style={{ fontSize: "14px", display: "flex", flexDirection: "row" }}
-        >
+        <div className="profile-title-name-id">
           <div>이름</div>
           <div style={{ marginLeft: "200px" }}>아이디</div>
         </div>
@@ -212,7 +208,7 @@ const MyProfileBox = ({ setClickTab }) => {
           <Id>{userId}</Id>
         </div>
 
-        <div style={{ fontSize: "14px" }}>비밀번호</div>
+        <div className="profile-title">비밀번호</div>
         <RRNContainer>
           <input
             type="password"
@@ -223,7 +219,7 @@ const MyProfileBox = ({ setClickTab }) => {
           />
         </RRNContainer>
 
-        <div style={{ fontSize: "14px" }}>휴대폰 번호</div>
+        <div className="profile-title">휴대폰 번호</div>
         <PhoneNum>
           <input
             type="text"
@@ -250,7 +246,7 @@ const MyProfileBox = ({ setClickTab }) => {
           />
         </PhoneNum>
 
-        <div style={{ fontSize: "14px" }}>이메일</div>
+        <div className="profile-title">이메일</div>
         <EmailContainer>
           <input
             type="text"
@@ -269,9 +265,7 @@ const MyProfileBox = ({ setClickTab }) => {
           />
         </EmailContainer>
 
-        <div
-          style={{ fontSize: "14px", display: "flex", flexDirection: "row" }}
-        >
+        <div className="profile-title-addr">
           주소
           <div style={{ marginLeft: "auto" }}>
             <AddrBtn
@@ -307,7 +301,16 @@ const MyProfileBox = ({ setClickTab }) => {
             />
           )}
         </div>
-        <div style={{ textAlign: "end", marginTop: "50px" }}>
+        <div className="profile-title-theme">나의 테마</div>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            textAlign: "end",
+            marginTop: "10px",
+          }}
+        >
+          <MyTheme />
           <UpdateBtn
             type="button"
             onClick={(e) => {
@@ -567,9 +570,8 @@ function Addr({ zoneCode, address, detailAddr }) {
 const MyProfileContainer = styled.div`
   display: grid;
   grid-template-columns: 500px 520px;
-  grid-template-rows: 450px;
+  grid-template-rows: 500px;
   gap: 10px;
-  // border: solid 1px black;
   font-size: 18px;
   margin: auto;
 `;
@@ -581,6 +583,7 @@ const MyUpdateImg = styled.div`
   align-items: center;
   background-color: var(--app-container);
   border-radius: 0.5em;
+  box-shadow: var(--shadow);
 `;
 const ImgBox = styled.div`
   width: 250px;
@@ -589,6 +592,7 @@ const ImgBox = styled.div`
   overflow: hidden;
   // position: absolute;
   position: relative;
+  box-shadow: var(--shadow);
 `;
 const Imgs = styled.img`
   width: 100%;
@@ -684,11 +688,13 @@ const AddrBtn = styled.button`
 const UpdateBtn = styled.button`
   margin-top: 5px;
   width: 100px;
+  height: 25px;
   padding: 3px 10px;
   background-color: var(--orange);
   color: white;
   border-radius: 5px;
   font-weight: bold;
+  margin-left: auto;
 `;
 
 export default MyProfileBox;
