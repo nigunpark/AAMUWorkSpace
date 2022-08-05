@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import com.aamu.aamurest.user.service.AttractionDTO;
+import com.aamu.aamurest.user.service.BBSDTO;
 import com.aamu.aamurest.user.service.MainService;
 import com.aamu.aamurest.user.service.PlannerDTO;
 import com.aamu.aamurest.user.service.RouteDTO;
@@ -24,7 +25,9 @@ public class MainServiceImpl implements MainService{
 
 	@Autowired
 	private MainDAO dao;
-
+	
+	@Autowired
+	private BBSDAO bbsDao;
 	@Autowired
 	private TransactionTemplate transactionTemplate;
 
@@ -703,5 +706,14 @@ public class MainServiceImpl implements MainService{
 	public AttractionDTO selectPlace(Map map, HttpServletRequest req) {
 		
 		return changeOneAttr(dao.selectPlace(map), req);
+	}
+	@Override
+	public BBSDTO getRouteBBS(int rbn,HttpServletRequest req) {
+		BBSDTO dto = dao.getRouteBBS(rbn);
+		dto.setRouteList(dao.selectRouteList(rbn));
+		dto.setReviewList(bbsDao.reviewSelectList(rbn));
+		List<String> photolist =bbsDao.bbsSelectPhotoList(rbn);
+		dto.setPhoto(FileUploadUtil.requestFilePath(photolist, "/resoures/bbsUpload", req));
+		return dto;
 	}
 }
