@@ -1,37 +1,63 @@
-// 리다이렉트될 화면
-// KakaoRedirectHandeler.js
 
 import React, { useEffect } from "react";
 import axios from 'axios';
-import { useNavigate } from "react-router-dom";
 
-const KakaoRedirectHandler = () => {
 
-  const navigate = useNavigate();
 
-  useEffect(()=> {
-    let params = new URL(document.location.toString()).searchParams;
+const REST_API_KEY = "3a141ff9d81872fc2f019e5f2f7de619";
 
-    console.log('params:', params);
+const KakaoRedirectHandler = ({navigate}) => {
+  const code = document.location.search.split('?code=')[1];
+if (code !== undefined) {
+  requestToken(code)
+    .then(({ data }) => {
+      console.log('requestToken:', data)
+    })
+    .catch(err => {
+      console.error('requestToken:', err)
+    })
+}
 
-    let code = params.get("code"); // 인가코드 받는 부분
-    let grant_type = "authorization_code";
-    let client_id = "cc80502fc1a7fe4caaa624af80993d73"; //REST API KEY
+function requestToken(code) {
+  const JS_APP_KEY ="2eed708665efb1b1a0ec9c3e21d756ea";
+  const REDIRECT_URI = "http://localhost:3000/oauth/callback/kakao";
+  const makeFormData = params => {
+    const searchParams = new URLSearchParams()
+    Object.keys(params).forEach(key => {
+      searchParams.append(key, params[key])
+    })
 
-    axios.post(`https://kauth.kakao.com/oauth/token?grant_type=authorization_code&client_id=${client_id}&redirect_uri=http://localhost:3000/oauth/callback/kakao&code=${code}`,
-      {
-        headers: {'Content-type': 'application/x-www-form-urlencoded;charset=utf-8'}
+    return searchParams
+  }
+
+    return axios({   
+      method: 'POST',
+      headers: {
+        'content-type': 'application/x-www-form-urlencoded;charset=utf-8',
+      },
+      url: 'https://kauth.kakao.com/oauth/token',
+      data: makeFormData({
+        grant_type: 'authorization_code',
+        client_id: JS_APP_KEY,
+        redirect_uri: REDIRECT_URI,
+        code,
       })
-      .then((res) => {
-        sessionStorage.setItem('token', res.data._token);
-        console.log(res.data);
-        // res에 포함된 토큰 받아서 원하는 로직을 하면된다.
-        navigate('/');
-      }).catch((error)=>{console.log(error)})
-    }, []);
+     
+    }).then(function (response) {
+     console.log('response',response.data.access_token);
+     const token = response.data.access_token
+    // Kakao Javascript SDK 초기화
+    // if (!window.Kakao.isInitialized()) {
+      // JavaScript key를 인자로 주고 SDK 초기화
+      window.Kakao.init('2eed708665efb1b1a0ec9c3e21d756ea');
+    // }
+    // access token 설정
+    window.Kakao.Auth.setAccessToken(token);
+    navigate("../tokenuser",  { replace: true});
+ 
 
-  // <div>사실 이페이지는 크게 의미 없다. 첫화면으로 로직이 끝나면 이동시켜주면 된다.</div>
-  //return navigate('/');
+  });
+  }
 };
 
 export default KakaoRedirectHandler;

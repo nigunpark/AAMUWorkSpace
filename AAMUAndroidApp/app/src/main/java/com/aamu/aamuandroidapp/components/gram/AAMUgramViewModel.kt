@@ -10,6 +10,7 @@ import androidx.lifecycle.viewModelScope
 import com.aamu.aamuandroidapp.data.api.AAMUDIGraph
 import com.aamu.aamuandroidapp.data.api.repositories.AAMURepository
 import com.aamu.aamuandroidapp.data.api.response.AAMUGarmResponse
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class AAMUgramViewModelFactory(val context: Context) : ViewModelProvider.Factory{
@@ -24,7 +25,9 @@ class  AAMUgramViewModel(context : Context) : ViewModel(){
     val aamuGramList = MutableLiveData<List<AAMUGarmResponse>>()
     val errorLiveData = MutableLiveData<String>()
 
-    init {
+    val context = context
+
+    fun getGramList(){
         viewModelScope.launch {
             val preferences : SharedPreferences = context.getSharedPreferences("usersInfo", Context.MODE_PRIVATE)
             val userid : String? = preferences.getString("id",null)
@@ -38,6 +41,19 @@ class  AAMUgramViewModel(context : Context) : ViewModel(){
                         Toast.makeText(context,"리스트를 받아오는데 실페했습니다", Toast.LENGTH_LONG)
                     }
                 }
+        }
+    }
+
+    fun getGramLike(lno : Int){
+        viewModelScope.launch {
+            val preferences : SharedPreferences = context.getSharedPreferences("usersInfo", Context.MODE_PRIVATE)
+            val userid : String? = preferences.getString("id",null)
+            aamuRepository.getGramLike(userid.toString(),lno)
+                .collect{
+                    if(it.get("isLike")?.isNotEmpty() == true){
+                        getGramList()
+                    }
+            }
         }
     }
 }

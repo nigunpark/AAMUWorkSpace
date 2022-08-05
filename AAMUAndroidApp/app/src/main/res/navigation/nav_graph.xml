@@ -43,6 +43,9 @@
         <action
             android:id="@+id/action_mainFragment_to_routeBBSDetailFragment"
             app:destination="@id/routeBBSDetailFragment"></action>
+        <action
+            android:id="@+id/action_mainFragment_to_gramDetailFragment"
+            app:destination="@id/gramDetailFragment" />
 
     </fragment>
     <fragment
@@ -72,6 +75,16 @@
             app:argType="com.aamu.aamuandroidapp.data.api.response.AAMUPlaceResponse"
             app:nullable="true"
             android:defaultValue="@null" />
+    </fragment>
+    <fragment
+        android:id="@+id/gramDetailFragment"
+        android:name="com.aamu.aamuandroidapp.fragment.main.gram.GramDetailFragment"
+        android:label="GramDetailFragment" >
+        <argument
+            android:name="lno"
+            app:argType="integer"
+            android:defaultValue="0"
+            />
     </fragment>
 
 </navigation>

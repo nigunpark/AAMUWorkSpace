@@ -386,7 +386,9 @@ const Edit = ({ setlist, val, seteditModal }) => {
             >
               <input
                 onKeyUp={(e) => searchWord(e, setSearch)}
-                value={close === false ? val.title : inputValue}
+                value={
+                  close === false ? val.title : inputValue
+                }
                 style={{ width: "70%" }}
                 onChange={(e) => {
                   setinputValue(e.target.value);

@@ -125,137 +125,134 @@ fun PlaceDetail(mapviewModel: AAMUPlanViewModel,
         Box(modifier = Modifier
             .fillMaxSize()
             .background(Color.White)) {
-            LazyColumn(modifier = Modifier.padding(20.dp)) {
-                item {
-                    Row(
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier
-                            .padding(bottom = 20.dp)
-                            .fillMaxWidth()
-                    ) {
-                        Column() {
-                            Text(
-                                text = placeLiveData?.title ?: "",
-                                style = typography.h6.copy(fontSize = 25.sp),
-                                color = MaterialTheme.colorScheme.onSurface
-                            )
-                            Text(
-                                text = getContentTypeId(placeLiveData?.contenttypeid ?: 0),
-                                style = typography.subtitle2,
-                                fontSize = 20.sp,
-                                maxLines = 1,
-                                overflow = TextOverflow.Ellipsis
-                            )
-                        }
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            FaIcon(
-                                faIcon = FaIcons.Star,
-                                size = 25.dp,
-                                tint = yellow
-                            )
-                            Text(text = "별점", fontSize = 20.sp)
-                        }
+            Column(modifier = Modifier.padding(20.dp)) {
+                Row(
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .padding(bottom = 20.dp)
+                        .fillMaxWidth()
+                ) {
+                    Column() {
+                        Text(
+                            text = placeLiveData?.title ?: "",
+                            style = typography.h6.copy(fontSize = 25.sp),
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                        Text(
+                            text = getContentTypeId(placeLiveData?.contenttypeid ?: 0),
+                            style = typography.subtitle2,
+                            fontSize = 20.sp,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                    }
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        FaIcon(
+                            faIcon = FaIcons.Star,
+                            size = 25.dp,
+                            tint = yellow
+                        )
+                        Text(text = "별점", fontSize = 20.sp)
                     }
                 }
-                item { Divider(modifier = Modifier.alpha(0.1f)) }
-                item {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.padding(vertical = 5.dp)
-                    ) {
-                        FaIcon(
-                            faIcon = FaIcons.MapMarker,
-                            tint = cyan500.copy(alpha = 0.3f),
-                            modifier = Modifier.padding(horizontal = 5.dp)
-                        )
-                        Text(
-                            text = placeLiveData?.addr ?: "",
-                            style = typography.h6.copy(fontSize = 12.sp)
-                        )
-                    }
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.padding(vertical = 5.dp)
-                    ) {
-                        FaIcon(
-                            faIcon = FaIcons.Clock,
-                            tint = cyan500.copy(alpha = 0.3f),
-                            modifier = Modifier.padding(horizontal = 5.dp)
-                        )
-                        Text(
-                            text = placeLiveData?.playtime ?: "영업시간 없음",
-                            style = typography.h6.copy(fontSize = 12.sp)
-                        )
-                    }
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.padding(vertical = 5.dp)
-                    ) {
-                        FaIcon(
-                            faIcon = FaIcons.Globe,
-                            tint = cyan500.copy(alpha = 0.3f),
-                            modifier = Modifier.padding(horizontal = 5.dp)
-                        )
-                        Text(
-                            text = placeLiveData?.url ?: "홈페이지 없음",
-                            style = typography.h6.copy(fontSize = 12.sp)
-                        )
-                    }
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.padding(vertical = 5.dp)
-                    ) {
-                        FaIcon(
-                            faIcon = FaIcons.Phone,
-                            tint = cyan500.copy(alpha = 0.3f),
-                            modifier = Modifier.padding(horizontal = 5.dp)
-                        )
-                        Text(
-                            text = placeLiveData?.tel ?: "전화번호 없음",
-                            style = typography.h6.copy(fontSize = 12.sp)
-                        )
-                    }
+                Divider(modifier = Modifier.alpha(0.1f))
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.padding(vertical = 5.dp)
+                ) {
+                    FaIcon(
+                        faIcon = FaIcons.MapMarker,
+                        tint = cyan500.copy(alpha = 0.3f),
+                        modifier = Modifier.padding(horizontal = 5.dp)
+                    )
+                    Text(
+                        text = placeLiveData?.addr ?: "",
+                        style = typography.h6.copy(fontSize = 12.sp)
+                    )
+                }
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.padding(vertical = 5.dp)
+                ) {
+                    FaIcon(
+                        faIcon = FaIcons.Clock,
+                        tint = cyan500.copy(alpha = 0.3f),
+                        modifier = Modifier.padding(horizontal = 5.dp)
+                    )
+                    Text(
+                        text = placeLiveData?.playtime ?: "영업시간 없음",
+                        style = typography.h6.copy(fontSize = 12.sp)
+                    )
+                }
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.padding(vertical = 5.dp)
+                ) {
+                    FaIcon(
+                        faIcon = FaIcons.Globe,
+                        tint = cyan500.copy(alpha = 0.3f),
+                        modifier = Modifier.padding(horizontal = 5.dp)
+                    )
+                    Text(
+                        text = placeLiveData?.url ?: "홈페이지 없음",
+                        style = typography.h6.copy(fontSize = 12.sp)
+                    )
+                }
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.padding(vertical = 5.dp)
+                ) {
+                    FaIcon(
+                        faIcon = FaIcons.Phone,
+                        tint = cyan500.copy(alpha = 0.3f),
+                        modifier = Modifier.padding(horizontal = 5.dp)
+                    )
+                    Text(
+                        text = placeLiveData?.tel ?: "전화번호 없음",
+                        style = typography.h6.copy(fontSize = 12.sp)
+                    )
+                }
 
+                Text(
+                    text = "사용자가 올린사진",
+                    style = typography.caption,
+                    color = typography.caption.color.copy(alpha = 0.5f)
+                )
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(300.dp)
+                ) {
+                    if(placeLiveData?.contentid != null)
+                        PlanGramImageGrid(placeLiveData?.contentid!!,100.dp)
                 }
-                item {
-                    Text(
-                        text = "사용자가 올린사진",
-                        style = typography.caption,
-                        color = typography.caption.color.copy(alpha = 0.5f)
-                    )
-                }
-                item {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(300.dp)
-                    ) {
-                        if(placeLiveData?.contentid != null)
-                            PlanGramImageGrid(placeLiveData?.contentid!!,100.dp)
-                    }
-                }
-                item {
-                    Text(
-                        text = "카카오 리뷰",
-                        style = typography.caption,
-                        color = typography.caption.color.copy(alpha = 0.5f)
-                    )
-                }
-                item {
-                    Box(modifier = Modifier.fillMaxSize()) {
-                        LazyColumn(modifier = Modifier.fillMaxSize()) {
-                            item {
-                                Row(verticalAlignment = Alignment.CenterVertically) {
-                                    FaIcon(
-                                        faIcon = FaIcons.Star,
-                                        size = 10.dp,
-                                        tint = yellow
-                                    )
-                                    Text(text = "별점", fontSize = 10.sp)
-                                }
+                Text(
+                    text = "카카오 리뷰",
+                    style = typography.caption,
+                    color = typography.caption.color.copy(alpha = 0.5f)
+                )
+                Box(modifier = Modifier.fillMaxSize()) {
+                    LazyColumn() {
+                        item {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                FaIcon(
+                                    faIcon = FaIcons.Star,
+                                    size = 20.dp,
+                                    tint = yellow
+                                )
+                                Text(text = "별점", fontSize = 20.sp)
                             }
-
+                        }
+                        item {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                FaIcon(
+                                    faIcon = FaIcons.Star,
+                                    size = 20.dp,
+                                    tint = yellow
+                                )
+                                Text(text = "별점", fontSize = 20.sp)
+                            }
                         }
                     }
                 }

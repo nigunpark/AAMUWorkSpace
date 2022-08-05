@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import "./App.css";
 import Navbar from "./components/Navbar/Navbar";
-import { Routes, Route, useLocation } from "react-router-dom";
+import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
 import Home from "./pages/Home.js";
 import { useEffect, useState } from "react";
 import WholeMap from "./pages/WholeMap.js";
@@ -27,6 +27,8 @@ import * as StompJs from "@stomp/stompjs";
 import { useDispatch } from "react-redux";
 import { addForChatInfo } from "./redux/store";
 import JoinStep3 from "./components/Join/JoinStep3";
+import TokenUser from "./components/Login/Kakao/TokenUser";
+import LoginFunc from "./components/Login/Kakao/LoginFunc";
 function App() {
   let dispatch = useDispatch();
   let location = useLocation();
@@ -45,7 +47,8 @@ function App() {
   const [inputValue, setinputValue] = useState("");
   const [list, setlist] = useState([]);
   const [forReRender, setForReRender] = useState(false);
-
+  const navigate = useNavigate();
+  const [accountEmail, setaccountEmail] = useState('');
   const handleScroll = () => {
     if (window.scrollY > 950 && window.scrollY < 2500) setScrollNav(true);
     else setScrollNav(false);
@@ -142,11 +145,9 @@ function App() {
         <Route path="/login" element={<LoginTest />} />
         <Route path="/test" element={<Test />} />
         <Route path="/Detailmodal" element={<DetailModal />} />
-
-        <Route
-          path="/oauth/callback/kakao"
-          element={<KakaoRedirectHandler />}
-        />
+        <Route path="/tokenuser" element={<TokenUser navigate={navigate} accountEmail={accountEmail} setaccountEmail={setaccountEmail}/>} />
+        <Route path="/loginFunc" element={<LoginFunc navigate={navigate} accountEmail={accountEmail}/>} />
+        <Route path="/oauth/callback/kakao" element={<KakaoRedirectHandler navigate={navigate}/>} />
       </Routes>
     </div>
   );

@@ -13,8 +13,8 @@ import kotlin.random.Random
 @Composable
 fun PostList(
     gramList: List<AAMUGarmResponse>,
-    onLikeClicked: () -> Unit,
-    onCommentsClicked: () -> Unit,
+    onLikeClicked: (Int) -> Unit,
+    onCommentsClicked: (Int) -> Unit,
     onSendClicked: () -> Unit,
     modifier: Modifier = Modifier,
 ) {

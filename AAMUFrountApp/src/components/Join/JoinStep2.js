@@ -1,11 +1,23 @@
-import React, { useRef, useState } from "react";
-import { Container, ContentStep2, Title, Body, Footer } from "../Modal/ForJoin.js";
+import React, { useEffect, useRef, useState } from "react";
+import {
+  Container,
+  ContentStep2,
+  Title,
+  Body,
+  Footer,
+} from "../Modal/ForJoin.js";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-regular-svg-icons";
 import "./Join.css";
 import { Typography } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
-import { fa1, fa2, fa3, faCheck, faHouse } from "@fortawesome/free-solid-svg-icons";
+import {
+  fa1,
+  fa2,
+  fa3,
+  faCheck,
+  faHouse,
+} from "@fortawesome/free-solid-svg-icons";
 import DaumPostcode from "react-daum-postcode";
 import emailjs from "@emailjs/browser";
 import { addStepTwo } from "../../redux/store.js";
@@ -14,7 +26,7 @@ import axios from "axios";
 const JoinStep2 = () => {
   let joominGender = useRef();
   let nameRef = useRef();
-  let nameValidRef = useRef();
+  let nameValidRef = useRef("");
   let joominValidRef = useRef();
   let phoneNumF = useRef();
   let phoneNumS = useRef();
@@ -24,7 +36,7 @@ const JoinStep2 = () => {
   let emailIdRef = useRef("");
   let emailAddrRef = useRef("");
   let emailValidRef = useRef();
-  let photoRef = useRef();
+  let photoRef = useRef("");
   let zoneCodeRef = useRef();
   let addrValidRef = useRef();
   let addrDetailRef = useRef();
@@ -44,6 +56,22 @@ const JoinStep2 = () => {
   const [eAddr, setEAddr] = useState("");
   const [imageFile, setImageFile] = useState(null);
   console.log("reduxState", reduxState.joinData);
+  useEffect(() => {
+   
+    if (sessionStorage.getItem("usernickname") !== null) {
+      if (sessionStorage.getItem("userimgkakao").length > 0) {
+        const img = sessionStorage.getItem("userimgkakao");
+        photoRef.current.src = img;
+      } else {
+        photoRef.current.src = "/images/no-image.jpg";
+      }
+      const email = sessionStorage.getItem("useremailkakao").split("@");
+      setEId(email[0]);
+      setEAddr(email[1]);
+      const name = sessionStorage.getItem("usernickname");
+      nameRef.current.value = name;
+    }
+  }, []);
   return (
     <div className="join__step-two">
       <Container>
@@ -62,7 +90,10 @@ const JoinStep2 = () => {
             <div className="join__progress-container">
               <FontAwesomeIcon icon={fa1} className="join__progress-icon " />
               -
-              <FontAwesomeIcon icon={fa2} className="join__progress-icon join__progress-step" />
+              <FontAwesomeIcon
+                icon={fa2}
+                className="join__progress-icon join__progress-step"
+              />
               -
               <FontAwesomeIcon icon={fa3} className="join__progress-icon" />
             </div>
@@ -103,7 +134,10 @@ const JoinStep2 = () => {
                     <div>
                       <div style={{ display: "flex" }}>
                         <span style={{ fontSize: "13px" }}>이름</span>{" "}
-                        <span className="join__keyup-validSpan" ref={nameValidRef}>
+                        <span
+                          className="join__keyup-validSpan"
+                          ref={nameValidRef}
+                        >
                           (이름을 입력하세요)
                         </span>
                       </div>
@@ -128,7 +162,10 @@ const JoinStep2 = () => {
                     <div>
                       <div style={{ display: "flex" }}>
                         <span style={{ fontSize: "13px" }}>주민등록번호</span>{" "}
-                        <span className="join__keyup-validSpan" ref={joominValidRef}>
+                        <span
+                          className="join__keyup-validSpan"
+                          ref={joominValidRef}
+                        >
                           (형식에 맞게 입력해주세요)
                         </span>
                       </div>
@@ -151,7 +188,11 @@ const JoinStep2 = () => {
                             placeholder=""
                             ref={sJoominRef}
                             onChange={() => {
-                              joominValid(joominValidRef, sJoominRef, joominGender);
+                              joominValid(
+                                joominValidRef,
+                                sJoominRef,
+                                joominGender
+                              );
                             }}
                           />
                         </div>
@@ -172,7 +213,11 @@ const JoinStep2 = () => {
                               placeholder=""
                               ref={joominGender}
                               onChange={() => {
-                                joominValid(joominValidRef, sJoominRef, joominGender);
+                                joominValid(
+                                  joominValidRef,
+                                  sJoominRef,
+                                  joominGender
+                                );
                               }}
                             />
                             <span
@@ -190,7 +235,10 @@ const JoinStep2 = () => {
                     <div>
                       <div style={{ display: "flex" }}>
                         <span style={{ fontSize: "13px" }}>휴대폰번호</span>{" "}
-                        <span className="join__keyup-validSpan" ref={phoneNumValidRef}>
+                        <span
+                          className="join__keyup-validSpan"
+                          ref={phoneNumValidRef}
+                        >
                           (휴대폰번호를 입력해주세요)
                         </span>
                       </div>
@@ -213,7 +261,12 @@ const JoinStep2 = () => {
                             ref={phoneNumF}
                             className="join__stepTwo-phonenum-input"
                             onChange={() => {
-                              phoneNumValid(phoneNumValidRef, phoneNumF, phoneNumS, phoneNumT);
+                              phoneNumValid(
+                                phoneNumValidRef,
+                                phoneNumF,
+                                phoneNumS,
+                                phoneNumT
+                              );
                             }}
                           />
                         </div>
@@ -231,7 +284,12 @@ const JoinStep2 = () => {
                             ref={phoneNumS}
                             className="join__stepTwo-phonenum-input"
                             onChange={() => {
-                              phoneNumValid(phoneNumValidRef, phoneNumF, phoneNumS, phoneNumT);
+                              phoneNumValid(
+                                phoneNumValidRef,
+                                phoneNumF,
+                                phoneNumS,
+                                phoneNumT
+                              );
                             }}
                           />
                         </div>
@@ -249,7 +307,12 @@ const JoinStep2 = () => {
                             ref={phoneNumT}
                             className="join__stepTwo-phonenum-input"
                             onChange={() => {
-                              phoneNumValid(phoneNumValidRef, phoneNumF, phoneNumS, phoneNumT);
+                              phoneNumValid(
+                                phoneNumValidRef,
+                                phoneNumF,
+                                phoneNumS,
+                                phoneNumT
+                              );
                             }}
                           />
                         </div>
@@ -257,7 +320,10 @@ const JoinStep2 = () => {
                     </div>
                   </div>
                 </div>
-                <div style={{ marginTop: "20px" }} className="join__stepTwo-content-container">
+                <div
+                  style={{ marginTop: "20px" }}
+                  className="join__stepTwo-content-container"
+                >
                   <SendEmail
                     emailIdRef={emailIdRef}
                     emailAddrRef={emailAddrRef}
@@ -274,12 +340,18 @@ const JoinStep2 = () => {
                   <div>
                     <div>
                       <span style={{ fontSize: "13px" }}> 주소</span>
-                      <span className="join__stepTwo-keyup-validSpan" ref={addrValidRef}>
+                      <span
+                        className="join__stepTwo-keyup-validSpan"
+                        ref={addrValidRef}
+                      >
                         (주소 및 상세주소를 입력해주세요)
                       </span>
                     </div>
                     <div style={{ display: "flex" }}>
-                      <div className="join__stepTwo-input-common" style={{ width: "100px" }}>
+                      <div
+                        className="join__stepTwo-input-common"
+                        style={{ width: "100px" }}
+                      >
                         <input
                           style={{ marginLeft: "3px" }}
                           type="text"
@@ -301,7 +373,10 @@ const JoinStep2 = () => {
                   </div>
 
                   <div>
-                    <div className="join__stepTwo-input-common" style={{ width: "100%" }}>
+                    <div
+                      className="join__stepTwo-input-common"
+                      style={{ width: "100%" }}
+                    >
                       <input
                         style={{ marginLeft: "3px" }}
                         type="text"
@@ -313,7 +388,10 @@ const JoinStep2 = () => {
                     </div>
                   </div>
                   <div>
-                    <div className="join__stepTwo-input-common" style={{ width: "100%" }}>
+                    <div
+                      className="join__stepTwo-input-common"
+                      style={{ width: "100%" }}
+                    >
                       <input
                         style={{ marginLeft: "3px" }}
                         type="text"
@@ -326,7 +404,10 @@ const JoinStep2 = () => {
                 </div>
                 <div className="join__stepTwo-introduce">
                   <span style={{ fontSize: "13px" }}> 자기소개</span>
-                  <div className="join__stepTwo-introduce-div" style={{ width: "100%" }}>
+                  <div
+                    className="join__stepTwo-introduce-div"
+                    style={{ width: "100%" }}
+                  >
                     <textarea
                       ref={introduceRef}
                       style={{
@@ -413,7 +494,12 @@ const SendEmail = ({
   const sendEmail = (e) => {
     e.preventDefault();
     emailjs
-      .sendForm("service_17j8i9s", "template_pn5zcvu", formRef.current, "Zhz2yYsd_9ndmdpMr")
+      .sendForm(
+        "service_17j8i9s",
+        "template_pn5zcvu",
+        formRef.current,
+        "Zhz2yYsd_9ndmdpMr"
+      )
       .then(
         (result) => {
           console.log(result.text);
@@ -448,6 +534,7 @@ const SendEmail = ({
               size={12}
               placeholder=""
               ref={emailIdRef}
+              value={eId}
               onChange={(e) => {
                 emailValid(emailValidRef, emailIdRef, emailAddrRef);
 
@@ -463,6 +550,7 @@ const SendEmail = ({
               size={12}
               placeholder=""
               ref={emailAddrRef}
+              value={eAddr}
               onChange={(e) => {
                 emailValid(emailValidRef, emailIdRef, emailAddrRef);
                 setEAddr(e.target.value);
@@ -475,11 +563,13 @@ const SendEmail = ({
                 onChange={(e) => {
                   if (e.target.value === "직접입력") {
                     emailValidRef.current.style.visibility = "visible";
-                    emailAddrRef.current.parentElement.style.borderColor = "grey";
+                    emailAddrRef.current.parentElement.style.borderColor =
+                      "grey";
                     emailAddrRef.current.value = "";
                   } else {
                     emailValidRef.current.style.visibility = "hidden";
-                    emailAddrRef.current.parentElement.style.borderColor = "yellowGreen";
+                    emailAddrRef.current.parentElement.style.borderColor =
+                      "yellowGreen";
                   }
                   emailAddrRef.current.value = e.target.value;
                 }}
@@ -514,15 +604,20 @@ const SendEmail = ({
                 e.preventDefault();
                 emailIdRef.current.parentElement.classList.add("validation");
                 setTimeout(() => {
-                  emailIdRef.current.parentElement.classList.remove("validation");
+                  emailIdRef.current.parentElement.classList.remove(
+                    "validation"
+                  );
                 }, 1100);
               } else if (emailAddrRef.current.value.trim().length === 0) {
                 e.preventDefault();
                 emailAddrRef.current.parentElement.classList.add("validation");
                 setTimeout(() => {
-                  emailAddrRef.current.parentElement.classList.remove("validation");
+                  emailAddrRef.current.parentElement.classList.remove(
+                    "validation"
+                  );
                 }, 1100);
               }
+              // console.log(emailIdRef.current.value,emailAddrRef);
             }}
           >
             인증번호 전송
@@ -577,7 +672,8 @@ const AddresApi = ({ setIsOpenPost, setAddress, setZoneCode }) => {
         extraAddr += data.bname;
       }
       if (data.buildingName !== "") {
-        extraAddr += extraAddr !== "" ? `, ${data.buildingName}` : data.buildingName;
+        extraAddr +=
+          extraAddr !== "" ? `, ${data.buildingName}` : data.buildingName;
       }
       fullAddr += extraAddr !== "" ? ` (${extraAddr})` : "";
     }
@@ -637,21 +733,30 @@ function joominValid(joominValidRef, sJoominRef, joominGender) {
 }
 
 function phoneNumValid(phoneNumValidRef, phoneNumF, phoneNumS, phoneNumT) {
-  if (phoneNumF.current.value.trim().length === 0 || phoneNumF.current.value.trim().length < 3) {
+  if (
+    phoneNumF.current.value.trim().length === 0 ||
+    phoneNumF.current.value.trim().length < 3
+  ) {
     phoneNumValidRef.current.style.visibility = "visible";
     phoneNumF.current.parentElement.style.borderColor = "grey";
   } else {
     phoneNumValidRef.current.style.visibility = "hidden";
     phoneNumF.current.parentElement.style.borderColor = "yellowGreen";
   }
-  if (phoneNumS.current.value.trim().length === 0 || phoneNumS.current.value.trim().length < 4) {
+  if (
+    phoneNumS.current.value.trim().length === 0 ||
+    phoneNumS.current.value.trim().length < 4
+  ) {
     phoneNumValidRef.current.style.visibility = "visible";
     phoneNumS.current.parentElement.style.borderColor = "grey";
   } else {
     phoneNumValidRef.current.style.visibility = "hidden";
     phoneNumS.current.parentElement.style.borderColor = "yellowGreen";
   }
-  if (phoneNumT.current.value.trim().length === 0 || phoneNumT.current.value.trim().length < 4) {
+  if (
+    phoneNumT.current.value.trim().length === 0 ||
+    phoneNumT.current.value.trim().length < 4
+  ) {
     phoneNumValidRef.current.style.visibility = "visible";
     phoneNumT.current.parentElement.style.borderColor = "grey";
   } else {
@@ -797,7 +902,11 @@ function Copyright(props) {
   return (
     <Typography variant="body2" color="text.warning" align="center" {...props}>
       {"Copyright © "}
-      <Link color="inherit" to="https://localhost:3000/" style={{ color: "var(--orange)" }}>
+      <Link
+        color="inherit"
+        to="https://localhost:3000/"
+        style={{ color: "var(--orange)" }}
+      >
         AAMU
       </Link>{" "}
       {new Date().getFullYear()}

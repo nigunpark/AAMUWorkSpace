@@ -30,7 +30,7 @@ const Uploader = ({ list, setsquare, setlist, setloading }) => {
   const [upload, setupload] = useState(false);
   const [search, setSearch] = useState([]);
   const [showSearch, setshowSearch] = useState(false);
-  const [showWrite, setShowWrite] = useState([]);
+  const [showWrite, setShowWrite] = useState(false);
   const [show] = useState(false);
   const [hasText, setHasText] = useState(false);
   const [inputValue, setinputValue] = useState("");
@@ -88,10 +88,18 @@ const Uploader = ({ list, setsquare, setlist, setloading }) => {
   };
 
   const onKeyPress = (e) => {
-    if (!e.target.value.includes("#") && e.keyCode === 32 && e.target.value.length !== 0) {
+    if (
+      !e.target.value.includes("#") &&
+      e.keyCode === 32 &&
+      e.target.value.length !== 0
+    ) {
       alert("#을 입력해주세요~!");
     }
-    if (e.target.value.length !== 0 && e.keyCode === 32 && e.target.value.includes("#")) {
+    if (
+      e.target.value.length !== 0 &&
+      e.keyCode === 32 &&
+      e.target.value.includes("#")
+    ) {
       submitTagItem();
     }
   };
@@ -440,9 +448,7 @@ const Uploader = ({ list, setsquare, setlist, setloading }) => {
                 onChange={(e) => {
                   e.stopPropagation();
                   setTagItem(e.target.value);
-                  {
-                    tagItem.length > 1 && setShowWrite(true);
-                  }
+                   setShowWrite(true);
                 }}
                 value={tagItem}
                 onKeyUp={(e) => {

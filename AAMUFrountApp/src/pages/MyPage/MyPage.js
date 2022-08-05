@@ -4,9 +4,7 @@ import MyPostBox from "./MyPageBox/MyPostBox";
 import MyEditBox from "./MyPageBox/MyEditBox";
 import MyHomeBox from "./MyPageBox/MyHomeBox";
 import MyProfileBox from "./MyPageBox/MyProfileBox";
-import MyInstaBox from "./MyPageBox/MyInstaBox";
 import MyMessageBar from "./MyMessageBar/MyMessageBar";
-import styled from "styled-components";
 import {
   faBookmark,
   faImage,
@@ -18,12 +16,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import CommentSearch from "../../components/Insta/ModalGroup/Comment/CommentSearch";
 import MyEdit from "../../components/Insta/ModalGroup/Edit/MyEdit";
-import ContentItem from "../Forum/Content/ContentItem";
 import MyBookMarkBox from "./MyPageBox/MyBookMarkBox";
-import MyTheme from "./MyPageBox/MyTheme";
 import DetailModal from "../Forum/DetailModal/DetailModal";
 import MyThemeLists from "./MyPageBox/MyThemeLists";
-import { Spinner } from "react-bootstrap";
+
+import Spinner from "../../components/Insta/Spinner";
+
 const MyPage = () => {
   let [clickTab, setClickTab] = useState(0);
 
@@ -32,9 +30,6 @@ const MyPage = () => {
   let three = useRef();
   let setting = useRef();
   let homeBox = useRef();
-
-  // /aamurest/planner/selectList
-  // /aamurest/planner/selectOne
 
   const [planList, setPlanList] = useState([]);
   // 업로드한 게시글 개수 카운트
@@ -484,30 +479,16 @@ function TabContent({
                       <img className="instaImg" src={val.photo[0]} />
                       <div>
                         <div className="instaTitle__container">
-                          <input
-                            type="text"
-                            value={val.ctitle}
-                            className="instaTitle"
-                          />
+                          <input type="text" value={val.ctitle} className="instaTitle" />
                         </div>
                         <div className="insta__info">
                           <div>
-                            <FontAwesomeIcon
-                              icon={faMessage}
-                              className="insta__info-icon"
-                            />{" "}
-                            <span className="insta__info-content">
-                              {val.rcount}
-                            </span>
+                            <FontAwesomeIcon icon={faMessage} className="insta__info-icon" />{" "}
+                            <span className="insta__info-content">{val.rcount}</span>
                           </div>
                           <div>
-                            <FontAwesomeIcon
-                              icon={faThumbsUp}
-                              className="insta__info-icon"
-                            />
-                            <span className="insta__info-content">
-                              {val.likecount}
-                            </span>
+                            <FontAwesomeIcon icon={faThumbsUp} className="insta__info-icon" />
+                            <span className="insta__info-content">{val.likecount}</span>
                           </div>
                         </div>
                       </div>
@@ -564,13 +545,7 @@ function TabContent({
       <div className="myInstaContainer">
         <div className="myInstar">
           {myBookList.map((val, idx) => {
-            return (
-              <MyBookMarkBox
-                setDetailOne={setDetailOne}
-                detail={val}
-                setIsOpen={setIsOpen}
-              />
-            );
+            return <MyBookMarkBox setDetailOne={setDetailOne} detail={val} setIsOpen={setIsOpen} />;
           })}
 
           {/*

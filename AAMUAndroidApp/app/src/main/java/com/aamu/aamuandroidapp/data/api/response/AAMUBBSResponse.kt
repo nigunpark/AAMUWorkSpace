@@ -16,14 +16,14 @@ data class AAMUBBSResponse(
     var planner: AAMUPlannerSelectOne? = null,
     var routeList: List<Place>? = null,
     var reviewList: List<Review>? = null,
-    var rateavg: Double? = 0.0,
+    var rateavg: Float? = 0.0F,
     var bookmark: Boolean? = false
 )
 
 data class Review(
     var rbn: Int? = 0,
     var id: String? = null,
-    var rate: Int? = 0,
+    var rate: Float? = 0.0F,
     var review: String? = null,
     var ratedate: Date? = null,
     var rno: String? = null,

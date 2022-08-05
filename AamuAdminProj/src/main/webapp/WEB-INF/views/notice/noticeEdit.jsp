@@ -46,6 +46,22 @@
 
 <style>
 
+input {
+	font-size: 0.812rem !important;
+	line-height: 1.5rem !important;
+}
+
+textarea {
+	font-size: 0.812rem !important;
+	line-height: 1.5rem !important;
+	text-align: left;
+	white-space: pre-wrap; /* CSS3*/
+	white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
+	white-space: -pre-wrap; /* Opera 4-6 */
+	white-space: -o-pre-wrap; /* Opera 7 */
+	word-wrap: break-all; /* Internet Explorer 5.5+ */
+}
+
 textarea.form-control {
 	min-height: 10rem;
 	overflow-y: hidden;
@@ -53,7 +69,7 @@ textarea.form-control {
 }
 
 .tab-content-top {
-padding: 1.5rem 2.187rem 1.5rem 3.5rem;
+padding: 1.5rem 1.5rem 1.5rem 1.5rem;
 	border-radius: 20px;
 	-webkit-box-shadow: 0 0 0 0 rgb(90 113 208/ 11%), 0 4px 16px 0
 		rgb(167 175 183/ 33%);

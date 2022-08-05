@@ -7,10 +7,9 @@ import "swiper/css"; //basic
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import axios from "axios";
-const Swipers = () => {
-  const [forSwiper, setForSwiper] = useState([]);
+const Swipers = ({ forSwiper }) => {
   useEffect(() => {
-    get(setForSwiper);
+    // get(setForSwiper);
   }, []);
   return (
     <div className="Swipers">
@@ -53,19 +52,6 @@ const Swipers = () => {
     </div>
   );
 };
-
-function get(setForSwiper) {
-  // let token = sessionStorage.getItem("token");
-  axios
-    .get("/aamurest/main/mainelement")
-    .then((resp) => {
-      console.log("resp.data", resp.data);
-      setForSwiper(Object.values(resp.data)[0].places);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-}
 
 function getLocalName(areacode) {
   switch (areacode) {

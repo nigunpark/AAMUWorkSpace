@@ -1,11 +1,25 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Container, Content, Title, Body, Footer, ContentStep3 } from "../Modal/ForJoin.js";
+import {
+  Container,
+  Content,
+  Title,
+  Body,
+  Footer,
+  ContentStep3,
+} from "../Modal/ForJoin.js";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFolderOpen } from "@fortawesome/free-regular-svg-icons";
 import "./Join.css";
 import { Typography } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
-import { fa1, fa2, fa3, faCheck, faFolderPlus, faHouse } from "@fortawesome/free-solid-svg-icons";
+import {
+  fa1,
+  fa2,
+  fa3,
+  faCheck,
+  faFolderPlus,
+  faHouse,
+} from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { addStepOne } from "../../redux/store.js";
@@ -85,6 +99,8 @@ const JoinStep3 = () => {
       .catch((err) => {
         console.log(err);
       });
+
+    sessionStorage.clear();
   };
   useEffect(() => {
     getThemes();
@@ -99,7 +115,10 @@ const JoinStep3 = () => {
             </Link>
             <Title>
               <div className="loginTitle__container">
-                <FontAwesomeIcon icon={faFolderOpen} className="joinStep3_title-i" />
+                <FontAwesomeIcon
+                  icon={faFolderOpen}
+                  className="joinStep3_title-i"
+                />
                 <h1>테마선택</h1>
               </div>
               <p style={{ color: "gray" }}>welcome to AAMU</p>
@@ -108,7 +127,10 @@ const JoinStep3 = () => {
               <FontAwesomeIcon icon={fa1} className="join__progress-icon " />
               -
               <FontAwesomeIcon icon={fa2} className="join__progress-icon" />-
-              <FontAwesomeIcon icon={fa3} className="join__progress-icon join__progress-step" />
+              <FontAwesomeIcon
+                icon={fa3}
+                className="join__progress-icon join__progress-step"
+              />
             </div>
             <CheckBoxBody>
               {themes.map((val, i) => {
@@ -135,7 +157,13 @@ const JoinStep3 = () => {
                         }}
                       />
                     </ImgCon>
-                    <div style={{ textAlign: "center", margin: "2px 0", fontSize: "14px" }}>
+                    <div
+                      style={{
+                        textAlign: "center",
+                        margin: "2px 0",
+                        fontSize: "14px",
+                      }}
+                    >
                       <label for={val.THEMENAME}>{val.THEMENAME}</label>
                       <input
                         type="checkbox"
@@ -145,7 +173,9 @@ const JoinStep3 = () => {
                           e.stopPropagation();
                           getCheckedBoxes(e.target.checked, e.target.value);
                         }}
-                        checked={checkeds.includes(val.THEMENAME) ? true : false}
+                        checked={
+                          checkeds.includes(val.THEMENAME) ? true : false
+                        }
                         hidden
                       />
                     </div>
@@ -219,7 +249,11 @@ function Copyright(props) {
   return (
     <Typography variant="body2" color="text.warning" align="center" {...props}>
       {"Copyright © "}
-      <Link color="inherit" to="https://localhost:3000/" style={{ color: "var(--orange)" }}>
+      <Link
+        color="inherit"
+        to="https://localhost:3000/"
+        style={{ color: "var(--orange)" }}
+      >
         AAMU
       </Link>{" "}
       {new Date().getFullYear()}

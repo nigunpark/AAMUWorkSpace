@@ -22,8 +22,8 @@ function FeedSetting({
   setloading,
   showChat,
   setShowChat,
-  textValue, 
-  setTextValue
+  textValue,
+  setTextValue,
 }) {
   let profileRef = useRef();
   let replyRef = useRef();
@@ -41,20 +41,22 @@ function FeedSetting({
   let [feedComments, setfeedComments] = useState([]);
   let [isValid, setisValid] = useState(false);
 
-  const [isShowMore, setIsShowMore] = useState(false); // 더보기 열고 닫는 스위치 
-  const textLimit = useRef(10); 			// 글자수 제한 선언
-  
-  const commenter = useMemo(() => { 		// 조건에 따라 게시글을 보여주는 함수
-    const shortReview =  val.content.slice(0, textLimit.current); 	// 원본에서 글자 수만큼 잘라서 짧은 버전을 준비하자
-    
-    if (val.content.length > textLimit.current) { 	// 원본이 길면 (원본 글자수 > 제한된 갯수)
-      if (isShowMore) { return val.content; } 	// 더보기가 true 면 원본 바로 리턴
-      return shortReview;			// (더보기가 false면) 짧은 버전 리턴해주자
+  const [isShowMore, setIsShowMore] = useState(false); // 더보기 열고 닫는 스위치
+  const textLimit = useRef(10); // 글자수 제한 선언
+
+  const commenter = useMemo(() => {
+    // 조건에 따라 게시글을 보여주는 함수
+    const shortReview = val.content.slice(0, textLimit.current); // 원본에서 글자 수만큼 잘라서 짧은 버전을 준비하자
+
+    if (val.content.length > textLimit.current) {
+      // 원본이 길면 (원본 글자수 > 제한된 갯수)
+      if (isShowMore) {
+        return val.content;
+      } // 더보기가 true 면 원본 바로 리턴
+      return shortReview; // (더보기가 false면) 짧은 버전 리턴해주자
     }
-    return val.content; 			// 그렇지않으면 (짧은 글에는) 쓴글 그대로 리턴!
-  }, [isShowMore]); 			// 얘는 isShowMore의 상태가 바뀔때마다 호출된다
-
-
+    return val.content; // 그렇지않으면 (짧은 글에는) 쓴글 그대로 리턴!
+  }, [isShowMore]); // 얘는 isShowMore의 상태가 바뀔때마다 호출된다
 
   // document.getElementById('button_hint').disabled = false;
 
@@ -158,8 +160,6 @@ function FeedSetting({
       });
   }
 
-  
-
   return (
     <div>
       <div className="feeds-setting">
@@ -192,9 +192,7 @@ function FeedSetting({
                   setprofileModal(false);
                 }}
               >
-                <Profile
-                  val={val}
-                ></Profile>
+                <Profile val={val}></Profile>
               </div>
             )}
           </div>
@@ -306,33 +304,37 @@ function FeedSetting({
             </span>
           </div>
           <div className="feeds-title">
-              <p>
-                <span className="userName">제목 </span>
-                <span> {val.ctitle}</span>
-              </p>
-              <p className="userName">
-                <strong
-                  style={{ fontSize: "13px", marginRight: "5px" }}
-                >
-                  {val.id}
-                </strong>
-                <span style={{ fontFamily: "normal" ,whiteSpace: 'pre-wrap'}}>
-                  {/* {val.content} */}
-                  <span>{commenter}</span>{/* // 여기에 (짧은거나 원본) 글 내용이 들어가고  */}
+            <p>
+              <span className="userName">제목 </span>
+              <span> {val.ctitle}</span>
+            </p>
+            <p className="userName">
+              <strong style={{ fontSize: "13px", marginRight: "5px" }}>
+                {val.id}
+              </strong>
+              <span style={{ fontFamily: "normal", whiteSpace: "pre-wrap" }}>
+                {/* {val.content} */}
+                <span>{commenter}</span>
+                {/* // 여기에 (짧은거나 원본) 글 내용이 들어가고  */}
 
-                <span style={{color:'gray'}} onClick={() => setIsShowMore(!isShowMore)}> {/* //클릭시 토글로 상태를 변경해주자 */}
-                 {(val.content.length > textLimit.current) &&	   // 버튼명은 조건에 따라 달라진다
-                    (isShowMore ? '[닫기]' : '...[더보기]')}
-                </span> 
+                <span
+                  style={{ color: "gray" }}
+                  onClick={() => setIsShowMore(!isShowMore)}
+                >
+                  {" "}
+                  {/* //클릭시 토글로 상태를 변경해주자 */}
+                  {val.content.length > textLimit.current && // 버튼명은 조건에 따라 달라진다
+                    (isShowMore ? "[닫기]" : "...[더보기]")}
                 </span>
-              </p>
-              {val.tname === null
-                  ? ""
-                  : val.tname.map((tname, i) => {
-                      return <span key={i}>{tname}</span>;
-              })}
-            </div>
-            
+              </span>
+            </p>
+            {val.tname === null
+              ? ""
+              : val.tname.map((tname, i) => {
+                  return <span key={i}>{tname}</span>;
+                })}
+          </div>
+
           {<CommentList val={val} />}
           <div className="feeds-comment"></div>
           <span className="time">

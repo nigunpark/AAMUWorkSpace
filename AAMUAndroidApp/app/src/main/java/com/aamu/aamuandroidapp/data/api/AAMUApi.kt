@@ -45,6 +45,12 @@ interface AAMUApi {
     @GET("gram/selectList")
     suspend fun getGramList(@Query("id") id : String) : Response<List<AAMUGarmResponse>>
 
+    @GET("gram/SelectOne")
+    suspend fun getGramDetail(@Query("id") id : String,@Query("lno") lno: Int) : Response<AAMUGarmResponse>
+
+    @GET("gram/like")
+    suspend fun getGramLike(@Query("id") id : String,@Query("lno") lno : Int) : Response<Map<String,String>>
+
     @GET("gram/selectList")
     suspend fun getGramByPlaceList(@Query("contentid") contentid : Int) : Response<List<AAMUGarmResponse>>
 
@@ -53,6 +59,9 @@ interface AAMUApi {
 
     @GET("bbs/SelectOne/{rbn}")
     suspend fun getBBSOne(@Path("rbn") rbn: Int) : Response<AAMUBBSResponse>
+
+    @POST("review/edit")
+    suspend fun postReview(@Body review : Review) : Response<Map<String,String>>
 
     companion object {
         private const val BASE_URL = "http://192.168.0.22:8080/aamurest/"

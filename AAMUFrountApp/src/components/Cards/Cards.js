@@ -2,7 +2,7 @@ import React from "react";
 import { useEffect } from "react";
 import CardItem from "./CardItem";
 import "./Cards.css";
-const Cards = () => {
+const Cards = ({ forCards }) => {
   const forMapTestArr = [1, 2, 3, 5];
   useEffect(() => {}, []);
   return (
@@ -15,8 +15,8 @@ const Cards = () => {
           <p className="card__desc">자신만의 여행계획을 세우고 남들과 공유해봐</p>
 
           <ul className="card__items">
-            {forMapTestArr.map((val, index) => {
-              return <CardItem i={val} key={index} />;
+            {forCards.map((val, index) => {
+              return <CardItem val={val} key={index} />;
             })}
           </ul>
         </div>
