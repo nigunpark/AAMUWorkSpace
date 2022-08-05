@@ -1,11 +1,18 @@
 import axios from "axios";
 import React, { useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import "./QnAWrite.css";
 const QnAEdit = () => {
+  const location = useLocation();
+  const editData = location.state.qnaDetail;
+  console.log("QnA 수정할 데이터 : ", editData);
   let titleRef = useRef();
   let contentRef = useRef();
   let navigate = useNavigate();
+  useEffect(() => {
+    titleRef.current.value = editData.title;
+    contentRef.current.value = editData.content;
+  }, []);
   const editQnA = () => {
     console.log(contentRef.current.value);
     console.log(titleRef.current.value);
@@ -14,7 +21,7 @@ const QnAEdit = () => {
       .put(
         "/aamurest/qna/edit",
         {
-          qno: "",
+          qno: editData.qno,
           title: titleRef.current.value,
           content: contentRef.current.value,
           id: sessionStorage.getItem("username"),
@@ -26,32 +33,18 @@ const QnAEdit = () => {
         }
       )
       .then(() => {
+        alert("수정이 완료되었어요!");
         navigate(-1);
       });
   };
-  async function getEdit() {
-    let token = sessionStorage.getItem("token");
-    await axios
-      .get("/aamurest/qna/view", {
-        params: { qno: "" },
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((resp) => {
-        console.log(resp);
-      })
-      .catch((err) => console.log(err));
-  }
-  useEffect(() => {
-    getEdit();
-  }, []);
 
   return (
     <div className="qnaWrite__container">
       <div className="qna__header">
         <div className="qna__header__title">궁금한점을 알려주세요</div>
-        <div className="qna__header__subTitle">AAMU는 여러분의 목소리를 듣고싶어요</div>
+        <div className="qna__header__subTitle">
+          AAMU는 여러분의 목소리를 듣고싶어요
+        </div>
       </div>
       <div className="qnaWrite">
         <div className="qnaWrite__title">
@@ -66,7 +59,7 @@ const QnAEdit = () => {
             <textarea
               ref={contentRef}
               placeholder="궁금한점을 알려주세요"
-              style={{ resize: "none" }}
+              style={{ width: "100%", height: "100%", resize: "none" }}
             ></textarea>
           </div>
         </div>

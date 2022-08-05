@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.aamu.aamurest.user.service.AttractionDTO;
+import com.aamu.aamurest.user.service.BBSDTO;
 import com.aamu.aamurest.user.service.PlannerDTO;
 import com.aamu.aamurest.user.service.RouteDTO;
 import com.aamu.aamurest.user.service.UsersDTO;
@@ -168,6 +169,11 @@ public class MainDAO {
 	public UsersDTO getUserChar(Map map) {
 		
 		return template.selectOne("selectOneUser",map);
+	}
+
+	public BBSDTO getRouteBBS(int rbn) {
+		
+		return template.selectOne("bbsSelectOne",rbn);
 	}
 
 }

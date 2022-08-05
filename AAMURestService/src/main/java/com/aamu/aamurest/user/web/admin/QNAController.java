@@ -76,7 +76,7 @@ public class QNAController {
 
 	// 게시물 등록
 	@PostMapping(value = "/qna/write")
-	public Map qnaInsert(@RequestParam Map map, HttpServletRequest req) {
+	public Map qnaInsert(@RequestBody Map map, HttpServletRequest req) {
 		System.out.println("등록: " + map);
 		Map resultMap = new HashMap();
 		int affected = qnaService.qnaInsert(map);
