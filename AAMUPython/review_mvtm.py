@@ -1,12 +1,15 @@
-from waitress import serve # waitress 서버!
+from waitress import serve # waitress 서버
 from flask import Flask, request  # 서버 구현을 위한 Flask 객체 import
 from flask_restx import Api, Resource  # Api 구현을 위한 Api 객체 import
 
+import logging
 import json
 import requests
 
 app = Flask(__name__)  # Flask 객체 선언, 파라미터로 어플리케이션 패키지의 이름을 넣어줌.
 api = Api(app)  # Flask 객체에 Api 객체 등록
+
+logging.basicConfig(level=logging.DEBUG)
 
 @api.route('/review', methods=["GET"])  # 데코레이터 이용, '/' 경로에 클래스 등록
 class AamuReview(Resource):
@@ -58,7 +61,10 @@ class AamuReview(Resource):
             aamu_comment=[] 
             for comment_content in aamu_data:
 
-                kakao_username = comment_content['username']
+                try:
+                    kakao_username = comment_content['username']
+                except KeyError:
+                    kakao_username = ""
                 kakao_point = comment_content['point']
                 try:
                     kakao_contents = comment_content['contents']
@@ -98,7 +104,10 @@ class AamuReview(Resource):
 
                 for comment_content in comment_next_data:
 
-                    kakao_username = comment_content['username']
+                    try:
+                        kakao_username = comment_content['username']
+                    except KeyError:
+                        kakao_username = ""
                     kakao_point = comment_content['point']
                     try:
                         kakao_contents = comment_content['contents']
