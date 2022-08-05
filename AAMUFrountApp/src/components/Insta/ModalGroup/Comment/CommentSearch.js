@@ -17,13 +17,7 @@ import { CommentsDisabled } from "@mui/icons-material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLocationDot, faX } from "@fortawesome/free-solid-svg-icons";
 
-function CommentSearch({
-  val,
-  setForReRender,
-  forReRender,
-  setcommentModal,
-  setcomments,
-}) {
+function CommentSearch({ val, setForReRender, forReRender, setcommentModal, setcomments }) {
   let menuRef = useRef();
   let replyRef1 = useRef();
   let commentRef1 = useRef();
@@ -32,6 +26,7 @@ function CommentSearch({
   const [modalShow, setModalShow] = useState(false);
   const [reply, setReply] = useState(false);
   const [modalSet, setModal] = useState(false);
+  const [position, setPosition] = useState("");
   // const [forReRender, setForReRender] = useState(false);
   let [isValid, setisValid] = useState(false);
 
@@ -244,17 +239,10 @@ function CommentSearch({
                       <div className="feeds-title">
                         <p>
                           <span className="userName">제목 </span>
-                          <span style={{ fontFamily: "normal" }}>
-                            {" "}
-                            {val.ctitle}
-                          </span>
+                          <span style={{ fontFamily: "normal" }}> {val.ctitle}</span>
                         </p>
                         <p className="userName">
-                          <strong
-                            style={{ fontSize: "13px", marginRight: "5px" }}
-                          >
-                            {val.id}
-                          </strong>
+                          <strong style={{ fontSize: "13px", marginRight: "5px" }}>{val.id}</strong>
                           <span
                             style={{
                               fontFamily: "normal",
@@ -301,14 +289,9 @@ function CommentSearch({
                       >
                         <div style={{ display: "flex", flexDirection: "row" }}>
                           <p className="userName" style={{ fontSize: "13px" }}>
-                            <strong>
-                              {sessionStorage.getItem("username")}
-                            </strong>
+                            <strong>{sessionStorage.getItem("username")}</strong>
                           </p>
-                          <p
-                            className="userName"
-                            style={{ fontFamily: "normal", width: "78%" }}
-                          >
+                          <p className="userName" style={{ fontFamily: "normal", width: "78%" }}>
                             {val.reply}
                           </p>
                           <div
@@ -370,10 +353,7 @@ function CommentSearch({
                   }}
                 >
                   {val.isLike ? (
-                    <i
-                      className="fa-solid fa-heart fa-2x"
-                      style={{ color: "red" }}
-                    ></i>
+                    <i className="fa-solid fa-heart fa-2x" style={{ color: "red" }}></i>
                   ) : (
                     <i className="fa-regular fa-heart fa-2x"></i>
                   )}
@@ -387,9 +367,7 @@ function CommentSearch({
               </div>
               <div className="likeCount">
                 <h3>
-                  <strong style={{ fontSize: "15px" }}>
-                    좋아요 {val.likecount}개
-                  </strong>
+                  <strong style={{ fontSize: "15px" }}>좋아요 {val.likecount}개</strong>
                 </h3>
               </div>
               <div className="postDate">
