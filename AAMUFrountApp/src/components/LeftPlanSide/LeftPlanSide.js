@@ -12,6 +12,7 @@ import {
   addArrInForJangso,
   addAtimeArrForJangso,
   addMonthNDate,
+  addWeather,
   changeLnfM,
   changeSaveDaysRedux,
   changeShowWhichModal,
@@ -24,6 +25,7 @@ import {
   setInitForTime,
   timeSetter,
 } from "../../redux/store";
+import axios from "axios";
 
 const LeftPlanSide = ({ currPosition }) => {
   const [findcurrPositionId, setFindcurrPositionId] = useState("");
@@ -80,6 +82,8 @@ const LeftPlanSide = ({ currPosition }) => {
             period={period}
             appearCalendar={appearCalendar}
             setAppearCalendar={setAppearCalendar}
+            currPosition={currPosition}
+            saveDays={saveDays}
           />
           <div className="dateRangePicker">
             {appearCalendar ? (
@@ -103,10 +107,7 @@ const LeftPlanSide = ({ currPosition }) => {
         </div>
 
         <h3 style={{ textAlign: "center", margin: "1rem 0" }}>선택목록</h3>
-        <div
-          className="leftPlanSide__pickLocal__type__container"
-          onClick={toggleBtn}
-        >
+        <div className="leftPlanSide__pickLocal__type__container" onClick={toggleBtn}>
           <span
             className="leftPlanSide__pickLocal__type-btn sukbak"
             ref={suksoRef}
@@ -132,16 +133,41 @@ const LeftPlanSide = ({ currPosition }) => {
   );
 };
 
-const ChangeDate = ({ period, appearCalendar, setAppearCalendar }) => {
+const ChangeDate = ({ period, appearCalendar, setAppearCalendar, currPosition, saveDays }) => {
   let sdy = period.startDate.getFullYear();
   let sdm = period.startDate.getMonth();
   let sdd = period.startDate.getDate();
   let sdDoW = period.startDate.getDay();
-
   let edy = period.endDate.getFullYear();
   let edm = period.endDate.getMonth();
   let edd = period.endDate.getDate();
   let dispatch = useDispatch();
+  const getWeather = async () => {
+    let arr = [];
+    let forArr = new Array(saveDays + 1).fill(0);
+    forArr.forEach((val, i) => {
+      arr.push(`${sdy}\.${sdm + 1}\.${(sdd + i).toString().padStart(2, 0)}`);
+    });
+    let token = sessionStorage.getItem("token");
+
+    await axios
+      .get("/aamurest/weather", {
+        params: {
+          searchWord: currPosition,
+          searchDate: arr.toString(),
+        },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((weather) => {
+        // console.log("weather", weather.data);
+        dispatch(addWeather(weather.data.weather));
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   useEffect(() => {
     dispatch(resetMonthNDate([]));
     dispatch(
@@ -151,6 +177,7 @@ const ChangeDate = ({ period, appearCalendar, setAppearCalendar }) => {
         dow: sdDoW,
       })
     );
+    getWeather();
   }, [period]);
 
   return (
@@ -172,9 +199,7 @@ function JangSoModal() {
   return (
     <div className="jangSoModal__container">
       <div className="jangSoModal__counter__container">
-        <span className="jangSoModal__counter">
-          {reduxState.arrForPickJangso.length}
-        </span>
+        <span className="jangSoModal__counter">{reduxState.arrForPickJangso.length}</span>
         <span>
           (총{reduxState.leftSideTimeSetter}시간{reduxState.leftSideMinSetter}
           분)
@@ -292,8 +317,7 @@ function PickedLocation({ local }) {
             onChange={(e) => {
               e.stopPropagation();
               if (
-                reduxState.leftSideTimeSetter * 60 +
-                  reduxState.leftSideMinSetter >
+                reduxState.leftSideTimeSetter * 60 + reduxState.leftSideMinSetter >
                 reduxState.tripPeriod.length * 1440
               ) {
                 alert("여행일자 x 24시간을 초과할 수 없습니다");
@@ -301,8 +325,7 @@ function PickedLocation({ local }) {
                 // return;
               }
               // if (e.target.value !== 0) {
-              if (timeVal > e.target.value)
-                dispatch(timeSetter(e.target.value - timeVal));
+              if (timeVal > e.target.value) dispatch(timeSetter(e.target.value - timeVal));
               else dispatch(timeSetter(e.target.value - timeVal));
               setTimeVal(e.target.value);
               dispatch(addAtimeArrForJangso(timeVal * 60 * 60 * 1000));
@@ -345,8 +368,7 @@ function PickedLocation({ local }) {
             onChange={(e) => {
               e.stopPropagation();
               if (
-                reduxState.leftSideTimeSetter * 60 +
-                  reduxState.leftSideMinSetter >
+                reduxState.leftSideTimeSetter * 60 + reduxState.leftSideMinSetter >
                 reduxState.tripPeriod.length * 1440
               ) {
                 alert("여행일자 x 24시간을 초과할 수 없습니다");
@@ -358,8 +380,7 @@ function PickedLocation({ local }) {
                 timeVal++;
                 e.target.value = 0;
               }
-              if (minVal > e.target.value)
-                dispatch(minSetter(e.target.value - minVal));
+              if (minVal > e.target.value) dispatch(minSetter(e.target.value - minVal));
               else dispatch(minSetter(e.target.value - minVal));
               setMinVal(e.target.value);
               dispatch(addAtimeArrForJangso(minVal * 60 * 1000));
@@ -386,9 +407,7 @@ function SukSoMadal() {
       <div
         className="suksoModal__allDel-btn"
         onClick={() => {
-          dispatch(
-            changeSaveDaysRedux(reduxState.saveDaysNPickedSuksoRedux.length)
-          );
+          dispatch(changeSaveDaysRedux(reduxState.saveDaysNPickedSuksoRedux.length));
         }}
       >
         숙소전체삭제
@@ -415,10 +434,8 @@ function SukSoSubModal({ index, local }) {
         DAY {index + 1}
         <span>
           {" "}
-          ({reduxState.monthNdate[0].month}.{" "}
-          {reduxState.monthNdate[0].date + index} ~{" "}
-          {reduxState.monthNdate[0].month}.{" "}
-          {reduxState.monthNdate[0].date + index + 1})
+          ({reduxState.monthNdate[0].month}. {reduxState.monthNdate[0].date + index} ~{" "}
+          {reduxState.monthNdate[0].month}. {reduxState.monthNdate[0].date + index + 1})
         </span>
       </div>
       {local !== 0 ? (
@@ -426,11 +443,7 @@ function SukSoSubModal({ index, local }) {
       ) : (
         <div className={`suksoModal__desc ${index}`}>
           <span>일자버튼을 누르고 숙소를 추가하세요</span>
-          <FontAwesomeIcon
-            icon={faPlus}
-            className="sukSoSubModal__plus-btn"
-            onClick={() => {}}
-          />
+          <FontAwesomeIcon icon={faPlus} className="sukSoSubModal__plus-btn" onClick={() => {}} />
         </div>
       )}
     </div>
