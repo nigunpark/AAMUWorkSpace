@@ -4,7 +4,7 @@ import axios from 'axios';
 
 
 
-const REST_API_KEY = "02112bcb58254150b780fe90791bd5a2";
+const REST_API_KEY = "3a141ff9d81872fc2f019e5f2f7de619";
 
 const KakaoRedirectHandler = ({navigate}) => {
   const code = document.location.search.split('?code=')[1];
@@ -19,7 +19,7 @@ if (code !== undefined) {
 }
 
 function requestToken(code) {
-  const JS_APP_KEY ="e18c7e895cf8f488cfc40dbb42762981";
+  const JS_APP_KEY ="2eed708665efb1b1a0ec9c3e21d756ea";
   const REDIRECT_URI = "http://localhost:3000/oauth/callback/kakao";
   const makeFormData = params => {
     const searchParams = new URLSearchParams()
@@ -49,7 +49,7 @@ function requestToken(code) {
     // Kakao Javascript SDK 초기화
     // if (!window.Kakao.isInitialized()) {
       // JavaScript key를 인자로 주고 SDK 초기화
-      window.Kakao.init('e18c7e895cf8f488cfc40dbb42762981');
+      window.Kakao.init('2eed708665efb1b1a0ec9c3e21d756ea');
     // }
     // access token 설정
     window.Kakao.Auth.setAccessToken(token);
