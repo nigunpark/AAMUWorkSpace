@@ -1,3 +1,5 @@
+
+
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -28,7 +30,7 @@ pageContext.setAttribute("newLineChar", "\n");
 									</tr>
 									<tr>
 										<th class="w-25 bg-dark text-white text-center">제목</th>
-										<td>${record.title}</td>
+										<td><span class="text-overflow">${record.title}</span></td>
 									</tr>
 									<tr>
 										<th class="w-25 bg-dark text-white text-center">문의</th>
@@ -59,7 +61,7 @@ pageContext.setAttribute("newLineChar", "\n");
 										<th class="bg-dark text-white text-center" colspan="2">내용</th>
 									</tr>
 									<tr>
-										<td colspan="2">${record.content}</td>
+										<td colspan="2"><p>${record.content}</p></td>
 									</tr>
 								</tbody>
 							</table>
@@ -81,7 +83,7 @@ pageContext.setAttribute("newLineChar", "\n");
 								<!-- 댓글 수정 -->
 								<input type="hidden" name="ano" />
 								<textarea id="answer" name="answer"
-									class="form-control w-20 h-25" rows="10"
+									class="form-control w-20 h-25" rows="5"
 									placeholder="내용을 입력하세요."></textarea>
 								<div class="d-flex justify-content-center">
 									<input type="button" class="btn btn-info mt-3" value="댓글 등록"
@@ -116,9 +118,10 @@ pageContext.setAttribute("newLineChar", "\n");
 															value="${\"ADMIN2\"==item.id ? 'answer' : ''}" />
 														<c:set var="inactive"
 															value="${\"ADMIN2\"==item.id ? '' : 'disabled'}" />
-														<td>${item.name}(${item.id})</td>
+														<td><p>${item.name}(${item.id})</p></td>
 														<td class="text-left ${titleClass}" title="${item.ano}">
-															${fn:replace(item.answer, newLineChar, "<br/>")}</td>
+															<p>${item.answer }</p>
+														</td>
 														<td>${item.adate }</td>
 														<td>
 															<button class="btn btn-sm btn-warning edit-answer"
@@ -145,8 +148,33 @@ pageContext.setAttribute("newLineChar", "\n");
 </div>
 
 <style>
+table {
+	table-layout: fixed;
+}
+
+table td .text-overflow {
+	line-height: 1.3rem;
+	padding: 0px;
+	text-align: left;
+	white-space: pre-wrap; /* CSS3*/
+	white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
+	white-space: -pre-wrap; /* Opera 4-6 */
+	white-space: -o-pre-wrap; /* Opera 7 */
+	word-wrap: break-all; /* Internet Explorer 5.5+ */
+}
+
+textarea, table td p {
+	line-height: 1.5rem !important;
+	text-align: left;
+	white-space: pre-wrap; /* CSS3*/
+	white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
+	white-space: -pre-wrap; /* Opera 4-6 */
+	white-space: -o-pre-wrap; /* Opera 7 */
+	word-wrap: break-all; /* Internet Explorer 5.5+ */
+}
+
 .tab-content-top {
-	padding: 1.5rem 2.187rem 1.5rem 3.5rem;
+	padding: 1.5rem 1.5rem 1.5rem 1.5rem;
 	border-radius: 20px;
 	-webkit-box-shadow: 0 0 0 0 rgb(90 113 208/ 11%), 0 4px 16px 0
 		rgb(167 175 183/ 33%);
@@ -157,15 +185,11 @@ pageContext.setAttribute("newLineChar", "\n");
 	border-radius: 20px;
 	-webkit-box-shadow: 0 0 0 0 rgb(90 113 208/ 11%), 0 4px 16px 0
 		rgb(167 175 183/ 33%);
-	padding: 1.5rem 2.187rem 1.5rem 3.5rem;
+	padding: 1.5rem 1.5rem 1.5rem 1.5rem;
 }
 
 .col-sm-8 {
 	width: 100% !important;
-}
-
-.answer-index {
-	
 }
 
 .table-hover>tbody>tr:hover { -
@@ -190,7 +214,8 @@ pageContext.setAttribute("newLineChar", "\n");
 
 .answer-index thead th {
 	border-bottom: 2px solid #ccc !important;
-	padding-bottom: 20px;
+	padding-top: 0px;
+	padding-bottom: 1.5rem;
 }
 
 .answer-index tr {
@@ -230,7 +255,7 @@ $('#submit').click(function(){
     console.log("입력한 댓글:",{id: data.id,answer:$("#answer").val(),adate:new Date().getTime(),name: data.name,no:${record.qno}});
 
     if($('#submit').val()==="댓글 등록"){
-       var tr="<tr><td>"+data.name+" ("+data.id+")</td><td title=\""+data.ano+"\" class=\"text-left answer\"><pre>"+$("#answer").val()+"</pre></td><td>"+(getDate(new Date().getTime()))+"</td><td><button class=\"btn btn-sm btn-warning edit-answer\" title=\""+data.ano+"\" value=\""+data.answer+"\">수정</button><button class=\"btn btn-danger btn-sm delete\">삭제</button></td></tr>";
+       var tr="<tr><td><p>"+data.name+" ("+data.id+")</p></td><td title=\""+data.ano+"\" class=\"text-left answer\"><p>"+$("#answer").val()+"</p></td><td>"+(getDate(new Date().getTime()))+"</td><td><button class=\"btn btn-sm btn-warning edit-answer\" title=\""+data.ano+"\" value=\""+data.answer+"\">수정</button><button class=\"btn btn-danger btn-sm delete\">삭제</button></td></tr>";
        $('#answer-list').before(tr);
        answerLoad();
     }

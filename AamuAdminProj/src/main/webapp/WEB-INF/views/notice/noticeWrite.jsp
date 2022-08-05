@@ -53,7 +53,7 @@ textarea.form-control{
 }
 
 .tab-content-top {
-padding: 1.5rem 2.187rem 1.5rem 3.5rem;
+padding: 1.5rem 1.5rem 1.5rem 1.5rem;
 	border-radius: 20px;
 	-webkit-box-shadow: 0 0 0 0 rgb(90 113 208/ 11%), 0 4px 16px 0
 		rgb(167 175 183/ 33%);
