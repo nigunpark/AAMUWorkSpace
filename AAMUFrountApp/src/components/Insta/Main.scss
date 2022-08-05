@@ -345,13 +345,13 @@
           font-size: 14px;
         }
 
-        .submitCommentInactive  {
+        .submitCommentInactive {
           margin-right: 10px;
           color: #bfe0fd;
           font-size: 14px;
         }
 
-        .submitCommentActive{
+        .submitCommentActive {
           margin-right: 10px;
           color: #0095f6;
           font-weight: bold;
@@ -710,7 +710,6 @@
             font-size: 10px;
             color: #8e8e8e;
           }
-         
         }
         .commentss {
           display: flex;
@@ -722,20 +721,20 @@
           padding-left: 10px;
           margin-top: 5px;
           border-top: 1px solid #dbdbdb;
-  
+
           .typing-comment {
             width: 300px;
             margin-left: 10px;
             font-size: 14px;
           }
-  
-          .submitCommentInactive  {
+
+          .submitCommentInactive {
             margin-right: 10px;
             color: #bfe0fd;
             font-size: 14px;
           }
-  
-          .submitCommentActive{
+
+          .submitCommentActive {
             margin-right: 10px;
             color: #0095f6;
             font-weight: bold;
@@ -1494,6 +1493,17 @@
       }
     }
   }
+
+  .commentSearch_position {
+    display: flex;
+    align-items: baseline;
+    gap: 3px;
+    color: grey;
+    transition: 0.1s;
+    &:hover {
+      color: var(--orange);
+    }
+  }
   .contentIcon {
     display: flex;
     flex-direction: column;
@@ -1501,6 +1511,7 @@
     // height: 10%;
     margin-left: 15px;
     padding: 15px 0;
+    gap: 5px;
 
     .feeds-icons {
       display: flex;
@@ -1536,7 +1547,6 @@
     }
     .likeCount {
       font-size: 13px;
-      margin-bottom: 10px;
     }
     .postDate {
       font-size: 10px;
@@ -1560,13 +1570,13 @@
       font-size: 14px;
     }
 
-    .submitCommentInactive  {
+    .submitCommentInactive {
       margin-right: 10px;
       color: #bfe0fd;
       font-size: 14px;
     }
 
-    .submitCommentActive{
+    .submitCommentActive {
       margin-right: 10px;
       color: #0095f6;
       font-weight: bold;
