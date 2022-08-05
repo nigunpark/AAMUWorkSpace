@@ -28,6 +28,7 @@
 
 body {
   font-family: "baseFont";
+  scroll-behavior: smooth;
 }
 
 a {
