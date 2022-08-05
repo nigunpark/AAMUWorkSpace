@@ -65,7 +65,7 @@ class AAMUPlanViewModel(context : Context,navController : NavController) : ViewM
 
     val mapPOIItems = MutableLiveData<MapPOIItem>()
 
-    init {
+    fun getPlannerSelectList(){
         viewModelScope.launch {
             aamuRepository.getPlannerSelectList()
                 .collect{aamuListPlanner->
@@ -76,7 +76,7 @@ class AAMUPlanViewModel(context : Context,navController : NavController) : ViewM
                         errorLiveData.value = "리스트를 받아오는데 실페했습니다"
                         Toast.makeText(context,"리스트를 받아오는데 실페했습니다",Toast.LENGTH_LONG)
                     }
-            }
+                }
         }
     }
 

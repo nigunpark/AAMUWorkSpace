@@ -1,12 +1,12 @@
 package com.aamu.aamuandroidapp.data.api.response
 
 data class AAMUGarmResponse(
-    var lno: String? = null,
+    var lno: Int? = null,
     var id: String? = null,
     var ctitle: String? = null,
     var content: String? = null,
     var postdate: Long? = null,
-    var likecount: String? = null,
+    var likecount: Int? = null,
     var islike: Boolean? = null,
     var rcount: String? = null,
     var userprofile: String? = null,
@@ -22,6 +22,7 @@ data class AAMUGarmResponse(
     var followercount: Int? = 0,
     var followingcount: Int? = 0,
     var isFollower: Boolean? = false,
+    var recommenduser: List<AAMUGarmResponse>? = null
 )
 
 

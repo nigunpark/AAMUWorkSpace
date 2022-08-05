@@ -9,6 +9,7 @@ import com.aamu.aamuandroidapp.data.api.userLogin
 import com.aamu.aamuandroidapp.util.contextL
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
+import kotlin.math.ln
 
 class AAMURepositoryImpl(
     private val aamuApi : AAMUApi
@@ -127,6 +128,32 @@ class AAMURepositoryImpl(
         emit(emptyList<AAMUGarmResponse>())
     }.flowOn(Dispatchers.IO)
 
+    override suspend fun getGramDetail(id: String, lno: Int): Flow<AAMUGarmResponse> = flow<AAMUGarmResponse> {
+        val response = aamuApi.getGramDetail(id,lno)
+        if(response.isSuccessful){
+            emit(response.body() ?: AAMUGarmResponse())
+        }
+        else
+            emit(AAMUGarmResponse())
+    }.catch {
+        emit(AAMUGarmResponse())
+    }.flowOn(Dispatchers.IO)
+
+    override suspend fun getGramLike(id: String, lno: Int): Flow<Map<String, String>> = flow<Map<String,String>> {
+        val response = aamuApi.getGramLike(id, lno)
+        val failmap = HashMap<String,String>()
+        failmap.put("result","fail")
+        if(response.isSuccessful){
+            emit(response.body() ?: failmap)
+        }
+        else
+            emit(failmap)
+    }.catch {
+        val failmap = HashMap<String,String>()
+        failmap.put("result","fail")
+        emit(failmap)
+    }.flowOn(Dispatchers.IO)
+
     override suspend fun getGramByPlaceList(contentid: Int): Flow<List<AAMUGarmResponse>> = flow<List<AAMUGarmResponse>> {
         val response = aamuApi.getGramByPlaceList(contentid)
         if (response.isSuccessful){
@@ -158,5 +185,26 @@ class AAMURepositoryImpl(
             emit(AAMUBBSResponse())
     }.catch {
         emit(AAMUBBSResponse())
+    }.flowOn(Dispatchers.IO)
+
+    override suspend fun postReview(review: Review): Flow<Map<String, String>> = flow<Map<String, String>> {
+        val response = aamuApi.postReview(review)
+        val failmap = HashMap<String,String>()
+        failmap.put("result","insertNotSuccess")
+        if (response.isSuccessful){
+            if(response.body()?.get("result").equals("insertNotSuccess")){
+                emit(failmap)
+            }
+            else{
+                emit(response.body() ?: failmap)
+            }
+        }
+        else {
+            emit(failmap)
+        }
+    }.catch {
+        val failmap = HashMap<String,String>()
+        failmap.put("result","insertNotSuccess")
+        emit(failmap)
     }.flowOn(Dispatchers.IO)
 }

@@ -6,13 +6,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import com.aamu.aamuandroidapp.R
 import com.aamu.aamuandroidapp.components.gram.AAMUgramHome
+import com.aamu.aamuandroidapp.components.gram.AAMUgramViewModel
+import com.aamu.aamuandroidapp.components.gram.AAMUgramViewModelFactory
 import com.aamu.aamuandroidapp.data.DemoDataProvider
 import com.aamu.aamuandroidapp.databinding.FragmentGramBinding
+import com.aamu.aamuandroidapp.fragment.main.MainFragmentDirections
 import com.aamu.aamuandroidapp.ui.theme.ComposeCookBookTheme
 
 class GramFragment : Fragment() {
@@ -35,9 +40,17 @@ class GramFragment : Fragment() {
 
         binding.gramCompose.setContent {
             ComposeCookBookTheme {
+                val viewModel : AAMUgramViewModel = viewModel(
+                    factory = AAMUgramViewModelFactory(LocalContext.current)
+                )
                 AAMUgramHome(
-                    onLikeClicked = {},
-                    onCommentsClicked = {},
+                    onLikeClicked = {
+                        viewModel.getGramLike(it)
+                    },
+                    onCommentsClicked = { lno ->
+                        val action = MainFragmentDirections.actionMainFragmentToGramDetailFragment(lno)
+                        navControllerHost.navigate(action)
+                    },
                     onSendClicked = {},
                     onProfileClicked = {},
                     onMessagingClicked = {navControllerHost.navigate(R.id.action_mainFragment_to_conversationFragment)}

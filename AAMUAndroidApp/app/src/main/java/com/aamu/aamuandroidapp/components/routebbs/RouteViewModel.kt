@@ -26,10 +26,9 @@ class RouteViewModel(context: Context) : ViewModel(){
 
     val aamuBBSList = MutableLiveData<List<AAMUBBSResponse>>()
     val errorLiveData = MutableLiveData<String>()
+    val context = context
 
     val currentPage = MutableLiveData<Int>(0)
-
-    val context = context
 
     fun getaamuBBSList(){
         viewModelScope.launch {

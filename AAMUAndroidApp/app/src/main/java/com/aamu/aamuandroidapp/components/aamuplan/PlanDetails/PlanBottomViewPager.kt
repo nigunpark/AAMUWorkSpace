@@ -30,6 +30,7 @@ import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.aamu.aamuandroidapp.R
 import com.aamu.aamuandroidapp.components.aamuplan.AAMUPlanViewModel
+import com.aamu.aamuandroidapp.ui.theme.cyan200
 import com.aamu.aamuandroidapp.ui.theme.orange200
 import com.aamu.aamuandroidapp.ui.theme.typography
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -93,53 +94,73 @@ fun PlannerRoute(mapviewModel: AAMUPlanViewModel,
                  topbarhide : MutableState<Boolean>,
                  bottomSheetScaffoldState: BottomSheetScaffoldState,){
     val plannerSelectList by mapviewModel.plannerSelectList.observeAsState(emptyList())
+    val error by mapviewModel.errorLiveData.observeAsState()
+
+    mapviewModel.getPlannerSelectList()
+
     val listState = rememberLazyListState()
     LazyColumn(state = listState){
         itemsIndexed(items = plannerSelectList,
         itemContent = { index, planner->
-            Surface(
-                modifier = Modifier.clickable {
-                    mapviewModel.getPlannerSelectOne(planner.rbn!!)
-                    topbarhide.value = true
-                    coroutineScope.launch {
-                        bottomSheetScaffoldState.bottomSheetState.collapse()
+            if(plannerSelectList.isNotEmpty()) {
+                Surface(
+                    modifier = Modifier.clickable {
+                        mapviewModel.getPlannerSelectOne(planner.rbn!!)
+                        topbarhide.value = true
+                        coroutineScope.launch {
+                            bottomSheetScaffoldState.bottomSheetState.collapse()
+                        }
                     }
+                ) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Image(
+                            painter = rememberAsyncImagePainter(
+                                model = ImageRequest.Builder(LocalContext.current)
+                                    .data(planner.smallImage ?: R.drawable.no_image)
+                                    .crossfade(true)
+                                    .build(),
+                                contentScale = ContentScale.Crop
+                            ),
+                            contentDescription = null,
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier
+                                .size(100.dp)
+                                .padding(4.dp)
+                                .shadow(1.dp)
+                        )
+                        Column(
+                            modifier = Modifier
+                                .padding(horizontal = 4.dp)
+                        ) {
+                            Text(
+                                text = planner.title ?: "",
+                                style = typography.h6.copy(fontSize = 16.sp),
+                                color = MaterialTheme.colorScheme.onSurface
+                            )
+                            Text(
+                                text = planner.plannerdate ?: "",
+                                style = typography.subtitle2,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis
+                            )
+                        }
+                    }
+                    Divider(modifier = Modifier.alpha(0.1f))
                 }
-            ){
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Image(
-                        painter = rememberAsyncImagePainter(
-                            model = ImageRequest.Builder(LocalContext.current)
-                                .data(planner.smallImage ?: R.drawable.no_image)
-                                .crossfade(true)
-                                .build(),
-                            contentScale = ContentScale.Crop
-                        ),
-                        contentDescription = null,
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier
-                            .size(100.dp)
-                            .padding(4.dp)
-                            .shadow(1.dp)
+            }
+            else {
+                if (error.isNullOrEmpty()) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.padding(24.dp),
+                        color = cyan200
                     )
-                    Column(
-                        modifier = Modifier
-                            .padding(horizontal = 4.dp)
-                    ) {
-                        Text(
-                            text = planner.title ?: "",
-                            style = typography.h6.copy(fontSize = 16.sp),
-                            color = MaterialTheme.colorScheme.onSurface
-                        )
-                        Text(
-                            text = planner.plannerdate ?: "",
-                            style = typography.subtitle2,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis
-                        )
-                    }
+                } else {
+                    Text(
+                        text = error ?: "Unknown error",
+                        modifier = Modifier,
+                        color = androidx.compose.material.MaterialTheme.colors.error
+                    )
                 }
-                Divider(modifier = Modifier.alpha(0.1f))
             }
         })
     }

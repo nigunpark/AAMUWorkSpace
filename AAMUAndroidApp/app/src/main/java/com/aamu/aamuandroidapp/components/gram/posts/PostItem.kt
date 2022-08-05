@@ -22,8 +22,8 @@ import java.text.SimpleDateFormat
 fun PostItem(
     gram: AAMUGarmResponse,
     isLiked: Boolean?,
-    onLikeClicked: () -> Unit,
-    onCommentsClicked: () -> Unit,
+    onLikeClicked: (Int) -> Unit,
+    onCommentsClicked: (Int) -> Unit,
     onSendClicked: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -49,22 +49,31 @@ fun PostItem(
             modifier = Modifier.padding(top = 8.dp)
         )
         PostInteractionBar(
+            lno = gram.lno!!,
             isLiked = isLiked ?: false,
             onLikeClicked = onLikeClicked,
             onCommentsClicked = onCommentsClicked,
             onSendClicked = onSendClicked,
         )
-        if(gram.commuCommentList?.size == 0){
+        if(gram.likecount == 0){
             ProfileSection(
                 firstImageId = null,
                 text = "아직 아무도 좋아요를 누르지 않았어요"
             )
         }
         else {
-            ProfileSection(
-                firstImageId = gram.commuComment?.userprofile,
-                text = "${gram.commuComment?.id}님이 댓글을 달고 ${gram.likecount}명이 좋아요를 눌렀어요"
-            )
+            if(gram.commuCommentList?.size==0){
+                ProfileSection(
+                    firstImageId = null,
+                    text = "${gram.likecount}명이 좋아요를 눌렀어요"
+                )
+            }
+            else {
+                ProfileSection(
+                    firstImageId = gram.commuComment?.userprofile,
+                    text = "${gram.commuComment?.id}님이 댓글을 달고 ${gram.likecount}명이 좋아요를 눌렀어요"
+                )
+            }
         }
         CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
             Text(
