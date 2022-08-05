@@ -385,7 +385,6 @@ function edit(
       }
     )
     .then((resp) => {
-      console.log("?", resp.data);
       setShowWrite(resp.data);
       searchBar();
       if (resp.data.isSuccess === true) {
