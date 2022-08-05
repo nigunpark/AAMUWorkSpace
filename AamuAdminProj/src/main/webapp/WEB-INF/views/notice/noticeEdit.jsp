@@ -46,6 +46,22 @@
 
 <style>
 
+input {
+	font-size: 0.812rem !important;
+	line-height: 1.5rem !important;
+}
+
+textarea {
+	font-size: 0.812rem !important;
+	line-height: 1.5rem !important;
+	text-align: left;
+	white-space: pre-wrap; /* CSS3*/
+	white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
+	white-space: -pre-wrap; /* Opera 4-6 */
+	white-space: -o-pre-wrap; /* Opera 7 */
+	word-wrap: break-all; /* Internet Explorer 5.5+ */
+}
+
 textarea.form-control {
 	min-height: 10rem;
 	overflow-y: hidden;

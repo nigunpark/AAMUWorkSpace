@@ -82,9 +82,9 @@ pageContext.setAttribute("newLineChar", "\n");
 
 								<!-- 댓글 수정 -->
 								<input type="hidden" name="ano" />
-								<textarea id="answer" name="answer"
-									class="form-control w-20 h-25" rows="5"
-									placeholder="내용을 입력하세요."></textarea>
+								<textarea id="answer" name="answer" class="form-control"
+									rows="5" placeholder="내용을 입력하세요." onkeydown="resize(this)"
+									onkeyup="resize(this)"></textarea>
 								<div class="d-flex justify-content-center">
 									<input type="button" class="btn btn-info mt-3" value="댓글 등록"
 										id="submit" />
@@ -118,7 +118,7 @@ pageContext.setAttribute("newLineChar", "\n");
 															value="${\"ADMIN2\"==item.id ? 'answer' : ''}" />
 														<c:set var="inactive"
 															value="${\"ADMIN2\"==item.id ? '' : 'disabled'}" />
-														<td><p>${item.name}(${item.id})</p></td>
+														<td><span class="text-overflow">${item.name}(${item.id})</span></td>
 														<td class="text-left ${titleClass}" title="${item.ano}">
 															<p>${item.answer }</p>
 														</td>
@@ -163,7 +163,24 @@ table td .text-overflow {
 	word-wrap: break-all; /* Internet Explorer 5.5+ */
 }
 
-textarea, table td p {
+textarea {
+	font-size: 0.812rem !important;
+	line-height: 1.5rem !important;
+	text-align: left;
+	white-space: pre-wrap; /* CSS3*/
+	white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
+	white-space: -pre-wrap; /* Opera 4-6 */
+	white-space: -o-pre-wrap; /* Opera 7 */
+	word-wrap: break-all; /* Internet Explorer 5.5+ */
+}
+
+textarea.form-control {
+	min-height: 10rem;
+	overflow-y: hidden;
+	resize: none;
+}
+
+table td p {
 	line-height: 1.5rem !important;
 	text-align: left;
 	white-space: pre-wrap; /* CSS3*/
@@ -255,7 +272,7 @@ $('#submit').click(function(){
     console.log("입력한 댓글:",{id: data.id,answer:$("#answer").val(),adate:new Date().getTime(),name: data.name,no:${record.qno}});
 
     if($('#submit').val()==="댓글 등록"){
-       var tr="<tr><td><p>"+data.name+" ("+data.id+")</p></td><td title=\""+data.ano+"\" class=\"text-left answer\"><p>"+$("#answer").val()+"</p></td><td>"+(getDate(new Date().getTime()))+"</td><td><button class=\"btn btn-sm btn-warning edit-answer\" title=\""+data.ano+"\" value=\""+data.answer+"\">수정</button><button class=\"btn btn-danger btn-sm delete\">삭제</button></td></tr>";
+       var tr="<tr><td><span class=\"text-overflow\">"+data.name+" ("+data.id+")</span></td><td title=\""+data.ano+"\" class=\"text-left answer\"><p>"+$("#answer").val()+"</p></td><td>"+(getDate(new Date().getTime()))+"</td><td><button class=\"btn btn-sm btn-warning edit-answer\" title=\""+data.ano+"\" value=\""+data.answer+"\">수정</button><button class=\"btn btn-danger btn-sm delete\">삭제</button></td></tr>";
        $('#answer-list').before(tr);
        answerLoad();
     }
@@ -323,6 +340,12 @@ $('#submit').click(function(){
     		}
     	}
 
+    
+    function resize(obj) {
+        obj.style.height = '1px';
+        obj.style.height = (12 + obj.scrollHeight) + 'px';
+    }
+    
 </script>
 
 </body>
