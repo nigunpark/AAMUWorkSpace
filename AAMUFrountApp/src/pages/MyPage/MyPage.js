@@ -26,8 +26,6 @@ import MyThemeLists from "./MyPageBox/MyThemeLists";
 
 import Spinner from "../../components/Insta/Spinner";
 
-import { Spinner } from "react-bootstrap";
-
 const MyPage = () => {
   let [clickTab, setClickTab] = useState(0);
 
