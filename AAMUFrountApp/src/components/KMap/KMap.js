@@ -56,8 +56,6 @@ const KMap = ({
     return state;
   });
   let dispatch = useDispatch();
-  let publicRef = useRef();
-  let personalRef = useRef();
   let container = useRef();
   //위치정보 얻음을 성공했을 시
   // function onGeoOk(position) {
@@ -88,6 +86,7 @@ const KMap = ({
   //-------------------------------------------------------------------------
   let pickedJangso = [];
   let mainMarker;
+
   useEffect(() => {
     let map;
     const center = new kakao.maps.LatLng(lat, lng);
@@ -246,7 +245,6 @@ const KMap = ({
     if (kMap === null) return;
     kakao.maps.event.addListener(kMap, "rightclick", function (mouseEvent) {
       let center = kMap.getCenter();
-      console.log("우측클릭");
       zoomAxios(center.getLat(), center.getLng());
     });
   }, [handleRightClick]);
@@ -280,7 +278,6 @@ const KMap = ({
         console.log(error);
       });
   };
-
   return (
     <div>
       <div
@@ -291,7 +288,35 @@ const KMap = ({
         }}
       >
         <div id="map" ref={container} style={{ width: "100%", height: "92vh" }}></div>
-        <div id="roadview" style={{ width: "100%", height: "99vh" }}></div>
+        <div className="kmap__weather__container">
+          {/* <span style={{ position: "absolute", zIndex: "101", right: "0" }}>11</span> */}
+          <div className="kmap__weather__wrapper">
+            {reduxState.forWeather.map((val, i) => {
+              return (
+                <div className="kmap__weather">
+                  <div className="kmap__weather-img">
+                    <div className="kmap__weather-img-container">
+                      <img src={val.weatherImage} alt="날씨" />
+                    </div>
+                    <span style={{ fontWeight: "bold" }}>{val.weatherState}</span>
+                  </div>
+                  <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
+                    <div style={{ fontWeight: "bold", fontSize: "15px" }}>{val.date}</div>
+                    <div>
+                      <span style={{ fontWeight: "bold", fontSize: "13px", color: "blue" }}>
+                        {val.lowTemp}
+                      </span>
+                      <span>&nbsp;/&nbsp;</span>
+                      <span style={{ fontWeight: "bold", fontSize: "13px", color: "red" }}>
+                        {val.highTemp}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
         <div className="kmap__right-btn__container">
           <div
             onClick={(e) => {
@@ -318,15 +343,16 @@ const KMap = ({
         </div>
         <div className="kmap__left-btn__container">
           <div>이용방법</div>
-          <div
+          {/* <div
             onClick={(e) => {
               e.stopPropagation();
               setAppearRegisterModal(true);
             }}
           >
             장소등록
-          </div>
-          <span className="kmap__transportation">
+          </div> */}
+
+          {/* <span className="kmap__transportation">
             <div
               onClick={(e) => {
                 e.stopPropagation();
@@ -366,7 +392,7 @@ const KMap = ({
                 </div>
               </>
             ) : null}
-          </span>
+          </span> */}
           <div
             onClick={(e) => {
               e.stopPropagation();
@@ -412,7 +438,7 @@ const KMap = ({
           </div>
         </div>
       </div>
-      {appearRegisterModal ? (
+      {/* {appearRegisterModal ? (
         <RegisterModal
           setAppearRegisterModal={setAppearRegisterModal}
           jangsoName={jangsoName}
@@ -420,7 +446,7 @@ const KMap = ({
           showFillMes={showFillMes}
           setShowFillMes={setShowFillMes}
         />
-      ) : null}
+      ) : null} */}
       {showAuSModal ? (
         <AreUSurePlan
           setShowAuSModal={setShowAuSModal}
@@ -626,16 +652,6 @@ function threeBtnToggle(e) {
       );
       e.target.classList.add("click__threebtnToggle");
     }
-  }
-}
-
-function whichTransport(e) {
-  if (e !== null && e.target.classList.contains("public")) {
-    e.target.nextElementSibling.nextElementSibling.classList.remove("pickedTransport");
-    e.target.classList.add("pickedTransport");
-  } else if (e !== null && e.target.classList.contains("personal")) {
-    e.target.previousElementSibling.previousElementSibling.classList.remove("pickedTransport");
-    e.target.classList.add("pickedTransport");
   }
 }
 
