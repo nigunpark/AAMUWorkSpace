@@ -22,6 +22,7 @@ import ContentItem from "../Forum/Content/ContentItem";
 import MyBookMarkBox from "./MyPageBox/MyBookMarkBox";
 import MyTheme from "./MyPageBox/MyTheme";
 import DetailModal from "../Forum/DetailModal/DetailModal";
+import Spinner from "../../components/Insta/Spinner";
 const MyPage = () => {
   let [clickTab, setClickTab] = useState(0);
 
@@ -52,6 +53,7 @@ const MyPage = () => {
       })
       .then((resp) => {
         setPlanList(resp.data);
+        setIsLoading(false);
 
         setUpload(
           resp.data.reduce((acc, obj) => {
@@ -100,9 +102,6 @@ const MyPage = () => {
         params: {
           id: sessionStorage.getItem("username"),
         },
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
       })
       .then((resp) => {
         console.log("나의 테마 (MyPage.js) :", resp.data);
@@ -115,7 +114,8 @@ const MyPage = () => {
   const [myBookList, setMyBookList] = useState([]);
   const [detailOne, setDetailOne] = useState({});
   const [isOpen, setIsOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
   const bookMarkList = async () => {
     let token = sessionStorage.getItem("token");
 
@@ -137,8 +137,8 @@ const MyPage = () => {
   useEffect(() => {
     selectList();
     searchBar();
-    bookMarkList();
-    myTheme();
+    // bookMarkList();
+    // myTheme();
   }, [clickTab]);
 
   useEffect(() => {
@@ -182,7 +182,7 @@ const MyPage = () => {
   return (
     <div className="app-container">
       <div className="app-header"></div>
-
+      {isLoading && <Spinner />}
       <div className="app-content">
         {/* <MySideBar/> 왼쪽 사이드바 */}
         <div className="app-sidebar">
@@ -425,6 +425,7 @@ function TabContent({
                 setSelectRbn={setSelectRbn}
                 setPlanList={setPlanList}
                 setUpload={setUpload}
+                setIsLoading={setIsLoading}
               />
             );
           })}
@@ -454,30 +455,16 @@ function TabContent({
                       <img className="instaImg" src={val.photo[0]} />
                       <div>
                         <div className="instaTitle__container">
-                          <input
-                            type="text"
-                            value={val.ctitle}
-                            className="instaTitle"
-                          />
+                          <input type="text" value={val.ctitle} className="instaTitle" />
                         </div>
                         <div className="insta__info">
                           <div>
-                            <FontAwesomeIcon
-                              icon={faMessage}
-                              className="insta__info-icon"
-                            />{" "}
-                            <span className="insta__info-content">
-                              {val.rcount}
-                            </span>
+                            <FontAwesomeIcon icon={faMessage} className="insta__info-icon" />{" "}
+                            <span className="insta__info-content">{val.rcount}</span>
                           </div>
                           <div>
-                            <FontAwesomeIcon
-                              icon={faThumbsUp}
-                              className="insta__info-icon"
-                            />
-                            <span className="insta__info-content">
-                              {val.likecount}
-                            </span>
+                            <FontAwesomeIcon icon={faThumbsUp} className="insta__info-icon" />
+                            <span className="insta__info-content">{val.likecount}</span>
                           </div>
                         </div>
                       </div>
@@ -534,13 +521,7 @@ function TabContent({
       <div className="myInstaContainer">
         <div className="myInstar">
           {myBookList.map((val, idx) => {
-            return (
-              <MyBookMarkBox
-                setDetailOne={setDetailOne}
-                detail={val}
-                setIsOpen={setIsOpen}
-              />
-            );
+            return <MyBookMarkBox setDetailOne={setDetailOne} detail={val} setIsOpen={setIsOpen} />;
           })}
 
           {/*
