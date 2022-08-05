@@ -179,8 +179,7 @@ a {
   width: 100%;
   max-width: 480px;
   color: var(--light-font);
-  box-shadow: 0 2px 6px 0 rgba(136, 148, 171, 0.2),
-    0 24px 20px -24px rgba(71, 82, 107, 0.1);
+  box-shadow: 0 2px 6px 0 rgba(136, 148, 171, 0.2), 0 24px 20px -24px rgba(71, 82, 107, 0.1);
   overflow: hidden;
 
   .dark & {
@@ -835,8 +834,28 @@ a {
 .editBox__rightSide {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  // gap: 1rem;
   width: 100%;
+}
+.myEditBox_btn {
+  padding: 3px 7px;
+  border: 2px solid var(--orange);
+  border-radius: 5px;
+  font-weight: bold;
+  transition: 0.1s;
+}
+
+.myEditBox_btn:hover {
+  // border:2px solid var(--o)
+  background-color: var(--orange);
+  color: white;
+  cursor: pointer;
+}
+.add-delete-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  gap: 1rem;
 }
 .write-box {
   &.picture {
@@ -866,7 +885,7 @@ a {
     border: solid 1px rgba(128, 128, 128, 0.5);
     padding: 4px;
     width: 100%;
-    height: 290px;
+    height: 250px;
     overflow-y: auto;
     &::-webkit-scrollbar {
       display: none;
@@ -880,15 +899,20 @@ a {
       color: var(--orange);
       position: absolute;
       top: 5px;
-      right: 9px;
+      right: 11px;
       cursor: pointer;
+      &:hover {
+        color: var(--skyblue);
+      }
     }
+
     img {
       max-width: 20rem;
       max-height: 17rem;
       object-fit: cover;
       border-radius: 5px;
-      border: 1px solid var(--orange);
+      box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+      // border: 1px solid var(--orange);
     }
   }
 
@@ -946,6 +970,18 @@ a {
   font-size: 18px;
   padding: 3px 0;
   background-color: white;
+}
+.detail_planner_title {
+  text-align: center;
+  // border: 2px solid black;
+  font-weight: bold;
+  border-radius: 5px;
+  box-shadow: var(--shadow);
+  font-size: 18px;
+  padding: 3px 0;
+  width: 96%;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.8);
 }
 .plan-region {
   // flex: 3;
