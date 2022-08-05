@@ -27,7 +27,7 @@ import {
 } from "../../redux/store";
 import axios from "axios";
 
-const LeftPlanSide = ({ currPosition }) => {
+const LeftPlanSide = ({ currPosition, setIsLoading }) => {
   const [findcurrPositionId, setFindcurrPositionId] = useState("");
   const [saveDays, setSaveDays] = useState(0);
   const [days, setDays] = useState(0);
@@ -84,6 +84,7 @@ const LeftPlanSide = ({ currPosition }) => {
             setAppearCalendar={setAppearCalendar}
             currPosition={currPosition}
             saveDays={saveDays}
+            setIsLoading={setIsLoading}
           />
           <div className="dateRangePicker">
             {appearCalendar ? (
@@ -133,7 +134,14 @@ const LeftPlanSide = ({ currPosition }) => {
   );
 };
 
-const ChangeDate = ({ period, appearCalendar, setAppearCalendar, currPosition, saveDays }) => {
+const ChangeDate = ({
+  period,
+  appearCalendar,
+  setAppearCalendar,
+  currPosition,
+  saveDays,
+  setIsLoading,
+}) => {
   let sdy = period.startDate.getFullYear();
   let sdm = period.startDate.getMonth();
   let sdd = period.startDate.getDate();
@@ -163,12 +171,14 @@ const ChangeDate = ({ period, appearCalendar, setAppearCalendar, currPosition, s
       .then((weather) => {
         // console.log("weather", weather.data);
         dispatch(addWeather(weather.data.weather));
+        setIsLoading(false);
       })
       .catch((err) => {
         console.log(err);
       });
   };
   useEffect(() => {
+    setIsLoading(true);
     dispatch(resetMonthNDate([]));
     dispatch(
       addMonthNDate({

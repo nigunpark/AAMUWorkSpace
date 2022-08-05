@@ -48,6 +48,7 @@ const KMap = ({
   setShowCratePlan,
   setFromWooJaeData,
   setForSearchTypeId,
+  isLoading,
 }) => {
   let [lat, setLat] = useState("");
   let [lng, setLng] = useState("");
@@ -83,6 +84,7 @@ const KMap = ({
   const [kMap, setKMap] = useState(null);
   const [showAlert, setShowAlert] = useState(false);
   const [showAlertTime, setAlertTime] = useState(false);
+
   //-------------------------------------------------------------------------
   let pickedJangso = [];
   let mainMarker;
@@ -291,6 +293,22 @@ const KMap = ({
         <div className="kmap__weather__container">
           {/* <span style={{ position: "absolute", zIndex: "101", right: "0" }}>11</span> */}
           <div className="kmap__weather__wrapper">
+            {isLoading && (
+              <lottie-player
+                src="https://assets9.lottiefiles.com/packages/lf20_cewufpii.json"
+                background="transparent"
+                speed="1"
+                style={{
+                  width: "50px",
+                  height: "50px",
+                  zIndex: "202",
+                  transition: ".3s",
+                  margin: "0 auto",
+                }}
+                loop
+                autoplay
+              ></lottie-player>
+            )}
             {reduxState.forWeather.map((val, i) => {
               return (
                 <div className="kmap__weather">

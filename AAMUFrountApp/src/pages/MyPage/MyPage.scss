@@ -1792,12 +1792,15 @@ a {
   font-size: 14px;
   font-weight: bold;
 }
-
+.myProfile__left {
+  border: 1px solid blue;
+  height: 100%;
+  width: 100%;
+}
 .profile-title-name-id {
   font-size: 14px;
   font-weight: bold;
   display: flex;
-  flex-direction: row;
 }
 
 .profile-title-addr {

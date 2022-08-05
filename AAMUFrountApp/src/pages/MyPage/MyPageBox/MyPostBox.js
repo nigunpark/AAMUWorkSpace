@@ -30,7 +30,7 @@ const MyPostBox = ({ selectRbn, setClickTab }) => {
     try {
       let token = sessionStorage.getItem("token");
 
-      let resp = await axios.get("/planner/selectone", {
+      let resp = await axios.get("aamurest/planner/selectone", {
         params: {
           rbn: selectRbn,
         },
@@ -39,84 +39,51 @@ const MyPostBox = ({ selectRbn, setClickTab }) => {
         },
       });
       console.log("MyPostBox : ", resp.data);
+      setPlannerTitle(resp.data.title);
+      // setTitle(resp.data.title);
+      // setContent(resp.data.content);
+      setPostTheme(resp.data.themename); // 테마 가져온거 기본 세팅하기
+      // setShowImages(resp.data.photo); // 업로드했던 사진 세팅하기
+      setDetailRoute(resp.data.route);
+      let month = resp.data.planner.plannerdate.substring(
+        resp.data.planner.plannerdate.indexOf("월") - 1,
+        resp.data.planner.plannerdate.indexOf("월")
+      );
+      let date = resp.data.planner.plannerdate.substring(
+        resp.data.planner.plannerdate.indexOf("일") - 1,
+        resp.data.planner.plannerdate.indexOf("일")
+      );
+      let dow = resp.data.planner.plannerdate.substring(
+        resp.data.planner.plannerdate.indexOf("~") - 2,
+        resp.data.planner.plannerdate.indexOf("~") - 1
+      );
+      switch (dow) {
+        case "일":
+          dow = 0;
+          break;
+        case "월":
+          dow = 1;
+          break;
+        case "화":
+          dow = 2;
+          break;
+        case "수":
+          dow = 3;
+          break;
+        case "목":
+          dow = 4;
+          break;
+        case "금":
+          dow = 5;
+          break;
+        default:
+          dow = 6;
+      }
+      setPlannerDate({ month, date, dow });
     } catch (error) {
       console.log((error) => console.log("상세경로 가져오기 실패", error));
     }
   };
-  // const getPlanData = async () => {
-  //   try {
-  //     let token = sessionStorage.getItem("token");
-
-  //     let resp = await axios.get("/aamurest/planner/selectonemap", {
-  //       params: {
-  //         rbn: selectRbn,
-  //       },
-  //       headers: {
-  //         Authorization: `Bearer ${token}`,
-  //       },
-  //     });
-  //     console.log("MyPostBox : ", resp.data);
-  //   } catch (error) {
-  //     console.log((error) => console.log("상세경로 가져오기 실패", error));
-  //   }
-  // };
-
-  async function getSelectOne() {
-    let token = sessionStorage.getItem("token");
-    await axios
-      .get(`/aamurest/bbs/SelectOne/${selectRbn}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((resp) => {
-        console.log("resp.data", resp.data);
-        setPlannerTitle(resp.data.planner.title);
-        setTitle(resp.data.title);
-        setContent(resp.data.content);
-        setPostTheme(resp.data.themename); // 테마 가져온거 기본 세팅하기
-        setShowImages(resp.data.photo); // 업로드했던 사진 세팅하기
-        setDetailRoute(resp.data.routeList);
-        let month = resp.data.planner.plannerdate.substring(
-          resp.data.planner.plannerdate.indexOf("월") - 1,
-          resp.data.planner.plannerdate.indexOf("월")
-        );
-        let date = resp.data.planner.plannerdate.substring(
-          resp.data.planner.plannerdate.indexOf("일") - 1,
-          resp.data.planner.plannerdate.indexOf("일")
-        );
-        let dow = resp.data.planner.plannerdate.substring(
-          resp.data.planner.plannerdate.indexOf("~") - 2,
-          resp.data.planner.plannerdate.indexOf("~") - 1
-        );
-        switch (dow) {
-          case "일":
-            dow = 0;
-            break;
-          case "월":
-            dow = 1;
-            break;
-          case "화":
-            dow = 2;
-            break;
-          case "수":
-            dow = 3;
-            break;
-          case "목":
-            dow = 4;
-            break;
-          case "금":
-            dow = 5;
-            break;
-          default:
-            dow = 6;
-        }
-        setPlannerDate({ month, date, dow });
-      })
-      .catch((error) => {
-        console.log((error) => console.log("수정할 데이터 불러오기 실패", error));
-      });
-  }
 
   useEffect(() => {
     // getSelectOne();
@@ -263,7 +230,6 @@ const MyPostBox = ({ selectRbn, setClickTab }) => {
               type="text"
               className="wirte-title"
               placeholder="제목을 입력하세요"
-              value={title}
               ref={titleRef}
             />
           </div>
@@ -328,7 +294,6 @@ const MyPostBox = ({ selectRbn, setClickTab }) => {
               name="content"
               className="write-section"
               placeholder="내용을 입력하세요"
-              value={content}
               ref={contentRef}
             />
           </div>
@@ -402,8 +367,8 @@ const MyPostBox = ({ selectRbn, setClickTab }) => {
                 // let write = uploadFile(showImagesFile);
                 bordWrite(
                   // write,
-                  title,
-                  content,
+                  titleRef,
+                  contentRef,
                   rbn,
                   navigate,
                   postThemeNum
@@ -548,7 +513,7 @@ function getTimes(periodIndex, st, et) {
       .padStart(2, "0"),
   };
 }
-function bordWrite(title, content, rbn, navigate) {
+function bordWrite(titleRef, contentRef, rbn, navigate) {
   // console.log("titleRef :", titleRef.current.value);
   // console.log("contentRef :", contentRef.current.value);
   let token = sessionStorage.getItem("token");
@@ -558,8 +523,8 @@ function bordWrite(title, content, rbn, navigate) {
       `/aamurest/bbs/edit`,
       {
         rbn: rbn,
-        title: title,
-        content: content,
+        title: titleRef.current.value,
+        content: contentRef.current.value,
       },
       {
         headers: {
