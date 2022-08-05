@@ -21,6 +21,7 @@ const MainPage = () => {
   const [fromWooJaeData, setFromWooJaeData] = useState([]);
   const [areaCode, setAreaCode] = useState(0);
   const [forSearchTypeId, setForSearchTypeId] = useState(12);
+  const [isLoading, setIsLoading] = useState(true);
   let dispatch = useDispatch();
   useEffect(() => {
     getCurrpositionLocal(currPosition, dispatch, setAreaCode);
@@ -30,7 +31,7 @@ const MainPage = () => {
   }, []);
   return (
     <div className="MainPage">
-      <LeftPlanSide currPosition={currPosition} />
+      <LeftPlanSide currPosition={currPosition} setIsLoading={setIsLoading} />
       <KMap
         currPosition={currPosition}
         setTitleName={setTitleName}
@@ -38,6 +39,7 @@ const MainPage = () => {
         setShowCratePlan={setShowCratePlan}
         setFromWooJaeData={setFromWooJaeData}
         setForSearchTypeId={setForSearchTypeId}
+        isLoading={isLoading}
       />
 
       <RightRecommandSide
