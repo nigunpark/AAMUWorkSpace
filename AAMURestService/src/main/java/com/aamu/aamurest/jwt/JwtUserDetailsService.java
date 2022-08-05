@@ -39,6 +39,13 @@ public class JwtUserDetailsService implements UserDetailsService {
 
         return member;
     }
+	
+	public AAMUUserDTO authenticateByEmail(String email) {
+		AAMUUserDTO member = dao.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("���� �̸��� ã���� �����ϴ�."+email));
+        return member;
+    }
+	
 	public String getUserProfile(String id) {
 		
 		return dao.getUserProfile(id);

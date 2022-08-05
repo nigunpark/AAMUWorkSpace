@@ -20,6 +20,11 @@ public class AAMUUserDAO {
 		AAMUUserDTO dto = template.selectOne("findByUsername", username);
 		return Optional.ofNullable(dto);
 	}
+	
+	public Optional<AAMUUserDTO> findByEmail(String email){
+		AAMUUserDTO dto = template.selectOne("findByEmail", email);
+		return Optional.ofNullable(dto);
+	}
 
 	public String getUserProfile(String id) {
 		System.out.println(id);
