@@ -28,7 +28,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
 
-    private static final List<String> EXCLUDE_URL = Collections.unmodifiableList(Arrays.asList("/authenticate","/users/checkid","/users/edit","/resources","/main/mainelement","/chat","/ws","/img/upload","/users/theme"));
+    private static final List<String> EXCLUDE_URL = Collections.unmodifiableList(Arrays.asList("/authenticate","/users/checkid","/users/edit","/resources","/main/mainelement","/chat","/ws","/img/upload","/users/theme","/authenticate/email"));
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)

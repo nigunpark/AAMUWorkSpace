@@ -14,6 +14,10 @@
 		SELECT m.id as username,m.pwd as password,authority FROM users m JOIN AUTHORITY_SECURITY AU ON m.id=au.id WHERE m.id='${value}'
 	</select>
 	
+	<select id="findByEmail" parameterType="String" resultMap="userDTOReult">
+		SELECT m.id as username,m.pwd as password,authority FROM users m JOIN AUTHORITY_SECURITY AU ON m.id=au.id WHERE m.email='${value}'
+	</select>
+	
 	<insert id="joinUser" parameterType="Map">
 		INSERT INTO users VALUES(#{id},#{email},#{pwd},#{name},#{gender},#{phonenum},#{addrid},#{self},SYSDATE,#{userprofile},#{socialnum})
 	</insert>
@@ -46,7 +50,7 @@
 	<delete id="deleteTheme" parameterType="Map">
 		DELETE aamuinter WHERE id=#{id}
 	</delete>
-	<select id="selectOneTheme" parameterType="Map">
+	<select id="selectOneTheme" parameterType="Map" resultType="Map">
 		SELECT * FROM theme WHERE themeid=#{themeid}
 	</select>
 </mapper>

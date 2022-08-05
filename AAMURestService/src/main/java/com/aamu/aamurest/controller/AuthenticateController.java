@@ -40,6 +40,20 @@ public class AuthenticateController {
         System.out.println(map);
         return map;
     }
+    
+    @PostMapping("/authenticate/email")
+    public Map createEmailToken(@RequestBody Map authenticationRequest,HttpServletRequest req) throws Exception {
+    	System.out.println(authenticationRequest);
+        AAMUUserDTO member = userDetailService.authenticateByEmail
+        		(authenticationRequest.get("email").toString());
+        String token = jwtTokenUtil.generateToken(member.getUsername());
+        Map map = new HashMap();
+        map.put("member", member);
+        map.put("token", token);
+        map.put("userprofile",FileUploadUtil.requestOneFile(userDetailService.getUserProfile(member.getUsername()), "/resources/userUpload", req));
+        System.out.println(map);
+        return map;
+    }
 
     @GetMapping("/isOK")
     public String hello() {

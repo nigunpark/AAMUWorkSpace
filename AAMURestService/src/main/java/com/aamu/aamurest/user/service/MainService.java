@@ -58,4 +58,6 @@ public interface MainService{
 
 	AttractionDTO selectPlace(Map map, HttpServletRequest req);
 
+	BBSDTO getRouteBBS(int rbn, HttpServletRequest req);
+
 }

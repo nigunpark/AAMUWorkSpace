@@ -597,19 +597,36 @@ public class MainController {
 		return list;
 	}
 	@GetMapping("/main/mainelement")
-	public Map<String,Map<String,List>> mainElement(@RequestParam Map map,HttpServletRequest req){
+	public Map<String,List> mainElement(@RequestParam Map map,HttpServletRequest req){
 
-		Map<String,Map<String,List>> basicMap = new HashMap<>();
+		//Map<String,Map<String,List>> basicMap = new HashMap<>();
 		Map<String,List> mapElement = new HashMap<>();
+		List<BBSDTO> bbsList = new Vector<>();
 		List<AttractionDTO> list = service.selectMainPlaceList(req);
-		if(map.get("id")!=null) {
-			service.getUserTheme(map);
+		if(map.get("id")!=null) {			
+			MultiValueMap<String,String> requestBody = new LinkedMultiValueMap<>();
+			HttpHeaders header = new HttpHeaders();
+			header.add("Content-Type", "application/json");
+			requestBody.add("id", map.get("id").toString());
+			requestBody.add("message", map.get("message").toString());
+			HttpEntity httpEntity = new HttpEntity<>(requestBody,header);
+			String uri = "http://192.168.0.19:5020/recommend";
+			ResponseEntity<Map> responseEntity =
+					restTemplate.exchange(uri, HttpMethod.POST,httpEntity, Map.class);
+			List<Map> rbnList = (List)responseEntity.getBody().get("rbns");
+			for(Map rbnMap : rbnList) {
+				
+				BBSDTO dto = service.getRouteBBS(Integer.parseInt(rbnMap.get("rbn").toString()),req);
+				bbsList.add(dto);
+			}
+			
 		}
 		
-		mapElement.put("places", list);
-		basicMap.put("placesInfo", mapElement);
+		mapElement.put("placeInfo", list);
+		mapElement.put("bbsInfo", bbsList);
+		//basicMap.put("placesInfo", mapElement);
 
-		return basicMap;
+		return mapElement;
 
 	}
 	@PostMapping("/img/upload")
