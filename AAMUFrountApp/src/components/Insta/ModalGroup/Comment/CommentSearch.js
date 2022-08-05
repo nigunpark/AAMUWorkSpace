@@ -15,7 +15,7 @@ import "../Upload/UploadSwiper.css";
 import dayjs from "dayjs";
 import { CommentsDisabled } from "@mui/icons-material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faX } from "@fortawesome/free-solid-svg-icons";
+import { faLocationDot, faX } from "@fortawesome/free-solid-svg-icons";
 
 function CommentSearch({ val, comment, setcommentModal, setcomments }) {
   let menuRef = useRef();
@@ -24,8 +24,7 @@ function CommentSearch({ val, comment, setcommentModal, setcomments }) {
 
   const [commentHeart, setCommentHeart] = useState(false);
   const [modalShow, setModalShow] = useState(false);
-  const [reply, setReply] = useState(false);
-  const [modalSet, setModal] = useState(false);
+  const [position, setPosition] = useState("");
   const [forReRender, setForReRender] = useState(false);
   let [isValid, setisValid] = useState(false);
 
@@ -59,6 +58,7 @@ function CommentSearch({ val, comment, setcommentModal, setcomments }) {
         },
       })
       .then((resp) => {
+        setPosition(resp.data.title);
         val.commuCommentList = resp.data.commuCommentList;
         val.isLike = resp.data.islike;
         setcomments(resp.data);
@@ -152,12 +152,6 @@ function CommentSearch({ val, comment, setcommentModal, setcomments }) {
       });
   }
 
-  // const CommentList = ({ val }) => {
-  //   return (
-
-  //   );
-  // };
-
   return (
     <Container1>
       <Overlay ref={commentRef1}>
@@ -213,15 +207,6 @@ function CommentSearch({ val, comment, setcommentModal, setcomments }) {
                   <FontAwesomeIcon icon={faX} />
                 </span>
               </div>
-              {/* <div className="dot1">
-                        <i className="fa-solid fa-ellipsis fa-2x"
-                        ref={menuRef}
-                        onClick={() => setModalShow(!modalShow)}></i>
-                        {/* {modalShow 
-                            &&<MenuModal setlist={setlist} setModalShow={setModalShow} seteditModal={seteditModal} val={val}/>
-                        } 
-                        
-                    </div>  */}
             </div>
             <div className="recommend">
               <div className="recommend-down">
@@ -255,14 +240,8 @@ function CommentSearch({ val, comment, setcommentModal, setcomments }) {
                           <span> {val.ctitle}</span>
                         </p>
                         <p className="userName">
-                          <strong
-                            style={{ fontSize: "13px", marginRight: "5px" }}
-                          >
-                            {val.id}
-                          </strong>
-                          <span style={{ fontFamily: "normal" }}>
-                            {val.content}
-                          </span>
+                          <strong style={{ fontSize: "13px", marginRight: "5px" }}>{val.id}</strong>
+                          <span style={{ fontFamily: "normal" }}>{val.content}</span>
                           {val.tname === null
                             ? ""
                             : val.tname.map((tname, i) => {
@@ -288,11 +267,7 @@ function CommentSearch({ val, comment, setcommentModal, setcomments }) {
                   //feedComments에 담겨있을 댓글 값을 CommentList 컴포넌트에 담아서 가져온다
                   return (
                     <div className="recommend-contents">
-                      <img
-                        className="likeimg"
-                        src={val.userprofile}
-                        alt="추사"
-                      />
+                      <img className="likeimg" src={val.userprofile} alt="추사" />
                       <div
                         style={{
                           width: "100%",
@@ -304,9 +279,7 @@ function CommentSearch({ val, comment, setcommentModal, setcomments }) {
                       >
                         <div style={{ display: "flex", flexDirection: "row" }}>
                           <p className="userName">
-                            <strong>
-                              {sessionStorage.getItem("username")}
-                            </strong>
+                            <strong>{sessionStorage.getItem("username")}</strong>
                           </p>
                           <p className="userName">{val.reply}</p>
                         </div>
@@ -341,9 +314,7 @@ function CommentSearch({ val, comment, setcommentModal, setcomments }) {
                             marginTop: "8px",
                           }}
                         >
-                          <p className="postDate">
-                            {dayjs(val.postdate).format("YYYY/MM/DD")}
-                          </p>
+                          <p className="postDate">{dayjs(val.postdate).format("YYYY/MM/DD")}</p>
                         </div>
                       </div>
                     </div>
@@ -376,14 +347,22 @@ function CommentSearch({ val, comment, setcommentModal, setcomments }) {
                   <i className="fa-regular fa-paper-plane fa-2x"></i>
                 </div>
               </div> */}
-              <div className="likeCount">
-                <h3>
-                  <strong style={{ fontSize: "20px" }}>좋아요 {val.likecount}개</strong>
-                </h3>
+              <div style={{ display: "flex", justifyContent: "space-between", width: "95%" }}>
+                <div className="likeCount">
+                  <h3>
+                    <strong style={{ fontSize: "20px" }}>좋아요 {val.likecount}개</strong>
+                  </h3>
+                </div>
+                <div className="postDate">
+                  <h3>{dayjs(new Date(val.postdate)).format("YYYY/MM/DD")}</h3>
+                </div>
               </div>
-              <div className="postDate">
-                <h3>{dayjs(new Date(val.postdate)).format("YYYY/MM/DD")}</h3>
-              </div>
+              <a href={`https://map.kakao.com/?q=${position}`}>
+                <div className="commentSearch_position">
+                  <FontAwesomeIcon icon={faLocationDot} />
+                  <span style={{ fontSize: "14px" }}>{position}</span>
+                </div>
+              </a>
             </div>
             <div className="comment1">
               <input
