@@ -180,14 +180,12 @@ function Comment({
       .then((resp) => {
         console.log(resp.data);
         setlist(resp.data);
-        setForReRender(!forReRender)
+        setForReRender(!forReRender);
       })
       .catch((error) => {
         console.log(error);
       });
   }
-
-  function handleFocus() {}
 
   return (
     <Container1>
@@ -215,7 +213,7 @@ function Comment({
                   return (
                     <SwiperSlide>
                       <li>
-                        <img className="divimage" alt="sample" src={image} />
+                        <img className="divimage1" alt="sample" src={image} />
                         {/* <img className='divimage' alt="sample" src='/images/bg1.png'/> */}
                       </li>
                     </SwiperSlide>
@@ -291,7 +289,10 @@ function Comment({
                       <div className="feeds-title">
                         <p>
                           <span className="userName">제목 </span>
-                          <span> {val.ctitle}</span>
+                          <span style={{ fontFamily: "normal" }}>
+                            {" "}
+                            {val.ctitle}
+                          </span>
                         </p>
                         <p className="userName">
                           <strong
@@ -299,16 +300,21 @@ function Comment({
                           >
                             {val.id}
                           </strong>
-                          <span style={{ fontFamily: "normal" ,whiteSpace: 'pre-wrap'}}>
+                          <span
+                            style={{
+                              fontFamily: "normal",
+                              whiteSpace: "pre-wrap",
+                            }}
+                          >
                             {val.content}
                           </span>
-                         
-                        </p>
-                        {val.tname === null
+
+                          {val.tname === null
                             ? ""
                             : val.tname.map((tname, i) => {
                                 return <span key={i}>{tname}</span>;
                               })}
+                        </p>
                       </div>
                     </div>
                     <div
@@ -349,15 +355,26 @@ function Comment({
                         }}
                       >
                         <div style={{ display: "flex", flexDirection: "row" }}>
-                          <p className="userName">
+                          <p className="userName" style={{ fontSize: "13px" }}>
                             <strong>
                               {sessionStorage.getItem("username")}
                             </strong>
                           </p>
-                          <p className="userName">{val.reply}</p>
-                        </div>
-                        <div className="comment-heart">
-                          {commentHeart ? (
+                          <p
+                            className="userName"
+                            style={{ fontFamily: "normal", width: "78%" }}
+                          >
+                            {val.reply}
+                          </p>
+                          <div
+                            style={{
+                              fontSize: "13px",
+                              alignSelf: "center",
+                              padding: "15px",
+                            }}
+                            className="comment-heart"
+                          >
+                            {/* {commentHeart ? (
                             <i
                               className="fa-solid fa-heart"
                               onClick={() => {
@@ -372,14 +389,15 @@ function Comment({
                                 setCommentHeart(!commentHeart);
                               }}
                             ></i>
-                          )}
-                          <i
-                            className="fa-regular fa-trash-can"
-                            ref={deleteRef}
-                            onClick={(e) => {
-                              deleteOne(val.cno);
-                            }}
-                          />
+                          )} */}
+
+                            <i
+                              className="fa-regular fa-trash-can "
+                              onClick={() => {
+                                deleteOne(val.cno);
+                              }}
+                            ></i>
+                          </div>
                         </div>
                         <div
                           style={{
