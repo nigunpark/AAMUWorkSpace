@@ -72,7 +72,58 @@
 .kmap__right-btn__container div:hover {
   transform: scale(1.1);
 }
+.kmap__weather__container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: absolute;
+  top: 85px;
+  right: 580px;
+  width: 230px;
+  height: 60px;
+  z-index: 100;
+  border-radius: 5px;
+  background: var(--cardColor);
+  overflow-y: auto;
+}
 
+.kmap__weather__container::-webkit-scrollbar {
+  display: none;
+  /* width: 8px; */
+}
+.kmap__weather-img {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.kmap__weather-img-container {
+  width: 40px;
+  height: 40px;
+}
+
+.kmap__weather-img-container img {
+  width: 100%;
+  object-fit: cover;
+  filter: drop-shadow(1px 1px 1px rgba(0, 0, 0, 0.7));
+}
+.kmap__weather {
+  width: 100%;
+  height: 100%;
+  padding: 7px 5px;
+  display: flex;
+  font-size: 13px;
+  gap: 1rem;
+}
+.kmap__weather__wrapper {
+  position: relative;
+  padding: 4px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  gap: 5px;
+}
 .kmap__left-btn__container {
   display: flex;
   flex-direction: column;
@@ -125,8 +176,7 @@
 
 .slide-in-left-public_transport {
   transition: 0.5s;
-  animation: slide-in-left-transport 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)
-    both;
+  animation: slide-in-left-transport 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
 }
 .slide-in-left-or {
   transition: 0.5s;
@@ -135,8 +185,7 @@
 }
 .slide-in-left-personal {
   transition: 0.5s;
-  animation: slide-in-left-personal 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)
-    both;
+  animation: slide-in-left-personal 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
   animation-delay: 0.3s;
 }
 
