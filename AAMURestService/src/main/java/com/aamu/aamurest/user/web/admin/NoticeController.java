@@ -61,7 +61,7 @@ public class NoticeController {
 
 	// 게시물 등록
 	@PostMapping(value = "/notice/write")
-	public Map noticeInsert(@RequestParam Map map, HttpServletRequest req) {
+	public Map noticeInsert(@RequestBody Map map, HttpServletRequest req) {
 		System.out.println("등록: " + map);
 		Map resultMap = new HashMap();
 		int affected = noticeService.noticeInsert(map);
