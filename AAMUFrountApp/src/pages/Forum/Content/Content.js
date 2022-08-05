@@ -45,9 +45,12 @@ const Content = () => {
         setListData(resp.data);
       })
       .catch((error) => {
-        console.log((error) => console.log("글 목록 가져오기 실패(Content.js) :", error));
+        console.log((error) =>
+          console.log("글 목록 가져오기 실패(Content.js) :", error)
+        );
       });
   };
+  // useEffect(() => {}, []);
   useEffect(() => {
     selectList();
     bookMarkList();
@@ -56,7 +59,7 @@ const Content = () => {
 
   const listSearch = (inSelectText) => {
     if (kindOfSearch == "" || inSelectText == "") {
-      return alert("검색어와 검색할 주제를 선택해주세요.");
+      return alert("검색어와 주제를 선택해주세요.");
     }
     let token = sessionStorage.getItem("token");
     axios
@@ -75,7 +78,7 @@ const Content = () => {
         searchOne.current.value = null;
       })
       .catch((error) => {
-        console.log((error) => console.log("검색 목록 가져오기 실패(Content.js) :", error));
+        console.log("검색 목록 가져오기 실패(Content.js) :", error);
       });
   };
 
@@ -158,14 +161,18 @@ const Content = () => {
               {/* {console.log("kindOfSearch :", kindOfSearch)} */}
             </FormControl>
             <div className="search__warpper__minCon">
-              <input type="text" placeholder="검색어를 입력하세요" ref={searchOne} />
+              <input
+                type="text"
+                placeholder="검색어를 입력하세요"
+                ref={searchOne}
+              />
               <span>
                 <FontAwesomeIcon
                   icon={faMagnifyingGlass}
                   className="search__i__minCon"
                   onClick={() => {
                     let inSelectText = searchOne.current.value;
-                    console.log("searchOne :", inSelectText);
+                    console.log("searchOne (검색어) :", inSelectText);
                     listSearch(inSelectText);
                   }}
                 />
@@ -174,7 +181,13 @@ const Content = () => {
           </div>
           <div className="card__items_minCon">
             {listData.map((val, idx) => {
-              return <ContentItem setDetailOne={setDetailOne} detail={val} setIsOpen={setIsOpen} />;
+              return (
+                <ContentItem
+                  setDetailOne={setDetailOne}
+                  detail={val}
+                  setIsOpen={setIsOpen}
+                />
+              );
             })}
             {/* {console.log("내가 누른 글 번호 :", detailOne.rbn)} */}
           </div>
