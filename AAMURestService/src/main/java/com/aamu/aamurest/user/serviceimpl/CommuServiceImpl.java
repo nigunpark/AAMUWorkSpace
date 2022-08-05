@@ -1,6 +1,10 @@
 package com.aamu.aamurest.user.serviceimpl;
 
 import java.io.File;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +19,9 @@ import org.springframework.transaction.support.TransactionTemplate;
 import com.aamu.aamurest.user.service.CommuCommentDTO;
 import com.aamu.aamurest.user.service.CommuDTO;
 import com.aamu.aamurest.user.service.CommuService;
+import com.aamu.aamurest.user.service.UsersDTO;
+import com.aamu.aamurest.util.UserUtil;
+
 
 @Service("commuService")
 public class CommuServiceImpl implements CommuService<CommuDTO>{
@@ -23,6 +30,9 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 
 	@Autowired
 	private TransactionTemplate transactionTemplate;
+	
+	@Autowired
+	private MainDAO mainDao;
 
 	//글 목록용
 	@Override
@@ -78,6 +88,132 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 	public List<String> commuSelectTagName(String lno) {
 		return dao.commuSelectTagName(lno);
 	}
+	
+	//글 목록용_추천 계정
+	@Override
+	public List<String> commuRecommendUser(Map map) {//id(세션id)
+		//기준되는id (세션id)
+		String standId = map.get("id").toString(); 
+		
+		//standTheme 로그인 한 사람 사용자정보 얻기
+		List<String> standTheme=infoUser(map);
+		
+		//int stand = standTheme.size();
+		String resultId = null;
+		double result = 0;
+		List<Map<String,Object>> resultList = new ArrayList<Map<String,Object>>();
+		Map resultMap = new HashMap<>();
+		for(String id:mainDao.getAllUser()) { //모든user id기 얻어서
+			if(!(standId.equals(id))){ //로그인id가 아닐 때 진행
+				map.put("id", id); //여기는 로그인id가 아닌 id를 셋팅
+				//standTheme 1.테마네임리스트 얻기
+				List<String> compareTheme = infoUser(map);
+				//교집합/합집합
+				double ins = UserUtil.intersection(standTheme, compareTheme)/(standTheme.size()+compareTheme.size());
+				if(result<ins) { //ins가 0보다 클때 
+					result = ins; //result=0.45
+					resultId = id; //resultId=ID
+					resultMap.put("id", resultId);
+					resultMap.put("ins", ins);
+					resultList.add(resultMap);
+				}
+			}
+		}/////////////for
+		
+		//내림차순
+		Collections.sort(resultList, new Comparator<Map<String, Object>>() {
+			@Override
+			public int compare(Map<String, Object> o1, Map<String, Object> o2) {
+				Double ins1 = (Double) o1.get("ins");
+				Double ins2 = (Double) o2.get("ins");
+				return ins1.compareTo(ins2);
+			}
+		}); 
+		System.out.println(resultList);
+		
+//		double rInt=0; //rInt가 ins
+//		ArrayList<Double> rList=new ArrayList<>();
+//		for(Map rMap:resultList) {
+//			rInt=Double.parseDouble(rMap.get("ins").toString());
+//			rList.add(rInt);
+//		}
+//		
+//		//내림차순 정렬
+//		List insList = new Vector<>(); //insList에 ins가 내림차순으로 5개 저장되어있음
+//		Collections.sort(rList,Collections.reverseOrder());//[7,6,5,4,3,2,1,0]
+//		for(int i=0; i<5; i++) {
+//			insList.add(rList.get(i));
+//		}//insList=[7,6,5,4,3]
+//		
+//		for(Map rMap:resultList) {
+//			rInt=Double.parseDouble(rMap.get("ins").toString());
+//			for(int i=0; i<insList.size(); i++) { //insList=[7,6,5,4,3]
+//				if(Double.parseDouble(insList.get(i).toString())==rInt) {
+//					rMap.get("id");
+//				}
+//			}
+//			
+//		}
+		
+		
+		
+		
+		return null;
+	}
+	
+	
+	
+	//추천_테마 
+	public List<String> infoUser(Map map){
+		//standTheme 1.테마네임리스트 얻기
+		List<String> standTheme = mainDao.getUserTheme(map); 
+		UsersDTO dto = mainDao.getUserChar(map); //id에 따른 users테이블에 있는 모든것 얻기 
+		//standTheme 2.나이대 20대, 30대 ...
+		LocalDate now = LocalDate.now();
+		System.out.println("dto에 뭐가 있니?"+dto);
+		int age = now.getYear()-Integer.parseInt(dto.getSocialnum().substring(0, 2))+1900;
+		age = age-age%10; 
+		standTheme.add(String.valueOf(age));//standTheme에 나이대 추가
+		//standTheme 3.태그(id에 따른)
+		List<String> allTags=dao.getAllTags(map);
+		for(String allTag:allTags) {
+			standTheme.add(allTag);
+		}
+		//standTheme 4.성별 추가
+		standTheme.add(dto.getGender());
+		return standTheme;
+	}
+	
+	//추천
+	/*
+	@Override
+	public List<String> getUserTheme(Map map) {
+		List<String> standTheme = dao.getUserTheme(map); //테마네임리스트 얻기
+		UsersDTO dto = dao.getUserChar(map); //id에 따른 users테이블에 있는 모든것 얻기 
+		LocalDate now = LocalDate.now();
+		int age = now.getYear()-Integer.parseInt(dto.getSocialnum().substring(0, 2))+1900; //20대, 30대 ...
+		age = age-age%10;
+		String standId = map.get("id").toString(); //기준되는id(세션id)
+		standTheme.add(String.valueOf(age));//테마네임리스트에 나이대 추가
+		standTheme.add(dto.getGender());//테마네임리스트에 성별 추가
+		int stand = standTheme.size(); //테마네임 length
+		String resultId = null;
+		double result = 0;
+		for(String id:dao.getAllUser()) {
+			if(!(standId.equals(id))){
+				map.put("id", id);
+				List<String> compareTheme = dao.getUserTheme(map);
+				double ins = intersection(standTheme, compareTheme)/standTheme.size()+compareTheme.size();
+				if(result<ins) {
+					result = ins;
+					resultId = id;
+				}
+			}
+		}
+		
+		return standTheme;
+	}
+	*/
 	
 	//글 검색용
 	@Override
@@ -497,13 +633,6 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 			System.out.println("tnameStr:"+tnameStr);
 			tnameList.add(tnameStr);//[서울] [서울,서울여행]
 		}
-//		String sharpTnameString=(String) map.get("tname");//[#서울,#서울여행]
-//		System.out.println("리스트에는 뭐가 들어있을가?"+sharpTnameString);
-//		List<String> tnameList = new Vector<>();
-//		for(String tnameString:sharpTnameString) { //#서울
-//			String tnameStr = tnameString.substring(0); //서울
-//			tnameList.add(tnameStr);//[서울] [서울,서울여행]
-//		}
 		for(int i=0; i<tnameList.size();i++) {
 			map.put("tname", tnameList.get(i));//tname:서울
 			List<String> tagLists=dao.commuSelectTag(map);

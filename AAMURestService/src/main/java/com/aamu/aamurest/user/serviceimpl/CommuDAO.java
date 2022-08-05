@@ -36,6 +36,11 @@ public class CommuDAO {
 		return template.selectOne("commuSearchTotalCount",map);
 	}
 	
+	//글 목록용_추천 계정
+	public List<String> getAllTags(Map map){
+		return template.selectList("getAllTags",map);
+	}
+	
 	//글 검색용
 	public List<String> commuSearachList(Map map){
 		System.out.println("dao map:"+map.get("searchColumn"));

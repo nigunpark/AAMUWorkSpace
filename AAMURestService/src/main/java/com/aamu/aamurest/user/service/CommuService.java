@@ -28,6 +28,9 @@ public interface CommuService<T> {
 	//글 목록용_tname 얻기
 	List<String> commuSelectTagName(String lno);
 	
+	//글 목록용_추천 계정
+	List<String> commuRecommendUser(Map map);
+	
 	//글 검색용
 	List<String> commuSearachList(Map map);
 

@@ -106,6 +106,8 @@ public class CommuController {
 			dto.setFollowercount(commuService.commuFollowerCount(map));
 			//내가 팔로잉하는 계정 수 셋팅
 			dto.setFollowingcount(commuService.commuFollowingCount(map));
+			//추천 계정 셋팅
+			commuService.commuRecommendUser(map);
 			
 		}/////for
 //		System.out.println("몇개 넘어가니:"+list.size());
@@ -241,21 +243,6 @@ public class CommuController {
 		dto.setCommuCommentList(commentList);
 		return dto;
 	}
-	
-
-	//글 수정용: List ver
-	/*
-	@PutMapping("/gram/edit")
-	public List<CommuDTO> commuUpdate(@RequestBody Map map, HttpServletRequest req) {
-		int affected=commuService.commuUpdate(map);
-
-		//글 목록 뿌려주기
-		List<CommuDTO> lists=commuSelectList(map, req);
-
-		if(affected==1) return lists;
-		else return null;
-	}
-	*/
 
 	//글 수정용: Map ver
 	@PutMapping("/gram/edit")
@@ -424,42 +411,35 @@ public class CommuController {
 	
 	
 	@GetMapping("/weather")
-	public Map weather(@RequestParam Map map,@RequestParam List<String> searchDates) { //searhWord 지역 searchDate 
+	public Map weather(@RequestParam Map map,@RequestParam List<String> searchDate, HttpServletRequest req) { //searhWord 지역 searchDate 
 		String searchWord=map.get("searchWord").toString();
-		//List<String> searchDates=(List<String>)map.get("searchDates");
 		System.out.println("searchWord:"+searchWord);
-		System.out.println("searchDates:"+searchDates);
-		String sDateStr = String.join(",", searchDates);
-//		MultiValueMap requestBody = new LinkedMultiValueMap<>();
-//		requestBody.add("searchWord", map.get("searchWord").toString());
-//		requestBody.add("searchDate", searchDate);
-		//2개가 넘어오면 
-		String uri="http://localhost:5020/weather?searchWord="+searchWord+"&searchDate="+sDateStr;
-//		for(String searchDate:searchDates) {
-//			uri+="&searchDate="+searchDate; //"http://localhost:5020/weather?searchWord="+searchWord+"&searchDate="+searchDate;
-//		}
-		System.out.println("uri:"+uri);
-		//int sum=0;
-		//sum+=sum+0; //sum=sum+1; 
-		//String uri= "";
-		//uri+="http://localhost:5020/weather?searchWord="+searchWord;
+		System.out.println("searchDate:"+searchDate);
+		String sDates = String.join(",", searchDate); //날씨리스트를 스트링으로 변환
 		
-		//String uri="http://localhost:5020/weather?searchWord="+searchWord+"searchDate=";
+		//파이썬으로 보낼 uri
+		String uri="http://localhost:5020/weather?searchWord="+searchWord+"&searchDate="+sDates;
+		//System.out.println("uri:"+uri);
+		
+		//제이슨형태로 보낸다
 		HttpHeaders header = new HttpHeaders();
 		header.add("Content-Type", "application/json");
-		HttpEntity httpEntity = new HttpEntity<>(/*requestBody,*/header);
+		HttpEntity httpEntity = new HttpEntity<>(header);
 		
 		ResponseEntity<Map> responseEntity =
 				restTemplate.exchange(uri, HttpMethod.GET,httpEntity, Map.class);
-//		System.out.println(responseEntity.getBody());
 		Map returnMap = responseEntity.getBody();
-		//returnMap.get("weather");
 		
+		//이미지셋팅
+		List<Map> weatherMaps=(List<Map>)returnMap.get("weather");
+		for(Map weatherMap:weatherMaps) {//구름많음, 맑음 ..
+			//날씨 state에 따른 날씨이미지 가져오기
+			String weatherImage=FileUploadUtil.requestOneFile(weatherMap.get("weatherState").toString(), "/resources/weather", req);
+			weatherMap.put("weatherImage", weatherImage+".png");
+		}
+		System.out.println("결과값:"+returnMap);
 		return returnMap;
 	}
-	
-	
-	
 	
 	
 

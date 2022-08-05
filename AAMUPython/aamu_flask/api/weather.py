@@ -30,8 +30,10 @@ class Weather(Resource):
 
             #스프링에서 보낸 파라미터 받기
             searchWord = request.args['searchWord']
-            searchDate = request.args['searchDate'] #[]
-            print(searchWord)
+            print(searchWord) #서울
+            sDates = request.args['searchDate'] #2022.8.04,2022.8.05 (문자열)
+            print(sDates)
+            searchDate=sDates.split(",") #[2022.8.04,2022.8.05]
             print(searchDate)
 
             # 스프링에서 보낸 requestBody 받기

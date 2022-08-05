@@ -57,7 +57,7 @@
 	
 	<!-- 글 검색용 -->
 	<select id="commuSearachList" parameterType="Map" resultType="String">
-		SELECT ${searchColumn} FROM ${table} WHERE ${searchColumn} LIKE #{searchWord}||'%'
+		SELECT DISTINCT ${searchColumn} FROM ${table} WHERE ${searchColumn} LIKE #{searchWord}||'%'
 	</select>
 	
 	<!-- 글 생성용 -->
@@ -231,6 +231,11 @@
 	<!-- 글 목록용_tags테이블에 tname 셀렉트 -->
 	<select id="commuSelectTagName" parameterType="String" resultType="String">
 		SELECT t.tname FROM commutag ct JOIN tags t ON ct.tno=t.tno WHERE ct.lno=#{lno}
+	</select>
+	
+	<!-- 글 목록용_추천 계정 -->
+	<select id="getAllTags" parameterType="Map" resultType="String">
+		SELECT t.tname FROM tags t JOIN commutag ct ON t.tno=ct.tno JOIN community c ON c.lno=ct.lno WHERE id=#{id}
 	</select>
 	
 	<!-- tags테이블에 tno 셀렉트 -->
