@@ -25,7 +25,7 @@ public interface BBSService {
 	int bbsDelete(Map map);
 	
 	//글 북마크
-	Boolean bbsBookmark(Map map);
+	boolean bbsBookmark(Map map);
 	
 	//글 북마크 목록
 	List<BBSDTO> bbsBookmarkList(Map map);
@@ -51,6 +51,8 @@ public interface BBSService {
 	
 	//평점 업데이트
 	int updateRate(Map map);
+
+
 
 
 }

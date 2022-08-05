@@ -74,6 +74,9 @@ public class BBSDAO {
 	
 	//글 검색 목록
 	public List<String> bbsSearchList(Map map) {
+		System.out.println("dao map:"+map.get("searchColumn"));
+		System.out.println("dao map:"+map.get("searchWord"));
+		System.out.println("dao map:"+map.get("table"));
 		return template.selectList("bbsSearchList");
 	}
 
@@ -126,11 +129,8 @@ public class BBSDAO {
 	public List<BBSDTO> searchList(){
 		return template.selectList("searchList");
 	}
-	/*
-	public Boolean bookmark(Map map){
-		return template.bookmark("bookmark",map);
-	}
-	*/
+
+
 
 }
 

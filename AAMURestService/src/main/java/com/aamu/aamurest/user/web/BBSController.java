@@ -121,8 +121,7 @@ public class BBSController {
 	//글 북마크하기
 	@GetMapping("/bbs/bookmark")
 	public Map bbsBookmark(@RequestParam Map map) { //id, rbn
-		Boolean affected=bbsService.bbsBookmark(map);
-		
+		boolean affected=bbsService.bbsBookmark(map);
 		Map resultMap = new HashMap();
 		System.out.println("북마크 여부:"+map);
 		if(affected) { //true

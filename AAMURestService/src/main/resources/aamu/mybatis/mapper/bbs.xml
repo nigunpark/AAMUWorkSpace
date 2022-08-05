@@ -13,12 +13,18 @@
 				<when test='searchColumn == "title"'>
 					WHERE ${searchColumn} LIKE '%'||#{searchWord}||'%'
 				</when>
+				<when test='searchColumn == "id"'>
+					WHERE ${searchColumn} LIKE #{searchWord}
+				</when>
+				<when test='searchColumn == "themename"'>
+					WHERE ${searchColumn} LIKE #{searchWord}
+				</when>
 				<otherwise>
 					WHERE ${searchColumn} LIKE #{searchWord}
 				</otherwise>
 			</choose>
 		</if>
-		<if test="contentid != null">where p.contentid=#{contentid}</if>
+		<if test="themeid != null">where p.themeid=#{themeid}</if>
 		ORDER BY rbbs.rbn DESC
 	</select>
 	
@@ -56,8 +62,8 @@
 	 </delete>
 	 
 	 <!-- 북마크하기 -->
-	 <select id="bbsSelectBookmark" resultType="BBSDTO" parameterType="map">
-		SELECT * from bookmark WHERE id=#{id} AND rbn=#{rbn}
+	 <select id="bbsSelectBookmark" resultType="int" parameterType="map">
+		SELECT COUNT(*) FROM bookmark WHERE id=#{id} AND rbn=#{rbn}
 	</select>
 	 
 	 <!-- 북마크 목록 -->
@@ -75,9 +81,9 @@
 		DELETE FROM bookmark WHERE id=#{id} AND rbn=#{rbn}
 	</delete>
 	
-	<!-- 글 검색 목록 -->
+	<!-- 글 검색하기 -->
 	<select id="bbsSearchList" parameterType="Map" resultType="String">
-		SELECT rbbs.* FROM routebbs rbbs JOIN ON WHERE ${searchColumn} LIKE '%'||#{searchWord}||'%'
+		SELECT ${searchColumn} FROM ${table} WHERE ${searchColumn} LIKE '%'||{searchword}||'%'
 	</select>
 	  
 	 <!--                            리뷰                                   -->

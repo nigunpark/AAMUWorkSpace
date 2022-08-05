@@ -65,32 +65,27 @@ public class BBSServiceImpl implements BBSService{
 	
 	//글 북마크하기
 	@Override
-	public Boolean bbsBookmark(Map map) {
-		
+	public boolean bbsBookmark(Map map) {
 	int bbsSelectBookmarkAffected=dao.bbsSelectBookmark(map);
-	int bbsMookmarkInsertAffected, bbsBookmarkDeleteAffected=0;
-	Map resultMap = new HashMap();
-
 	if(bbsSelectBookmarkAffected==0) {
-		System.out.println("여긴옴?");
-		bbsMookmarkInsertAffected=dao.bbsBookmarkInsert(map);
-		if(bbsMookmarkInsertAffected==1) return true;
-		else return null;
+		System.out.println("북마크를 성공");
+		if(dao.bbsBookmarkInsert(map)==1) return true;
+		else return false;
 	}
 	else { //다시 누를 경우 == 북마크 취소
-		bbsBookmarkDeleteAffected=dao.bbsBookmarkDelete(map);
-		if(bbsBookmarkDeleteAffected==1) return false;
-		else return null;
+		System.out.println("북마크를 삭제");
+		if(dao.bbsBookmarkDelete(map)==1) return false;
+		else return true;
 		}
 	}
-	
+
+
 	//글 북마크 목록
 	@Override
 	public List<BBSDTO> bbsBookmarkList(Map map) {
 		List<BBSDTO> bookmarkList = dao.bbsBookmarkList(map);
 		List<BBSDTO> returnList = new Vector<>();
-		for(BBSDTO dto:bookmarkList) {
-			
+		for(BBSDTO dto:bookmarkList) {	
 			int rbn = dto.getRbn();
 			dto.setReviewList(dao.reviewSelectList(rbn));
 			returnList.add(dto);
@@ -169,13 +164,16 @@ public class BBSServiceImpl implements BBSService{
 	@Override
 	public List<String> bbsSearchList(Map map) {
 		if(map.get("searchColumn").equals("id")) {
-			//map.put("searchWord", map.get("searchWord").toString()); 어퍼케이스 하려고 넣었나?
 			map.put("table", "users");
 			List<String> list=dao.bbsSearchList(map);
 			return list;
 		}
 		else if(map.get("searchColumn").equals("title")){
-			map.put("table", "community");
+			map.put("table", "routebbs");
+			return dao.bbsSearchList(map);
+		}
+		else if(map.get("searchColumn").equals("themename")){
+			map.put("table", "theme");
 			return dao.bbsSearchList(map);
 		}
 		return dao.bbsSearchList(map);
@@ -221,6 +219,7 @@ public class BBSServiceImpl implements BBSService{
 	public int updateRate(Map map) {
 		return dao.updateRate(map);
 	}
+
 
 }
 	
