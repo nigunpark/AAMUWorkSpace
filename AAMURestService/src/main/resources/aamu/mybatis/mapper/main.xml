@@ -153,4 +153,14 @@
 	<select id="getUserTheme" parameterType="Map" resultType="String">
 		SELECT themename from theme t JOIN aamuinter a ON t.themeid=a.themeid WHERE id=#{id}
 	</select>
+	<select id="selectTopBBS" resultType="int">
+		select rbn from routebbs where <![CDATA[rownum<5]]> order by rateavg desc
+	</select>
+	<select id="getTopAttr" resultType="attrDTO">
+		select p.*,i.* from places p join placesinfo i on p.contentid=i.contentid join route r on r.contentid=p.contentid 
+		where p.contenttypeid=12 and r.rbn in 
+		(SELECT rbbs.rbn FROM 
+		(SELECT ROW_NUMBER() OVER(ORDER BY rb.rateavg DESC) AS ROW_NUM,
+		rb.*FROM routebbs rb) rbbs WHERE rbbs.ROW_NUM <![CDATA[<=2]]>)
+	</select>
 </mapper>

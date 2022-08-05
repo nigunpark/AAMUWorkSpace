@@ -176,4 +176,14 @@ public class MainDAO {
 		return template.selectOne("bbsSelectOne",rbn);
 	}
 
+	public List<Integer> selectTopBBS() {
+
+		return template.selectList("selectTopBBS");
+	}
+
+	public List<AttractionDTO> getTopAttr() {
+		
+		return template.selectList("getTopAttr");
+	}
+
 }

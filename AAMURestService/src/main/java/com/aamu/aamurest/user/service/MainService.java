@@ -60,6 +60,8 @@ public interface MainService{
 
 	BBSDTO getRouteBBS(int rbn, HttpServletRequest req);
 
-	List<Integer> selectTopBBS();
+	List<BBSDTO> selectTopBBS(HttpServletRequest req);
+
+	List<AttractionDTO> getTopAttr();
 
 }

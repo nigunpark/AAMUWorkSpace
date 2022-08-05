@@ -614,15 +614,24 @@ public class MainController {
 					restTemplate.exchange(uri, HttpMethod.POST,httpEntity, Map.class);
 			System.out.println(responseEntity.getBody());
 			List<Map> rbnList = (List)responseEntity.getBody().get("rbns");
+			int rank = 1;
 			for(Map rbnMap : rbnList) {
-				
 				BBSDTO dto = service.getRouteBBS(Integer.parseInt(rbnMap.get("rbn").toString()),req);
+				if(rank<3) {
+					for(RouteDTO routeDTO:dto.getRouteList()) {
+						if(routeDTO.getContenttypeid()!=32) {
+							list.add(service.selectOnePlace(routeDTO.getContentid(), req));
+						}
+					}
+					rank++;
+				}
 				bbsList.add(dto);
 			}
 			
 		}
 		else {
-			service.selectTopBBS();
+			list = service.getTopAttr();
+			bbsList =  service.selectTopBBS(req);
 		}
 		mapElement.put("placeInfo", list);
 		mapElement.put("bbsInfo", bbsList);

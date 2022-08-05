@@ -710,12 +710,26 @@ public class MainServiceImpl implements MainService{
 		dto.setRouteList(dao.selectRouteList(rbn));
 		dto.setReviewList(bbsDao.reviewSelectList(rbn));
 		List<String> photolist =bbsDao.bbsSelectPhotoList(rbn);
-		dto.setPhoto(FileUploadUtil.requestFilePath(photolist, "/resoures/bbsUpload", req));
+		dto.setPhoto(FileUploadUtil.requestFilePath(photolist, "/resources/bbsUpload", req));
 		return dto;
 	}
 	@Override
-	public List<Integer> selectTopBBS() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<BBSDTO> selectTopBBS(HttpServletRequest req) {
+		List<Integer> rbnList = dao.selectTopBBS();
+		List<BBSDTO> bbsList = new Vector<>();
+		for(Integer rbn : rbnList) {
+			BBSDTO dto = dao.getRouteBBS(rbn);
+			dto.setRouteList(dao.selectRouteList(rbn));
+			dto.setReviewList(bbsDao.reviewSelectList(rbn));
+			List<String> photolist =bbsDao.bbsSelectPhotoList(rbn);
+			dto.setPhoto(FileUploadUtil.requestFilePath(photolist, "/resources/bbsUpload", req));
+			bbsList.add(dto);
+		}
+		return bbsList;
+	}
+	@Override
+	public List<AttractionDTO> getTopAttr() {
+		
+		return dao.getTopAttr();
 	}
 }

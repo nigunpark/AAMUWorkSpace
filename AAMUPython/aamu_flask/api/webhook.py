@@ -6,8 +6,10 @@ class WebHook(Resource):
         dialog_response = request.get_json()
         query = dialog_response['queryResult']['queryText']
         parameters = dialog_response['queryResult']['parameters']
-        loc = parameters['loc']
-        place = parameters['place']
+        if parameters.get('loc') != None:
+            loc = parameters['loc']
+        if parameters.get('place') != None:
+            place = parameters['place']
         print('진행하자')
         if place.find('박')==-1:
             print('숙소나 여행지')
