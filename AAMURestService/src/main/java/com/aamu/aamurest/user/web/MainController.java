@@ -521,7 +521,7 @@ public class MainController {
 
 	@GetMapping("/info/search")
 	public List<AttractionDTO> search(@RequestParam Map map,HttpServletRequest req){
-
+		
 		List<AttractionDTO> lists =service.searchTwoPlace(map,req);
 
 		return lists;
@@ -645,6 +645,7 @@ public class MainController {
 		returnMap.put("rbn", null);
 		String rbn = null;
 		if(message.contains("searchRoute")) {
+			/*
 			message = message.split("searchRoute")[0].trim();
 			System.out.println("마지막 응답 메시지:"+message);
 			rbn = service.searchPlanner(message);
@@ -660,6 +661,11 @@ public class MainController {
 				
 			
 			returnMap.put("message", message);
+			*/
+			uri="http://192.168.0.19:5020/recommend";
+			responseEntity =
+					restTemplate.exchange(uri, HttpMethod.POST,httpEntity, Map.class);
+			return responseEntity.getBody();
 		}
 		else if(message.contains("searchPlace")){
 			message = message.split("searchPlace")[0].trim();

@@ -14,4 +14,9 @@ public interface UsersService {
 
 	List<Map> selectAllTheme();
 
+	int updateTheme(Map map);
+
+	List selectUserTheme(Map map);
+
+
 }

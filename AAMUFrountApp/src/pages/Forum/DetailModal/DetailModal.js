@@ -216,6 +216,9 @@ const DetailModal = ({
       })
       .then((resp) => {
         console.log("북마크 추가/취소 성공 (DetailModal.js) :", resp.data);
+        // alert("북마크 되었어요.");
+        // let bool = window.confirm("마이페이지로 이동하겠어요?");
+        // if (bool) navigate("/myPage");
       })
       .catch((error) => {
         console.log("북마크 실패 (DetailModal.js) :", error);

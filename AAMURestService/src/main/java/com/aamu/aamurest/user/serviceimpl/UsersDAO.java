@@ -50,4 +50,19 @@ public class UsersDAO {
 		return template.insert("insertUserTheme", map);
 	}
 
+	public int deleteTheme(Map map) {
+		
+		return template.delete("deleteTheme", map);
+	}
+
+	public List selectUserTheme(Map map) {
+		
+		return template.selectList("selectUserTheme", map);
+	}
+
+	public Map selectOneTheme(String themeid) {
+		
+		return template.selectOne("selectOneTheme", themeid);
+	}
+
 }

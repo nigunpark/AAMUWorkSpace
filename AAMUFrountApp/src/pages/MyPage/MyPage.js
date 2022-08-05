@@ -22,7 +22,7 @@ import ContentItem from "../Forum/Content/ContentItem";
 import MyBookMarkBox from "./MyPageBox/MyBookMarkBox";
 import MyTheme from "./MyPageBox/MyTheme";
 import DetailModal from "../Forum/DetailModal/DetailModal";
-import Spinner from "../../components/Insta/Spinner";
+import MyThemeLists from "./MyPageBox/MyThemeLists";
 const MyPage = () => {
   let [clickTab, setClickTab] = useState(0);
 
@@ -137,7 +137,7 @@ const MyPage = () => {
   useEffect(() => {
     selectList();
     searchBar();
-    // bookMarkList();
+    bookMarkList();
     // myTheme();
   }, [clickTab]);
 
@@ -339,12 +339,40 @@ const MyPage = () => {
 };
 
 function Title({ clickTab }) {
+  const [theme, setTheme] = useState();
+
+  const getMyThemes = async () => {
+    let token = sessionStorage.getItem("token");
+
+    await axios
+      .get("/aamurest/user/theme", {
+        params: {
+          id: sessionStorage.getItem("username"),
+        },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((resp) => {
+        console.log("나의 테마 : ", resp.data);
+        setTheme(resp.data);
+      })
+      .catch((error) => {
+        console.log("나의 테마 가져오기 실패", error);
+      });
+  };
+  useEffect(() => {
+    getMyThemes();
+  }, []);
+
   //타이틀
   if (clickTab === 0) {
     return (
       <>
         <div className="projects-title">이런여행 어때 게시판 정보</div>
-        <MyTheme />
+        <div style={{ display: "flex", flexDirection: "row" }}>
+          {theme == undefined ? null : <MyThemeLists theme={theme} />}
+        </div>
       </>
     );
   } else if (clickTab === 1) {
