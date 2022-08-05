@@ -17,16 +17,22 @@ import { CommentsDisabled } from "@mui/icons-material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faX } from "@fortawesome/free-solid-svg-icons";
 
-function CommentSearch({ val, comment, setcommentModal, setcomments }) {
+function CommentSearch({
+  val,
+  setForReRender,
+  forReRender,
+  setcommentModal,
+  setcomments,
+}) {
   let menuRef = useRef();
-  let replyRef = useRef();
+  let replyRef1 = useRef();
   let commentRef1 = useRef();
 
   const [commentHeart, setCommentHeart] = useState(false);
   const [modalShow, setModalShow] = useState(false);
   const [reply, setReply] = useState(false);
   const [modalSet, setModal] = useState(false);
-  const [forReRender, setForReRender] = useState(false);
+  // const [forReRender, setForReRender] = useState(false);
   let [isValid, setisValid] = useState(false);
 
   function menuModalRef(e) {
@@ -66,7 +72,7 @@ function CommentSearch({ val, comment, setcommentModal, setcomments }) {
       .catch((error) => {
         console.log(error);
       });
-    replyRef.current.value = "";
+    replyRef1.current.value = "";
   }
 
   useEffect(() => {
@@ -89,14 +95,14 @@ function CommentSearch({ val, comment, setcommentModal, setcomments }) {
       .then((resp) => {
         val.isLike = resp.data.isLike;
         val.likecount = resp.data.likecount;
-        // setForReRender(!forReRender);
+        setForReRender(!forReRender);
       })
       .catch((error) => {
         console.log(error);
       });
   }
 
-  function post(replyRef) {
+  function post(replyRef1) {
     //유효성 검사를 통과하고 게시버튼 클릭시 발생하는 함수
 
     let token = sessionStorage.getItem("token");
@@ -105,7 +111,7 @@ function CommentSearch({ val, comment, setcommentModal, setcomments }) {
         "/aamurest/gram/comment/edit",
         {
           id: sessionStorage.getItem("username"),
-          reply: replyRef.current.value,
+          reply: replyRef1.current.value,
           lno: val.lno,
         },
         {
@@ -124,7 +130,7 @@ function CommentSearch({ val, comment, setcommentModal, setcomments }) {
       .catch((error) => {
         console.log(error);
       });
-    replyRef.current.value = "";
+    replyRef1.current.value = "";
   }
 
   let [deleteOne1, setdeleteOne1] = useState(false);
@@ -252,7 +258,10 @@ function CommentSearch({ val, comment, setcommentModal, setcomments }) {
                       <div className="feeds-title">
                         <p>
                           <span className="userName">제목 </span>
-                          <span> {val.ctitle}</span>
+                          <span style={{ fontFamily: "normal" }}>
+                            {" "}
+                            {val.ctitle}
+                          </span>
                         </p>
                         <p className="userName">
                           <strong
@@ -260,9 +269,15 @@ function CommentSearch({ val, comment, setcommentModal, setcomments }) {
                           >
                             {val.id}
                           </strong>
-                          <span style={{ fontFamily: "normal" }}>
+                          <span
+                            style={{
+                              fontFamily: "normal",
+                              whiteSpace: "pre-wrap",
+                            }}
+                          >
                             {val.content}
                           </span>
+
                           {val.tname === null
                             ? ""
                             : val.tname.map((tname, i) => {
@@ -303,15 +318,26 @@ function CommentSearch({ val, comment, setcommentModal, setcomments }) {
                         }}
                       >
                         <div style={{ display: "flex", flexDirection: "row" }}>
-                          <p className="userName">
+                          <p className="userName" style={{ fontSize: "13px" }}>
                             <strong>
                               {sessionStorage.getItem("username")}
                             </strong>
                           </p>
-                          <p className="userName">{val.reply}</p>
-                        </div>
-                        <div className="comment-heart">
-                          {commentHeart ? (
+                          <p
+                            className="userName"
+                            style={{ fontFamily: "normal", width: "78%" }}
+                          >
+                            {val.reply}
+                          </p>
+                          <div
+                            style={{
+                              fontSize: "13px",
+                              alignSelf: "center",
+                              padding: "15px",
+                            }}
+                            className="comment-heart"
+                          >
+                            {/* {commentHeart ? (
                             <i
                               className="fa-solid fa-heart"
                               onClick={() => {
@@ -326,14 +352,17 @@ function CommentSearch({ val, comment, setcommentModal, setcomments }) {
                                 setCommentHeart(!commentHeart);
                               }}
                             ></i>
-                          )}
-                          <i
-                            className="fa-regular fa-trash-can"
-                            onClick={() => {
-                              deleteTwo(replyTwo, val.cno);
-                            }}
-                          ></i>
+                          )} */}
+
+                            <i
+                              className="fa-regular fa-trash-can "
+                              onClick={() => {
+                                deleteTwo(replyTwo, val.cno);
+                              }}
+                            ></i>
+                          </div>
                         </div>
+
                         <div
                           style={{
                             fontSize: "10px",
@@ -352,7 +381,7 @@ function CommentSearch({ val, comment, setcommentModal, setcomments }) {
               </div>
             </div>
             <div className="contentIcon">
-              {/* <div className="feeds-icons">
+              <div className="feeds-icons">
                 <div
                   className="heart-icon"
                   onClick={(e) => {
@@ -375,10 +404,12 @@ function CommentSearch({ val, comment, setcommentModal, setcomments }) {
                 <div className="share-icon">
                   <i className="fa-regular fa-paper-plane fa-2x"></i>
                 </div>
-              </div> */}
+              </div>
               <div className="likeCount">
                 <h3>
-                  <strong style={{ fontSize: "20px" }}>좋아요 {val.likecount}개</strong>
+                  <strong style={{ fontSize: "15px" }}>
+                    좋아요 {val.likecount}개
+                  </strong>
                 </h3>
               </div>
               <div className="postDate">
@@ -388,7 +419,7 @@ function CommentSearch({ val, comment, setcommentModal, setcomments }) {
             <div className="comment1">
               <input
                 type="text"
-                ref={replyRef}
+                ref={replyRef1}
                 className="inputComment_"
                 placeholder="댓글 달기..."
                 style={{ width: "90%" }}
@@ -406,14 +437,14 @@ function CommentSearch({ val, comment, setcommentModal, setcomments }) {
               <button
                 className={
                   //클래스명을 comment창의 글자 길에 따라서 다르게 주면서 버튼색에 css디자인을 줄 수 있음
-                  replyRef.current === undefined
+                  replyRef1.current === undefined
                     ? null
-                    : replyRef.current.value.length > 0
+                    : replyRef1.current.value.length > 0
                     ? "submitCommentActive"
                     : "submitCommentInactive"
                 }
                 onClick={() => {
-                  post(replyRef);
+                  post(replyRef1);
                   // setReply(!reply);
                 }} //클릭하면 위서 선언한 post함수를 실행하여 feedComments에 담겨서 re-rendering 된 댓글창을 확인할 수 있다
                 disabled={isValid ? false : true} //사용자가 아무것도 입력하지 않았을 경우 게시를 할 수 없도록
