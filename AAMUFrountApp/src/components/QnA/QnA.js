@@ -1,22 +1,17 @@
 import React, { useEffect, useState } from "react";
 import "./QnA.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAngleDown, faCircleQuestion } from "@fortawesome/free-solid-svg-icons";
+import {
+  faAngleDown,
+  faCircleQuestion,
+} from "@fortawesome/free-solid-svg-icons";
 import Pagination from "./Pagination";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { post } from "jquery";
 import axios from "axios";
 const QnA = () => {
-  const [posts, setPosts] = useState([
-    <QnABbsOne />,
-    <QnABbsOne />,
-    <QnABbsOne />,
-    <QnABbsOne />,
-    <QnABbsOne />,
-    <QnABbsOne />,
-    <QnABbsOne />,
-    <QnABbsOne />,
-  ]);
+  const navigate = useNavigate();
+  const [posts, setPosts] = useState([<QnABbsOne />]);
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage, setPostsPerPage] = useState(5);
@@ -27,6 +22,9 @@ const QnA = () => {
     currentPosts = posts.slice(indexOfFirst, indexOfLast);
     return currentPosts;
   };
+
+  const bestQnA = posts.slice(-3, posts.length);
+  const userQnA = posts.slice(0, posts.length - 3);
   function getQna() {
     let token = sessionStorage.getItem("token");
     axios
@@ -36,20 +34,24 @@ const QnA = () => {
         },
       })
       .then((resp) => {
-        console.log(resp.data);
+        setPosts(resp.data);
       })
       .catch((err) => {
         console.log(err);
       });
   }
+
   useEffect(() => {
     getQna();
   }, []);
+
   return (
     <div className="qna__container">
       <div className="qna__header">
         <div className="qna__header__title">AAMU Q &amp; A</div>
-        <div className="qna__header__subTitle">AAMU에 궁금한점이 있으신가요?</div>
+        <div className="qna__header__subTitle">
+          AAMU에 궁금한점이 있으신가요?
+        </div>
       </div>
       <div className="qna__body">
         <div className="qna__usual-questions">
@@ -57,9 +59,9 @@ const QnA = () => {
             <h3>&lt;&nbsp;자주 찾는 질문&nbsp;&gt;</h3>
           </div>
           <div>
-            <QnAaccoridan />
-            <QnAaccoridan />
-            <QnAaccoridan />
+            {bestQnA.map((val, idx) => {
+              return <QnAaccoridan val={val} />;
+            })}
           </div>
         </div>
         <div className="qna__qnaBoard">
@@ -70,17 +72,9 @@ const QnA = () => {
             </div>
           </Link>
           <div className="qna__qnaBoard-contents">
-            {getcurrentPosts(posts).map((val, i) => {
-              return val;
+            {getcurrentPosts(userQnA).map((val, i) => {
+              return <QnABbsOne val={val} navigate={navigate} />;
             })}
-            {/* <QnABbsOne />
-            <QnABbsOne />
-            <QnABbsOne />
-            <QnABbsOne />
-            <QnABbsOne />
-            <QnABbsOne />
-            <QnABbsOne />
-            <QnABbsOne /> */}
           </div>
           <div className="qna__pagination">
             <Pagination
@@ -94,19 +88,22 @@ const QnA = () => {
     </div>
   );
 };
-function QnABbsOne() {
+function QnABbsOne({ val, navigate }) {
   return (
-    <div className="qna__one">
-      <span style={{ textAlign: "center", height: "30px" }}>1</span>
-      <span className="qna__one-title">
-        질문드립니다.질문드립니다.질문드립니다.질문드립니다.질문드립니다.질문드립니다.질문드립니다.질문드립니다.
-      </span>
-      <span className="qna__one-id">KIM1111</span>
+    <div
+      className="qna__one"
+      onClick={() => {
+        navigate("/qnaDetail", { state: { qno: val.qno } });
+      }}
+    >
+      <span style={{ textAlign: "center", height: "30px" }}>{val.qno}</span>
+      <span className="qna__one-title">{val.title}</span>
+      <span className="qna__one-id">{val.id}</span>
     </div>
   );
 }
 
-function QnAaccoridan() {
+function QnAaccoridan({ val }) {
   const accordianItems = document.querySelectorAll(".value__accordion-item");
   accordianItems.forEach((item) => {
     const accordianHeader = item.querySelector(".value__accordion-header");
@@ -132,17 +129,20 @@ function QnAaccoridan() {
     <div className="value__accordion">
       <div className="value__accordion-item">
         <header className="value__accordion-header">
-          <FontAwesomeIcon icon={faCircleQuestion} className="value__accordion-icon" />
-          <h3 className="value__accordion-title">자주찾는 질문제목입니다</h3>
+          <FontAwesomeIcon
+            icon={faCircleQuestion}
+            className="value__accordion-icon"
+          />
+          <h3 className="value__accordion-title">{val.title}</h3>
           <div className="value__accordion-arrow">
-            <FontAwesomeIcon icon={faAngleDown} className="accordian-arrow-icon" />
+            <FontAwesomeIcon
+              icon={faAngleDown}
+              className="accordian-arrow-icon"
+            />
           </div>
         </header>
         <div className="value__accordion-content">
-          <p className="value__accordion-description">
-            자주찾는 질문내용입니다.자주찾는 질문내용입니다.자주찾는 질문내용입니다.자주찾는
-            질문내용입니다.
-          </p>
+          <p className="value__accordion-description">{val.content}</p>
         </div>
       </div>
     </div>
