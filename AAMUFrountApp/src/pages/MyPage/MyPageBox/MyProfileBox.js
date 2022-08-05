@@ -130,12 +130,7 @@ const MyProfileBox = ({ setClickTab }) => {
             />
             <ImgUploadLabel for="upload">
               {showImages.map((image, id) => (
-                <Imgs
-                  src={showImages}
-                  // onClick={() => handleDeleteImage(id)}/>
-                  alt={`${image}-${id}`}
-                  onClick={() => handleDeleteImage()}
-                />
+                <Imgs src={showImages} alt={`${image}-${id}`} onClick={() => handleDeleteImage()} />
               ))}
             </ImgUploadLabel>
           </form>
@@ -147,13 +142,15 @@ const MyProfileBox = ({ setClickTab }) => {
           <div className="profile-title-name-id">
             <div>
               <span>이름</span>
-              <Name>{name}</Name>
+              <Name>
+                <input value={name} readOnly />
+              </Name>
             </div>
           </div>
-          <div style={{ display: "flex" }}>
+          <div style={{ display: "flex", gap: "1rem" }}>
             <RRNContainer>
               <div className="profile-title">아이디</div>
-              <input type="text" value={userId} />
+              <input type="text" value={userId} readOnly />
             </RRNContainer>
             <RRNContainer>
               <div className="profile-title">비밀번호</div>
@@ -162,140 +159,127 @@ const MyProfileBox = ({ setClickTab }) => {
           </div>
           <PhoneNum>
             <div className="profile-title">휴대폰 번호</div>
-            <input
-              type="text"
-              onChange={(e) => {
-                setPhoneFNum(e.target.value);
-              }}
-              value={phoneFNum}
-            />
-            -
-            <input
-              type="text"
-              onChange={(e) => {
-                setPhoneSNum(e.target.value);
-              }}
-              value={phoneSNum}
-            />
-            -
-            <input
-              type="text"
-              onChange={(e) => {
-                setPhoneTNum(e.target.value);
-              }}
-              value={phoneTNum}
-            />
+            <div>
+              <input type="text" />
+              &nbsp;-&nbsp;
+              <input type="text" />
+              &nbsp;-&nbsp;
+              <input type="text" />
+            </div>
           </PhoneNum>
 
-          <div className="profile-title">이메일</div>
           <EmailContainer>
-            <input
-              type="text"
-              onChange={(e) => {
-                setEmailFrist(e.target.value);
-              }}
-              value={emailFrist}
-            />
-            @
-            <input
-              type="text"
-              onChange={(e) => {
-                setEmailSecond(e.target.value);
-              }}
-              value={emailSecond}
-            />
+            <div className="profile-title">이메일</div>
+            <div>
+              <input type="text" value={emailFrist} />
+              &nbsp;@&nbsp;
+              <input type="text" value={emailSecond} />
+            </div>
           </EmailContainer>
         </div>
         {/* ---------------------------------------------- */}
-        <div>
+        <div className="myProfile__right">
           <div className="profile-title-addr">
-            주소
-            <div style={{ marginLeft: "auto" }}>
-              <AddrBtn
-                type="button"
-                onClick={() => {
-                  setAddrIsValid(!addrIsValid);
+            <span>주소</span>
+
+            <AddrBtn
+              type="button"
+              onClick={() => {
+                setAddrIsValid(!addrIsValid);
+                setIsOpenPost(!isOpenPost);
+              }}
+            >
+              주소 변경하기
+            </AddrBtn>
+          </div>
+          <div className="myProfile__addr">
+            <div className="myProfile__zCode">
+              <input
+                type="text"
+                size={14}
+                placeholder="우편번호"
+                ref={zoneCodeRef}
+                value={zoneCode}
+              />
+            </div>
+
+            <div className="myProfile__addrs">
+              <input type="text" size={52} placeholder="기본주소" ref={addrRef} value={address} />
+            </div>
+
+            <div className="myProfile__addrs">
+              <input
+                style={{ marginLeft: "3px" }}
+                type="text"
+                size={52}
+                placeholder="상세주소"
+                ref={addrDetailRef}
+                onChange={(e) => {
+                  setDetailAddr(e.target.value);
                 }}
-              >
-                주소 변경하기
-              </AddrBtn>
+                value={detailAddr}
+              />
             </div>
           </div>
+          {isOpenPost && (
+            <AddresApi
+              isOpenPost={isOpenPost}
+              setIsOpenPost={setIsOpenPost}
+              setAddress={setAddress}
+              setZoneCode={setZoneCode}
+            />
+          )}
 
-          <div style={{ marginLeft: "10px" }}>
-            {addrIsValid ? (
-              <EditAddr
-                zoneCodeRef={zoneCodeRef}
-                zoneCode={zoneCode}
-                setIsOpenPost={setIsOpenPost}
-                isOpenPost={isOpenPost}
-                addrRef={addrRef}
-                address={address}
-                detailAddr={detailAddr}
-                addrDetailRef={addrDetailRef}
-                setAddress={setAddress}
-                setZoneCode={setZoneCode}
-                setDetailAddr={setDetailAddr}
-              />
-            ) : (
-              <Addr zoneCode={zoneCode} address={address} detailAddr={detailAddr} />
-            )}
-          </div>
-          <div
-            className="join__stepTwo-introduce-div"
-            style={{ width: "70%", height: "100px", marginTop: "10px" }}
-          >
+          <div className="join__stepTwo-introduce-div" style={{ width: "100%", height: "50%" }}>
             <textarea
               // ref={introduceRef}
               style={{
-                position: "absolute",
-                width: "345px",
-                height: "95px",
+                // position: "absolute",
+                width: "100%",
+                height: "100%",
                 resize: "none",
                 border: "none",
                 outline: "none",
               }}
-              onChange={(e) => {
-                setIntroduce(e.target.value);
-              }}
-              value={introduce}
             ></textarea>
-          </div>
-          <div className="profile-title-theme">나의 테마</div>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              textAlign: "end",
-              marginTop: "10px",
-            }}
-          >
-            <MyTheme />
-
-            <UpdateBtn
-              type="button"
-              onClick={(e) => {
-                // let profile = uploadFile(showImages);
-                // handleAddImages(e);
-                profileUpdate(
-                  profiles,
-                  // profile,
-                  phoneNum,
-                  email,
-                  addr,
-                  introduce,
-                  pwd,
-                  gender,
-                  name
-                );
-              }}
-            >
-              저장
-            </UpdateBtn>
           </div>
         </div>
         {/* ---------------------------------------------- */}
       </MyUpdateProfile>
+      <div style={{ display: "grid", gridTemplateColumns: "auto 10%", width: "100%" }}>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            textAlign: "end",
+            marginTop: "10px",
+          }}
+        >
+          <div className="profile-title-theme">나의 테마</div>
+          <MyTheme />
+
+          <UpdateBtn
+            type="button"
+            onClick={(e) => {
+              // let profile = uploadFile(showImages);
+              // handleAddImages(e);
+              profileUpdate(
+                profiles,
+                // profile,
+                phoneNum,
+                email,
+                addr,
+                introduce,
+                pwd,
+                gender,
+                name
+              );
+            }}
+          >
+            저장
+          </UpdateBtn>
+        </div>
+      </div>
     </MyProfileContainer>
   );
 };
@@ -340,86 +324,6 @@ function profileUpdate(profiles, phoneNum, email, addr, introduce, pwd, gender, 
     });
 }
 
-function EditAddr({
-  zoneCodeRef,
-  zoneCode,
-  setIsOpenPost,
-  isOpenPost,
-  addrRef,
-  address,
-  detailAddr,
-  addrDetailRef,
-  setAddress,
-  setZoneCode,
-  setDetailAddr,
-}) {
-  return (
-    <div style={{ position: "relative" }}>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          marginBottom: "10px",
-        }}
-      >
-        <div className="join__stepTwo-input-common">
-          <input
-            style={{ marginLeft: "3px" }}
-            type="text"
-            size={14}
-            placeholder="우편번호"
-            ref={zoneCodeRef}
-            value={zoneCode}
-          />
-        </div>
-        <span
-          className="postCodeFind-btn"
-          onClick={() => {
-            setIsOpenPost(!isOpenPost);
-          }}
-        >
-          우편번호 찾기
-        </span>
-      </div>
-      <div>
-        <div className="join__stepTwo-input-common" style={{ width: "100%", marginBottom: "10px" }}>
-          <input
-            style={{ marginLeft: "3px" }}
-            type="text"
-            size={52}
-            placeholder="기본주소"
-            ref={addrRef}
-            value={address}
-          />
-        </div>
-      </div>
-      <div>
-        <div className="join__stepTwo-input-common" style={{ width: "100%" }}>
-          <input
-            style={{ marginLeft: "3px" }}
-            type="text"
-            size={52}
-            placeholder="상세주소"
-            ref={addrDetailRef}
-            onChange={(e) => {
-              setDetailAddr(e.target.value);
-            }}
-            value={detailAddr}
-          />
-        </div>
-      </div>
-      {isOpenPost && (
-        <AddresApi
-          isOpenPost={isOpenPost}
-          setIsOpenPost={setIsOpenPost}
-          setAddress={setAddress}
-          setZoneCode={setZoneCode}
-        />
-      )}
-    </div>
-  );
-}
-
 const AddresApi = ({ setIsOpenPost, setAddress, setZoneCode }) => {
   const onCompletePost = (data) => {
     let fullAddr = data.address;
@@ -443,19 +347,21 @@ const AddresApi = ({ setIsOpenPost, setAddress, setZoneCode }) => {
   const postCodeStyle = {
     display: "block",
     position: "absolute",
-    top: "-255px",
-    right: "200px",
+    top: "140px",
+    right: "680px",
     width: "400px",
-    height: "400px",
+    height: "500px",
     borderRadius: "8px",
-    padding: "3px",
+    border: "1px solid grey",
+    padding: "1px",
+    zIndex: "10",
   };
 
   return (
     <div>
       <DaumPostcode
         style={postCodeStyle}
-        className="daumPostCode"
+        className="daumPostCode_myProfile"
         autoClose
         onComplete={onCompletePost}
       />
@@ -463,68 +369,17 @@ const AddresApi = ({ setIsOpenPost, setAddress, setZoneCode }) => {
   );
 };
 
-function Addr({ zoneCode, address, detailAddr }) {
-  return (
-    <>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          marginBottom: "10px",
-        }}
-      >
-        <div className="join__stepTwo-input-common">
-          <input
-            style={{ marginLeft: "3px" }}
-            type="text"
-            size={14}
-            value={zoneCode}
-            // ref={zoneCodeRef}
-            // value={zoneCode}
-            disabled
-          />
-        </div>
-      </div>
-      <div>
-        <div className="join__stepTwo-input-common" style={{ width: "100%", marginBottom: "10px" }}>
-          <input
-            style={{ marginLeft: "3px" }}
-            type="text"
-            size={52}
-            value={address}
-            // ref={addrRef}
-            // value={address}
-            disabled
-          />
-        </div>
-      </div>
-      <div>
-        <div className="join__stepTwo-input-common" style={{ width: "100%" }}>
-          <input
-            style={{ marginLeft: "3px" }}
-            type="text"
-            size={52}
-            value={detailAddr}
-            // ref={addrDetailRef}
-            disabled
-          />
-        </div>
-      </div>
-    </>
-  );
-}
-
 const MyProfileContainer = styled.div`
   display: flex;
   // grid-template-columns: 500px 520px;
   // grid-template-rows: 500px;
   flex-direction: column;
-  gap: 10px;
+  gap: 0.5rem;
   font-size: 18px;
   margin: auto;
   width: 100%;
   height: 100%;
-  border: 1px solid red;
+  max-width: 1200px;
 `;
 
 const MyUpdateImg = styled.div`
@@ -532,9 +387,11 @@ const MyUpdateImg = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  border: 1px solid blue;
+  padding: 20px 0;
   width: 100%;
   height: 100%;
+  border-radius: 5px;
+  box-shadow: var(--shadow);
 `;
 const ImgBox = styled.div`
   width: 250px;
@@ -563,53 +420,54 @@ const MyUpdateProfile = styled.div`
   display: grid;
   // flex-direction: column;
   grid-template-columns: 50% 50%;
+  // padding: 5px;
   width: 100%;
   height: 100%;
-  border: 1px solid green;
+  gap: 10px;
 `;
 const Name = styled.div`
-  width: 100px;
-  border: 2px solid grey;
-  border-radius: 5px;
+  input {
+    width: 573px;
+    border: 2px solid grey;
+    padding: 3px;
+    font-size: 18px;
+    border-radius: 5px;
+  }
 `;
-const Id = styled.div`
-  width: 100px;
-  border: 2px solid grey;
-  border-radius: 5px;
-`;
+
 const RRNContainer = styled.div`
   input {
     font-size: 18px;
-    width: 100px;
+    width: 277px;
     border: solid 2px gray;
     border-radius: 0.3em;
+    padding: 3px;
   }
 `;
 const PhoneNum = styled.div`
   display: flex;
-  flex-direction: row;
   gap: 2px;
-  margin-bottom: 10px;
-  margin-left: 10px;
+  flex-direction: column;
 
   input {
-    width: 70px;
+    width: 177px;
     border: solid 2px gray;
+    font-size: 18px;
     border-radius: 0.3em;
+    padding: 3px;
   }
 `;
 const EmailContainer = styled.div`
   display: flex;
-  flexdirection: row;
+  flex-direction: column;
   gap: 3px;
-  margin-left: 10px;
-  margin-bottom: 10px;
 
   input {
     font-size: 18px;
-    width: 100px;
+    width: 271px;
     border: solid 2px gray;
     border-radius: 0.3em;
+    padding: 3px;
   }
 `;
 const AddrBtn = styled.button`
@@ -620,7 +478,6 @@ const AddrBtn = styled.button`
   font-weight: bold;
 `;
 const UpdateBtn = styled.button`
-  margin-top: 5px;
   width: 100px;
   height: 25px;
   padding: 3px 10px;
@@ -628,7 +485,6 @@ const UpdateBtn = styled.button`
   color: white;
   border-radius: 5px;
   font-weight: bold;
-  margin-left: auto;
 `;
 
 export default MyProfileBox;
