@@ -73,7 +73,14 @@ const QnA = () => {
           </Link>
           <div className="qna__qnaBoard-contents">
             {getcurrentPosts(userQnA).map((val, i) => {
-              return <QnABbsOne val={val} navigate={navigate} />;
+              return (
+                <QnABbsOne
+                  val={val}
+                  navigate={navigate}
+                  userQnA={userQnA}
+                  i={i}
+                />
+              );
             })}
           </div>
           <div className="qna__pagination">
@@ -88,7 +95,7 @@ const QnA = () => {
     </div>
   );
 };
-function QnABbsOne({ val, navigate }) {
+function QnABbsOne({ val, navigate, userQnA, i }) {
   return (
     <div
       className="qna__one"
@@ -96,7 +103,9 @@ function QnABbsOne({ val, navigate }) {
         navigate("/qnaDetail", { state: { qno: val.qno } });
       }}
     >
-      <span style={{ textAlign: "center", height: "30px" }}>{val.qno}</span>
+      <span style={{ textAlign: "center", height: "30px" }}>
+        {console.log("i 길이", i)}
+      </span>
       <span className="qna__one-title">{val.title}</span>
       <span className="qna__one-id">{val.id}</span>
     </div>
