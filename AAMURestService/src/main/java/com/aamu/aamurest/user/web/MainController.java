@@ -509,7 +509,7 @@ public class MainController {
 		KakaoReview kakaReview = new KakaoReview();
 		if(kakaoKey!=null) {
 
-			String uri = "http://192.168.0.19:5000/review?map="+kakaoKey;
+			String uri = "http://192.168.0.22:5000/review?map="+kakaoKey;
 
 			ResponseEntity<KakaoReview> responseEntity =
 					restTemplate.exchange(uri, HttpMethod.GET, null, KakaoReview.class);
@@ -598,7 +598,7 @@ public class MainController {
 	}
 	@GetMapping("/main/mainelement")
 	public Map<String,List> mainElement(@RequestParam Map map,HttpServletRequest req){
-
+		System.out.println(map);
 		//Map<String,Map<String,List>> basicMap = new HashMap<>();
 		Map<String,List> mapElement = new HashMap<>();
 		List<BBSDTO> bbsList = new Vector<>();
@@ -608,11 +608,11 @@ public class MainController {
 			HttpHeaders header = new HttpHeaders();
 			header.add("Content-Type", "application/json");
 			requestBody.add("id", map.get("id").toString());
-			requestBody.add("message", map.get("message").toString());
 			HttpEntity httpEntity = new HttpEntity<>(requestBody,header);
-			String uri = "http://192.168.0.19:5020/recommend";
+			String uri = "http://192.168.0.22:5020/recommend";
 			ResponseEntity<Map> responseEntity =
 					restTemplate.exchange(uri, HttpMethod.POST,httpEntity, Map.class);
+			System.out.println(responseEntity.getBody());
 			List<Map> rbnList = (List)responseEntity.getBody().get("rbns");
 			for(Map rbnMap : rbnList) {
 				
@@ -621,7 +621,9 @@ public class MainController {
 			}
 			
 		}
-		
+		else {
+			service.selectTopBBS();
+		}
 		mapElement.put("placeInfo", list);
 		mapElement.put("bbsInfo", bbsList);
 		//basicMap.put("placesInfo", mapElement);
@@ -644,7 +646,7 @@ public class MainController {
 	@PostMapping("/main/chatbot")
 	public Map mainChatbot(@RequestBody Map map,HttpServletRequest req) {
 		System.out.println(map);
-		String uri="http://192.168.0.19:5020/message";
+		String uri="http://192.168.0.22:5020/message";
 		MultiValueMap<String,String> requestBody = new LinkedMultiValueMap<>();
 		HttpHeaders header = new HttpHeaders();
 		header.add("Content-Type", "application/json");
@@ -679,7 +681,7 @@ public class MainController {
 			
 			returnMap.put("message", message);
 			*/
-			uri="http://192.168.0.19:5020/recommend";
+			uri="http://192.168.0.22:5020/recommend";
 			responseEntity =
 					restTemplate.exchange(uri, HttpMethod.POST,httpEntity, Map.class);
 			return responseEntity.getBody();

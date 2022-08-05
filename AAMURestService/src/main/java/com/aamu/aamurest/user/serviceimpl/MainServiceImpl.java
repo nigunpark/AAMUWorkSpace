@@ -19,6 +19,7 @@ import com.aamu.aamurest.user.service.PlannerDTO;
 import com.aamu.aamurest.user.service.RouteDTO;
 import com.aamu.aamurest.user.service.UsersDTO;
 import com.aamu.aamurest.util.FileUploadUtil;
+import com.aamu.aamurest.util.UserUtil;
 
 @Service
 public class MainServiceImpl implements MainService{
@@ -686,7 +687,7 @@ public class MainServiceImpl implements MainService{
 			if(!(standId.equals(id))){
 				map.put("id", id);
 				List<String> compareTheme = dao.getUserTheme(map);
-				double ins = intersection(standTheme, compareTheme)/standTheme.size()+compareTheme.size();
+				double ins = UserUtil.intersection(standTheme, compareTheme)/standTheme.size()+compareTheme.size();
 				if(result<ins) {
 					result = ins;
 					resultId = id;
@@ -697,11 +698,7 @@ public class MainServiceImpl implements MainService{
 		return standTheme;
 	}
 	
-	public static int intersection(List<String> list1,List<String> list2){
-		
-		list1.retainAll(list2);
-		return list1.size();
-	}
+
 	@Override
 	public AttractionDTO selectPlace(Map map, HttpServletRequest req) {
 		
@@ -715,5 +712,10 @@ public class MainServiceImpl implements MainService{
 		List<String> photolist =bbsDao.bbsSelectPhotoList(rbn);
 		dto.setPhoto(FileUploadUtil.requestFilePath(photolist, "/resoures/bbsUpload", req));
 		return dto;
+	}
+	@Override
+	public List<Integer> selectTopBBS() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
