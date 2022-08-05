@@ -1,5 +1,7 @@
 package com.aamu.aamurest.util;
 
+import java.util.List;
+
 public class UserUtil {
 	public static String changeTheme(String theme) {
 		String themeid= null;
@@ -39,5 +41,10 @@ public class UserUtil {
 				break;
 		}
 		return themeid;
+	}
+	public static int intersection(List<String> list1,List<String> list2){
+		
+		list1.retainAll(list2);
+		return list1.size();
 	}
 }
