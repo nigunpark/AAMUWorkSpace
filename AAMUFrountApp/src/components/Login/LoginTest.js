@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { keyframes } from "styled-components";
 import { addProfileImg } from "../../redux/store";
+import { KAKAO_AUTH_URL } from "./Kakao/OAuth";
 import "./Login.css";
 const LoginTest = () => {
   let idRef = useRef();
@@ -89,7 +90,7 @@ const LoginTest = () => {
                 Login
               </button>
               <div className="socialLoginBtn__container">
-                <button className="socialLoginBtn kakao">
+                <a href={KAKAO_AUTH_URL}>
                   <img
                     src="/images/kakaoLoginBtn.png"
                     style={{
@@ -98,7 +99,7 @@ const LoginTest = () => {
                       height: "auto",
                     }}
                   />
-                </button>
+                </a>
                 <button className="socialLoginBtn naver">
                   <img
                     src="/images/naverLoginBtn.png"
