@@ -1,28 +1,36 @@
 import axios from "axios";
 import React, { useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import "./QnAWrite.css";
 const QnAWrite = () => {
   let titleRef = useRef();
   let contentRef = useRef();
+  let navigate = useNavigate();
   const sendQnA = () => {
-    console.log(contentRef.current.value);
     console.log(titleRef.current.value);
+    console.log(contentRef.current.value);
     let token = sessionStorage.getItem("token");
-    axios.post(
-      "/aamurest/qna/write",
-      {
-        id: sessionStorage.getItem("username"),
-        title: titleRef.current.value,
-        content: contentRef.current.value,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
+    axios
+      .post(
+        "/aamurest/qna/write",
+        {
+          id: sessionStorage.getItem("username"),
+          title: titleRef.current.value,
+          content: contentRef.current.value,
         },
-      }
-    );
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then((resp) => {
+        if (resp.data === 1) navigate("/qna");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
-  console.log("contentRef.current.value", contentRef.current.value);
   return (
     <div className="qnaWrite__container">
       <div className="qna__header">
@@ -42,7 +50,7 @@ const QnAWrite = () => {
             <textarea
               ref={contentRef}
               placeholder="궁금한점을 알려주세요"
-              style={{ resize: "none" }}
+              style={{ width: "980px", height: "410px", resize: "none" }}
             ></textarea>
           </div>
         </div>
