@@ -14,5 +14,7 @@ class WebHook(Resource):
             return jsonify({'fulfillmentText': '{} {}searchPlace'.format(loc, parameters['place'])})
         else:
             print('경로추천')
+
             return jsonify({'fulfillmentText': '{} {}searchRoute'.format(loc, parameters['place'])})
+
         #returnStr = '/porum/'+rbn

@@ -14,10 +14,12 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.aamu.aamurest.user.service.MainService;
 import com.aamu.aamurest.user.service.UsersDTO;
 import com.aamu.aamurest.user.service.UsersService;
 import com.aamu.aamurest.util.FileUploadUtil;
@@ -29,7 +31,6 @@ public class UserController {
 
 	@Autowired
 	private UsersService service;
-
 
 	@PostMapping("/users/edit")
 	public int join(@RequestParam Map map,@RequestParam MultipartFile userprofile,@RequestParam List theme,HttpServletRequest req) throws IllegalStateException, IOException {
@@ -51,6 +52,7 @@ public class UserController {
 		int affected=0;
 		System.out.println(map);
 		System.out.println(userprofile);
+		
 		UsersDTO dto = service.selectOneUser(map);
 		String originalProfile = dto.getUserprofile();
 		String path = req.getSession().getServletContext().getRealPath("/resources/userUpload");
@@ -62,7 +64,7 @@ public class UserController {
 		}
 		else map.put("userprofile", originalProfile);
 		affected = service.updateUser(map);
-
+		
 		return affected;
 	}
 	@GetMapping("/users/selectone")
@@ -87,6 +89,19 @@ public class UserController {
 		}
 		return list;
 		
+	}
+	@GetMapping("/user/theme")
+	public List selectTheme(@RequestParam Map map){
+		
+		return service.selectUserTheme(map);
+	}
+	@PutMapping("/users/updatetheme")
+	public int theme(@RequestBody Map map) {
+		int affected = 0;
+		System.out.println(map);
+		affected = service.updateTheme(map);
+		
+		return affected;
 	}
 
 

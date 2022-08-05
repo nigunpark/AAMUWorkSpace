@@ -2,6 +2,7 @@ package com.aamu.aamurest.user.serviceimpl;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Vector;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -57,6 +58,35 @@ public class UsersServiceImpl implements UsersService{
 	public List<Map> selectAllTheme() {
 		
 		return dao.selectAllTheme();
+	}
+
+	@Override
+	public int updateTheme(Map map) {
+		int affected = 0;
+		affected = transactionTemplate.execute(tx->{
+			dao.deleteTheme(map);
+			List<Map> list=(List)map.get("themes");
+			for(Map listMap : list) {
+				map.put("themeid", UserUtil.changeTheme(listMap.get("theme").toString()));
+				System.out.println(map);
+				dao.insertTheme(map);
+			}
+			int result =1;
+			return result;
+		});
+		
+		return affected;
+	}
+
+	@Override
+	public List selectUserTheme(Map map) {
+		List<String> list = dao.selectUserTheme(map);
+		List<Map> themeList = new Vector<>();
+		for(String themeid:list) {
+			Map themeMap = dao.selectOneTheme(themeid);
+			themeList.add(themeMap);
+		}
+		return themeList;
 	}
 
 
