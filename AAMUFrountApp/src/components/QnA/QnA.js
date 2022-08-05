@@ -72,9 +72,10 @@ const QnA = () => {
           <div className="qna__qnaBoard-contents">
             {getcurrentPosts(posts).map((val, i) => {
               return val;
+
+              // <QnABbsOne />
             })}
             {/* <QnABbsOne />
-            <QnABbsOne />
             <QnABbsOne />
             <QnABbsOne />
             <QnABbsOne />
