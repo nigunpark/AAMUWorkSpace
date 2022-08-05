@@ -32,6 +32,7 @@ function CommentSearch({
   const [modalShow, setModalShow] = useState(false);
   const [reply, setReply] = useState(false);
   const [modalSet, setModal] = useState(false);
+  const [position, setPosition] = useState("");
   // const [forReRender, setForReRender] = useState(false);
   let [isValid, setisValid] = useState(false);
 
