@@ -1,20 +1,18 @@
 import axios from "axios";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled, { keyframes } from "styled-components";
 import { addWholeBlackBox } from "../../../redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { faRectangleXmark } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleXmark } from "@fortawesome/free-solid-svg-icons";
 
 const MyEditBox = ({ selectRbn }) => {
   let navigate = useNavigate();
-
-  const [detailPostData, setDetailPostData] = useState({});
-  const [detailTitle, setDetailTitle] = useState("");
   const [detailRoute, setDetailRoute] = useState([]);
   const [plannerDate, setPlannerDate] = useState({});
   const [title, setTitle] = useState("");
+  const [plannerTitle, setPlannerTitle] = useState("");
   let titleRef = useRef();
   const [content, setContent] = useState("");
   let contentRef = useRef();
@@ -25,34 +23,7 @@ const MyEditBox = ({ selectRbn }) => {
 
   //--------------------------------이미지 시작--------------------------------
   const [showImages, setShowImages] = useState([]);
-  const [showImagesFile, setShowImagesFile] = useState([]);
-
-  //이미지 등록
-  const handleAddImages = (e) => {
-    const imageLists = e.target.files;
-    let imageUrlLists = [...showImages];
-    let imgs = [...showImagesFile];
-
-    for (let i = 0; i < imageLists.length; i++) {
-      const currentImageUrl = URL.createObjectURL(imageLists[i]); //이거 안됨..
-      imageUrlLists.push(currentImageUrl);
-
-      imgs.push(imageLists[i]); // 한개씩 첨부했을때 post로 잘 넘어가게
-    }
-
-    if (imageUrlLists.length > 6) {
-      //사진 6개 제한
-      imageUrlLists = imageUrlLists.slice(0, 6);
-    }
-
-    setShowImages(imageUrlLists);
-    setShowImagesFile(imgs);
-  };
-
-  const handleDeleteImage = (id) => {
-    //등록한 사진 삭제
-    setShowImages(showImages.filter((_, index) => index !== id));
-  };
+  const [showImagesFile, setShowImagesFile] = useState([]); //전송할이미지들
   //--------------------------------이미지 끝--------------------------------
 
   async function getSelectOne() {
@@ -64,7 +35,8 @@ const MyEditBox = ({ selectRbn }) => {
         },
       })
       .then((resp) => {
-        console.log("myEditBox", resp.data);
+        console.log("MyEditBox", resp.data);
+        setPlannerTitle(resp.data.planner.title);
         setTitle(resp.data.title);
         setContent(resp.data.content);
         setPostTheme(resp.data.themename); // 테마 가져온거 기본 세팅하기
@@ -136,60 +108,6 @@ const MyEditBox = ({ selectRbn }) => {
   const [postTheme, setPostTheme] = useState("");
   const [postThemeNum, setPostThemeNum] = useState(0);
 
-  const themes = [
-    {
-      themeId: 1,
-      themeName: "봄",
-    },
-    {
-      themeId: 2,
-      themeName: "여름",
-    },
-    {
-      themeId: 3,
-      themeName: "가을",
-    },
-    {
-      themeId: 4,
-      themeName: "겨울",
-    },
-    {
-      themeId: 5,
-      themeName: "산/트레킹",
-    },
-    {
-      themeId: 6,
-      themeName: "바다/해수욕장",
-    },
-    {
-      themeId: 7,
-      themeName: "호캉스",
-    },
-    {
-      themeId: 8,
-      themeName: "자전거",
-    },
-    {
-      themeId: 9,
-      themeName: "섬",
-    },
-    {
-      themeId: 10,
-      themeName: "맛집",
-    },
-    {
-      themeId: 11,
-      themeName: "힐링",
-    },
-    {
-      themeId: 12,
-      themeName: "드라이브",
-    },
-  ];
-
-  const canSubmit = useCallback(() => {
-    return content !== "" && title !== "" && postThemeNum !== 0;
-  }, [title, content, postThemeNum]); //제목, 내용, 테마 입력 안되면 공유버튼 비활성화
   const getDow = (dow) => {
     switch (dow) {
       case 0:
@@ -208,6 +126,20 @@ const MyEditBox = ({ selectRbn }) => {
         return "토";
     }
   };
+  const addImages = (e) => {
+    const nowSelectImageList = e.target.files;
+    const nowImageURLList = [...showImages];
+    for (let i = 0; i < nowSelectImageList.length; i++) {
+      nowImageURLList.push(URL.createObjectURL(nowSelectImageList[i]));
+    }
+
+    if (nowImageURLList.length > 5) {
+      alert("사진은 5장 이하로만 가능합니다");
+      nowImageURLList = nowImageURLList.slice(0, 5);
+    }
+    setShowImages(nowImageURLList); //뿌려줄 사진배열
+    setShowImagesFile(nowSelectImageList); //전송할 사진파일들이 담김
+  };
   const delPhoto = (image) => {
     setShowImages((curr) => {
       return curr.filter((val) => {
@@ -218,13 +150,14 @@ const MyEditBox = ({ selectRbn }) => {
   return (
     <div className="MyWrite-container">
       <Plan>
+        <div className="detail_planner_title">{plannerTitle}</div>
         <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
           {routeData.map((route, idx) => {
             return (
               <div key={idx} className="detail-plan">
                 <div className="paln-date">
                   {idx + 1}일차 ({plannerDate.month}월 {plannerDate.date + idx}일&nbsp;
-                  {getDow(plannerDate.dow)})
+                  {getDow(plannerDate.dow + idx)})
                 </div>
                 <div className="plan__over-container">
                   {route[`day${idx + 1}`].map((obj, i) => {
@@ -317,38 +250,36 @@ const MyEditBox = ({ selectRbn }) => {
         <Imgs src='/images/imageMap.png'/>
       </div> */}
         </div>
-        <div style={{ display: "flex", flexDirection: "column", height: "100%", gap: "1rem" }}>
+        <div style={{ display: "flex", justifyContent: "flex-end", margin: "7px 0" }}>
+          <form encType="multipart/form-data">
+            <input
+              id="myEditBox_imgInput"
+              type="file"
+              multiple
+              accept=".jpg, .jpeg, .png"
+              style={{ display: "none" }}
+              onChange={(e) => {
+                e.stopPropagation();
+                addImages(e);
+              }}
+            />
+          </form>
+          <label htmlFor="myEditBox_imgInput">
+            <span className="myEditBox_btn">이미지 업로드</span>
+          </label>
+        </div>
+        <div className="add-delete-container">
           <div className="write-box add-delete">
             {showImages.map((image, id) => (
               <>
                 <div className="previewImage" key={id}>
                   <FontAwesomeIcon
-                    icon={faCircleXmark}
+                    icon={faRectangleXmark}
                     className="test-i"
                     onClick={() => delPhoto(image)}
                   />
                   <img src={image} alt={`${image}-${id}`} />
                 </div>
-                {/* <div className="previewImage">
-                    <FontAwesomeIcon icon={faCircleXmark} className="test-i" />
-                    <img src={image} alt={`${image}-${id}`} />
-                  </div>
-                  <div className="previewImage">
-                    <FontAwesomeIcon icon={faCircleXmark} className="test-i" />
-                    <img src={image} alt={`${image}-${id}`} />
-                  </div>
-                  <div className="previewImage">
-                    <FontAwesomeIcon icon={faCircleXmark} className="test-i" />
-                    <img src={image} alt={`${image}-${id}`} />
-                  </div>
-                  <div className="previewImage">
-                    <FontAwesomeIcon icon={faCircleXmark} className="test-i" />
-                    <img src={image} alt={`${image}-${id}`} />
-                  </div>
-                  <div className="previewImage">
-                    <FontAwesomeIcon icon={faCircleXmark} className="test-i" />
-                    <img src={image} alt={`${image}-${id}`} />
-                  </div> */}
               </>
             ))}
           </div>
@@ -366,18 +297,58 @@ const MyEditBox = ({ selectRbn }) => {
             />
           </div>
 
-          <div className="" style={{ display: "flex", justifyContent: "flex-end", gap: "1rem" }}>
+          <div
+            className=""
+            style={{ display: "flex", justifyContent: "space-between", gap: "1rem" }}
+          >
             <div className="box-gab">
               {/* 테마 */}
               <span className="theme-section" onClick={onClickModal}>
                 {/* theme : {postTheme == 0 ? "테마를 선택하세요" : postTheme} */}
-                theme :{" "}
-                <select style={{ width: "100px", textAlign: "center" }}>
-                  <option>봄</option>
-                  <option>여름</option>
-                  <option>호캉스</option>
-                  <option>뭐뭐뭐</option>
-                </select>
+                theme :
+                <div style={{ overflowX: "auto" }}>
+                  {/* {themes.map((val, i) => {
+                return (
+                  <CheckBox
+                    key={val.THEMEID}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      doCheck(e);
+                      getCheckedBoxes(
+                        e.target.parentElement.nextSibling.lastChild.checked,
+                        e.target.parentElement.nextSibling.lastChild.value
+                      );
+                    }}
+                  >
+                    <ImgCon>
+                      <img
+                        src={val.themeimg}
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          objectFit: "cover",
+                          borderRadius: "5px",
+                        }}
+                      />
+                    </ImgCon>
+                    <div style={{ textAlign: "center", margin: "2px 0", fontSize: "14px" }}>
+                      <label for={val.THEMENAME}>{val.THEMENAME}</label>
+                      <input
+                        type="checkbox"
+                        id={val.THEMENAME}
+                        value={val.THEMENAME}
+                        onChange={(e) => {
+                          e.stopPropagation();
+                          getCheckedBoxes(e.target.checked, e.target.value);
+                        }}
+                        checked={checkeds.includes(val.THEMENAME) ? true : false}
+                        hidden
+                      />
+                    </div>
+                  </CheckBox>
+                );
+              })} */}
+                </div>
               </span>
 
               {/* {isOpen == true ? (
@@ -390,8 +361,7 @@ const MyEditBox = ({ selectRbn }) => {
               ) : null} */}
             </div>
             <span
-              style={{ color: "black", textAlign: "center" }}
-              className="edit-btn"
+              className="myEditBox_btn"
               onClick={() => {
                 // let write = uploadFile(showImagesFile);
                 bordWrite(
