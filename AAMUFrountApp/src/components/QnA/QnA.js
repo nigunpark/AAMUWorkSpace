@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
 import "./QnA.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAngleDown, faCircleQuestion } from "@fortawesome/free-solid-svg-icons";
+import {
+  faAngleDown,
+  faCircleQuestion,
+} from "@fortawesome/free-solid-svg-icons";
 import Pagination from "./Pagination";
 import { Link, useNavigate } from "react-router-dom";
 import { post } from "jquery";
@@ -46,7 +49,9 @@ const QnA = () => {
     <div className="qna__container">
       <div className="qna__header">
         <div className="qna__header__title">AAMU Q &amp; A</div>
-        <div className="qna__header__subTitle">AAMU에 궁금한점이 있으신가요?</div>
+        <div className="qna__header__subTitle">
+          AAMU에 궁금한점이 있으신가요?
+        </div>
       </div>
       <div className="qna__body">
         <div className="qna__usual-questions">
@@ -68,17 +73,10 @@ const QnA = () => {
           </Link>
           <div className="qna__qnaBoard-contents">
             {getcurrentPosts(posts).map((val, i) => {
-              return val;
+              return <QnABbsOne val={val} navigate={navigate} />;
 
-              // <QnABbsOne />
+              //
             })}
-            {/* <QnABbsOne />
-            <QnABbsOne />
-            <QnABbsOne />
-            <QnABbsOne />
-            <QnABbsOne />
-            <QnABbsOne />
-            <QnABbsOne /> */}
 
             {getcurrentPosts(userQnA).map((val, i) => {
               return (
@@ -103,7 +101,7 @@ const QnA = () => {
     </div>
   );
 };
-function QnABbsOne({ val, navigate, userQnA, i }) {
+function QnABbsOne({ val, navigate }) {
   return (
     <div
       className="qna__one"
@@ -111,9 +109,7 @@ function QnABbsOne({ val, navigate, userQnA, i }) {
         navigate("/qnaDetail", { state: { qno: val.qno } });
       }}
     >
-      <span style={{ textAlign: "center", height: "30px" }}>
-        {console.log("i 길이", i)}
-      </span>
+      <span style={{ textAlign: "center", height: "30px" }}></span>
       <span className="qna__one-title">{val.title}</span>
       <span className="qna__one-id">{val.id}</span>
     </div>
@@ -146,10 +142,16 @@ function QnAaccoridan({ val }) {
     <div className="value__accordion">
       <div className="value__accordion-item">
         <header className="value__accordion-header">
-          <FontAwesomeIcon icon={faCircleQuestion} className="value__accordion-icon" />
+          <FontAwesomeIcon
+            icon={faCircleQuestion}
+            className="value__accordion-icon"
+          />
           <h3 className="value__accordion-title">{val.title}</h3>
           <div className="value__accordion-arrow">
-            <FontAwesomeIcon icon={faAngleDown} className="accordian-arrow-icon" />
+            <FontAwesomeIcon
+              icon={faAngleDown}
+              className="accordian-arrow-icon"
+            />
           </div>
         </header>
         <div className="value__accordion-content">
