@@ -16,7 +16,7 @@ const TokenUser = ({navigate,accountEmail, setaccountEmail}) => {
         success: function(response) {
             console.log(response);
             console.log('response.data.kakao_account.email',response.kakao_account.email);
-            setaccountEmail(response.kakao_account.email);
+            setaccountEmail(response.kakao_account);
             navigate("./loginFunc",  { replace: true});
         },
         fail: function(error) {

@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Container, Content, Title, Body, Footer } from "../Modal/ForJoin.js";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-regular-svg-icons";
@@ -30,6 +30,13 @@ const Join = () => {
   });
   const [doneDoubleCk, setDoneDoubleCk] = useState(false);
   const [whichIdValid, setWhichIdValid] = useState(false);
+  useEffect(() => {
+    if (sessionStorage.getItem("useremailkakao") !== null) {
+      const id = sessionStorage.getItem("useremailkakao").split("@", 1);
+      console.log(sessionStorage.getItem("useremailkakao"));
+      idRef.current.value = id;
+    }
+  }, []);
   return (
     <div className="join__step-one">
       <Container>
