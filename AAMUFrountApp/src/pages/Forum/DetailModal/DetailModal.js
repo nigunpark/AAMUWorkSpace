@@ -12,13 +12,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faX } from "@fortawesome/free-solid-svg-icons";
 import { faBookmark } from "@fortawesome/free-solid-svg-icons";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
-const DetailModal = ({
-  detailOne,
-  setIsOpen,
-  setShowCBModal,
-  setIsLoading,
-  bookbol,
-}) => {
+const DetailModal = ({ detailOne, setIsOpen, setShowCBModal, setIsLoading, bookbol }) => {
+  console.log("detailOne", detailOne);
   const [myBookMark, setMyBookMark] = useState(false);
   let navigate = useNavigate();
   // console.log("detailOne", detailOne);
@@ -230,10 +225,7 @@ const DetailModal = ({
     return (
       <div className="detail__modal-commentsList">
         <Stars>
-          <FontAwesomeIcon
-            icon={faStar}
-            style={{ marginRight: "3px", color: "gold" }}
-          />
+          <FontAwesomeIcon icon={faStar} style={{ marginRight: "3px", color: "gold" }} />
           <span>{val.rate.toString().padEnd(3, ".0")}</span>
         </Stars>
         <span
@@ -290,15 +282,12 @@ const DetailModal = ({
         {/* <DetailModalWrap> */}
         <div className="detailModalWrap" ref={modalRef}>
           <Plan>
-            <div
-              style={{ display: "flex", flexDirection: "column", gap: "10px" }}
-            >
+            <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
               {routeData.map((route, idx) => {
                 return (
                   <div key={idx} className="detail-plan">
                     <div className="paln-date">
-                      {idx + 1}일차 ({plannerDate.month}월{" "}
-                      {plannerDate.date + idx}일&nbsp;
+                      {idx + 1}일차 ({plannerDate.month}월 {plannerDate.date + idx}일&nbsp;
                       {getDow(plannerDate.dow)})
                     </div>
                     <div className="plan__over-container">
@@ -400,8 +389,7 @@ const DetailModal = ({
                               e.stopPropagation();
                               setShowChat(!showChat);
                               setTimeout(() => {
-                                if (!showChat)
-                                  modalRef.current.style.left = "1%";
+                                if (!showChat) modalRef.current.style.left = "1%";
                                 else modalRef.current.style.left = "8%";
                               }, 100);
                             }}
@@ -430,14 +418,9 @@ const DetailModal = ({
                         </div>
                       </div>
                     </div>
-                    <h4 style={{ fontSize: "23px", fontWeight: "bold" }}>
-                      {detailOne.title}
-                    </h4>
+                    <h4 style={{ fontSize: "23px", fontWeight: "bold" }}>{detailOne.title}</h4>
                     <Tag>
-                      <Date>
-                        작성일.{" "}
-                        {dateFormat(new window.Date(detailOne.postdate))}
-                      </Date>
+                      <Date>작성일. {dateFormat(new window.Date(detailOne.postdate))}</Date>
                       tag : #{theme}
                     </Tag>
                   </div>
@@ -477,31 +460,19 @@ const DetailModal = ({
                     )}
                   </div>
 
-                  <div
-                    style={{ display: "grid", gridTemplateColumns: "auto 15%" }}
-                  >
+                  <div style={{ display: "grid", gridTemplateColumns: "auto 17%" }}>
                     <div className="detail_modal_input-container">
                       {sessionStorage.getItem("username") == userId ? (
-                        <input
-                          type="text"
-                          placeholder="글쓴이는 댓글 안되요!"
-                          disabled
-                        />
+                        <input type="text" placeholder="글쓴이는 댓글 안되요!" disabled />
                       ) : isReviewId === 1 ? (
-                        <input
-                          type="text"
-                          placeholder="댓글은 하나만!"
-                          disabled
-                        />
+                        <input type="text" placeholder="댓글은 하나만!" disabled />
                       ) : (
                         <input
                           type="text"
                           placeholder="댓글 달기..."
                           ref={commentRef}
                           onKeyUp={(e) => {
-                            e.target.value.length > 0
-                              ? setIsValid(true)
-                              : setIsValid(false);
+                            e.target.value.length > 0 ? setIsValid(true) : setIsValid(false);
                           }} //사용자가 리뷰를 작성했을 때 빈공간인지 확인하여 유효성 검사
                         />
                       )}
@@ -549,39 +520,26 @@ function DetailSetting({ fromWooJaeData, periodIndex, obj, i }) {
   useEffect(() => {
     if (i !== 0) {
       setUpTime(
-        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime +
-          obj.mtime / 1000 / 60
+        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime + obj.mtime / 1000 / 60
       );
       setDownTime(
         fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime +
           obj.mtime / 1000 / 60 +
-          fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].atime /
-            1000 /
-            60
+          fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].atime / 1000 / 60
       );
       let forBlackBoxRedux = getTimes(
         periodIndex,
-        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime +
-          obj.mtime / 1000 / 60,
+        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime + obj.mtime / 1000 / 60,
         fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime +
           obj.mtime / 1000 / 60 +
-          fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].atime /
-            1000 /
-            60
+          fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].atime / 1000 / 60
       );
       dispatch(addWholeBlackBox(forBlackBoxRedux));
-      if (
-        i !==
-        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)].length - 1
-      ) {
-        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][
-          i + 1
-        ].starttime =
+      if (i !== fromWooJaeData[periodIndex]["day" + (periodIndex + 1)].length - 1) {
+        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i + 1].starttime =
           fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime +
           obj.mtime / 1000 / 60 +
-          fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].atime /
-            1000 /
-            60;
+          fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].atime / 1000 / 60;
       }
     }
   }, []);
@@ -665,9 +623,7 @@ const Chat = ({ detailOne }) => {
               return (
                 <div
                   className={
-                    val.authid !== sessionStorage.getItem("username")
-                      ? "chatBox box"
-                      : "chatBox"
+                    val.authid !== sessionStorage.getItem("username") ? "chatBox box" : "chatBox"
                   }
                 >
                   <div
@@ -691,11 +647,7 @@ const Chat = ({ detailOne }) => {
                         {new window.Date().getHours() > 12
                           ? new window.Date().getHours() - 12
                           : new window.Date().getHours()}
-                        :
-                        {new window.Date()
-                          .getMinutes()
-                          .toString()
-                          .padStart(2, "0")}
+                        :{new window.Date().getMinutes().toString().padStart(2, "0")}
                       </span>
                     </div>
 
@@ -783,8 +735,7 @@ const Container = styled.div`
   top: 47px;
   right: 20px;
   transition: 0.3s;
-  animation: ${swing_chat} 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.5s
-    both;
+  animation: ${swing_chat} 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.5s both;
 `;
 const InnnerContainer = styled.div`
   position: relative;
@@ -850,8 +801,7 @@ const Plan = styled.div`
   &::-webkit-scrollbar {
     display: none;
   }
-  animation: ${bounce_modal_plan} 1.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)
-    both;
+  animation: ${bounce_modal_plan} 1.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
   animation-delay: 0.2s;
 `;
 
