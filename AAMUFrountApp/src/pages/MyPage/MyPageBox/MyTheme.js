@@ -3,12 +3,11 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import MyThemeLists from "./MyThemeLists";
 
-const MyTheme = () => {
+const MyTheme = ({ checkeds, setCheckeds }) => {
   const [themeItem, setThemeItem] = useState([]);
-  const [checkeds, setCheckeds] = useState([]);
+
   const [theme, setTheme] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
-
   const onClickModal = () => {
     setIsOpen(true);
     // alert("테마는 최대 5개까지 저장되요!");
@@ -32,7 +31,6 @@ const MyTheme = () => {
 
   const getMyThemes = async () => {
     let token = sessionStorage.getItem("token");
-
     await axios
       .get("/aamurest/user/theme", {
         params: {
@@ -54,11 +52,17 @@ const MyTheme = () => {
   useEffect(() => {
     getThemes();
     getMyThemes();
-  }, [isOpen]);
+    // setTheme(checkeds);
+  }, []);
 
   const getCheckedBoxes = (checked, val) => {
-    if (checked) setCheckeds([...checkeds, val]);
-    else setCheckeds(checkeds.filter((one) => one !== val));
+    if (checked) {
+      setCheckeds([...checkeds, val]);
+      setTheme([...theme, val]);
+    } else {
+      setCheckeds(checkeds.filter((one) => one !== val));
+      setTheme(theme.filter((one) => one !== val));
+    }
   };
   const doCheck = (e) => {
     let checkbox = e.target.parentElement.nextSibling.lastChild;
@@ -71,10 +75,11 @@ const MyTheme = () => {
       e.target.parentElement.parentElement.style.background = "var(--skyblue)";
       e.target.parentElement.parentElement.style.color = "white";
     }
-
-    if (checkeds.length == 4) {
+    if (checkeds.length === 5) {
       alert("테마는 최대 5개까지 저장되요!");
+      return false;
     }
+    return true;
   };
 
   return (
@@ -83,6 +88,8 @@ const MyTheme = () => {
       onClick={(e) => {
         e.stopPropagation();
         onClickModal();
+        setTheme([]);
+        setCheckeds([]);
       }}
     >
       <MyThemeLists theme={theme} />
@@ -101,14 +108,7 @@ const MyTheme = () => {
   );
 };
 
-function ThemeSelect({
-  setIsOpen,
-  getCheckedBoxes,
-  doCheck,
-  themeItem,
-  checkeds,
-  setCheckeds,
-}) {
+function ThemeSelect({ setIsOpen, getCheckedBoxes, doCheck, themeItem, checkeds, setCheckeds }) {
   const themeEdit = () => {
     let arrayList = checkeds.join().split(",");
     const newArr = arrayList.map((val, idx) => {
@@ -153,11 +153,12 @@ function ThemeSelect({
                   key={val.THEMEID}
                   onClick={(e) => {
                     e.stopPropagation();
-                    doCheck(e);
-                    getCheckedBoxes(
-                      e.target.parentElement.nextSibling.lastChild.checked,
-                      e.target.parentElement.nextSibling.lastChild.value
-                    );
+                    if (doCheck(e)) {
+                      getCheckedBoxes(
+                        e.target.parentElement.nextSibling.lastChild.checked,
+                        e.target.parentElement.nextSibling.lastChild.value
+                      );
+                    }
                   }}
                 >
                   <ImgCon>
@@ -185,7 +186,7 @@ function ThemeSelect({
                       value={val.THEMENAME}
                       onChange={(e) => {
                         e.stopPropagation();
-                        getCheckedBoxes(e.target.checked, e.target.value);
+                        // getCheckedBoxes(e.target.checked, e.target.value);
                       }}
                       checked={checkeds.includes(val.THEMENAME) ? true : false}
                       hidden
@@ -200,7 +201,8 @@ function ThemeSelect({
               className="myBox-List-back"
               onClick={(e) => {
                 e.stopPropagation();
-                themeEdit();
+                // themeEdit();
+                // setCheckeds(curr => [...curr,])
                 setIsOpen(false);
               }}
             >
