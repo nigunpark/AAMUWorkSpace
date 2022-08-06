@@ -137,7 +137,7 @@ public class BBSController {
 	
 	//글 북마크 목록
 	@GetMapping("/bbs/bookmark/list")
-	public List<BBSDTO> bbsBookmarkList(@RequestParam Map map, HttpServletRequest req){
+	public List<BBSDTO> bbsBookmarkList(@RequestParam Map map, HttpServletRequest req){//id
 		List<BBSDTO> list = bbsService.bbsBookmarkList(map);
 		System.out.println("북마크 목록:"+list);
 		for(BBSDTO dto:list) {
@@ -210,14 +210,22 @@ public class BBSController {
 		
 	}
 	
-	/*
-	//테마 사진 하나 뿌려주기
-	@GetMapping("/theme/SelectOne/{themeid}")
-	public BBSDTO themeSelectOne(@RequestParam Map map,HttpServletRequest req) {
-		BBSDTO dto = bbsService.themeSelectOne(map);
-		dto.setThemeimg(FileUploadUtil.requestOneFile(dto.getThemeimg(), "/resources/themeUpload", req));
+	public static AttractionDTO changeOneAttr(AttractionDTO dto,HttpServletRequest req) {
+		String title = dto.getTitle();
+		if(title!=null && dto.getSmallimage()!=null) {
+			if(!(dto.getSmallimage().toString().contains("http")) && dto.getSmallimage()!=null) 
+				dto.setSmallimage(FileUploadUtil.requestOneFile(dto.getSmallimage(),"/resources/hotelImage",req));
+			
+			if(title!=null && title.contains("[") &&!(title.split("\\[")[0].equals("")))
+				dto.setTitle(title.split("\\[")[0]);
+			
+			if(title!=null && title.contains("(")&&!(title.split("\\(")[0].equals("")))
+				dto.setTitle(title.split("\\(")[0]);
+		}
 		return dto;
+		
 	}
-	*/
+
+	
 }
 

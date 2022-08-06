@@ -52,7 +52,4 @@ public interface BBSService {
 	//평점 업데이트
 	int updateRate(Map map);
 
-
-
-
 }

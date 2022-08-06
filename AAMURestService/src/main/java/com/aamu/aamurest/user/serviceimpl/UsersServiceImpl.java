@@ -38,14 +38,24 @@ public class UsersServiceImpl implements UsersService{
 
 	@Override
 	public UsersDTO selectOneUser(Map map) {
-
+		
 		return dao.selectOneUser(map);
 	}
 
 	@Override
 	public int updateUser(Map map) {
-
-		return dao.updateUser(map);
+		int affected = 0;
+		affected = transactionTemplate.execute(tx->{
+			dao.deleteTheme(map);
+			List<Map> list=(List)map.get("themes");
+			for(Map listMap : list) {
+				map.put("themeid", UserUtil.changeTheme(listMap.get("theme").toString()));
+				System.out.println(map);
+				dao.insertTheme(map);
+			}
+			return dao.updateUser(map);
+		});
+		return affected;
 	}
 
 	@Override

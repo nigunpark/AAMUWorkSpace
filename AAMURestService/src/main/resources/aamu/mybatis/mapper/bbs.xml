@@ -64,11 +64,22 @@
 	 <!-- 북마크하기 -->
 	 <select id="bbsSelectBookmark" resultType="int" parameterType="map">
 		SELECT COUNT(*) FROM bookmark WHERE id=#{id} AND rbn=#{rbn}
+		
 	</select>
 	 
 	 <!-- 북마크 목록 -->
 	<select id="bbsBookmarkList" parameterType="map" resultType="BBSDTO">
-		SELECT rbbs.*,bm.* FROM routebbs rbbs JOIN bookmark bm ON rbbs.id=bm.id AND rbbs.rbn=bm.rbn
+		SELECT * FROM routebbs  WHERE rbn IN (SELECT rbn FROM bookmark WHERE id=#{id})
+	</select>
+	
+	<!-- 북마크 목록_route -->
+	<select id="bbsBoomarkRouteList" parameterType="map" resultType="RouteDTO">
+		SELECT contentid FROM route WHERE rbn=#{rbn}
+	</select>
+	
+	<!-- 북마크 목록_contentid -->
+	<select id="bbsBoomarkAttrList" resultType="AttrDTO">
+		SELECT p.* FROM route r JOIN places p ON r.contentid=p.contentid WHERE r.contentid=#{contentid} AND r.rbn=#{rbn}
 	</select>
 	
 	<!-- 글 북마크_insert -->

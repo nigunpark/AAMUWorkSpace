@@ -4,85 +4,101 @@ import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import Spinner from "../Spinner";
 
+const Modal = ({
+  val,
+  setModalShow,
+  seteditModal,
+  setlist,
+  setcommentModal,
+}) => {
+  let menuRef = useRef();
+  let editRef = useRef();
+  const [goEdit, setgoEdit] = useState(false);
+  const [loading, setloading] = useState(false);
+  const [godown, setgodown] = useState(false);
 
-const Modal = ({val,setModalShow,seteditModal , setlist,setcommentModal}) => {
-    let menuRef = useRef();
-    let editRef = useRef();
-    const [goEdit, setgoEdit] = useState(false);
-    const [loading, setloading] = useState(false);
-    const [godown, setgodown] = useState(false);
-    
+  //
 
-
-  // 
-
- 
-    
-    let [deleteOnee, setdeleteOnee] = useState(false); 
-    function deleteOne(){//업로드 버튼 누르고 화면 새로고침
-        let token = sessionStorage.getItem("token");
-        axios.delete(`/aamurest/gram/edit/${val.lno}`,{
-          headers: {
-                Authorization: `Bearer ${token}`,
-              },
-        })
-        .then((resp) => {
-            setdeleteOnee(resp.data);//성공 여부가 온다 true false
-            // alert('삭제되었습니다!')
-            setcommentModal(false);
-            setlist((curr) => {
-              return curr.filter((item) => {
-                return item.lno != val.lno;
-              });
-            });
-          })
-          .catch((error) => {
-            console.log(error);
+  let [deleteOnee, setdeleteOnee] = useState(false);
+  function deleteOne() {
+    //업로드 버튼 누르고 화면 새로고침
+    let token = sessionStorage.getItem("token");
+    axios
+      .delete(`/aamurest/gram/edit/${val.lno}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((resp) => {
+        setdeleteOnee(resp.data); //성공 여부가 온다 true false
+        // alert('삭제되었습니다!')
+        setcommentModal(false);
+        setlist((curr) => {
+          return curr.filter((item) => {
+            return item.lno != val.lno;
           });
-      }
- 
-      
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
   return (
     <Container>
       <Overlay ref={menuRef}>
-        <ModalWrap>
-          <Contents>
-            <Button
-              type="button"
-              className="edit"
-              ref={editRef}
-              onClick={(e) => {
-                e.stopPropagation();
-                setModalShow(false);
-                seteditModal(true);
-              }}
-            >
-              수정하기
-            </Button>
-
-            <Button
-              type="button"
-              className="delete"
-              onClick={(e) => {
-                console.log('삭제');
-                e.stopPropagation();
-                setModalShow(false);
-                deleteOne();
-              }}
-            >
-              삭제하기
-            </Button>
-            <Button
-              type="button"
-              className="cancel"
-              onClick={() => {
-                setModalShow(false);
-              }}
-            >
-              취소하기
-            </Button>
-          </Contents>
-        </ModalWrap>
+        {val.id === sessionStorage.getItem("username") ? (
+          <ModalWrap>
+            <Contents>
+              <Button
+                type="button"
+                className="edit"
+                ref={editRef}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setModalShow(false);
+                  seteditModal(true);
+                }}
+              >
+                수정하기
+              </Button>
+              <Button
+                type="button"
+                className="delete"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setModalShow(false);
+                  deleteOne();
+                }}
+              >
+                삭제하기
+              </Button>
+              <Button
+                type="button"
+                className="cancel"
+                onClick={() => {
+                  setModalShow(false);
+                }}
+              >
+                취소하기
+              </Button>
+            </Contents>
+          </ModalWrap>
+        ) : (
+          <ModalWrap>
+            <Contents>
+              <Button
+                type="button"
+                className="cancel"
+                onClick={() => {
+                  setModalShow(false);
+                }}
+              >
+                취소하기
+              </Button>
+            </Contents>
+          </ModalWrap>
+        )}
       </Overlay>
     </Container>
   );
