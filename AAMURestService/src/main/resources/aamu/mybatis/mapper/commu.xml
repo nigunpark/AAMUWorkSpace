@@ -54,6 +54,11 @@
 		</choose>
 	</select>
 	
+	<!-- 세션id가 팔로우하는 id 얻기 -->
+	<select id="commuGetidByFollower" parameterType="Map" resultType="String">
+		SELECT id FROM follower WHERE follower=#{id}
+	</select>
+	
 	
 	<!-- 글 검색용 -->
 	<select id="commuSearachList" parameterType="Map" resultType="String">
@@ -106,12 +111,12 @@
 	
 	<!-- 글 하나 뿌려주는 용_모든 댓글 뿌려주기-->
 	<select id="commuCommentList" parameterType="String" resultType="commuCommentDTO" >
-		SELECT * FROM commucomment WHERE lno=#{lno}
+		SELECT * FROM commucomment WHERE lno=#{lno} ORDER BY cno
 	</select>
 	
 	<!-- 글 하나 뿌려주는 용_프로필 뿌려주기 -->
 	<select id="commuSelectUserProf" parameterType="String" resultType="String">
-		SELECT userprofile from users where id=#{id}
+		SELECT userprofile FROM users WHERE id=#{id}
 	</select>
 	
 	<!-- 글 수정용 -->
@@ -208,7 +213,7 @@
 	
 	<!-- 마이페이지용_id에 따른 -->
 	<select id="commuMyPageList" resultType="CommuDTO">
-		SELECT * FROM community WHERE id=#{id} ORDER BY lno DESC
+		SELECT * FROM community WHERE id=#{follower} ORDER BY lno DESC
 	</select>
 	
 	<!-- 마이페이지용_토탈카운트 셋팅 (해당 id의 총 글 갯수) -->

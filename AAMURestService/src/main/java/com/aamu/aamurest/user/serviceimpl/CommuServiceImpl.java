@@ -97,34 +97,30 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 		
 		//standTheme 로그인 한 사람 사용자정보 얻기
 		List<String> standTheme=infoUser(map);
-		
-		//int stand = standTheme.size();
-		String resultId = null;
-		double result = 0;
 		List<Map<String,Object>> resultList = new ArrayList<Map<String,Object>>();
-		Map resultMap = new HashMap<>();
 		
-		for(String id:mainDao.getAllUser()) { //모든user id기 얻어서
+		List<String> allUsersNotFollower = new Vector<>();
+		List<String> allUsers=mainDao.getAllUser(); //모든 id 얻기 
+		List<String> idByFollowers=dao.commuGetidByFollower(map); //세션id가 팔로우하는 id 얻기
+		//System.out.println("처음 allUsers:"+allUsers);
+		//System.out.println("idByFollowers:"+idByFollowers);
+		allUsers.removeAll(idByFollowers);
+		//System.out.println("allUsers"+allUsers);
+		
+		for(String id:allUsers) {
+			Map resultMap = new HashMap<>();
 			if(!(standId.equals(id))){ //로그인id가 아닐 때 진행
 				map.put("id", id); //여기는 로그인id가 아닌 id를 셋팅
-				System.out.println("여기 아이디는?"+map.get("id"));
-				//standTheme 1.테마네임리스트 얻기
+				//standTheme 세션id제외 사용자정보 얻기
 				List<String> compareTheme = infoUser(map); 
-				System.out.println("compareTheme:"+compareTheme.toString());
+				//System.out.println("compareTheme:"+compareTheme.toString());
 				//교집합/합집합
-				System.out.println("교집합:"+UserUtil.intersection(standTheme, compareTheme));
-				double ins = UserUtil.intersection(standTheme, compareTheme)/(standTheme.size()+compareTheme.size());
-				System.out.println("ins는:"+ins);
-				if(result<ins) { //ins가 0보다 클때 
-					result = ins; //result=0.45
-					resultId = id; //resultId=ID
-					resultMap.put("id", resultId);
-					resultMap.put("ins", ins);
-					resultList.add(resultMap);
-				}
+				double ins = (double)UserUtil.intersection(standTheme, compareTheme)/(double)(standTheme.size()+compareTheme.size());
+				resultMap.put("id", id);
+				resultMap.put("ins", ins);
+				resultList.add(resultMap);
 			}
 		}/////////////for
-		System.out.println("resultMap:"+resultMap);
 		
 		//내림차순
 		Collections.sort(resultList, new Comparator<Map<String, Object>>() {
@@ -132,40 +128,31 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 			public int compare(Map<String, Object> o1, Map<String, Object> o2) {
 				Double ins1 = (Double) o1.get("ins");
 				Double ins2 = (Double) o2.get("ins");
-				return ins1.compareTo(ins2);
+				return ins2.compareTo(ins1);
 			}
 		}); 
-		System.out.println(resultList);
+		System.out.println("내림차순 되나?"+resultList.toString()); //ㅇㅋ
+		//위에서부터 5개 자르기
+		/*
+		List<Map<String, Object>> resultId=resultList.subList(0, 5);
+		System.out.println("5개 list:"+resultList.subList(0, 5));
+		List<String> idList = new Vector<>();
 		
+		for(Map<String, Object> result:resultId) {
+			System.out.println("result:"+result);
+			idList.add(result.get("id").toString());
+		}
+		*/
 		
-//		double rInt=0; //rInt가 ins
-//		ArrayList<Double> rList=new ArrayList<>();
-//		for(Map rMap:resultList) {
-//			rInt=Double.parseDouble(rMap.get("ins").toString());
-//			rList.add(rInt);
-//		}
-//		
-//		//내림차순 정렬
-//		List insList = new Vector<>(); //insList에 ins가 내림차순으로 5개 저장되어있음
-//		Collections.sort(rList,Collections.reverseOrder());//[7,6,5,4,3,2,1,0]
-//		for(int i=0; i<5; i++) {
-//			insList.add(rList.get(i));
-//		}//insList=[7,6,5,4,3]
-//		
-//		for(Map rMap:resultList) {
-//			rInt=Double.parseDouble(rMap.get("ins").toString());
-//			for(int i=0; i<insList.size(); i++) { //insList=[7,6,5,4,3]
-//				if(Double.parseDouble(insList.get(i).toString())==rInt) {
-//					rMap.get("id");
-//				}
-//			}
-//			
-//		}
+		//모든거 다 가기
+		List<String> idList = new Vector<>();
+		for(Map<String, Object> result:resultList) {
+			System.out.println("result:"+result);
+			idList.add(result.get("id").toString());
+		}
 		
-		
-		
-		
-		return null;
+		System.out.println("결과값:"+idList.toString());
+		return idList;
 	}
 	
 	
