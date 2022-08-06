@@ -1,14 +1,11 @@
-import { style } from "@mui/system";
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import DaumPostcode from "react-daum-postcode";
 import axios from "axios";
-import { Avatar } from "antd";
-import { useNavigate } from "react-router-dom";
+
 import MyTheme from "./MyTheme";
 
-const MyProfileBox = ({ setClickTab }) => {
-  const [userProfile, setUserProfile] = useState();
+const MyProfileBox = () => {
   const [name, setName] = useState();
   const [gender, setGender] = useState();
   const [userId, setUserId] = useState();
@@ -45,7 +42,7 @@ const MyProfileBox = ({ setClickTab }) => {
     let imageUrlLists = [...showImages];
     let imgs = [...showImagesFile];
 
-    if (imageLists.length != 0) {
+    if (imageLists.length !== 0) {
       for (let i = 0; i < imageLists.length; i++) {
         const currentImageUrl = URL.createObjectURL(imageLists[i]);
         imageUrlLists.push(currentImageUrl);
@@ -84,9 +81,6 @@ const MyProfileBox = ({ setClickTab }) => {
         },
       })
       .then((resp) => {
-        // console.log("데이터 확인 : ", resp.data);
-
-        setUserProfile(resp.data);
         setPwd(resp.data.pwd);
 
         setPhoneFNum(resp.data.phonenum.split("-")[0]);
@@ -130,7 +124,11 @@ const MyProfileBox = ({ setClickTab }) => {
             />
             <ImgUploadLabel for="upload">
               {showImages.map((image, id) => (
-                <Imgs src={showImages} alt={`${image}-${id}`} onClick={() => handleDeleteImage()} />
+                <Imgs
+                  src={showImages}
+                  alt={`${image}-${id}`}
+                  onClick={() => handleDeleteImage()}
+                />
               ))}
             </ImgUploadLabel>
           </form>
@@ -204,7 +202,13 @@ const MyProfileBox = ({ setClickTab }) => {
             </div>
 
             <div className="myProfile__addrs">
-              <input type="text" size={52} placeholder="기본주소" ref={addrRef} value={address} />
+              <input
+                type="text"
+                size={52}
+                placeholder="기본주소"
+                ref={addrRef}
+                value={address}
+              />
             </div>
 
             <div className="myProfile__addrs">
@@ -230,7 +234,10 @@ const MyProfileBox = ({ setClickTab }) => {
             />
           )}
 
-          <div className="join__stepTwo-introduce-div" style={{ width: "100%", height: "50%" }}>
+          <div
+            className="join__stepTwo-introduce-div"
+            style={{ width: "100%", height: "50%" }}
+          >
             <textarea
               // ref={introduceRef}
               style={{
@@ -246,7 +253,13 @@ const MyProfileBox = ({ setClickTab }) => {
         </div>
         {/* ---------------------------------------------- */}
       </MyUpdateProfile>
-      <div style={{ display: "grid", gridTemplateColumns: "auto 10%", width: "100%" }}>
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "auto 10%",
+          width: "100%",
+        }}
+      >
         <div
           style={{
             display: "flex",
@@ -261,11 +274,8 @@ const MyProfileBox = ({ setClickTab }) => {
           <UpdateBtn
             type="button"
             onClick={(e) => {
-              // let profile = uploadFile(showImages);
-              // handleAddImages(e);
               profileUpdate(
                 profiles,
-                // profile,
                 phoneNum,
                 email,
                 addr,
@@ -284,16 +294,17 @@ const MyProfileBox = ({ setClickTab }) => {
   );
 };
 
-function uploadFile(showImages) {
-  //이미지 업로드
-  let formData = new FormData();
-  formData.append("userprofile", showImages);
-
-  return formData;
-}
-
-function profileUpdate(profiles, phoneNum, email, addr, introduce, pwd, gender, name) {
-  if (profiles.length == 0) {
+function profileUpdate(
+  profiles,
+  phoneNum,
+  email,
+  addr,
+  introduce,
+  pwd,
+  gender,
+  name
+) {
+  if (profiles.length === 0) {
     profiles = new FormData();
     console.log("profileUpdate 클릭 후 호출 함수:", profiles);
   }
@@ -337,7 +348,8 @@ const AddresApi = ({ setIsOpenPost, setAddress, setZoneCode }) => {
         extraAddr += data.bname;
       }
       if (data.buildingName !== "") {
-        extraAddr += extraAddr !== "" ? `, ${data.buildingName}` : data.buildingName;
+        extraAddr +=
+          extraAddr !== "" ? `, ${data.buildingName}` : data.buildingName;
       }
       fullAddr += extraAddr !== "" ? ` (${extraAddr})` : "";
     }
