@@ -21,6 +21,9 @@ interface AAMUApi {
     @POST("authenticate")
     suspend fun doLogin(@Body user: userLogin): Response<AAMUUserResponse>
 
+    @POST("notification/firebase")
+    suspend fun postToken(@Body map: Map<String,String>): Response<Map<String,String>>
+
     @GET("isOK")
     suspend fun isok() : Response<String>
 

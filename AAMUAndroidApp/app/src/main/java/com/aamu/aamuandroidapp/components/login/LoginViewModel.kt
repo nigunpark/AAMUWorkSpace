@@ -13,6 +13,7 @@ import com.aamu.aamuandroidapp.data.api.AAMUDIGraph
 import com.aamu.aamuandroidapp.data.api.repositories.AAMURepository
 import com.aamu.aamuandroidapp.util.contextL
 import com.aamu.aamuandroidapp.util.getToken
+import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.launch
 
 @Suppress("UNCHECKED_CAST")
@@ -32,6 +33,11 @@ class LoginViewModel() : ViewModel(){
         val retoken = aamuRepository.dologin(username = username, password = password)
         retoken?.let {
             token.value = it
+            FirebaseMessaging.getInstance().token.addOnSuccessListener {
+                viewModelScope.launch{
+                    aamuRepository.postToken(username,it)
+                }
+            }
         }
     }
 

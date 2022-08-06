@@ -28,6 +28,19 @@ class AAMURepositoryImpl(
         }
     }
 
+    override suspend fun postToken(username: String, firebaseid: String) {
+        val map : MutableMap<String,String> = HashMap<String,String>()
+        map.put("id",username)
+        map.put("firebaseid",firebaseid)
+        val response = aamuApi.postToken(map)
+        if(response.isSuccessful){
+            Log.i("com.aamu.aamu","응 당연한 성공이야" + response.body())
+        }
+        else{
+            Log.i("com.aamu.aamu","응 당연한 실페야" + response.body())
+        }
+    }
+
     override suspend fun isok(): Boolean {
         val response = aamuApi.isok()
         if(response.isSuccessful)
