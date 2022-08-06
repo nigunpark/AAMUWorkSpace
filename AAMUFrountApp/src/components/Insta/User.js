@@ -18,7 +18,9 @@ function User({
   setSearchb,
   inputValue,
   setinputValue,
-  showChat
+  showChat,
+  recommendUser, 
+  setrecommendUser
 }) {
   const modalRef = useRef();
   const notimodalRef = useRef();
@@ -32,6 +34,9 @@ function User({
   const [title, settitle] = useState([]);
   // const [searchb, setSearchb] = useState([]);
   const [searchText, setsearchText] = useState(false);
+
+  
+ 
 
   let navigater = useNavigate();
 
@@ -62,6 +67,7 @@ function User({
         console.log(error);
       });
   }
+
 
   function searchBarModal() {
     //백이랑 인스타 리스드를 뿌려주기 위한 axios
@@ -233,75 +239,45 @@ function User({
           <span>회원님을 위한 추천</span>
           <span>모두 보기</span>
         </div>
-        <div className="recommend-down">
-          <div className="recommend-contents">
-            <img src="./img/bk.jpg" alt="추사" />
-            <div>
-              <p className="user-id">psg</p>
-              <p className="user-name">0hyun0hyun님 외 2명이...</p>
-            </div>
-            <div className="follow">
-              {follow ? (
-                <span
-                  className="following"
-                  onClick={() => {
-                    setFollowing(!follow);
-                  }}
-                >
-                  팔로잉
-                </span>
-              ) : (
-                <span
-                  onClick={() => {
-                    setFollowing(!follow);
-                  }}
-                >
-                  팔로우
-                </span>
-              )}
-            </div>
-          </div>
-          <div className="recommend-contents">
-            <img src="./img/bk.jpg" alt="추사" />
-            <div>
-              <p className="user-id">manchesterun</p>
-              <p className="user-name">0hyun0hyun님 외 2명이...</p>
-            </div>
-            <div>
-              <span className="follow">팔로우</span>
-            </div>
-          </div>
-          <div className="recommend-contents">
-            <img src="./img/bk.jpg" alt="추사" />
-            <div>
-              <p className="user-id">jeenny</p>
-              <p className="user-name">0hyun0hyun님 외 2명이...</p>
-            </div>
-            <div>
-              <span className="follow">팔로우</span>
-            </div>
-          </div>
-          <div className="recommend-contents">
-            <img src="./img/bk.jpg" alt="추사" />
-            <div>
-              <p className="user-id">0hyun0hyun</p>
-              <p className="user-name">0hyun0hyun님 외 2명이...</p>
-            </div>
-            <div>
-              <span className="follow">팔로우</span>
-            </div>
-          </div>
-          <div className="recommend-contents">
-            <img src="./img/bk.jpg" alt="추사" />
-            <div>
-              <p className="user-id">0hyun0hyun</p>
-              <p className="user-name">0hyun0hyun님 외 2명이...</p>
-            </div>
-            <div>
-              <span className="follow">팔로우</span>
-            </div>
-          </div>
-        </div>
+        {recommendUser.slice(0,5).map((val, i) => {
+            
+          return (
+            <div className="recommend-down">
+              <div className="recommend-contents">
+                <img src={val.userprofile} alt="추사" 
+                onError={(e) => {
+                  e.stopPropagation();
+                  e.target.src = "/images/user.jpg";
+                }}/>
+                <div>
+                  <p className="user-id">{val.id}</p>
+                  <p className="user-name">0hyun0hyun님 외 2명이...</p>
+                </div>
+                <div className="follow">
+                  {follow ? (
+                    <span
+                      className="following"
+                      onClick={() => {
+                        setFollowing(!follow);
+                      }}
+                    >
+                      팔로잉
+                    </span>
+                  ) : (
+                    <span
+                      onClick={() => {
+                        setFollowing(!follow);
+                      }}
+                    >
+                      팔로우
+                    </span>
+                  )}
+                </div>
+              </div>
+            </div>)
+        }
+        )}
+
       </div>
       <div className="information">
         <p> &nbsp;&nbsp;About ・ Help ・ Press ・ API ・ Jobs ・ Privacy </p>
