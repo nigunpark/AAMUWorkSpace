@@ -671,8 +671,12 @@ public class MainController {
 		String message = returnMap.get("message").toString();
 		returnMap.put("bool", true);
 		returnMap.put("rbn", null);
+		returnMap.put("bbslist", null);
+		returnMap.put("dtolist", null);
+		returnMap.put("route", null);
 		String rbn = null;
-		if(message.contains("searchRoute")) {
+		List<BBSDTO> bbsList = new Vector<>();
+		if(message.contains("recommendRoute")) {
 			/*
 			message = message.split("searchRoute")[0].trim();
 			System.out.println("마지막 응답 메시지:"+message);
@@ -693,7 +697,18 @@ public class MainController {
 			uri="http://192.168.0.22:5020/recommend";
 			responseEntity =
 					restTemplate.exchange(uri, HttpMethod.POST,httpEntity, Map.class);
-			return responseEntity.getBody();
+			message = "AAMU에서 추천하는 여행 플래너!";
+			List<Map> list = (List)responseEntity.getBody().get("rbns");
+			System.out.println(list.toString());
+
+			for(Map planner:list) {
+				
+				BBSDTO bbsMap =bbsService.bbsSelectOne((Integer.parseInt(planner.get("rbn").toString())));
+				bbsList.add(bbsMap);
+			}
+			returnMap.put("message", message);
+			returnMap.put("bbslist", bbsList);
+			return returnMap;
 		}
 		else if(message.contains("searchPlace")){
 			message = message.split("searchPlace")[0].trim();
@@ -705,17 +720,42 @@ public class MainController {
 			Map codeMap = MainServiceImpl.switchArea(area, contenttype);
 			System.out.println(codeMap);
 			codeMap.put("rownum", 1);
-			String contentid = service.searchMostRoute(codeMap);
-			if(contentid!=null) {
-				AttractionDTO dto = service.selectOnePlace(Integer.parseInt(contentid),req);
-				returnMap.put("message","현재 AAMU에서 추천하는"+contenttype+"입니다");
-				returnMap.put("title",dto.getTitle());
-				returnMap.put("kakaokey", dto.getKakaokey());
+			List<String> contentids = service.searchMostRoute(codeMap);
+			List<Map> dtoList = new Vector<>();
+			if(contentids!=null) {
+				for(String contentid:contentids) {
+					Map contentMap = new HashMap<>();
+					AttractionDTO dto = service.selectOnePlace(Integer.parseInt(contentid),req);
+					contentMap.put("title",dto.getTitle());
+					contentMap.put("kakaokey", dto.getKakaokey());
+					dtoList.add(contentMap);
+				}
+				returnMap.put("dtolist", dtoList);
+				returnMap.put("message","현재 AAMU에서 추천하는 "+contenttype+" 입니다");
+
 			}
 			else {
 				returnMap.put("message","죄송합니다 현재 추천할만한 장소가 업습니다.");
 			}
 			
+		}
+		else if(message.contains("searchRoute")) {
+			message = message.split("searchRoute")[0].trim();
+			System.out.println("마지막 응답 메시지:"+message);
+			rbn = service.searchPlanner(message);
+			if(rbn == null) message = "죄송합니다 알맞은 플래너가 없습니다.";
+			else {
+				returnMap.put("route", message+" (CLICK)");
+				returnMap.put("rbn",rbn);
+				int rbnInt = Integer.parseInt(rbn);
+				BBSDTO dto = bbsService.bbsSelectOne(rbnInt);
+				bbsList.add(dto);
+				returnMap.put("bbslist", bbsList);
+				message = message+" 일정의 여행 플래너 입니다!";
+			}
+				
+			
+			returnMap.put("message", message);
 		}
 		return returnMap;
 	}

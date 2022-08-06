@@ -47,7 +47,7 @@ public class UserController {
 		return affected;
 	}
 	@PostMapping("/users/upload")
-	public int updateUser(@RequestParam Map map,@RequestParam(required = false) MultipartFile userprofile,@RequestParam List theme,HttpServletRequest req) throws IllegalStateException, IOException {
+	public UsersDTO updateUser(@RequestParam Map map,@RequestParam(required = false) MultipartFile userprofile,@RequestParam List theme,HttpServletRequest req) throws IllegalStateException, IOException {
 
 		int affected=0;
 		System.out.println(map);
@@ -63,9 +63,12 @@ public class UserController {
 			map.put("userprofile",photo);
 		}
 		else map.put("userprofile", originalProfile);
+		map.put("themes", theme);
 		affected = service.updateUser(map);
+		UsersDTO userDto = service.selectOneUser(map);
+		userDto.setUserprofile(FileUploadUtil.requestOneFile(dto.getUserprofile(),"/resources/userUpload", req));
 		
-		return affected;
+		return userDto;
 	}
 	@GetMapping("/users/selectone")
 	public UsersDTO selectOneUser(@RequestParam Map map,HttpServletRequest req) {

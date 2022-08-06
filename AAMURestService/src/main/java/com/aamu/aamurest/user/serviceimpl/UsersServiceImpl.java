@@ -38,18 +38,26 @@ public class UsersServiceImpl implements UsersService{
 
 	@Override
 	public UsersDTO selectOneUser(Map map) {
-		
-		return dao.selectOneUser(map);
+		UsersDTO dto = dao.selectOneUser(map);
+		List<String> themeids = dao.selectUserTheme(map);
+		List<String> themenames = new Vector<>();
+		for(String themeid:themeids) {
+			themenames.add(dao.selectOneTheme(themeid));
+		}
+		dto.setTheme(themenames);
+		return dto;
 	}
 
 	@Override
 	public int updateUser(Map map) {
 		int affected = 0;
+		System.out.println("map"+map);
 		affected = transactionTemplate.execute(tx->{
 			dao.deleteTheme(map);
-			List<Map> list=(List)map.get("themes");
-			for(Map listMap : list) {
-				map.put("themeid", UserUtil.changeTheme(listMap.get("theme").toString()));
+			List<String> list=(List)map.get("themes");
+			for(String theme : list) {
+				System.out.println(theme);
+				map.put("themeid", UserUtil.changeTheme(theme));
 				System.out.println(map);
 				dao.insertTheme(map);
 			}
@@ -90,13 +98,13 @@ public class UsersServiceImpl implements UsersService{
 
 	@Override
 	public List selectUserTheme(Map map) {
+		
 		List<String> list = dao.selectUserTheme(map);
-		List<Map> themeList = new Vector<>();
+		List<String> themenames = new Vector<>();
 		for(String themeid:list) {
-			Map themeMap = dao.selectOneTheme(themeid);
-			themeList.add(themeMap);
+			themenames.add(dao.selectOneTheme(themeid));
 		}
-		return themeList;
+		return themenames;
 	}
 
 

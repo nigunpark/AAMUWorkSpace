@@ -144,8 +144,8 @@ public class MainDAO {
 		
 		return template.selectOne("countRouteBBS",rbn);
 	}
-	public String searchMostRoute(Map map) {
-		return template.selectOne("searchMostRoute", map);
+	public List<String> searchMostRoute(Map map) {
+		return template.selectList("searchMostRoute", map);
 	}
 
 	public List<String> searchTopPlaces(Map map) {
@@ -184,6 +184,10 @@ public class MainDAO {
 	public List<AttractionDTO> getTopAttr() {
 		
 		return template.selectList("getTopAttr");
+	}
+	public BBSDTO selectOneBBSTitle(int rbn) {
+		
+		return template.selectOne("selectOneBBSTitle", rbn);
 	}
 
 }

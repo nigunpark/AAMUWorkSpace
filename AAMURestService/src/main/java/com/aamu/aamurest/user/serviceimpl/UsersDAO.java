@@ -60,7 +60,7 @@ public class UsersDAO {
 		return template.selectList("selectUserTheme", map);
 	}
 
-	public Map selectOneTheme(String themeid) {
+	public String selectOneTheme(String themeid) {
 		
 		return template.selectOne("selectOneTheme", themeid);
 	}

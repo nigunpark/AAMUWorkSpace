@@ -21,5 +21,5 @@ public class UsersDTO {
 	private Date joindate;
 	private String userprofile;
 	private String socialnum;
-	private List<Map> theme;
+	private List<String> theme;
 }
