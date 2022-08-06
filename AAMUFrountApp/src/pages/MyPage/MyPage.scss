@@ -464,23 +464,21 @@ a {
 }
 .projects-theme {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-  flex-direction: row;
+  // flex-wrap: wrap;
+  // justify-content: center;
+  // align-items: center;
   gap: 5px;
-  // box-shadow: var(--shadow);
   width: 100%;
+  height: 100%;
+  // border: 1px solid red;
 }
 .projects-theme-item {
-  border: 1px solid black;
-  height: 30px;
-  border-radius: 30%;
+  height: 100%;
+  width: 100%;
+  border-radius: 5px;
   padding: 0 5px;
   text-align: center;
-  background-color: #f5efff;
   box-shadow: var(--lightShadow);
-  border: 2px solid white;
   transition: 0.1s;
   cursor: pointer;
 }
@@ -1745,15 +1743,25 @@ a {
   flex-direction: column;
   gap: 10px;
 }
+.myProfile__theme-container {
+  display: grid;
+  grid-template-columns: 10% auto;
+  width: 100%;
+  border: 2px solid grey;
+  border-radius: 5px;
+  padding: 5px;
+  margin-top: 10px;
+  box-shadow: var(--shadow);
+}
 .myProfile__zCode {
   border: 2px solid rgb(128, 128, 128);
-  width: 80px;
+  width: 90px;
   border-radius: 5px;
   height: 30px;
   display: flex;
 
   input {
-    width: 60px;
+    width: 90px;
     font-size: 18px;
     border-radius: 0.3em;
     padding: 3px;
@@ -1785,5 +1793,8 @@ a {
 .profile-title-theme {
   font-size: 14px;
   font-weight: bold;
-  width: 100%;
+  // width: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
