@@ -41,6 +41,7 @@ import com.aamu.aamurest.user.service.api.KakaoKey.Document;
 import com.aamu.aamurest.user.service.api.KakaoReview;
 import com.aamu.aamurest.user.serviceimpl.MainServiceImpl;
 import com.aamu.aamurest.util.FileUploadUtil;
+import com.aamu.aamurest.util.UserUtil;
 
 @RestController
 @CrossOrigin("*")
@@ -665,7 +666,6 @@ public class MainController {
 
 		ResponseEntity<Map> responseEntity =
 				restTemplate.exchange(uri, HttpMethod.POST,httpEntity, Map.class);
-		
 		System.out.println(responseEntity.getBody());
 		Map returnMap = responseEntity.getBody();
 		String message = returnMap.get("message").toString();

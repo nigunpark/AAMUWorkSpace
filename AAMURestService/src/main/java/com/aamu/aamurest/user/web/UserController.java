@@ -47,7 +47,7 @@ public class UserController {
 		return affected;
 	}
 	@PostMapping("/users/upload")
-	public int updateUser(@RequestParam Map map,@RequestParam(required = false) MultipartFile userprofile,HttpServletRequest req) throws IllegalStateException, IOException {
+	public int updateUser(@RequestParam Map map,@RequestParam(required = false) MultipartFile userprofile,@RequestParam List theme,HttpServletRequest req) throws IllegalStateException, IOException {
 
 		int affected=0;
 		System.out.println(map);
