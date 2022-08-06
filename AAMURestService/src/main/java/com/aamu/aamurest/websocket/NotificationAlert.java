@@ -1,5 +1,6 @@
 package com.aamu.aamurest.websocket;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,8 +28,12 @@ public class NotificationAlert {
 	@Autowired
 	private RestTemplate restTemplate;
 	
-	public void NotiMessage(String title,String fromthan,NotificationDTO message) {
-		
+	public static final String BBS = "BBS";
+	public static final String GRAM = "GRAM";
+	
+	public void NotiMessage(String title,NotificationDTO message) {
+		Date date = new Date();
+		message.setSenddate(date.getTime());
 		template.insert("insertNotiMessage", message);
 		
 		try {
@@ -42,7 +47,8 @@ public class NotificationAlert {
 			notification.put("body", message.getAmessage());
 			//데이타 메시지- 자바코드로 하드코딩(혹은 웹 UI만들어서 받던지)
 			Map<String,String> data = new HashMap<>();
-			data.put("fromthan", fromthan);
+			data.put("fromthan", message.getFromthan());
+			data.put("no", String.valueOf(message.getNo()));
 			
 			Map<String,Object> bodies = new HashMap<>();
 			bodies.put("notification", notification);

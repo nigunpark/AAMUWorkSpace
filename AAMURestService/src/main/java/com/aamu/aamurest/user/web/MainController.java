@@ -50,6 +50,8 @@ public class MainController {
 
 	@Value("${kakaokey}")
 	private String kakaokey;
+	
+	private final String serverip = "http://192.168.45.107";
 
 	@Autowired
 	private MainService service;
@@ -510,7 +512,7 @@ public class MainController {
 		KakaoReview kakaReview = new KakaoReview();
 		if(kakaoKey!=null) {
 
-			String uri = "http://192.168.0.22:5000/review?map="+kakaoKey;
+			String uri = serverip+":5000/review?map="+kakaoKey;
 
 			ResponseEntity<KakaoReview> responseEntity =
 					restTemplate.exchange(uri, HttpMethod.GET, null, KakaoReview.class);
@@ -610,7 +612,7 @@ public class MainController {
 			header.add("Content-Type", "application/json");
 			requestBody.add("id", map.get("id").toString());
 			HttpEntity httpEntity = new HttpEntity<>(requestBody,header);
-			String uri = "http://192.168.0.22:5020/recommend";
+			String uri = serverip+":5020/recommend";
 			ResponseEntity<Map> responseEntity =
 					restTemplate.exchange(uri, HttpMethod.POST,httpEntity, Map.class);
 			System.out.println(responseEntity.getBody());
@@ -656,7 +658,7 @@ public class MainController {
 	@PostMapping("/main/chatbot")
 	public Map mainChatbot(@RequestBody Map map,HttpServletRequest req) {
 		System.out.println(map);
-		String uri="http://192.168.0.22:5020/message";
+		String uri= serverip+":5020/message";
 		MultiValueMap<String,String> requestBody = new LinkedMultiValueMap<>();
 		HttpHeaders header = new HttpHeaders();
 		header.add("Content-Type", "application/json");
@@ -694,7 +696,7 @@ public class MainController {
 			
 			returnMap.put("message", message);
 			*/
-			uri="http://192.168.0.22:5020/recommend";
+			uri=serverip+":5020/recommend";
 			responseEntity =
 					restTemplate.exchange(uri, HttpMethod.POST,httpEntity, Map.class);
 			message = "AAMU에서 추천하는 여행 플래너!";

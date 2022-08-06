@@ -19,4 +19,6 @@ public class NotificationDTO {
 	private String amessage;
 	private long senddate;
 	private int readknow;
+	private String fromthan;
+	private int no;
 }

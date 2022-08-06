@@ -6,19 +6,19 @@
 <mapper namespace="aamu.mybatis.mapper.notimessage">
 	
 	<insert id="insertNotiMessage" parameterType="notificationDTO">
-		INSERT INTO NORIFICATION
-		VALUES(SEQ_NANO.NEXTVAL,#{id},#{amessage},#{senddate},default)
+		INSERT INTO NOTIFICATION
+		VALUES(SEQ_NANO.NEXTVAL,#{id},#{amessage},#{senddate},default,#{fromthan},#{no})
 		<selectKey keyProperty="nano" resultType="int" order="AFTER">
 	    	SELECT SEQ_NANO.CURRVAL FROM DUAL
 	    </selectKey>
 	</insert>
 	
 	<select id="selectListNotiMessage" parameterType="Map">
-		SELECT * FROM NORIFICATION WHERE id=#{id}
+		SELECT * FROM NOTIFICATION WHERE id=#{id}
 	</select>
 	
 	<update id="updateNotiMessage" parameterType="Map">
-		UPDATE NORIFICATION SET READKNOW = 1 WHERE nano=#{nano}
+		UPDATE NOTIFICATION SET READKNOW = 1 WHERE nano=#{nano}
 	</update>
 	
 </mapper>

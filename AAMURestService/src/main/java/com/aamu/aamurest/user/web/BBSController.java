@@ -213,9 +213,8 @@ public class BBSController {
 		if(affected==1) resultMap.put("result", "insertSuccess");
 		else resultMap.put("result", "insertNotSuccess");
 		
-		Date date = new Date();
 		String authid = bbsService.bbsSelectUserID(rbn);
-		notificationAlert.NotiMessage("이런여행 어때 게시판", "BBS",new NotificationDTO(0,authid,map.get("id").toString()+"님이 리뷰를 남겼어요",date.getTime(),0) );
+		notificationAlert.NotiMessage("이런여행 어때 게시판",new NotificationDTO(0,authid,map.get("id").toString()+"님이 리뷰를 남겼어요",0,0,notificationAlert.BBS,rbn));
 		return resultMap;
 	}
 	
