@@ -29,6 +29,7 @@ import { addForChatInfo } from "./redux/store";
 import JoinStep3 from "./components/Join/JoinStep3";
 import TokenUser from "./components/Login/Kakao/TokenUser";
 import LoginFunc from "./components/Login/Kakao/LoginFunc";
+import Content from "./pages/Forum/Content/Content";
 function App() {
   let dispatch = useDispatch();
   let location = useLocation();
@@ -48,7 +49,7 @@ function App() {
   const [list, setlist] = useState([]);
   const [forReRender, setForReRender] = useState(false);
   const navigate = useNavigate();
-  const [accountEmail, setaccountEmail] = useState('');
+  const [accountEmail, setaccountEmail] = useState("");
   const handleScroll = () => {
     if (window.scrollY > 950 && window.scrollY < 2500) setScrollNav(true);
     else setScrollNav(false);
@@ -56,13 +57,10 @@ function App() {
   window.addEventListener("scroll", handleScroll);
 
   const subscribe = () => {
-    client.current.subscribe(
-      `/notification/${sessionStorage.getItem("username")}`,
-      ({ body }) => {
-        // setChatMessages((_chatMessages) => [..._chatMessages, JSON.parse(body)]);
-        console.log("body", body);
-      }
-    );
+    client.current.subscribe(`/notification/${sessionStorage.getItem("username")}`, ({ body }) => {
+      // setChatMessages((_chatMessages) => [..._chatMessages, JSON.parse(body)]);
+      console.log("body", body);
+    });
   };
   //채팅연결
   const connect = () => {
@@ -97,7 +95,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/WholeMap" element={<WholeMap />} />
           <Route path="/mainPage/:currPosition" element={<MainPage />} />
-          <Route path="/forum" element={<Forum />} />
+          <Route path="/forum" element={<Content />} />
           <Route path="/qna" element={<QnA />} />
           <Route path="/qnaDetail" element={<QnADetail />} />
           <Route path="/qnaWrite" element={<QnAWrite />} />
@@ -145,9 +143,24 @@ function App() {
         <Route path="/login" element={<LoginTest />} />
         <Route path="/test" element={<Test />} />
         <Route path="/Detailmodal" element={<DetailModal />} />
-        <Route path="/tokenuser" element={<TokenUser navigate={navigate} accountEmail={accountEmail} setaccountEmail={setaccountEmail}/>} />
-        <Route path="/loginFunc" element={<LoginFunc navigate={navigate} accountEmail={accountEmail}/>} />
-        <Route path="/oauth/callback/kakao" element={<KakaoRedirectHandler navigate={navigate}/>} />
+        <Route
+          path="/tokenuser"
+          element={
+            <TokenUser
+              navigate={navigate}
+              accountEmail={accountEmail}
+              setaccountEmail={setaccountEmail}
+            />
+          }
+        />
+        <Route
+          path="/loginFunc"
+          element={<LoginFunc navigate={navigate} accountEmail={accountEmail} />}
+        />
+        <Route
+          path="/oauth/callback/kakao"
+          element={<KakaoRedirectHandler navigate={navigate} />}
+        />
       </Routes>
     </div>
   );
