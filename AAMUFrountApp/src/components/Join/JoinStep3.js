@@ -1,38 +1,24 @@
 import React, { useEffect, useRef, useState } from "react";
-import {
-  Container,
-  Content,
-  Title,
-  Body,
-  Footer,
-  ContentStep3,
-} from "../Modal/ForJoin.js";
+import { Container, Title, Footer, ContentStep3 } from "../Modal/ForJoin.js";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFolderOpen } from "@fortawesome/free-regular-svg-icons";
 import "./Join.css";
 import { Typography } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
-import {
-  fa1,
-  fa2,
-  fa3,
-  faCheck,
-  faFolderPlus,
-  faHouse,
-} from "@fortawesome/free-solid-svg-icons";
+import { fa1, fa2, fa3, faHouse } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
-import { useDispatch, useSelector } from "react-redux";
-import { addStepOne } from "../../redux/store.js";
+import { useSelector } from "react-redux";
+
 import styled from "styled-components";
 const JoinStep3 = () => {
   const forSlideRef = useRef();
   let navigate = useNavigate();
-  let dispatch = useDispatch();
+
   let reduxState = useSelector((state) => {
     return state;
   });
   console.log("reduxState.joinData", reduxState.joinData);
-  let checkBoxRef = useRef();
+
   const [themes, setThemes] = useState([]);
   const [checkeds, setCheckeds] = useState([]);
   const getThemes = async () => {
@@ -148,6 +134,7 @@ const JoinStep3 = () => {
                   >
                     <ImgCon>
                       <img
+                        alt=""
                         src={val.themeimg}
                         style={{
                           width: "100%",

@@ -233,9 +233,9 @@
 		SELECT t.tname FROM commutag ct JOIN tags t ON ct.tno=t.tno WHERE ct.lno=#{lno}
 	</select>
 	
-	<!-- 글 목록용_추천 계정 -->
+	<!-- 글 목록용_추천 계정 태그얻기 -->
 	<select id="getAllTags" parameterType="Map" resultType="String">
-		SELECT t.tname FROM tags t JOIN commutag ct ON t.tno=ct.tno JOIN community c ON c.lno=ct.lno WHERE id=#{id}
+		SELECT DISTINCT t.tname FROM tags t JOIN commutag ct ON t.tno=ct.tno JOIN community c ON c.lno=ct.lno WHERE id=#{id}
 	</select>
 	
 	<!-- tags테이블에 tno 셀렉트 -->

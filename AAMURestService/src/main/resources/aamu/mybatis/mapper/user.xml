@@ -45,7 +45,7 @@
 		SELECT themeid FROM aamuinter WHERE id=#{id}
 	</select>
 	<select id="getAllUser" resultType="String">
-		SELECT id FROM users;
+		SELECT id FROM users
 	</select>
 	<delete id="deleteTheme" parameterType="Map">
 		DELETE aamuinter WHERE id=#{id}

@@ -22,7 +22,7 @@ import DaumPostcode from "react-daum-postcode";
 import emailjs from "@emailjs/browser";
 import { addStepTwo } from "../../redux/store.js";
 import { useSelector, useDispatch } from "react-redux";
-import axios from "axios";
+
 const JoinStep2 = () => {
   let joominGender = useRef();
   let nameRef = useRef();
@@ -57,7 +57,6 @@ const JoinStep2 = () => {
   const [imageFile, setImageFile] = useState(null);
   console.log("reduxState", reduxState.joinData);
   useEffect(() => {
-   
     if (sessionStorage.getItem("usernickname") !== null) {
       if (sessionStorage.getItem("userimgkakao").length > 0) {
         const img = sessionStorage.getItem("userimgkakao");
@@ -104,6 +103,7 @@ const JoinStep2 = () => {
                     <div className="join__profile-img-preview">
                       <label htmlFor="photo" className="join__stepTwo-label" />
                       <img
+                        alt=""
                         className="join__stepTwo-img"
                         ref={photoRef}
                         src="/images/no-image.jpg"
@@ -642,7 +642,7 @@ const SendEmail = ({
           <span
             className="emailValid-confirm-btn"
             onClick={() => {
-              if (userVNumRef.current.value == number) {
+              if (userVNumRef.current.value === number) {
                 setEmailCk(true);
               }
             }}

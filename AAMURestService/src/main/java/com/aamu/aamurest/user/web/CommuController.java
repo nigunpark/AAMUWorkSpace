@@ -106,10 +106,12 @@ public class CommuController {
 			dto.setFollowercount(commuService.commuFollowerCount(map));
 			//내가 팔로잉하는 계정 수 셋팅
 			dto.setFollowingcount(commuService.commuFollowingCount(map));
-			//추천 계정 셋팅
-			commuService.commuRecommendUser(map);
+			
 			
 		}/////for
+		//추천 한개씩 나오게 테스트용
+		//추천 계정 셋팅
+		commuService.commuRecommendUser(map);
 //		System.out.println("몇개 넘어가니:"+list.size());
 		return list;
 	}////////////////commuSelectList

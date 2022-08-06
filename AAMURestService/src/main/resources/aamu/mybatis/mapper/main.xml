@@ -151,7 +151,7 @@
 		Insert into theme values (SEQ_THE.nextval,#{themename},#{themeimg})
 	</insert>
 	<select id="getUserTheme" parameterType="Map" resultType="String">
-		SELECT themename from theme t JOIN aamuinter a ON t.themeid=a.themeid WHERE id=#{id}
+		SELECT DISTINCT themename from theme t JOIN aamuinter a ON t.themeid=a.themeid WHERE id=#{id}
 	</select>
 	<select id="selectTopBBS" resultType="int">
 		select rbn from routebbs where <![CDATA[rownum<5]]> order by rateavg desc

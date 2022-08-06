@@ -1,6 +1,7 @@
 package com.aamu.aamurest.user.service;
 
 import java.util.List;
+import java.util.Map;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -37,5 +38,5 @@ public class CommuDTO {
 	private int followercount; //나를 팔로워하는 숫자
 	private int followingcount; //내가 팔로잉하는 숫자
 	private Boolean isFollower;
-	private List<CommuDTO> recommenduser; //추천 id
+	private List<Map> recommenduser; //추천 id
 }
