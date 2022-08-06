@@ -55,8 +55,8 @@ public class BBSController {
 
 	//글 목록
 	@GetMapping("/bbs/SelectList")
-	public List<BBSDTO> bbsSelectList(HttpServletRequest req){
-		List<BBSDTO> list = bbsService.bbsSelectList();
+	public List<BBSDTO> bbsSelectList(@RequestParam Map mapp,HttpServletRequest req){
+		List<BBSDTO> list = bbsService.bbsSelectList(mapp);
 		Map map = new HashMap();
 		System.out.println("list:"+list);
 		for(BBSDTO dto:list) {

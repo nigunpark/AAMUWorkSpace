@@ -31,8 +31,8 @@ public class BBSServiceImpl implements BBSService{
 
 	//글 목록
 	@Override
-	public List<BBSDTO> bbsSelectList() {
-		List<BBSDTO> bbsList = dao.bbsSelectList();
+	public List<BBSDTO> bbsSelectList(Map map) {
+		List<BBSDTO> bbsList = dao.bbsSelectList(map);
 		List<BBSDTO> returnList = new Vector<>();
 
 		for(BBSDTO dto:bbsList) {

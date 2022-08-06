@@ -6,7 +6,7 @@
 <mapper namespace="aamu.mybatis.mapper.bbs">
 
 	<!-- 글 목록용 -->
-	<select id="bbsSelectList" resultType="BBSDTO">
+	<select id="bbsSelectList" parameterType="Map" resultType="BBSDTO">
 		SELECT rbbs.*,t.* FROM routebbs rbbs JOIN theme t ON rbbs.themeid=t.themeid
 		<if test="searchColumn != null">
 			<choose>

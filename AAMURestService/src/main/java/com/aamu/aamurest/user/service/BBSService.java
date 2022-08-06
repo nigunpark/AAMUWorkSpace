@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 @Service
 public interface BBSService {
 	//글 목록
-	List<BBSDTO> bbsSelectList();
+	List<BBSDTO> bbsSelectList(Map map);
 
 	//글 목록_사진 뿌려주기
 	List bbsSelectPhotoList(int rbn);
