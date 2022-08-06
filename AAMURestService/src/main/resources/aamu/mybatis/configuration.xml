@@ -18,6 +18,7 @@
   		<typeAlias type="com.aamu.aamurest.user.service.UsersDTO" alias="usersDTO"/>
   		<typeAlias type="com.aamu.aamurest.user.service.ChatRoomDTO" alias="chatRoomDTO"/>
   		<typeAlias type="com.aamu.aamurest.user.service.ChatingMessageDTO" alias="chatingMessageDTO"/>
+  		<typeAlias type="com.aamu.aamurest.user.service.NotificationDTO" alias="notificationDTO"/>
   		<typeAlias type="com.aamu.aamurest.user.service.admin.NoticeDTO" alias="NoticeDTO"/>
   		<typeAlias type="com.aamu.aamurest.user.service.admin.QNADTO" alias="QNADTO"/>
   		<typeAlias type="com.aamu.aamurest.user.service.admin.AnswerDTO" alias="AnswerDTO"/>
@@ -30,5 +31,7 @@
 		<mapper resource="aamu/mybatis/mapper/chatroom.xml" />
 		<mapper resource="aamu/mybatis/mapper/notice.xml" />
 		<mapper resource="aamu/mybatis/mapper/qna.xml" />
+		<mapper resource="aamu/mybatis/mapper/notimessage.xml" />
+		<mapper resource="aamu/mybatis/mapper/firebase.xml" />
 	</mappers>
 </configuration>

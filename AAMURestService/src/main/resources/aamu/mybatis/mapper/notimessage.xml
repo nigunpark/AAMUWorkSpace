@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="aamu.mybatis.mapper.notimessage">
+	
+	<insert id="insertNotiMessage" parameterType="notificationDTO">
+		INSERT INTO NORIFICATION
+		VALUES(SEQ_NANO.NEXTVAL,#{id},#{amessage},#{senddate},default)
+		<selectKey keyProperty="nano" resultType="int" order="AFTER">
+	    	SELECT SEQ_NANO.CURRVAL FROM DUAL
+	    </selectKey>
+	</insert>
+	
+	<select id="selectListNotiMessage" parameterType="Map">
+		SELECT * FROM NORIFICATION WHERE id=#{id}
+	</select>
+	
+	<update id="updateNotiMessage" parameterType="Map">
+		UPDATE NORIFICATION SET READKNOW = 1 WHERE nano=#{nano}
+	</update>
+	
+</mapper>
