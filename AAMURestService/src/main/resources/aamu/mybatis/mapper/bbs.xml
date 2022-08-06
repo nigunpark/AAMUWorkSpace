@@ -40,6 +40,10 @@
 		WHERE rbbs.rbn=#{rbn}
 	</select>
 	
+	<select id="bbsSelectUserID" parameterType="int" resultType="String">
+		SELECT id FROM routebbs where rbn = #{value}
+	</select>
+		
 	<!-- 글 등록 -->
 	<insert id="bbsInsert" parameterType="map">
 		INSERT INTO routebbs VALUES (#{rbn},#{title},SYSDATE,#{content},#{themeid},DEFAULT,#{id})

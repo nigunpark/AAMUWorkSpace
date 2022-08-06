@@ -94,7 +94,7 @@ public class BBSDAO {
 
 	//글 상세보기_모든 리뷰 보기
 	public List<ReviewDTO> reviewSelectList(int rbn) {
-		return template.selectList("reviewList",rbn);
+		return template.selectList("reviewSelectList",rbn);
 	}
 
 	//리뷰 등록
@@ -133,6 +133,10 @@ public class BBSDAO {
 	//평점 업데이트
 	public int updateRate(Map map) {
 		return template.update("updateRate",map);
+	}
+	
+	public String bbsSelectUserID(int rbn) {
+		return template.selectOne("bbsSelectUserID", rbn);
 	}
 
 
