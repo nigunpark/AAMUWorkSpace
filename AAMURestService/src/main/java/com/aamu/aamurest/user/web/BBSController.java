@@ -1,6 +1,7 @@
 package com.aamu.aamurest.user.web;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,12 +26,14 @@ import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import com.aamu.aamurest.user.service.AttractionDTO;
 import com.aamu.aamurest.user.service.BBSDTO;
 import com.aamu.aamurest.user.service.MainService;
+import com.aamu.aamurest.user.service.NotificationDTO;
 import com.aamu.aamurest.user.service.ReviewDTO;
 import com.aamu.aamurest.user.service.RouteDTO;
 import com.aamu.aamurest.user.service.UsersDTO;
 import com.aamu.aamurest.user.serviceimpl.BBSServiceImpl;
 import com.aamu.aamurest.util.FileUploadUtil;
 import com.aamu.aamurest.util.UserUtil;
+import com.aamu.aamurest.websocket.NotificationAlert;
 
 @CrossOrigin(origins="*")
 @RestController
@@ -46,6 +49,9 @@ public class BBSController {
 	
 	@Autowired
 	private MainService mainService;
+	
+	@Autowired
+	private NotificationAlert notificationAlert;
 
 	//글 목록
 	@GetMapping("/bbs/SelectList")
@@ -206,6 +212,11 @@ public class BBSController {
 		Map resultMap = new HashMap();
 		if(affected==1) resultMap.put("result", "insertSuccess");
 		else resultMap.put("result", "insertNotSuccess");
+		
+		Date date = new Date();
+		
+		notificationAlert.NotiMessage("", "BBS",new NotificationDTO(0,"",map.get("id").toString()+"님이 리뷰를 남겼어요",date.getTime(),0) );
+		
 		return resultMap;
 	}
 	
