@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import ContentItem from "./ContentItem";
 import "./Content.css";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import FSearch from "../FSearch/FSearch";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -23,10 +23,16 @@ const Content = () => {
   const [detailOne, setDetailOne] = useState({});
   const [kindOfSearch, setKindOfSearch] = useState("");
 
+  let location = useLocation();
   let searchOne = useRef();
   function chatbotModal() {
-    if (reduxState.forChatBotData.bool === true) {
-      setShowCBModal(true);
+    let dto;
+    if (location.state !== null) {
+      dto = location.state.dto;
+      setDetailOne(dto);
+      // setTimeout(setShowCBModal(true), 200);
+      // setShowCBModal(true);
+      setIsOpen(true);
     }
   }
   // console.log("detailOne", detailOne);
@@ -41,21 +47,21 @@ const Content = () => {
       })
       .then((resp) => {
         // setList(resp.data);
-        console.log("글 목록 가져오기 Content.js) :", resp.data);
+        // console.log("글 목록 가져오기 Content.js) :", resp.data);
         setListData(resp.data);
       })
       .catch((error) => {
-        console.log((error) =>
-          console.log("글 목록 가져오기 실패(Content.js) :", error)
-        );
+        // console.log((error) => console.log("글 목록 가져오기 실패(Content.js) :", error));
       });
   };
   // useEffect(() => {}, []);
   useEffect(() => {
     selectList();
     bookMarkList();
-    chatbotModal();
   }, [isOpen]);
+  useEffect(() => {
+    chatbotModal();
+  }, []);
 
   const listSearch = (inSelectText) => {
     if (kindOfSearch == "" || inSelectText == "") {
@@ -93,11 +99,11 @@ const Content = () => {
         },
       })
       .then((resp) => {
-        console.log("북마크 목록 데이터 (Content.js) :", resp.data);
+        // console.log("북마크 목록 데이터 (Content.js) :", resp.data);
         setMyBookMark(resp.data);
       })
       .catch((error) => {
-        console.log("북마크 목록 실패 (Content.js) :", error);
+        // console.log("북마크 목록 실패 (Content.js) :", error);
       });
   };
 
@@ -122,7 +128,7 @@ const Content = () => {
   if (bookTF != undefined) {
     bookbol = bookBool.bookmark;
   }
-  console.log("bookbol find:", bookbol);
+  // console.log("bookbol find:", bookbol);
 
   return (
     <div className="Cards_minCon">
@@ -161,11 +167,7 @@ const Content = () => {
               {/* {console.log("kindOfSearch :", kindOfSearch)} */}
             </FormControl>
             <div className="search__warpper__minCon">
-              <input
-                type="text"
-                placeholder="검색어를 입력하세요"
-                ref={searchOne}
-              />
+              <input type="text" placeholder="검색어를 입력하세요" ref={searchOne} />
               <span>
                 <FontAwesomeIcon
                   icon={faMagnifyingGlass}
@@ -181,13 +183,7 @@ const Content = () => {
           </div>
           <div className="card__items_minCon">
             {listData.map((val, idx) => {
-              return (
-                <ContentItem
-                  setDetailOne={setDetailOne}
-                  detail={val}
-                  setIsOpen={setIsOpen}
-                />
-              );
+              return <ContentItem setDetailOne={setDetailOne} detail={val} setIsOpen={setIsOpen} />;
             })}
             {/* {console.log("내가 누른 글 번호 :", detailOne.rbn)} */}
           </div>
@@ -195,8 +191,8 @@ const Content = () => {
       </div>
       {showCBModal && (
         <DetailModal
+          detailRbn={detailOne}
           setShowCBModal={setShowCBModal}
-          detailRbn={reduxState.forChatBotData.rbn}
           setIsOpen={setIsOpen}
           setIsLoading={setIsLoading}
           bookbol={bookbol}
