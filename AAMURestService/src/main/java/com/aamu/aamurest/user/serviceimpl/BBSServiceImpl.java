@@ -224,6 +224,11 @@ public class BBSServiceImpl implements BBSService{
 		return dao.selectRouteList(rbn);
 	}
 
+	@Override
+	public String bbsSelectUserID(int rbn) {
+		return dao.bbsSelectUserID(rbn);
+	}
+
 }
 	
 	

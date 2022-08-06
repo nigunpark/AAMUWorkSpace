@@ -14,6 +14,9 @@ public interface BBSService {
 
 	//글 하나 선택
 	BBSDTO bbsSelectOne(int rbn);
+	
+	//글 하나 주인
+	String bbsSelectUserID(int rbn);
 
 	//글 등록
 	int bbsInsert(Map map);

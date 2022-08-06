@@ -134,6 +134,10 @@ public class BBSDAO {
 	public int updateRate(Map map) {
 		return template.update("updateRate",map);
 	}
+	
+	public String bbsSelectUserID(int rbn) {
+		return template.selectOne("bbsSelectUserID", rbn);
+	}
 
 
 
