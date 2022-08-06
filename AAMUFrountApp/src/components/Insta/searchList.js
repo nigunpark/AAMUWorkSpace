@@ -1,12 +1,10 @@
 import axios from "axios";
-import React, { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import session from "redux-persist/lib/storage/session";
+import React, { useState } from "react";
+
 import styled from "styled-components";
 import CommentSearch from "./ModalGroup/Comment/CommentSearch";
 
 function SearchList({ searchb, inputValue, forReRender, setForReRender }) {
-  let commentRef = useRef();
   const [val, setList] = useState([]);
   const [commentModal, setcommentModal] = useState(false);
   let [comment, setComment] = useState("");
@@ -42,6 +40,7 @@ function SearchList({ searchb, inputValue, forReRender, setForReRender }) {
       <Grid>
         <User>
           <img
+            alt=""
             src={searchb[0] === undefined ? null : searchb[0].photo[0]}
             onError={(e) => {
               e.stopPropagation();
@@ -51,7 +50,8 @@ function SearchList({ searchb, inputValue, forReRender, setForReRender }) {
           <div style={{ paddingLeft: "20px" }}>
             <p className="user-id">{inputValue}</p>
             <p className="user-name">
-              게시물 <strong style={{ color: "black" }}>{searchb.length}</strong>
+              게시물{" "}
+              <strong style={{ color: "black" }}>{searchb.length}</strong>
             </p>
           </div>
         </User>
@@ -139,18 +139,6 @@ const User = styled.div`
     margin-left: 10px;
   }
 `;
-const SearchProfile = styled.div`
-  display: grid;
-  position: absolute;
-  gap: 5px;
-  overflow: auto;
-  padding: 5px;
-
-  &::-webkit-scrollbar {
-    display: none;
-  }
-  // border: 1px solid red;
-`;
 const MyInstar = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -178,27 +166,6 @@ const InstaImg = styled.img`
   height: 100%;
   border-radius: 10px;
   object-fit: cover;
-`;
-
-const Container1 = styled.div`
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  display: flex;
-  z-index: 1;
-  justify-content: center;
-  align-items: center;
-`;
-const Overlay = styled.div`
-  position: relative;
-  width: 100%;
-  height: 100%;
-  z-index: 15;
-  background-color: rgba(0, 0, 0, 0.6);
 `;
 
 export default SearchList;
