@@ -178,6 +178,7 @@ public class BBSServiceImpl implements BBSService{
 		return dao.bbsSearchList(map);
 	}
 
+
 	/*---------------------------------------------------*/
 	
 	//리뷰 목록

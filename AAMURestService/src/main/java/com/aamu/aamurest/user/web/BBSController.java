@@ -71,9 +71,9 @@ public class BBSController {
 				route.setDto(mainService.selectOnePlace(route.getContentid(), req));
 			}
 			dto.setRouteList(routelist);
-			//map.put("id", dto.getId());
-			//map.put("rbn", dto.getRbn());
-			//dto.setBookmark(bbsService.bbsBookmark(map));
+			map.put("id", dto.getId());
+			map.put("rbn", dto.getRbn());
+			dto.setBookmark(bbsService.bbsBookmark(map));
 			
 		}
 		return list;

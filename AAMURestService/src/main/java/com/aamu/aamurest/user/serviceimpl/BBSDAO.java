@@ -94,7 +94,7 @@ public class BBSDAO {
 
 	//글 상세보기_모든 리뷰 보기
 	public List<ReviewDTO> reviewSelectList(int rbn) {
-		return template.selectList("reviewList",rbn);
+		return template.selectList("reviewSelectList",rbn);
 	}
 
 	//리뷰 등록
