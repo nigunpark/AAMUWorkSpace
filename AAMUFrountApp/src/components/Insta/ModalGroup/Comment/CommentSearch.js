@@ -1,40 +1,36 @@
 import styled from "styled-components";
 import React, { useEffect, useRef, useState } from "react";
-// import Profile from "../Profile";
-import MenuModal from "../MenuModal";
 import axios from "axios";
 import "../Slider/slick.css";
 import "../Slider/slick-theme.css";
 import { SwiperSlide, Swiper } from "swiper/react";
-import Edit from "../Edit/Edit";
-import { A11y, Autoplay, Navigation, Pagination, Scrollbar } from "swiper";
+import { A11y, Navigation, Pagination, Scrollbar } from "swiper";
 import "swiper/css"; //basic
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "../Upload/UploadSwiper.css";
 import dayjs from "dayjs";
-import { CommentsDisabled } from "@mui/icons-material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLocationDot, faX } from "@fortawesome/free-solid-svg-icons";
 
-function CommentSearch({ val, setForReRender, forReRender, setcommentModal, setcomments }) {
+function CommentSearch({
+  val,
+  setForReRender,
+  forReRender,
+  setcommentModal,
+  setcomments,
+}) {
   let menuRef = useRef();
   let replyRef1 = useRef();
   let commentRef1 = useRef();
 
-  const [commentHeart, setCommentHeart] = useState(false);
   const [position, setPosition] = useState("");
   const [modalShow, setModalShow] = useState(false);
-  const [reply, setReply] = useState(false);
-  const [modalSet, setModal] = useState(false);
-  const [position, setPosition] = useState("");
-  // const [forReRender, setForReRender] = useState(false);
   let [isValid, setisValid] = useState(false);
 
   function menuModalRef(e) {
     e.stopPropagation();
     if (e.target != menuRef.current) setModalShow(false);
-    // if (e.target != commentRef1.current) setcommentModal(false);
   }
   window.addEventListener("click", menuModalRef);
 
@@ -240,10 +236,17 @@ function CommentSearch({ val, setForReRender, forReRender, setcommentModal, setc
                       <div className="feeds-title">
                         <p>
                           <span className="userName">제목 </span>
-                          <span style={{ fontFamily: "normal" }}> {val.ctitle}</span>
+                          <span style={{ fontFamily: "normal" }}>
+                            {" "}
+                            {val.ctitle}
+                          </span>
                         </p>
                         <p className="userName">
-                          <strong style={{ fontSize: "13px", marginRight: "5px" }}>{val.id}</strong>
+                          <strong
+                            style={{ fontSize: "13px", marginRight: "5px" }}
+                          >
+                            {val.id}
+                          </strong>
                           <span
                             style={{
                               fontFamily: "normal",
@@ -294,9 +297,14 @@ function CommentSearch({ val, setForReRender, forReRender, setcommentModal, setc
                       >
                         <div style={{ display: "flex", flexDirection: "row" }}>
                           <p className="userName" style={{ fontSize: "13px" }}>
-                            <strong>{sessionStorage.getItem("username")}</strong>
+                            <strong>
+                              {sessionStorage.getItem("username")}
+                            </strong>
                           </p>
-                          <p className="userName" style={{ fontFamily: "normal", width: "78%" }}>
+                          <p
+                            className="userName"
+                            style={{ fontFamily: "normal", width: "78%" }}
+                          >
                             {val.reply}
                           </p>
                           <div
@@ -360,7 +368,10 @@ function CommentSearch({ val, setForReRender, forReRender, setcommentModal, setc
                   }}
                 >
                   {val.isLike ? (
-                    <i className="fa-solid fa-heart fa-2x" style={{ color: "red" }}></i>
+                    <i
+                      className="fa-solid fa-heart fa-2x"
+                      style={{ color: "red" }}
+                    ></i>
                   ) : (
                     <i className="fa-regular fa-heart fa-2x"></i>
                   )}
@@ -374,7 +385,9 @@ function CommentSearch({ val, setForReRender, forReRender, setcommentModal, setc
               </div>
               <div className="likeCount">
                 <h3>
-                  <strong style={{ fontSize: "15px" }}>좋아요 {val.likecount}개</strong>
+                  <strong style={{ fontSize: "15px" }}>
+                    좋아요 {val.likecount}개
+                  </strong>
                 </h3>
               </div>
               <div className="postDate">
