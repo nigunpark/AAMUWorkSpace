@@ -42,7 +42,8 @@
 }
 .bot {
   text-align: start;
-  display: flex;
+  display: inline-block;
+  flex-direction: column;
   justify-content: start;
 }
 .chatBotBox__span {
