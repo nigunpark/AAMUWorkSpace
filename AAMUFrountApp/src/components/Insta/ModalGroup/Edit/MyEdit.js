@@ -20,7 +20,7 @@ import "../Upload/UploadSwiper.css";
 import { confirmAlert } from "react-confirm-alert";
 import { faX } from "@fortawesome/free-solid-svg-icons";
 
-const MyEdit = ({ setlist, val, seteditModal, searchBar }) => {
+const MyEdit = ({ val, seteditModal, searchBar }) => {
   let menuRef = useRef();
   let searchRef = useRef();
   let titleRef = useRef();
@@ -123,7 +123,10 @@ const MyEdit = ({ setlist, val, seteditModal, searchBar }) => {
       <Overlay />
       <Contents>
         <FirstLine>
-          <div className="newPosting" style={{ marginLeft: "45%", width: "20%" }}>
+          <div
+            className="newPosting"
+            style={{ marginLeft: "45%", width: "20%" }}
+          >
             <h2>수정하기</h2>
           </div>
           {/* {showNext ?  */}
@@ -161,7 +164,11 @@ const MyEdit = ({ setlist, val, seteditModal, searchBar }) => {
           </Nextbtn>
         </FirstLine>
         <Body>
-          <form className="picfileframe" style={{ width: "65%" }} encType="multipart/form-data">
+          <form
+            className="picfileframe"
+            style={{ width: "65%" }}
+            encType="multipart/form-data"
+          >
             <input
               id="input-file"
               type="file"
@@ -235,7 +242,9 @@ const MyEdit = ({ setlist, val, seteditModal, searchBar }) => {
               <MyUsername>{sessionStorage.getItem("username")}</MyUsername>
             </div>
             <div>
-              <span style={{ fontWeight: "bold", marginLeft: "10px" }}>제목 : </span>
+              <span style={{ fontWeight: "bold", marginLeft: "10px" }}>
+                제목 :{" "}
+              </span>
               <input
                 ref={titleRef}
                 type="text"
