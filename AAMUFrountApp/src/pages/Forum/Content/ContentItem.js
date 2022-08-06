@@ -1,14 +1,10 @@
-import { Rating, Typography } from "@mui/material";
-import { Link } from "react-router-dom";
-import React, { useState } from "react";
-import DetailModal from "../DetailModal/DetailModal";
+import React from "react";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const ContentItem = ({ detail, setDetailOne, setIsOpen }) => {
   let day = new Date(detail.postdate);
   const postDay = dateFormat(day);
-  const detailRbn = detail.rbn; // rbn 값 저장 잘 됨
   function dateFormat(date) {
     let month = date.getMonth() + 1;
     let day = date.getDate();
@@ -16,7 +12,6 @@ const ContentItem = ({ detail, setDetailOne, setIsOpen }) => {
     day = day >= 10 ? day : "0" + day;
     return date.getFullYear() + "-" + month + "-" + day;
   }
-  //   목록에서 보여줄 평균 별점
   let star = 0;
   detail.reviewList.forEach((obj, i) => {
     star += Number(obj.rate);
@@ -47,7 +42,6 @@ const ContentItem = ({ detail, setDetailOne, setIsOpen }) => {
 
             <div className="card__item__bottom">
               <div className="card__item__rating_minCon">
-                {/* <img src="/images/star.png" style={{ width: "30px" }} /> */}
                 <div>
                   <FontAwesomeIcon
                     icon={faStar}
@@ -59,7 +53,6 @@ const ContentItem = ({ detail, setDetailOne, setIsOpen }) => {
                 </div>
                 <span className="idSpan_minCon">{detail.id}님의 plan</span>
               </div>
-              {/* style={{ display: "flex", flexDirection: "row" }} */}
               <div>
                 <h4
                   style={{
@@ -86,14 +79,6 @@ const ContentItem = ({ detail, setDetailOne, setIsOpen }) => {
           </figure>
         </div>
       </div>
-      {/* {isOpen == true ? (
-        <DetailModal
-          postDay={postDay}
-          detailRbn={detailRbn}
-          setShowCBModal={setShowCBModal}
-          setIsOpen={setIsOpen}
-        />
-      ) : null} */}
     </>
   );
 };
