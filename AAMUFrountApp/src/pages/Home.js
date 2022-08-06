@@ -16,7 +16,7 @@ const Home = () => {
         },
       })
       .then((resp) => {
-        console.log("home", resp.data);
+        // console.log("home", resp.data);
         setForSwiper(resp.data.placeInfo);
         setForCards(resp.data.bbsInfo);
       })
