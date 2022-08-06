@@ -79,7 +79,6 @@ public class BBSServiceImpl implements BBSService{
 		}
 	}
 
-
 	//글 북마크 목록
 	@Override
 	public List<BBSDTO> bbsBookmarkList(Map map) {
@@ -218,6 +217,10 @@ public class BBSServiceImpl implements BBSService{
 	@Override
 	public int updateRate(Map map) {
 		return dao.updateRate(map);
+	}
+
+	public List<RouteDTO> routeList(int contentid) {
+		return null;
 	}
 
 

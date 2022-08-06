@@ -137,7 +137,7 @@ public class BBSController {
 	
 	//글 북마크 목록
 	@GetMapping("/bbs/bookmark/list")
-	public List<BBSDTO> bbsBookmarkList(@RequestParam Map map, HttpServletRequest req){
+	public List<BBSDTO> bbsBookmarkList(@RequestParam Map map, HttpServletRequest req){//id
 		List<BBSDTO> list = bbsService.bbsBookmarkList(map);
 		System.out.println("북마크 목록:"+list);
 		for(BBSDTO dto:list) {
@@ -146,6 +146,8 @@ public class BBSController {
 			//dto.setPhoto(dao.bbsSelectPhotoList(rbn));
 			//모든 리뷰 가져오기
 			dto.setReviewList(bbsService.reviewList(dto.getRbn()));
+			
+			dto.setRouteList(bbsService.routeList(((AttractionDTO) dto).getContentid()));
 		}
 		return list;
 	}
@@ -209,15 +211,7 @@ public class BBSController {
 		return resultMap;
 		
 	}
+
 	
-	/*
-	//테마 사진 하나 뿌려주기
-	@GetMapping("/theme/SelectOne/{themeid}")
-	public BBSDTO themeSelectOne(@RequestParam Map map,HttpServletRequest req) {
-		BBSDTO dto = bbsService.themeSelectOne(map);
-		dto.setThemeimg(FileUploadUtil.requestOneFile(dto.getThemeimg(), "/resources/themeUpload", req));
-		return dto;
-	}
-	*/
 }
 
