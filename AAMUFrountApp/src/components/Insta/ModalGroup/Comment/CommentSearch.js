@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import React, { useEffect, useRef, useState } from "react";
-// import Profile from "../Profile";
+import Picker from "emoji-picker-react";
 import MenuModal from "../MenuModal";
 import axios from "axios";
 import "../Slider/slick.css";
@@ -27,9 +27,14 @@ function CommentSearch({ val, setForReRender, forReRender, setcommentModal, setc
   const [modalShow, setModalShow] = useState(false);
   const [reply, setReply] = useState(false);
   const [modalSet, setModal] = useState(false);
-  const [position, setPosition] = useState("");
   // const [forReRender, setForReRender] = useState(false);
   let [isValid, setisValid] = useState(false);
+
+  const [emoji, setemoji] = useState(false);
+  const onEmojiClick = (event, emojiObject) => {
+    // setChosenEmoji(emojiObject);
+    replyRef1.current.value = emojiObject.emoji;
+  };
 
   function menuModalRef(e) {
     e.stopPropagation();
@@ -195,11 +200,18 @@ function CommentSearch({ val, setForReRender, forReRender, setcommentModal, setc
                     }}
                   />
                 </div>
-                <div>
+                <div >
                   <p className="user-id">
                     <strong>{val.id}</strong>
                   </p>
+                  <a href={`https://map.kakao.com/?q=${position}`}>
+                    <div className="commentSearch_position" style={{marginLeft:'7px'}}>
+                      <FontAwesomeIcon icon={faLocationDot} />
+                      <span style={{ fontSize: "14px" }}>{position}</span>
+                    </div>
+                  </a>
                 </div>
+                
                 <span
                   className="detail__plan-exit"
                   onClick={(e) => {
@@ -282,6 +294,10 @@ function CommentSearch({ val, setForReRender, forReRender, setcommentModal, setc
                         className="likeimg"
                         src={val.userprofile}
                         alt="추사"
+                        onError={(e) => {
+                          e.stopPropagation();
+                          e.target.src =  "/images/user.jpg";
+                        }}
                       />
                       <div
                         style={{
@@ -294,7 +310,7 @@ function CommentSearch({ val, setForReRender, forReRender, setcommentModal, setc
                       >
                         <div style={{ display: "flex", flexDirection: "row" }}>
                           <p className="userName" style={{ fontSize: "13px" }}>
-                            <strong>{sessionStorage.getItem("username")}</strong>
+                            <strong>{val.id}</strong>
                           </p>
                           <p className="userName" style={{ fontFamily: "normal", width: "78%" }}>
                             {val.reply}
@@ -365,7 +381,7 @@ function CommentSearch({ val, setForReRender, forReRender, setcommentModal, setc
                     <i className="fa-regular fa-heart fa-2x"></i>
                   )}
                 </div>
-                <div className="talk-icon">
+                <div className="talk-icon" onClick={()=>{replyRef1.current.focus()}}>
                   <i className=" fa-regular fa-comment fa-2x"></i>
                 </div>
                 <div className="share-icon">
@@ -380,20 +396,24 @@ function CommentSearch({ val, setForReRender, forReRender, setcommentModal, setc
               <div className="postDate">
                 <h3>{dayjs(new Date(val.postdate)).format("YYYY/MM/DD")}</h3>
               </div>
-              <a href={`https://map.kakao.com/?q=${position}`}>
-                <div className="commentSearch_position">
-                  <FontAwesomeIcon icon={faLocationDot} />
-                  <span style={{ fontSize: "14px" }}>{position}</span>
-                </div>
-              </a>
+              
             </div>
             <div className="comment1">
+            <div className="emoji">
+              <i class="fa-regular fa-face-smile" style={{fontSize:'24px',left:'5px'}} onClick={()=>{setemoji(!emoji)}}/>
+            </div>
+              {emoji
+              &&
+              <div className="emoji-all">
+                <Picker onEmojiClick={onEmojiClick} onClick={()=>{setemoji(!emoji)}}/>
+              </div>
+              }
               <input
                 type="text"
                 ref={replyRef1}
                 className="inputComment_"
                 placeholder="댓글 달기..."
-                style={{ width: "90%" }}
+                style={{ width: "80%" ,fontSize:'13px'}}
                 // onChange={(e) => {
                 //   setComment(e.target.value); //댓글 창의 상태가 변할때마다 setComment를 통해 comment값을 바꿔준다
                 // }}
