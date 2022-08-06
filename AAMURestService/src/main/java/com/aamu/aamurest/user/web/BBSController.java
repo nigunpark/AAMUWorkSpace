@@ -24,10 +24,13 @@ import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import com.aamu.aamurest.user.service.AttractionDTO;
 import com.aamu.aamurest.user.service.BBSDTO;
+import com.aamu.aamurest.user.service.MainService;
 import com.aamu.aamurest.user.service.ReviewDTO;
+import com.aamu.aamurest.user.service.RouteDTO;
 import com.aamu.aamurest.user.service.UsersDTO;
 import com.aamu.aamurest.user.serviceimpl.BBSServiceImpl;
 import com.aamu.aamurest.util.FileUploadUtil;
+import com.aamu.aamurest.util.UserUtil;
 
 @CrossOrigin(origins="*")
 @RestController
@@ -40,18 +43,32 @@ public class BBSController {
 
 	@Autowired
 	private CommonsMultipartResolver multipartResolver;
+	
+	@Autowired
+	private MainService mainService;
 
 	//글 목록
 	@GetMapping("/bbs/SelectList")
 	public List<BBSDTO> bbsSelectList(HttpServletRequest req){
 		List<BBSDTO> list = bbsService.bbsSelectList();
+		Map map = new HashMap();
 		System.out.println("list:"+list);
 		for(BBSDTO dto:list) {
 			//모든 사진 가져오기
 			dto.setPhoto(FileUploadUtil.requestFilePath(bbsService.bbsSelectPhotoList(dto.getRbn()), "/resources/bbsUpload", req));
 			//dto.setPhoto(dao.bbsSelectPhotoList(rbn));
 			//모든 리뷰 가져오기
-			dto.setReviewList(bbsService.reviewList(dto.getRbn()));
+			dto.setReviewList(bbsService.reviewSelectList(dto.getRbn()));
+			//모든 경로 가져오기
+			List<RouteDTO> routelist = bbsService.selectRouteList(dto.getRbn());
+			for(RouteDTO route:routelist) {
+				route.setDto(mainService.selectOnePlace(route.getContentid(), req));
+			}
+			dto.setRouteList(routelist);
+			//map.put("id", dto.getId());
+			//map.put("rbn", dto.getRbn());
+			//dto.setBookmark(bbsService.bbsBookmark(map));
+			
 		}
 		return list;
 	}
@@ -64,8 +81,8 @@ public class BBSController {
 		
 		System.out.println("머가나오나:"+dto);
 		//모든 리뷰 가져오기
-		System.out.println("리뷰리스트에 뭐가 있을까?"+bbsService.reviewList(rbn));
-		dto.setReviewList(bbsService.reviewList(rbn));
+		System.out.println("리뷰리스트에 뭐가 있을까?"+bbsService.reviewSelectList(rbn));
+		dto.setReviewList(bbsService.reviewSelectList(rbn));
 		//모든 사진 가져오기
 		//dto.setPhoto(bbsService.bbsSelectPhotoList(rbn));
 		dto.setPhoto(FileUploadUtil.requestFilePath(bbsService.bbsSelectPhotoList(dto.getRbn()), "/resources/bbsUpload", req));
@@ -145,8 +162,16 @@ public class BBSController {
 			dto.setPhoto(FileUploadUtil.requestFilePath(bbsService.bbsSelectPhotoList(dto.getRbn()), "/resources/bbsUpload", req));
 			//dto.setPhoto(dao.bbsSelectPhotoList(rbn));
 			//모든 리뷰 가져오기
-			dto.setReviewList(bbsService.reviewList(dto.getRbn()));
+			dto.setReviewList(bbsService.reviewSelectList(dto.getRbn()));
+			//모든 경로 가져오기
+			List<RouteDTO> routelist = bbsService.selectRouteList(dto.getRbn());
+			for(RouteDTO route:routelist) {
+				route.setDto(mainService.selectOnePlace(route.getContentid(), req));
+			}
+			dto.setRouteList(routelist);
+			dto.setBookmark(bbsService.bbsBookmark(map));
 		}
+		
 		return list;
 	}
 	
@@ -165,7 +190,7 @@ public class BBSController {
 	public Map reviewInsert(@RequestBody Map map) {
 		System.out.println("map이 넘어오나:"+map);
 		int rbn = Integer.parseInt(map.get("rbn").toString());
-		List<ReviewDTO> list = bbsService.reviewList(rbn);
+		List<ReviewDTO> list = bbsService.reviewSelectList(rbn);
 		double total = Double.parseDouble(map.get("rate").toString());
 		if(list.size() != 0) {
 			for(ReviewDTO dto:list) {
@@ -207,22 +232,6 @@ public class BBSController {
 		else
 			resultMap.put("result", "deleteNotSuccess");
 		return resultMap;
-		
-	}
-	
-	public static AttractionDTO changeOneAttr(AttractionDTO dto,HttpServletRequest req) {
-		String title = dto.getTitle();
-		if(title!=null && dto.getSmallimage()!=null) {
-			if(!(dto.getSmallimage().toString().contains("http")) && dto.getSmallimage()!=null) 
-				dto.setSmallimage(FileUploadUtil.requestOneFile(dto.getSmallimage(),"/resources/hotelImage",req));
-			
-			if(title!=null && title.contains("[") &&!(title.split("\\[")[0].equals("")))
-				dto.setTitle(title.split("\\[")[0]);
-			
-			if(title!=null && title.contains("(")&&!(title.split("\\(")[0].equals("")))
-				dto.setTitle(title.split("\\(")[0]);
-		}
-		return dto;
 		
 	}
 

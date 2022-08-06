@@ -59,7 +59,17 @@ public class BBSDAO {
 	
 	//글 북마크 목록
 	public List<BBSDTO> bbsBookmarkList(Map map) {
-		return template.selectList("bbsBookmarkList");
+		return template.selectList("bbsBookmarkList",map);
+	}
+	
+	//글 북마크 목록
+	public List<BBSDTO> selectRouteList(Map map) {
+		return template.selectList("selectRouteList",map);
+	}
+	
+	//글 북마크 목록
+	public List<BBSDTO> selectOnePlace(Map map) {
+		return template.selectList("selectOnePlace",map);
 	}
 	
 	//글 북마크_insert
@@ -74,17 +84,17 @@ public class BBSDAO {
 	
 	//글 검색 목록
 	public List<String> bbsSearchList(Map map) {
-		System.out.println("dao map:"+map.get("searchColumn"));
-		System.out.println("dao map:"+map.get("searchWord"));
-		System.out.println("dao map:"+map.get("table"));
-		return template.selectList("bbsSearchList");
+		System.out.println("dao map:"+map.get("title"));
+		System.out.println("dao map:"+map.get("id"));
+		//System.out.println("dao map:"+map.get("table"));
+		return template.selectList("bbsSearchList",map);
 	}
 
 	/*----------------------------------------------------------*/
 
 	//글 상세보기_모든 리뷰 보기
 	public List<ReviewDTO> reviewSelectList(int rbn) {
-		return template.selectList("reviewSelectList",rbn);
+		return template.selectList("reviewList",rbn);
 	}
 
 	//리뷰 등록
@@ -123,11 +133,6 @@ public class BBSDAO {
 	//평점 업데이트
 	public int updateRate(Map map) {
 		return template.update("updateRate",map);
-	}
-	
-	//검색 결과
-	public List<BBSDTO> searchList(){
-		return template.selectList("searchList");
 	}
 
 

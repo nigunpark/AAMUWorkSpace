@@ -36,7 +36,7 @@ public interface BBSService {
 	/*----------------------------------------------------*/
 
 	//글 상세보기_모든 리뷰 보기
-	List<ReviewDTO> reviewList(int rbn);
+	List<ReviewDTO> reviewSelectList(int rbn);
 	
 	//리뷰 등록
 	int reviewInsert(Map map);

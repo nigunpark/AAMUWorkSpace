@@ -74,7 +74,7 @@ public class BBSServiceImpl implements BBSService{
 	}
 	else { //다시 누를 경우 == 북마크 취소
 		System.out.println("북마크를 삭제");
-		if(dao.bbsBookmarkDelete(map)==1) return false;
+		if(dao.bbsBookmarkDelete(map)==0) return false;
 		else return true;
 		}
 	}
@@ -182,7 +182,7 @@ public class BBSServiceImpl implements BBSService{
 	
 	//리뷰 목록
 	@Override
-	public List<ReviewDTO> reviewList(int rbn) {
+	public List<ReviewDTO> reviewSelectList(int rbn) {
 		return dao.reviewSelectList(rbn);
 	}
 		
@@ -219,10 +219,9 @@ public class BBSServiceImpl implements BBSService{
 		return dao.updateRate(map);
 	}
 
-	public List<RouteDTO> routeList(int contentid) {
-		return null;
+	public List<RouteDTO> selectRouteList(int rbn) {
+		return dao.selectRouteList(rbn);
 	}
-
 
 }
 	
