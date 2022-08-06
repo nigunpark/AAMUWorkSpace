@@ -146,8 +146,6 @@ public class BBSController {
 			//dto.setPhoto(dao.bbsSelectPhotoList(rbn));
 			//모든 리뷰 가져오기
 			dto.setReviewList(bbsService.reviewList(dto.getRbn()));
-			
-			dto.setRouteList(bbsService.routeList(((AttractionDTO) dto).getContentid()));
 		}
 		return list;
 	}
@@ -209,6 +207,22 @@ public class BBSController {
 		else
 			resultMap.put("result", "deleteNotSuccess");
 		return resultMap;
+		
+	}
+	
+	public static AttractionDTO changeOneAttr(AttractionDTO dto,HttpServletRequest req) {
+		String title = dto.getTitle();
+		if(title!=null && dto.getSmallimage()!=null) {
+			if(!(dto.getSmallimage().toString().contains("http")) && dto.getSmallimage()!=null) 
+				dto.setSmallimage(FileUploadUtil.requestOneFile(dto.getSmallimage(),"/resources/hotelImage",req));
+			
+			if(title!=null && title.contains("[") &&!(title.split("\\[")[0].equals("")))
+				dto.setTitle(title.split("\\[")[0]);
+			
+			if(title!=null && title.contains("(")&&!(title.split("\\(")[0].equals("")))
+				dto.setTitle(title.split("\\(")[0]);
+		}
+		return dto;
 		
 	}
 
