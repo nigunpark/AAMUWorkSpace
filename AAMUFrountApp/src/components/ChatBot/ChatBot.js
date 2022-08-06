@@ -14,9 +14,10 @@ const ChatBot = ({ showChatBot, chatArr }) => {
   function goRecommend(val) {
     if (val.rbn !== null) {
       dispatch(addChatBotData(val));
-      navigate("/forum");
+      navigate("/forum", { state: { dto: val } });
     }
   }
+  console.log("chats", chats);
   return (
     <Container>
       <Content>
@@ -33,24 +34,35 @@ const ChatBot = ({ showChatBot, chatArr }) => {
                     {val.message}
                     <br />
                   </span>
-                  {val.title !== undefined && (
-                    <>
-                      <a href={`https://place.map.kakao.com/${val.kakaokey}`} target="_blank">
-                        <span className="chatBotBox__innerSpan">{val.title}</span>
-                      </a>
-                    </>
+                  {val.dtolist && (
+                    <div style={{ display: "flex", flexDirection: "column" }}>
+                      {val.dtolist.map((val) => {
+                        return (
+                          <a href={`https://place.map.kakao.com/${val.kakaokey}`} target="_blank">
+                            <span className="chatBotBox__innerSpan">{val.title}</span>
+                          </a>
+                        );
+                      })}
+                    </div>
                   )}
-                  {val.route !== undefined && (
-                    <>
-                      <span
-                        className="chatBotBox__innerSpan"
-                        onClick={() => {
-                          goRecommend(val);
-                        }}
-                      >
-                        {val.route}
-                      </span>
-                    </>
+                  {val.bbslist && (
+                    <div style={{ display: "inline-block", flexDirection: "column" }}>
+                      {val.bbslist.map((val, i) => {
+                        return (
+                          <>
+                            <span
+                              className="chatBotBox__innerSpan"
+                              onClick={() => {
+                                goRecommend(val);
+                              }}
+                            >
+                              {val.title}
+                            </span>
+                            <br />
+                          </>
+                        );
+                      })}
+                    </div>
                   )}
                 </p>
               );
@@ -111,7 +123,7 @@ function chatBotConn(inputRef, chats, setChats, chatArr) {
     )
     .then((resp) => {
       chatArr.push(resp.data);
-      console.log("resp", resp.data);
+      console.log("resp(챗봇)", resp.data);
       setChats([...chatArr]);
     })
     .catch((err) => {
