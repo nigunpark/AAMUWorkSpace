@@ -2,10 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import ContentItem from "./ContentItem";
 import "./Content.css";
 import { useLocation } from "react-router-dom";
-import FSearch from "../FSearch/FSearch";
-
 import { Link } from "react-router-dom";
-
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
@@ -38,6 +35,9 @@ const Content = () => {
   const selectList = async () => {
     await axios
       .get("/aamurest/bbs/SelectList", {
+        params: {
+          id: sessionStorage.getItem("username"),
+        },
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -51,9 +51,10 @@ const Content = () => {
         // console.log((error) => console.log("글 목록 가져오기 실패(Content.js) :", error));
       });
   };
+
   useEffect(() => {
     selectList();
-    bookMarkList();
+    // bookMarkList();
   }, [isOpen]);
   useEffect(() => {
     chatbotModal();
@@ -64,11 +65,13 @@ const Content = () => {
       return alert("검색어와 주제를 선택해주세요.");
     }
     let token = sessionStorage.getItem("token");
+    console.log("searchWord :", inSelectText);
+    console.log("searchColumn :", kindOfSearch);
     axios
-      .get("", {
+      .get("/aamurest/bbs/search/list", {
         params: {
-          검색어key: inSelectText,
-          선택한거key: kindOfSearch,
+          searchWord: inSelectText,
+          searchColumn: kindOfSearch,
         },
         headers: {
           Authorization: `Bearer ${token}`,
@@ -78,56 +81,54 @@ const Content = () => {
         console.log("검색한 글 목록(Content.js) :", resp.data);
         setListData(resp.data);
 
-        // setKindOfSearch([]);
-        // searchOne.current.value = null;
+        setKindOfSearch([]);
+        searchOne.current.value = null;
       })
       .catch((error) => {
         console.log("검색 목록 가져오기 실패(Content.js) :", error);
       });
   };
 
-  const [myBookMark, setMyBookMark] = useState([]);
-  const bookMarkList = async () => {
-    let token = sessionStorage.getItem("token");
+  // const bookMarkList = async () => {
+  //   let token = sessionStorage.getItem("token");
 
-    await axios
-      .get("/aamurest/bbs/bookmark/list", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((resp) => {
-        // console.log("북마크 목록 데이터 (Content.js) :", resp.data);
-        setMyBookMark(resp.data);
-      })
-      .catch((error) => {
-        // console.log("북마크 목록 실패 (Content.js) :", error);
-      });
-  };
+  //   await axios
+  //     .get("/aamurest/bbs/bookmark/list", {
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //     })
+  //     .then((resp) => {
+  //       // console.log("북마크 목록 데이터 (Content.js) :", resp.data);
+  //       setMyBookMark(resp.data);
+  //     })
+  //     .catch((error) => {
+  //       // console.log("북마크 목록 실패 (Content.js) :", error);
+  //     });
+  // };
 
-  function isBook(e) {
-    if (e.rbn === detailOne.rbn) {
-      return true;
-    }
-  }
-  function isBookBool(e) {
-    if (e.bookmark === false) {
-      return true;
-    }
-  }
-  const bookTF = myBookMark.find(isBook);
-  const bookBool = myBookMark.find(isBookBool);
+  // function isBook(e) {
+  //   if (e.rbn === detailOne.rbn) {
+  //     return true;
+  //   }
+  // }
+  // function isBookBool(e) {
+  //   if (e.bookmark === false) {
+  //     return true;
+  //   }
+  // }
+  // const bookTF = myBookMark.find(isBook);
+  // const bookBool = myBookMark.find(isBookBool);
 
-  let book;
-  let bookbol;
-  if (bookTF != undefined) {
-    book = bookTF.rbn;
-  }
-  if (bookTF != undefined) {
-    bookbol = bookBool.bookmark;
-  }
+  // let book;
+  // let bookbol;
+  // if (bookTF != undefined) {
+  //   book = bookTF.rbn;
+  // }
+  // if (bookTF != undefined) {
+  //   bookbol = bookBool.bookmark;
+  // }
   // console.log("bookbol find:", bookbol);
-
   return (
     <div className="Cards_minCon">
       <div className="card__container_minCon">
@@ -159,7 +160,7 @@ const Content = () => {
                   <em>없음</em>
                 </MenuItem>
                 <MenuItem value="id">아이디</MenuItem>
-                <MenuItem value="theme">테마</MenuItem>
+                <MenuItem value="themename">테마</MenuItem>
                 <MenuItem value="title">제목</MenuItem>
               </Select>
             </FormControl>
@@ -188,7 +189,13 @@ const Content = () => {
           </div>
           <div className="card__items_minCon">
             {listData.map((val, idx) => {
-              return <ContentItem setDetailOne={setDetailOne} detail={val} setIsOpen={setIsOpen} />;
+              return (
+                <ContentItem
+                  setDetailOne={setDetailOne}
+                  detail={val}
+                  setIsOpen={setIsOpen}
+                />
+              );
             })}
           </div>
         </div>
@@ -199,7 +206,6 @@ const Content = () => {
           setShowCBModal={setShowCBModal}
           setIsOpen={setIsOpen}
           setIsLoading={setIsLoading}
-          bookbol={bookbol}
         />
       )}
       {isOpen && (
@@ -208,7 +214,6 @@ const Content = () => {
           setShowCBModal={setShowCBModal}
           setIsOpen={setIsOpen}
           setIsLoading={setIsLoading}
-          bookbol={bookbol}
         />
       )}
     </div>
