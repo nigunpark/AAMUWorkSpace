@@ -28,6 +28,9 @@ public class BBSServiceImpl implements BBSService{
 	
 	@Autowired
 	private MainDAO mainDao;
+	
+	@Autowired
+	private UsersDAO usersDao;
 
 	//글 목록
 	@Override
@@ -60,6 +63,7 @@ public class BBSServiceImpl implements BBSService{
 		}
 		dto.setRouteList(routes);
 		dto.setPlanner(mainDao.selectPlannerOne(rbn));
+		dto.setThemeList(usersDao.selectAllTheme());
 		return dto;
 	}
 	
@@ -74,9 +78,18 @@ public class BBSServiceImpl implements BBSService{
 	}
 	else { //다시 누를 경우 == 북마크 취소
 		System.out.println("북마크를 삭제");
-		if(dao.bbsBookmarkDelete(map)==0) return false;
+		if(dao.bbsBookmarkDelete(map)==1) return false;
 		else return true;
 		}
+	}
+	
+	//북마크 여부 확인
+	@Override
+	public boolean checkBookmark(Map map) {
+		int affected = dao.bbsSelectBookmark(map);
+		boolean isBookmark = false;
+		if(affected==1) isBookmark =true;
+		return isBookmark;
 	}
 
 	//글 북마크 목록

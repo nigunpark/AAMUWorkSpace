@@ -54,5 +54,8 @@ public interface BBSService {
 	
 	//평점 업데이트
 	int updateRate(Map map);
+	
+	//북마크 여부
+	boolean checkBookmark(Map map);
 
 }

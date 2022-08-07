@@ -1,6 +1,8 @@
 package com.aamu.aamurest.user.service;
 
 import java.util.List;
+import java.util.Map;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,5 +30,5 @@ public class BBSDTO {
 	private List<ReviewDTO> reviewList;
 	private double rateavg; //평균 평점
 	private boolean bookmark; //북마크
-	
+	private List<Map> themeList;
 }

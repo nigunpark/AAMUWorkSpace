@@ -38,6 +38,7 @@ public class NotificationAlert {
 		
 		try {
 			String firebaseid = template.selectOne("selectonefirebase",message.getId());
+			firebaseid.toCharArray();
 			HttpHeaders headers = new HttpHeaders();
 			headers.add("Content-Type", "application/json");
 			headers.add("Authorization", "Bearer AAAAuSENOMk:APA91bGjt_r6LEeCNsglpl2mNyK99X9WjhatB8iIUBLLHxdNwdy6n8m6idiuPoSLKT79l4GLedIZ0B628RWxiGQgvrUi8CH0ocqDxxb5kUW-G1Yd7urOkjtpBnwfrWOsgVikWVquzbBO");
