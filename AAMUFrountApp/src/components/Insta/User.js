@@ -19,8 +19,8 @@ function User({
   inputValue,
   setinputValue,
   showChat,
-  recommendUser, 
-  setrecommendUser
+  recommendUser,
+  setrecommendUser,
 }) {
   const modalRef = useRef();
   const notimodalRef = useRef();
@@ -34,9 +34,6 @@ function User({
   const [title, settitle] = useState([]);
   // const [searchb, setSearchb] = useState([]);
   const [searchText, setsearchText] = useState(false);
-
-  
- 
 
   let navigater = useNavigate();
 
@@ -54,7 +51,6 @@ function User({
         params: {
           searchColumn: searchb,
           searchWord: inputValue,
-          
         },
       })
       .then((resp) => {
@@ -67,7 +63,6 @@ function User({
         console.log(error);
       });
   }
-
 
   function searchBarModal() {
     //백이랑 인스타 리스드를 뿌려주기 위한 axios
@@ -82,7 +77,6 @@ function User({
         params: {
           searchColumn: searchb,
           searchWord: inputValue,
-          
         },
       })
       .then((resp) => {
@@ -181,11 +175,7 @@ function User({
         >
           <div className="heart">
             {heart ? (
-              <i
-                className=" fa-solid fa-heart fa-2x"
-                ref={notimodalRef}
-                style={{ color: "black" }}
-              >
+              <i className=" fa-solid fa-heart fa-2x" ref={notimodalRef} style={{ color: "black" }}>
                 <NotificationModal></NotificationModal>
               </i>
             ) : (
@@ -239,16 +229,18 @@ function User({
           <span>회원님을 위한 추천</span>
           <span>모두 보기</span>
         </div>
-        {recommendUser.slice(0,5).map((val, i) => {
-            
+        {recommendUser.slice(0, 5).map((val, i) => {
           return (
             <div className="recommend-down">
               <div className="recommend-contents">
-                <img src={val.userprofile} alt="추사" 
-                onError={(e) => {
-                  e.stopPropagation();
-                  e.target.src = "/images/user.jpg";
-                }}/>
+                <img
+                  src={val.userprofile}
+                  alt="추사"
+                  onError={(e) => {
+                    e.stopPropagation();
+                    e.target.src = "/images/user.jpg";
+                  }}
+                />
                 <div>
                   <p className="user-id">{val.id}</p>
                   <p className="user-name">0hyun0hyun님 외 2명이...</p>
@@ -274,10 +266,9 @@ function User({
                   )}
                 </div>
               </div>
-            </div>)
-        }
-        )}
-
+            </div>
+          );
+        })}
       </div>
       <div className="information">
         <p> &nbsp;&nbsp;About ・ Help ・ Press ・ API ・ Jobs ・ Privacy </p>
