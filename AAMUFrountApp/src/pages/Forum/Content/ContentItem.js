@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
@@ -13,10 +13,12 @@ const ContentItem = ({ detail, setDetailOne, setIsOpen }) => {
     return date.getFullYear() + "-" + month + "-" + day;
   }
   let star = 0;
+
   detail.reviewList.forEach((obj, i) => {
     star += Number(obj.rate);
   });
   star = Math.round((star / detail.reviewList.length) * 10) / 10;
+
   return (
     <>
       <div
