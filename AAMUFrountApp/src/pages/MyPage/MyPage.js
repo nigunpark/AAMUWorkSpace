@@ -98,6 +98,9 @@ const MyPage = () => {
 
     await axios
       .get("/aamurest/bbs/bookmark/list", {
+        params: {
+          id: sessionStorage.getItem("username"),
+        },
         headers: {
           Authorization: `Bearer ${token}`,
         },
