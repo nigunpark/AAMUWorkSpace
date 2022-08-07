@@ -33,8 +33,10 @@ import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import com.aamu.aamurest.user.service.CommuCommentDTO;
 import com.aamu.aamurest.user.service.CommuDTO;
+import com.aamu.aamurest.user.service.NotificationDTO;
 import com.aamu.aamurest.user.serviceimpl.CommuServiceImpl;
 import com.aamu.aamurest.util.FileUploadUtil;
+import com.aamu.aamurest.websocket.NotificationAlert;
 
 @RestController
 @CrossOrigin(origins="*")
@@ -48,7 +50,8 @@ public class CommuController {
 	@Autowired
 	private CommonsMultipartResolver multipartResolver;
 
-
+	@Autowired
+	private NotificationAlert notificationAlert;
 
 	//글 목록용
 	@GetMapping("/gram/selectList")
@@ -318,6 +321,11 @@ public class CommuController {
 			resultMap.put("reply", map.get("reply"));
 		}
 		else resultMap.put("isSuccess", false);
+		
+		//댓글 알림
+		//authid는 글쓴이 id
+		String authid = commuService.commuSelectUserId(map);
+		notificationAlert.NotiMessage("이런곳은 어때 게시판",new NotificationDTO(0,authid,map.get("id").toString()+"님이 리뷰를 남겼어요.",0,0,NotificationAlert.GRAM,Integer.parseInt(map.get("lno").toString())));
 		return resultMap;
 	}
 	
@@ -386,6 +394,11 @@ public class CommuController {
 			resultMap.put("likecount", likecount);
 			resultMap.put("lno", map.get("lno"));
 		}
+		
+		//좋아요 알림
+		String authid = commuService.commuSelectUserId(map); //authid = 좋아요 누른lno글의 글쓴이id
+		notificationAlert.NotiMessage("이런곳은 어때 게시판",new NotificationDTO(0,authid,map.get("id").toString()+"님이 좋아요를 눌렀어요.",0,0,NotificationAlert.GRAM,Integer.parseInt(map.get("lno").toString())));
+
 		return resultMap;
 	}
 	
@@ -395,6 +408,10 @@ public class CommuController {
 		//map에 id:세션id follower:글쓴이id
 		Map resultMap=commuService.commuFollower(map);
 //		System.out.println("팔로우 결과값:"+resultMap);
+		
+		//팔로우 알림
+		notificationAlert.NotiMessage("이런곳은 어때 게시판",new NotificationDTO(0,map.get("id").toString(),map.get("follower").toString()+"님이 리뷰를 남겼어요",0,0,NotificationAlert.GRAM,0));
+		
 		return resultMap;
 	}
 	

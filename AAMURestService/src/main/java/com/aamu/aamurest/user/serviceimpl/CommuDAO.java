@@ -142,6 +142,11 @@ public class CommuDAO {
 	public int commuRcMinusUpdate(Map map) {
 		return template.update("commuRcMinusUpdate",map);
 	}
+	
+	//댓글 알림
+	public String commuSelectUserId(Map map) {
+		return template.selectOne("commuSelectUserId",map);
+	}
 
 	//글 좋아요_
 	public int commuLikeSelect(Map map) {

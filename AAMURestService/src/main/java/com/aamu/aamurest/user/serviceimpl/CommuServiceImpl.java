@@ -474,6 +474,12 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 		return affected;
 	}
 	
+	//댓글 알림
+	@Override
+	public String commuSelectUserId(Map map) {
+		return dao.commuSelectUserId(map);
+	}
+	
 	//글 좋아요 전체리스트
 	@Override
 	public Boolean commuLike(Map map) {
