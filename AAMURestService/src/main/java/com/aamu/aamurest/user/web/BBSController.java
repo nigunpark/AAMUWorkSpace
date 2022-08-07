@@ -80,7 +80,7 @@ public class BBSController {
 	
 	//글 하나 선택
 	@GetMapping("/bbs/SelectOne/{rbn}")
-	public BBSDTO bbsSelectOne(@PathVariable int rbn, HttpServletRequest req) {
+	public BBSDTO bbsSelectOne(@RequestParam Map map,@PathVariable int rbn, HttpServletRequest req) {
 		System.out.println("선택:"+rbn);
 		BBSDTO dto=bbsService.bbsSelectOne(rbn);
 		
@@ -91,6 +91,8 @@ public class BBSController {
 		//모든 사진 가져오기
 		//dto.setPhoto(bbsService.bbsSelectPhotoList(rbn));
 		dto.setPhoto(FileUploadUtil.requestFilePath(bbsService.bbsSelectPhotoList(dto.getRbn()), "/resources/bbsUpload", req));
+		map.put("rbn", dto.getRbn());
+		dto.setBookmark(bbsService.checkBookmark(map));
 		return dto;
 	}
 	
@@ -110,6 +112,8 @@ public class BBSController {
 		Map resultMap = new HashMap();
 		if(affected==1) resultMap.put("result", "insertSuccess");
 		else resultMap.put("result", "insertNotSuccess");
+		
+		
 		
 		return resultMap;
 		}

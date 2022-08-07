@@ -20,4 +20,5 @@ public class PlannerDTO {
 	private String smallImage;
 	private String bigImage;
 	private int isBBS;
+	private String theme = null;
 }

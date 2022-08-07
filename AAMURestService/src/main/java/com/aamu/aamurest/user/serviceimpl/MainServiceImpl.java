@@ -501,6 +501,7 @@ public class MainServiceImpl implements MainService{
 				index=1;
 				day=0;
 			}
+			dto.setTheme(dao.getThemeFromRbn(dto.getRbn()));
 			dto.setRoute(null);
 			returnList.add(dto);
 		}
@@ -518,6 +519,7 @@ public class MainServiceImpl implements MainService{
 			route.setDto(changeOneAttr(aDto, req));
 			routes2.add(route);
 		}
+		dto.setTheme(dao.getThemeFromRbn(rbn));
 		dto.setRoute(routes2);
 
 		return dto;
