@@ -24,13 +24,12 @@ const CreatePlanLeft = ({ currPosition, fromWooJaeData, setForDayLine, setFromWo
   const [whichModal, setWhichModal] = useState("전체일정");
   const dayRef = useRef();
   const [temp, setTemp] = useState("");
-
+  console.log("fromWoo", fromWooJaeData);
   useEffect(() => {
     setTemp(dayRef.current);
   }, []);
   if (fromWooJaeData.length === 0) return;
   if (fromWooJaeData === undefined) return;
-  console.log("fromWooJaeData", fromWooJaeData);
   let tempWholeArr = [];
   fromWooJaeData.forEach((val, i) => {
     let temp = Object.values(val)[0];
@@ -41,8 +40,6 @@ const CreatePlanLeft = ({ currPosition, fromWooJaeData, setForDayLine, setFromWo
   tempWholeArr.forEach((val, i) => {
     val.id = i;
   });
-
-  // console.log("reduxState.timeSetObj 이거 : ", reduxState.timeSetObj);
   return (
     <div className="createPlanLeft">
       <div className="createPlanLeft__days">
@@ -87,6 +84,7 @@ const CreatePlanLeft = ({ currPosition, fromWooJaeData, setForDayLine, setFromWo
       <div style={{ width: "100%" }}>
         <WhichModal
           whichModal={whichModal}
+          setWhichModal={setWhichModal}
           currPosition={currPosition}
           fromWooJaeData={fromWooJaeData}
           setFromWooJaeData={setFromWooJaeData}
@@ -97,38 +95,47 @@ const CreatePlanLeft = ({ currPosition, fromWooJaeData, setForDayLine, setFromWo
   );
 };
 
-function WhichModal({ whichModal, currPosition, fromWooJaeData, setFromWooJaeData }) {
+function WhichModal({
+  whichModal,
+  setWhichModal,
+  currPosition,
+  fromWooJaeData,
+  setFromWooJaeData,
+}) {
   if (whichModal === "전체일정") {
     return (
       <WholeSchedule
         currPosition={currPosition}
         fromWooJaeData={fromWooJaeData}
         setFromWooJaeData={setFromWooJaeData}
+        setWhichModal={setWhichModal}
       />
     );
   } else {
     let obj = fromWooJaeData.find((obj, i) => {
       return Object.keys(obj).toString() == whichModal;
     });
-    let arr = obj[Object.keys(obj)];
-    if (arr.length <= 1) {
-      return (
-        <Alert severity="info">
-          <strong>장소가 최소 2개이상 있어야</strong>
-          <br />
-          <strong>상세경로 확인 가능해요</strong>
-        </Alert>
-      );
-    } else {
-      let newArr = new Array(arr.length - 1).fill(0);
-      return newArr.map((val, index) => {
-        return <Step arr={arr} index={index} key={index} />;
-      });
+    if (obj !== null && obj !== undefined) {
+      let arr = obj[Object.keys(obj)];
+      if (arr.length <= 1) {
+        return (
+          <Alert severity="info">
+            <strong>장소가 최소 2개이상 있어야</strong>
+            <br />
+            <strong>상세경로 확인 가능해요</strong>
+          </Alert>
+        );
+      } else {
+        let newArr = new Array(arr.length - 1).fill(0);
+        return newArr.map((val, index) => {
+          return <Step arr={arr} index={index} key={index} />;
+        });
+      }
     }
   }
 }
 
-function WholeSchedule({ currPosition, fromWooJaeData, setFromWooJaeData }) {
+function WholeSchedule({ currPosition, fromWooJaeData, setFromWooJaeData, setWhichModal }) {
   let reduxState = useSelector((state) => {
     return state;
   });
@@ -155,6 +162,7 @@ function WholeSchedule({ currPosition, fromWooJaeData, setFromWooJaeData }) {
               key={index}
               fromWooJaeData={fromWooJaeData}
               setFromWooJaeData={setFromWooJaeData}
+              setWhichModal={setWhichModal}
             />
           );
         })}
@@ -182,20 +190,16 @@ function Content({ index, fromWooJaeData, setFromWooJaeData }) {
       let newArr = [...fromWooJaeData[index]["day" + (index + 1)]];
       setSortedList(newArr);
     }
-  }, []);
+  }, [forReRen]);
   if (fromWooJaeData === undefined) return;
   if (fromWooJaeData.length === 0) return;
   if (fromWooJaeData[index] === undefined) return;
 
   const handleDragStart = (e) => {
     e.target.parentElement.parentElement.parentElement.style.opacity = 0.5;
-
-    sourceElement = e.target;
-    // e.dataTransfer.effectAllowed = "move";
+    console.log(e.target.parentElement.parentElement.parentElement);
+    sourceElement = e.target.parentElement.parentElement.parentElement;
     e.dataTransfer.effectAllowed = "move";
-    // console.log("sourceElement", sourceElement);
-    // console.log("sortedList", sortedList);
-    // console.log("e.target", e.target);
   };
   const handleDragOver = (e) => {
     e.preventDefault();
@@ -212,15 +216,18 @@ function Content({ index, fromWooJaeData, setFromWooJaeData }) {
     if (sourceElement.id !== e.target.id) {
       //drag를 당하는 녀석을 제외하고 새로운 배열
       const list = sortedList.filter((val, i) => i.toString() !== sourceElement.id);
-
       //지워지는 detail
-      const removed = sortedList.filter((val, i) => val.id === Number(sourceElement.id))[0];
-      const dropedIt = sortedList.filter((val, i) => val.id === Number(e.target.id))[0];
+      // const removed = sortedList.filter((val, i) => val.id === Number(sourceElement.id))[0];//원래꺼
+      const removed = sortedList.filter((val, i) => i === Number(sourceElement.id))[0];
+      // const dropedIt = sortedList.filter((val, i) => val.id === Number(e.target.id))[0];//원래꺼
+      const dropedIt = sortedList.filter(
+        (val, i) => i === Number(e.target.parentElement.parentElement.parentElement.id)
+      )[0];
       let temp = removed.starttime;
       removed.starttime = dropedIt.starttime;
       dropedIt.starttime = temp;
       // insert removed item after this number.
-      let insertAt = Number(e.target.id);
+      let insertAt = Number(e.target.parentElement.parentElement.parentElement.id);
       let tempList = [];
       // 마지막 detailing위에 놓았을 때 id+1안되도록
       if (insertAt >= list.length) {
@@ -250,6 +257,7 @@ function Content({ index, fromWooJaeData, setFromWooJaeData }) {
 
   const handleDragEnd = (e) => {
     e.target.parentElement.parentElement.parentElement.style.opacity = 1;
+    setForReRen(!forReRen);
   };
 
   const handleDelete = (e, testRef) => {
@@ -351,7 +359,6 @@ function Content({ index, fromWooJaeData, setFromWooJaeData }) {
             });
           });
 
-          console.log("editData", editData);
           let token = sessionStorage.getItem("token");
           axios
             .post(
@@ -366,7 +373,6 @@ function Content({ index, fromWooJaeData, setFromWooJaeData }) {
               }
             )
             .then((resp) => {
-              console.log("resp.data.routeMap[0]", resp.data.routeMap);
               let keys = [];
               Object.keys(resp.data.routeMap).forEach((val) => {
                 keys.push(val);
@@ -381,16 +387,12 @@ function Content({ index, fromWooJaeData, setFromWooJaeData }) {
               keys.map((val, idx) => {
                 tempArr.push({ [val]: values[idx] });
               });
-
               setFromWooJaeData(tempArr);
-              console.log("tempArr", tempArr);
               // setSortedList(tempArr);
-              // console.log("tempArr", tempArr);
             })
             .catch((err) => {
               console.log(err);
             });
-          setForReRen(!forReRen);
         }}
       >
         {reduxState.tripPeriod.map((val, i) => {
@@ -480,6 +482,7 @@ function Content({ index, fromWooJaeData, setFromWooJaeData }) {
                   fromWooJaeData[index]["day" + (index + 1)][0].starttime =
                     newObj.time * 60 * 60 * 1000 + newObj.min * 60 * 1000;
                 }
+                setForReRen(!forReRen);
               }}
             />
           </Stack>
@@ -502,6 +505,8 @@ function Content({ index, fromWooJaeData, setFromWooJaeData }) {
               handleDrop={handleDrop}
               handleDragEnd={handleDragEnd}
               handleDelete={handleDelete}
+              forReRen={forReRen}
+              setForReRen={setForReRen}
             />
           );
         })}
@@ -521,6 +526,8 @@ function DetailSetting({
   handleDrop,
   handleDragEnd,
   handleDelete,
+  forReRen,
+  setForReRen,
 }) {
   let reduxState = useSelector((state) => {
     return state;
@@ -530,6 +537,7 @@ function DetailSetting({
   const [downTime, setDownTime] = useState(0);
   const [memoBadge, setMemoBadge] = useState(false);
   const [showAdjustMTime, setShowAdjustMTime] = useState(false);
+
   let memoRef = useRef();
   let textAreaRef = useRef();
   let mTimeRef = useRef();
@@ -572,7 +580,7 @@ function DetailSetting({
           fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].atime / 1000 / 60;
       }
     }
-  }, []);
+  }, [forReRen]);
   function getTimes(periodIndex, st, et) {
     return {
       day: periodIndex + 1,
@@ -609,6 +617,7 @@ function DetailSetting({
             ref={mTimeRef}
             onChange={(e) => {
               obj.mtime = e.target.value * 1000 * 60;
+              setForReRen(!forReRen);
             }}
           />
           <span>분</span>
@@ -730,7 +739,14 @@ function DetailSetting({
           periodIndex={periodIndex}
           index={i}
         />
-        {showAdjustMTime && <AdjustMTime setShowAdjustMTime={setShowAdjustMTime} obj={obj} />}
+        {showAdjustMTime && (
+          <AdjustMTime
+            setShowAdjustMTime={setShowAdjustMTime}
+            obj={obj}
+            setForReRen={setForReRen}
+            forReRen={forReRen}
+          />
+        )}
       </div>
     </div>
   );
@@ -806,7 +822,7 @@ function MemoArea({
   );
 }
 
-function AdjustMTime({ setShowAdjustMTime, obj }) {
+function AdjustMTime({ setShowAdjustMTime, obj, setForReRen, forReRen }) {
   let timeRef = useRef();
   let minRef = useRef();
   return (
@@ -823,6 +839,7 @@ function AdjustMTime({ setShowAdjustMTime, obj }) {
               defaultValue={Math.floor(obj.atime / 1000 / 60 / 60)}
               onChange={(e) => {
                 obj.atime = e.target.value * 1000 * 60 * 60 + minRef.current.value * 1000 * 60;
+                setForReRen(!forReRen);
               }}
             />
             <span>시간</span>
@@ -834,6 +851,7 @@ function AdjustMTime({ setShowAdjustMTime, obj }) {
               defaultValue={Math.floor((obj.atime / 1000 / 60) % 60)}
               onChange={(e) => {
                 obj.atime = e.target.value * 1000 * 60 + timeRef.current.value * 1000 * 60 * 60;
+                setForReRen(!forReRen);
               }}
             />
             <span>분</span>
