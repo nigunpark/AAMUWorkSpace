@@ -91,7 +91,6 @@ const MyProfileBox = ({ setClickTab }) => {
   useEffect(() => {
     getDatas();
   }, []);
-  console.log("imgRef.current", imgRef.current.files);
   let [profiles, setProfile] = useState([]);
   // console.log("profiles", profiles);
   function profileUpdate() {
