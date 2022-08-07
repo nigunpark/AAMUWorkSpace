@@ -62,8 +62,9 @@ class ConversationFragment : Fragment() {
         }
         setContent {
             conversationViewModel = viewModel(
-                factory = ConversationViewModelFactory("10")
+                factory = ConversationViewModelFactory()
             )
+            conversationViewModel.getChatList("10")
             ConversationContent(
                 viewModel= conversationViewModel,
                 // Add padding so that we are inset from any navigation bars

@@ -325,7 +325,7 @@ public class CommuController {
 		//댓글 알림
 		//authid는 글쓴이 id
 		String authid = commuService.commuSelectUserId(map);
-		notificationAlert.NotiMessage("이런곳은 어때 게시판",new NotificationDTO(0,authid,map.get("id").toString()+"님이 리뷰를 남겼어요.",0,0,NotificationAlert.GRAM,Integer.parseInt(map.get("lno").toString())));
+		notificationAlert.NotiMessage("이런곳은 어때 게시판",map.get("id").toString(),new NotificationDTO(0,authid,map.get("id").toString()+"님이 리뷰를 남겼어요.",0,0,NotificationAlert.GRAM,Integer.parseInt(map.get("lno").toString())));
 		return resultMap;
 	}
 	
@@ -395,9 +395,11 @@ public class CommuController {
 			resultMap.put("lno", map.get("lno"));
 		}
 		
-		//좋아요 알림
-		String authid = commuService.commuSelectUserId(map); //authid = 좋아요 누른lno글의 글쓴이id
-		notificationAlert.NotiMessage("이런곳은 어때 게시판",new NotificationDTO(0,authid,map.get("id").toString()+"님이 좋아요를 눌렀어요.",0,0,NotificationAlert.GRAM,Integer.parseInt(map.get("lno").toString())));
+		if((boolean)resultMap.get("isLike")) {
+			//좋아요 알림
+			String authid = commuService.commuSelectUserId(map); //authid = 좋아요 누른lno글의 글쓴이id
+			notificationAlert.NotiMessage("이런곳은 어때 게시판",map.get("id").toString(),new NotificationDTO(0,authid,map.get("id").toString()+"님이 좋아요를 눌렀어요.",0,0,NotificationAlert.GRAM,Integer.parseInt(map.get("lno").toString())));
+		}
 
 		return resultMap;
 	}
@@ -407,10 +409,15 @@ public class CommuController {
 	public Map commuFollower(@RequestBody Map map) {//id,follower
 		//map에 id:세션id follower:글쓴이id
 		Map resultMap=commuService.commuFollower(map);
-//		System.out.println("팔로우 결과값:"+resultMap);
+		System.out.println("팔로우 결과값:"+resultMap);
 		
 		//팔로우 알림
-		notificationAlert.NotiMessage("이런곳은 어때 게시판",new NotificationDTO(0,map.get("id").toString(),map.get("follower").toString()+"님이 리뷰를 남겼어요",0,0,NotificationAlert.GRAM,0));
+		if((boolean) resultMap.get("isFollower")) {
+			notificationAlert.NotiMessage("이런곳은 어때 게시판",map.get("id").toString(),new NotificationDTO(0,map.get("follower").toString(),map.get("id").toString()+"님이 회원님을 팔로우 했어요",0,0,NotificationAlert.GRAM,0));
+		}
+		else {
+			notificationAlert.NotiMessage("이런곳은 어때 게시판",map.get("id").toString(),new NotificationDTO(0,map.get("follower").toString(),map.get("id").toString()+"님이 회원님을 언팔로우 했어요",0,0,NotificationAlert.GRAM,0));
+		}
 		
 		return resultMap;
 	}

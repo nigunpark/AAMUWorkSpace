@@ -220,4 +220,16 @@ class AAMURepositoryImpl(
         failmap.put("result","insertNotSuccess")
         emit(failmap)
     }.flowOn(Dispatchers.IO)
+
+    override suspend fun getNotiList(id: String): Flow<List<AAMUNotiResponse>> = flow<List<AAMUNotiResponse>> {
+        val response = aamuApi.getNotiList(id)
+        if(response.isSuccessful){
+            emit(response.body() ?: emptyList<AAMUNotiResponse>())
+        }
+        else{
+            emit(emptyList<AAMUNotiResponse>())
+        }
+    }.catch {
+        emit(emptyList<AAMUNotiResponse>())
+    }.flowOn(Dispatchers.IO)
 }

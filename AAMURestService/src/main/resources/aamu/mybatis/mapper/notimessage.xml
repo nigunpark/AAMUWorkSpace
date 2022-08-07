@@ -14,7 +14,7 @@
 	</insert>
 	
 	<select id="selectListNotiMessage" parameterType="Map" resultType="notificationDTO">
-		SELECT * FROM NOTIFICATION WHERE id=#{id}
+		SELECT * FROM NOTIFICATION WHERE id=#{id} ORDER BY nano DESC
 	</select>
 	
 	<update id="updateNotiMessage" parameterType="Map">

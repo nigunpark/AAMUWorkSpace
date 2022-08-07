@@ -29,7 +29,8 @@
         android:id="@+id/mainFragment"
         android:name="com.aamu.aamuandroidapp.fragment.main.MainFragment"
         android:label="fragment_main"
-        tools:layout="@layout/fragment_main" >
+        tools:layout="@layout/fragment_main"
+        >
         <action
             android:id="@+id/action_mainFragment_to_plannerFragment"
             app:destination="@id/plannerFragment"
@@ -42,7 +43,7 @@
             app:popUpToInclusive="false" />
         <action
             android:id="@+id/action_mainFragment_to_routeBBSDetailFragment"
-            app:destination="@id/routeBBSDetailFragment"></action>
+            app:destination="@id/routeBBSDetailFragment"/>
         <action
             android:id="@+id/action_mainFragment_to_gramDetailFragment"
             app:destination="@id/gramDetailFragment" />

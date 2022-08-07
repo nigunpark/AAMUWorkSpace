@@ -24,4 +24,6 @@ interface AAMURepository {
     suspend fun getBBSList() : Flow<List<AAMUBBSResponse>>
     suspend fun getBBSOne( rbn: Int) : Flow<AAMUBBSResponse>
     suspend fun postReview(review: Review) : Flow<Map<String,String>>
+
+    suspend fun getNotiList(id : String) : Flow<List<AAMUNotiResponse>>
 }
