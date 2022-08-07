@@ -27,7 +27,7 @@ const CreatePlan = ({ setShowCratePlan, currPosition, fromWooJaeData, setFromWoo
   let reduxState = useSelector((state) => {
     return state;
   });
-  console.log("reduxState.timeSetObj", reduxState.timeSetObj);
+  // console.log("reduxState.timeSetObj", reduxState.timeSetObj);
   return (
     <div>
       <DimmedContainer>
