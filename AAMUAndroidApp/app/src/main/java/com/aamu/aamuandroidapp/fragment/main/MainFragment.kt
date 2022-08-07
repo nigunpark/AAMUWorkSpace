@@ -12,9 +12,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.fragment.app.FragmentTransaction
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
@@ -29,6 +29,7 @@ import com.aamu.aamuandroidapp.util.stomp
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import io.reactivex.disposables.Disposable
 import meow.bottomnavigation.MeowBottomNavigation
+import kotlin.reflect.KFunction1
 
 class MainFragment : Fragment() {
 
@@ -52,15 +53,15 @@ class MainFragment : Fragment() {
     override fun onAttach(context: Context) {
         super.onAttach(context)
         binding = FragmentMainBinding.inflate(layoutInflater)
-        viewModel = ViewModelProvider(requireActivity())[MainViewModel::class.java]
+        viewModel = ViewModelProvider(requireActivity(),MainViewModelFactory(context))[MainViewModel::class.java]
 
         Log.i("com.aamu.aamu",viewModel.fromthan.value ?: "없음")
         Log.i("com.aamu.aamu",viewModel.no.value.toString())
         replace(HomeFragment())
 
-        binding.bottomNav.setContent {
-            MeowBottom(context)
-        }
+//        binding.bottomNav.setContent {
+//            MeowBottom(context,::replace)
+//        }
 
 //        binding.bottomNav.apply {
 //            add(MeowBottomNavigation.Model(1, R.drawable.ic_home))
@@ -81,56 +82,22 @@ class MainFragment : Fragment() {
 //        }
     }
 
-    @Composable
-    fun MeowBottom(
-        context: Context
-    ){
-        AndroidView({MeowBottomNavigation(context)}){
-            it.apply {
-                hasAnimation =true
-                backgroundBottomColor = Color.parseColor("#ffffff")
-                circleColor = Color.parseColor("#ffffff")
-                countBackgroundColor = Color.parseColor("#ff6f00")
-                countTextColor = Color.parseColor("#ffffff")
-                defaultIconColor = Color.parseColor("#90a4ae")
-//                rippleColor = Color.parseColor("#2f424242")
-                selectedIconColor = Color.parseColor("#3c415e")
-//                shadowColor = Color.parseColor("#1f212121")
-            }
-
-            it.apply {
-                add(MeowBottomNavigation.Model(1, R.drawable.ic_home))
-                add(MeowBottomNavigation.Model(2, R.drawable.ic_explore))
-                add(MeowBottomNavigation.Model(3, R.drawable.ic_instagram))
-                add(MeowBottomNavigation.Model(4, R.drawable.ic_notification))
-                add(MeowBottomNavigation.Model(5, R.drawable.ic_account))
-                show(1)
-
-                setCount(4, "3")
-            }
-
-            it.setOnClickMenuListener {
-                when (it.id) {
-                    1 -> replace(HomeFragment())
-                    2 -> replace(RouteBBSFragment())
-                    3 -> replace(GramFragment())
-                    4 -> replace(InfoFragment())
-                    5 -> replace(InfoFragment())
-                }
-            }
-        }
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        Log.i("com.aamu.aamu","여기는 타는데 이 밑은 안탐?")
+        binding.bottomNav.setContent {
+            val clickno = viewModel.clickno.observeAsState()
+            Log.i("com.aamu.aamu","왜 안되냐")
+            MeowBottom(viewModel, ::replace)
+        }
 
         navControllerHost = findNavController()
 
@@ -169,9 +136,59 @@ class MainFragment : Fragment() {
 
     }
 
-    private fun replace(fragmet: Fragment) {
+    fun replace(fragmet: Fragment) {
         requireActivity().supportFragmentManager.beginTransaction()
             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
             .replace(binding.navMainFrame.id, fragmet).commit()
+    }
+}
+
+@Composable
+fun MeowBottom(
+    viewModel: MainViewModel,
+    replace: KFunction1<Fragment, Unit>
+){
+    AndroidView({viewModel.meowBottom}){
+        it.apply {
+            hasAnimation =true
+            backgroundBottomColor = Color.parseColor("#ffffff")
+            circleColor = Color.parseColor("#ffffff")
+            countBackgroundColor = Color.parseColor("#ff6f00")
+            countTextColor = Color.parseColor("#ffffff")
+            defaultIconColor = Color.parseColor("#90a4ae")
+//                rippleColor = Color.parseColor("#2f424242")
+            selectedIconColor = Color.parseColor("#3c415e")
+//                shadowColor = Color.parseColor("#1f212121")
+        }
+
+        it.apply {
+            add(MeowBottomNavigation.Model(1, R.drawable.ic_home))
+            add(MeowBottomNavigation.Model(2, R.drawable.ic_explore))
+            add(MeowBottomNavigation.Model(3, R.drawable.ic_instagram))
+            add(MeowBottomNavigation.Model(4, R.drawable.ic_notification))
+            add(MeowBottomNavigation.Model(5, R.drawable.ic_account))
+            show(1)
+            setCount(4, "3")
+        }
+
+        it.setOnClickMenuListener {
+            when (it.id) {
+                1 -> {
+                    replace(HomeFragment())
+                }
+                2 -> {
+                    replace(RouteBBSFragment())
+                }
+                3 -> {
+                    replace(GramFragment())
+                }
+                4 -> {
+                    replace(InfoFragment())
+                }
+                5 -> {
+                    replace(InfoFragment())
+                }
+            }
+        }
     }
 }
