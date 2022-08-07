@@ -61,12 +61,15 @@ const DetailModal = ({
     let token = sessionStorage.getItem("token");
     axios
       .get(`/aamurest/bbs/SelectOne/${detailOne.rbn}`, {
+        params: {
+          id: sessionStorage.getItem("username"),
+        },
         headers: {
           Authorization: `Bearer ${token}`,
         },
       })
       .then((resp) => {
-        // console.log("게시판 상세보기 : ", resp.data);
+        console.log("게시판 상세보기 : ", resp.data);
         setTitle(resp.data.title);
         setContent(resp.data.content);
         setTheme(resp.data.themename);
@@ -74,6 +77,8 @@ const DetailModal = ({
         setFeedComments(resp.data.reviewList);
         setDetailRoute(resp.data.routeList);
         setUserId(resp.data.id);
+        setMyBookMark(resp.data.bookmark);
+
         let month = resp.data.planner.plannerdate.substring(
           resp.data.planner.plannerdate.indexOf("월") - 1,
           resp.data.planner.plannerdate.indexOf("월")
@@ -443,16 +448,16 @@ const DetailModal = ({
                             <FontAwesomeIcon
                               icon={faBookmark}
                               className="detail__plan-bookMark"
-                              // onClick={() => {
-                              //   setMyBookMark(false);
-                              // }}
+                              onClick={() => {
+                                setMyBookMark(false);
+                              }}
                             />
                           ) : (
                             <i
                               class="fa-regular fa-bookmark detail__plan-bookMark"
-                              // onClick={() => {
-                              //   setMyBookMark(true);
-                              // }}
+                              onClick={() => {
+                                setMyBookMark(true);
+                              }}
                             ></i>
                           )}
                         </div>
