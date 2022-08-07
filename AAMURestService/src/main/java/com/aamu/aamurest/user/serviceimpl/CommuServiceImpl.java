@@ -643,9 +643,9 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 		for(int i=0; i<tnameList.size();i++) {
 			map.put("tname", tnameList.get(i));//tname:서울
 			List<String> tagLists=dao.commuSelectTag(map);
-			//System.out.println("list에는?:"+tagLists.get(0).toString());
-			System.out.println("표함되어잇을끼요?"+tagLists.contains("서울"));
-			System.out.println("첫번째는 과연:"+tnameList.get(i));
+//			System.out.println("list에는?:"+tagLists.get(0).toString());
+//			System.out.println("표함되어잇을끼요?"+tagLists.contains("서울"));
+//			System.out.println("첫번째는 과연:"+tnameList.get(i));
 			if(tagLists.contains(tnameList.get(i))) {//tags테이블에 있으면
 				map.put("tname", tnameList.get(i));
 //				System.out.println("메소드 타니?"+map.get("tname"));
@@ -667,6 +667,15 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 		}
 		return affected;
 	}
+	
+	/////////////////////////////////////////////////////////워드클라우드 
+	@Override
+	public List<String> getAllTnamesOfWoman(Map map) {
+	
+		return dao.getAllTnamesOfWoman(map);
+	}
+	
+	
 	
 	
 	

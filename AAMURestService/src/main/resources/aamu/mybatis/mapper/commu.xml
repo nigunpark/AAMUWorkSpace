@@ -273,6 +273,17 @@
 		DELETE commutag WHERE lno=#{lno}
 	</delete>
 	
+	<!-- @@@@@@@@@@@@@@@@@@@@@@@@@@@@@이미지 클라우드@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ -->
+	<select id="getAllTnamesOfWoman" parameterType="Map" resultType="String">
+		SELECT tname FROM tags t 
+		JOIN commutag ct ON t.tno=ct.tno 
+		JOIN community c ON ct.lno=c.lno 
+		JOIN users u ON c.id=u.id 
+		WHERE gender=#{gender}
+	</select>
+	
+	
+	
 
 	
 	

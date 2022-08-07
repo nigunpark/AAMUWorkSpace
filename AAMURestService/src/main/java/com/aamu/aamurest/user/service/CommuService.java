@@ -111,5 +111,10 @@ public interface CommuService<T> {
 	
 	//마이페이지용_내가 팔로잉하는 계정 수 셋팅
 	int commuFollowingCount(Map map);
+	
+	///////////////////////////////////////////////////////////워드 클라우드
+	List<String> getAllTnamesOfWoman(Map map);
+	
+	
 
 }

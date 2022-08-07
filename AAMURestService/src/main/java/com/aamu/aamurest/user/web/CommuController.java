@@ -475,6 +475,35 @@ public class CommuController {
 		return returnMap;
 	}
 	
+	@GetMapping("/word")
+	public Map imageCloud() {
+		Map map = new HashMap<>();
+		map.put("gender", "여자");
+		List<String> allTnamesOfWoman=commuService.getAllTnamesOfWoman(map);
+		map.put("gender", "남자");
+		List<String> allTnamesOfMan=commuService.getAllTnamesOfWoman(map);
+		String allTnamesOfWomanStr = String.join(",", allTnamesOfWoman);
+		String allTnamesOfManStr = String.join(",", allTnamesOfMan);
+		
+		//파이썬으로 보낼 uri
+		String uri="http://localhost:5020/word?allTnamesOfWomanStr="+allTnamesOfWomanStr+"&allTnamesOfManStr="+allTnamesOfManStr;
+		//System.out.println("uri:"+uri);
+		
+		//제이슨형태로 보낸다
+		HttpHeaders header = new HttpHeaders();
+		header.add("Content-Type", "application/json");
+		HttpEntity httpEntity = new HttpEntity<>(header);
+		
+		ResponseEntity<Map> responseEntity =
+				restTemplate.exchange(uri, HttpMethod.GET,httpEntity, Map.class);
+		Map returnMap = responseEntity.getBody();
+		
+		return null;
+		
+	}
+	
+	
+	
 	
 
 }

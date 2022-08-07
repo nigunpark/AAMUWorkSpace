@@ -185,6 +185,7 @@ public class AdminCommuServiceImpl implements AdminCommuService {
 		return dao.commuSelectUserProf(id);
 	}
 	
+	
 
 	
 	

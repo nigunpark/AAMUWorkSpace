@@ -36,5 +36,7 @@ public interface AdminCommuService {
 	//커뮤니티 통계_글쓴이 프로필 사진 뿌려주기
 	String commuSelectUserProf(String id);
 	
+	
+	
 
 }
