@@ -119,7 +119,6 @@ const MyProfileBox = ({ setClickTab }) => {
         },
       })
       .then((resp) => {
-        console.log(resp.data);
         if (resp.data.result === 1) {
           sessionStorage.setItem("userimg", resp.data.Dto.userprofile);
           alert("프로필 수정이 완료되었습니다.");
