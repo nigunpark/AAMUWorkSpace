@@ -22,7 +22,6 @@ const MyHomeBox = ({ setClickTab, planList, rbn, setSelectRbn, setPlanList, setU
   const [isOpen, setIsOpen] = useState(false);
   const postDate = new Date(planList.routeDate);
   const [forDimmed, setForDimmed] = useState({});
-  console.log("planList", planList);
   // console.log("MyHomeBox :", rbn);
   let reduxState = useSelector((state) => state);
   let dispatch = useDispatch();
@@ -137,6 +136,16 @@ const MyHomeBox = ({ setClickTab, planList, rbn, setSelectRbn, setPlanList, setU
             >
               {planList.plannerdate}
             </div>
+            <span
+              style={{
+                opacity: doneOrStillOpacity(),
+                fontSize: "13px",
+                fontWeight: "bold",
+                color: "grey",
+              }}
+            >
+              {planList.theme}
+            </span>
           </div>
         </div>
       </div>
