@@ -33,19 +33,12 @@ const Navbar = ({ scrollNav, whereUrl }) => {
       >
         <div className="navbar-container">
           <Link to="/">
-            {/* <div className="navbar-logo"> */}
-            {/* <h1>AAMU</h1> */}
             <div>
               <img className="logoImg" src="/images/aamuLogo.png" />
             </div>
             {/* </div> */}
           </Link>
           <ul className={click ? "nav-menu active" : "nav-menu"}>
-            {/* <li>
-              <Link to="/" className="nav-links" onClick={closeMoblieMenu}>
-                Home
-              </Link>
-            </li> */}
             <li>
               <NavLink
                 to="/WholeMap"
@@ -146,7 +139,9 @@ function UserBadge() {
     if (e.target !== userRef.current) setShowUserModal(false);
   };
   window.addEventListener("click", handleUserModal);
-  let reduxState = useSelector((state) => state);
+  useEffect(() => {
+    userRef.current.src = sessionStorage.getItem("userimg");
+  }, [sessionStorage]);
   return (
     <>
       <Container>
