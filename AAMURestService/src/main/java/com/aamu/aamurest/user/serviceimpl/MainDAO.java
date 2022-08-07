@@ -190,4 +190,9 @@ public class MainDAO {
 		return template.selectOne("selectOneBBSTitle", rbn);
 	}
 
+	public String getThemeFromRbn(int rbn) {
+	
+		return template.selectOne("getThemeFromRbn", rbn);
+	}
+
 }

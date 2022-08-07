@@ -13,7 +13,7 @@
 	    </selectKey>
 	</insert>
 	
-	<select id="selectListNotiMessage" parameterType="Map">
+	<select id="selectListNotiMessage" parameterType="Map" resultType="notificationDTO">
 		SELECT * FROM NOTIFICATION WHERE id=#{id}
 	</select>
 	
@@ -21,7 +21,7 @@
 		UPDATE NOTIFICATION SET READKNOW = 1 WHERE nano=#{nano}
 	</update>
 	
-	<delete id="deleteNotiMessage" parameterMap="Map">
+	<delete id="deleteNotiMessage" parameterType="Map">
 		DELETE NOTIFICATION WHERE nano=#{nano}
 	</delete>
 	
