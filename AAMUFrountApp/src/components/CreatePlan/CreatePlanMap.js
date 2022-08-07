@@ -75,7 +75,7 @@ const CreatePlanMap = ({ currPosition, fromWooJaeData, forDayLine, setSavePlan }
       });
 
       //전체일정 선택시
-      if (forDayLine === 0 || forDayLine === 4) {
+      if (forDayLine === 0) {
         reduxState.tripPeriod.map((val, i) => {
           // 지도에 표시할 선을 생성합니다
           let polyline = new kakao.maps.Polyline({
@@ -171,10 +171,9 @@ const CreatePlanMap = ({ currPosition, fromWooJaeData, forDayLine, setSavePlan }
   return (
     <div
       style={{
-        position: "relative",
         width: "100%",
         height: "100%",
-        display: "inline-block",
+        // display: "inline-block",
       }}
     >
       <div
@@ -183,18 +182,20 @@ const CreatePlanMap = ({ currPosition, fromWooJaeData, forDayLine, setSavePlan }
         style={{
           width: "100%",
           height: "100%",
+          position: "relative",
         }}
-      ></div>
-      <div className="cMap__btn-container">
-        <div>수정저장</div>
-        <div>버튼버튼</div>
-        <div
-          onClick={(e) => {
-            e.stopPropagation();
-            setSavePlan(true);
-          }}
-        >
-          일정저장
+      >
+        <div className="cMap__btn-container">
+          <div>수정저장</div>
+          <div>버튼버튼</div>
+          <div
+            onClick={(e) => {
+              e.stopPropagation();
+              setSavePlan(true);
+            }}
+          >
+            일정저장
+          </div>
         </div>
       </div>
     </div>
