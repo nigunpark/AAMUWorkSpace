@@ -21,4 +21,11 @@
 		UPDATE NOTIFICATION SET READKNOW = 1 WHERE nano=#{nano}
 	</update>
 	
+	<delete id="deleteNotiMessage" parameterMap="Map">
+		DELETE NOTIFICATION WHERE nano=#{nano}
+	</delete>
+	
+	<delete id="deleteAllNotiMessage" parameterType="Map">
+		DELETE NOTIFICATION WHERE id=#{id}
+	</delete>
 </mapper>
