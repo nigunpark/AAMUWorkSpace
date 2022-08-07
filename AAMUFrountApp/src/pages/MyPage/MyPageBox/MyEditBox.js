@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { faRectangleXmark } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import MyTheme from "./MyTheme";
 
 const MyEditBox = ({ selectRbn }) => {
   let navigate = useNavigate();
@@ -17,6 +18,7 @@ const MyEditBox = ({ selectRbn }) => {
   const [content, setContent] = useState("");
   let contentRef = useRef();
   const [rbn, setDetailRbn] = useState(0);
+  const [themes, setThemes] = useState("");
   useEffect(() => {
     setDetailRbn(selectRbn);
   }, []);
@@ -25,7 +27,6 @@ const MyEditBox = ({ selectRbn }) => {
   const [showImages, setShowImages] = useState([]);
   const [showImagesFile, setShowImagesFile] = useState([]); //전송할이미지들
   //--------------------------------이미지 끝--------------------------------
-  console.log("showImagesFile", showImagesFile);
   async function getSelectOne() {
     let token = sessionStorage.getItem("token");
     await axios
@@ -36,6 +37,7 @@ const MyEditBox = ({ selectRbn }) => {
       })
       .then((resp) => {
         console.log("MyEditBox", resp.data);
+        setThemes(resp.data.themename);
         setPlannerTitle(resp.data.planner.title);
         setTitle(resp.data.title);
         setContent(resp.data.content);
@@ -312,8 +314,11 @@ const MyEditBox = ({ selectRbn }) => {
               {/* 테마 */}
               <span className="theme-section" onClick={onClickModal}>
                 {/* theme : {postTheme == 0 ? "테마를 선택하세요" : postTheme} */}
-                theme :
+                theme : {themes}
                 <div style={{ overflowX: "auto" }}>
+                  <div className="myProfile__theme-container">
+                    <MyTheme />
+                  </div>
                   {/* {themes.map((val, i) => {
                 return (
                   <CheckBox
