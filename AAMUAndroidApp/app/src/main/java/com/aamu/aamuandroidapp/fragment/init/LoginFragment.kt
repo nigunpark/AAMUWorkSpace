@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -19,6 +20,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
+import com.aamu.aamuandroidapp.FcmService
 import com.aamu.aamuandroidapp.R
 import com.aamu.aamuandroidapp.components.login.LoginScreen
 import com.aamu.aamuandroidapp.components.login.LoginVideo
@@ -29,6 +31,9 @@ import com.aamu.aamuandroidapp.util.setContextapp
 import com.aamu.aamuandroidapp.util.setStatusBarOrigin
 import com.aamu.aamuandroidapp.util.setStatusBarTransparent
 import com.google.common.reflect.Reflection
+import com.google.firebase.iid.FirebaseInstanceIdReceiver
+import com.google.firebase.iid.internal.FirebaseInstanceIdInternal
+import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 

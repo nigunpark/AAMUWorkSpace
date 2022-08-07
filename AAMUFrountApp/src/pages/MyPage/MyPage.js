@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./MyPage.scss";
 import MyPostBox from "./MyPageBox/MyPostBox";
 import MyEditBox from "./MyPageBox/MyEditBox";
@@ -7,9 +7,7 @@ import MyProfileBox from "./MyPageBox/MyProfileBox";
 import MyMessageBar from "./MyMessageBar/MyMessageBar";
 import {
   faBookmark,
-  faImage,
   faMessage,
-  faStar,
   faThumbsUp,
 } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -90,23 +88,6 @@ const MyPage = () => {
       });
   }
 
-  const [myThemes, setMyThemes] = useState();
-  async function myTheme() {
-    let token = sessionStorage.getItem("token");
-    await axios
-      .get("", {
-        params: {
-          id: sessionStorage.getItem("username"),
-        },
-      })
-      .then((resp) => {
-        console.log("나의 테마 (MyPage.js) :", resp.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
-
   const [myBookList, setMyBookList] = useState([]);
   const [detailOne, setDetailOne] = useState({});
   const [isOpen, setIsOpen] = useState(false);
@@ -134,7 +115,6 @@ const MyPage = () => {
     selectList();
     // searchBar();
     bookMarkList();
-    // myTheme();
   }, [clickTab]);
 
   useEffect(() => {
@@ -367,7 +347,7 @@ function Title({ clickTab }) {
       <>
         <div className="projects-title">이런여행 어때 게시판 정보</div>
         <div style={{ display: "flex", flexDirection: "row" }}>
-          {theme == undefined ? null : <MyThemeLists theme={theme} />}
+          {theme === undefined ? null : <MyThemeLists theme={theme} />}
         </div>
       </>
     );
@@ -433,8 +413,6 @@ function TabContent({
       });
   }
 
-  // console.log("TabContent selectRbn :", selectRbn);
-
   if (clickTab === 0) {
     // 홈
     return (
@@ -476,19 +454,33 @@ function TabContent({
                         setList(val);
                       }}
                     >
-                      <img className="instaImg" src={val.photo[0]} />
+                      <img alt="" className="instaImg" src={val.photo[0]} />
                       <div>
                         <div className="instaTitle__container">
-                          <input type="text" value={val.ctitle} className="instaTitle" />
+                          <input
+                            type="text"
+                            value={val.ctitle}
+                            className="instaTitle"
+                          />
                         </div>
                         <div className="insta__info">
                           <div>
-                            <FontAwesomeIcon icon={faMessage} className="insta__info-icon" />{" "}
-                            <span className="insta__info-content">{val.rcount}</span>
+                            <FontAwesomeIcon
+                              icon={faMessage}
+                              className="insta__info-icon"
+                            />{" "}
+                            <span className="insta__info-content">
+                              {val.rcount}
+                            </span>
                           </div>
                           <div>
-                            <FontAwesomeIcon icon={faThumbsUp} className="insta__info-icon" />
-                            <span className="insta__info-content">{val.likecount}</span>
+                            <FontAwesomeIcon
+                              icon={faThumbsUp}
+                              className="insta__info-icon"
+                            />
+                            <span className="insta__info-content">
+                              {val.likecount}
+                            </span>
                           </div>
                         </div>
                       </div>
@@ -498,13 +490,11 @@ function TabContent({
               );
             })}
 
-            {modalOpen == true ? (
+            {modalOpen === true ? (
               <MyBoxList
                 setModalOpen={setModalOpen}
-                setClickTab={setClickTab}
                 seteditModal={seteditModal}
                 setMyLno={setMyLno}
-                myLno={myLno}
                 val={val}
                 setList={setList}
                 setcomments={setcomments}
@@ -530,7 +520,6 @@ function TabContent({
             {editModal && (
               <MyEdit
                 val={val}
-                setlist={setMyInstar}
                 seteditModal={seteditModal}
                 searchBar={searchBar}
               />
@@ -545,14 +534,14 @@ function TabContent({
       <div className="myInstaContainer">
         <div className="myInstar">
           {myBookList.map((val, idx) => {
-            return <MyBookMarkBox setDetailOne={setDetailOne} detail={val} setIsOpen={setIsOpen} />;
+            return (
+              <MyBookMarkBox
+                setDetailOne={setDetailOne}
+                detail={val}
+                setIsOpen={setIsOpen}
+              />
+            );
           })}
-
-          {/*
-            ContentItem.js 랑 같음
-            추후에 Content.js 에서 넘기는 데이터랑
-            ContentItem.js 안의 내용이랑 비슷하게 채우면될듯
-          */}
         </div>
 
         {isOpen && (
@@ -567,7 +556,7 @@ function TabContent({
     );
   } else if (clickTab === 3) {
     //----------------------프로필------------------------
-    return <MyProfileBox setClickTab={setClickTab} />;
+    return <MyProfileBox />;
   } else if (clickTab === 10) {
     //-----------------------글작성------------------------
     return <MyPostBox selectRbn={selectRbn} setClickTab={setClickTab} />;
@@ -580,14 +569,14 @@ function TabContent({
 function TabTopLine({ clickTab, planList, uploadCount, myInstar }) {
   const [totalLike, setTotalLike] = useState(0);
   let count = 0;
-  // console.log("uploadCount :", uploadCount[1] == undefined);
+
   useEffect(() => {
     myInstar.map((val) => {
       return setTotalLike((curr) => curr + parseInt(val.likecount));
     });
   }, [clickTab]);
-  if (planList.length != 0) {
-    if (uploadCount[1] != undefined) count = uploadCount[1].length;
+  if (planList.length !== 0) {
+    if (uploadCount[1] !== undefined) count = uploadCount[1].length;
   }
 
   //서브 타이틀
@@ -612,10 +601,6 @@ function TabTopLine({ clickTab, planList, uploadCount, myInstar }) {
           <span className="status-number">{myInstar.length}</span>
           <span className="status-type">Total</span>
         </div>
-        {/* <div className="item-status">
-          <span className="status-number">{totalLike}</span>
-          <span className="status-type">Like</span>
-        </div> */}
       </div>
     );
   } else if (clickTab === 2) {
@@ -636,10 +621,8 @@ function TabTopLine({ clickTab, planList, uploadCount, myInstar }) {
 
 function MyBoxList({
   setModalOpen,
-  setClickTab,
   seteditModal,
   setMyLno,
-  myLno,
   val,
   setList,
   setcomments,
@@ -656,7 +639,6 @@ function MyBoxList({
         },
       })
       .then((resp) => {
-        // setdeleteOnee(resp.data); //성공 여부가 온다 true false
         alert("삭제되었습니다!");
         // feedList(setlist);
         searchBar();

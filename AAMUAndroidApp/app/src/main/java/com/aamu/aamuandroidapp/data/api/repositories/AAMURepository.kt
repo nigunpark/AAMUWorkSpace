@@ -6,6 +6,7 @@ import retrofit2.http.Query
 
 interface AAMURepository {
     suspend fun dologin(username : String, password : String) : String?
+    suspend fun postToken(username: String,firebaseid : String)
     suspend fun isok() : Boolean
     suspend fun getRecentPlace(placey : Double,placex : Double) : Flow<List<AAMUPlaceResponse>>
     suspend fun getPlaceOne(contentid : Int, contenttypeid : Int) : Flow<AAMUPlaceResponse>

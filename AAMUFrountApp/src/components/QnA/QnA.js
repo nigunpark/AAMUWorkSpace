@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from "react";
 import "./QnA.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAngleDown, faCircleQuestion } from "@fortawesome/free-solid-svg-icons";
+import {
+  faAngleDown,
+  faCircleQuestion,
+} from "@fortawesome/free-solid-svg-icons";
 import Pagination from "./Pagination";
 import { Link, useNavigate } from "react-router-dom";
-import { post } from "jquery";
+
 import axios from "axios";
 const QnA = () => {
   const navigate = useNavigate();
   const [posts, setPosts] = useState([<QnABbsOne />]);
-  const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage, setPostsPerPage] = useState(5);
   const indexOfLast = currentPage * postsPerPage;
@@ -47,7 +49,9 @@ const QnA = () => {
     <div className="qna__container">
       <div className="qna__header">
         <div className="qna__header__title">AAMU Q &amp; A</div>
-        <div className="qna__header__subTitle">AAMU에 궁금한점이 있으신가요?</div>
+        <div className="qna__header__subTitle">
+          AAMU에 궁금한점이 있으신가요?
+        </div>
       </div>
       <div className="qna__body">
         <div className="qna__usual-questions">
@@ -69,7 +73,14 @@ const QnA = () => {
           </Link>
           <div className="qna__qnaBoard-contents">
             {getcurrentPosts(userQnA).map((val, i) => {
-              return <QnABbsOne val={val} navigate={navigate} userQnA={userQnA} i={i} />;
+              return (
+                <QnABbsOne
+                  val={val}
+                  navigate={navigate}
+                  userQnA={userQnA}
+                  i={i}
+                />
+              );
 
               // return <QnABbsOne key={i} val={val} navigate={navigate} />;
             })}
@@ -130,10 +141,16 @@ function QnAaccoridan({ val }) {
     <div className="value__accordion">
       <div className="value__accordion-item">
         <header className="value__accordion-header">
-          <FontAwesomeIcon icon={faCircleQuestion} className="value__accordion-icon" />
+          <FontAwesomeIcon
+            icon={faCircleQuestion}
+            className="value__accordion-icon"
+          />
           <h3 className="value__accordion-title">{val.title}</h3>
           <div className="value__accordion-arrow">
-            <FontAwesomeIcon icon={faAngleDown} className="accordian-arrow-icon" />
+            <FontAwesomeIcon
+              icon={faAngleDown}
+              className="accordian-arrow-icon"
+            />
           </div>
         </header>
         <div className="value__accordion-content">

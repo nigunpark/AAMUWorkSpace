@@ -106,10 +106,27 @@ public class CommuController {
 			dto.setFollowercount(commuService.commuFollowerCount(map));
 			//내가 팔로잉하는 계정 수 셋팅
 			dto.setFollowingcount(commuService.commuFollowingCount(map));
-			//추천 계정 셋팅
-			commuService.commuRecommendUser(map);
+			
+			
 			
 		}/////for
+		
+		//추천 계정 셋팅
+		List<Map> recommendUserList = new Vector<>();
+		if(map.get("id")!=null) {
+			List<String> idList=commuService.commuRecommendUser(map);
+			for(String id:idList) {
+				Map recommendUserMap = new HashMap<>();
+				recommendUserMap.put("id", id);
+				//id에 따른 글쓴이 프로필사진 셋팅
+				String userprofile=FileUploadUtil.requestOneFile(commuService.commuSelectUserProf(id), "/resources/userUpload", req);
+				recommendUserMap.put("userprofile", userprofile);
+				recommendUserList.add(recommendUserMap);
+			}
+		}
+		list.get(0).setRecommenduser(recommendUserList);
+		
+		
 //		System.out.println("몇개 넘어가니:"+list.size());
 		return list;
 	}////////////////commuSelectList

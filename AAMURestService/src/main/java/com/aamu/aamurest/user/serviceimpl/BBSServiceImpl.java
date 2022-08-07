@@ -31,8 +31,8 @@ public class BBSServiceImpl implements BBSService{
 
 	//글 목록
 	@Override
-	public List<BBSDTO> bbsSelectList() {
-		List<BBSDTO> bbsList = dao.bbsSelectList();
+	public List<BBSDTO> bbsSelectList(Map map) {
+		List<BBSDTO> bbsList = dao.bbsSelectList(map);
 		List<BBSDTO> returnList = new Vector<>();
 
 		for(BBSDTO dto:bbsList) {
@@ -74,11 +74,10 @@ public class BBSServiceImpl implements BBSService{
 	}
 	else { //다시 누를 경우 == 북마크 취소
 		System.out.println("북마크를 삭제");
-		if(dao.bbsBookmarkDelete(map)==1) return false;
+		if(dao.bbsBookmarkDelete(map)==0) return false;
 		else return true;
 		}
 	}
-
 
 	//글 북마크 목록
 	@Override
@@ -179,11 +178,12 @@ public class BBSServiceImpl implements BBSService{
 		return dao.bbsSearchList(map);
 	}
 
+
 	/*---------------------------------------------------*/
 	
 	//리뷰 목록
 	@Override
-	public List<ReviewDTO> reviewList(int rbn) {
+	public List<ReviewDTO> reviewSelectList(int rbn) {
 		return dao.reviewSelectList(rbn);
 	}
 		
@@ -220,6 +220,14 @@ public class BBSServiceImpl implements BBSService{
 		return dao.updateRate(map);
 	}
 
+	public List<RouteDTO> selectRouteList(int rbn) {
+		return dao.selectRouteList(rbn);
+	}
+
+	@Override
+	public String bbsSelectUserID(int rbn) {
+		return dao.bbsSelectUserID(rbn);
+	}
 
 }
 	

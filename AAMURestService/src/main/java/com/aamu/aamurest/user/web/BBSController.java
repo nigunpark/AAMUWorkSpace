@@ -1,6 +1,7 @@
 package com.aamu.aamurest.user.web;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,10 +25,15 @@ import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import com.aamu.aamurest.user.service.AttractionDTO;
 import com.aamu.aamurest.user.service.BBSDTO;
+import com.aamu.aamurest.user.service.MainService;
+import com.aamu.aamurest.user.service.NotificationDTO;
 import com.aamu.aamurest.user.service.ReviewDTO;
+import com.aamu.aamurest.user.service.RouteDTO;
 import com.aamu.aamurest.user.service.UsersDTO;
 import com.aamu.aamurest.user.serviceimpl.BBSServiceImpl;
 import com.aamu.aamurest.util.FileUploadUtil;
+import com.aamu.aamurest.util.UserUtil;
+import com.aamu.aamurest.websocket.NotificationAlert;
 
 @CrossOrigin(origins="*")
 @RestController
@@ -40,18 +46,35 @@ public class BBSController {
 
 	@Autowired
 	private CommonsMultipartResolver multipartResolver;
+	
+	@Autowired
+	private MainService mainService;
+	
+	@Autowired
+	private NotificationAlert notificationAlert;
 
 	//글 목록
 	@GetMapping("/bbs/SelectList")
-	public List<BBSDTO> bbsSelectList(HttpServletRequest req){
-		List<BBSDTO> list = bbsService.bbsSelectList();
+	public List<BBSDTO> bbsSelectList(@RequestParam Map mapp,HttpServletRequest req){
+		List<BBSDTO> list = bbsService.bbsSelectList(mapp);
+		Map map = new HashMap();
 		System.out.println("list:"+list);
 		for(BBSDTO dto:list) {
 			//모든 사진 가져오기
 			dto.setPhoto(FileUploadUtil.requestFilePath(bbsService.bbsSelectPhotoList(dto.getRbn()), "/resources/bbsUpload", req));
 			//dto.setPhoto(dao.bbsSelectPhotoList(rbn));
 			//모든 리뷰 가져오기
-			dto.setReviewList(bbsService.reviewList(dto.getRbn()));
+			dto.setReviewList(bbsService.reviewSelectList(dto.getRbn()));
+			//모든 경로 가져오기
+			List<RouteDTO> routelist = bbsService.selectRouteList(dto.getRbn());
+			for(RouteDTO route:routelist) {
+				route.setDto(mainService.selectOnePlace(route.getContentid(), req));
+			}
+			dto.setRouteList(routelist);
+			map.put("id", dto.getId());
+			map.put("rbn", dto.getRbn());
+			dto.setBookmark(bbsService.bbsBookmark(map));
+			
 		}
 		return list;
 	}
@@ -64,8 +87,8 @@ public class BBSController {
 		
 		System.out.println("머가나오나:"+dto);
 		//모든 리뷰 가져오기
-		System.out.println("리뷰리스트에 뭐가 있을까?"+bbsService.reviewList(rbn));
-		dto.setReviewList(bbsService.reviewList(rbn));
+		System.out.println("리뷰리스트에 뭐가 있을까?"+bbsService.reviewSelectList(rbn));
+		dto.setReviewList(bbsService.reviewSelectList(rbn));
 		//모든 사진 가져오기
 		//dto.setPhoto(bbsService.bbsSelectPhotoList(rbn));
 		dto.setPhoto(FileUploadUtil.requestFilePath(bbsService.bbsSelectPhotoList(dto.getRbn()), "/resources/bbsUpload", req));
@@ -137,7 +160,7 @@ public class BBSController {
 	
 	//글 북마크 목록
 	@GetMapping("/bbs/bookmark/list")
-	public List<BBSDTO> bbsBookmarkList(@RequestParam Map map, HttpServletRequest req){
+	public List<BBSDTO> bbsBookmarkList(@RequestParam Map map, HttpServletRequest req){//id
 		List<BBSDTO> list = bbsService.bbsBookmarkList(map);
 		System.out.println("북마크 목록:"+list);
 		for(BBSDTO dto:list) {
@@ -145,8 +168,16 @@ public class BBSController {
 			dto.setPhoto(FileUploadUtil.requestFilePath(bbsService.bbsSelectPhotoList(dto.getRbn()), "/resources/bbsUpload", req));
 			//dto.setPhoto(dao.bbsSelectPhotoList(rbn));
 			//모든 리뷰 가져오기
-			dto.setReviewList(bbsService.reviewList(dto.getRbn()));
+			dto.setReviewList(bbsService.reviewSelectList(dto.getRbn()));
+			//모든 경로 가져오기
+			List<RouteDTO> routelist = bbsService.selectRouteList(dto.getRbn());
+			for(RouteDTO route:routelist) {
+				route.setDto(mainService.selectOnePlace(route.getContentid(), req));
+			}
+			dto.setRouteList(routelist);
+			dto.setBookmark(bbsService.bbsBookmark(map));
 		}
+		
 		return list;
 	}
 	
@@ -165,7 +196,7 @@ public class BBSController {
 	public Map reviewInsert(@RequestBody Map map) {
 		System.out.println("map이 넘어오나:"+map);
 		int rbn = Integer.parseInt(map.get("rbn").toString());
-		List<ReviewDTO> list = bbsService.reviewList(rbn);
+		List<ReviewDTO> list = bbsService.reviewSelectList(rbn);
 		double total = Double.parseDouble(map.get("rate").toString());
 		if(list.size() != 0) {
 			for(ReviewDTO dto:list) {
@@ -181,6 +212,9 @@ public class BBSController {
 		Map resultMap = new HashMap();
 		if(affected==1) resultMap.put("result", "insertSuccess");
 		else resultMap.put("result", "insertNotSuccess");
+		
+		String authid = bbsService.bbsSelectUserID(rbn);
+		notificationAlert.NotiMessage("이런여행 어때 게시판",new NotificationDTO(0,authid,map.get("id").toString()+"님이 리뷰를 남겼어요",0,0,NotificationAlert.BBS,rbn));
 		return resultMap;
 	}
 	
@@ -209,15 +243,7 @@ public class BBSController {
 		return resultMap;
 		
 	}
+
 	
-	/*
-	//테마 사진 하나 뿌려주기
-	@GetMapping("/theme/SelectOne/{themeid}")
-	public BBSDTO themeSelectOne(@RequestParam Map map,HttpServletRequest req) {
-		BBSDTO dto = bbsService.themeSelectOne(map);
-		dto.setThemeimg(FileUploadUtil.requestOneFile(dto.getThemeimg(), "/resources/themeUpload", req));
-		return dto;
-	}
-	*/
 }
 

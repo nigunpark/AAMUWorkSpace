@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="aamu.mybatis.mapper.firebase">
+	
+	<insert id="insertfirebase" parameterType="Map">
+		INSERT INTO FIREBASETABLE
+		VALUES(#{id},#{firebaseid})
+	</insert>
+	
+	<select id="selectonefirebase" parameterType="String" resultType="String">
+		SELECT FIREBASEID FROM FIREBASETABLE WHERE id=#{value}
+	</select>
+	
+	
+	<delete id="deletefirebase" parameterType="Map">
+		DELETE FROM FIREBASETABLE WHERE id=#{id}
+	</delete>
+	
+	
+</mapper>

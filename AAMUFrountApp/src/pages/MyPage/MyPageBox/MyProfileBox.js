@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import DaumPostcode from "react-daum-postcode";
 import axios from "axios";
+
 import MyTheme from "./MyTheme";
 
 const MyProfileBox = ({ setClickTab }) => {
@@ -31,7 +32,7 @@ const MyProfileBox = ({ setClickTab }) => {
     let imageUrlLists = [...showImages];
     let imgs = [...showImagesFile];
 
-    if (imageLists.length != 0) {
+    if (imageLists.length !== 0) {
       for (let i = 0; i < imageLists.length; i++) {
         const currentImageUrl = URL.createObjectURL(imageLists[i]);
         imageUrlLists.push(currentImageUrl);
@@ -66,6 +67,33 @@ const MyProfileBox = ({ setClickTab }) => {
         headers: {
           Authorization: `Bearer ${token}`,
         },
+        // <<<<<<< HEAD
+        // =======
+        //       })
+        //       .then((resp) => {
+        //         setPwd(resp.data.pwd);
+
+        //         setPhoneFNum(resp.data.phonenum.split("-")[0]);
+        //         setPhoneSNum(resp.data.phonenum.split("-")[1]);
+        //         setPhoneTNum(resp.data.phonenum.split("-")[2]);
+
+        //         setEmailFrist(resp.data.email.split("@")[0]);
+        //         setEmailSecond(resp.data.email.split("@")[1]);
+
+        //         setZoneCode(resp.data.addrid.split("/")[0]);
+        //         setAddress(resp.data.addrid.split("/")[1]);
+        //         setDetailAddr(resp.data.addrid.split("/")[2]);
+
+        //         setIntroduce(resp.data.self);
+        //         setShowImages(resp.data.userprofile.split());
+        //         // setProfile(resp.data.userprofile.split());
+        //         setName(resp.data.name);
+        //         setGender(resp.data.gender);
+        //         setUserId(resp.data.id);
+        //       })
+        //       .catch((error) => {
+        //         console.log((error) => console.log("프로필 가져오기 실패", error));
+        // >>>>>>> b7b3d9ca3996f4cd027bb2262cf25c10d5bfe511
       });
 
       console.log("resp", resp.data);
@@ -287,6 +315,37 @@ function uploadFile(showImages) {
 }
 
 const AddresApi = ({ setIsOpenPost, zCodeRef, addrRef }) => {
+  function profileUpdate(profiles, phoneNum, email, addr, introduce, pwd, gender, name) {
+    if (profiles.length === 0) {
+      profiles = new FormData();
+      console.log("profileUpdate 클릭 후 호출 함수:", profiles);
+    }
+
+    profiles.append("addrid", addr);
+    profiles.append("email", email);
+    profiles.append("gender", gender);
+    profiles.append("id", sessionStorage.getItem("username"));
+    profiles.append("name", name);
+    profiles.append("phonenum", phoneNum);
+    profiles.append("pwd", pwd);
+    profiles.append("self", introduce);
+    let token = sessionStorage.getItem("token");
+    axios
+      .post("/aamurest/users/upload", profiles, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-type": "multipart/form-data",
+        },
+      })
+      .then((resp) => {
+        if (resp.data === 1) {
+          alert("프로필 수정이 완료되었습니다.");
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
   const onCompletePost = (data) => {
     let fullAddr = data.address;
     let extraAddr = "";

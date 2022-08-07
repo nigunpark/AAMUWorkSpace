@@ -18,8 +18,8 @@ public class BBSDAO {
 	private SqlSessionTemplate template;
 
 	//글 목록
-	public List<BBSDTO> bbsSelectList(){
-		return template.selectList("bbsSelectList");
+	public List<BBSDTO> bbsSelectList(Map map){
+		return template.selectList("bbsSelectList",map);
 	}
 
 	//글 목록_사진 뿌려주기
@@ -59,7 +59,17 @@ public class BBSDAO {
 	
 	//글 북마크 목록
 	public List<BBSDTO> bbsBookmarkList(Map map) {
-		return template.selectList("bbsBookmarkList");
+		return template.selectList("bbsBookmarkList",map);
+	}
+	
+	//글 북마크 목록
+	public List<BBSDTO> selectRouteList(Map map) {
+		return template.selectList("selectRouteList",map);
+	}
+	
+	//글 북마크 목록
+	public List<BBSDTO> selectOnePlace(Map map) {
+		return template.selectList("selectOnePlace",map);
 	}
 	
 	//글 북마크_insert
@@ -74,10 +84,10 @@ public class BBSDAO {
 	
 	//글 검색 목록
 	public List<String> bbsSearchList(Map map) {
-		System.out.println("dao map:"+map.get("searchColumn"));
-		System.out.println("dao map:"+map.get("searchWord"));
-		System.out.println("dao map:"+map.get("table"));
-		return template.selectList("bbsSearchList");
+		System.out.println("dao map:"+map.get("title"));
+		System.out.println("dao map:"+map.get("id"));
+		//System.out.println("dao map:"+map.get("table"));
+		return template.selectList("bbsSearchList",map);
 	}
 
 	/*----------------------------------------------------------*/
@@ -125,9 +135,8 @@ public class BBSDAO {
 		return template.update("updateRate",map);
 	}
 	
-	//검색 결과
-	public List<BBSDTO> searchList(){
-		return template.selectList("searchList");
+	public String bbsSelectUserID(int rbn) {
+		return template.selectOne("bbsSelectUserID", rbn);
 	}
 
 

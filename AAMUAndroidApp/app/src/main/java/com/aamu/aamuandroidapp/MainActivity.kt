@@ -6,10 +6,12 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Base64
 import android.util.Log
-import androidx.compose.ui.platform.LocalContext
+import androidx.activity.viewModels
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import com.aamu.aamuandroidapp.databinding.ActivityMainBinding
+import com.aamu.aamuandroidapp.fragment.main.MainViewModel
+import com.aamu.aamuandroidapp.fragment.main.MainViewModelFactory
 import com.aamu.aamuandroidapp.util.setContextapp
 import com.aamu.aamuandroidapp.util.stompConnection
 import com.aamu.aamuandroidapp.util.stompDisconnect
@@ -29,6 +31,12 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         setContextapp(applicationContext)
         navController = findNavController(R.id.nav_host_fragment)
+
+        if(intent.hasExtra("fromthan")){
+            val viewModel: MainViewModel by viewModels()
+            Log.i("com.aamu.aamu","여를 안탐?")
+            viewModel.setFromthanNo(intent.getStringExtra("fromthan")!!,Integer.parseInt(intent.getStringExtra("no")))
+        }
 
         try {
             val information =

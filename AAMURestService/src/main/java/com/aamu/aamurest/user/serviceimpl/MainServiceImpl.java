@@ -656,7 +656,7 @@ public class MainServiceImpl implements MainService{
 		
 	}
 	@Override
-	public String searchMostRoute(Map map) {
+	public List<String> searchMostRoute(Map map) {
 		
 		return dao.searchMostRoute(map);
 	}
@@ -731,5 +731,10 @@ public class MainServiceImpl implements MainService{
 	public List<AttractionDTO> getTopAttr() {
 		
 		return dao.getTopAttr();
+	}
+	@Override
+	public BBSDTO selectOneBBSTitle(int rbn) {
+		
+		return dao.selectOneBBSTitle(rbn);
 	}
 }

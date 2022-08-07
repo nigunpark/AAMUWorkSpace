@@ -3,6 +3,7 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'androidx.navigation.safeargs.kotlin'
 }
+apply plugin: 'com.google.gms.google-services'
 apply plugin: 'kotlin-kapt'
 android {
     compileSdk 32
@@ -11,7 +12,7 @@ android {
     }
     defaultConfig {
         applicationId "com.aamu.aamuandroidapp"
-        minSdk 23
+        minSdk 28
         targetSdk 32
         versionCode 1
         versionName "1.0"
@@ -128,4 +129,9 @@ dependencies {
     kapt 'com.github.bumptech.glide:compiler:4.13.2'
 
     implementation 'com.github.a914-gowtham:compose-ratingbar:1.2.3'
+
+    implementation platform('com.google.firebase:firebase-bom:30.3.1')
+    implementation 'com.google.firebase:firebase-analytics'
+    //추가한 라인-메시징 서비스용
+    implementation 'com.google.firebase:firebase-messaging'
 }

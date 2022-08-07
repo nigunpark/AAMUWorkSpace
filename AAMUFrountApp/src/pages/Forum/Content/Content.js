@@ -1,24 +1,23 @@
 import React, { useState, useEffect, useRef } from "react";
 import ContentItem from "./ContentItem";
 import "./Content.css";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import FSearch from "../FSearch/FSearch";
+
+import { Link } from "react-router-dom";
+
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
-import dummy from "../DB/contentdata.json";
 import { useSelector } from "react-redux";
 import DetailModal from "../DetailModal/DetailModal";
-import Spinner from "../../../components/Insta/Spinner";
 import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 const Content = () => {
   let reduxState = useSelector((state) => state);
-  //let navigate = useNavigate();
   const [listData, setListData] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   let token = sessionStorage.getItem("token");
-  let [list, setList] = useState("");
   const [showCBModal, setShowCBModal] = useState(false);
   const [detailOne, setDetailOne] = useState({});
   const [kindOfSearch, setKindOfSearch] = useState("");
@@ -35,8 +34,6 @@ const Content = () => {
       setIsOpen(true);
     }
   }
-  // console.log("detailOne", detailOne);
-  // console.log("?forChatBotData?", reduxState.forChatBotData);
 
   const selectList = async () => {
     await axios
@@ -46,15 +43,14 @@ const Content = () => {
         },
       })
       .then((resp) => {
-        // setList(resp.data);
-        // console.log("글 목록 가져오기 Content.js) :", resp.data);
+        console.log("글 목록 가져오기 Content.js) :", resp.data);
+
         setListData(resp.data);
       })
       .catch((error) => {
         // console.log((error) => console.log("글 목록 가져오기 실패(Content.js) :", error));
       });
   };
-  // useEffect(() => {}, []);
   useEffect(() => {
     selectList();
     bookMarkList();
@@ -81,7 +77,9 @@ const Content = () => {
       .then((resp) => {
         console.log("검색한 글 목록(Content.js) :", resp.data);
         setListData(resp.data);
-        searchOne.current.value = null;
+
+        // setKindOfSearch([]);
+        // searchOne.current.value = null;
       })
       .catch((error) => {
         console.log("검색 목록 가져오기 실패(Content.js) :", error);
@@ -121,10 +119,10 @@ const Content = () => {
   const bookBool = myBookMark.find(isBookBool);
 
   let book;
+  let bookbol;
   if (bookTF != undefined) {
     book = bookTF.rbn;
   }
-  let bookbol;
   if (bookTF != undefined) {
     bookbol = bookBool.bookmark;
   }
@@ -164,17 +162,24 @@ const Content = () => {
                 <MenuItem value="theme">테마</MenuItem>
                 <MenuItem value="title">제목</MenuItem>
               </Select>
-              {/* {console.log("kindOfSearch :", kindOfSearch)} */}
             </FormControl>
             <div className="search__warpper__minCon">
-              <input type="text" placeholder="검색어를 입력하세요" ref={searchOne} />
+              <input
+                type="text"
+                placeholder="검색어를 입력하세요"
+                ref={searchOne}
+                onKeyDown={(e) => {
+                  let inSelectText = searchOne.current.value;
+                  if (e.key === "Enter") listSearch(inSelectText);
+                }}
+              />
+
               <span>
                 <FontAwesomeIcon
                   icon={faMagnifyingGlass}
                   className="search__i__minCon"
                   onClick={() => {
                     let inSelectText = searchOne.current.value;
-                    console.log("searchOne (검색어) :", inSelectText);
                     listSearch(inSelectText);
                   }}
                 />
@@ -185,7 +190,6 @@ const Content = () => {
             {listData.map((val, idx) => {
               return <ContentItem setDetailOne={setDetailOne} detail={val} setIsOpen={setIsOpen} />;
             })}
-            {/* {console.log("내가 누른 글 번호 :", detailOne.rbn)} */}
           </div>
         </div>
       </div>
@@ -207,7 +211,6 @@ const Content = () => {
           bookbol={bookbol}
         />
       )}
-      {/* {isLoading && <Spinner />} */}
     </div>
   );
 };
