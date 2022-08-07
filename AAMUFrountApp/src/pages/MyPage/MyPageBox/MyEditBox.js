@@ -25,7 +25,7 @@ const MyEditBox = ({ selectRbn }) => {
   const [showImages, setShowImages] = useState([]);
   const [showImagesFile, setShowImagesFile] = useState([]); //전송할이미지들
   //--------------------------------이미지 끝--------------------------------
-
+  console.log("showImagesFile", showImagesFile);
   async function getSelectOne() {
     let token = sessionStorage.getItem("token");
     await axios
@@ -82,7 +82,14 @@ const MyEditBox = ({ selectRbn }) => {
         console.log((error) => console.log("수정할 데이터 불러오기 실패", error));
       });
   }
-
+  function uploadFile() {
+    //이미지 업로드
+    let formData = new FormData(); // formData 객체를 생성한다.
+    for (let i = 0; i < showImagesFile.length; i++) {
+      formData.append("multifiles", showImagesFile[i]); // 반복문을 활용하여 파일들을 formData 객체에 추가한다
+    }
+    return formData;
+  }
   useEffect(() => {
     getSelectOne();
   }, []);
@@ -362,16 +369,10 @@ const MyEditBox = ({ selectRbn }) => {
             </div>
             <span
               className="myEditBox_btn"
-              onClick={() => {
-                // let write = uploadFile(showImagesFile);
-                bordWrite(
-                  // write,
-                  title,
-                  content,
-                  rbn,
-                  navigate,
-                  postThemeNum
-                );
+              onClick={(e) => {
+                e.stopPropagation();
+                let temp = uploadFile();
+                bordWrite(temp, titleRef, contentRef, rbn, navigate, postThemeNum, showImagesFile);
               }}
             >
               수정하기
@@ -512,9 +513,13 @@ function getTimes(periodIndex, st, et) {
       .padStart(2, "0"),
   };
 }
-function bordWrite(title, content, rbn, navigate) {
+function bordWrite(temp, titleRef, contentRef, rbn, navigate, showImagesFile) {
   // console.log("titleRef :", titleRef.current.value);
   // console.log("contentRef :", contentRef.current.value);
+
+  temp.append("rbn", rbn);
+  temp.append("title", titleRef.current.value);
+  temp.append("content", contentRef.current.value);
   let token = sessionStorage.getItem("token");
 
   axios
@@ -522,8 +527,8 @@ function bordWrite(title, content, rbn, navigate) {
       `/aamurest/bbs/edit`,
       {
         rbn: rbn,
-        title: title,
-        content: content,
+        title: titleRef.current.value,
+        content: contentRef.current.value,
       },
       {
         headers: {
@@ -538,7 +543,7 @@ function bordWrite(title, content, rbn, navigate) {
         navigate("/forum");
       } else {
         alert("저장오류가 발생했습니다. 관리자에게 문의하세요");
-        navigate("/");
+        navigate("/forum");
       }
     })
     .catch((error) => {
