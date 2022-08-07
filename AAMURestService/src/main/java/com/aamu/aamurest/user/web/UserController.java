@@ -47,28 +47,29 @@ public class UserController {
 		return affected;
 	}
 	@PostMapping("/users/upload")
-	public UsersDTO updateUser(@RequestParam Map map,@RequestParam(required = false) MultipartFile userprofile,@RequestParam List theme,HttpServletRequest req) throws IllegalStateException, IOException {
+	public Map updateUser(@RequestParam Map map,@RequestParam(required = false) MultipartFile userprofile,@RequestParam List theme,HttpServletRequest req) throws IllegalStateException, IOException {
 
 		int affected=0;
 		System.out.println(map);
 		System.out.println(userprofile);
-		
+		Map returnMap = new HashMap<>();
 		UsersDTO dto = service.selectOneUser(map);
 		String originalProfile = dto.getUserprofile();
 		String path = req.getSession().getServletContext().getRealPath("/resources/userUpload");
+		String photo =null;
 		if(userprofile!=null) {
 			File oldFile = new File(path+File.separator+originalProfile);
 			oldFile.delete();
-			String photo = FileUploadUtil.oneFile(userprofile, path);
+			photo = FileUploadUtil.oneFile(userprofile, path);
 			map.put("userprofile",photo);
 		}
 		else map.put("userprofile", originalProfile);
 		map.put("themes", theme);
 		affected = service.updateUser(map);
-		UsersDTO userDto = service.selectOneUser(map);
-		userDto.setUserprofile(FileUploadUtil.requestOneFile(dto.getUserprofile(),"/resources/userUpload", req));
-		
-		return userDto;
+		dto.setUserprofile(FileUploadUtil.requestOneFile(photo, "/resources/userUpload", req));
+		returnMap.put("result", affected);
+		returnMap.put("Dto", dto);
+		return returnMap;
 	}
 	@GetMapping("/users/selectone")
 	public UsersDTO selectOneUser(@RequestParam Map map,HttpServletRequest req) {
