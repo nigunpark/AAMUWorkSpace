@@ -47,12 +47,21 @@
 <!--        app:mbn_selectedIconColor="#3c415e"-->
 <!--        app:mbn_shadowColor="#1f212121" />-->
 
-    <androidx.compose.ui.platform.ComposeView
-        android:id="@+id/bottomNav"
+<!--    <androidx.compose.ui.platform.ComposeView-->
+<!--        android:id="@+id/bottomNav"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"/>-->
+
+    <FrameLayout
+        android:id="@+id/bottomfragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent"
+        />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

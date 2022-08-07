@@ -66,8 +66,11 @@ interface AAMUApi {
     @POST("review/edit")
     suspend fun postReview(@Body review : Review) : Response<Map<String,String>>
 
+    @GET("notification/list")
+    suspend fun getNotiList(@Query("id") id : String) : Response<List<AAMUNotiResponse>>
+
     companion object {
-        private const val BASE_URL = "http://192.168.0.22:8080/aamurest/"
+        private const val BASE_URL = "http://192.168.45.107:8080/aamurest/"
 
         operator fun invoke():AAMUApi{
             val requestInterceptor  = Interceptor{ chain ->

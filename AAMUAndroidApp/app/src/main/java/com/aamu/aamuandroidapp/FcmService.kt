@@ -21,11 +21,10 @@ class FcmService : FirebaseMessagingService() {
         val intent = Intent(this, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
-
         for( key in message.data.keys){
             intent.putExtra(key,message.data.get(key))
         }
-        val pendingIntent: PendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_MUTABLE)
+        val pendingIntent: PendingIntent = PendingIntent.getActivity(this, Integer.parseInt(message.data.get("orgid")), intent, PendingIntent.FLAG_MUTABLE)
 
         val notifibuilder = NotificationCompat.Builder(this,AAMUCHANNL)
             .setSmallIcon(R.drawable.ic_launcher_foreground) //smallIcon
@@ -36,8 +35,16 @@ class FcmService : FirebaseMessagingService() {
             .setContentIntent(pendingIntent) //클릭시 pendingIntent의 Activity로 이동
             .setGroup(AAMUNOTIFY)
 
+        val notiSummaryBuilder = NotificationCompat.Builder(this, AAMUCHANNL)
+            .setContentTitle("아무여행 어플리케이션")
+            .setContentText("새로운 알림")
+            .setSmallIcon(R.drawable.ic_launcher_foreground)
+            .setGroup(AAMUNOTIFY)
+            .setGroupSummary(true)
+
         NotificationManagerCompat.from(this).apply {
-            notify(100,notifibuilder.build())
+            notify(Integer.parseInt(message.data.get("orgid")),notifibuilder.build())
+            notify(100,notiSummaryBuilder.build())
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

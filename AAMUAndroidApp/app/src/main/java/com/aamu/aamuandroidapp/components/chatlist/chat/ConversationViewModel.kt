@@ -24,13 +24,13 @@ import java.util.concurrent.TimeUnit
 import kotlin.collections.HashMap
 
 
-class ConversationViewModelFactory(val roomno : String) : ViewModelProvider.Factory{
+class ConversationViewModelFactory() : ViewModelProvider.Factory{
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return ConversationViewModel(roomno) as T
+        return ConversationViewModel() as T
     }
 }
 
-class ConversationViewModel(roomno : String) : ViewModel() {
+class ConversationViewModel() : ViewModel() {
     private val aamuRepository : AAMURepository = AAMUDIGraph.createAAMURepository()
 
     val messageList = MutableLiveData<List<AAMUChatingMessageResponse>>()
@@ -38,10 +38,9 @@ class ConversationViewModel(roomno : String) : ViewModel() {
 
     private val map : HashMap<String,String> = HashMap()
 
-
     private lateinit var topic: Disposable
 
-    init {
+    fun getChatList(roomno : String){
         map.put("roomno",roomno)
         viewModelScope.launch {
             aamuRepository.getChatMessageList(map)
