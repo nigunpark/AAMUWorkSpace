@@ -166,9 +166,14 @@
 		UPDATE community SET rcount=rcount-1 WHERE lno=#{lno}
 	</update>
 	
+	<!-- 댓글 알림 -->
+	<select id="commuSelectUserId" parameterType="Map" resultType="String">
+		SELECT id FROM community WHERE lno=#{lno}
+	</select>
+	
 	<!-- 글 좋아요 -->
 	<select id="commuLikeSelect" parameterType="Map" resultType="int">
-		SELECT count(*) from likeboard WHERE id=#{id} AND lno=#{lno}
+		SELECT count(*) FROM likeboard WHERE id=#{id} AND lno=#{lno}
 	</select>
 	
 	<!-- 글 좋아요_insert(likeboard테이블) -->
