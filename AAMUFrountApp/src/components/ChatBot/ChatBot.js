@@ -1,20 +1,21 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import "./ChatBot.css";
 import styled, { keyframes } from "styled-components";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { addChatBotData } from "../../redux/store";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 // let chatArr = [];
 const ChatBot = ({ showChatBot, chatArr }) => {
   let inputRef = useRef();
   let dispatch = useDispatch();
   let navigate = useNavigate();
   const [chats, setChats] = useState([]);
+  let location = useLocation();
   function goRecommend(val) {
     if (val.rbn !== null) {
-      dispatch(addChatBotData(val));
       navigate("/forum", { state: { dto: val } });
+      dispatch(addChatBotData(val));
     }
   }
   console.log("chats", chats);
