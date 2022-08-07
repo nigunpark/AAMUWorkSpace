@@ -67,35 +67,7 @@ const MyProfileBox = ({ setClickTab }) => {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-        // <<<<<<< HEAD
-        // =======
-        //       })
-        //       .then((resp) => {
-        //         setPwd(resp.data.pwd);
-
-        //         setPhoneFNum(resp.data.phonenum.split("-")[0]);
-        //         setPhoneSNum(resp.data.phonenum.split("-")[1]);
-        //         setPhoneTNum(resp.data.phonenum.split("-")[2]);
-
-        //         setEmailFrist(resp.data.email.split("@")[0]);
-        //         setEmailSecond(resp.data.email.split("@")[1]);
-
-        //         setZoneCode(resp.data.addrid.split("/")[0]);
-        //         setAddress(resp.data.addrid.split("/")[1]);
-        //         setDetailAddr(resp.data.addrid.split("/")[2]);
-
-        //         setIntroduce(resp.data.self);
-        //         setShowImages(resp.data.userprofile.split());
-        //         // setProfile(resp.data.userprofile.split());
-        //         setName(resp.data.name);
-        //         setGender(resp.data.gender);
-        //         setUserId(resp.data.id);
-        //       })
-        //       .catch((error) => {
-        //         console.log((error) => console.log("프로필 가져오기 실패", error));
-        // >>>>>>> b7b3d9ca3996f4cd027bb2262cf25c10d5bfe511
       });
-
       console.log("resp", resp.data);
       pwdRef.current.value = resp.data.pwd;
       fPhoneNum.current.value = resp.data.phonenum.split("-")[0];
@@ -147,8 +119,11 @@ const MyProfileBox = ({ setClickTab }) => {
         },
       })
       .then((resp) => {
-        if (resp.data === 1) {
+        if (resp.data.result === 1) {
+          sessionStorage.setItem("userimg", resp.data.Dto.userprofile);
           alert("프로필 수정이 완료되었습니다.");
+        } else {
+          alert("프로필 수정이 실패했습니다");
         }
       })
       .catch((error) => {

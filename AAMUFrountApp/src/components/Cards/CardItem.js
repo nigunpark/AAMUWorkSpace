@@ -1,7 +1,8 @@
 import { Rating, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
 import React, { useState } from "react";
-
+import { faStar } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 const CardItem = ({ val }) => {
   const [value, setValue] = useState(2.5);
 
@@ -14,14 +15,26 @@ const CardItem = ({ val }) => {
               <img src={`${val.photo[0]}`} alt="카드이미지" className="card__item__img" />
             </div>
             <div className="card__item__rating">
-              <Rating
+              <div>
+                <FontAwesomeIcon
+                  icon={faStar}
+                  style={{
+                    marginRight: "5px",
+                    color: "gold",
+                    filter: "drop-shadow(1px 1px 1px black)",
+                    fontSize: "16px",
+                  }}
+                />
+                <span style={{ fontWeight: "bold" }}>{val.rateavg}</span>
+              </div>
+              {/* <Rating
                 name="simple-controlled"
                 value={val.rateavg}
                 precision={0.5}
                 onChange={(event, newValue) => {
                   setValue(newValue);
                 }}
-              />
+              /> */}
               <span className="idSpan">{`${val.id}님의 plan`}</span>
             </div>
             <div className="card__item__content">

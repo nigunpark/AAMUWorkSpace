@@ -5,11 +5,7 @@ import MyEditBox from "./MyPageBox/MyEditBox";
 import MyHomeBox from "./MyPageBox/MyHomeBox";
 import MyProfileBox from "./MyPageBox/MyProfileBox";
 import MyMessageBar from "./MyMessageBar/MyMessageBar";
-import {
-  faBookmark,
-  faMessage,
-  faThumbsUp,
-} from "@fortawesome/free-regular-svg-icons";
+import { faBookmark, faMessage, faThumbsUp } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import CommentSearch from "../../components/Insta/ModalGroup/Comment/CommentSearch";
@@ -35,7 +31,6 @@ const MyPage = () => {
 
   async function selectList() {
     let token = sessionStorage.getItem("token");
-
     await axios
       .get("/aamurest/planner/selectList", {
         params: {
@@ -46,6 +41,7 @@ const MyPage = () => {
         },
       })
       .then((resp) => {
+        console.log("resp.data(selectList)", resp.data);
         setPlanList(resp.data);
         setIsLoading(false);
 
@@ -116,7 +112,7 @@ const MyPage = () => {
 
   useEffect(() => {
     selectList();
-    // searchBar();
+    searchBar();
     bookMarkList();
   }, [clickTab]);
 
@@ -200,29 +196,6 @@ const MyPage = () => {
           >
             <i className="fa-brands fa-instagram fa-2x"></i>
           </button>
-
-          {/* <button
-            ref={three}
-            className="app-sidebar-link"
-            onClick={() => {
-              setClickTab(2);
-            }}
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="feather feather-calendar"
-            >
-              <FontAwesomeIcon icon={faStar} />
-            </svg>
-          </button> */}
 
           <button
             ref={three}
@@ -341,7 +314,7 @@ function Title({ clickTab }) {
       });
   };
   useEffect(() => {
-    getMyThemes();
+    // getMyThemes();
   }, []);
 
   //타이틀
@@ -349,9 +322,9 @@ function Title({ clickTab }) {
     return (
       <>
         <div className="projects-title">이런여행 어때 게시판 정보</div>
-        <div style={{ display: "flex", flexDirection: "row" }}>
+        {/* <div style={{ display: "flex", flexDirection: "row" }}>
           {theme === undefined ? null : <MyThemeLists theme={theme} />}
-        </div>
+        </div> */}
       </>
     );
   } else if (clickTab === 1) {
@@ -460,30 +433,16 @@ function TabContent({
                       <img alt="" className="instaImg" src={val.photo[0]} />
                       <div>
                         <div className="instaTitle__container">
-                          <input
-                            type="text"
-                            value={val.ctitle}
-                            className="instaTitle"
-                          />
+                          <input type="text" value={val.ctitle} className="instaTitle" />
                         </div>
                         <div className="insta__info">
                           <div>
-                            <FontAwesomeIcon
-                              icon={faMessage}
-                              className="insta__info-icon"
-                            />{" "}
-                            <span className="insta__info-content">
-                              {val.rcount}
-                            </span>
+                            <FontAwesomeIcon icon={faMessage} className="insta__info-icon" />{" "}
+                            <span className="insta__info-content">{val.rcount}</span>
                           </div>
                           <div>
-                            <FontAwesomeIcon
-                              icon={faThumbsUp}
-                              className="insta__info-icon"
-                            />
-                            <span className="insta__info-content">
-                              {val.likecount}
-                            </span>
+                            <FontAwesomeIcon icon={faThumbsUp} className="insta__info-icon" />
+                            <span className="insta__info-content">{val.likecount}</span>
                           </div>
                         </div>
                       </div>
@@ -520,13 +479,7 @@ function TabContent({
               />
             )}
 
-            {editModal && (
-              <MyEdit
-                val={val}
-                seteditModal={seteditModal}
-                searchBar={searchBar}
-              />
-            )}
+            {editModal && <MyEdit val={val} seteditModal={seteditModal} searchBar={searchBar} />}
           </div>
         </div>
       </>
@@ -537,13 +490,7 @@ function TabContent({
       <div className="myInstaContainer">
         <div className="myInstar">
           {myBookList.map((val, idx) => {
-            return (
-              <MyBookMarkBox
-                setDetailOne={setDetailOne}
-                detail={val}
-                setIsOpen={setIsOpen}
-              />
-            );
+            return <MyBookMarkBox setDetailOne={setDetailOne} detail={val} setIsOpen={setIsOpen} />;
           })}
         </div>
 

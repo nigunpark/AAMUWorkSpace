@@ -84,7 +84,14 @@ const MyPostBox = ({ selectRbn, setClickTab }) => {
       console.log((error) => console.log("상세경로 가져오기 실패", error));
     }
   };
-
+  function uploadFile() {
+    //이미지 업로드
+    let formData = new FormData(); // formData 객체를 생성한다.
+    for (let i = 0; i < showImagesFile.length; i++) {
+      formData.append("multifiles", showImagesFile[i]); // 반복문을 활용하여 파일들을 formData 객체에 추가한다
+    }
+    return formData;
+  }
   useEffect(() => {
     // getSelectOne();
     getPlanData();
@@ -364,18 +371,11 @@ const MyPostBox = ({ selectRbn, setClickTab }) => {
             <span
               className="myEditBox_btn"
               onClick={() => {
-                // let write = uploadFile(showImagesFile);
-                bordWrite(
-                  // write,
-                  titleRef,
-                  contentRef,
-                  rbn,
-                  navigate,
-                  postThemeNum
-                );
+                let write = uploadFile(showImagesFile);
+                bordWrite(write, titleRef, contentRef, rbn, navigate, postThemeNum);
               }}
             >
-              수정하기
+              공유하기
             </span>
           </div>
         </div>
@@ -513,25 +513,20 @@ function getTimes(periodIndex, st, et) {
       .padStart(2, "0"),
   };
 }
-function bordWrite(titleRef, contentRef, rbn, navigate) {
+function bordWrite(write, titleRef, contentRef, rbn, navigate, postThemeNum) {
   // console.log("titleRef :", titleRef.current.value);
   // console.log("contentRef :", contentRef.current.value);
+  write.append("rbn", rbn);
+  write.append("title", titleRef.current.value);
+  write.append("content", contentRef.current.value);
   let token = sessionStorage.getItem("token");
 
   axios
-    .put(
-      `/aamurest/bbs/edit`,
-      {
-        rbn: rbn,
-        title: titleRef.current.value,
-        content: contentRef.current.value,
+    .post(`/aamurest/bbs/edit`, write, {
+      headers: {
+        Authorization: `Bearer ${token}`,
       },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    )
+    })
     .then((resp) => {
       console.log(resp.data);
       if (resp.data.result === "updateSuccess") {

@@ -51,7 +51,7 @@ public class MainController {
 	@Value("${kakaokey}")
 	private String kakaokey;
 	
-	private final String serverip = "http://192.168.45.107";
+	private final String serverip = "http://192.168.0.22";
 
 	@Autowired
 	private MainService service;
@@ -605,7 +605,7 @@ public class MainController {
 		//Map<String,Map<String,List>> basicMap = new HashMap<>();
 		Map<String,List> mapElement = new HashMap<>();
 		List<BBSDTO> bbsList = new Vector<>();
-		List<AttractionDTO> list = service.selectMainPlaceList(req);
+		List<AttractionDTO> list = new Vector<>();
 		if(map.get("id")!=null) {			
 			MultiValueMap<String,String> requestBody = new LinkedMultiValueMap<>();
 			HttpHeaders header = new HttpHeaders();
@@ -620,15 +620,19 @@ public class MainController {
 			int rank = 1;
 			for(Map rbnMap : rbnList) {
 				BBSDTO dto = service.getRouteBBS(Integer.parseInt(rbnMap.get("rbn").toString()),req);
-				if(rank<3) {
-					for(RouteDTO routeDTO:dto.getRouteList()) {
-						if(routeDTO.getContenttypeid()!=32) {
-							list.add(service.selectOnePlace(routeDTO.getContentid(), req));
-						}
+
+				for(RouteDTO routeDTO:dto.getRouteList()) {
+					AttractionDTO placeDto = service.selectOnePlace(routeDTO.getContentid(), req);
+					if(placeDto.getContenttypeid()!=32 && list.size()<6 && rank==1) {
+						System.out.println("뭐가 들어올까요"+dto.getContent());
+						list.add(placeDto);
+						rank++;
 					}
-					rank++;
 				}
-				bbsList.add(dto);
+					
+
+				rank=1;
+				if(bbsList.size()<4)bbsList.add(dto);
 			}
 			
 		}

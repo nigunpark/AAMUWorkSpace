@@ -86,7 +86,6 @@ public class BBSDAO {
 	public List<String> bbsSearchList(Map map) {
 		System.out.println("dao map:"+map.get("title"));
 		System.out.println("dao map:"+map.get("id"));
-		//System.out.println("dao map:"+map.get("table"));
 		return template.selectList("bbsSearchList",map);
 	}
 
@@ -138,7 +137,6 @@ public class BBSDAO {
 	public String bbsSelectUserID(int rbn) {
 		return template.selectOne("bbsSelectUserID", rbn);
 	}
-
 
 
 }

@@ -53,9 +53,7 @@ const QnADetail = () => {
     <div className="qnaWrite__container">
       <div className="qna__header">
         <div className="qna__header__title">Q &amp; A 답변</div>
-        <div className="qna__header__subTitle">
-          궁금한 점이 해결되었으면 좋겠어요
-        </div>
+        <div className="qna__header__subTitle">궁금한 점이 해결되었으면 좋겠어요</div>
       </div>
       <div className="qnaWrite">
         <div className="qnaWrite__title">
@@ -78,9 +76,7 @@ const QnADetail = () => {
         <div className="qnaWrite__content">
           <h3>AAMU의 답변</h3>
           <div className="qnaWrite__content-input">
-            <textarea
-              style={{ width: "100%", height: "100%", resize: "none" }}
-            ></textarea>
+            <textarea readOnly style={{ width: "100%", height: "100%", resize: "none" }}></textarea>
           </div>
         </div>
         <div className="qnaAnswer__content-btns">

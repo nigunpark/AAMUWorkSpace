@@ -55,9 +55,8 @@ public class BBSController {
 
 	//글 목록
 	@GetMapping("/bbs/SelectList")
-	public List<BBSDTO> bbsSelectList(@RequestParam Map mapp,HttpServletRequest req){
-		List<BBSDTO> list = bbsService.bbsSelectList(mapp);
-		Map map = new HashMap();
+	public List<BBSDTO> bbsSelectList(@RequestParam Map map,HttpServletRequest req){
+		List<BBSDTO> list = bbsService.bbsSelectList(map);
 		System.out.println("list:"+list);
 		for(BBSDTO dto:list) {
 			//모든 사진 가져오기
@@ -71,9 +70,9 @@ public class BBSController {
 				route.setDto(mainService.selectOnePlace(route.getContentid(), req));
 			}
 			dto.setRouteList(routelist);
-			map.put("id", dto.getId());
 			map.put("rbn", dto.getRbn());
-			dto.setBookmark(bbsService.bbsBookmark(map));
+			System.out.println("map: "+map);
+			dto.setBookmark(bbsService.checkBookmark(map));
 			
 		}
 		return list;
@@ -175,7 +174,8 @@ public class BBSController {
 				route.setDto(mainService.selectOnePlace(route.getContentid(), req));
 			}
 			dto.setRouteList(routelist);
-			dto.setBookmark(bbsService.bbsBookmark(map));
+			map.put("rbn", dto.getRbn());
+			dto.setBookmark(bbsService.checkBookmark(map));
 		}
 		
 		return list;
@@ -183,10 +183,27 @@ public class BBSController {
 	
 	//글 검색 목록
 	@GetMapping("/bbs/search/list")
-	public List<String> bbsSearchList(@RequestParam Map map){
-		System.out.println("검색 searchColumn:"+map.get("searchColumn"));
-		System.out.println("검색 searchWord:"+map.get("searchWord"));
-		List<String> list=bbsService.bbsSearchList(map);
+	public List<BBSDTO> bbsSearchList(@RequestParam Map mapp,HttpServletRequest req){
+		List<BBSDTO> list = bbsService.bbsSelectList(mapp);
+		Map map = new HashMap();
+		System.out.println("list:"+list);
+		for(BBSDTO dto:list) {
+			//모든 사진 가져오기
+			dto.setPhoto(FileUploadUtil.requestFilePath(bbsService.bbsSelectPhotoList(dto.getRbn()), "/resources/bbsUpload", req));
+			//dto.setPhoto(dao.bbsSelectPhotoList(rbn));
+			//모든 리뷰 가져오기
+			dto.setReviewList(bbsService.reviewSelectList(dto.getRbn()));
+			//모든 경로 가져오기
+			List<RouteDTO> routelist = bbsService.selectRouteList(dto.getRbn());
+			for(RouteDTO route:routelist) {
+				route.setDto(mainService.selectOnePlace(route.getContentid(), req));
+			}
+			dto.setRouteList(routelist);
+			map.put("id", dto.getId());
+			map.put("rbn", dto.getRbn());
+			dto.setBookmark(bbsService.bbsBookmark(map));
+			
+		}
 		return list;
 	}
 	
