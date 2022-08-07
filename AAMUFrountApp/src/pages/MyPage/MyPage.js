@@ -31,7 +31,6 @@ const MyPage = () => {
 
   async function selectList() {
     let token = sessionStorage.getItem("token");
-
     await axios
       .get("/aamurest/planner/selectList", {
         params: {
@@ -42,7 +41,7 @@ const MyPage = () => {
         },
       })
       .then((resp) => {
-        console.log("resp.data", resp.data);
+        console.log("resp.data(selectList)", resp.data);
         setPlanList(resp.data);
         setIsLoading(false);
 
@@ -110,7 +109,7 @@ const MyPage = () => {
 
   useEffect(() => {
     selectList();
-    // searchBar();
+    searchBar();
     bookMarkList();
   }, [clickTab]);
 
