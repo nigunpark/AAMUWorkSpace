@@ -48,7 +48,7 @@ public interface MainService{
 
 	String searchPlanner(String message);
 	
-	String searchMostRoute(Map map);
+	List<String> searchMostRoute(Map map);
 	
 	List<String> searchTopPlaces(Map map);
 
@@ -63,5 +63,7 @@ public interface MainService{
 	List<BBSDTO> selectTopBBS(HttpServletRequest req);
 
 	List<AttractionDTO> getTopAttr();
+	
+	BBSDTO selectOneBBSTitle(int rbn);
 
 }

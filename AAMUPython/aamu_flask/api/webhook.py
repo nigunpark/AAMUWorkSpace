@@ -6,17 +6,12 @@ class WebHook(Resource):
         dialog_response = request.get_json()
         query = dialog_response['queryResult']['queryText']
         parameters = dialog_response['queryResult']['parameters']
-        if parameters.get('loc') != None:
-            loc = parameters['loc']
-        if parameters.get('place') != None:
-            place = parameters['place']
-        print('진행하자')
-        if place.find('박')==-1:
-            print('숙소나 여행지')
-            return jsonify({'fulfillmentText': '{} {}searchPlace'.format(loc, parameters['place'])})
-        else:
-            print('경로추천')
+        if parameters.get('schedule') != None:
+            return jsonify({'fulfillmentText': '{} {}searchRoute'.format(parameters['loc'], parameters['schedule'])})
+        elif parameters.get('ROUTE') != None:
+            return jsonify({'fulfillmentText': 'recommendRoute'})
+        elif parameters.get('place') != None:
+            return jsonify({'fulfillmentText': '{} {}searchPlace'.format(parameters['loc'], parameters['place'])})
 
-            return jsonify({'fulfillmentText': '{} {}searchRoute'.format(loc, parameters['place'])})
 
-        #returnStr = '/porum/'+rbn
+

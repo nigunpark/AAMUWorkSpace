@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import Profile from "./ProfileModal";
-import MenuModal from "./ModalGroup/MenuModal";
+import Picker from "emoji-picker-react";
 import Comment from "./ModalGroup/Comment/Comment";
 import Slider from "react-slick";
 import "./ModalGroup/Slider/slick.css";
@@ -14,6 +14,8 @@ import { confirmAlert } from "react-confirm-alert";
 import { useDispatch, useSelector } from "react-redux";
 import { addForChatInfo } from "../../redux/store";
 import FeeduserModal from "./ModalGroup/FeeduserModal";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faLocationDot } from "@fortawesome/free-solid-svg-icons";
 function FeedSetting({
   val,
   setlist,
@@ -27,22 +29,25 @@ function FeedSetting({
 }) {
   let profileRef = useRef();
   let replyRef = useRef();
-  let editRef = useRef();
+  const [chosenEmoji, setChosenEmoji] = useState(null);
+
+  const [feedComments, setfeedComments] = useState([]);
   const [editModal, seteditModal] = useState(false);
   const [comeditModal, setcomeditModal] = useState(false);
   const [modalShow, setModalShow] = useState(false);
   const [profileModal, setprofileModal] = useState(false);
   const [commentModal, setcommentModal] = useState(false);
-
-  let [userName] = useState("hacker");
-  let [comment, setComment] = useState("");
-  let [id, setid] = useState("");
-  let [reply, setreply] = useState("");
-  let [feedComments, setfeedComments] = useState([]);
+  
   let [isValid, setisValid] = useState(false);
 
   const [isShowMore, setIsShowMore] = useState(false); // 더보기 열고 닫는 스위치
   const textLimit = useRef(10); // 글자수 제한 선언
+
+  const [emoji, setemoji] = useState(false);
+  const onEmojiClick = (event, emojiObject) => {
+    setChosenEmoji(emojiObject);
+    replyRef.current.value = emojiObject.emoji;
+  };
 
   const commenter = useMemo(() => {
     // 조건에 따라 게시글을 보여주는 함수
@@ -68,7 +73,7 @@ function FeedSetting({
   //   }
   let dispatch = useDispatch();
   let reduxState = useSelector((state) => state);
-  function post(comment, setfeedComments) {
+  function post(replyRef) {
     //유효성 검사를 통과하고 게시버튼 클릭시 발생하는 함수
     // feedComments = val.commuComment;
     // console.log('id',sessionStorage.getItem('username'))
@@ -87,7 +92,7 @@ function FeedSetting({
         "/aamurest/gram/comment/edit",
         {
           id: sessionStorage.getItem("username"),
-          reply: comment,
+          reply: replyRef.current.value,
           lno: val.lno,
         },
         {
@@ -109,7 +114,7 @@ function FeedSetting({
         console.log("error", error);
       });
 
-    setComment(""); //사용자 댓글창을 빈 댓글 창으로 초기화
+    replyRef.current.value = ""; //사용자 댓글창을 빈 댓글 창으로 초기화
   }
 
   const settings = {
@@ -131,9 +136,6 @@ function FeedSetting({
       </div>
     );
   };
-
-  let heartRef = useRef();
-  let [fHeart, setfHeart] = useState([]);
 
   function fillLike(setForReRender, forReRender) {
     //백이랑 인스타 리스드를 뿌려주기 위한 axios
@@ -214,9 +216,12 @@ function FeedSetting({
             )}
           </div>
         </div>
-        <div className="location">
-          <p>{val.title}</p>
-        </div>
+        <a href={`https://map.kakao.com/?q=${val.title}`}>
+          <div className="location">
+            <FontAwesomeIcon icon={faLocationDot} />
+            <span style={{ fontSize: "14px" }}>{val.title}</span>
+          </div>
+        </a>
         <Slider {...settings}>
           {val.photo.map((image, i) => (
             <div className="container">
@@ -318,13 +323,13 @@ function FeedSetting({
                 {/* // 여기에 (짧은거나 원본) 글 내용이 들어가고  */}
 
                 <span
-                  style={{ color: "gray" }}
+                  style={{ color: "gray", cursor: "pointer" }}
                   onClick={() => setIsShowMore(!isShowMore)}
                 >
                   {" "}
                   {/* //클릭시 토글로 상태를 변경해주자 */}
                   {val.content.length > textLimit.current && // 버튼명은 조건에 따라 달라진다
-                    (isShowMore ? "[닫기]" : "...[더보기]")}
+                    (isShowMore ? "닫기" : "...더보기")}
                 </span>
               </span>
             </p>
@@ -342,34 +347,44 @@ function FeedSetting({
           </span>
         </div>
         <div className="comment">
+          <div className="emoji">
+            <i class="fa-regular fa-face-smile" style={{fontSize:'24px',left:'5px'}} onClick={()=>{setemoji(!emoji)}}/>
+          </div>
+            {emoji
+            &&
+            <div className="emoji-all">
+              <Picker onEmojiClick={onEmojiClick} onClick={()=>{setemoji(!emoji)}}/>
+            </div>
+            }
           <input
             type="text"
             ref={replyRef}
-            className="inputComment"
+            className="inputComment_"
             placeholder="댓글 달기..."
-            style={{ width: "90%" }}
-            onChange={(e) => {
-              e.stopPropagation();
-              setComment(e.target.value); //댓글 창의 상태가 변할때마다 setComment를 통해 comment값을 바꿔준다
-            }}
+            style={{ width: "80%" ,fontSize:'13px'}}
+            // onChange={(e) => {
+            //   setComment(e.target.value); //댓글 창의 상태가 변할때마다 setComment를 통해 comment값을 바꿔준다
+            // }}
             onKeyUp={(e) => {
-              e.stopPropagation();
               e.target.value.length > 0 //사용자가 키를 눌렀다 떼었을때 길이가 0을 넘는 값인지 유효성 검사 결과 값을 담는다
                 ? setisValid(true)
                 : setisValid(false);
+              // console.log(replyRef.current.value.length>0?'true':'false');
             }}
-            value={comment}
+            // value={comment}
           />
-
+          
           <button
             className={
               //클래스명을 comment창의 글자 길에 따라서 다르게 주면서 버튼색에 css디자인을 줄 수 있음
-              comment.length > 0
+              replyRef.current === undefined
+                ? null
+                : replyRef.current.value.length > 0
                 ? "submitCommentActive"
                 : "submitCommentInactive"
             }
             onClick={() => {
-              post(comment, setfeedComments);
+              post(replyRef);
             }} //클릭하면 위서 선언한 post함수를 실행하여 feedComments에 담겨서 re-rendering 된 댓글창을 확인할 수 있다
             disabled={isValid ? false : true} //사용자가 아무것도 입력하지 않았을 경우 게시를 할 수 없도록
             type="button"

@@ -1,6 +1,8 @@
 package com.aamu.aamurest.user.service;
 
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -19,4 +21,5 @@ public class UsersDTO {
 	private Date joindate;
 	private String userprofile;
 	private String socialnum;
+	private List<String> theme;
 }

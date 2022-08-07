@@ -2,6 +2,10 @@ package com.aamu.aamurest.util;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
+import com.aamu.aamurest.user.service.AttractionDTO;
+
 public class UserUtil {
 	public static String changeTheme(String theme) {
 		String themeid= null;
@@ -46,5 +50,20 @@ public class UserUtil {
 		
 		list1.retainAll(list2);
 		return list1.size();
+	}
+	public static AttractionDTO changeOneAttr(AttractionDTO dto,HttpServletRequest req) {
+		String title = dto.getTitle();
+		if(title!=null && dto.getSmallimage()!=null) {
+			if(!(dto.getSmallimage().toString().contains("http")) && dto.getSmallimage()!=null) 
+				dto.setSmallimage(FileUploadUtil.requestOneFile(dto.getSmallimage(),"/resources/hotelImage",req));
+			
+			if(title!=null && title.contains("[") &&!(title.split("\\[")[0].equals("")))
+				dto.setTitle(title.split("\\[")[0]);
+			
+			if(title!=null && title.contains("(")&&!(title.split("\\(")[0].equals("")))
+				dto.setTitle(title.split("\\(")[0]);
+		}
+		return dto;
+		
 	}
 }

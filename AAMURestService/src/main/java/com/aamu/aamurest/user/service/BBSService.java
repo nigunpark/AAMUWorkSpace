@@ -7,13 +7,16 @@ import org.springframework.stereotype.Service;
 @Service
 public interface BBSService {
 	//글 목록
-	List<BBSDTO> bbsSelectList();
+	List<BBSDTO> bbsSelectList(Map map);
 
 	//글 목록_사진 뿌려주기
 	List bbsSelectPhotoList(int rbn);
 
 	//글 하나 선택
 	BBSDTO bbsSelectOne(int rbn);
+	
+	//글 하나 주인
+	String bbsSelectUserID(int rbn);
 
 	//글 등록
 	int bbsInsert(Map map);
@@ -36,7 +39,7 @@ public interface BBSService {
 	/*----------------------------------------------------*/
 
 	//글 상세보기_모든 리뷰 보기
-	List<ReviewDTO> reviewList(int rbn);
+	List<ReviewDTO> reviewSelectList(int rbn);
 	
 	//리뷰 등록
 	int reviewInsert(Map map);
@@ -51,8 +54,5 @@ public interface BBSService {
 	
 	//평점 업데이트
 	int updateRate(Map map);
-
-
-
 
 }

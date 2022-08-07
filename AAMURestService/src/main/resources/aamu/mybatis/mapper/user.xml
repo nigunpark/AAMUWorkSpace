@@ -33,7 +33,11 @@
 	</select>
 	
 	<update id="updateUser" parameterType="Map">
-		UPDATE users SET email=#{email},pwd=#{pwd},name=#{name},gender=#{gender},phonenum=#{phonenum},addrid=#{addrid},self=#{self},userprofile=#{userprofile} WHERE id=#{id}
+		UPDATE users SET email=#{email},pwd=#{pwd},name=#{name},gender=#{gender},phonenum=#{phonenum},addrid=#{addrid},self=#{self}
+		<if test="userprofile != null">
+		,userprofile=#{userprofile}
+		</if>
+		 WHERE id=#{id}
 	</update>
 	<select id="checkId" parameterType="String" resultType="int">
 		SELECT COUNT(*) FROM users WHERE id=#{id}
@@ -45,12 +49,12 @@
 		SELECT themeid FROM aamuinter WHERE id=#{id}
 	</select>
 	<select id="getAllUser" resultType="String">
-		SELECT id FROM users;
+		SELECT id FROM users
 	</select>
 	<delete id="deleteTheme" parameterType="Map">
 		DELETE aamuinter WHERE id=#{id}
 	</delete>
-	<select id="selectOneTheme" parameterType="Map" resultType="Map">
-		SELECT * FROM theme WHERE themeid=#{themeid}
+	<select id="selectOneTheme" parameterType="Map" resultType="String">
+		SELECT themename FROM theme WHERE themeid=#{themeid}
 	</select>
 </mapper>

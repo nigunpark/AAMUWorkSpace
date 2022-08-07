@@ -16,7 +16,7 @@ function Main({
   setForReRender,
 }) {
   const [showChat, setShowChat] = useState(false);
-  const [val, setval] = useState([]);
+  const [recommendUser, setrecommendUser] = useState([]);
   
   function feedList() {
     //백이랑 인스타 리스드를 뿌려주기 위한 axios
@@ -33,6 +33,8 @@ function Main({
       .then((resp) => {
         console.log(resp.data);
         setlist(resp.data);
+        setrecommendUser(resp.data[0].recommenduser);
+        console.log(resp.data[0].recommenduser);
         setForReRender(!forReRender)
       })
       .catch((error) => {
@@ -60,24 +62,25 @@ function Main({
         >
           {loading && <Spinner />}
           {list.map((val, i) => {
-            return (
-              <FeedSetting key={i}
-                val={val}
-                setlist={setlist}
-                forReRender={forReRender}
-                setForReRender={setForReRender}
-                setloading={setloading}
-                setShowChat={setShowChat}
-                showChat={showChat}
-                
-              />
-            );
+            
+              return (
+                <FeedSetting key={i}
+                  val={val}
+                  setlist={setlist}
+                  forReRender={forReRender}
+                  setForReRender={setForReRender}
+                  setloading={setloading}
+                  setShowChat={setShowChat}
+                  showChat={showChat}
+                  
+                />
+              );
           })}
           {/* <FeedSetting></FeedSetting> */}
         </div>
         <div className="main-right">
           <User
-          list={list}
+            list={list}
             inputValue={inputValue}
             setinputValue={setinputValue}
             setlist={setlist}
@@ -85,6 +88,8 @@ function Main({
             searchb={searchb}
             setSearchb={setSearchb}
             showChat={showChat}
+            recommendUser={recommendUser} 
+            setrecommendUser={setrecommendUser}
           ></User>
         </div>
       </div>

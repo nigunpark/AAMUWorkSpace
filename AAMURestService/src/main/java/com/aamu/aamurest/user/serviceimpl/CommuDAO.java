@@ -41,6 +41,11 @@ public class CommuDAO {
 		return template.selectList("getAllTags",map);
 	}
 	
+	//세션id가 팔로우하는 id 얻기
+	public List<String> commuGetidByFollower(Map map){
+		return template.selectList("commuGetidByFollower",map);
+	}
+	
 	//글 검색용
 	public List<String> commuSearachList(Map map){
 		System.out.println("dao map:"+map.get("searchColumn"));

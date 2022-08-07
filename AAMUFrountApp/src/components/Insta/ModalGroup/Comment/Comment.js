@@ -5,7 +5,7 @@ import axios from "axios";
 import "../Slider/slick.css";
 import "../Slider/slick-theme.css";
 import { SwiperSlide, Swiper } from "swiper/react";
-import Edit from "../Edit/Edit";
+import Picker from "emoji-picker-react";
 import { A11y, Autoplay, Navigation, Pagination, Scrollbar } from "swiper";
 import "swiper/css"; //basic
 import "swiper/css/navigation";
@@ -13,6 +13,8 @@ import "swiper/css/pagination";
 import "../Upload/UploadSwiper.css";
 import dayjs from "dayjs";
 import { CommentsDisabled } from "@mui/icons-material";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faLocationDot } from "@fortawesome/free-solid-svg-icons";
 
 function Comment({
   val,
@@ -32,6 +34,12 @@ function Comment({
   let [comment, setComment] = useState("");
   let [commentbb, setCommentbb] = useState("");
   // const [replyOne, setreplyOne] = useState("");
+
+  const [emoji, setemoji] = useState(false);
+  const onEmojiClick = (event, emojiObject) => {
+    // setChosenEmoji(emojiObject);
+    replyRef.current.value = emojiObject.emoji;
+  };
 
   let [isValid, setisValid] = useState(false);
 
@@ -70,6 +78,10 @@ function Comment({
   useEffect(() => {
     commentModal(setcomments);
   }, []);
+
+  
+    
+
 
   function fillLike(setForReRender, forReRender) {
     //백이랑 인스타 리스드를 뿌려주기 위한 axios
@@ -238,6 +250,12 @@ function Comment({
                   <p className="user-id">
                     <strong>{val.id}</strong>
                   </p>
+                  <a href={`https://map.kakao.com/?q=${val.title}`}>
+                    <div className="commentSearch_position" style={{marginLeft:'7px'}}>
+                      <FontAwesomeIcon icon={faLocationDot} />
+                      <span style={{ fontSize: "14px" }}>{val.title}</span>
+                    </div>
+                  </a>
                 </div>
               </div>
               <div className="dot1">
@@ -344,6 +362,10 @@ function Comment({
                         className="likeimg"
                         src={val.userprofile}
                         alt="추사"
+                        onError={(e) => {
+                          e.stopPropagation();
+                          e.target.src =  "/images/user.jpg";
+                        }}
                       />
                       <div
                         style={{
@@ -357,7 +379,7 @@ function Comment({
                         <div style={{ display: "flex", flexDirection: "row" }}>
                           <p className="userName" style={{ fontSize: "13px" }}>
                             <strong>
-                              {sessionStorage.getItem("username")}
+                              {val.id}
                             </strong>
                           </p>
                           <p
@@ -434,9 +456,9 @@ function Comment({
                     <i className="fa-regular fa-heart fa-2x"></i>
                   )}
                 </div>
-                <div className="talk-icon">
-                  <i className=" fa-regular fa-comment fa-2x"></i>
-                </div>
+                  <div className="talk-icon" onClick={()=>{replyRef.current.focus()}}>
+                    <i className=" fa-regular fa-comment fa-2x"></i>
+                  </div>
                 <div className="share-icon">
                   <i className="fa-regular fa-paper-plane fa-2x"></i>
                 </div>
@@ -451,12 +473,21 @@ function Comment({
               </div>
             </div>
             <div className="commentss">
+            <div className="emoji">
+              <i class="fa-regular fa-face-smile" style={{fontSize:'24px',left:'5px'}} onClick={()=>{setemoji(!emoji)}}/>
+            </div>
+              {emoji
+              &&
+              <div className="emoji-all">
+                <Picker onEmojiClick={onEmojiClick} onClick={()=>{setemoji(!emoji)}}/>
+              </div>
+              }
               <input
                 type="text"
                 ref={replyRef}
                 className="inputComment_"
                 placeholder="댓글 달기..."
-                style={{ width: "90%" }}
+                style={{ width: "80%" ,fontSize:'13px'}}
                 // onChange={(e) => {
                 //   setComment(e.target.value); //댓글 창의 상태가 변할때마다 setComment를 통해 comment값을 바꿔준다
                 // }}
@@ -528,6 +559,7 @@ const Contents = styled.div`
   display: flex;
   flex-direction: row;
   border-radius: 7px;
+  padding: 5px;
 `;
 
 export default Comment;

@@ -6,25 +6,24 @@
 <mapper namespace="aamu.mybatis.mapper.bbs">
 
 	<!-- 글 목록용 -->
-	<select id="bbsSelectList" resultType="BBSDTO">
-		SELECT rbbs.*,t.* FROM routebbs rbbs JOIN theme t ON rbbs.themeid=t.themeid 
+	<select id="bbsSelectList" parameterType="Map" resultType="BBSDTO">
+		SELECT rbbs.*,t.* FROM routebbs rbbs JOIN theme t ON rbbs.themeid=t.themeid
 		<if test="searchColumn != null">
 			<choose>
 				<when test='searchColumn == "title"'>
 					WHERE ${searchColumn} LIKE '%'||#{searchWord}||'%'
 				</when>
 				<when test='searchColumn == "id"'>
-					WHERE ${searchColumn} LIKE #{searchWord}
-				</when>
-				<when test='searchColumn == "themename"'>
-					WHERE ${searchColumn} LIKE #{searchWord}
-				</when>
+  	  				WHERE ${searchColumn} LIKE '%'||#{searchWord}||'%'    
+  	 			</when>
+  	 			<when test='searchColumn == "themename"'>
+  	  				WHERE ${searchColumn} LIKE '%'||#{searchWord}||'%'
+  	 			</when>  
 				<otherwise>
 					WHERE ${searchColumn} LIKE #{searchWord}
 				</otherwise>
 			</choose>
 		</if>
-		<if test="themeid != null">where p.themeid=#{themeid}</if>
 		ORDER BY rbbs.rbn DESC
 	</select>
 	
@@ -41,6 +40,10 @@
 		WHERE rbbs.rbn=#{rbn}
 	</select>
 	
+	<select id="bbsSelectUserID" parameterType="int" resultType="String">
+		SELECT id FROM routebbs where rbn = #{value}
+	</select>
+		
 	<!-- 글 등록 -->
 	<insert id="bbsInsert" parameterType="map">
 		INSERT INTO routebbs VALUES (#{rbn},#{title},SYSDATE,#{content},#{themeid},DEFAULT,#{id})
@@ -68,7 +71,17 @@
 	 
 	 <!-- 북마크 목록 -->
 	<select id="bbsBookmarkList" parameterType="map" resultType="BBSDTO">
-		SELECT rbbs.*,bm.* FROM routebbs rbbs JOIN bookmark bm ON rbbs.id=bm.id AND rbbs.rbn=bm.rbn
+		SELECT * FROM routebbs WHERE rbn IN (SELECT rbn FROM bookmark WHERE id=#{id})
+	</select>
+	
+	<!-- 북마크 목록_routeDTO -->
+	<select id="bbsSelectRouteList" parameterType="map" resultType="RouteDTO">
+		SELECT contentid FROM route WHERE rbn=#{rbn}
+	</select>
+	
+	<!-- 북마크 목록_AttractionDTO -->
+	<select id="bbsSelectOnePlace" parameterType="map" resultType="RouteDTO">
+		SELECT p.* FROM route r JOIN places p ON r.contentid=p.contentid WHERE r.contentid=#{contentid} AND r.rbn=#{rbn}
 	</select>
 	
 	<!-- 글 북마크_insert -->
@@ -82,9 +95,10 @@
 	</delete>
 	
 	<!-- 글 검색하기 -->
+	<!-- 
 	<select id="bbsSearchList" parameterType="Map" resultType="String">
-		SELECT ${searchColumn} FROM ${table} WHERE ${searchColumn} LIKE '%'||{searchword}||'%'
-	</select>
+		SELECT ${searchColumn} FROM ${table} WHERE ${searchColumn} LIKE '%'||{searchWord}||'%'
+	</select> -->
 	  
 	 <!--                            리뷰                                   -->
 	 

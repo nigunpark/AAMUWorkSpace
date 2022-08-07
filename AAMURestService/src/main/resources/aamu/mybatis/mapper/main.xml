@@ -141,7 +141,7 @@
 	</select>
 	<select id="searchMostRoute" parameterType="Map" resultType="String">
 		SELECT contentid FROM route WHERE contentid in
-		(select contentid from places where areacode=#{areacode} and contenttypeid=#{contenttypeid}) and ROWNUM = ${rownum} group by contentid ORDER BY count(contentid) DESC
+		(select contentid from places where areacode=#{areacode} and contenttypeid=#{contenttypeid}) and ROWNUM <![CDATA[<]]> 5 group by contentid ORDER BY count(contentid) DESC
 	</select>
 	<select id="searchTopPlaces" parameterType="Map" resultType="String">
 		SELECT contentid FROM route WHERE contentid in
@@ -151,7 +151,7 @@
 		Insert into theme values (SEQ_THE.nextval,#{themename},#{themeimg})
 	</insert>
 	<select id="getUserTheme" parameterType="Map" resultType="String">
-		SELECT themename from theme t JOIN aamuinter a ON t.themeid=a.themeid WHERE id=#{id}
+		SELECT DISTINCT themename from theme t JOIN aamuinter a ON t.themeid=a.themeid WHERE id=#{id}
 	</select>
 	<select id="selectTopBBS" resultType="int">
 		select rbn from routebbs where <![CDATA[rownum<5]]> order by rateavg desc
@@ -162,5 +162,9 @@
 		(SELECT rbbs.rbn FROM 
 		(SELECT ROW_NUMBER() OVER(ORDER BY rb.rateavg DESC) AS ROW_NUM,
 		rb.*FROM routebbs rb) rbbs WHERE rbbs.ROW_NUM <![CDATA[<=2]]>)
+		and rownum<![CDATA[<=5]]>
+	</select>
+	<select id="selectOneBBSTitle" parameterType="int" resultType="BBSDTO">
+		select rbn,title FROM routebbs WHERE rbn=#{rbn}
 	</select>
 </mapper>
