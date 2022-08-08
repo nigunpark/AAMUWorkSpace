@@ -41,7 +41,7 @@ function App() {
     if (sessionStorage.getItem("username") !== null) {
       connect();
     }
-  }, [sessionStorage.getItem("username")]);
+  }, []);
   const [scrollNav, setScrollNav] = useState(false);
   const [whereUrl, setWhereUrl] = useState(false);
   const [searchb, setSearchb] = useState([]);
