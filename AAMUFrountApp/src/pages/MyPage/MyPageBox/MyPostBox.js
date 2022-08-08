@@ -6,19 +6,20 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { faRectangleXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
 const MyPostBox = ({ selectRbn, setClickTab }) => {
   let navigate = useNavigate();
   const [detailRoute, setDetailRoute] = useState([]);
   const [plannerDate, setPlannerDate] = useState({});
   const [title, setTitle] = useState("");
   const [plannerTitle, setPlannerTitle] = useState("");
+  const [themes, setThemes] = useState([]);
   let titleRef = useRef();
-  const [content, setContent] = useState("");
+  let selectRef = useRef();
   let contentRef = useRef();
   const [rbn, setDetailRbn] = useState(0);
   useEffect(() => {
     setDetailRbn(selectRbn);
+    getThemes();
   }, []);
 
   //--------------------------------이미지 시작--------------------------------
@@ -45,17 +46,17 @@ const MyPostBox = ({ selectRbn, setClickTab }) => {
       setPostTheme(resp.data.themename); // 테마 가져온거 기본 세팅하기
       // setShowImages(resp.data.photo); // 업로드했던 사진 세팅하기
       setDetailRoute(resp.data.route);
-      let month = resp.data.planner.plannerdate.substring(
-        resp.data.planner.plannerdate.indexOf("월") - 1,
-        resp.data.planner.plannerdate.indexOf("월")
+      let month = resp.data.plannerdate.substring(
+        resp.data.plannerdate.indexOf("월") - 1,
+        resp.data.plannerdate.indexOf("월")
       );
-      let date = resp.data.planner.plannerdate.substring(
-        resp.data.planner.plannerdate.indexOf("일") - 1,
-        resp.data.planner.plannerdate.indexOf("일")
+      let date = resp.data.plannerdate.substring(
+        resp.data.plannerdate.indexOf("일") - 2,
+        resp.data.plannerdate.indexOf("일")
       );
-      let dow = resp.data.planner.plannerdate.substring(
-        resp.data.planner.plannerdate.indexOf("~") - 2,
-        resp.data.planner.plannerdate.indexOf("~") - 1
+      let dow = resp.data.plannerdate.substring(
+        resp.data.plannerdate.indexOf("~") - 2,
+        resp.data.plannerdate.indexOf("~") - 1
       );
       switch (dow) {
         case "일":
@@ -81,7 +82,7 @@ const MyPostBox = ({ selectRbn, setClickTab }) => {
       }
       setPlannerDate({ month, date, dow });
     } catch (error) {
-      console.log((error) => console.log("상세경로 가져오기 실패", error));
+      console.log("error", error);
     }
   };
   function uploadFile() {
@@ -157,6 +158,26 @@ const MyPostBox = ({ selectRbn, setClickTab }) => {
       });
     });
   };
+
+  const getThemes = async () => {
+    let token = sessionStorage.getItem("token");
+    await axios
+      .get("/aamurest/users/theme", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((resp) => {
+        let tempArr = [];
+        resp.data.forEach((val) => {
+          tempArr.push(val.THEMENAME);
+        });
+        setThemes(tempArr);
+      })
+      .catch((err) => {
+        console.log("err", err);
+      });
+  };
   return (
     <div className="MyWrite-container">
       <Plan>
@@ -166,7 +187,7 @@ const MyPostBox = ({ selectRbn, setClickTab }) => {
             return (
               <div key={idx} className="detail-plan">
                 <div className="paln-date">
-                  {idx + 1}일차 ({plannerDate.month}월 {plannerDate.date + idx}일&nbsp;
+                  {idx + 1}일차 ({plannerDate.month}월 {parseInt(plannerDate.date) + idx}일&nbsp;
                   {getDow(plannerDate.dow + idx)})
                 </div>
                 <div className="plan__over-container">
@@ -295,9 +316,6 @@ const MyPostBox = ({ selectRbn, setClickTab }) => {
 
           <div className="write-box writer">
             <textarea
-              onChange={(e) => {
-                setContent(e.target.value);
-              }}
               name="content"
               className="write-section"
               placeholder="내용을 입력하세요"
@@ -314,65 +332,18 @@ const MyPostBox = ({ selectRbn, setClickTab }) => {
               <span className="theme-section" onClick={onClickModal}>
                 {/* theme : {postTheme == 0 ? "테마를 선택하세요" : postTheme} */}
                 theme :
-                <div style={{ overflowX: "auto" }}>
-                  {/* {themes.map((val, i) => {
-                return (
-                  <CheckBox
-                    key={val.THEMEID}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      doCheck(e);
-                      getCheckedBoxes(
-                        e.target.parentElement.nextSibling.lastChild.checked,
-                        e.target.parentElement.nextSibling.lastChild.value
-                      );
-                    }}
-                  >
-                    <ImgCon>
-                      <img
-                        src={val.themeimg}
-                        style={{
-                          width: "100%",
-                          height: "100%",
-                          objectFit: "cover",
-                          borderRadius: "5px",
-                        }}
-                      />
-                    </ImgCon>
-                    <div style={{ textAlign: "center", margin: "2px 0", fontSize: "14px" }}>
-                      <label for={val.THEMENAME}>{val.THEMENAME}</label>
-                      <input
-                        type="checkbox"
-                        id={val.THEMENAME}
-                        value={val.THEMENAME}
-                        onChange={(e) => {
-                          e.stopPropagation();
-                          getCheckedBoxes(e.target.checked, e.target.value);
-                        }}
-                        checked={checkeds.includes(val.THEMENAME) ? true : false}
-                        hidden
-                      />
-                    </div>
-                  </CheckBox>
-                );
-              })} */}
-                </div>
+                <select ref={selectRef} style={{ fontWeight: "bold" }}>
+                  {themes.map((val) => {
+                    return <option>{val}</option>;
+                  })}
+                </select>
               </span>
-
-              {/* {isOpen == true ? (
-                <Theme
-                  setIsOpen={setIsOpen}
-                  themes={themes}
-                  setPostTheme={setPostTheme}
-                  setPostThemeNum={setPostThemeNum}
-                />
-              ) : null} */}
             </div>
             <span
               className="myEditBox_btn"
               onClick={() => {
                 let write = uploadFile(showImagesFile);
-                bordWrite(write, titleRef, contentRef, rbn, navigate, postThemeNum);
+                bordWrite(write, titleRef, contentRef, rbn, navigate, selectRef);
               }}
             >
               공유하기
@@ -411,29 +382,6 @@ const Plan = styled.div`
   animation: ${bounce_modal_plan} 1.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
   animation-delay: 0.2s;
 `;
-function Theme({ setIsOpen, themes, setPostTheme, setPostThemeNum }) {
-  return (
-    <div className="theme-modal">
-      <div className="theme-modal-overlay">
-        {themes.map((val, idx) => {
-          return (
-            <div
-              className="theme-modal-select"
-              value={val.themeId}
-              onClick={(e) => {
-                setPostThemeNum(val.themeId);
-                setPostTheme(val.themeName);
-                setIsOpen(false);
-              }}
-            >
-              {val.themeName}
-            </div>
-          );
-        })}
-      </div>
-    </div>
-  );
-}
 
 function DetailSetting({ fromWooJaeData, periodIndex, obj, i }) {
   let reduxState = useSelector((state) => {
@@ -513,12 +461,12 @@ function getTimes(periodIndex, st, et) {
       .padStart(2, "0"),
   };
 }
-function bordWrite(write, titleRef, contentRef, rbn, navigate, postThemeNum) {
-  // console.log("titleRef :", titleRef.current.value);
-  // console.log("contentRef :", contentRef.current.value);
+function bordWrite(write, titleRef, contentRef, rbn, navigate, selectRef) {
   write.append("rbn", rbn);
   write.append("title", titleRef.current.value);
   write.append("content", contentRef.current.value);
+  write.append("themeid", selectRef.current.value);
+  write.append("id", sessionStorage.getItem("username"));
   let token = sessionStorage.getItem("token");
 
   axios
@@ -529,16 +477,16 @@ function bordWrite(write, titleRef, contentRef, rbn, navigate, postThemeNum) {
     })
     .then((resp) => {
       console.log(resp.data);
-      if (resp.data.result === "updateSuccess") {
+      if (resp.data.result === "insertSuccess") {
         alert("글이 저장되었습니다");
         navigate("/forum");
       } else {
         alert("저장오류가 발생했습니다. 관리자에게 문의하세요");
-        navigate("/");
+        navigate(-1);
       }
     })
     .catch((error) => {
-      console.log((error) => console.log("수정 실패", error));
+      console.log((error) => console.log("공유 실패", error));
     });
 }
 
