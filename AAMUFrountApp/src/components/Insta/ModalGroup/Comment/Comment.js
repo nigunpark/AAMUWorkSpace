@@ -223,7 +223,7 @@ function Comment({
               >
                 {val.photo.map((image, i) => {
                   return (
-                    <SwiperSlide>
+                    <SwiperSlide key={i}>
                       <li>
                         <img className="divimage1" alt="sample" src={image} />
                         {/* <img className='divimage' alt="sample" src='/images/bg1.png'/> */}
@@ -306,7 +306,7 @@ function Comment({
                     >
                       <div className="feeds-title">
                         <p>
-                          <span className="userName">제목 </span>
+                          <span className="userName"><strong>제목 </strong></span>
                           <span style={{ fontFamily: "normal" }}>
                             {" "}
                             {val.ctitle}
@@ -330,7 +330,7 @@ function Comment({
                           {val.tname === null
                             ? ""
                             : val.tname.map((tname, i) => {
-                                return <span key={i}>{tname}</span>;
+                                return <span style={{color:'#333333'}} key={i}><strong>{tname}</strong></span>;
                               })}
                         </p>
                       </div>
@@ -352,8 +352,8 @@ function Comment({
                   //feedComments에 담겨있을 댓글 값을 CommentList 컴포넌트에 담아서 가져온다
                   return (
                     <div
+                    key={i}
                       className="recommendContents"
-                      key={sessionStorage.getItem("username")}
                       onClick={(e) => {
                         // console.log(val.cno);
                       }}
@@ -396,23 +396,6 @@ function Comment({
                             }}
                             className="comment-heart"
                           >
-                            {/* {commentHeart ? (
-                            <i
-                              className="fa-solid fa-heart"
-                              onClick={() => {
-                                setCommentHeart(!commentHeart);
-                              }}
-                              style={{ color: "red" }}
-                            />
-                          ) : (
-                            <i
-                              className="fa-regular fa-heart"
-                              onClick={() => {
-                                setCommentHeart(!commentHeart);
-                              }}
-                            ></i>
-                          )} */}
-
                             <i
                               className="fa-regular fa-trash-can "
                               onClick={() => {
@@ -474,7 +457,7 @@ function Comment({
             </div>
             <div className="commentss">
             <div className="emoji">
-              <i class="fa-regular fa-face-smile" style={{fontSize:'24px',left:'5px'}} onClick={()=>{setemoji(!emoji)}}/>
+              <i className="fa-regular fa-face-smile" style={{fontSize:'24px',left:'5px'}} onClick={()=>{setemoji(!emoji)}}/>
             </div>
               {emoji
               &&
