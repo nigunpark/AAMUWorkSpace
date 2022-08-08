@@ -97,12 +97,12 @@
   color: red;
   font-size: 13px;
 }
-/* 
+
 .LoginTest {
-  background-image: url("/images/tropical.jpg");
+  /* background-image: url("/public/images/sea.gif");
   background-repeat: no-repeat;
-  background-size: cover;
-} */
+  background-size: cover; */
+}
 
 @keyframes heartbeat {
   0% {
