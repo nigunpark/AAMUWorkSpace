@@ -6,7 +6,7 @@ import styled from 'styled-components';
 function HashTagModal({hashRef,tagModal,setShowWrite,setTagItem}){
     function handleRef(e){
       e.stopPropagation();
-      if(e.target.value !== hashRef.current.value) setShowWrite(false)
+      if(e.target.value !== hashRef.current.textContent) setShowWrite(false)
     }
     window.addEventListener("click", handleRef);
   return (

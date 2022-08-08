@@ -224,7 +224,7 @@ function FeedSetting({
         </a>
         <Slider {...settings}>
           {val.photo.map((image, i) => (
-            <div className="container">
+            <div className="container" key={i}>
               <img
                 src={image}
                 // setMyImage={setMyImage}
@@ -310,7 +310,7 @@ function FeedSetting({
           </div>
           <div className="feeds-title">
             <p>
-              <span className="userName">제목 </span>
+              <span className="userName"> <strong>제목 </strong></span>
               <span> {val.ctitle}</span>
             </p>
             <p className="userName">
@@ -336,7 +336,7 @@ function FeedSetting({
             {val.tname === null
               ? ""
               : val.tname.map((tname, i) => {
-                  return <span key={i}>{tname}</span>;
+                  return <span style={{color:'#333333'}} key={i}><strong>{tname}</strong></span>;
                 })}
           </div>
 
@@ -348,7 +348,7 @@ function FeedSetting({
         </div>
         <div className="comment">
           <div className="emoji">
-            <i class="fa-regular fa-face-smile" style={{fontSize:'24px',left:'5px'}} onClick={()=>{setemoji(!emoji)}}/>
+            <i className="fa-regular fa-face-smile" style={{fontSize:'24px',left:'5px'}} onClick={()=>{setemoji(!emoji)}}/>
           </div>
             {emoji
             &&

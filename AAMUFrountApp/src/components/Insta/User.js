@@ -26,11 +26,12 @@ function User({
   const notimodalRef = useRef();
   const outside = useRef();
   const SearchModalRef = useRef();
+  const followerRef = useRef();
   const [heart, setHeart] = useState(false);
-  const [follow, setFollowing] = useState(false);
+  const [ffollower, setfollower] = useState([]);
   const [search, setsearch] = useState(false);
   const [square, setsquare] = useState(false);
-  const [userModal, setUserModal] = useState("");
+  const [usefollow, setusefollow] = useState(false);
   const [title, settitle] = useState([]);
   // const [searchb, setSearchb] = useState([]);
   const [searchText, setsearchText] = useState(false);
@@ -58,6 +59,31 @@ function User({
         setSearchb(resp.data);
 
         navigater("/Insta/searchList");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  function follower(id) {
+    //유효성 검사를 통과하고 게시버튼 클릭시 발생하는 함수
+    let token = sessionStorage.getItem("token");
+    axios
+      .post(
+        "/aamurest/gram/follower",
+        {
+          follower: id,
+          id: sessionStorage.getItem("username"),
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then((resp) => {
+        setusefollow(resp.data);
+        console.log(resp.data);
       })
       .catch((error) => {
         console.log(error);
@@ -95,10 +121,6 @@ function User({
     if (e.target !== SearchModalRef.current) setsearchText(false);
   }
   window.addEventListener("click", handleModal);
-
-  const handleChange = (e) => {
-    console.log(e.target.value);
-  };
 
   const submit = () => {
     confirmAlert({
@@ -154,17 +176,18 @@ function User({
         </div>
       </div>
       <div className="user">
-        <img
-          src={sessionStorage.getItem("userimg")}
-          alt="프사"
-          onError={(e) => {
-            e.stopPropagation();
-            e.target.src = "/images/user.jpg";
-          }}
-        />
-        <div>
+        <div className="userps">
+          <img
+            src={sessionStorage.getItem("userimg")}
+            alt="프사"
+            onError={(e) => {
+              e.stopPropagation();
+              e.target.src = "/images/user.jpg";
+            }}
+          />
+        </div>
+        <div className="userpsid">
           <p className="user-id">{sessionStorage.getItem("username")}</p>
-          <p className="user-name">김영현</p>
         </div>
 
         <div
@@ -175,7 +198,11 @@ function User({
         >
           <div className="heart">
             {heart ? (
-              <i className=" fa-solid fa-heart fa-2x" ref={notimodalRef} style={{ color: "black" }}>
+              <i
+                className=" fa-solid fa-heart fa-2x"
+                ref={notimodalRef}
+                style={{ color: "black" }}
+              >
                 <NotificationModal></NotificationModal>
               </i>
             ) : (
@@ -231,7 +258,7 @@ function User({
         </div>
         {recommendUser.slice(0, 5).map((val, i) => {
           return (
-            <div className="recommend-down">
+            <div className="recommend-down" key={i}>
               <div className="recommend-contents">
                 <img
                   src={val.userprofile}
@@ -241,28 +268,37 @@ function User({
                     e.target.src = "/images/user.jpg";
                   }}
                 />
-                <div>
-                  <p className="user-id">{val.id}</p>
-                  <p className="user-name">0hyun0hyun님 외 2명이...</p>
+                <div className="user-id">
+                  <p>{val.id}</p>
                 </div>
-                <div className="follow">
-                  {follow ? (
-                    <span
-                      className="following"
-                      onClick={() => {
-                        setFollowing(!follow);
-                      }}
-                    >
-                      팔로잉
-                    </span>
+                <div
+                  className="follow"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (//팔로워 배열안에 들어가 있는 팔로워들
+                      ffollower.includes(e.target.parentElement.previousElementSibling.textContent)
+                    ) {
+                      setfollower(
+                        ffollower.filter((folval) => {//언팔로우 하기 위한 로직
+                          return (
+                            e.target.parentElement.previousElementSibling
+                              .textContent !== folval
+                          );
+                        })
+                      );
+                    } else {//팔로우하기 위한 팔로워들
+                      setfollower([
+                        ...ffollower,//기존에 있는 팔로워들 +
+                        e.target.parentElement.previousElementSibling.textContent,//클릭이 생기는 팔로워들 
+                      ]);
+                    }
+                    follower(val.id);
+                  }}
+                >
+                  {ffollower.includes(val.id) ? (//ffollower 배열에 val.id가 포함되어 있다면
+                    <span className="following">팔로잉</span>
                   ) : (
-                    <span
-                      onClick={() => {
-                        setFollowing(!follow);
-                      }}
-                    >
-                      팔로우
-                    </span>
+                    <span>팔로우</span>
                   )}
                 </div>
               </div>

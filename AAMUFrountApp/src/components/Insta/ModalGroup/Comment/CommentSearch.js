@@ -174,7 +174,7 @@ function CommentSearch({ val, setForReRender, forReRender, setcommentModal, setc
               >
                 {val.photo.map((image, i) => {
                   return (
-                    <SwiperSlide>
+                    <SwiperSlide key={i}>
                       <li>
                         <img className="divimage" alt="sample" src={image} />
                       </li>
@@ -285,7 +285,7 @@ function CommentSearch({ val, setForReRender, forReRender, setcommentModal, setc
                 {val.commuCommentList.map((val, i) => {
                   //feedComments에 담겨있을 댓글 값을 CommentList 컴포넌트에 담아서 가져온다
                   return (
-                    <div className="recommend-contents">
+                    <div className="recommend-contents" key={i}>
                       <img
                         className="likeimg"
                         src={val.userprofile}
@@ -400,7 +400,7 @@ function CommentSearch({ val, setForReRender, forReRender, setcommentModal, setc
             <div className="comment1">
               <div className="emoji">
                 <i
-                  class="fa-regular fa-face-smile"
+                  className="fa-regular fa-face-smile"
                   style={{ fontSize: "24px", left: "5px" }}
                   onClick={() => {
                     setemoji(!emoji);
