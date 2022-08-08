@@ -108,20 +108,28 @@ public class BBSController {
 			map.put("photolist", uploads);
 		} catch (IllegalStateException | IOException e) {e.printStackTrace();}
 
-		int affected=bbsService.bbsInsert(map);
+		int bbsaffected=bbsService.bbsInsert(map);
 		Map resultMap = new HashMap();
-		if(affected==1) resultMap.put("result", "insertSuccess");
+		if(bbsaffected==1) resultMap.put("result", "insertSuccess");
 		else resultMap.put("result", "insertNotSuccess");
-		
-		
 		
 		return resultMap;
 		}
 
 	//글 수정 <성공>
-	@PutMapping("/bbs/edit")
-    public Map bbsUpdate(@RequestBody Map map) {
-		System.out.println("글 수정:"+map);
+	@PostMapping("/bbs/edit/photo")
+    public Map bbsUpdate(@RequestParam List<MultipartFile> multifiles, @RequestParam Map map, HttpServletRequest req) {
+		System.out.println("글 수정:"+map);	
+		if(multifiles!=null) {
+			String path=req.getSession().getServletContext().getRealPath("/resources/bbsUpload");
+			try {
+				List<String> uploads= FileUploadUtil.fileProcess(multifiles, path);
+				System.out.println("(bbsController)uploads:"+uploads);
+				map.put("photolist", uploads);
+			} catch (IllegalStateException | IOException e) {e.printStackTrace();}
+
+		}
+		System.out.println("map:"+map);
 		int bbsUpdateAffected=bbsService.bbsUpdate(map);
 		Map resultMap = new HashMap<> ();
 		if(bbsUpdateAffected==1)

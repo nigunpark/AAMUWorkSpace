@@ -16,6 +16,7 @@ import com.aamu.aamurest.user.service.BBSDTO;
 import com.aamu.aamurest.user.service.BBSService;
 import com.aamu.aamurest.user.service.ReviewDTO;
 import com.aamu.aamurest.user.service.RouteDTO;
+import com.aamu.aamurest.util.UserUtil;
 
 @Service
 public class BBSServiceImpl implements BBSService{
@@ -109,11 +110,12 @@ public class BBSServiceImpl implements BBSService{
 	//글 등록
 	@Override
 	public int bbsInsert(Map map) {
-
+		map.put("themeid",UserUtil.changeTheme(map.get("themeid").toString()));
 		int bbsaffected=dao.bbsInsert(map);
 		//사진
 		int photoAffected=0;
 		List<String> lists= (List<String>) map.get("photolist");
+
 		System.out.println("(bbsServiceImpl)lists:"+lists);
 		for(String photo:lists) {
 			Map photomap = new HashMap();
@@ -151,7 +153,26 @@ public class BBSServiceImpl implements BBSService{
 	//글 수정
 	@Override
 	public int bbsUpdate(Map map) {
-		return dao.bbsUpdate(map);
+		int bbsaffected = 0;
+		map.put("themeid",UserUtil.changeTheme(map.get("themename").toString()));
+		bbsaffected = dao.bbsUpdate(map);
+		int photoAffected=0;
+		if(map.get("photolist")!=null) {
+			List<String> lists= (List<String>) map.get("photolist");
+			System.out.println("(bbsServiceImpl)lists:"+lists);
+			for(String photo:lists) {
+				Map photomap = new HashMap();
+				photomap.put("rbn", map.get("rbn"));
+				photomap.put("photo", photo);
+				photoAffected+=dao.photoInsert(photomap);
+				System.out.println("(CommuServiceImpl)photoAffected:"+photoAffected);
+			}
+			if(bbsaffected==1 && photoAffected==((List)map.get("photolist")).size())
+				return 1;
+			else
+				return 0;
+		}
+		return bbsaffected;
 	}
 
 	//글 삭제

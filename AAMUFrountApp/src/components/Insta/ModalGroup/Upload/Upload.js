@@ -293,7 +293,7 @@ const Uploader = ({ list, setsquare, setlist, setloading }) => {
               >
                 {myImage.map((image, i) => {
                   return (
-                    <SwiperSlide>
+                    <SwiperSlide key={i}>
                       <li>
                         <img className="divimage1" alt="sample" src={image} />
                       </li>
@@ -408,24 +408,24 @@ const Uploader = ({ list, setsquare, setlist, setloading }) => {
             }}
           >
             <input
-              onKeyUp={(e) => searchWord(e, setSearch)}
-              value={inputValue}
-              onChange={(e) => {
-                e.stopPropagation();
-                setinputValue(e.target.value);
-                setHasText(true);
-              }}
+              onKeyUp={(e) => {searchWord(e, setSearch);
+                setHasText(true);}}
+              // value={inputValue}
+              // onChange={(e) => {
+              //   e.stopPropagation();
+              //   setinputValue(e.target.value);
+              //   setHasText(true);
+              // }}
               placeholder="위치 추가"
               type="text"
               ref={searchRef}
             />
             {hasText && (
-              <SearchModal search={search} setHasText={setHasText} setinputValue={setinputValue} />
+              <SearchModal search={search} setHasText={setHasText} searchRef={searchRef} />
             )}
             <i className="fa-solid fa-location-dot"></i>
           </div>
-          <div>
-            <div className="uploadLocation">
+            <div>
               {tagList.map((tagItem, index) => {
                 return (
                   <TagItem key={index}>
@@ -440,11 +440,12 @@ const Uploader = ({ list, setsquare, setlist, setloading }) => {
                   </TagItem>
                 );
               })}
+              <div  className="uploadLocation">
               <input
                 type="text"
                 data-tip="입력후 스페이스바를 눌러주세요"
                 placeholder="해시태그 추가"
-                tabIndex={2}
+                tabIndex={1}
                 onChange={(e) => {
                   e.stopPropagation();
                   setTagItem(e.target.value);
@@ -465,7 +466,7 @@ const Uploader = ({ list, setsquare, setlist, setloading }) => {
                 />
               )}
 
-              <i class="fa-solid fa-hashtag"></i>
+              <i className="fa-solid fa-hashtag"></i>
             </div>
           </div>
           <ReactTooltip />
@@ -500,25 +501,26 @@ function feedList(setlist, setloading) {
 
 function hashTag(e, settagModal) {
   let val = e.target.value;
+  console.log('val',val);
   // submitTagItem()
   //업로드 버튼 누르고 화면 새로고침
-  let token = sessionStorage.getItem("token");
-  axios
-    .get("/aamurest/gram/tag", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      params: {
-        tname: val.substring(val.lastIndexOf("#")),
-      },
-    })
-    .then((resp) => {
-      console.log(resp.data);
-      settagModal(resp.data);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+  // let token = sessionStorage.getItem("token");
+  // axios
+  //   .get("/aamurest/gram/tag", {
+  //     headers: {
+  //       Authorization: `Bearer ${token}`,
+  //     },
+  //     params: {
+  //       tname: val,
+  //     },
+  //   })
+  //   .then((resp) => {
+  //     console.log(resp.data);
+  //     settagModal(resp.data);
+  //   })
+  //   .catch((error) => {
+  //     console.log(error);
+  //   });
 }
 
 function uploadFile(myImagefile) {
@@ -630,7 +632,6 @@ const TagBox = styled.div`
 
 const TagItem = styled.div`
   display: inline-flex;
-  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   margin: 5px;

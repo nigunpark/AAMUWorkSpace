@@ -37,8 +37,10 @@ const DetailModal = ({ detailOne, setIsOpen, setShowCBModal, setIsLoading }) => 
   const [detailRoute, setDetailRoute] = useState([]);
   const [prevChats, setPrevChats] = useState([]);
   const [myBookMark, setMyBookMark] = useState(false);
+
   const [roomno, setRoomno] = useState(0);
   // const [rno, setRno] = useState(0);
+
   let dispatch = useDispatch();
   useEffect(() => {
     const $body = document.querySelector("body");
@@ -214,9 +216,9 @@ const DetailModal = ({ detailOne, setIsOpen, setShowCBModal, setIsLoading }) => 
       })
       .then((resp) => {
         console.log("북마크 추가/취소 성공 (DetailModal.js) :", resp.data);
-        // alert("북마크 되었어요.");
-        // let bool = window.confirm("마이페이지로 이동하겠어요?");
-        // if (bool) navigate("/myPage");
+        alert("북마크 되었어요.");
+        let bool = window.confirm("마이페이지로 이동하시겠어요?");
+        if (bool) navigate("/myPage");
       })
       .catch((error) => {
         console.log("북마크 실패 (DetailModal.js) :", error);
@@ -428,22 +430,6 @@ const DetailModal = ({ detailOne, setIsOpen, setShowCBModal, setIsLoading }) => 
                           </span>
                         </div>
                         <div onClick={bookMarkOne}>
-                          {/* {myBookMark == bookbol ? (
-                            <FontAwesomeIcon
-                              icon={faBookmark}
-                              className="detail__plan-bookMark"
-                              onClick={() => {
-                                setMyBookMark(!myBookMark);
-                              }}
-                            />
-                          ) : (
-                            <i
-                              class="fa-regular fa-bookmark detail__plan-bookMark"
-                              onClick={() => {
-                                setMyBookMark(!myBookMark);
-                              }}
-                            ></i>
-                          )} */}
                           {myBookMark == true ? (
                             <FontAwesomeIcon
                               icon={faBookmark}

@@ -215,7 +215,7 @@ function FeedSetting({
         </a>
         <Slider {...settings}>
           {val.photo.map((image, i) => (
-            <div className="container">
+            <div className="container" key={i}>
               <img
                 src={image}
                 // setMyImage={setMyImage}
@@ -296,7 +296,10 @@ function FeedSetting({
           </div>
           <div className="feeds-title">
             <p>
-              <span className="userName">제목 </span>
+              <span className="userName">
+                {" "}
+                <strong>제목 </strong>
+              </span>
               <span> {val.ctitle}</span>
             </p>
             <p className="userName">
@@ -320,7 +323,11 @@ function FeedSetting({
             {val.tname === null
               ? ""
               : val.tname.map((tname, i) => {
-                  return <span key={i}>{tname}</span>;
+                  return (
+                    <span style={{ color: "#333333" }} key={i}>
+                      <strong>{tname}</strong>
+                    </span>
+                  );
                 })}
           </div>
 
@@ -333,7 +340,7 @@ function FeedSetting({
         <div className="comment">
           <div className="emoji">
             <i
-              class="fa-regular fa-face-smile"
+              className="fa-regular fa-face-smile"
               style={{ fontSize: "24px", left: "5px" }}
               onClick={() => {
                 setemoji(!emoji);
@@ -360,7 +367,7 @@ function FeedSetting({
             //   setComment(e.target.value); //댓글 창의 상태가 변할때마다 setComment를 통해 comment값을 바꿔준다
             // }}
             onKeyUp={(e) => {
-              e.target.value.length > 0 //사용자가 키를 눌렀다 떼었을때 길이가 0을 넘는 값인지 유효성 검사 결과 값을 담는다
+              replyRef.current !== undefined && replyRef.current.value.length > 0 //사용자가 키를 눌렀다 떼었을때 길이가 0을 넘는 값인지 유효성 검사 결과 값을 담는다
                 ? setisValid(true)
                 : setisValid(false);
               // console.log(replyRef.current.value.length>0?'true':'false');
@@ -371,9 +378,7 @@ function FeedSetting({
           <button
             className={
               //클래스명을 comment창의 글자 길에 따라서 다르게 주면서 버튼색에 css디자인을 줄 수 있음
-              replyRef.current === undefined
-                ? null
-                : replyRef.current.value.length > 0
+              isValid === true && replyRef.current.value.length > 0
                 ? "submitCommentActive"
                 : "submitCommentInactive"
             }

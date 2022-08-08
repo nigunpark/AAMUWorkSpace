@@ -3,7 +3,7 @@ import React from 'react'
 import styled from 'styled-components';
 
 
-function SearchModal({search,setinputValue,setHasText}){
+function SearchModal({search,searchRef,setHasText}){
     
 
   return (
@@ -12,9 +12,9 @@ function SearchModal({search,setinputValue,setHasText}){
         <Searchengine>
             <Searchcontents>
             
-            {search.map((val,i)=>{return <P onClick={(e)=>{
+            {search.map((val,i)=>{return <P key={i} onClick={(e)=>{
                 e.stopPropagation();
-                setinputValue(e.target.textContent)
+                searchRef.current.value=e.target.textContent
                 setHasText(false)}              
               }>{val.TITLE}</P>
                 
