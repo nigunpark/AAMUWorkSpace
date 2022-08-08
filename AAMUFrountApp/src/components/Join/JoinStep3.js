@@ -17,7 +17,6 @@ const JoinStep3 = () => {
   let reduxState = useSelector((state) => {
     return state;
   });
-  console.log("reduxState.joinData", reduxState.joinData);
 
   const [themes, setThemes] = useState([]);
   const [checkeds, setCheckeds] = useState([]);
@@ -101,10 +100,7 @@ const JoinStep3 = () => {
             </Link>
             <Title>
               <div className="loginTitle__container">
-                <FontAwesomeIcon
-                  icon={faFolderOpen}
-                  className="joinStep3_title-i"
-                />
+                <FontAwesomeIcon icon={faFolderOpen} className="joinStep3_title-i" />
                 <h1>테마선택</h1>
               </div>
               <p style={{ color: "gray" }}>welcome to AAMU</p>
@@ -113,10 +109,7 @@ const JoinStep3 = () => {
               <FontAwesomeIcon icon={fa1} className="join__progress-icon " />
               -
               <FontAwesomeIcon icon={fa2} className="join__progress-icon" />-
-              <FontAwesomeIcon
-                icon={fa3}
-                className="join__progress-icon join__progress-step"
-              />
+              <FontAwesomeIcon icon={fa3} className="join__progress-icon join__progress-step" />
             </div>
             <CheckBoxBody>
               {themes.map((val, i) => {
@@ -160,9 +153,7 @@ const JoinStep3 = () => {
                           e.stopPropagation();
                           getCheckedBoxes(e.target.checked, e.target.value);
                         }}
-                        checked={
-                          checkeds.includes(val.THEMENAME) ? true : false
-                        }
+                        checked={checkeds.includes(val.THEMENAME) ? true : false}
                         hidden
                       />
                     </div>
@@ -236,11 +227,7 @@ function Copyright(props) {
   return (
     <Typography variant="body2" color="text.warning" align="center" {...props}>
       {"Copyright © "}
-      <Link
-        color="inherit"
-        to="https://localhost:3000/"
-        style={{ color: "var(--orange)" }}
-      >
+      <Link color="inherit" to="https://localhost:3000/" style={{ color: "var(--orange)" }}>
         AAMU
       </Link>{" "}
       {new Date().getFullYear()}
