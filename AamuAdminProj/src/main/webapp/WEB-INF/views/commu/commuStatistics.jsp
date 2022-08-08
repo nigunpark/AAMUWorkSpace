@@ -3,8 +3,20 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <jsp:include page="/WEB-INF/views/template/top.jsp" />
 <!--차트 데이터용 자바 스크립트-->
-
 <script src="<c:url value="/resources/vendors/chart.js/Chart.min.js"/>"></script>
+
+<style>
+
+img {
+  width: 100%;
+  height: 300px;
+  max-width:700px;
+  display:block;
+  margin:0 auto;
+}
+</style>
+
+
 <div class="main-panel">
 	<div class="content-wrapper">
 		<div class="row">
@@ -13,17 +25,10 @@
 					<div class="tab-content tab-content-basic">
 						<!--차트 정보 시작-->
 						<!-- 월별 게시물 수 -->
-						<div class="row">
-							<div class="col-lg-6 grid-margin stretch-card">
-								<div class="card">
-									<div class="card-body">
-										<h4 class="card-title">월별 게시물 수</h4>
-										<canvas id="lineChart"></canvas>
-									</div>
-								</div>
-							</div>
+						
+						<div class="row" >
 							<!-- 성별 게시물 비율 -->
-							<div class="col-lg-6 grid-margin stretch-card">
+							<div class="col-lg-7 grid-margin stretch-card" style="float: none; margin:0 auto;">
 								<div class="card">
 									<div class="card-body">
 										<h4 class="card-title">성별 게시물 비율</h4>
@@ -31,7 +36,28 @@
 									</div>
 								</div>
 							</div>
+							
 						</div>
+						<div class="row mt-10">
+							<div class="col-lg-6 grid-margin stretch-card">
+								<div class="card">
+									<div class="card-body">
+										<h4 class="card-title">여성이 많이 사용한 태그</h4>
+										<img src="<c:url value="/resources/images/woman.png"/>" alt="여성 태그 이미지"/>
+									</div>
+								</div>
+							</div>
+							<div class="col-lg-6 grid-margin stretch-card">
+								<div class="card">
+									<div class="card-body">
+										<h4 class="card-title">남성이 많이 사용한 태그</h4>
+										<img src="<c:url value="/resources/images/man.png"/>" alt="남성 태그 이미지"/>
+									</div>
+								</div>
+							</div>
+							
+						</div>
+						
 						<!--차트 정보 끝-->
 						<div class="col-lg-12 grid-margin stretch-card">
 							<div class="card">
@@ -47,6 +73,7 @@
 												<tr>
 													<th>순위</th>
 													<th>id</th>
+													<th>글제목</th>
 													<th>좋아요 수</th>
 													<th>댓글 수</th>
 													<th>가입일</th>
@@ -65,12 +92,13 @@
 															<td>${i}위</td>
 															<td>
 					                                          <div class="d-flex ">
-					                                            <img src="${record.userprofile}" alt="">
-					                                            <div>
-					                                              <h6 class="text-center">${record.id}</h6>
+					                                          	<div>
+						                                            <img src="${record.userprofile}" alt="">
+						                                            <h6 class="text-center">${record.id}</h6>
 					                                            </div>
 					                                          </div>
 					                                        </td>
+					                                        <td>${record.ctitle}</td>
 															<td>${record.likecount}</td>
 															<td>${record.rcount}</td>
 															<td>${record.joindate}</td>
@@ -103,6 +131,7 @@
 	$(function() {
 		'use strict';
 		//월별 게시물 수
+		/*
 		var data = {
 			labels : [ "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12" ],
 			datasets : [ {
@@ -119,8 +148,9 @@
 				fill : false
 			} ]
 		};
-
+		*/
 		//월별 게시물 수
+		/*
 		var options = {
 			scales : {
 				yAxes : [ {
@@ -139,7 +169,7 @@
 			}
 
 		};
-
+		*/
 		//성별 게시물 비율
 		var doughnutPieData = {
 			datasets : [ {
@@ -151,6 +181,7 @@
 		};
 
 		//성별 게시물 비율
+		
 		var doughnutPieOptions = {
 			responsive : true,
 			animation : {
@@ -160,6 +191,7 @@
 		};
 
 		//월별 게시물 수
+		/*
 		if ($("#lineChart").length) {
 			var lineChartCanvas = $("#lineChart").get(0).getContext("2d");
 			var lineChart = new Chart(lineChartCanvas, {
@@ -168,6 +200,7 @@
 				options : options
 			});
 		}
+		*/
 
 		//성별 게시물 비율
 		if ($("#doughnutChart").length) {

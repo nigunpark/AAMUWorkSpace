@@ -296,20 +296,22 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 	//TAGS테이블에 있으면 TNO,TNAME 키값으로 뿌려주기 //없으면 INSERT TAGS테이블 COMMUTAG테이블
 	@Override
 	public List<String> commuTag(Map map) {
-		List<String> tagLists=dao.commuSelectTag(map);
-		List<String> sharptTagList = new Vector<>();
-//		System.out.println("트루일가요?"+tagLists.contains(map.get("tname")));
-		if(tagLists.contains(map.get("tname"))) {
-//			System.out.println("tname은 뭘가요?"+map.get("tname"));
+		if(map.get("tname").toString().contains("#")) {
+			String tname=map.get("tname").toString().split("#")[1];
+			map.put("tname", tname);
+			List<String> tagLists=dao.commuSelectTag(map);//#서, #서울가 오잖아
+			List<String> sharptTagList = new Vector<>();
+			System.out.println("트루일가요?"+tagLists.contains(map.get("tname")));
+			
+			System.out.println("tname은 뭘가요?"+map.get("tname"));
 			for(String tag:tagLists) { //서울, 서울여행을 꺼내서 
 				String sharpTag="#"+tag; //#서울을 붙이기
 				sharptTagList.add(sharpTag); //새로운 배열에 담아서 전달
 			}
-			return sharptTagList;
+			return sharptTagList;		
 		}
-		else {
-			return sharptTagList;
-		}
+		else 
+			return null;
 	}
 
 	//글 하나 뿌려주는 용

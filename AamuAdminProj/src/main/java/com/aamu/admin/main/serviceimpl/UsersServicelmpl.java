@@ -81,7 +81,7 @@ public class UsersServicelmpl implements UsersService{
 			List<String> stopIdLists=(List<String>)map.get("stopId");
 			for(String stopId:stopIdLists) {
 				map.put("id",stopId);
-				map.put("enabled", 0);
+				map.put("authority", "ROLE_GUEST");
 				affected+=dao.usersStop(map);
 			}
 		}
@@ -89,7 +89,7 @@ public class UsersServicelmpl implements UsersService{
 			List<String> addIdLists=(List<String>)map.get("addId");
 			for(String addId:addIdLists) {
 				map.put("id",addId); 
-				map.put("enabled", 1);
+				map.put("authority", "ROLE_USER");
 				affected+=dao.usersStop(map);
 			}
 		}

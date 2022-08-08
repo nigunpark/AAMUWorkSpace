@@ -63,7 +63,7 @@
 	
 	<!-- 베스트 글쓴이 -->
 	<select id="bestUsersList" resultType="AdminCommuDTO">
-		SELECT * FROM(SELECT u.userprofile, u.id, c.likecount, c.rcount, u.joindate FROM users u JOIN community c ON c.id = u.id
+		SELECT * FROM(SELECT u.userprofile, u.id, c.likecount, c.rcount, u.joindate, c.ctitle FROM users u JOIN community c ON c.id = u.id
 		order by likecount desc, rcount desc)T
 		WHERE ROWNUM &lt;=5
 	</select>

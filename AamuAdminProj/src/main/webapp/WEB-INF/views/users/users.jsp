@@ -78,11 +78,11 @@
 																<td>${record.name}</td>
 																<td>${record.joindate}</td>
 																<c:choose>
-																	<c:when test="${record.enabled eq 1}">
-																		<td><div class="badge badge-opacity-success">활동중</div></td>
+																	<c:when test='${record.authority eq "ROLE_GUEST"}'>
+																		<td><div class="badge badge-opacity-warning">활동정지</div></td>
 																	</c:when>
 																	<c:otherwise>
-																		<td><div class="badge badge-opacity-warning">활동정지</div></td>
+																		<td><div class="badge badge-opacity-success">활동중</div></td>
 																	</c:otherwise>
 																</c:choose>
 															</tr>
@@ -182,11 +182,11 @@
 	       			contentType:"application/json", //데이타 보낼 때
 	       			dataType: "json" //데이타 받을 때 
 	       		}).done(data=>{
-	       			console.log('삭제성공:',data);
+	       			console.log('정지성공:',data);
 	       			location.replace("Users.do");
 	       			
 	       		}).fail(error=>{
-	       			console.log('삭제에러:',error);
+	       			console.log('정지에러:',error);
 	       		});
 			}///////if 삭제하시겠습니까?
 			

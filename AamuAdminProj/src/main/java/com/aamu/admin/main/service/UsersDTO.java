@@ -19,6 +19,5 @@ public class UsersDTO {
 	private String self;
 	private java.sql.Date joindate;
 	private String userprofile;
-	private String enabled;
-	
+	private String authority;
 }

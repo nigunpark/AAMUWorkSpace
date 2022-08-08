@@ -21,20 +21,28 @@ class Word(Resource):
         print(allTnamesOfWomanStr)  # 서울
         print(allTnamesOfManStr)  # 서울
         allTnamesOfManStrList=allTnamesOfManStr.split(',')
+        allTnamesOfWomanList = allTnamesOfWomanStr.split(',')
 
-        womanWord = Counter(allTnamesOfWomanStr) # 단어별 빈도수 형태의 딕셔너리 데이터를 구함
+        womanWord = Counter(allTnamesOfWomanList) # 단어별 빈도수 형태의 딕셔너리 데이터를 구함
         manWord = Counter(allTnamesOfManStrList)
         print(manWord)
-        wc = WordCloud(font_path='malgun', width=400, height=400, scale=2.0, max_font_size=250, background_color="white")
+        print(womanWord)
+        wc = WordCloud(font_path='malgun', width=1000, height=800, scale=2.0, max_font_size=250, background_color="white")
         womanGen=wc.generate_from_frequencies(womanWord)
-        manGen = wc.generate_from_frequencies(manWord)
-        fig=plt.figure(figsize=(10, 10))
+        #manGen = wc.generate_from_frequencies(manWord)
+        fig=plt.figure(figsize=(10, 8))
         plt.imshow(womanGen)
+        plt.tight_layout(pad=0)
         plt.axis("off")
-        fig.savefig("wordCloud2.png")
-        #plt.imshow(manGen)
-        #plt.axis("off")
-        #fig.savefig("wordCloud.png")
+        fig.savefig("D:\KKH\Workspace\AAMUWorkSpace\AamuAdminProj\src\main\webapp\\resources\images\woman.png")
+
+        wc2 = WordCloud(font_path='malgun', width=1000, height=800, scale=2.0, max_font_size=250, background_color="white")
+        manGen = wc2.generate_from_frequencies(manWord)
+        fig2 = plt.figure(figsize=(10, 8))
+        plt.imshow(manGen)
+        plt.tight_layout(pad=0)
+        plt.axis("off")
+        fig2.savefig("D:\KKH\Workspace\AAMUWorkSpace\AamuAdminProj\src\main\webapp\\resources\images\man.png")
 
 
 

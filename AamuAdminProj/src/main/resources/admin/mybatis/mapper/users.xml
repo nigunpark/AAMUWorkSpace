@@ -7,7 +7,7 @@
 	<select id="usersSelectList"  parameterType="Map" resultType="usersDTO">
 		SELECT * FROM
 		(SELECT T.*, ROWNUM R FROM(
-		SELECT u.*, ac.enabled FROM USERS u join authority_security ac on u.id=ac.id where ac.authority='ROLE_USER' 
+		SELECT u.*, ac.authority FROM USERS u join authority_security ac on u.id=ac.id WHERE ac.authority='ROLE_USER' OR ac.authority='ROLE_GUEST'
 		<if test="searchColumn != null">
 	  	 	AND ${searchColumn} LIKE '%' || #{searchWord} || '%' 
 	  	</if>
@@ -18,17 +18,17 @@
 	
 	<!-- 전체 글 레코드수 -->
 	<select id="usersGetTotalRecordCount" parameterType="Map" resultType="int">
-	 	SELECT COUNT(*) FROM USERS u JOIN authority_security ac on u.id=ac.id where ac.authority='ROLE_USER'
+	 	SELECT COUNT(*) FROM USERS u JOIN authority_security ac on u.id=ac.id WHERE ac.authority='ROLE_USER' OR ac.authority='ROLE_GUEST'
 	</select>
 	
 	<!-- 프로필 사진 -->
 	<select id="usersSelectUserProf" parameterType="String" resultType="String">
-		SELECT userprofile from users where id=#{id}
+		SELECT userprofile FROM users WHERE id=#{id}
 	</select>
 	
 	<!-- 회원 정지 -->
 	<update id="usersStop" parameterType="Map">
-		UPDATE authority_security SET enabled=#{enabled} WHERE id=#{id}
+		UPDATE authority_security SET authority=#{authority} WHERE id=#{id}
 	</update>
 	
 	
