@@ -6,7 +6,7 @@ data class AAMUBBSResponse(
     var rbn: Int? = 0,
     var title: String? = null,
     var content: String? = null,
-    var postdate: Long? = null,
+    var postdate: Long? = 0,
     var themeid: Int? = 0,
     var themename: String? = null,
     var themeimg: String? = null,
@@ -17,7 +17,8 @@ data class AAMUBBSResponse(
     var routeList: List<Place>? = null,
     var reviewList: List<Review>? = null,
     var rateavg: Float? = 0.0F,
-    var bookmark: Boolean? = false
+    var bookmark: Boolean? = false,
+    var themeList: List<Map<*,*>>? = null
 )
 
 data class Review(

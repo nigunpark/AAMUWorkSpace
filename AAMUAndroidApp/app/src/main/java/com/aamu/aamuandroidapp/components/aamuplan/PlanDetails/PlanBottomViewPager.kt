@@ -33,9 +33,12 @@ import com.aamu.aamuandroidapp.components.aamuplan.AAMUPlanViewModel
 import com.aamu.aamuandroidapp.ui.theme.cyan200
 import com.aamu.aamuandroidapp.ui.theme.orange200
 import com.aamu.aamuandroidapp.ui.theme.typography
+import com.aamu.aamuandroidapp.ui.theme.yellow
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
+import com.guru.fontawesomecomposelib.FaIcon
+import com.guru.fontawesomecomposelib.FaIcons
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -71,7 +74,7 @@ fun PlanBottomViewPager(mapviewModel: AAMUPlanViewModel,
                 coroutineScope.launch {
                     pagerState.animateScrollToPage(1)
                 }
-            }, text = { Text(text = "공유된 일정", fontWeight = FontWeight.Bold)})
+            }, text = { Text(text = "즐겨찾기 한 일정", fontWeight = FontWeight.Bold)})
         }
         HorizontalPager(state = pagerState) {index ->
             Column(
@@ -80,7 +83,7 @@ fun PlanBottomViewPager(mapviewModel: AAMUPlanViewModel,
                 if (index == 0) {
                     PlannerRoute(mapviewModel,coroutineScope,topbarhide,bottomSheetScaffoldState)
                 } else {
-                    PlannerShareRoute()
+                    PlannerShareRoute(mapviewModel,coroutineScope,topbarhide,bottomSheetScaffoldState)
                 }
             }
         }
@@ -166,9 +169,95 @@ fun PlannerRoute(mapviewModel: AAMUPlanViewModel,
     }
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun PlannerShareRoute(){
-//    LazyColumn(content = ){}
+fun PlannerShareRoute(mapviewModel: AAMUPlanViewModel,
+                      coroutineScope: CoroutineScope,
+                      topbarhide : MutableState<Boolean>,
+                      bottomSheetScaffoldState: BottomSheetScaffoldState){
+    val bookMarkSelectList by mapviewModel.bookMarkSelectList.observeAsState(emptyList())
+    val error by mapviewModel.errorBookMarkLiveData.observeAsState()
+
+    mapviewModel.getPlannerBookMarkSelectList()
+
+    val listState = rememberLazyListState()
+    LazyColumn(state = listState){
+        itemsIndexed(items = bookMarkSelectList,
+            itemContent = { index, planner->
+                if(bookMarkSelectList.isNotEmpty()) {
+                    Surface(
+                        modifier = Modifier.clickable {
+                            mapviewModel.getPlannerSelectOne(planner.rbn!!)
+                            topbarhide.value = true
+                            coroutineScope.launch {
+                                bottomSheetScaffoldState.bottomSheetState.collapse()
+                            }
+                        }
+                    ) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Image(
+                                painter = rememberAsyncImagePainter(
+                                    model = ImageRequest.Builder(LocalContext.current)
+                                        .data(planner.photo?.getOrNull(0) ?: R.drawable.no_image)
+                                        .crossfade(true)
+                                        .build(),
+                                    contentScale = ContentScale.Crop
+                                ),
+                                contentDescription = null,
+                                contentScale = ContentScale.Crop,
+                                modifier = Modifier
+                                    .size(100.dp)
+                                    .padding(4.dp)
+                                    .shadow(1.dp)
+                            )
+                            Column(
+                                modifier = Modifier
+                                    .padding(horizontal = 4.dp)
+                            ) {
+                                Text(
+                                    text = planner.title ?: "",
+                                    style = typography.h6.copy(fontSize = 16.sp),
+                                    color = MaterialTheme.colorScheme.onSurface
+                                )
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    FaIcon(
+                                        faIcon = FaIcons.Star,
+                                        size = 20.dp,
+                                        tint = yellow,
+                                    )
+                                    Spacer(modifier = Modifier.width(5.dp))
+                                    Text(
+                                        text = "${planner.rateavg}점",
+                                    )
+                                    Spacer(modifier = Modifier.width(10.dp))
+                                    Text(
+                                        text = planner.content ?: "",
+                                        style = typography.subtitle2,
+                                        maxLines = 1,
+                                        overflow = TextOverflow.Ellipsis
+                                    )
+                                }
+                            }
+                        }
+                        Divider(modifier = Modifier.alpha(0.1f))
+                    }
+                }
+                else {
+                    if (error.isNullOrEmpty()) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.padding(24.dp),
+                            color = cyan200
+                        )
+                    } else {
+                        Text(
+                            text = error ?: "Unknown error",
+                            modifier = Modifier,
+                            color = androidx.compose.material.MaterialTheme.colors.error
+                        )
+                    }
+                }
+            })
+    }
 }
 
 @Preview

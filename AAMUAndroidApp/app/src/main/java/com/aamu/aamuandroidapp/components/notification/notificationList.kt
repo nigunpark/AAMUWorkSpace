@@ -98,17 +98,30 @@ fun NotificationList(
                 }
             }
         } else {
-            if (error.isNullOrEmpty()) {
-                CircularProgressIndicator(
-                    modifier = Modifier.padding(24.dp),
-                    color = cyan200
+            Column(
+                modifier = Modifier
+                    .fillMaxSize().align(alignment = Alignment.Center), horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Spacer(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(
+                            WindowInsets.statusBars
+                                .asPaddingValues()
+                                .calculateTopPadding() + 70.dp
+                        )
                 )
-            } else {
-                Text(
-                    text = error ?: "Unknown error",
-                    modifier = Modifier,
-                    color = MaterialTheme.colors.error
-                )
+                if (error.isNullOrEmpty()) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.padding(24.dp),
+                        color = cyan200
+                    )
+                } else {
+                    Text(
+                        text = error ?: "Unknown error",
+                        modifier = Modifier
+                    )
+                }
             }
         }
     }
@@ -120,9 +133,11 @@ fun NotificationListItem(index: Int, noti: AAMUNotiResponse, onItemSwiped: (Int)
     val visible = remember(noti.nano) { mutableStateOf(true) }
 
     AnimatedVisibility(visible = visible.value) {
-        Box(modifier = Modifier.background(amber200).clickable {
-            onItemClick.invoke(noti.nano!!)
-        }) {
+        Box(modifier = Modifier
+            .background(amber200)
+            .clickable {
+                onItemClick.invoke(noti.nano!!)
+            }) {
             BackgroundListItem(modifier = Modifier
                 .align(Alignment.CenterEnd)
                 .background(amber200))

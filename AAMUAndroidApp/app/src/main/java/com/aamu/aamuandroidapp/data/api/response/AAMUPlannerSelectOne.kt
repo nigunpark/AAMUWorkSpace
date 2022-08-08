@@ -12,7 +12,8 @@ data class AAMUPlannerSelectOne(
     var routeMap : Map<String?,List<Place?>?>? = null,
     var smallImage : String? = null,
     var bigImage : String? = null,
-    var isBBS : Int? = null
+    var isBBS : Int? = null,
+    var theme: String?= null
 )
 data class Place(
     var rbn : Int? = null,

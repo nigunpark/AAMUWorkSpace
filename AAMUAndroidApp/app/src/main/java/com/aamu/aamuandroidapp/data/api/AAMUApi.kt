@@ -34,13 +34,19 @@ interface AAMUApi {
     suspend fun getPlaceOne(@Query("contentid") contentid : Int,@Query("contenttypeid") contenttypeid : Int) : Response<AAMUPlaceResponse>
 
     @GET("info/recentdiner")
-    suspend fun getRecentDiner(@Query("placey") placey : Double,@Query("placex") placex : Double) : Response<List<AAMUPlaceResponse>>
+    suspend fun getRecentDiner(@Query("placey") placey : Double,@Query("placex") placex : Double,@Query("category") category : String) : Response<List<AAMUPlaceResponse>>
 
     @GET("planner/selectList")
     suspend fun getPlannerSelectList() : Response<List<AAMUPlannerSelectOne>>
 
+    @GET("bbs/bookmark/list")
+    suspend fun getPlannerBookMarkSelectList(@Query("id") id : String) : Response<List<AAMUBBSResponse>>
+
     @GET("planner/selectonemap")
     suspend fun getPlannerSelectOne(@Query("rbn") rbn : Int) : Response<AAMUPlannerSelectOne>
+
+    @GET("chat/rooms")
+    suspend fun getChatRoomList(@Query("id") id : String): Response<List<AAMUChatRoomResponse>>
 
     @GET("chat/room")
     suspend fun getChatMessageList(@QueryMap map : Map<String,String>): Response<List<AAMUChatingMessageResponse>>
@@ -70,7 +76,7 @@ interface AAMUApi {
     suspend fun getNotiList(@Query("id") id : String) : Response<List<AAMUNotiResponse>>
 
     companion object {
-        private const val BASE_URL = "http://192.168.45.107:8080/aamurest/"
+        private const val BASE_URL = "http://192.168.0.22:8080/aamurest/"
 
         operator fun invoke():AAMUApi{
             val requestInterceptor  = Interceptor{ chain ->

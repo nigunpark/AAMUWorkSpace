@@ -10,10 +10,14 @@ interface AAMURepository {
     suspend fun isok() : Boolean
     suspend fun getRecentPlace(placey : Double,placex : Double) : Flow<List<AAMUPlaceResponse>>
     suspend fun getPlaceOne(contentid : Int, contenttypeid : Int) : Flow<AAMUPlaceResponse>
-    suspend fun getRecentDiner(placey : Double,placex : Double) : Flow<List<AAMUPlaceResponse>>
+    suspend fun getRecentDiner(placey : Double,placex : Double,category : String) : Flow<List<AAMUPlaceResponse>>
+
     suspend fun getPlannerSelectList() : Flow<List<AAMUPlannerSelectOne>>
+    suspend fun getPlannerBookMarkSelectList(id : String) : Flow<List<AAMUBBSResponse>>
+
     suspend fun getPlannerSelectOne(rbn : Int) : Flow<AAMUPlannerSelectOne>
 
+    suspend fun getChatRoomList(id : String) : Flow<List<AAMUChatRoomResponse>>
     suspend fun getChatMessageList(map : Map<String,String>) : Flow<List<AAMUChatingMessageResponse>>
 
     suspend fun getGramList(id : String) : Flow<List<AAMUGarmResponse>>

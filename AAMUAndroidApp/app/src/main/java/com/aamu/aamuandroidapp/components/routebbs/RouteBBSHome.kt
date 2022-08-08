@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import com.aamu.aamuandroidapp.R
 import com.aamu.aamuandroidapp.data.api.response.AAMUBBSResponse
 import com.aamu.aamuandroidapp.fragment.main.sub.RouteBBSHomeInteractionEvents
+import com.aamu.aamuandroidapp.ui.theme.amber200
 import com.aamu.aamuandroidapp.ui.theme.cyan200
 import com.aamu.aamuandroidapp.ui.theme.cyan700
 import com.aamu.aamuandroidapp.ui.theme.extensions.generateDominantColorState

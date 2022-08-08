@@ -80,9 +80,10 @@ class AAMURepositoryImpl(
 
     override suspend fun getRecentDiner(
         placey: Double,
-        placex: Double
+        placex: Double,
+        category : String
     ): Flow<List<AAMUPlaceResponse>> = flow {
-        val response  = aamuApi.getRecentDiner(placey,placex)
+        val response  = aamuApi.getRecentDiner(placey,placex,category)
         if(response.isSuccessful){
             emit(response.body() ?: emptyList<AAMUPlaceResponse>())
         }
@@ -106,6 +107,18 @@ class AAMURepositoryImpl(
         emit(emptyList<AAMUPlannerSelectOne>())
     }.flowOn(Dispatchers.IO)
 
+    override suspend fun getPlannerBookMarkSelectList(id: String): Flow<List<AAMUBBSResponse>> = flow<List<AAMUBBSResponse>> {
+        val response = aamuApi.getPlannerBookMarkSelectList(id)
+        if(response.isSuccessful){
+            emit(response.body() ?: emptyList<AAMUBBSResponse>())
+        }
+        else{
+            emit(emptyList<AAMUBBSResponse>())
+        }
+    }.catch {
+        emit(emptyList<AAMUBBSResponse>())
+    }.flowOn(Dispatchers.IO)
+
     override suspend fun getPlannerSelectOne(rbn: Int): Flow<AAMUPlannerSelectOne> = flow<AAMUPlannerSelectOne> {
         val response = aamuApi.getPlannerSelectOne(rbn)
 
@@ -117,6 +130,18 @@ class AAMURepositoryImpl(
         }
     }.catch {
         emit(AAMUPlannerSelectOne(null,null,null,null,null,null,null,null))
+    }.flowOn(Dispatchers.IO)
+
+    override suspend fun getChatRoomList(id: String): Flow<List<AAMUChatRoomResponse>> = flow<List<AAMUChatRoomResponse>> {
+        val response = aamuApi.getChatRoomList(id)
+        if (response.isSuccessful){
+            emit(response.body() ?: emptyList<AAMUChatRoomResponse>())
+        }
+        else{
+            emit(emptyList<AAMUChatRoomResponse>())
+        }
+    }.catch {
+        emit(emptyList<AAMUChatRoomResponse>())
     }.flowOn(Dispatchers.IO)
 
     override suspend fun getChatMessageList(map: Map<String, String>): Flow<List<AAMUChatingMessageResponse>> = flow<List<AAMUChatingMessageResponse>> {

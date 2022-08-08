@@ -49,6 +49,9 @@ import com.aamu.aamuandroidapp.ui.theme.modifiers.verticalGradientBackground
 import com.aamu.aamuandroidapp.ui.theme.typography
 import com.aamu.aamuandroidapp.ui.theme.yellow
 import com.aamu.aamuandroidapp.util.contextL
+import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.rememberPagerState
 import com.gowtham.ratingbar.RatingBar
 import com.gowtham.ratingbar.RatingBarConfig
 import com.gowtham.ratingbar.RatingBarStyle
@@ -58,6 +61,7 @@ import com.guru.fontawesomecomposelib.FaIcons
 import java.text.SimpleDateFormat
 import java.util.*
 
+@OptIn(ExperimentalPagerApi::class)
 @Composable
 fun RouteBBSDetail(
     rbn : Int
@@ -72,7 +76,7 @@ fun RouteBBSDetail(
     val error by viewModel.errorLiveData.observeAsState()
 
     Box(modifier = Modifier.fillMaxSize()){
-        if (bbsDetail?.rbn != null) {
+        if (bbsDetail?.rbn != 0 && bbsDetail?.rbn != null) {
             val dominantColors = listOf(Color.White, cyan200)
 
             LazyColumn(
@@ -86,27 +90,47 @@ fun RouteBBSDetail(
                     )
             ) {
                 item {
-                    val painter = rememberAsyncImagePainter(
-                        model = ImageRequest.Builder(LocalContext.current)
-                            .data(bbsDetail!!.photo?.getOrNull(0) ?: R.drawable.no_image)
-                            .crossfade(true)
-                            .build(),
-                        contentScale = ContentScale.Crop
-                    )
-                    Image(
-                        painter = painter,
-                        contentScale = ContentScale.Crop,
-                        contentDescription = null,
-                        modifier = Modifier
-                            .height(
-                                600.dp
+                    if(bbsDetail!!.photo != null) {
+                        val pagerState = rememberPagerState(
+                            pageCount = bbsDetail!!.photo?.size ?: 0,
+                            initialOffscreenLimit = 2,
+                            infiniteLoop = false,
+                            initialPage = 0
+                        )
+                        val painter = rememberAsyncImagePainter(
+                            model = ImageRequest.Builder(LocalContext.current)
+                                .data(bbsDetail!!.photo?.getOrNull(0) ?: R.drawable.no_image)
+                                .crossfade(true)
+                                .build(),
+                            contentScale = ContentScale.Crop
+                        )
+                        HorizontalPager(state = pagerState) { index ->
+                            val painterOther = rememberAsyncImagePainter(
+                                model = ImageRequest.Builder(LocalContext.current)
+                                    .data(
+                                        bbsDetail!!.photo?.getOrNull(index) ?: R.drawable.no_image
+                                    )
+                                    .crossfade(true)
+                                    .build(),
+                                contentScale = ContentScale.Crop
                             )
-                            .fillMaxWidth(),
-                    )
-                    when (painter.state) {
-                        is AsyncImagePainter.State.Success -> expand.value = true
-                        else -> expand.value = false
+                            Image(
+                                painter = if (index == 0) painter else painterOther,
+                                contentScale = ContentScale.Crop,
+                                contentDescription = null,
+                                modifier = Modifier
+                                    .height(
+                                        600.dp
+                                    )
+                                    .fillMaxWidth(),
+                            )
+                        }
+                        when (painter.state) {
+                            is AsyncImagePainter.State.Success -> expand.value = true
+                            else -> expand.value = false
+                        }
                     }
+
                 }
                 item {
                     Column(modifier = Modifier.background(Color.White)) {
@@ -156,7 +180,7 @@ fun RouteBBSDetail(
                         PlannerDetail(viewModel)
                     }
                 }
-                if (bbsDetail!!.reviewList?.size != 0) {
+                if (bbsDetail!!.reviewList != null && bbsDetail!!.reviewList?.size != 0) {
                     items(items = bbsDetail!!.reviewList!!) { review ->
                         Box(Modifier.padding(5.dp)) {
                             Box(
@@ -230,7 +254,7 @@ fun RouteBBSDetail(
         val preferences : SharedPreferences = LocalContext.current.getSharedPreferences("usersInfo", Context.MODE_PRIVATE)
         val userid : String? = preferences.getString("id",null)
 
-        if (bbsDetail?.rbn != null &&bbsDetail!!.reviewList?.size != 0) {
+        if (bbsDetail?.rbn != null && bbsDetail!!.reviewList != null && bbsDetail!!.reviewList?.size != 0) {
             for (review in bbsDetail!!.reviewList!!) {
                 if (review.id == userid) {
                     isReviewUser = true

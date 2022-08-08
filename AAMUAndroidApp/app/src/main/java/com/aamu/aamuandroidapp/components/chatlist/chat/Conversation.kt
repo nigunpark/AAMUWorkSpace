@@ -27,15 +27,13 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.LastBaseline
 import androidx.compose.ui.platform.LocalContext
@@ -56,23 +54,31 @@ import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
-//@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ConversationContent(
     viewModel : ConversationViewModel,
     modifier: Modifier = Modifier,
+    roomString: String,
+    backClick: ()->Unit
 ) {
 
     val messageList by viewModel.messageList.observeAsState(emptyList())
 
     val scrollState = rememberLazyListState()
+    val scrollBehavior = remember { TopAppBarDefaults.pinnedScrollBehavior( state = TopAppBarState(
+        0F,0f,0f
+    )) }
     val scope = rememberCoroutineScope()
 
     Surface(modifier = modifier) {
-        Box(modifier = Modifier.fillMaxSize().background(cyan200.copy(alpha = 0.1f))) {
+        Box(modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White)) {
             Column(
                 Modifier
                     .fillMaxSize()
+                    .nestedScroll(scrollBehavior.nestedScrollConnection)
             ) {
                 Messages(
                     messages = messageList,
@@ -95,10 +101,11 @@ fun ConversationContent(
             }
             // Channel name bar floats above the messages
             ChannelNameBar(
-                channelName = "ㅁㄴㅇㄻㄴㅇㄹ",
-                channelMembers = 1,
+                channelName = roomString,
+                scrollBehavior = scrollBehavior,
                 // Use statusBarsPadding() to move the app bar content below the status bar
-                modifier = Modifier.statusBarsPadding().background(cyan200.copy(alpha = 0.3f)),
+                modifier = Modifier.statusBarsPadding(),
+                backClick = backClick
             )
         }
     }
@@ -108,23 +115,20 @@ fun ConversationContent(
 @Composable
 fun ChannelNameBar(
     channelName: String,
-    channelMembers: Int,
     modifier: Modifier = Modifier,
+    scrollBehavior: TopAppBarScrollBehavior? = null,
+    backClick : () -> Unit
 ) {
     JetchatAppBar(
         modifier = modifier,
+        scrollBehavior = scrollBehavior,
+        backClick = backClick,
         title = {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 // Channel name
                 Text(
                     text = channelName,
                     style = MaterialTheme.typography.titleMedium
-                )
-                // Number of members
-                Text(
-                    text = channelMembers.toString(),
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
         }
@@ -416,7 +420,7 @@ fun ClickableMessage(
 @Preview
 @Composable
 fun channelBarPrev() {
-    ChannelNameBar(channelName = "composers", channelMembers = 52)
+//    ChannelNameBar(channelName = "composers", channelMembers = 52)
 }
 
 @Preview

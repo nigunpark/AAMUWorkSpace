@@ -47,6 +47,9 @@
         <action
             android:id="@+id/action_mainFragment_to_gramDetailFragment"
             app:destination="@id/gramDetailFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_chatlistFragment"
+            app:destination="@id/chatlistFragment" />
 
     </fragment>
     <fragment
@@ -57,7 +60,17 @@
     <fragment
         android:id="@+id/conversationFragment"
         android:name="com.aamu.aamuandroidapp.fragment.main.conversation.ConversationFragment"
-        android:label="ConversationFragment" />
+        android:label="ConversationFragment" >
+        <argument
+            android:name="roomno"
+            app:argType="integer"
+            android:defaultValue="0"
+            />
+        <argument
+            android:name="otherid"
+            app:argType="string"
+            android:defaultValue=""/>
+    </fragment>
     <fragment
         android:id="@+id/routeBBSDetailFragment"
         android:name="com.aamu.aamuandroidapp.fragment.main.routebbs.RouteBBSDetailFragment"
@@ -86,6 +99,14 @@
             app:argType="integer"
             android:defaultValue="0"
             />
+    </fragment>
+    <fragment
+        android:id="@+id/chatlistFragment"
+        android:name="com.aamu.aamuandroidapp.fragment.main.chats.ChatlistFragment"
+        android:label="ChatlistFragment" >
+        <action
+            android:id="@+id/action_chatlistFragment_to_conversationFragment"
+            app:destination="@id/conversationFragment" />
     </fragment>
 
 </navigation>

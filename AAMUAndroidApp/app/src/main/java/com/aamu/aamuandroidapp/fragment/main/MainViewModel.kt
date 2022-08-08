@@ -126,7 +126,7 @@ class MainViewModel(context : Context) : ViewModel() {
                         }
                     }
                     else{
-                        errorLiveData.value = "리스트를 받아오는데 실페했습니다"
+                        errorLiveData.value = "알람이 없어요"
                         Toast.makeText(context,"리스트를 받아오는데 실페했습니다", Toast.LENGTH_LONG)
                     }
                 }

@@ -16,8 +16,12 @@ import com.aamu.aamuandroidapp.data.model.Tweet
 import com.aamu.aamuandroidapp.components.gram.profile.ProfileSection
 import com.aamu.aamuandroidapp.components.gram.profile.ProfileSectionSizes
 import com.aamu.aamuandroidapp.data.api.response.AAMUGarmResponse
+import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.rememberPagerState
 import java.text.SimpleDateFormat
 
+@OptIn(ExperimentalPagerApi::class)
 @Composable
 fun PostItem(
     gram: AAMUGarmResponse,
@@ -43,11 +47,21 @@ fun PostItem(
                 )
             }
         )
-        PostImage(
-            imageId = gram.photo?.getOrNull(0),
-            contentDescription = gram.title,
-            modifier = Modifier.padding(top = 8.dp)
-        )
+        if(gram.photo != null) {
+            val pagerState = rememberPagerState(
+                pageCount = gram.photo?.size ?: 0,
+                initialOffscreenLimit = 2,
+                infiniteLoop = false,
+                initialPage = 0
+            )
+            HorizontalPager(state = pagerState) { index ->
+                PostImage(
+                    imageId = gram.photo?.getOrNull(index),
+                    contentDescription = gram.title,
+                    modifier = Modifier.padding(top = 8.dp)
+                )
+            }
+        }
         PostInteractionBar(
             lno = gram.lno!!,
             isLiked = isLiked ?: false,

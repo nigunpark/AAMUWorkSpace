@@ -1,6 +1,7 @@
 package com.aamu.aamuandroidapp.components.aamuplan
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.location.Location
@@ -20,12 +21,14 @@ import androidx.navigation.NavController
 import com.aamu.aamuandroidapp.R
 import com.aamu.aamuandroidapp.data.api.AAMUDIGraph
 import com.aamu.aamuandroidapp.data.api.repositories.AAMURepository
+import com.aamu.aamuandroidapp.data.api.response.AAMUBBSResponse
 import com.aamu.aamuandroidapp.data.api.response.AAMUPlaceResponse
 import com.aamu.aamuandroidapp.data.api.response.AAMUPlannerSelectOne
 import com.aamu.aamuandroidapp.data.api.response.Place
 import com.aamu.aamuandroidapp.util.getLatLng
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.BitmapImageViewTarget
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import net.daum.mf.map.api.*
 import java.io.IOException
@@ -51,8 +54,10 @@ class AAMUPlanViewModel(context : Context,navController : NavController) : ViewM
     val recentPlaces = MutableLiveData<List<AAMUPlaceResponse>>()
 
     val errorLiveData = MutableLiveData<String>()
+    val errorBookMarkLiveData = MutableLiveData<String>()
 
     val plannerSelectList = MutableLiveData<List<AAMUPlannerSelectOne>>()
+    val bookMarkSelectList = MutableLiveData<List<AAMUBBSResponse>>()
 
     val plannerSelectOne = MutableLiveData<AAMUPlannerSelectOne>()
     val isSelectOne = MutableLiveData<Boolean>(false)
@@ -75,6 +80,22 @@ class AAMUPlanViewModel(context : Context,navController : NavController) : ViewM
                     else{
                         errorLiveData.value = "리스트를 받아오는데 실페했습니다"
                         Toast.makeText(context,"리스트를 받아오는데 실페했습니다",Toast.LENGTH_LONG)
+                    }
+                }
+        }
+    }
+
+    fun getPlannerBookMarkSelectList(){
+        val preferences : SharedPreferences = context.getSharedPreferences("usersInfo", Context.MODE_PRIVATE)
+        val userid : String? = preferences.getString("id",null)
+        viewModelScope.launch {
+            aamuRepository.getPlannerBookMarkSelectList(userid ?: "")
+                .collect {
+                    if(it.isNotEmpty()) {
+                        bookMarkSelectList.value = it
+                    }
+                    else{
+                        errorBookMarkLiveData.value = "북마크한 리스트가 없습니다"
                     }
                 }
         }
@@ -143,10 +164,46 @@ class AAMUPlanViewModel(context : Context,navController : NavController) : ViewM
                 mCustomMarker.userObject = recentPlace
                 mCustomMarker.mapPoint = MapPoint.mapPointWithGeoCoord(recentPlace.mapy!!,recentPlace.mapx!!)
                 mCustomMarker.showAnimationType = MapPOIItem.ShowAnimationType.SpringFromGround
-                mCustomMarker.markerType = MapPOIItem.MarkerType.RedPin
+
+                mCustomMarker.markerType =MapPOIItem.MarkerType.CustomImage
+                mCustomMarker.customImageResourceId = R.drawable.map_end_icon
+                mCustomMarker.setCustomImageAutoscale(false)
 
                 mapView.addPOIItem(mCustomMarker)
-                mapView.selectPOIItem(mCustomMarker, true)
+            }
+        }
+        mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(location?.latitude ?:33.450701,location?.longitude ?:126.570667), true)
+    }
+
+    fun getRecentDiner(category : String) = viewModelScope.launch {
+        mapView.removeAllPOIItems()
+        mapView.removeAllPolylines()
+        val location : Location? = getLatLng()
+        aamuRepository.getRecentDiner(location?.latitude ?:33.450701,location?.longitude ?:126.570667,category)
+            .collect { aamuplaces ->
+                if (aamuplaces.isNotEmpty()){
+                    recentPlaces.value = aamuplaces
+                    mapView.removeAllPOIItems()
+                }
+                else{
+                    errorLiveData.value = "Failed to Places"
+                    Toast.makeText(context,"Failed to Places",Toast.LENGTH_LONG)
+                }
+            }
+        recentPlaces.value?.let {
+            for (recentPlace in it){
+                val mCustomMarker :MapPOIItem =MapPOIItem()
+                mCustomMarker.itemName = recentPlace.title
+                mCustomMarker.tag = recentPlace.contentid!!
+                mCustomMarker.userObject = recentPlace
+                mCustomMarker.mapPoint = MapPoint.mapPointWithGeoCoord(recentPlace.mapy!!,recentPlace.mapx!!)
+                mCustomMarker.showAnimationType = MapPOIItem.ShowAnimationType.SpringFromGround
+
+                mCustomMarker.markerType =MapPOIItem.MarkerType.CustomImage
+                mCustomMarker.customImageResourceId = R.drawable.map_end_icon
+                mCustomMarker.setCustomImageAutoscale(false)
+
+                mapView.addPOIItem(mCustomMarker)
             }
         }
         mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(location?.latitude ?:33.450701,location?.longitude ?:126.570667), true)

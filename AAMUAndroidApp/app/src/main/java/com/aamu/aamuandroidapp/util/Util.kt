@@ -22,6 +22,7 @@ import com.gmail.bishoybasily.stomp.lib.Event
 import com.gmail.bishoybasily.stomp.lib.StompClient
 import io.reactivex.disposables.Disposable
 import okhttp3.OkHttpClient
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 fun Activity.setStatusBarTransparent() {
@@ -94,7 +95,7 @@ lateinit var stomp : CustomStompClient
 private lateinit var stompConnection: Disposable
 
 fun stompConnection() {
-    val url = "ws://192.168.45.107:8080/aamurest/ws/chat/websocket"
+    val url = "ws://192.168.0.22:8080/aamurest/ws/chat/websocket"
     val intervalMillis = 1000L
     val client = OkHttpClient.Builder()
         .readTimeout(10, TimeUnit.SECONDS)
@@ -138,6 +139,24 @@ fun getContentTypeId(contenttypeid : Int) : String{
         39 -> "음식점"
         else -> "알수 없음"
     }
+}
+
+fun displayedAt(item : Long) : String{
+    val latetime = Calendar.getInstance().time.time - item
+    val seconds = latetime / 1000.0
+    if (seconds < 60) return "방금 전"
+    val minutes = seconds / 60
+    if (minutes < 60) return "${Math.floor(minutes).toInt()}분 전"
+    val hours = minutes / 60
+    if (hours < 24) return "${Math.floor(hours).toInt()}시간 전"
+    val days = hours / 24
+    if (days < 7) return "${Math.floor(days).toInt()}일 전"
+    val weeks = days / 7
+    if (weeks < 5) return "${Math.floor(weeks).toInt()}주 전"
+    val months = days / 30
+    if (months < 12) return "${Math.floor(months).toInt()}개월 전"
+    val years = days / 365
+    return "${Math.floor(years).toInt()}년 전"
 }
 
 
