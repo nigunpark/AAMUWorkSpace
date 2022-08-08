@@ -49,14 +49,14 @@
 		INSERT INTO routebbs VALUES (#{rbn},#{title},SYSDATE,#{content},#{themeid},DEFAULT,#{id})
 	</insert>
 	
-	<!-- 글 생성용_사진 저장 -->
+	<!-- 글 등록_사진 저장 -->
 	<insert id="photoInsert" parameterType="map" >
 		INSERT INTO routebbsphoto VALUES (#{rbn},#{photo})
 	</insert>
 	
 	<!-- 글 수정 -->
 	<update id="bbsUpdate" parameterType="map">
-		UPDATE routebbs SET title=#{title},content=#{content} WHERE rbn=#{rbn}
+		UPDATE routebbs SET title=#{title},content=#{content},themeid=#{themeid} WHERE rbn=#{rbn}
 	 </update>
 	 
 	 <!-- 글 삭제 -->
@@ -94,7 +94,7 @@
 		DELETE FROM bookmark WHERE id=#{id} AND rbn=#{rbn}
 	</delete>
 	
-	<!-- 글 검색하기 -->
+	<!-- 글 검색하기_자동 완성 기능 -->
 	<!-- 
 	<select id="bbsSearchList" parameterType="Map" resultType="String">
 		SELECT ${searchColumn} FROM ${table} WHERE ${searchColumn} LIKE '%'||{searchWord}||'%'
