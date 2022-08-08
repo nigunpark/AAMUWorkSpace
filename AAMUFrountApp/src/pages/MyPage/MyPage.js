@@ -88,6 +88,7 @@ const MyPage = () => {
   const [detailOne, setDetailOne] = useState({});
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [chatRooms, setChatRooms] = useState([]);
 
   const bookMarkList = async () => {
     let token = sessionStorage.getItem("token");
@@ -114,6 +115,7 @@ const MyPage = () => {
     selectList();
     searchBar();
     bookMarkList();
+    getChatRooms(setChatRooms);
   }, [clickTab]);
 
   useEffect(() => {
@@ -284,11 +286,74 @@ const MyPage = () => {
           <div className="messages">
             <MyMessageBar />
           </div>
+          <br />
+          <div className="projects-section-header">
+            <p>채팅방 목록</p>
+          </div>
+          <div className="chatRooms__container">
+            {chatRooms.map((val, i) => {
+              return (
+                <div className="chatRooms">
+                  <div className="chatRooms__profile-top">
+                    <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                      <div className="chatRooms__profile-img-container">
+                        <img src={val.frompro} className="chatRooms__profile-img" />
+                      </div>
+                      <span style={{ fontSize: "13px", fontWeight: "bold" }}>{val.fromid}</span>
+                    </div>
+                    <span style={{ fontSize: "12px", color: "grey" }}>
+                      {displayedAt(val.senddate)}
+                    </span>
+                  </div>
+                  <div className="chatRooms__profile-bottom">
+                    <p style={{ fontSize: "14px" }}>{val.lastmessage}</p>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
     </div>
   );
 };
+
+function displayedAt(createdAt) {
+  const milliSeconds = new Date() - createdAt;
+  const seconds = milliSeconds / 1000;
+  if (seconds < 60) return `방금 전`;
+  const minutes = seconds / 60;
+  if (minutes < 60) return `${Math.floor(minutes)}분 전`;
+  const hours = minutes / 60;
+  if (hours < 24) return `${Math.floor(hours)}시간 전`;
+  const days = hours / 24;
+  if (days < 7) return `${Math.floor(days)}일 전`;
+  const weeks = days / 7;
+  if (weeks < 5) return `${Math.floor(weeks)}주 전`;
+  const months = days / 30;
+  if (months < 12) return `${Math.floor(months)}개월 전`;
+  const years = days / 365;
+  return `${Math.floor(years)}년 전`;
+}
+function getChatRooms(setChatRooms) {
+  let token = sessionStorage.getItem("token");
+  axios
+    .get("/aamurest/chat/rooms", {
+      params: {
+        id: sessionStorage.getItem("username"),
+      },
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    .then((resp) => {
+      console.log("채팅방목록", resp.data);
+      setChatRooms(resp.data);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+}
 
 function Title({ clickTab }) {
   const [theme, setTheme] = useState();
@@ -313,9 +378,6 @@ function Title({ clickTab }) {
         console.log("나의 테마 가져오기 실패", error);
       });
   };
-  useEffect(() => {
-    // getMyThemes();
-  }, []);
 
   //타이틀
   if (clickTab === 0) {
