@@ -123,8 +123,8 @@ function chatBotConn(inputRef, chats, setChats, chatArr) {
       }
     )
     .then((resp) => {
-      chatArr.push(resp.data);
       console.log("resp(챗봇)", resp.data);
+      chatArr.push(resp.data);
       setChats([...chatArr]);
     })
     .catch((err) => {
