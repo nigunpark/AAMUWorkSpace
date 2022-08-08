@@ -25,7 +25,7 @@ align-items: center; */
   width: 90%;
   margin: 0 auto;
 }
-
+ 
 .swiper__wrapper {
   position: relative;
   margin: 50px 0 45px;
@@ -89,7 +89,6 @@ align-items: center; */
   position: absolute;
   height: 100%;
   border-radius: 5px;
-  border-radius: 10px 0 0 10px;
 }
 
 .swiper__item {
