@@ -26,27 +26,38 @@ let chatArr = [];
 //   client.activate();
 //   return client;
 // }
-const Chat = ({ showChat }) => {
+const Chat = ({ prevChats }) => {
   const [chats, setChats] = useState([]);
   const [client, setClient] = useState({});
   let reduxState = useSelector((state) => state);
   useEffect(() => {
+    if (prevChats !== undefined && prevChats.length !== 0) setChats(prevChats);
     // let client = getConnet(reduxState.forChatInfo.roomno, setChats);
     // console.log("client", client);
     // setClient(client);
     // if (showChat === false) subscription.unsubscribe();
-  }, []);
-  function getChats() {
+    // getChats();
     reduxState.forChatInfo.client.subscribe(
       `/queue/chat/message/${reduxState.forChatInfo.roomno}`,
       (message) => {
         console.log(JSON.parse(message.body));
-        setChats((curr) => {
-          return [...curr, JSON.parse(message.body)];
-        });
+
+        // setChats((curr) => {
+        //   return [...curr, JSON.parse(message.body)];
+        // });
+        if (JSON.parse(message.body).authid !== sessionStorage.getItem("username")) {
+          let newChat = {
+            // missage: message.body.missage,
+            missage: JSON.parse(message.body).missage,
+            authid: JSON.parse(message.body).authid,
+          };
+          setChats((curr) => [...curr, newChat]);
+        }
       }
     );
-  }
+  }, []);
+  console.log("chats", chats);
+  function getChats() {}
   let inputRef = useRef();
   let bodyRef = useRef();
   console.log("리렌더링 채팅");
