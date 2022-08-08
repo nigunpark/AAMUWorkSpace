@@ -18,7 +18,7 @@ const LoginTest = () => {
   let dispatch = useDispatch();
   return (
     <div className="LoginTest">
-      {/* <video src="/images/video3.mp4" muted autoPlay loop /> */}
+      {/* <video src="/images/loginBack.mp4" muted autoPlay loop /> */}
       <Container />
       <Overlay>
         {/* <Image /> */}
@@ -180,8 +180,12 @@ const flip = keyframes`
 const Container = styled.div`
   position: fixed;
   // background-image: url("/images/loginBg.png");
+  // background-repeat: no-repeat;
+  // background-size: cover;
+  background-image: url("/public/images/sea.gif");
   background-repeat: no-repeat;
   background-size: cover;
+  // background: red;
   top: 0;
   left: 0;
   width: 100%;
