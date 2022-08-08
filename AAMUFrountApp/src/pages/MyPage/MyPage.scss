@@ -433,6 +433,7 @@ a {
   margin-top: 50px;
   // box-shadow: 1px 3px 8px rgba(250, 163, 7, 0.7);
   box-shadow: var(--shadow);
+  // border: 1px solid red;
   .messages-close {
     position: absolute;
     top: 12px;
@@ -489,7 +490,7 @@ a {
   display: flex;
   align-items: flex-start;
   width: 100%;
-  border: 1px solid red;
+  border: 1px solid blue;
 
   &:hover {
     background-color: var(--message-box-hover);
@@ -522,7 +523,48 @@ a {
     margin: 0;
   }
 }
-
+.chatRooms__container {
+  overflow-y: auto;
+  padding: 7px;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.chatRooms {
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border-radius: 5px;
+  box-shadow: var(--lightShadow);
+  transition: 0.1s;
+}
+.chatRooms:hover {
+  cursor: pointer;
+  box-shadow: var(--shadow);
+}
+.chatRooms__profile-top {
+  display: flex;
+  justify-content: space-between;
+  // justify-content: center;
+  align-items: center;
+}
+.chatRooms__profile-bottom {
+}
+.chatRooms__profile-img-container {
+  border: 1px solid grey;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  box-shadow: 1px 1px 2px black;
+}
+.chatRooms__profile-img {
+  width: 30px;
+  height: 30px;
+  object-fit: cover;
+  border-radius: 50%;
+  box-shadow: 1px 1px 2px black;
+}
 .message-content {
   padding-left: 16px;
   width: 100%;
@@ -757,11 +799,12 @@ a {
   width: 100%;
 }
 .myEditBox_btn {
-  padding: 3px 7px;
+  padding: 5px 7px;
   border: 2px solid var(--orange);
   border-radius: 5px;
   font-weight: bold;
   transition: 0.1s;
+  text-align: center;
 }
 
 .myEditBox_btn:hover {
@@ -987,24 +1030,47 @@ a {
 }
 .theme-section {
   // flex: 1;
-  border-radius: 5px;
   border: 1px solid rgba(128, 128, 128, 0.5);
   overflow: auto;
   // border: none;
   font-size: 14px;
   color: #8e8e8e;
   padding: 5px 10px;
+  border-radius: 5px;
   // height: 20px;
   // box-shadow: var(--shadow);
 }
 
 .box-gab {
-  // height: 10px;
   display: flex;
-  justify-content: flex-end;
   align-items: center;
+  padding: 5px;
+  gap: 1rem;
+}
+.themesForm {
+  animation: themes 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+.themeLabel {
+  border: 1px solid grey;
+  border-radius: 5px;
+  padding: 3px;
+  transition: 0.1s;
+}
+.themeLabel:hover {
+  cursor: pointer;
+  box-shadow: 1px 1px 1px black;
 }
 
+@keyframes themes {
+  0% {
+    transform: translateX(-100px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
 .myTheme-List {
   position: fixed;
   width: 100%;
