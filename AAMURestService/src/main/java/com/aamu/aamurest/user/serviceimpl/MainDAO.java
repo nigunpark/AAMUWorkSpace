@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import com.aamu.aamurest.user.service.AttractionDTO;
 import com.aamu.aamurest.user.service.BBSDTO;
 import com.aamu.aamurest.user.service.PlannerDTO;
+import com.aamu.aamurest.user.service.ReviewDTO;
 import com.aamu.aamurest.user.service.RouteDTO;
 import com.aamu.aamurest.user.service.UsersDTO;
 
@@ -193,6 +194,25 @@ public class MainDAO {
 	public String getThemeFromRbn(int rbn) {
 	
 		return template.selectOne("getThemeFromRbn", rbn);
+	}
+
+	public List<BBSDTO> selectAllBbsRate() {
+		
+		return template.selectList("selectAllBbsRate");
+	}
+
+	public List<ReviewDTO> selectAllReview() {
+		
+		return template.selectList("selectAllReview");
+	}
+
+	public List<BBSDTO> searchBbsRate(Map map) {
+
+		return template.selectList("searchBbsRate",map);
+	}
+	public List<ReviewDTO> searchBbsReview(Map map){
+		
+		return template.selectList("searchBbsReview", map);
 	}
 
 }
