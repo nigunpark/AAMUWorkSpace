@@ -21,6 +21,7 @@ function User({
   showChat,
   recommendUser,
   setrecommendUser,
+  prevChats,
 }) {
   const modalRef = useRef();
   const notimodalRef = useRef();
@@ -119,7 +120,7 @@ function User({
   };
   return (
     <div>
-      {showChat && <Chat showChat={showChat} />}
+      {showChat && <Chat showChat={showChat} prevChats={prevChats} />}
       <div className="userSearch">
         <SearchSelect setSearchb={setSearchb} />
         <div
@@ -277,7 +278,6 @@ function User({
       <div className="information2">
         <p>ⓒ 2022 INSTAGRAM</p>
       </div>
-      {showChat && <Chat />}
     </div>
   );
 }
