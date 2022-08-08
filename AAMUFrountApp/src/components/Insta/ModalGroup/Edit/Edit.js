@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Button } from "@mui/material";
+import ReactTooltip from "react-tooltip";
 import axios from "axios";
 import styled from "styled-components";
 import $, { escapeSelector } from "jquery";
@@ -50,8 +50,9 @@ const Edit = ({ setlist, val, seteditModal }) => {
 
   useEffect(() => {
     setedithash(val.tname)
-    settitle(val.ctitle);
-    setcontent(val.content);
+    titleRef.current.value =val.ctitle;
+    textareaRef.current.value =val.content;
+    searchRef.current.value = val.title
   }, []);
 
   
@@ -229,7 +230,7 @@ const Edit = ({ setlist, val, seteditModal }) => {
                 >
                   {val.photo.map((image, i) => {
                     return (
-                      <SwiperSlide>
+                      <SwiperSlide key={i}>
                         <li>
                           <img className="divimage1" alt="sample" src={image} />
                         </li>
@@ -269,10 +270,10 @@ const Edit = ({ setlist, val, seteditModal }) => {
                 ref={titleRef}
                 type="text"
                 placeholder="제목을 입력하세요"
-                onChange={(e) => {
-                  settitle(e.target.value);
-                }}
-                value={title}
+                // onChange={(e) => {
+                //   settitle(e.target.value);
+                // }}
+                // value={title}
               />
             </div>
             <div>
@@ -284,10 +285,10 @@ const Edit = ({ setlist, val, seteditModal }) => {
                 onKeyUp={(e) => fn_checkByte(e)}
                 rows="8"
                 placeholder="문구입력..."
-                onChange={(e) => {
-                  setcontent(e.target.value);
-                }}
-                value={content}
+                // onChange={(e) => {
+                //   setcontent(e.target.value);
+                // }}
+                // value={content}
                 style={{
                   border: "none",
                   resize: "none",
@@ -319,8 +320,47 @@ const Edit = ({ setlist, val, seteditModal }) => {
               </sup>
             </div>
 
+            <div
+              className="uploadLocation2"
+              onClick={() => {
+                setshowSearch(!showSearch);
+              }}
+            >
+              <input
+                onKeyUp={(e) => {
+                  searchWord(e, setSearch);
+                  setHasText(true);}
+                }
+                style={{ width: "70%" }}
+                // onChange={(e) => {
+                //   setinputValue(e.target.value);
+                  
+                // }}
+                placeholder="위치 추가"
+                type="text"
+                ref={searchRef}
+              />
+              {hasText ? (
+                <SearchModal
+                  search={search}
+                  searchRef={searchRef}
+                  setHasText={setHasText}
+                />
+              ) : null}
+
+              <i className="fa-solid fa-location-dot" />
+              {/* {close ? null : (
+                <i
+                  className="fa-regular fa-circle-xmark"
+                  style={{ marginRight: "-10px" }}
+                  onClick={() => {
+                    setClose(!close);
+                  }}
+                />
+              )} */}
+            </div>
+
             <div>
-            <div  className="uploadLocation">
               {edithash === null ? '':
               edithash.map((tagItem, index) => {
                 return (
@@ -349,6 +389,8 @@ const Edit = ({ setlist, val, seteditModal }) => {
                   </TagItem>
                 );
               })}
+              
+            <div  className="uploadLocation">
               <input
                 type="text"
                 data-tip="입력후 스페이스바를 눌러주세요"
@@ -374,50 +416,10 @@ const Edit = ({ setlist, val, seteditModal }) => {
                 />
               )}
               
-              <i class="fa-solid fa-hashtag"></i>
+              <i className="fa-solid fa-hashtag"></i>
             </div>
           </div>
-
-            <div
-              className="uploadLocation2"
-              onClick={() => {
-                setshowSearch(!showSearch);
-              }}
-            >
-              <input
-                onKeyUp={(e) => searchWord(e, setSearch)}
-                value={
-                  close === false ? val.title : inputValue
-                }
-                style={{ width: "70%" }}
-                onChange={(e) => {
-                  setinputValue(e.target.value);
-                  setHasText(true);
-                }}
-                placeholder="위치 추가"
-                type="text"
-                ref={searchRef}
-              />
-              {hasText ? (
-                <SearchModal
-                  search={search}
-                  inputValue={inputValue}
-                  setHasText={setHasText}
-                  setinputValue={setinputValue}
-                />
-              ) : null}
-
-              <i className="fa-solid fa-location-dot" />
-              {close ? null : (
-                <i
-                  className="fa-regular fa-circle-xmark"
-                  style={{ marginRight: "-10px" }}
-                  onClick={() => {
-                    setClose(!close);
-                  }}
-                />
-              )}
-            </div>
+          <ReactTooltip />
           </div>
           {/* // :null} */}
         </Body>
@@ -591,7 +593,7 @@ const Center = styled.div`
 `;
 
 const TagItem = styled.div`
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: space-between;
   margin: 5px;
@@ -614,6 +616,7 @@ const DDButton = styled.button`
   border-radius: 50%;
   color: tomato;
 `;
+
 
 const TagInput = styled.input`
   display: inline-flex;

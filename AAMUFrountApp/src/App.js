@@ -15,7 +15,7 @@ import DetailModal from "./pages/Forum/DetailModal/DetailModal";
 import KakaoRedirectHandler from "./components/Login/Kakao/KakaoRedirectHandler";
 import JoinStep1 from "./components/Join/JoinStep1.js";
 import JoinStep2 from "./components/Join/JoinStep2.js";
-import SearchList from "./components/Insta/searchList";
+import SearchList from "./components/Insta/SearchList";
 import Chat from "./components/Chat/Chat";
 import QnA from "./components/QnA/QnA";
 import CommentSearch from "./components/Insta/ModalGroup/Comment/CommentSearch";
@@ -41,7 +41,7 @@ function App() {
     if (sessionStorage.getItem("username") !== null) {
       connect();
     }
-  }, [sessionStorage.getItem("username")]);
+  }, []);
   const [scrollNav, setScrollNav] = useState(false);
   const [whereUrl, setWhereUrl] = useState(false);
   const [searchb, setSearchb] = useState([]);

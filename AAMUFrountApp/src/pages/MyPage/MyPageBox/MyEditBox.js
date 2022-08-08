@@ -14,15 +14,15 @@ const MyEditBox = ({ selectRbn }) => {
   const [plannerDate, setPlannerDate] = useState({});
   const [title, setTitle] = useState("");
   const [plannerTitle, setPlannerTitle] = useState("");
-  let titleRef = useRef();
   const [content, setContent] = useState("");
-  let contentRef = useRef();
   const [rbn, setDetailRbn] = useState(0);
   const [themes, setThemes] = useState("");
+  const [wholeThemes, setWholeThemes] = useState([]);
+  let titleRef = useRef();
+  let contentRef = useRef();
   useEffect(() => {
     setDetailRbn(selectRbn);
   }, []);
-
   //--------------------------------이미지 시작--------------------------------
   const [showImages, setShowImages] = useState([]);
   const [showImagesFile, setShowImagesFile] = useState([]); //전송할이미지들
@@ -116,6 +116,25 @@ const MyEditBox = ({ selectRbn }) => {
 
   const [postTheme, setPostTheme] = useState("");
   const [postThemeNum, setPostThemeNum] = useState(0);
+  const getThemes = async () => {
+    let token = sessionStorage.getItem("token");
+    await axios
+      .get("/aamurest/users/theme", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((resp) => {
+        let tempArr = [];
+        resp.data.forEach((val) => {
+          tempArr.push(val.THEMENAME);
+        });
+        setWholeThemes(tempArr);
+      })
+      .catch((err) => {
+        console.log("err", err);
+      });
+  };
 
   const getDow = (dow) => {
     switch (dow) {
@@ -259,7 +278,7 @@ const MyEditBox = ({ selectRbn }) => {
         <Imgs src='/images/imageMap.png'/>
       </div> */}
         </div>
-        <div style={{ display: "flex", justifyContent: "flex-end", margin: "7px 0" }}>
+        <div style={{ display: "flex", justifyContent: "flex-end", margin: "10px 0" }}>
           <form encType="multipart/form-data">
             <input
               id="myEditBox_imgInput"
@@ -312,72 +331,57 @@ const MyEditBox = ({ selectRbn }) => {
           >
             <div className="box-gab">
               {/* 테마 */}
-              <span className="theme-section" onClick={onClickModal}>
-                {/* theme : {postTheme == 0 ? "테마를 선택하세요" : postTheme} */}
+              <span
+                className="theme-section"
+                onClick={() => {
+                  getThemes();
+                  onClickModal();
+                }}
+              >
                 theme : {themes}
-                <div style={{ overflowX: "auto" }}>
-                  <div className="myProfile__theme-container">
-                    <MyTheme />
-                  </div>
-                  {/* {themes.map((val, i) => {
-                return (
-                  <CheckBox
-                    key={val.THEMEID}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      doCheck(e);
-                      getCheckedBoxes(
-                        e.target.parentElement.nextSibling.lastChild.checked,
-                        e.target.parentElement.nextSibling.lastChild.value
-                      );
-                    }}
-                  >
-                    <ImgCon>
-                      <img
-                        src={val.themeimg}
-                        style={{
-                          width: "100%",
-                          height: "100%",
-                          objectFit: "cover",
-                          borderRadius: "5px",
-                        }}
-                      />
-                    </ImgCon>
-                    <div style={{ textAlign: "center", margin: "2px 0", fontSize: "14px" }}>
-                      <label for={val.THEMENAME}>{val.THEMENAME}</label>
-                      <input
-                        type="checkbox"
-                        id={val.THEMENAME}
-                        value={val.THEMENAME}
-                        onChange={(e) => {
-                          e.stopPropagation();
-                          getCheckedBoxes(e.target.checked, e.target.value);
-                        }}
-                        checked={checkeds.includes(val.THEMENAME) ? true : false}
-                        hidden
-                      />
-                    </div>
-                  </CheckBox>
-                );
-              })} */}
-                </div>
               </span>
 
-              {/* {isOpen == true ? (
-                <Theme
-                  setIsOpen={setIsOpen}
-                  themes={themes}
-                  setPostTheme={setPostTheme}
-                  setPostThemeNum={setPostThemeNum}
-                />
-              ) : null} */}
+              {isOpen && (
+                <form className="themesForm" style={{ display: "flex", gap: "3px" }}>
+                  {wholeThemes.map((val, i) => {
+                    return (
+                      <>
+                        <input
+                          id={val}
+                          type="radio"
+                          value={val}
+                          key={i}
+                          name="theme"
+                          hidden
+                          onChange={(e) => {
+                            setThemes(e.target.value);
+                            setIsOpen(false);
+                          }}
+                        />
+                        <label
+                          className="themeLabel"
+                          style={{
+                            border: "1px solid grey",
+                            borderRadius: "5px",
+                            padding: "3px",
+                            cursor: "pointer",
+                          }}
+                          htmlFor={val}
+                        >
+                          {val}
+                        </label>
+                      </>
+                    );
+                  })}
+                </form>
+              )}
             </div>
             <span
               className="myEditBox_btn"
               onClick={(e) => {
                 e.stopPropagation();
                 let temp = uploadFile();
-                bordWrite(temp, titleRef, contentRef, rbn, navigate, postThemeNum, showImagesFile);
+                bordWrite(temp, titleRef, contentRef, rbn, navigate, themes);
               }}
             >
               수정하기
@@ -518,29 +522,22 @@ function getTimes(periodIndex, st, et) {
       .padStart(2, "0"),
   };
 }
-function bordWrite(temp, titleRef, contentRef, rbn, navigate, showImagesFile) {
+function bordWrite(temp, titleRef, contentRef, rbn, navigate, themes) {
   // console.log("titleRef :", titleRef.current.value);
   // console.log("contentRef :", contentRef.current.value);
-
+  // rbn, title, content, themeid, id, photo
   temp.append("rbn", rbn);
   temp.append("title", titleRef.current.value);
   temp.append("content", contentRef.current.value);
+  temp.append("themename", themes);
   let token = sessionStorage.getItem("token");
 
   axios
-    .put(
-      `/aamurest/bbs/edit`,
-      {
-        rbn: rbn,
-        title: titleRef.current.value,
-        content: contentRef.current.value,
+    .post(`/aamurest/bbs/edit/photo`, temp, {
+      headers: {
+        Authorization: `Bearer ${token}`,
       },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    )
+    })
     .then((resp) => {
       console.log(resp.data);
       if (resp.data.result === "updateSuccess") {
@@ -548,7 +545,7 @@ function bordWrite(temp, titleRef, contentRef, rbn, navigate, showImagesFile) {
         navigate("/forum");
       } else {
         alert("저장오류가 발생했습니다. 관리자에게 문의하세요");
-        navigate("/forum");
+        navigate("/myPage");
       }
     })
     .catch((error) => {

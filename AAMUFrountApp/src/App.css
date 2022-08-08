@@ -3,7 +3,8 @@
   --orange: rgb(250, 163, 7);
   --red: #d00000;
   --darkOrange: #dc2f02;
-  --skyblue: rgb(0, 180, 216);
+  /* --skyblue: rgb(0, 180, 216); */
+  --skyblue: #4972af;
   --darkblue: #118ab2;
   --gray: rgba(36, 45, 73, 0.45);
   --shadow: 1px 6px 10px rgba(26, 26, 26, 0.2);

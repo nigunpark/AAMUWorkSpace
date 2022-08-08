@@ -35,6 +35,7 @@ import com.aamu.aamurest.user.service.BBSDTO;
 import com.aamu.aamurest.user.service.BBSService;
 import com.aamu.aamurest.user.service.MainService;
 import com.aamu.aamurest.user.service.PlannerDTO;
+import com.aamu.aamurest.user.service.ReviewDTO;
 import com.aamu.aamurest.user.service.RouteDTO;
 import com.aamu.aamurest.user.service.api.KakaoKey;
 import com.aamu.aamurest.user.service.api.KakaoKey.Document;
@@ -559,12 +560,12 @@ public class MainController {
 				System.out.println(radius);
 				uri="https://dapi.kakao.com/v2/local/search/category.json?y="+map.get("placey")
 				+"&x="+map.get("placex")
-				+"&radius="+radius+"&category_group_code=FD6&page="+page+"&sort=distance";
+				+"&radius="+radius+"&category_group_code="+map.get("category")+"&page="+page+"&sort=distance";
 
 				 responseEntity =
 						restTemplate.exchange(uri, HttpMethod.GET, httpEntity, KakaoKey.class);
 				 listDocument =  responseEntity.getBody().getDocuments();
-				 if(listDocument.size()<10)continue;
+				 if(listDocument.size()<5)continue;
 			}
 			for(Document document:listDocument) {
 
@@ -593,7 +594,10 @@ public class MainController {
 				}
 
 			}
-			if(responseEntity.getBody().getMeta().getIsEnd() ||list.size()>50) break;
+			if(map.get("category").toString().equals("FD6"))
+				if(responseEntity.getBody().getMeta().getIsEnd() ||list.size()>30) break;
+			else
+				if(responseEntity.getBody().getMeta().getIsEnd() ||list.size()>10) break;	
 		}
 
 
@@ -607,10 +611,12 @@ public class MainController {
 		List<BBSDTO> bbsList = new Vector<>();
 		List<AttractionDTO> list = new Vector<>();
 		if(map.get("id")!=null) {			
-			MultiValueMap<String,String> requestBody = new LinkedMultiValueMap<>();
+			MultiValueMap<String,Object> requestBody = new LinkedMultiValueMap<>();
 			HttpHeaders header = new HttpHeaders();
 			header.add("Content-Type", "application/json");
 			requestBody.add("id", map.get("id").toString());
+			requestBody.add("routebbs", service.selectAllBbsRate());
+			requestBody.add("ratereview", service.selectAllReview());
 			HttpEntity httpEntity = new HttpEntity<>(requestBody,header);
 			String uri = serverip+":5020/recommend";
 			ResponseEntity<Map> responseEntity =
@@ -663,7 +669,7 @@ public class MainController {
 	public Map mainChatbot(@RequestBody Map map,HttpServletRequest req) {
 		System.out.println(map);
 		String uri= serverip+":5020/message";
-		MultiValueMap<String,String> requestBody = new LinkedMultiValueMap<>();
+		MultiValueMap<String,Object> requestBody = new LinkedMultiValueMap<>();
 		HttpHeaders header = new HttpHeaders();
 		header.add("Content-Type", "application/json");
 		requestBody.add("id", map.get("id").toString());
@@ -682,6 +688,7 @@ public class MainController {
 		returnMap.put("route", null);
 		String rbn = null;
 		List<BBSDTO> bbsList = new Vector<>();
+		List<ReviewDTO> reviewList = new Vector<>();
 		if(message.contains("recommendRoute")) {
 			/*
 			message = message.split("searchRoute")[0].trim();
@@ -700,6 +707,8 @@ public class MainController {
 			
 			returnMap.put("message", message);
 			*/
+			requestBody.add("routebbs", service.selectAllBbsRate());
+			requestBody.add("ratereview", service.selectAllReview());
 			uri=serverip+":5020/recommend";
 			responseEntity =
 					restTemplate.exchange(uri, HttpMethod.POST,httpEntity, Map.class);
@@ -710,6 +719,7 @@ public class MainController {
 			for(Map planner:list) {
 				
 				BBSDTO bbsMap =bbsService.bbsSelectOne((Integer.parseInt(planner.get("rbn").toString())));
+				if(bbsMap.getReviewList()==null)bbsMap.setReviewList(reviewList);
 				bbsList.add(bbsMap);
 			}
 			returnMap.put("message", message);
@@ -748,19 +758,38 @@ public class MainController {
 		else if(message.contains("searchRoute")) {
 			message = message.split("searchRoute")[0].trim();
 			System.out.println("마지막 응답 메시지:"+message);
-			rbn = service.searchPlanner(message);
-			if(rbn == null) message = "죄송합니다 알맞은 플래너가 없습니다.";
-			else {
-				returnMap.put("route", message+" (CLICK)");
-				returnMap.put("rbn",rbn);
-				int rbnInt = Integer.parseInt(rbn);
-				BBSDTO dto = bbsService.bbsSelectOne(rbnInt);
-				bbsList.add(dto);
-				returnMap.put("bbslist", bbsList);
-				message = message+" 일정의 여행 플래너 입니다!";
-			}
+			map.put("searchword", message);
+			List<BBSDTO> searchbbsList =  service.searchBbsRate(map);
+			System.out.println("챗봇가기전 리스트:"+searchbbsList.toString());
+			if(searchbbsList!=null) {
+				requestBody.add("routebbs", searchbbsList);
+				for(BBSDTO bbsDTO:searchbbsList) {
+					map.put("rbn", bbsDTO.getRbn());
+					requestBody.add("ratereview", service.searchBbsReview(map));
+				}
+				uri=serverip+":5020/recommend";
+				responseEntity =
+						restTemplate.exchange(uri, HttpMethod.POST,httpEntity, Map.class);
+				System.out.println(responseEntity.getBody().toString());
+				List<Map> list = (List)responseEntity.getBody().get("rbns");
+				System.out.println(list.toString());
+				if(!list.isEmpty()) {
+					for(Map planner:list) {
+						
+						BBSDTO bbsMap =bbsService.bbsSelectOne((Integer.parseInt(planner.get("rbn").toString())));
+						if(bbsMap.getReviewList()==null)bbsMap.setReviewList(reviewList);
+						bbsList.add(bbsMap);
+					}
+					System.out.println("챗봇 리스트:"+bbsList.toString());
+					returnMap.put("route", message+" (CLICK)");
+					returnMap.put("bbslist", bbsList);
+					message = message+"로 가는 AAMU여행 추천 플래너!";
+				}
+				else message = "죄송합니다 알맞은 플래너가 없습니다.";
 				
+			}
 			
+			else message = "죄송합니다 알맞은 플래너가 없습니다.";
 			returnMap.put("message", message);
 		}
 		return returnMap;

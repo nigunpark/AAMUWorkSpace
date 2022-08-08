@@ -170,4 +170,16 @@
 	<select id="getThemeFromRbn" parameterType="int" resultType="String">
 		select t.themename from theme t join routebbs r on t.themeid = r.themeid where r.rbn = #{rbn} 	
 	</select>
+	<select id="selectAllBbsRate" resultType="BBSDTO">
+		select rbn,title from routebbs
+	</select>
+	<select id="selectAllReview" resultType="reviewDTO">
+		select id,rbn,rate from ratereview
+	</select>
+	<select id="searchBbsRate" parameterType="Map" resultType="BBSDTO">
+		select rbn,title from routebbs where rbn in(select rbn from routeboard where title like '%'||#{searchword}||'%')
+	</select>
+		<select id="searchBbsReview" parameterType="Map" resultType="reviewDTO">
+		select id,rbn,rate from ratereview where rbn = #{rbn}
+	</select>
 </mapper>

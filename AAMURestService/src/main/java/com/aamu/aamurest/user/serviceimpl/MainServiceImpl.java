@@ -16,6 +16,7 @@ import com.aamu.aamurest.user.service.AttractionDTO;
 import com.aamu.aamurest.user.service.BBSDTO;
 import com.aamu.aamurest.user.service.MainService;
 import com.aamu.aamurest.user.service.PlannerDTO;
+import com.aamu.aamurest.user.service.ReviewDTO;
 import com.aamu.aamurest.user.service.RouteDTO;
 import com.aamu.aamurest.user.service.UsersDTO;
 import com.aamu.aamurest.util.FileUploadUtil;
@@ -738,5 +739,25 @@ public class MainServiceImpl implements MainService{
 	public BBSDTO selectOneBBSTitle(int rbn) {
 		
 		return dao.selectOneBBSTitle(rbn);
+	}
+	@Override
+	public List<BBSDTO> selectAllBbsRate() {
+
+		return dao.selectAllBbsRate();
+	}
+	@Override
+	public List<ReviewDTO> selectAllReview() {
+		
+		return dao.selectAllReview();
+	}
+	@Override
+	public List<BBSDTO> searchBbsRate(Map map) {
+	
+		return dao.searchBbsRate(map);
+	}
+	@Override
+	public List<ReviewDTO> searchBbsReview(Map map) {
+
+		return dao.searchBbsReview(map);
 	}
 }

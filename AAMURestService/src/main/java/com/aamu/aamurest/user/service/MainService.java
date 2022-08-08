@@ -66,4 +66,13 @@ public interface MainService{
 	
 	BBSDTO selectOneBBSTitle(int rbn);
 
+	List<BBSDTO> selectAllBbsRate();
+
+	List<ReviewDTO> selectAllReview();
+
+	List<BBSDTO> searchBbsRate(Map map);
+
+	List<ReviewDTO> searchBbsReview(Map map);
+
+
 }
