@@ -99,6 +99,9 @@ fun MeowBottom(
         if(noticount!! > 0){
             it.setCount(4,noticount.toString())
         }
+        else{
+            it.clearCount(4)
+        }
     }
 }
 
