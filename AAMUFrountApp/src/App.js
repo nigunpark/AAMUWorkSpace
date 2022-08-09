@@ -50,6 +50,7 @@ function App() {
   const [forReRender, setForReRender] = useState(false);
   const navigate = useNavigate();
   const [accountEmail, setaccountEmail] = useState("");
+  const [noti, setNoti] = useState([]);
   const handleScroll = () => {
     if (window.scrollY > 950 && window.scrollY < 2500) setScrollNav(true);
     else setScrollNav(false);
@@ -57,10 +58,18 @@ function App() {
   window.addEventListener("scroll", handleScroll);
 
   const subscribe = () => {
-    client.current.subscribe(`/notification/${sessionStorage.getItem("username")}`, ({ body }) => {
-      // setChatMessages((_chatMessages) => [..._chatMessages, JSON.parse(body)]);
-      console.log("body", body);
-    });
+    client.current.subscribe(
+      `/queue/notification/${sessionStorage.getItem("username")}`,
+      ({ body }) => {
+        // setChatMessages((_chatMessages) => [..._chatMessages, JSON.parse(body)]);
+        console.log("body", body);
+        setNoti((curr) => {
+          return [...curr, JSON.parse(body)];
+        });
+        console.log("noti", noti);
+        // console.log([...noti, JSON.parse(body)]);
+      }
+    );
   };
   //채팅연결
   const connect = () => {
@@ -91,7 +100,11 @@ function App() {
   return (
     <div>
       <Routes>
-        <Route element={<Navbar scrollNav={scrollNav} whereUrl={whereUrl} />}>
+        <Route
+          element={
+            <Navbar scrollNav={scrollNav} whereUrl={whereUrl} noti={noti} setNoti={setNoti} />
+          }
+        >
           <Route path="/" element={<Home />} />
           <Route path="/WholeMap" element={<WholeMap />} />
           <Route path="/mainPage/:currPosition" element={<MainPage />} />
