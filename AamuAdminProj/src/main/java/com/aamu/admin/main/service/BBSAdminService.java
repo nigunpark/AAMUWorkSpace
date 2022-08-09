@@ -14,7 +14,7 @@ public interface BBSAdminService {
 	int bbsGetTotalRecordCount(Map map);
 	
 	//게시글 삭제
-	int bbsDelete(Map map);
+	int bbsAdminDelete(Map map);
 	
 	//리뷰 목록
 	ListPagingData<ReviewAdminDTO> reviewAdminSelectList(Map map,HttpServletRequest req,int nowPage);

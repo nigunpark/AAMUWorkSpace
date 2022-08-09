@@ -71,12 +71,12 @@
 						<!--예시 용 테이블-->
 						<!-- 검색 -->
 						<div class="row">
-							<form class="col-md-12 d-flex justify-content-center align-items-center" method="post" action="<c:url value="BBS.do"/>">
+							<form class="col-md-12 d-flex justify-content-center align-items-center" method="post" action="<c:url value="bbs.do"/>">
 								<div class="form-group row">
 									<div class="col-sm-12">
 										<select class="form-control background-color-secondary text-black" name="searchColumn">
-											<option value="c.id">id</option>
-											<option value="ctitle">제목</option>
+											<option value="bbs.id">id</option>
+											<option value="title">제목</option>
 											<option value="content">내용</option>
 										</select>
 									</div>
@@ -130,26 +130,26 @@
     //삭제 click
     $('div.card-numberOfBoard > button').click(function(){
     	console.log("버튼이벤트 발생");
-    	var lnoArr = new Array();
+    	var rbnArr = new Array();
         $('input[name="RowCheck"]:checked').each(function(i){//체크된 리스트 저장
-        	lnoArr.push($(this).val());
-        	console.log($(this).val()); //lnoArr:63,62
+        	rbnArr.push($(this).val());
+        	console.log($(this).val());
         });
-    	if(lnoArr.length ==0){
+    	if(rbnArr.length ==0){
     		alert("선택된 글이 없습니다.");
     	}
     	else{
     		if(confirm("정말 삭제하시겠습니까?")){
-    			var jsonString = JSON.stringify({lno : lnoArr})
+    			var jsonString = JSON.stringify({rbn : rbnArr})
         		$.ajax({
-           			url:"<c:url value="CommuDelete.do"/>",
+           			url:"<c:url value="bbsAdminDelete.do"/>",
            			type:"post",
            			data: jsonString,
            			contentType:"application/json", //데이타 보낼 때
            			dataType: "json" //데이타 받을 때 
            		}).done(data=>{
            			console.log('삭제성공:',data);
-           			location.replace("Commu.do");
+           			location.replace("bbs.do");
            			
            		}).fail(error=>{
            			console.log('삭제에러:',error);

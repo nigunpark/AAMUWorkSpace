@@ -27,8 +27,8 @@ public class BBSAdminDAO {
 	}
 	
 	//게시글 삭제
-	public int bbsDelete(Map map) {
-		return template.delete("bbsDelete",map);
+	public int bbsAdminDelete(Map map) {
+		return template.delete("bbsAdminDelete",map);
 	}
 	
 	//전체 리뷰 목록
@@ -42,9 +42,10 @@ public class BBSAdminDAO {
 	}
 	
 	//리뷰 삭제
-	public int reviewDelete(Map map) {
-		return template.delete("reviewDelete",map);
+	public int reviewAdminDelete(Map map) {
+		return template.delete("reviewAdminDelete",map);
 	}
+
 	
 	
 	/*---------------------------------------------------------------*/

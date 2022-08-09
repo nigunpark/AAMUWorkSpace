@@ -39,7 +39,6 @@
 													<th class="col-1">ID</th>
 													<th class="col-1">작성일</th>
 													<th class="col-1">해당 게시글 번호</th>
-													<th>해당 게시글 제목</th>
 												</tr>
 											</thead>
 											<tbody>
@@ -64,9 +63,8 @@
 															<td>${record.rno}</td>
 															<td>${record.review}</td>
 															<td>${record.id}</td>
-															<td>${record.reviewdate}</td>
+															<td>${record.ratedate}</td>
 															<td>${record.rbn}</td>
-															<td>${record.title}</td>
 														</tr>
 													</c:forEach>
 												</c:if>
@@ -81,13 +79,13 @@
 						<!--예시 용 테이블-->
 						<!-- 검색 -->
 						<div class="row">
-							<form class="col-md-12 d-flex justify-content-center align-items-center" method="post" action="<c:url value="CommuComment.do"/>">
+							<form class="col-md-12 d-flex justify-content-center align-items-center" method="post" action="<c:url value="review.do"/>">
 								<div class="form-group row ">
 									<div class="col-sm-12">
 										<select class="form-control background-color-secondary text-black text-center" name="searchColumn">
-											<option value="cc.id">id</option>
-											<option value="reply">내용</option>
-											<option value="c.lno">게시글 번호</option>
+											<option value="rr.id">id</option>
+											<option value="reply">리뷰 내용</option>
+											<option value="bbs.rno">게시글 번호</option>
 										</select>
 									</div>
 								</div>
@@ -145,7 +143,7 @@
         	rnoArr.push($(this).val());
         	console.log($(this).val()); //cnoArr:63,62
         });
-    	if(cnoArr.length ==0){
+    	if(rnoArr.length ==0){
     		alert("선택된 글이 없습니다.");
     	}
     	else{
@@ -159,7 +157,7 @@
            			dataType: "json" //데이타 받을 때 
            		}).done(data=>{
            			console.log('삭제성공:',data);
-           			location.replace("reviewAdmin.do");
+           			location.replace("review.do");
            			
            		}).fail(error=>{
            			console.log('삭제에러:',error);

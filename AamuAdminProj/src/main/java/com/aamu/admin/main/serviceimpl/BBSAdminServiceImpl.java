@@ -35,7 +35,7 @@ public class BBSAdminServiceImpl implements BBSAdminService{
 	@Value("${blockPage}")
 	private int blockPage;
 	
-	//전체 게시글 뿌려주기
+	//전체 게시글 뿌려주기 <성공>
 	@Override
 	public ListPagingData<BBSAdminDTO> bbsAdminSelectList(Map map, HttpServletRequest req, int nowPage) {
 		//페이징을 위한 로직 시작]
@@ -62,26 +62,36 @@ public class BBSAdminServiceImpl implements BBSAdminService{
 		return listPagingData;
 	}
 	
-	//전체 게시글 수
+	//전체 게시글 수 <성공>
 	@Override
 	public int bbsGetTotalRecordCount(Map map) {
 		return dao.bbsGetTotalRecordCount(map);
 	}
 	
-	//게시글 삭제
+	//게시글 삭제 <성공>
 	@Override
-	public int bbsDelete(Map map) {
-		int affected = 0;
+	public int bbsAdminDelete(Map map) {
+		int affected=0;
 		affected = transactionTemplate.execute(tx->{
-			map.put("table", "routebbsphoto");
-			dao.bbsDelete(map);
-			map.put("table", "ratereview");
-			dao.bbsDelete(map);
-			map.put("table", "bookmark");
-			dao.bbsDelete(map);
-			map.put("table", "routebbs");
+			List<String> rbnLists=(List<String>)map.get("rbn");
 			
-			return dao.bbsDelete(map);
+			for(String rbn:rbnLists) {
+				map.put("table", "routebbsphoto");
+				map.put("rbn", rbn); 
+				dao.bbsAdminDelete(map);
+				
+				map.put("table", "ratereview");
+				dao.bbsAdminDelete(map);
+				
+				map.put("table", "bookmark");
+				dao.bbsAdminDelete(map);
+				
+				map.put("table", "routebbs");
+				dao.bbsAdminDelete(map);
+				
+				map.put("table", "routebbs");
+			}
+			return dao.bbsAdminDelete(map);
 		});
 		return affected;
 	}	
@@ -128,8 +138,7 @@ public class BBSAdminServiceImpl implements BBSAdminService{
 		for (String rno : rnolists) {
 			Map rnoMap = new HashMap();
 			rnoMap.put("rno", rno);
-			System.out.println(rnoMap);
-			affected += dao.reviewDelete(rnoMap);
+			affected += dao.reviewAdminDelete(rnoMap);
 		}
 		if (affected == ((List) map.get("rno")).size()) {
 				return 1;

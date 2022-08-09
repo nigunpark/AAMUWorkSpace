@@ -30,10 +30,10 @@
 	<!--                     리뷰                          -->
 	
 	<!-- 전체 리뷰 목록 -->
-	<select id="reviewSelectList"  parameterType="map" resultType="ReviewAdminDTO">
+	<select id="reviewAdminSelectList"  parameterType="map" resultType="ReviewAdminDTO">
 		SELECT * FROM
 		(SELECT T.*,ROWNUM R FROM (
-		SELECT rr.*,rbbs.title FROM ratereview rr JOIN routebbs rbbs ON rr.rno=rbbs.rno 
+		SELECT rr.*,rbbs.title FROM ratereview rr JOIN routebbs rbbs ON rr.rbn=rbbs.rbn
 		<if test="searchColumn != null">
   	 		WHERE ${searchColumn} LIKE '%' || #{searchWord} || '%' 
   		</if>

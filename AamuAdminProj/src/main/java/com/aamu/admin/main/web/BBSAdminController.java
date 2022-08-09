@@ -52,10 +52,10 @@ public class BBSAdminController {
 	}
 	
 	//게시글 삭제
-	@PostMapping("bbsDelete.do")
+	@PostMapping("bbsAdminDelete.do")
 	@ResponseBody
-	public Map bbsDelete(@RequestBody Map map){
-		int affected=bbsAdminService.bbsDelete(map);
+	public Map bbsAdminDelete(@RequestBody Map map){
+		int affected=bbsAdminService.bbsAdminDelete(map);
 		//데이터 반환
 		Map resultMap = new HashMap();
 		System.out.println("affected:"+affected);
@@ -81,12 +81,12 @@ public class BBSAdminController {
 		model.addAttribute("totalCount",bbsAdminService.reviewGetTotalRecordCount(map));
 		
 		//뷰정보 반환
-		return "review/review";
+		return "bbs/review";
 	}
 		
 	
 	//리뷰 삭제
-	@PostMapping("reviewDelete.do")
+	@PostMapping("reviewAdminDelete.do")
 	@ResponseBody
 	public Map reviewAdminDelete(@RequestBody Map map){
 		int affected=bbsAdminService.reviewAdminDelete(map);

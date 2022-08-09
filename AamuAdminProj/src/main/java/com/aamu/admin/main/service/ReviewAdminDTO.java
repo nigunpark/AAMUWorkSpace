@@ -1,5 +1,7 @@
 package com.aamu.admin.main.service;
 
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,7 +18,7 @@ public class ReviewAdminDTO {
 	private String id;
 	private int rate;
 	private String review;
-	private java.sql.Date reviewdate; 
+	private java.sql.Date ratedate; 
 	private String rno;
 	private String reviewcount;
 }

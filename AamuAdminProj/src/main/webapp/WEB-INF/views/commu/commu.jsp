@@ -51,7 +51,7 @@
 															<td>
 																<div class="form-check form-check-flat mt-0">
 																	<label class="form-check-label"> 
-																		<input name="RowCheck" type="checkbox" class="form-check-input" aria-checked="false" value="${record.lno}"> <i class="input-helper"></i>
+																		<input name="RowCheck" type="checkbox" class="form-check-input" aria-checked="false" value="${record.rno}"> <i class="input-helper"></i>
 																	</label>
 																</div>
 															</td>

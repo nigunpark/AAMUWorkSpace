@@ -135,7 +135,7 @@
             <div class="collapse" id="form-elements">
               <ul class="nav flex-column sub-menu">
                 <li class="nav-item"><a class="nav-link" href="<c:url value="bbs.do"/>">전체 게시글 관리</a></li>
-                <li class="nav-item"> <a class="nav-link" href="#">리뷰 관리</a></li>
+                <li class="nav-item"> <a class="nav-link" href="review.do">리뷰 관리</a></li>
               </ul>
             </div>
           </li>
