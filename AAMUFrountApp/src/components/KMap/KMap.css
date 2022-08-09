@@ -45,12 +45,12 @@
 
 .kmap__right-btn__container {
   display: flex;
-  gap: 1rem;
+  gap: 0.5rem;
   justify-content: center;
   position: absolute;
   top: 85px;
   right: 310px;
-  width: 240px;
+  width: 250px;
   height: 60px;
   z-index: 100;
 }
@@ -62,7 +62,7 @@
   background: var(--cardColor);
   border-radius: 5px;
   flex: 1;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: bold;
   box-shadow: var(--shadow);
   cursor: pointer;
