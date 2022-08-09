@@ -15,8 +15,6 @@
   <link rel="stylesheet" href="<c:url value="/resources/css/vertical-layout-light/style.css"/>">
   
   <script src="<c:url value="/resources/vendors/js/vendor.bundle.base.js"/>"></script>
-  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.slim.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
   
   
   <!--축소 페이지용 js-->
@@ -61,6 +59,22 @@
           </li>
         </ul>
         <ul class="navbar-nav ms-auto">
+          <li class="nav-item d-none d-lg-block">
+            <div id="datepicker-popup" class="input-group date datepicker navbar-date-picker">
+              <span class="input-group-addon input-group-prepend border-right">
+                <span class="icon-calendar input-group-text calendar-icon"></span>
+              </span>
+              <input type="text" class="form-control" >
+            </div>
+          </li>
+          <li class="nav-item d-none d-lg-block">
+            <div id="datepicker-popup2" class="input-group date datepicker navbar-date-picker">
+              <span class="input-group-addon input-group-prepend border-right">
+                <span class="icon-calendar input-group-text calendar-icon"></span>
+              </span>
+              <input type="text" class="form-control" >
+            </div>
+          </li>
           <li class="nav-item">
             <form class="search-form" action="#">
               <i class="icon-search"></i>

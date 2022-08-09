@@ -43,6 +43,14 @@ function Comment({
 
   let [isValid, setisValid] = useState(false);
 
+  function btn_check(){
+    replyRef.current !== undefined && 
+    (replyRef.current.value.length >= 1 //사용자가 키를 눌렀다 떼었을때 길이가 0을 넘는 값인지 유효성 검사 결과 값을 담는다
+      ? setisValid(true)
+      : setisValid(false))
+  }
+
+
   function menuModalRef(e) {
     e.stopPropagation();
     if (e.target != menuRef.current) setModalShow(false);
@@ -133,6 +141,7 @@ function Comment({
         console.log("resp.data", resp.data.reply);
         const copyComments = [...replyOne];
         setcomments({ ...comments }, copyComments);
+        setisValid(false)
         commentModal(setcomments);
         feedList();
       })
@@ -358,6 +367,7 @@ function Comment({
                         // console.log(val.cno);
                       }}
                     >
+                      <div>
                       <img
                         className="likeimg"
                         src={val.userprofile}
@@ -367,6 +377,7 @@ function Comment({
                           e.target.src =  "/images/user.jpg";
                         }}
                       />
+                      </div>
                       <div
                         style={{
                           width: "100%",
@@ -376,18 +387,20 @@ function Comment({
                           marginLeft: "10px",
                         }}
                       >
-                        <div style={{ display: "flex", flexDirection: "row" }}>
-                          <p className="userName" style={{ fontSize: "13px" }}>
-                            <strong>
-                              {val.id}
-                            </strong>
-                          </p>
-                          <p
-                            className="userName"
-                            style={{ fontFamily: "normal", width: "78%" }}
-                          >
-                            {val.reply}
-                          </p>
+                        <div style={{ display: "flex", flexDirection: "row"}}>
+                          <div style={{display: "flex", flexDirection: "row", width: "90%"}}>
+                            <p className="userName" style={{  fontSize: "13px" }}>
+                              <strong>
+                                {val.id}
+                              </strong>
+                            </p>
+                            <p
+                              className="userName"
+                              style={{ fontFamily: "normal"}}
+                            >
+                              {val.reply}
+                            </p>
+                          </div>
                           <div
                             style={{
                               fontSize: "13px",
@@ -459,12 +472,14 @@ function Comment({
             <div className="emoji">
               <i className="fa-regular fa-face-smile" style={{fontSize:'24px',left:'5px'}} onClick={()=>{setemoji(!emoji)}}/>
             </div>
-              {emoji
-              &&
-              <div className="emoji-all">
-                <Picker onEmojiClick={onEmojiClick} onClick={()=>{setemoji(!emoji)}}/>
-              </div>
-              }
+            {emoji && (
+            <div className="emoji-all"
+              onClick={()=>{setisValid(true);  setemoji(false);}}>
+              <Picker
+                onEmojiClick={onEmojiClick}
+              />
+            </div>
+          )}
               <input
                 type="text"
                 ref={replyRef}
@@ -475,27 +490,23 @@ function Comment({
                 //   setComment(e.target.value); //댓글 창의 상태가 변할때마다 setComment를 통해 comment값을 바꿔준다
                 // }}
                 onKeyUp={(e) => {
-                  e.target.value.length > 0 //사용자가 키를 눌렀다 떼었을때 길이가 0을 넘는 값인지 유효성 검사 결과 값을 담는다
-                    ? setisValid(true)
-                    : setisValid(false);
+                  btn_check()
                   // console.log(replyRef.current.value.length>0?'true':'false');
                 }}
                 // value={comment}
               />
-
+    
               <button
                 className={
                   //클래스명을 comment창의 글자 길에 따라서 다르게 주면서 버튼색에 css디자인을 줄 수 있음
-                  replyRef.current.value === undefined
-                    ? null
-                    : replyRef.current.value.length > 0
+                  isValid
                     ? "submitCommentActive"
                     : "submitCommentInactive"
                 }
                 onClick={() => {
+                  console.log(isValid);
+                  console.log(replyRef.current.value.length);
                   post(replyRef);
-                  // handleFocus();
-                  // setReply(!reply);
                 }} //클릭하면 위서 선언한 post함수를 실행하여 feedComments에 담겨서 re-rendering 된 댓글창을 확인할 수 있다
                 disabled={isValid ? false : true} //사용자가 아무것도 입력하지 않았을 경우 게시를 할 수 없도록
                 type="button"

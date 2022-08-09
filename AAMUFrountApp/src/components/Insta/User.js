@@ -20,23 +20,19 @@ function User({
   setinputValue,
   showChat,
   recommendUser,
-  setrecommendUser,
   prevChats,
 }) {
   const modalRef = useRef();
   const notimodalRef = useRef();
   const outside = useRef();
   const SearchModalRef = useRef();
-  const followerRef = useRef();
   const [heart, setHeart] = useState(false);
   const [ffollower, setfollower] = useState([]);
   const [search, setsearch] = useState(false);
   const [square, setsquare] = useState(false);
   const [usefollow, setusefollow] = useState(false);
   const [title, settitle] = useState([]);
-  // const [searchb, setSearchb] = useState([]);
   const [searchText, setsearchText] = useState(false);
-
   let navigater = useNavigate();
 
   function searchBar(e) {

@@ -56,7 +56,6 @@ const Chat = ({ prevChats }) => {
       }
     );
   }, []);
-  console.log("chats", chats);
   function getChats() {}
   let inputRef = useRef();
   let bodyRef = useRef();

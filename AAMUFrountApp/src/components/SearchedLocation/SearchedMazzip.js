@@ -13,9 +13,17 @@ import {
 } from "../Modal/localInfoModalParts.js";
 import { useDispatch, useSelector } from "react-redux";
 //redux에서 localNameForMarker(마커찍기위한 장소이름) 변경함수
-import { addOneSaveDaysRedux, changeLnfM, changeShowWhichModal } from "../../redux/store.js";
+import {
+  addOneSaveDaysRedux,
+  addPickMazzip,
+  changeLnfM,
+  changeShowWhichModal,
+  delArrInRestaurant,
+  deleteArrInJangso,
+  timeSetter,
+} from "../../redux/store.js";
 import axios from "axios";
-const SearchedSukso = ({ local, index }) => {
+const SearchedMazzip = ({ local, index }) => {
   const [locaInfoModal, setLocaInfoModal] = useState(false);
   let dispatch = useDispatch();
   let localNameRef = useRef();
@@ -83,8 +91,10 @@ const SearchedSukso = ({ local, index }) => {
               className="searchedLocation__i"
               onClick={(e) => {
                 e.stopPropagation();
-                dispatch(addOneSaveDaysRedux(local));
-                dispatch(changeShowWhichModal(1));
+                dispatch(timeSetter(2));
+                dispatch(addPickMazzip(local));
+                dispatch(changeShowWhichModal(2));
+                dispatch(delArrInRestaurant(local));
               }}
             />
           </div>
@@ -248,4 +258,4 @@ function PickedSuksoBadge({ sukso, index }) {
     </div>
   );
 }
-export default SearchedSukso;
+export default SearchedMazzip;

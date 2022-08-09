@@ -106,9 +106,6 @@ public class MainController {
 				if(tripDay<hotelDay) tripDay =hotelDay;
 
 			}
-			else {
-				list.get(i).setMtime(30*1000*60);
-			}
 		}///////////////list index change
 		/////////////////////////
 		list.get(tripDay-1).setContentid(list.get(tripDay-2).getContentid());
@@ -151,9 +148,17 @@ public class MainController {
 						attry = list.get(k).getDto().getMapy();
 						resultxy = Math.sqrt(Math.pow(Math.abs(standardx-attrx),2)+Math.pow(Math.abs(standardy-attry),2));
 						*/
-
-						map.put("secondx", list.get(k).getDto().getMapx());
-						map.put("secondy", list.get(k).getDto().getMapy());
+						//맛집 안겹치게하기
+						if(list.get(count*tripDay+index).getContenttypeid()==39) {
+							if(list.get(k).getContenttypeid()!=39) {
+								map.put("secondx", list.get(k).getDto().getMapx());
+								map.put("secondy", list.get(k).getDto().getMapy());
+							}
+						}
+						else {
+							map.put("secondx", list.get(k).getDto().getMapx());
+							map.put("secondy", list.get(k).getDto().getMapy());
+						}
 
 						resultxy = service.getRecentPlaceOne(map);
 						if(low>resultxy && tripDay*(count+1)+index<list.size()) {
@@ -513,7 +518,7 @@ public class MainController {
 		KakaoReview kakaReview = new KakaoReview();
 		if(kakaoKey!=null) {
 
-			String uri = serverip+":5000/review?map="+kakaoKey;
+			String uri = serverip+":5020/review?map="+kakaoKey;
 
 			ResponseEntity<KakaoReview> responseEntity =
 					restTemplate.exchange(uri, HttpMethod.GET, null, KakaoReview.class);
@@ -549,7 +554,7 @@ public class MainController {
 
 		String uri="https://dapi.kakao.com/v2/local/search/category.json?y="+map.get("placey")
 		+"&x="+map.get("placex")
-		+"&radius="+radius+"&category_group_code=FD6&page="+1+"&sort=distance";
+		+"&radius="+radius+"&category_group_code="+map.get("category")+"&page="+1+"&sort=distance";
 
 		ResponseEntity<KakaoKey> responseEntity =
 				restTemplate.exchange(uri, HttpMethod.GET, httpEntity, KakaoKey.class);
@@ -586,7 +591,7 @@ public class MainController {
 					page++;
 					uri="https://dapi.kakao.com/v2/local/search/category.json?y="+map.get("placey")
 					+"&x="+map.get("placex")
-					+"&radius="+radius+"&category_group_code=FD6&page="+page+"&sort=distance";
+					+"&radius="+radius+"&category_group_code="+map.get("category")+"&page="+page+"&sort=distance";
 
 					 responseEntity =
 							restTemplate.exchange(uri, HttpMethod.GET, httpEntity, KakaoKey.class);
@@ -594,10 +599,8 @@ public class MainController {
 				}
 
 			}
-			if(map.get("category").toString().equals("FD6"))
-				if(responseEntity.getBody().getMeta().getIsEnd() ||list.size()>30) break;
-			else
-				if(responseEntity.getBody().getMeta().getIsEnd() ||list.size()>10) break;	
+		
+			if(responseEntity.getBody().getMeta().getIsEnd() ||list.size()>30) break;
 		}
 
 
@@ -605,7 +608,7 @@ public class MainController {
 	}
 	@GetMapping("/main/mainelement")
 	public Map<String,List> mainElement(@RequestParam Map map,HttpServletRequest req){
-		System.out.println(map);
+		System.out.println("메인페이지 아이디:"+map);
 		//Map<String,Map<String,List>> basicMap = new HashMap<>();
 		Map<String,List> mapElement = new HashMap<>();
 		List<BBSDTO> bbsList = new Vector<>();
@@ -761,7 +764,7 @@ public class MainController {
 			map.put("searchword", message);
 			List<BBSDTO> searchbbsList =  service.searchBbsRate(map);
 			System.out.println("챗봇가기전 리스트:"+searchbbsList.toString());
-			if(searchbbsList!=null) {
+			if(!searchbbsList.isEmpty()) {
 				requestBody.add("routebbs", searchbbsList);
 				for(BBSDTO bbsDTO:searchbbsList) {
 					map.put("rbn", bbsDTO.getRbn());
@@ -794,6 +797,9 @@ public class MainController {
 		}
 		return returnMap;
 	}
-
+	@GetMapping("/main/area")
+	public List<Map> areaTopAttr(Map map){
+		return service.getTopPlaceInArea(map);
+	}
 
 }

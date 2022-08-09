@@ -417,10 +417,65 @@ a {
     color: var(--link-color-active);
   }
 }
+.myPage__follow__container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  // justify-content: space-between;
+  box-shadow: var(--shadow);
+  width: 100%;
+  // border: 1px solid grey;
+  border-radius: 5px;
+  height: 21%;
+  padding: 5px;
+  gap: 5px;
+}
+.myPage__follower,
+.myPage__following {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 22%;
+  align-items: center;
+  justify-content: flex-start;
+  overflow-y: auto;
+  gap: 5px;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+.myPage__follower_one,
+.myPage__following_one {
+  display: flex;
+  gap: 0.5rem;
+  // justify-content: space-between;
+  align-items: center;
+  border: 1px solid grey;
+  border-radius: 5px;
+  width: 100%;
+  transition: 0.1s;
+  &:hover {
+    cursor: pointer;
+    box-shadow: 1px 1px 2px black;
+  }
+}
 
+.myPage__following__img-container {
+  width: 30px;
+  height: 30px;
+}
+
+.myPage__following__img-container img {
+  width: 30px;
+  height: 30px;
+  object-fit: cover;
+  border-radius: 50%;
+}
 .messages-section {
   flex-shrink: 0;
-  padding-bottom: 32px;
+  // padding-bottom: 32px;
+  gap: 10px;
+  display: flex;
+  flex-direction: column;
   background-color: var(--projects-section);
   margin-left: 24px;
   flex: 1;
@@ -433,7 +488,10 @@ a {
   margin-top: 50px;
   // box-shadow: 1px 3px 8px rgba(250, 163, 7, 0.7);
   box-shadow: var(--shadow);
-  // border: 1px solid red;
+  padding: 5px;
+  &::-webkit-scrollbar {
+    display: none;
+  }
   .messages-close {
     position: absolute;
     top: 12px;
@@ -452,11 +510,11 @@ a {
   }
 
   .projects-section-header {
-    position: sticky;
-    top: 0;
     z-index: 0;
-    padding: 32px 24px 0 24px;
+    padding: 10px 20px;
     background-color: var(--projects-section);
+    text-align: center;
+    width: 100%;
   }
 }
 .projects-title {
@@ -490,7 +548,6 @@ a {
   display: flex;
   align-items: flex-start;
   width: 100%;
-  border: 1px solid blue;
 
   &:hover {
     background-color: var(--message-box-hover);
@@ -529,6 +586,9 @@ a {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 .chatRooms {
   padding: 8px;
