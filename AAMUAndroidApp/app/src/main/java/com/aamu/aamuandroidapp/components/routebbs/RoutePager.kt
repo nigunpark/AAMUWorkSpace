@@ -38,7 +38,7 @@ fun RoutePager(
     if (bbsList.isNotEmpty()) {
         val pagerState = remember { PagerState(maxPage = bbsList.size - 1, currentPage = viewModel.currentPage.value!!) }
 
-        Pager(state = pagerState, modifier = Modifier.height(645.dp), orientation = Orientation.Horizontal ,offscreenLimit = bbsList.size) {
+        Pager(state = pagerState, modifier = Modifier.height(645.dp), orientation = Orientation.Horizontal ,offscreenLimit = 2) {
             val bbs = bbsList[commingPage]
             if (pagerState.currentPage != viewModel.currentPage.value){
                 viewModel.currentPage.value = pagerState.currentPage

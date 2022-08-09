@@ -18,13 +18,14 @@
         />
 
     <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/waveanimat"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintHeight="wrap_content"
         app:layout_constraintWidth_percent="1.5"
         app:lottie_autoPlay="true"
         app:lottie_loop="true"
-        app:lottie_rawRes="@raw/wavelines"
+        app:lottie_rawRes="@raw/wavelines_org"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"

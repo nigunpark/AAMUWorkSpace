@@ -24,10 +24,13 @@ interface AAMURepository {
     suspend fun getGramDetail(id : String,lno : Int) : Flow<AAMUGarmResponse>
     suspend fun getGramLike(id : String,lno : Int) : Flow<Map<String,String>>
     suspend fun getGramByPlaceList(contentid : Int) : Flow<List<AAMUGarmResponse>>
+    suspend fun postGramComment(gramComment: GramComment) : Flow<Map<String,String>>
 
     suspend fun getBBSList() : Flow<List<AAMUBBSResponse>>
     suspend fun getBBSOne( rbn: Int) : Flow<AAMUBBSResponse>
     suspend fun postReview(review: Review) : Flow<Map<String,String>>
 
     suspend fun getNotiList(id : String) : Flow<List<AAMUNotiResponse>>
+
+    suspend fun getUserInfo(id : String) : Flow<AAMUUserInfo>
 }
