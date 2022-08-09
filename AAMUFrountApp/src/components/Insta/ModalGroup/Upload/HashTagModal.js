@@ -6,7 +6,7 @@ import styled from 'styled-components';
 function HashTagModal({hashRef,tagModal,setShowWrite,setTagItem}){
     function handleRef(e){
       e.stopPropagation();
-      if(e.target.value !== hashRef.current.textContent) setShowWrite(false)
+      if(e.target.value !== hashRef.current) setShowWrite(false)
     }
     window.addEventListener("click", handleRef);
   return (
@@ -15,15 +15,15 @@ function HashTagModal({hashRef,tagModal,setShowWrite,setTagItem}){
         <Searchengine
         ref={hashRef}>
             <Searchcontents>
-            {tagModal.map((val,i)=>{return <P 
-                onClick={(e)=>{
-                e.stopPropagation();
-                setTagItem(e.target.textContent)
-                setShowWrite(false)}              
-              }>{val}</P>
-               }
-            
-              )}
+              {tagModal.map((val,i)=>{
+                return (
+                <P key={i}
+                  onClick={(e)=>{
+                  e.stopPropagation();
+                  setTagItem(e.target.value)
+                  setShowWrite(false)}              
+                }>{val}</P>
+                )})}
                 {/* // val.indexOf(inputValue)!==-1?<P onClick={()=>onClick(i)}>{val.TITLE}</P>  */}
            
             </Searchcontents>

@@ -15,6 +15,8 @@
   <link rel="stylesheet" href="<c:url value="/resources/css/vertical-layout-light/style.css"/>">
   
   <script src="<c:url value="/resources/vendors/js/vendor.bundle.base.js"/>"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
   
   
   <!--축소 페이지용 js-->
@@ -43,10 +45,10 @@
           </button>
         </div>
         <div>
-          <a class="navbar-brand brand-logo" href="<c:url value="main.do"/>">
+          <a class="navbar-brand brand-logo" href="http://http://192.168.0.35:3000/">
             <img src="<c:url value="/resources/images/AAMU_100_TEXT.png"/>" alt="mapping=/resources/**" />
           </a>
-          <a class="navbar-brand brand-logo-mini" href="<c:url value="main.do"/>">
+          <a class="navbar-brand brand-logo-mini" href="http://http://192.168.0.35:3000/">
             <img src="<c:url value="/resources/images/AAMU_100_Circle.png"/>" alt="mapping=/resources/**" />
           </a>
         </div>
@@ -121,7 +123,6 @@
             <div class="collapse" id="ui-basic">
               <ul class="nav flex-column sub-menu">
                 <li class="nav-item"> <a class="nav-link" href="Users.do">회원 관리</a></li>
-                <li class="nav-item"> <a class="nav-link" href="#">회원 관심사항</a></li>
               </ul>
             </div>
           </li>
@@ -136,7 +137,6 @@
             <div class="collapse" id="form-elements">
               <ul class="nav flex-column sub-menu">
                 <li class="nav-item"><a class="nav-link" href="<c:url value="bbs.do"/>">전체 게시글 관리</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">신고 게시글 관리</a></li>
                 <li class="nav-item"> <a class="nav-link" href="#">리뷰 관리</a></li>
               </ul>
             </div>
@@ -150,7 +150,6 @@
             <div class="collapse" id="tables">
               <ul class="nav flex-column sub-menu">
                 <li class="nav-item"><a class="nav-link" href="<c:url value="Commu.do"/>">전체 커뮤니티 관리</a></li>
-                <li class="nav-item"><a class="nav-link" href="CommuComplain.do">신고 커뮤니티 관리</a></li>
                 <li class="nav-item"> <a class="nav-link" href="CommuComment.do">댓글 관리</a></li>
               </ul>
             </div>
@@ -179,6 +178,7 @@
             <div class="collapse" id="icons">
               <ul class="nav flex-column sub-menu">
                 <li class="nav-item"> <a class="nav-link" href="<c:url value="adminbackup.do"/>">데이터 백업</a></li>
+                <li class="nav-item"> <a class="nav-link" href="<c:url value="Theme.do"/>">테마 관리</a></li>
               </ul>
             </div>
           </li>

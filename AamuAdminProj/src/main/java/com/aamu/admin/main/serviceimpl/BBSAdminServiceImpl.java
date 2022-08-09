@@ -24,6 +24,9 @@ public class BBSAdminServiceImpl implements BBSAdminService{
 	private BBSAdminDAO dao;
 	
 	@Autowired
+	private UsersDAO usersDao;
+	
+	@Autowired
 	private TransactionTemplate transactionTemplate;
 	
 	// 리소스파일(paging.properties)에서 읽어오기
@@ -34,7 +37,7 @@ public class BBSAdminServiceImpl implements BBSAdminService{
 	
 	//전체 게시글 뿌려주기
 	@Override
-	public ListPagingData<BBSAdminDTO> bbsSelectList(Map map, HttpServletRequest req, int nowPage) {
+	public ListPagingData<BBSAdminDTO> bbsAdminSelectList(Map map, HttpServletRequest req, int nowPage) {
 		//페이징을 위한 로직 시작]
 		//전체 레코드수
 		int totalCount=dao.bbsGetTotalRecordCount(map);
@@ -68,24 +71,24 @@ public class BBSAdminServiceImpl implements BBSAdminService{
 	//게시글 삭제
 	@Override
 	public int bbsDelete(Map map) {
-		int affected=0;
-		List<String> rbnlists=(List<String>)map.get("rbn");
-		System.out.println(rbnlists);
-		for (String rbn : rbnlists) {
-			Map rbnMap = new HashMap();
-			rbnMap.put("rbn", rbn);
-			System.out.println(rbnMap);
-			affected += dao.reviewDelete(rbnMap);
-		}
-		if (affected == ((List) map.get("rbn")).size()) {
-			return 1;
-		} else
-			return 0;
-	}
+		int affected = 0;
+		affected = transactionTemplate.execute(tx->{
+			map.put("table", "routebbsphoto");
+			dao.bbsDelete(map);
+			map.put("table", "ratereview");
+			dao.bbsDelete(map);
+			map.put("table", "bookmark");
+			dao.bbsDelete(map);
+			map.put("table", "routebbs");
+			
+			return dao.bbsDelete(map);
+		});
+		return affected;
+	}	
 	
 	//리뷰 목록
 	@Override
-	public ListPagingData<ReviewAdminDTO> reviewSelectList(Map map, HttpServletRequest req, int nowPage) {
+	public ListPagingData<ReviewAdminDTO> reviewAdminSelectList(Map map, HttpServletRequest req, int nowPage) {
 		//페이징을 위한 로직 시작]
 		//전체 레코드수
 		int totalCount=dao.reviewGetTotalRecordCount(map);
@@ -95,7 +98,7 @@ public class BBSAdminServiceImpl implements BBSAdminService{
 		//페이징과 관련된 값들 얻기를 위한 메소드 호출
 		PagingUtil.setMapForPaging(map);
 		//게시글 전체 목록 얻기
-		List lists= dao.bbsSelectList(map);
+		List lists= dao.reviewAdminSelectList(map);
 		
 		String pagingString = PagingUtil.pagingBootStrapStyle(
 			Integer.parseInt(map.get(PagingUtil.TOTAL_COUNT).toString()), 
@@ -118,21 +121,48 @@ public class BBSAdminServiceImpl implements BBSAdminService{
 	
 	//리뷰 삭제
 	@Override
-	public int reviewDelete(Map map) {
+	public int reviewAdminDelete(Map map) {
 		int affected=0;
-		List<String> rbnlists=(List<String>)map.get("rbn");
-		System.out.println(rbnlists);
-		for (String rbn : rbnlists) {
-			Map rbnMap = new HashMap();
-			rbnMap.put("rbn", rbn);
-			System.out.println(rbnMap);
-			affected += dao.reviewDelete(rbnMap);
+		List<String> rnolists=(List<String>)map.get("rno");
+		System.out.println(rnolists);
+		for (String rno : rnolists) {
+			Map rnoMap = new HashMap();
+			rnoMap.put("rno", rno);
+			System.out.println(rnoMap);
+			affected += dao.reviewDelete(rnoMap);
 		}
-		if (affected == ((List) map.get("rbn")).size()) {
+		if (affected == ((List) map.get("rno")).size()) {
 				return 1;
 			} else
 				return 0;
 		}
+	
+	/*---------------------------------------------------------------*/
+	/*
+	//게시판 통계
+	@Override
+	public Map bbsTotal() {
+		Map map = new HashMap<>();
+		//월별
+		map.put("bbsMonthTotal", dao.bbsMonthTotal(map));
+		
+		return map;
+	}
+	
+	//게시판 통계_베스트 게시글
+	@Override
+	public List<BBSAdminDTO> bbsBestList() {
+		//베스트 글 
+		List<BBSAdminDTO> lists=dao.bbsBestList();
+		return lists;
+	}
+	
+	//게시판 통계_프로필 뿌려주기
+	@Override
+	public String bbsSelectProfile(String id) {
+		return dao.bbsSelectProfile(id);
+	}
+	*/
 		
 }
 	

@@ -7,6 +7,9 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.aamu.admin.main.service.AdminCommuDTO;
+import com.aamu.admin.main.service.BBSAdminDTO;
+
 @Repository
 public class BBSAdminDAO {
 	
@@ -15,7 +18,7 @@ public class BBSAdminDAO {
 	
 	//전체 게시글 목록
 	public List bbsSelectList(Map map) {
-		return template.selectList("bbsSelectList",map);
+		return template.selectList("bbsAdminSelectList",map);
 	}
 	
 	//전체 게시글 수
@@ -29,8 +32,8 @@ public class BBSAdminDAO {
 	}
 	
 	//전체 리뷰 목록
-	public List reviewSelectList(Map map) {
-		return template.selectList("reviewSelectList",map);
+	public List reviewAdminSelectList(Map map) {
+		return template.selectList("reviewAdminSelectList",map);
 	}
 	
 	//전체 리뷰 수
@@ -42,5 +45,27 @@ public class BBSAdminDAO {
 	public int reviewDelete(Map map) {
 		return template.delete("reviewDelete",map);
 	}
+	
+	
+	/*---------------------------------------------------------------*/
+	/*
+	//게시판 통계
+	//월별 
+	public int bbsMonthTotal(Map map) {
+		int affected=template.selectOne("bbsMonthTotal",map);
+		return affected;
+	}
+	
+	//게시판 통계_베스트 게시글
+	public List<BBSAdminDTO> bbsBestList(){
+		List<BBSAdminDTO> records= template.selectList("bbsBestList");
+		return records;
+	}
+	
+	//게시판 통계_글쓴이 프로필 사진 뿌려주기
+	public String bbsSelectProfile(String id) {
+		return template.selectOne("bbsSelectProfile",id);
+	}
+	*/
 	
 }

@@ -53,7 +53,7 @@ public class BBSServiceImpl implements BBSService{
 	public List bbsSelectPhotoList(int rbn) {
 		return dao.bbsSelectPhotoList(rbn);
 	}
-
+	
 	//글 상세보기
 	@Override
 	public BBSDTO bbsSelectOne(int rbn) {

@@ -6,12 +6,10 @@ import $, { escapeSelector } from "jquery";
 import SearchModal from "../Upload/SearchModal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperPlane } from "@fortawesome/free-regular-svg-icons";
-import { Link, useNavigate } from "react-router-dom";
-import Slider from "react-slick";
+import { useNavigate } from "react-router-dom";
 import "../Slider/slick-theme.css";
 import "../Slider/slick.css";
 import { SwiperSlide, Swiper } from "swiper/react";
-import SwipersItem from "../../Swipers/SwipersItem";
 import { A11y, Autoplay, Navigation, Pagination, Scrollbar } from "swiper";
 import "swiper/css"; //basic
 import "swiper/css/navigation";
@@ -27,36 +25,28 @@ const Edit = ({ setlist, val, seteditModal }) => {
   let textareaRef = useRef();
   let navigate = useNavigate();
   const [hide, setHide] = useState(false);
-  const [close, setClose] = useState(false);
   const [search, setSearch] = useState([]);
   const [showSearch, setshowSearch] = useState(false);
   const [showWrite, setShowWrite] = useState(false);
-  const [show] = useState(false);
   const [hasText, setHasText] = useState(false);
-  const [inputValue, setinputValue] = useState("");
-
   const [tagItem, setTagItem] = useState([]);
   const [tagList, setTagList] = useState([]);
   const [tagModal, settagModal] = useState([]);
-
-  //이미지 다중 업로드 시
-  const [back, setback] = useState(false);
-  const [myImagefile, setMyImageFile] = useState([]);
-
   const [editzz, setEdit] = useState([]);
-  const [title, settitle] = useState("");
-  const [content, setcontent] = useState("");
-  const [edithash,setedithash] = useState([])
+  const [edithash, setedithash] = useState([]);
+  const [listid, setlistid] = useState({
+    TITLE: "",
+    CONTENTID: "",
+  });
 
   useEffect(() => {
-    setedithash(val.tname)
-    titleRef.current.value =val.ctitle;
-    textareaRef.current.value =val.content;
-    searchRef.current.value = val.title
+    setedithash(val.tname);
+    titleRef.current.value = val.ctitle;
+    textareaRef.current.value = val.content;
+    searchRef.current.value = val.title;
+    setlistid({ TITLE: val.title, CONTENTID: val.contentid });
   }, []);
-
-  
-
+  console.log(listid);
   function searchWord(e, setSearch) {
     //위치 지정을 위한 백에게 받는 axios
     let val = e.target.value;
@@ -81,12 +71,20 @@ const Edit = ({ setlist, val, seteditModal }) => {
   }
 
   const onKeyPress = (e) => {
-    if(!e.target.value.includes('#')&& e.keyCode === 32 && e.target.value.length !== 0){
-      alert('#을 입력해주세요~!');
+    if (
+      !e.target.value.includes("#") &&
+      e.keyCode === 32 &&
+      e.target.value.length !== 0
+    ) {
+      alert("#을 입력해주세요~!");
     }
-    if (e.target.value.length !== 0 && e.keyCode === 32 && e.target.value.includes('#') ) {
-        submitTagItem();
-    } 
+    if (
+      e.target.value.length !== 0 &&
+      e.keyCode === 32 &&
+      e.target.value.includes("#")
+    ) {
+      submitTagItem();
+    }
   };
 
   const submitTagItem = () => {
@@ -116,7 +114,6 @@ const Edit = ({ setlist, val, seteditModal }) => {
     // console.log(delOne);
     // console.log(edithash);
   };
-
 
   function fn_checkByte(obj) {
     //textarea입력한 글자 count 및 글자 수 제한
@@ -190,10 +187,8 @@ const Edit = ({ setlist, val, seteditModal }) => {
                 tagList,
                 search,
                 edithash,
-                tagItem,
-                setTagList,
-                setEdit,
-                editzz
+                listid,
+                setEdit
               );
               seteditModal(false);
               // feedList(setlist)
@@ -329,13 +324,14 @@ const Edit = ({ setlist, val, seteditModal }) => {
               <input
                 onKeyUp={(e) => {
                   searchWord(e, setSearch);
-                  setHasText(true);}
-                }
+                  setHasText(true);
+                }}
                 style={{ width: "70%" }}
                 // onChange={(e) => {
                 //   setinputValue(e.target.value);
-                  
+
                 // }}
+                data-tip="위치 입력"
                 placeholder="위치 추가"
                 type="text"
                 ref={searchRef}
@@ -343,7 +339,7 @@ const Edit = ({ setlist, val, seteditModal }) => {
               {hasText ? (
                 <SearchModal
                   search={search}
-                  searchRef={searchRef}
+                  setlistid={setlistid}
                   setHasText={setHasText}
                 />
               ) : null}
@@ -361,65 +357,67 @@ const Edit = ({ setlist, val, seteditModal }) => {
             </div>
 
             <div>
-              {edithash === null ? '':
-              edithash.map((tagItem, index) => {
+              {edithash === null
+                ? ""
+                : edithash.map((tagItem, index) => {
+                    return (
+                      <TagItem key={index}>
+                        <p>{tagItem}</p>
+                        <DDButton
+                          onClick={(e) => {
+                            deleteTagedit(e);
+                          }}
+                        >
+                          X
+                        </DDButton>
+                      </TagItem>
+                    );
+                  })}
+              {tagList.map((tagItem, index) => {
                 return (
                   <TagItem key={index}>
-                    <p >{tagItem}</p>
-                    <DDButton
-                      onClick={(e) => {
-                        deleteTagedit(e);
-                      }}>
-                      X
-                    </DDButton>
-                  </TagItem>
-                );
-              })}
-              {
-              tagList.map((tagItem, index) => {
-                return (
-                  <TagItem key={index}>
-                    <p >{tagItem}</p>
+                    <p>{tagItem}</p>
                     <DDButton
                       onClick={(e) => {
                         deleteTagItem(e);
-                      }}>
+                      }}
+                    >
                       X
                     </DDButton>
                   </TagItem>
                 );
               })}
-              
-            <div  className="uploadLocation">
-              <input
-                type="text"
-                data-tip="입력후 스페이스바를 눌러주세요"
-                placeholder="해시태그 추가"
-                tabIndex={2}
-                onChange={(e) => {
-                  e.stopPropagation();
-                  setTagItem(e.target.value);
-                  setShowWrite(true);
-                }}
-                value={tagItem}
-                onKeyUp={(e) => {
-                  hashTag(e, settagModal);
-                  onKeyPress(e);
-                }}
-              />
-              {showWrite && (
-                <HashTagModal
-                  hashRef={hashRef}
-                  tagModal={tagModal}
-                  setShowWrite={setShowWrite}
-                  setTagItem={setTagItem}
+
+              <div className="uploadLocation">
+                <input
+                  type="text"
+                  data-tip="입력후 스페이스바를 눌러주세요"
+                  placeholder="해시태그 추가"
+                  tabIndex={2}
+                  onChange={(e) => {
+                    e.stopPropagation();
+                    setTagItem(e.target.value);
+                    setShowWrite(true);
+                  }}
+                  value={tagItem}
+                  onKeyUp={(e) => {
+                    hashTag(e, settagModal);
+                    onKeyPress(e);
+                  }}
                 />
-              )}
-              
-              <i className="fa-solid fa-hashtag"></i>
+                {showWrite && (
+                  <HashTagModal
+                    hashRef={hashRef}
+                    tagModal={tagModal}
+                    setShowWrite={setShowWrite}
+                    setTagItem={setTagItem}
+                  />
+                )}
+
+                <i className="fa-solid fa-hashtag"></i>
+              </div>
             </div>
-          </div>
-          <ReactTooltip />
+            <ReactTooltip />
           </div>
           {/* // :null} */}
         </Body>
@@ -469,7 +467,6 @@ function hashTag(e, settagModal) {
     });
 }
 
-
 function edit(
   val,
   setlist,
@@ -480,30 +477,22 @@ function edit(
   tagList,
   search,
   edithash,
-  tagItem,
-  setTagList,
-  setEdit,
-  editzz
+  listid,
+  setEdit
 ) {
   //새 게시물 업로드를 위한 axios
-  let updatedTagList1
-  if(edithash === null){
+
+  let updatedTagList1;
+  if (edithash === null) {
     updatedTagList1 = [...tagList];
-  }
-  else{
-    if(edithash.length >1 ){
-      updatedTagList1 = [...edithash,...tagList];
-    }
-    else{
-      updatedTagList1 = [edithash,...tagList];
+  } else {
+    if (edithash.length > 1) {
+      updatedTagList1 = [...edithash, ...tagList];
+    } else {
+      updatedTagList1 = [edithash, ...tagList];
     }
   }
   setEdit(updatedTagList1);
-  console.log("tagList", updatedTagList1);
-  let searched = search.find((val, i) => {
-    return val.TITLE === searchRef.current.value;
-  });
-
   let token = sessionStorage.getItem("token");
   axios
     .put(
@@ -512,8 +501,8 @@ function edit(
         lno: val.lno,
         ctitle: titleRef.current.value,
         content: textareaRef.current.value,
-        contentid: searched.CONTENTID,
-        tname:updatedTagList1,
+        contentid: parseInt(listid.CONTENTID),
+        tname: updatedTagList1,
       },
       {
         headers: {
@@ -525,6 +514,7 @@ function edit(
       console.log(resp.data);
       setShowWrite(resp.data);
       feedList(setlist);
+      alert('수정이 완료되었습니다!')
     })
     .catch((error) => {
       console.log(error);
@@ -616,7 +606,6 @@ const DDButton = styled.button`
   border-radius: 50%;
   color: tomato;
 `;
-
 
 const TagInput = styled.input`
   display: inline-flex;

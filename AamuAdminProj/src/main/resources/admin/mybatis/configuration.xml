@@ -14,6 +14,8 @@
 		<typeAlias type="com.aamu.admin.main.service.AnswerDTO" alias="AnswerDTO"/>
 		<typeAlias type="com.aamu.admin.main.service.api.AttractionDTO" alias="attrDTO"/>
 		<typeAlias type="com.aamu.admin.main.service.UsersDTO" alias="usersDTO"/>
+		<typeAlias type="com.aamu.admin.main.service.BBSAdminDTO" alias="BBSAdminDTO"/>
+		<typeAlias type="com.aamu.admin.main.service.ReviewAdminDTO" alias="ReviewAdminDTO"/>
   	</typeAliases>
 	<mappers>
 		<mapper resource="admin/mybatis/mapper/main.xml" />

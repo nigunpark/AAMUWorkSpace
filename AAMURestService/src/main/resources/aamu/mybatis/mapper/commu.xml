@@ -231,6 +231,11 @@
 		SELECT COUNT(*) FROM follower WHERE follower=#{follower}
 	</select>
 	
+	<!-- 마이페이지용_팔로우,팔로잉 목록 -->
+	<select id="commuMyPageFollower" parameterType="Map" resultType="String">
+		SELECT ${selectid} FROM follower WHERE ${whereid}=#{id}
+	</select>
+	
 	<!-- @@@@@@@@@@@@@@@@@@@@@@@@@@@@@태그@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ -->
 	
 	<!-- commutag테이블에 레코드 몇개 있는지 셀렉트 -->

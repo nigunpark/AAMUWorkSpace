@@ -572,64 +572,14 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 		return dao.commuFollowingCount(map);
 	}
 	
+	//마이페이지용-팔로우,팔로잉 목록
+	@Override
+	public List<String> commuMyPageFollower(Map map) {
+		return dao.commuMyPageFollower(map);
+	}
+	
 
 	////////////////////////////////////////////////////////공통 메소드
-	
-	//insertCommuTag 메소드 ***********보류
-	/*
-	public int insertCommuTagTb(Map map) {
-		int affected=0;
-		String tnameString=map.get("tname").toString();
-		tnameString.replaceAll(" ", "");
-		String[] tnameArr = tnameString.split("#");
-		for(int i=1; i<tnameArr.length;i++) {
-			map.put("tname", tnameArr[i]);
-			System.out.println("메소드 타니?"+map.get("tname"));
-			int tno=dao.selectTnoOfTags(map); //tags테이블에 tno 셀렉트
-			map.put("tno", tno);
-			System.out.println("메소드 타니? tno"+map.get("tno"));
-			affected=dao.commuInsertCommuTag(map); //commutag테이블에 저장
-		}
-		return affected;
-	}*/
-	
-	//insertCommuTag 메소드 ***********보류
-	/*
-	public int insertCommuTagTb(Map map) {
-		int affected=0;
-		String tnameString=map.get("tname").toString();
-		tnameString.replaceAll(" ", "");
-		String[] tnameArr = tnameString.split("#");//[서울,서울여행]
-		//
-		//
-		for(int i=1; i<tnameArr.length;i++) {
-			map.put("tname", tnameArr[i]);//tname:서울
-			List<String> tagLists=dao.commuSelectTag(map);
-			//System.out.println("list에는?:"+tagLists.get(0).toString());
-			System.out.println("표함되어잇을끼요?"+tagLists.contains("서울"));
-			System.out.println("첫번째는 과연:"+tnameArr[i]);
-			if(tagLists.contains(tnameArr[i])) {//tags테이블에 있으면
-				map.put("tname", tnameArr[i]);
-				System.out.println("메소드 타니?"+map.get("tname"));
-				int tno=dao.selectTnoOfTags(map); //tags테이블에 tno 셀렉트
-				map.put("tno", tno);
-				System.out.println("메소드 타니? tno"+map.get("tno"));
-				affected=dao.commuInsertCommuTag(map); //1. commutag테이블에 저장
-			}
-			else {
-				dao.commuInsertTags(map); //1. tags테이블에 인서트
-				map.put("tname", tnameArr[i]);
-				System.out.println("메소드 타니?"+map.get("tname"));
-				int tno=dao.selectTnoOfTags(map); //tags테이블에 tno 셀렉트
-				map.put("tno", tno);
-				System.out.println("메소드 타니? tno"+map.get("tno"));
-				affected=dao.commuInsertCommuTag(map); //2.commutag테이블에 인서트
-				System.out.println("커뮤태그에 인서트 되나?"+affected);
-			}
-		}
-		return affected;
-	}
-	*/
 	
 	public int insertCommuTagTb(Map map) {
 		System.out.println("여기오나?"+map.get("tname"));

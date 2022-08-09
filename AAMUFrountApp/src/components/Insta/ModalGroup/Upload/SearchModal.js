@@ -3,7 +3,7 @@ import React from 'react'
 import styled from 'styled-components';
 
 
-function SearchModal({search,searchRef,setHasText}){
+function SearchModal({search,setlistid,setHasText}){
     
 
   return (
@@ -14,7 +14,7 @@ function SearchModal({search,searchRef,setHasText}){
             
             {search.map((val,i)=>{return <P key={i} onClick={(e)=>{
                 e.stopPropagation();
-                searchRef.current.value=e.target.textContent
+                setlistid({TITLE:val.TITLE,CONTENTID:val.CONTENTID});
                 setHasText(false)}              
               }>{val.TITLE}</P>
                 

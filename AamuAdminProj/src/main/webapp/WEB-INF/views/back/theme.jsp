@@ -10,90 +10,91 @@
 				<div class="home-tab">
 					<div class="tab-content tab-content-basic">
 						<!--여기부터 내용을 넣으시오-->
-						<!--게시판 게시글 관리-->
+
+						<!--커뮤니티 게시글 관리-->
 						<div class="col-lg-12 grid-margin stretch-card">
 							<div class="card">
 								<div class="card-body">
-									<h4 class="card-title">게시글 전체 목록</h4>
+									<div
+										class="d-sm-flex justify-content-between align-items-start">
+										<div>
+											<h4 class="card-title">테마 관리</h4>
+											<p class="card-description">사용자 관심 테마 관리</p>
+										</div>
+										<div>
+											<button
+												class="btn btn-primary btn-sm text-white mb-0 me-0 my-4"
+												type="button" data-toggle="modal" data-target="#myModal">테마
+												등록</button>
 
-									<div class="card-numberOfBoard">
-										총 게시글 수: ${totalCount}개
-										<button class="btn btn-primary text-white me-0" style="float: right">삭제</button>
+										</div>
 									</div>
 									<div class="table-responsive text-center">
-										<table class="table text-center">
+										<table class="table table-bordered">
 											<thead>
 												<tr>
-													<th class="col-1 ">
-														<div class="form-check form-check-flat mt-0">
-															<label class="form-check-label"> 
-																<input type="checkbox" class="form-check-input" aria-checked="false" id="chkAll"><i class="input-helper"></i>
-															</label>
-														</div>
-													</th>
-													<th class="col-1">게시글 번호</th>
-													<th>제목</th>
-													<th class="col-1">ID</th>
-													<th class="col-1">작성일</th>
+													<th class="col-1">번호</th>
+													<th class="col-1">이미지</th>
+													<th>테마 이름</th>
+													<th class="col-3">비고</th>
 												</tr>
 											</thead>
 											<tbody>
-												<c:if test="${empty listPagingData.lists }" var="isEmpty">
-													<tr>
-														<td colspan="8">등록된 글이 없습니다.</td>
-													</tr>
-												</c:if>
-												<c:if test="${not isEmpty }">
-													<c:forEach var="record" items="${listPagingData.lists}" varStatus="loop">
-														<tr>
-															<td>
-																<div class="form-check form-check-flat mt-0">
-																	<label class="form-check-label"> 
-																		<input name="RowCheck" type="checkbox" class="form-check-input" aria-checked="false" value="${record.rbn}"> <i class="input-helper"></i>
-																	</label>
-																</div>
-															</td>
-															<td>${record.rbn}</td>
-															<td>${record.title}</td>
-															<td>${record.id}</td>
-															<td>${record.postdate}</td>
-														</tr>
-													</c:forEach>
-												</c:if>
+												<tr>
+													<td>1</td>
+													<td>
+														<img src="#" alt="테마 이미지">
+													</td>
+													<td>테마이름입니다</td>
+													<td>
+														<button
+															class="btn btn-primary btn-sm text-white mb-0 me-2"
+															type="button">수정</button>
+														<button
+															class="btn btn-primary btn-sm text-white mb-0 me-0"
+															type="button">삭제</button>
+													</td>
+												</tr>
 											</tbody>
 										</table>
-										<!-- 페이징 출력 -->
-										<div>${listPagingData.pagingString}</div>
+
 									</div>
 								</div>
 							</div>
 						</div>
 						<!--예시 용 테이블-->
-						<!-- 검색 -->
-						<div class="row">
-							<form class="col-md-12 d-flex justify-content-center align-items-center" method="post" action="<c:url value="BBS.do"/>">
-								<div class="form-group row">
-									<div class="col-sm-12">
-										<select class="form-control background-color-secondary text-black" name="searchColumn">
-											<option value="c.id">id</option>
-											<option value="ctitle">제목</option>
-											<option value="content">내용</option>
-										</select>
+						<!-- 모달 시작 -->
+						<div class="modal" id="myModal">
+							<div class="modal-dialog">
+								<div class="modal-content">
+									<!-- Modal -->
+									<div class="col-12 grid-margin stretch-card">
+										<div class="card">
+											<div class="card-body">
+												<h4 class="card-title">새로운 테마 추가</h4>
+												<form class="forms-sample">
+													<div class="form-group">
+														<label for="exampleInputName1">테마 이름</label> <input
+															type="text" class="form-control" id="exampleInputName1"
+															placeholder="테마 이름">
+													</div>
+													<!-- 파일업로드 -->
+													<div class="form-group">
+														<label>테마 이미지</label>
+														<div>
+															<input type="file" size="50" value="기본 텍스트" />
+														</div>
+													</div>
+													<button type="submit" class="btn btn-primary me-2">등록</button>
+													<button class="btn btn-light">취소</button>
+												</form>
+											</div>
+										</div>
 									</div>
 								</div>
-								<div class="form-group row">
-									<div class="col-sm-12">
-										<input type="text" class="form-control mx-2 my-2" placeholder="검색어를 입력하세요" name="searchWord" />
-									</div>
-								</div>
-								<div class="form-group row">
-									<div class="col-sm-12">
-										<input type="submit" class="btn btn-primary mx-3 my-2 text-white" value="검색" id="submit"/>
-									</div>
-								</div>
-							</form>
+							</div>
 						</div>
-						<!-- 검색 끝 -->
+						<!--모달 끝-->
 						<!--------------------- 내용의 끝 부분입니다------------------------------------>
 					</div>
 				</div>
@@ -103,6 +104,7 @@
 	</div>
 	<!--main-panel-->
 </div>
+
 
 <script>
   	//체크박스 
