@@ -8,7 +8,6 @@ const MyMessageBar = () => {
       <div className="message-content">
         <div className="message-header">
           <div className="name">뚱이</div>
-
           <div className="star-checkbox">
             <input type="checkbox" id="star-1" />
             <label for="star-1">
