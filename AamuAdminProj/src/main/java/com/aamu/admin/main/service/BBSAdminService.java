@@ -24,6 +24,7 @@ public interface BBSAdminService {
 	
 	//리뷰 삭제
 	int reviewAdminDelete(Map map);
+
 	
 	
 	/*---------------------------------------------------------------*/

@@ -30,26 +30,26 @@
 	<!--                     리뷰                          -->
 	
 	<!-- 전체 리뷰 목록 -->
-	<select id="reviewSelectList"  parameterType="Map" resultType="ReviewAdminDTO">
+	<select id="reviewSelectList"  parameterType="map" resultType="ReviewAdminDTO">
 		SELECT * FROM
 		(SELECT T.*,ROWNUM R FROM (
 		SELECT rr.*,rbbs.title FROM ratereview rr JOIN routebbs rbbs ON rr.rno=rbbs.rno 
-	<if test="searchColumn != null">
-  	 	WHERE ${searchColumn} LIKE '%' || #{searchWord} || '%' 
-  	</if>
+		<if test="searchColumn != null">
+  	 		WHERE ${searchColumn} LIKE '%' || #{searchWord} || '%' 
+  		</if>
 		ORDER BY rno DESC) T) 
 		WHERE R BETWEEN #{start} AND #{end}
-	</select> -->
-	
-	<!-- 전체 댓글 레코드수 -->
-	<select id="reviewGetTotalRecordCount" parameterType="Map" resultType="int">
-	 	SELECT COUNT(*) FROM ratereview
 	</select>
 	
+	<!-- 전체 댓글 레코드수 -->
+	<!--<select id="reviewGetTotalRecordCount" parameterType="map" resultType="int">
+	 	SELECT COUNT(*) FROM ratereview
+	</select>-->
+	
 	<!-- 리뷰 삭제 -->
-	<delete id="reviewAdminDelete" parameterType="map">
+	<!--  <delete id="reviewAdminDelete" parameterType="map">
 	 	DELETE ratereview WHERE rno=#{rno}
-	 </delete>
+	 </delete>-->
 	
 	<!-- 					통계 							 -->
 	<!-- 게시판 월별 통계 -->

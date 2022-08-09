@@ -121,7 +121,7 @@ public class BBSAdminServiceImpl implements BBSAdminService{
 	
 	//리뷰 삭제
 	@Override
-	public int reviewDelete(Map map) {
+	public int reviewAdminDelete(Map map) {
 		int affected=0;
 		List<String> rnolists=(List<String>)map.get("rno");
 		System.out.println(rnolists);
