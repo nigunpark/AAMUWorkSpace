@@ -24,7 +24,7 @@ const Uploader = ({ list, setsquare, setlist, setloading }) => {
   let titleRef = useRef();
   let textareaRef = useRef();
   let hashRef = useRef();
-  let clickRef = useRef();
+  let tagItemRef = useRef();
   let navigate = useNavigate();
   const [hide, setHide] = useState(false);
   const [upload, setupload] = useState(false);
@@ -36,9 +36,33 @@ const Uploader = ({ list, setsquare, setlist, setloading }) => {
   const [inputValue, setinputValue] = useState("");
   const [taginput, settaginput] = useState([]);
 
-  const [tagItem, setTagItem] = useState([]);
+  const [tagItem, setTagItem] = useState("");
   const [tagList, setTagList] = useState([]);
   const [tagModal, settagModal] = useState([]);
+
+  function hashTag(e, settagModal) {
+    let val = e.target.value;
+    console.log("val", val);
+    // submitTagItem()
+    // 업로드 버튼 누르고 화면 새로고침
+    let token = sessionStorage.getItem("token");
+    axios
+      .get("/aamurest/gram/tag", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        params: {
+          tname: val,
+        },
+      })
+      .then((resp) => {
+        console.log(resp.data);
+        settagModal(resp.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
 
   //이미지 하나 업로드시
   // const [image, setImage] = useState({//초기 이미지 세팅 및 변수
@@ -332,10 +356,14 @@ const Uploader = ({ list, setsquare, setlist, setloading }) => {
                 e.target.src = "/images/user.jpg";
               }}
             />
-            <span className="uploadname">{sessionStorage.getItem("username")}</span>
+            <span className="uploadname">
+              {sessionStorage.getItem("username")}
+            </span>
           </div>
           <div>
-            <span style={{ fontWeight: "bold", marginLeft: "10px" }}>제목 : </span>
+            <span style={{ fontWeight: "bold", marginLeft: "10px" }}>
+              제목 :{" "}
+            </span>
             <input ref={titleRef} type="text" placeholder="제목을 입력하세요" />
           </div>
           <div>
@@ -369,7 +397,9 @@ const Uploader = ({ list, setsquare, setlist, setloading }) => {
               height: "27px",
             }}
           >
-            <sup style={{ float: "right", paddingRight: "15px", color: "#c0c0c0" }}>
+            <sup
+              style={{ float: "right", paddingRight: "15px", color: "#c0c0c0" }}
+            >
               (<span id="nowByte">0</span>/1000bytes)
             </sup>
           </div>
@@ -408,8 +438,10 @@ const Uploader = ({ list, setsquare, setlist, setloading }) => {
             }}
           >
             <input
-              onKeyUp={(e) => {searchWord(e, setSearch);
-                setHasText(true);}}
+              onKeyUp={(e) => {
+                searchWord(e, setSearch);
+                setHasText(true);
+              }}
               // value={inputValue}
               // onChange={(e) => {
               //   e.stopPropagation();
@@ -421,26 +453,43 @@ const Uploader = ({ list, setsquare, setlist, setloading }) => {
               ref={searchRef}
             />
             {hasText && (
-              <SearchModal search={search} setHasText={setHasText} searchRef={searchRef} />
+              <Searchengine>
+                <Searchcontents>
+                  {search.map((val, i) => {
+                    return (
+                      <P
+                        key={i}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          searchRef.current.value = e.target.textContent;
+                          setHasText(false);
+                        }}
+                      >
+                        {val.TITLE}
+                      </P>
+                    );
+                  })}
+                </Searchcontents>
+              </Searchengine>
             )}
             <i className="fa-solid fa-location-dot"></i>
           </div>
-            <div>
-              {tagList.map((tagItem, index) => {
-                return (
-                  <TagItem key={index}>
-                    <p>{tagItem}</p>
-                    <DDButton
-                      onClick={(e) => {
-                        deleteTagItem(e);
-                      }}
-                    >
-                      X
-                    </DDButton>
-                  </TagItem>
-                );
-              })}
-              <div  className="uploadLocation">
+          <div>
+            {tagList.map((tagItemRef, index) => {
+              return (
+                <TagItem key={index}>
+                  <p>{tagItemRef}</p>
+                  <DDButton
+                    onClick={(e) => {
+                      deleteTagItem(e);
+                    }}
+                  >
+                    X
+                  </DDButton>
+                </TagItem>
+              );
+            })}
+            <div className="uploadLocation">
               <input
                 type="text"
                 data-tip="입력후 스페이스바를 눌러주세요"
@@ -449,21 +498,37 @@ const Uploader = ({ list, setsquare, setlist, setloading }) => {
                 onChange={(e) => {
                   e.stopPropagation();
                   setTagItem(e.target.value);
-                   setShowWrite(true);
+                  setShowWrite(true);
                 }}
                 value={tagItem}
+                // ref={tagItemRef}
                 onKeyUp={(e) => {
                   hashTag(e, settagModal);
                   onKeyPress(e);
+                  setShowWrite(true);
                 }}
               />
               {showWrite && (
-                <HashTagModal
-                  hashRef={hashRef}
-                  tagModal={tagModal}
-                  setShowWrite={setShowWrite}
-                  setTagItem={setTagItem}
-                />
+                <Searchengine ref={hashRef}>
+                  <Searchcontents>
+                    {tagModal.length > 1 &&
+                      tagModal.map((val, i) => {
+                        return (
+                          <P
+                            key={i}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setTagItem(e.target.textContent);
+                              setShowWrite(false);
+                            }}>
+                            {val}
+                          </P>
+                        );
+                      })}
+                      
+                    {/* // val.indexOf(inputValue)!==-1?<P onClick={()=>onClick(i)}>{val.TITLE}</P>  */}
+                  </Searchcontents>
+                </Searchengine>
               )}
 
               <i className="fa-solid fa-hashtag"></i>
@@ -497,30 +562,6 @@ function feedList(setlist, setloading) {
     .catch((error) => {
       console.log(error);
     });
-}
-
-function hashTag(e, settagModal) {
-  let val = e.target.value;
-  console.log('val',val);
-  // submitTagItem()
-  //업로드 버튼 누르고 화면 새로고침
-  // let token = sessionStorage.getItem("token");
-  // axios
-  //   .get("/aamurest/gram/tag", {
-  //     headers: {
-  //       Authorization: `Bearer ${token}`,
-  //     },
-  //     params: {
-  //       tname: val,
-  //     },
-  //   })
-  //   .then((resp) => {
-  //     console.log(resp.data);
-  //     settagModal(resp.data);
-  //   })
-  //   .catch((error) => {
-  //     console.log(error);
-  //   });
 }
 
 function uploadFile(myImagefile) {
@@ -586,7 +627,7 @@ const Contents = styled.div`
   width: 60%;
   // min-width:30%;
   // max-width:60%;
-  height: 700px;
+  height: 750px;
   background: white;
   display: flex;
   flex-direction: column;
@@ -663,5 +704,37 @@ const TagInput = styled.input`
   outline: none;
   cursor: text;
 `;
+const Searchengine = styled.div`
+  position: absolute;
+  width: 35%;
+  height: 300px;
+  background-color: transparent;
+  right: 10px;
+  z-index: 9;
+  overflow: auto;
+`;
+const Searchcontents = styled.div`
+  position: absolute;
+  width: 95%;
+  display: flex;
+  background-color: #fff;
+  flex-direction: column;
+  box-shadow: 0 0 5px 1px rgba(var(--jb7, 0, 0, 0), 0.0975);
+  align-items: center;
+  margin-left: 10px;
+`;
+const P = styled.div`
+  display: flex;
+  position: relative;
+  width: 100%;
+  height: 50px;
+  padding-left: 10px;
+  align-items: center;
+  cursor: pointer;
+  font-size: 15px;
 
+  &:hover {
+    background-color: #e5e5e5;
+  }
+`;
 export default Uploader;

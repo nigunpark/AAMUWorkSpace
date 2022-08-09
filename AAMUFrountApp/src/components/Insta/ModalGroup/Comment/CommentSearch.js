@@ -26,7 +26,13 @@ function CommentSearch({ val, setForReRender, forReRender, setcommentModal, setc
   const [modalSet, setModal] = useState(false);
   // const [forReRender, setForReRender] = useState(false);
   let [isValid, setisValid] = useState(false);
-
+ 
+  function btn_check(){
+    replyRef1.current !== undefined && 
+    (replyRef1.current.value.length >= 1 //사용자가 키를 눌렀다 떼었을때 길이가 0을 넘는 값인지 유효성 검사 결과 값을 담는다
+      ? setisValid(true)
+      : setisValid(false))
+  }
   const [emoji, setemoji] = useState(false);
   const onEmojiClick = (event, emojiObject) => {
     // setChosenEmoji(emojiObject);
@@ -124,6 +130,7 @@ function CommentSearch({ val, setForReRender, forReRender, setcommentModal, setc
         setcomments(copyComments);
         setForReRender(!forReRender);
         commentModal2(setcomments);
+        setisValid(false)
       })
       .catch((error) => {
         console.log(error);
@@ -305,13 +312,20 @@ function CommentSearch({ val, setForReRender, forReRender, setcommentModal, setc
                           marginLeft: "10px",
                         }}
                       >
-                        <div style={{ display: "flex", flexDirection: "row" }}>
-                          <p className="userName" style={{ fontSize: "13px" }}>
-                            <strong>{val.id}</strong>
-                          </p>
-                          <p className="userName" style={{ fontFamily: "normal", width: "78%" }}>
-                            {val.reply}
-                          </p>
+                        <div style={{ display: "flex", flexDirection: "row"}}>
+                          <div style={{display: "flex", flexDirection: "row", width: "90%"}}>
+                            <p className="userName" style={{  fontSize: "13px" }}>
+                              <strong>
+                                {val.id}
+                              </strong>
+                            </p>
+                            <p
+                              className="userName"
+                              style={{ fontFamily: "normal"}}
+                            >
+                              {val.reply}
+                            </p>
+                          </div>
                           <div
                             style={{
                               fontSize: "13px",
@@ -408,12 +422,10 @@ function CommentSearch({ val, setForReRender, forReRender, setcommentModal, setc
                 />
               </div>
               {emoji && (
-                <div className="emoji-all">
+                <div className="emoji-all"
+                  onClick={()=>{setisValid(true);  setemoji(false);}}>
                   <Picker
                     onEmojiClick={onEmojiClick}
-                    onClick={() => {
-                      setemoji(!emoji);
-                    }}
                   />
                 </div>
               )}
@@ -426,30 +438,28 @@ function CommentSearch({ val, setForReRender, forReRender, setcommentModal, setc
                 // onChange={(e) => {
                 //   setComment(e.target.value); //댓글 창의 상태가 변할때마다 setComment를 통해 comment값을 바꿔준다
                 // }}
-                onKeyUp={(e) => {
-                  e.target.value.length > 0 //사용자가 키를 눌렀다 떼었을때 길이가 0을 넘는 값인지 유효성 검사 결과 값을 담는다
-                    ? setisValid(true)
-                    : setisValid(false);
-                }}
-                // value={comment}
-              />
+                 onKeyUp={(e) => {
+              btn_check()
+              // console.log(replyRef.current.value.length>0?'true':'false');
+            }}
+            // value={comment}
+          />
 
-              <button
-                className={
-                  //클래스명을 comment창의 글자 길에 따라서 다르게 주면서 버튼색에 css디자인을 줄 수 있음
-                  replyRef1.current === undefined
-                    ? null
-                    : replyRef1.current.value.length > 0
-                    ? "submitCommentActive"
-                    : "submitCommentInactive"
-                }
-                onClick={() => {
-                  post(replyRef1);
-                  // setReply(!reply);
-                }} //클릭하면 위서 선언한 post함수를 실행하여 feedComments에 담겨서 re-rendering 된 댓글창을 확인할 수 있다
-                disabled={isValid ? false : true} //사용자가 아무것도 입력하지 않았을 경우 게시를 할 수 없도록
-                type="button"
-              >
+          <button
+            className={
+              //클래스명을 comment창의 글자 길에 따라서 다르게 주면서 버튼색에 css디자인을 줄 수 있음
+              isValid
+                ? "submitCommentActive"
+                : "submitCommentInactive"
+            }
+            onClick={() => {
+              console.log(isValid);
+              console.log(replyRef1.current.value.length);
+              post(replyRef1);
+            }} //클릭하면 위서 선언한 post함수를 실행하여 feedComments에 담겨서 re-rendering 된 댓글창을 확인할 수 있다
+            disabled={isValid ? false : true} //사용자가 아무것도 입력하지 않았을 경우 게시를 할 수 없도록
+            type="button"
+          >
                 게시
               </button>
             </div>
