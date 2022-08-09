@@ -121,7 +121,6 @@
             <div class="collapse" id="ui-basic">
               <ul class="nav flex-column sub-menu">
                 <li class="nav-item"> <a class="nav-link" href="Users.do">회원 관리</a></li>
-                <li class="nav-item"> <a class="nav-link" href="#">회원 관심사항</a></li>
               </ul>
             </div>
           </li>
@@ -136,7 +135,6 @@
             <div class="collapse" id="form-elements">
               <ul class="nav flex-column sub-menu">
                 <li class="nav-item"><a class="nav-link" href="<c:url value="bbs.do"/>">전체 게시글 관리</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">신고 게시글 관리</a></li>
                 <li class="nav-item"> <a class="nav-link" href="#">리뷰 관리</a></li>
               </ul>
             </div>
@@ -150,7 +148,6 @@
             <div class="collapse" id="tables">
               <ul class="nav flex-column sub-menu">
                 <li class="nav-item"><a class="nav-link" href="<c:url value="Commu.do"/>">전체 커뮤니티 관리</a></li>
-                <li class="nav-item"><a class="nav-link" href="CommuComplain.do">신고 커뮤니티 관리</a></li>
                 <li class="nav-item"> <a class="nav-link" href="CommuComment.do">댓글 관리</a></li>
               </ul>
             </div>
@@ -179,6 +176,7 @@
             <div class="collapse" id="icons">
               <ul class="nav flex-column sub-menu">
                 <li class="nav-item"> <a class="nav-link" href="<c:url value="adminbackup.do"/>">데이터 백업</a></li>
+                <li class="nav-item"> <a class="nav-link" href="<c:url value="Theme.do"/>">테마 관리</a></li>
               </ul>
             </div>
           </li>
