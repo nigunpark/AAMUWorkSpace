@@ -2,16 +2,18 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
 <mapper namespace="admin.mybatis.mapper.bbs">
+
 	<!-- 전체 게시글 목록 -->
-	<select id="" parameterType="map" resultType="BBSDTO">
+	<select id="bbsAdminSelectList" parameterType="map" resultType="BBSAdminDTO">
 		SELECT * FROM
 		(SELECT T.*,ROWNUM R FROM (
 		SELECT rbbs.* FROM routebbs rbbs JOIN users u ON rbbs.id=u.id 
 		<if test="searchColumn != null">
 	  	 	WHERE ${searchColumn} LIKE '%' || #{searchWord} || '%' 
 	  	</if>  
-		ORDER BY lno DESC) T)
+		ORDER BY rbn DESC) T)
 		WHERE R BETWEEN #{start} AND #{end}
 	</select>
 	
@@ -21,17 +23,52 @@
 	</select>
 	
 	<!-- 게시글 삭제 -->
-	 <delete id="bbsAdminDelete" parameterType="map">
+	<delete id="bbsAdminDelete" parameterType="map">
 	 	DELETE FROM ${table} WHERE rbn=#{rbn}
 	 </delete>
+	 
 	<!--                     리뷰                          -->
 	
 	<!-- 전체 리뷰 목록 -->
+	<select id="reviewSelectList"  parameterType="Map" resultType="ReviewAdminDTO">
+		SELECT * FROM
+		(SELECT T.*,ROWNUM R FROM (
+		SELECT rr.*,rbbs.title FROM ratereview rr JOIN routebbs rbbs ON rr.rno=rbbs.rno 
+	<if test="searchColumn != null">
+  	 	WHERE ${searchColumn} LIKE '%' || #{searchWord} || '%' 
+  	</if>
+		ORDER BY rno DESC) T) 
+		WHERE R BETWEEN #{start} AND #{end}
+	</select> -->
 	
+	<!-- 전체 댓글 레코드수 -->
+	<select id="reviewGetTotalRecordCount" parameterType="Map" resultType="int">
+	 	SELECT COUNT(*) FROM ratereview
+	</select>
 	
 	<!-- 리뷰 삭제 -->
 	<delete id="reviewAdminDelete" parameterType="map">
 	 	DELETE ratereview WHERE rno=#{rno}
 	 </delete>
 	
-</mapper> 
+	<!-- 					통계 							 -->
+	<!-- 게시판 월별 통계 -->
+	<!-- <select id="bbsMonthTotal" resultType="int" parameterType="map">
+		SELECT 
+  		count(case when postdate between '2022-07-01' AND '2022-08-01' then 1 end) monthCount
+		FROM routebbs
+	</select> -->
+	
+	<!-- 베스트 게시글 -->
+	<!-- <select id="bbsBestList" resultType="BBSAdminDTO">
+		SELECT * FROM(SELECT u.userprofile, u.id, rbbs.bbscount, u.joindate FROM users u JOIN routebbs rbbs ON rbbs.id = u.id
+		order by bbscount desc)T
+		WHERE ROWNUM &lt;=5
+	</select> -->
+	
+	<!-- 프로필 사진 -->
+	<!-- <select id="bbsSelectProfile" parameterType="String" resultType="String">
+		SELECT profile FROM users WHERE id=#{id}
+	</select> -->
+
+	</mapper> 

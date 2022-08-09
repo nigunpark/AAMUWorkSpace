@@ -35,8 +35,6 @@
 													<th>제목</th>
 													<th class="col-1">ID</th>
 													<th class="col-1">작성일</th>
-													<th class="col-1">조회수</th>
-													<th class="col-1"></th>
 												</tr>
 											</thead>
 											<tbody>
@@ -56,11 +54,9 @@
 																</div>
 															</td>
 															<td>${record.rbn}</td>
-															<td>${record.ctitle}</td>
+															<td>${record.title}</td>
 															<td>${record.id}</td>
 															<td>${record.postdate}</td>
-															<td>${record.rcount}</td>
-															<td>${record.}</td>
 														</tr>
 													</c:forEach>
 												</c:if>
@@ -107,4 +103,63 @@
 	</div>
 	<!--main-panel-->
 </div>
+
+<script>
+  	//체크박스 
+    var selectLength=$(':checkbox').slice(1).length;
+    $(':checkbox').click(function(){
+      if($(this).val()==='all'){
+        if($(this).prop('checked')) $(':checkbox').slice(1).prop('checked',true);
+        else $(':checkbox').slice(1).prop('checked',false);
+      }
+      else{
+        if($(this).prop('checked')){
+          if(selectLength==$(':checkbox:checked').length){
+            $(':checkbox:first').prop('checked',true)
+          }             
+        }
+        else $(':checkbox:first').prop('checked',false)
+      }
+    });
+    //체크박스all버튼 눌렀을 때 전체 선택
+	$('#chkAll').click(function(){
+		if($('#chkAll').is(":checked")) $(':checkbox').prop("checked",true)
+		else $(':checkbox').prop("checked",false)
+	});  
+    
+    //삭제 click
+    $('div.card-numberOfBoard > button').click(function(){
+    	console.log("버튼이벤트 발생");
+    	var lnoArr = new Array();
+        $('input[name="RowCheck"]:checked').each(function(i){//체크된 리스트 저장
+        	lnoArr.push($(this).val());
+        	console.log($(this).val()); //lnoArr:63,62
+        });
+    	if(lnoArr.length ==0){
+    		alert("선택된 글이 없습니다.");
+    	}
+    	else{
+    		if(confirm("정말 삭제하시겠습니까?")){
+    			var jsonString = JSON.stringify({lno : lnoArr})
+        		$.ajax({
+           			url:"<c:url value="CommuDelete.do"/>",
+           			type:"post",
+           			data: jsonString,
+           			contentType:"application/json", //데이타 보낼 때
+           			dataType: "json" //데이타 받을 때 
+           		}).done(data=>{
+           			console.log('삭제성공:',data);
+           			location.replace("Commu.do");
+           			
+           		}).fail(error=>{
+           			console.log('삭제에러:',error);
+           		});
+    		}///////if 삭제하시겠습니까?
+    		
+    	}//////else
+    });
+    
+  </script>
+</body>
+</html>
 

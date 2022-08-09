@@ -1,6 +1,7 @@
 package com.aamu.admin.main.web;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -22,6 +23,7 @@ import com.aamu.admin.main.service.ListPagingData;
 import com.aamu.admin.main.service.PagingUtil;
 import com.aamu.admin.main.service.ReviewAdminDTO;
 import com.aamu.admin.main.serviceimpl.BBSAdminServiceImpl;
+import com.aamu.admin.util.FileUploadUtil;
 
 @Controller
 public class BBSAdminController {
@@ -31,7 +33,7 @@ public class BBSAdminController {
 	
 	//전체 게시글
 	@RequestMapping("bbs.do")
-	public String bbsSelectList(
+	public String bbsAdminSelectList(
 		@ModelAttribute("id") String id,
 		@RequestParam Map map,
 		@RequestParam(defaultValue = "1",required = false) int nowPage,
@@ -39,7 +41,7 @@ public class BBSAdminController {
 		Model model) {
 		//현재 페이지를 맵에 저장
 		map.put(PagingUtil.NOW_PAGE, nowPage);
-		ListPagingData<BBSAdminDTO> listPagingData= bbsAdminService.bbsSelectList(map, req, nowPage);
+		ListPagingData<BBSAdminDTO> listPagingData= bbsAdminService.bbsAdminSelectList(map, req, nowPage);
 		
 		//데이타 저장]
 		model.addAttribute("listPagingData",listPagingData);
@@ -64,7 +66,7 @@ public class BBSAdminController {
 	
 	//전체 리뷰
 	@RequestMapping("review.do")
-	public String reviewSelectList(
+	public String reviewAdminSelectList(
 		@ModelAttribute("id") String id,
 		@RequestParam Map map,
 		@RequestParam(defaultValue = "1",required = false) int nowPage,
@@ -72,7 +74,7 @@ public class BBSAdminController {
 		Model model) {
 		//현재 페이지를 맵에 저장
 		map.put(PagingUtil.NOW_PAGE, nowPage);
-		ListPagingData<ReviewAdminDTO> listPagingData= bbsAdminService.reviewSelectList(map, req, nowPage);
+		ListPagingData<ReviewAdminDTO> listPagingData= bbsAdminService.reviewAdminSelectList(map, req, nowPage);
 		
 		//데이타 저장]
 		model.addAttribute("listPagingData",listPagingData);
@@ -96,6 +98,25 @@ public class BBSAdminController {
 		return resultMap;
 		}
 	
+	/*---------------------------------------------------------------*/
+	/*
+	//게시판 통계
+	@RequestMapping("bbsStatistic.do")
+	public String bbsStatistic(Model model, HttpServletRequest req) {
+		Map map = bbsAdminService.bbsTotal();
+		//월별 게시물 수
+		System.out.println("bbsMonthTotal:"+map.get("bbsMonthTotal"));
+		model.addAttribute("bbsMonthTotal",map.get("bbsMonthTotal"));
+		//베스트 글 
+		List<BBSAdminDTO> lists = BBSAdminService.bbsBestList();
+		for(BBSAdminDTO dto:lists) {
+			dto.setProfile(FileUploadUtil.requestOneFile(BBSAdminService.bbsSelectProfile(dto.getId()), "/resources/bbsUpload", req));
+		}
+		model.addAttribute("lists",lists);
+		
+		return "bbs/bbsStatistic";
+	}*/
+		
 	
 	
 }
