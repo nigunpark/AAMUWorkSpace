@@ -15,10 +15,12 @@ import DetailModal from "../Forum/DetailModal/DetailModal";
 import MyThemeLists from "./MyPageBox/MyThemeLists";
 
 import Spinner from "../../components/Insta/Spinner";
+import { addForChatInfo } from "../../redux/store";
+import { useDispatch } from "react-redux";
+import Chat from "../../components/Chat/Chat";
 
 const MyPage = () => {
   let [clickTab, setClickTab] = useState(0);
-
   let home = useRef();
   let two = useRef();
   let three = useRef();
@@ -58,10 +60,9 @@ const MyPage = () => {
         console.log((error) => console.log("여행경로 가져오기 실패", error));
       });
   }
-
   const [myInstar, setMyInstar] = useState([]);
   const [myLno, setMyLno] = useState(0);
-
+  let dispatch = useDispatch();
   async function searchBar() {
     let token = sessionStorage.getItem("token");
     let serchId = "id";
@@ -89,7 +90,9 @@ const MyPage = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [chatRooms, setChatRooms] = useState([]);
-
+  const [followings, setFollowing] = useState({});
+  const [prevChats, setPrevChats] = useState([]);
+  const [showChat, setShowChat] = useState(false);
   const bookMarkList = async () => {
     let token = sessionStorage.getItem("token");
 
@@ -111,14 +114,46 @@ const MyPage = () => {
       });
   };
 
+  const getFollowing = () => {
+    let token = sessionStorage.getItem("token");
+    axios
+      .get("/aamurest/gram/mypage/follower", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        params: {
+          id: sessionStorage.getItem("username"),
+        },
+      })
+      .then((resp) => {
+        console.log("팔로잉", resp.data);
+        setFollowing(resp.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  async function getChatRoom(val, dispatch, setPrevChats) {
+    await axios
+      .post("/aamurest/chat/room?fromid=" + sessionStorage.getItem("username") + "&toid=" + val.id)
+      .then((resp) => {
+        setPrevChats([]);
+        setTimeout(() => {
+          setPrevChats(resp.data.list);
+          dispatch(addForChatInfo({ ...resp.data, id: val.id }));
+          setShowChat(!showChat);
+        }, 100);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
   useEffect(() => {
     selectList();
     searchBar();
     bookMarkList();
     getChatRooms(setChatRooms);
-  }, [clickTab]);
-
-  useEffect(() => {
+    getFollowing();
     if (clickTab === 0) {
       home.current.classList.add("active");
       two.current.classList.remove("active");
@@ -277,29 +312,114 @@ const MyPage = () => {
               setIsLoading={setIsLoading}
             />
           </div>
+          <div style={{ position: "absolute", right: "285px", top: "-90px" }}>
+            {showChat && <Chat showChat={showChat} prevChats={prevChats} />}
+          </div>
         </div>
 
         <div className="messages-section">
+          <div style={{ border: "1px solid grey", borderRadius: "5px" }}>
+            <div className="projects-section-header">
+              <p>공지사항</p>
+            </div>
+            <div className="messages">
+              <MyMessageBar />
+            </div>
+          </div>
+          {/* <div style={{ border: "1px solid grey", borderRadius: "5px" }}> */}
           <div className="projects-section-header">
-            <p>공지사항</p>
+            <p>팔로잉/팔로워</p>
           </div>
-          <div className="messages">
-            <MyMessageBar />
+          <div className="myPage__follow__container">
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "5px",
+              }}
+            >
+              <div style={{ fontWeight: "bold", fontSize: "17px", textAlign: "center" }}>
+                팔로잉
+              </div>
+              <div className="myPage__following">
+                {followings.following !== undefined &&
+                  followings.following.map((val, i) => {
+                    return (
+                      <div
+                        className="myPage__following_one"
+                        onClick={() => {
+                          getChatRoom(val, dispatch, setPrevChats);
+                          setTimeout(() => {}, 100);
+                        }}
+                      >
+                        <div className="myPage__following__img-container">
+                          <img src={val.userprofile} />
+                        </div>
+                        <span>{val.id}</span>
+                      </div>
+                    );
+                  })}
+              </div>
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: "5px" }}>
+              <div style={{ fontWeight: "bold", fontSize: "17px", textAlign: "center" }}>
+                팔로워
+              </div>
+              <div className="myPage__follower">
+                {followings.follower !== undefined &&
+                  followings.follower.map((val, i) => {
+                    return (
+                      <div className="myPage__follower_one">
+                        <div className="myPage__following__img-container">
+                          <img
+                            src={val.userprofile ?? "/images/no-image.jpg"}
+                            onError={(e) => {
+                              e.target.src = "/images/no-image.jpg";
+                            }}
+                          />
+                        </div>
+                        <span>{val.id}</span>
+                      </div>
+                    );
+                  })}
+              </div>
+            </div>
           </div>
-          <br />
+          {/* </div> */}
           <div className="projects-section-header">
             <p>채팅방 목록</p>
           </div>
           <div className="chatRooms__container">
             {chatRooms.map((val, i) => {
               return (
-                <div className="chatRooms">
+                <div
+                  className="chatRooms"
+                  onClick={() => {
+                    getChatRoom(
+                      sessionStorage.getItem("username") === val.fromid ? val.topro : val.frompro,
+                      dispatch,
+                      setPrevChats
+                    );
+                    setTimeout(() => {
+                      setShowChat(!showChat);
+                    }, 100);
+                  }}
+                >
                   <div className="chatRooms__profile-top">
                     <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                       <div className="chatRooms__profile-img-container">
-                        <img src={val.frompro} className="chatRooms__profile-img" />
+                        <img
+                          src={
+                            sessionStorage.getItem("username") === val.fromid
+                              ? val.topro
+                              : val.frompro
+                          }
+                          className="chatRooms__profile-img"
+                        />
                       </div>
-                      <span style={{ fontSize: "13px", fontWeight: "bold" }}>{val.fromid}</span>
+                      <span style={{ fontSize: "13px", fontWeight: "bold" }}>
+                        {sessionStorage.getItem("username") === val.fromid ? val.toid : val.fromid}
+                      </span>
                     </div>
                     <span style={{ fontSize: "12px", color: "grey" }}>
                       {displayedAt(val.senddate)}
