@@ -43,10 +43,10 @@
           </button>
         </div>
         <div>
-          <a class="navbar-brand brand-logo" href="<c:url value="main.do"/>">
+          <a class="navbar-brand brand-logo" href="http://http://192.168.0.35:3000/">
             <img src="<c:url value="/resources/images/AAMU_100_TEXT.png"/>" alt="mapping=/resources/**" />
           </a>
-          <a class="navbar-brand brand-logo-mini" href="<c:url value="main.do"/>">
+          <a class="navbar-brand brand-logo-mini" href="http://http://192.168.0.35:3000/">
             <img src="<c:url value="/resources/images/AAMU_100_Circle.png"/>" alt="mapping=/resources/**" />
           </a>
         </div>
