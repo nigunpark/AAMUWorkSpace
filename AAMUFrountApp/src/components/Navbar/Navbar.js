@@ -3,12 +3,9 @@ import { Link, useNavigate, useLocation, NavLink } from "react-router-dom";
 import "./Navbar.css";
 import { Outlet } from "react-router-dom";
 import styled, { keyframes } from "styled-components";
-import { useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMessage, faRobot } from "@fortawesome/free-solid-svg-icons";
 import ChatBot from "../ChatBot/ChatBot";
-import axios from "axios";
-import { message } from "antd";
 let chatArr = [];
 const Navbar = ({ scrollNav, whereUrl }) => {
   const [click, setClick] = useState(false);
@@ -79,6 +76,19 @@ const Navbar = ({ scrollNav, whereUrl }) => {
                 QnA
               </NavLink>
             </li>
+            {sessionStorage.getItem("role") === "ROLE_ADMIN" && (
+              <li>
+                <a
+                  href="http://192.168.0.22:9090/admin/"
+                  className="nav-links"
+                  onClick={closeMoblieMenu}
+                  style={{ color: "red" }}
+                  // style={({ isActive }) => (isActive ? activeStyle : undefined)}
+                >
+                  ADMIN
+                </a>
+              </li>
+            )}
           </ul>
           <div className="navbar-btn-container">
             {sessionStorage.getItem("token") === null ? (
@@ -105,7 +115,7 @@ const Navbar = ({ scrollNav, whereUrl }) => {
         </div>
       </nav>
       <Outlet />
-      {location.pathname.indexOf("mainPage") !== 1 && (
+      {location.pathname.indexOf("mainPage") !== 1 && location.pathname.indexOf("forum") !== 1 && (
         <ChatBotBtn setShowChatBot={setShowChatBot} showChatBot={showChatBot} />
       )}
     </div>

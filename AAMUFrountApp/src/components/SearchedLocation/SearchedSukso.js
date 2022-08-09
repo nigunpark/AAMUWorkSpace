@@ -1,8 +1,4 @@
-import {
-  faCircleInfo,
-  faPlus,
-  faStar,
-} from "@fortawesome/free-solid-svg-icons";
+import { faCircleInfo, faPlus, faStar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useRef, useState } from "react";
 import "./SearchedLocation.css";
@@ -17,11 +13,7 @@ import {
 } from "../Modal/localInfoModalParts.js";
 import { useDispatch, useSelector } from "react-redux";
 //redux에서 localNameForMarker(마커찍기위한 장소이름) 변경함수
-import {
-  addOneSaveDaysRedux,
-  changeLnfM,
-  changeShowWhichModal,
-} from "../../redux/store.js";
+import { addOneSaveDaysRedux, changeLnfM, changeShowWhichModal } from "../../redux/store.js";
 import axios from "axios";
 const SearchedSukso = ({ local, index }) => {
   const [locaInfoModal, setLocaInfoModal] = useState(false);
@@ -61,9 +53,7 @@ const SearchedSukso = ({ local, index }) => {
         <div className="searchedLocation__img-container">
           {reduxState.saveDaysNPickedSuksoRedux.map((state, index) => {
             if (state === local) {
-              return (
-                <PickedSuksoBadge index={index} local={local} key={index} />
-              );
+              return <PickedSuksoBadge index={index} local={local} key={index} />;
             }
           })}
 
@@ -94,7 +84,7 @@ const SearchedSukso = ({ local, index }) => {
               onClick={(e) => {
                 e.stopPropagation();
                 dispatch(addOneSaveDaysRedux(local));
-                dispatch(changeShowWhichModal(true));
+                dispatch(changeShowWhichModal(1));
               }}
             />
           </div>
@@ -138,13 +128,8 @@ function LocalInfoModal({
             <h4>{local.title}</h4>
             <h4>
               (
-              <FontAwesomeIcon
-                icon={faStar}
-                style={{ marginRight: "8px", color: "gold" }}
-              />
-              {commentData.basic_info !== undefined &&
-                `(${commentData.basic_info.star})`}
-              )
+              <FontAwesomeIcon icon={faStar} style={{ marginRight: "8px", color: "gold" }} />
+              {commentData.basic_info !== undefined && `(${commentData.basic_info.star})`})
             </h4>
           </div>
           <div className="localInfo__container">
@@ -170,38 +155,22 @@ function LocalInfoModal({
         </BodyLim>
         <div className="localInfo__snsBtn__container">
           <ul className="localInfo__snsBtn-ul">
-            <a
-              href={`https://www.instagram.com/explore/tags/${local.title}/`}
-              target="_blank"
-            >
+            <a href={`https://www.instagram.com/explore/tags/${local.title}/`} target="_blank">
               <li>
-                <img
-                  src={process.env.PUBLIC_URL + "/images/sns/instagram.png"}
-                />
+                <img src={process.env.PUBLIC_URL + "/images/sns/instagram.png"} />
               </li>
             </a>
-            <a
-              href={`https://twitter.com/search?q=${local.title}&src=typed_query`}
-              target="_blank"
-            >
+            <a href={`https://twitter.com/search?q=${local.title}&src=typed_query`} target="_blank">
               <li>
                 <img src={process.env.PUBLIC_URL + "/images/sns/twitter.png"} />
               </li>
             </a>
-            <a
-              href={`https://www.google.com/maps/place/${local.title}`}
-              target="_blank"
-            >
+            <a href={`https://www.google.com/maps/place/${local.title}`} target="_blank">
               <li>
-                <img
-                  src={process.env.PUBLIC_URL + "/images/sns/googlemap.png"}
-                />
+                <img src={process.env.PUBLIC_URL + "/images/sns/googlemap.png"} />
               </li>
             </a>
-            <a
-              href={`https://search.naver.com/search.naver?query=${local.title}`}
-              target="_blank"
-            >
+            <a href={`https://search.naver.com/search.naver?query=${local.title}`} target="_blank">
               <li>
                 <img src={process.env.PUBLIC_URL + "/images/sns/naver.png"} />
               </li>
@@ -215,8 +184,7 @@ function LocalInfoModal({
             }}
           >
             리뷰보기
-            {commentData.basic_info !== undefined &&
-              `(${commentData.basic_info.feedback})`}
+            {commentData.basic_info !== undefined && `(${commentData.basic_info.feedback})`}
           </span>
           <span>목록에 추가</span>
         </div>

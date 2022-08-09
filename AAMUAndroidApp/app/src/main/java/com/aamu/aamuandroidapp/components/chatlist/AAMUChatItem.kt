@@ -41,13 +41,9 @@ fun AAMUChatItem(item: AAMUChatRoomResponse,userid : String,onClick : (Int,Strin
     if (item.fromid == userid) {
         otheruser.fromid = item.toid
         otheruser.frompro = item.topro
-        otheruser.toid = item.fromid
-        otheruser.topro = item.frompro
     } else {
         otheruser.fromid = item.fromid
         otheruser.frompro = item.frompro
-        otheruser.toid = item.toid
-        otheruser.topro = item.topro
     }
 
     Card(

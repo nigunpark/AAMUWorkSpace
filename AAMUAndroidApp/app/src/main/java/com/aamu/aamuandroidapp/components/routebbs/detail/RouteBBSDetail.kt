@@ -2,6 +2,7 @@ package com.aamu.aamuandroidapp.components.routebbs.detail
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.os.Build
 import android.util.Log
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
@@ -22,6 +23,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asAndroidBitmap
@@ -34,16 +36,20 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import coil.ImageLoader
 import coil.compose.AsyncImagePainter
 import coil.compose.ImagePainter
 import coil.compose.rememberAsyncImagePainter
 import coil.compose.rememberImagePainter
+import coil.decode.GifDecoder
+import coil.decode.ImageDecoderDecoder
 import coil.request.ImageRequest
 import com.aamu.aamuandroidapp.R
 import com.aamu.aamuandroidapp.components.aamuplan.AAMUPlanViewModel
 import com.aamu.aamuandroidapp.components.aamuplan.AAMUPlanViewModelFactory
 import com.aamu.aamuandroidapp.components.routebbs.InterestTag
 import com.aamu.aamuandroidapp.data.api.response.Review
+import com.aamu.aamuandroidapp.ui.theme.aamublue
 import com.aamu.aamuandroidapp.ui.theme.cyan200
 import com.aamu.aamuandroidapp.ui.theme.modifiers.verticalGradientBackground
 import com.aamu.aamuandroidapp.ui.theme.typography
@@ -75,13 +81,38 @@ fun RouteBBSDetail(
     val bbsDetail by viewModel.bbsDetail.observeAsState()
     val error by viewModel.errorLiveData.observeAsState()
 
-    Box(modifier = Modifier.fillMaxSize()){
+    BoxWithConstraints(modifier = Modifier.fillMaxSize()){
         if (bbsDetail?.rbn != 0 && bbsDetail?.rbn != null) {
-            val dominantColors = listOf(Color.White, cyan200)
-
+            val gradient = Brush.verticalGradient(
+                colors = listOf(Color.White, Color.Transparent),
+                startY = maxHeight.value/3,  // 1/3
+                endY = maxHeight.value
+            )
+            val imgLoader = ImageLoader(LocalContext.current).newBuilder().components {
+                if (Build.VERSION.SDK_INT >= 28){
+                    add(ImageDecoderDecoder.Factory())
+                }
+                else{
+                    add(GifDecoder.Factory())
+                }
+            }.build()
+            Box{
+                Image(painter = rememberAsyncImagePainter(
+                    model = ImageRequest.Builder(LocalContext.current)
+                        .data(R.drawable.deepdarkocean)
+                        .crossfade(true)
+                        .build(),
+                    imageLoader = imgLoader,
+                    placeholder = null,
+                    contentScale = ContentScale.FillHeight
+                ),
+                    contentDescription = "",
+                    modifier = Modifier.fillMaxSize()
+                    , contentScale = ContentScale.FillHeight)
+                Box(modifier = Modifier.matchParentSize().background(gradient))
+            }
             LazyColumn(
                 modifier = Modifier
-                    .verticalGradientBackground(dominantColors)
                     .padding(
                         animateDpAsState(
                             if (expand.value) 1.dp else 120.dp,
@@ -317,7 +348,7 @@ fun PlannerDetail(
         LazyColumn(modifier = Modifier
             .height(200.dp)
             .fillMaxWidth()
-            .background(cyan200)){
+            .background(aamublue)){
             for(key in plannerDetail!!.routeMap?.keys!!){
 
                 val dayday = (((key?.replace("day",""))?.toInt()?.minus(1))?.times(1000*60*60*24) ?: 0)
@@ -340,7 +371,7 @@ fun PlannerDetail(
                             }
                             
                             Box(modifier = Modifier
-                                .background(cyan200)
+                                .background(aamublue)
                                 .padding(5.dp)
                                 .fillMaxWidth()) {
                                 LazyRow() {

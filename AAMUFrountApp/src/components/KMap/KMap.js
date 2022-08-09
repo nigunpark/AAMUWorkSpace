@@ -341,7 +341,7 @@ const KMap = ({
               e.stopPropagation();
               setTitleName("추천숙소");
               dispatch(changeInfo("추천숙소"));
-              setConWhichModal(true);
+              setConWhichModal(1);
               setForSearchTypeId(32);
             }}
           >
@@ -350,9 +350,20 @@ const KMap = ({
           <div
             onClick={(e) => {
               e.stopPropagation();
+              setTitleName("추천맛집");
+              dispatch(changeInfo("추천맛집"));
+              setConWhichModal(2);
+              setForSearchTypeId(39);
+            }}
+          >
+            추천맛집
+          </div>
+          <div
+            onClick={(e) => {
+              e.stopPropagation();
               setTitleName("추천장소");
               dispatch(changeInfo("추천장소"));
-              setConWhichModal(false);
+              setConWhichModal(3);
               setForSearchTypeId(12);
             }}
           >
@@ -360,7 +371,7 @@ const KMap = ({
           </div>
         </div>
         <div className="kmap__left-btn__container">
-          <div>이용방법</div>
+          {/* <div>이용방법</div> */}
           {/* <div
             onClick={(e) => {
               e.stopPropagation();
@@ -429,7 +440,6 @@ const KMap = ({
                 reduxState.arrForPickJangso.length < reduxState.tripPeriod.length
               ) {
                 setShowAlert(true);
-
                 return;
               }
               setShowAuSModal(true);
@@ -728,7 +738,16 @@ async function toWooJae(currPosition, reduxState, setFromWooJaeData) {
     });
   });
 
-  console.log("arr", arr);
+  reduxState.arrForPickMazzip.forEach((obj, index) => {
+    arr.push({
+      contenttypeid: obj.contenttypeid,
+      contentid: obj.contentid,
+      starttime: null,
+      day: null,
+      atime: obj.atime,
+    });
+  });
+
   try {
     const resp = await axios.post(
       "/aamurest/planner/data",

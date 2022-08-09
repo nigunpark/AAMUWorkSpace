@@ -760,4 +760,9 @@ public class MainServiceImpl implements MainService{
 
 		return dao.searchBbsReview(map);
 	}
+	@Override
+	public List<Map> getTopPlaceInArea(Map map) {
+		
+		return dao.getTopPlaceInArea(map);
+	}
 }

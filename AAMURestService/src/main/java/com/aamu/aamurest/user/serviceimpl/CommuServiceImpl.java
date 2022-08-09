@@ -296,7 +296,7 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 	//TAGS테이블에 있으면 TNO,TNAME 키값으로 뿌려주기 //없으면 INSERT TAGS테이블 COMMUTAG테이블
 	@Override
 	public List<String> commuTag(Map map) {
-		if(map.get("tname").toString().contains("#")) {
+		if(map.get("tname").toString().contains("#") && map.get("tname").toString().length()>=2) {
 			String tname=map.get("tname").toString().split("#")[1];
 			map.put("tname", tname);
 			List<String> tagLists=dao.commuSelectTag(map);//#서, #서울가 오잖아

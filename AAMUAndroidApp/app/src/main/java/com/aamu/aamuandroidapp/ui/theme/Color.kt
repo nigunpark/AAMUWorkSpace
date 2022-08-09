@@ -26,6 +26,10 @@ val orange200 = Color(0xFFff7961)
 val orange500 = Color(0xFFf44336)
 val orange700 = Color(0xFFba000d)
 
+val aamublue = Color(0xFF4972AF)
+val aamuorange200 = Color(0xFFFAE307)
+val aamuorange500 = Color(0xFFFAC307)
+val aamuorange = Color(0xFFFAA307)
 
 val teal200 = Color(0xff80deea)
 val twitterColor = Color(0xFF1DA1F2)

@@ -45,10 +45,10 @@
           </button>
         </div>
         <div>
-          <a class="navbar-brand brand-logo" href="http://http://192.168.0.35:3000/">
+          <a class="navbar-brand brand-logo" href="http://192.168.0.35:3000/">
             <img src="<c:url value="/resources/images/AAMU_100_TEXT.png"/>" alt="mapping=/resources/**" />
           </a>
-          <a class="navbar-brand brand-logo-mini" href="http://http://192.168.0.35:3000/">
+          <a class="navbar-brand brand-logo-mini" href="http://192.168.0.35:3000/">
             <img src="<c:url value="/resources/images/AAMU_100_Circle.png"/>" alt="mapping=/resources/**" />
           </a>
         </div>
@@ -61,22 +61,6 @@
           </li>
         </ul>
         <ul class="navbar-nav ms-auto">
-          <li class="nav-item d-none d-lg-block">
-            <div id="datepicker-popup" class="input-group date datepicker navbar-date-picker">
-              <span class="input-group-addon input-group-prepend border-right">
-                <span class="icon-calendar input-group-text calendar-icon"></span>
-              </span>
-              <input type="text" class="form-control" >
-            </div>
-          </li>
-          <li class="nav-item d-none d-lg-block">
-            <div id="datepicker-popup2" class="input-group date datepicker navbar-date-picker">
-              <span class="input-group-addon input-group-prepend border-right">
-                <span class="icon-calendar input-group-text calendar-icon"></span>
-              </span>
-              <input type="text" class="form-control" >
-            </div>
-          </li>
           <li class="nav-item">
             <form class="search-form" action="#">
               <i class="icon-search"></i>

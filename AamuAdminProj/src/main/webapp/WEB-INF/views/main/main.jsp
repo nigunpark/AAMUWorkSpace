@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<jsp:include page="/WEB-INF/views/template/top.jsp"/>
+<jsp:include page="/WEB-INF/views/template/top2.jsp"/>
    <!--차트 데이터용 자바 스크립트-->
 
   <script src="<c:url value="/resources/vendors/chart.js/Chart.min.js"/>"></script>

@@ -93,6 +93,7 @@ const CreatePlanMap = ({ currPosition, fromWooJaeData, forDayLine, setSavePlan }
         // 마커 이미지의 이미지 주소입니다
         let imageSrcHotel = "/images/hotel.png";
         let imageSrcDesti = "/images/destination.png";
+        let imageSrcDinning = "/images/dinning.png";
         let imageSrc = "/images/destination.png";
         reduxState.tripPeriod.map((val, index) => {
           forMarkers[index].map((val, i) => {
@@ -101,6 +102,7 @@ const CreatePlanMap = ({ currPosition, fromWooJaeData, forDayLine, setSavePlan }
             // 마커 이미지를 생성합니다
             if (val.contenttypeid === 12) imageSrc = imageSrcDesti;
             if (val.contenttypeid === 32) imageSrc = imageSrcHotel;
+            if (val.contenttypeid === 39) imageSrc = imageSrcDinning;
             let markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
             // 마커를 생성합니다
             let marker = new kakao.maps.Marker({
@@ -143,6 +145,7 @@ const CreatePlanMap = ({ currPosition, fromWooJaeData, forDayLine, setSavePlan }
         // 마커 이미지의 이미지 주소입니다
         let imageSrcHotel = "/images/hotel.png";
         let imageSrcDesti = "/images/destination.png";
+        let imageSrcDinning = "/images/dinning.png";
         let imageSrc = "/images/destination.png";
         forMarkers[i].map((val, idx) => {
           // 마커 이미지의 이미지 크기 입니다
@@ -150,6 +153,7 @@ const CreatePlanMap = ({ currPosition, fromWooJaeData, forDayLine, setSavePlan }
           // 마커 이미지를 생성합니다
           if (val.contenttypeid === 12) imageSrc = imageSrcDesti;
           if (val.contenttypeid === 32) imageSrc = imageSrcHotel;
+          if (val.contenttypeid === 39) imageSrc = imageSrcDinning;
           let markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
           // 마커를 생성합니다
           marker = new kakao.maps.Marker({

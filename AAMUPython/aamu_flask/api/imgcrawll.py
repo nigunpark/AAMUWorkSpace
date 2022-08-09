@@ -29,18 +29,23 @@ class Imgcrawll(Resource):
                 title = dict_.get('title')
                 contentid = dict_.get('contentid')
                 if title.find('(') != -1:
-                    title = title.split('(')[0]
+                    if title.split('(')[0]:
+                        title = title.split('(')[0]
                 if title.find('[') != -1:
-                    title = title.split('[')[0]
+                    if title.split('[')[0]:
+                        title = title.split('[')[0]
                 print(title)
                 print(type(dict_.get('contenttypeid')))
                 contenttypeid = dict_.get('contenttypeid')
                 print(type(contenttypeid))
                 print(contenttypeid)
                 print(contenttypeid == '32')
-                if contenttypeid == '32' :
+                if contenttypeid == '32':
                     title = '숙소 '+title
-
+                elif contenttypeid == '39':
+                    title = '음식점 '+title
+                elif contenttypeid == '12':
+                    title = '관광지 ' + title
                 url = 'https://www.google.com/search?q=' + title + '&source=lnms&tbm=isch'
                 selector = '#islrg > div.islrc > div:nth-child(2) > a.wXeWr.islib.nfEiy > div.bRMDJf.islir > img'
 
