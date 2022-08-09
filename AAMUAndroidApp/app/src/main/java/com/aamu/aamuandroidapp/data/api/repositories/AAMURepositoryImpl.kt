@@ -203,6 +203,24 @@ class AAMURepositoryImpl(
         emit(emptyList<AAMUGarmResponse>())
     }.flowOn(Dispatchers.IO)
 
+    override suspend fun postGramComment(gramComment: GramComment): Flow<Map<String, String>> = flow<Map<String,String>> {
+        val response = aamuApi.postGramComment(gramComment)
+        val failmap = HashMap<String,String>()
+        failmap.put("result","insertNotSuccess")
+        if (response.isSuccessful){
+            if(response.body()?.getOrDefault("id",null) != null){
+                emit(response.body() ?: failmap)
+            }
+            else{
+                emit(failmap)
+            }
+        }
+    }.catch {
+        val failmap = HashMap<String,String>()
+        failmap.put("result","insertNotSuccess")
+        emit(failmap)
+    }.flowOn(Dispatchers.IO)
+
     override suspend fun getBBSList(): Flow<List<AAMUBBSResponse>> = flow<List<AAMUBBSResponse>> {
         val response = aamuApi.getBBSList()
         if (response.isSuccessful){
@@ -256,5 +274,17 @@ class AAMURepositoryImpl(
         }
     }.catch {
         emit(emptyList<AAMUNotiResponse>())
+    }.flowOn(Dispatchers.IO)
+
+    override suspend fun getUserInfo(id: String): Flow<AAMUUserInfo> = flow<AAMUUserInfo> {
+        val response = aamuApi.getUserInfo(id)
+        if(response.isSuccessful){
+            emit(response.body() ?: AAMUUserInfo())
+        }
+        else{
+            emit(AAMUUserInfo())
+        }
+    }.catch {
+        emit(AAMUUserInfo())
     }.flowOn(Dispatchers.IO)
 }

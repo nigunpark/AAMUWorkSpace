@@ -3,6 +3,7 @@ package com.aamu.aamuandroidapp.fragment.main
 import android.Manifest
 import android.content.Context
 import android.content.SharedPreferences
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -17,11 +18,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.replace
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import com.aamu.aamuandroidapp.R
 import com.aamu.aamuandroidapp.databinding.FragmentMainBinding
 import com.aamu.aamuandroidapp.fragment.main.sub.GramFragment
 import com.aamu.aamuandroidapp.fragment.main.sub.HomeFragment
@@ -29,6 +32,10 @@ import com.aamu.aamuandroidapp.fragment.main.sub.InfoFragment
 import com.aamu.aamuandroidapp.fragment.main.sub.RouteBBSFragment
 import com.aamu.aamuandroidapp.util.PermissionUtils
 import com.aamu.aamuandroidapp.util.stomp
+import com.airbnb.lottie.LottieProperty
+import com.airbnb.lottie.SimpleColorFilter
+import com.airbnb.lottie.model.KeyPath
+import com.airbnb.lottie.value.LottieValueCallback
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import io.reactivex.disposables.Disposable
 import kotlin.math.absoluteValue
@@ -60,6 +67,11 @@ class MainFragment : Fragment() {
         Log.i("com.aamu.aamu",viewModel.fromthan.value ?: "없음")
         Log.i("com.aamu.aamu",viewModel.no.value.toString())
         requireActivity().supportFragmentManager.beginTransaction().replace(binding.bottomfragment.id,BottomFragment()).commit()
+        binding.waveanimat.addValueCallback(
+            KeyPath("**"),
+            LottieProperty.COLOR_FILTER,
+            LottieValueCallback(SimpleColorFilter(Color.parseColor("#a5c3e7")))
+        )
         replace(HomeFragment())
 
 //        binding.bottomNav.apply {

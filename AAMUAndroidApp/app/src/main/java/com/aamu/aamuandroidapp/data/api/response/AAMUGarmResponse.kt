@@ -27,9 +27,9 @@ data class AAMUGarmResponse(
 
 
 data class GramComment(
-    var cno: String? = null,
+    var cno: Int? = null,
     var id: String? = null,
-    var lno: String? = null,
+    var lno: Int? = null,
     var reply: String? = null,
     var replydate: Long? = null,
     var userprofile: String? = null

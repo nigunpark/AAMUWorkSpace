@@ -11,6 +11,8 @@ import com.aamu.aamuandroidapp.components.gram.image.PlanGramImageGridViewModel
 import com.aamu.aamuandroidapp.data.api.AAMUDIGraph
 import com.aamu.aamuandroidapp.data.api.repositories.AAMURepository
 import com.aamu.aamuandroidapp.data.api.response.AAMUGarmResponse
+import com.aamu.aamuandroidapp.data.api.response.GramComment
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class GramDetailViewModelFactory(val context : Context): ViewModelProvider.Factory{
@@ -43,4 +45,20 @@ class GramDetailViewModel(context : Context) : ViewModel(){
                 }
         }
     }
+
+    fun postGramComment(gramComment: GramComment){
+        val preferences : SharedPreferences = context.getSharedPreferences("usersInfo", Context.MODE_PRIVATE)
+        val userid : String? = preferences.getString("id",null)
+        gramComment.id = userid
+        viewModelScope.launch {
+            aamuRepository.postGramComment(gramComment)
+                .collect{
+                    if (it.getOrDefault("id",null) != null){
+                        getGramDetail(gramComment.lno ?: 0)
+                    }
+                }
+        }
+    }
+
+
 }

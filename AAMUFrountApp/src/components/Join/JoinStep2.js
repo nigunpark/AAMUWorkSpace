@@ -566,7 +566,7 @@ const SendEmail = ({
           <span
             className="emailValid-confirm-btn"
             onClick={() => {
-              if (userVNumRef.current.value === number) {
+              if (parseInt(userVNumRef.current.value) === number) {
                 setEmailCk(true);
               } else {
                 alert("숫자가 틀립니다");

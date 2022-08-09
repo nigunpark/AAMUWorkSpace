@@ -74,5 +74,5 @@ public interface MainService{
 
 	List<ReviewDTO> searchBbsReview(Map map);
 
-
+	List<Map> getTopPlaceInArea(Map map);
 }

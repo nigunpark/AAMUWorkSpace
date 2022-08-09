@@ -33,14 +33,18 @@ import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.aamu.aamuandroidapp.R
 import com.aamu.aamuandroidapp.components.gram.profile.ProfilePicture
+import com.aamu.aamuandroidapp.components.gram.profile.ProfileSectionSizes
 import com.aamu.aamuandroidapp.components.gram.profile.ProfileSizes
+import com.aamu.aamuandroidapp.data.api.response.GramComment
+import com.aamu.aamuandroidapp.ui.theme.aamuorange
 import com.aamu.aamuandroidapp.ui.theme.cyan200
+import com.aamu.aamuandroidapp.ui.theme.twitterColor
 import com.google.accompanist.insets.LocalWindowInsets
 import java.text.SimpleDateFormat
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun GramDetail(lno : Int){
+fun GramDetail(lno : Int,backclick : ()->Unit){
     val viewModel : GramDetailViewModel = viewModel(
         factory = GramDetailViewModelFactory(LocalContext.current)
     )
@@ -52,26 +56,11 @@ fun GramDetail(lno : Int){
     if(gramDetail?.lno != null) {
         Box(
             modifier = Modifier
-                .background(Color.White)
+                .background(aamuorange.copy(alpha = 0.1f))
                 .fillMaxSize()
         ) {
-            TopAppBar(title = {
-                Column(modifier = Modifier.fillMaxWidth()) {
-                    Spacer(modifier = Modifier.height(WindowInsets.statusBars.asPaddingValues().calculateTopPadding()))
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        IconButton(onClick = { }) {
-                            Icon(
-                                imageVector = Icons.Filled.ArrowBack,
-                                contentDescription = "백버튼"
-                            )
-                        }
-                        Text(gramDetail?.ctitle ?: "")
-                    }
-                }
-            },
-            modifier = Modifier.height(WindowInsets.statusBars.asPaddingValues().calculateTopPadding()+56.dp),
-            backgroundColor = Color.White)
-            LazyColumn {
+
+            LazyColumn() {
                 item {
                     Spacer(
                         modifier = Modifier
@@ -89,15 +78,15 @@ fun GramDetail(lno : Int){
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(30.dp),
-                            verticalAlignment = Alignment.CenterVertically
+                            verticalAlignment = Alignment.Top
                         ) {
                             ProfilePicture(
                                 imageId = gramDetail?.userprofile,
                                 contentDescription = null,
-                                size = ProfileSizes.medium
+                                size = ProfileSizes.large
                             )
                             Spacer(modifier = Modifier.width(10.dp))
-                            Column(verticalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxHeight()) {
+                            Column(verticalArrangement = Arrangement.SpaceAround, modifier = Modifier.fillMaxHeight()) {
                                 Row {
                                     Text(
                                         text = gramDetail?.id ?: "",
@@ -106,12 +95,17 @@ fun GramDetail(lno : Int){
                                     Spacer(modifier = Modifier.width(10.dp))
                                     Text(text = gramDetail?.content ?: "")
                                 }
+                                Spacer(modifier = Modifier.height(30.dp))
+                                Text(
+                                    text = "${gramDetail?.tname?.joinToString(" ")}",
+                                    color = twitterColor,
+                                )
+                                Spacer(modifier = Modifier.height(30.dp))
                                 Row {
                                     val formatter = SimpleDateFormat("yyyy년 MM월 dd일")
                                     val time = formatter.format(gramDetail?.postdate)
                                     Text(text = "${time}", color = Color.LightGray)
                                 }
-
                             }
                         }
                     }
@@ -132,12 +126,14 @@ fun GramDetail(lno : Int){
                                 contentDescription = null,
                                 size = ProfileSizes.medium
                             )
+                            Spacer(modifier = Modifier.width(10.dp))
                             Column {
                                 Row {
                                     Text(
                                         text = gramComment.id ?: "",
                                         fontWeight = FontWeight.ExtraBold
                                     )
+                                    Spacer(modifier = Modifier.width(10.dp))
                                     Text(text = gramComment.reply ?: "")
                                 }
                                 Row {
@@ -149,10 +145,36 @@ fun GramDetail(lno : Int){
                             }
                         }
                     }
-                } else {
-
+                }
+                item { 
+                    Spacer(modifier = Modifier.height(64.dp).fillMaxWidth())
                 }
             }
+            Box(
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .fillMaxWidth()
+            ) {
+                GramInput(onMessageSent = {
+                    viewModel.postGramComment(GramComment(lno = lno, reply = it))
+                })
+            }
+            TopAppBar(title = {
+                Column(modifier = Modifier.fillMaxWidth()) {
+                    Spacer(modifier = Modifier.height(WindowInsets.statusBars.asPaddingValues().calculateTopPadding()))
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        IconButton(onClick = { backclick.invoke()}) {
+                            Icon(
+                                imageVector = Icons.Filled.ArrowBack,
+                                contentDescription = "백버튼"
+                            )
+                        }
+                        Text(gramDetail?.ctitle ?: "")
+                    }
+                }
+            },
+                modifier = Modifier.height(WindowInsets.statusBars.asPaddingValues().calculateTopPadding()+56.dp),
+                backgroundColor = Color.White)
         }
     }
     else{
@@ -174,5 +196,5 @@ fun GramDetail(lno : Int){
 @Preview
 @Composable
 fun PreviewGramDetail(){
-    GramDetail(lno = 0)
+    GramDetail(lno = 0,{})
 }
