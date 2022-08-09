@@ -88,8 +88,8 @@ public class BBSAdminController {
 	//리뷰 삭제
 	@PostMapping("reviewDelete.do")
 	@ResponseBody
-	public Map reviewDelete(@RequestBody Map map){
-		int affected=bbsAdminService.reviewDelete(map);
+	public Map reviewAdminDelete(@RequestBody Map map){
+		int affected=bbsAdminService.reviewAdminDelete(map);
 		//데이터 반환
 		Map resultMap = new HashMap();
 		System.out.println("affected:"+affected);

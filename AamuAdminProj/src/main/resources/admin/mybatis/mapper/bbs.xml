@@ -42,14 +42,14 @@
 	</select>
 	
 	<!-- 전체 댓글 레코드수 -->
-	<!--<select id="reviewGetTotalRecordCount" parameterType="map" resultType="int">
+	<select id="reviewGetTotalRecordCount" parameterType="map" resultType="int">
 	 	SELECT COUNT(*) FROM ratereview
-	</select>-->
+	</select>
 	
 	<!-- 리뷰 삭제 -->
-	<!--  <delete id="reviewAdminDelete" parameterType="map">
+	<delete id="reviewAdminDelete" parameterType="map">
 	 	DELETE ratereview WHERE rno=#{rno}
-	 </delete>-->
+	 </delete>
 	
 	<!-- 					통계 							 -->
 	<!-- 게시판 월별 통계 -->
