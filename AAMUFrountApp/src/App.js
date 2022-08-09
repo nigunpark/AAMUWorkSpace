@@ -99,7 +99,7 @@ function App() {
           <Route path="/qna" element={<QnA />} />
           <Route path="/qnaDetail" element={<QnADetail />} />
           <Route path="/qnaWrite" element={<QnAWrite />} />
-          <Route path="/qnaEdit" element={<QnAEdit />} />
+          {/* <Route path="/admin" element="http://192.168.0.22:9090/admin/" /> */}
 
           {/* <Route path="/review" element={<Board />} /> */}
           {/* <Route path="/Insta" element={<Main />} /> */}
