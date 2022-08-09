@@ -245,6 +245,11 @@ public class CommuDAO {
 		return template.selectOne("commuFollowingCount",map);
 	}
 	
+	//마이페이지용-팔로우,팔로잉 목록
+	public List<String> commuMyPageFollower(Map map){
+		return template.selectList("commuMyPageFollower",map);
+	}
+	
 	///////////////////////////////////////////////////////////////워드클라우드 
 	public List<String> getAllTnamesOfWoman(Map map){
 		return template.selectList("getAllTnamesOfWoman",map);

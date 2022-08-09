@@ -1,6 +1,7 @@
 package com.aamu.aamuandroidapp.fragment.main
 
 import android.content.Context
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -14,8 +15,14 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
+import com.aamu.aamuandroidapp.R
 import com.aamu.aamuandroidapp.databinding.FragmentMainBinding
 import com.aamu.aamuandroidapp.fragment.main.sub.*
+import com.airbnb.lottie.LottieAnimationView
+import com.airbnb.lottie.LottieProperty
+import com.airbnb.lottie.SimpleColorFilter
+import com.airbnb.lottie.model.KeyPath
+import com.airbnb.lottie.value.LottieValueCallback
 import kotlin.reflect.KFunction1
 
 class BottomFragment : Fragment(){
@@ -41,6 +48,31 @@ class BottomFragment : Fragment(){
     }
 
     fun replace(fragmet: Fragment) {
+        val lottie = requireActivity().findViewById<LottieAnimationView>(R.id.waveanimat)
+
+        if(fragmet is RouteBBSFragment) {
+            lottie.addValueCallback(
+                KeyPath("**"),
+                LottieProperty.COLOR_FILTER,
+                LottieValueCallback(SimpleColorFilter(Color.parseColor("#4972AF")))
+            )
+        }
+        else if(fragmet is HomeFragment){
+            lottie.addValueCallback(
+                KeyPath("**"),
+                LottieProperty.COLOR_FILTER,
+                LottieValueCallback(SimpleColorFilter(Color.parseColor("#a5c3e7")))
+            )
+        }
+        else {
+            lottie.addValueCallback(
+                KeyPath("**"),
+                LottieProperty.COLOR_FILTER,
+                LottieValueCallback(SimpleColorFilter(Color.parseColor("#FAA307")))
+            )
+        }
+
+
         requireActivity().supportFragmentManager.beginTransaction()
             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
             .replace(binding.navMainFrame.id, fragmet).commit()
@@ -67,5 +99,10 @@ fun MeowBottom(
         if(noticount!! > 0){
             it.setCount(4,noticount.toString())
         }
+        else{
+            it.clearCount(4)
+        }
     }
 }
+
+

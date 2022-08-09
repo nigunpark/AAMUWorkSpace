@@ -215,4 +215,9 @@ public class MainDAO {
 		return template.selectList("searchBbsReview", map);
 	}
 
+	public List<Map> getTopPlaceInArea(Map map) {
+		
+		return template.selectList("getTopPlaceInArea", map);
+	}
+
 }

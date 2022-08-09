@@ -28,24 +28,28 @@ function FeedSetting({
   let profileRef = useRef();
   let replyRef = useRef();
   const [chosenEmoji, setChosenEmoji] = useState(null);
-
   const [feedComments, setfeedComments] = useState([]);
   const [editModal, seteditModal] = useState(false);
   const [comeditModal, setcomeditModal] = useState(false);
   const [modalShow, setModalShow] = useState(false);
   const [profileModal, setprofileModal] = useState(false);
   const [commentModal, setcommentModal] = useState(false);
-
   let [isValid, setisValid] = useState(false);
-
   const [isShowMore, setIsShowMore] = useState(false); // 더보기 열고 닫는 스위치
   const textLimit = useRef(10); // 글자수 제한 선언
-
   const [emoji, setemoji] = useState(false);
+
   const onEmojiClick = (event, emojiObject) => {
     setChosenEmoji(emojiObject);
     replyRef.current.value = emojiObject.emoji;
   };
+
+  function btn_check(){
+    replyRef.current !== undefined && 
+    (replyRef.current.value.length >= 1 //사용자가 키를 눌렀다 떼었을때 길이가 0을 넘는 값인지 유효성 검사 결과 값을 담는다
+      ? setisValid(true)
+      : setisValid(false))
+  }
 
   const commenter = useMemo(() => {
     // 조건에 따라 게시글을 보여주는 함수
@@ -107,6 +111,7 @@ function FeedSetting({
         // val.commuComment = resp.data.reply;
         setfeedComments(resp.data);
         setForReRender(!forReRender);
+        setisValid(false)
       })
       .catch((error) => {
         console.log("error", error);
@@ -126,7 +131,7 @@ function FeedSetting({
 
   let CommentList = ({ val }) => {
     return (
-      <div className="writing">
+      <div className="writing" style={{marginTop:'5px'}}>
         <span className="id">{val.commuComment === null ? null : val.commuComment.id}</span>
         <span>{val.commuComment === null ? null : val.commuComment.reply}</span>
       </div>
@@ -348,12 +353,10 @@ function FeedSetting({
             />
           </div>
           {emoji && (
-            <div className="emoji-all">
+            <div className="emoji-all"
+              onClick={()=>{setisValid(true);  setemoji(false);}}>
               <Picker
                 onEmojiClick={onEmojiClick}
-                onClick={() => {
-                  setemoji(!emoji);
-                }}
               />
             </div>
           )}
@@ -367,9 +370,7 @@ function FeedSetting({
             //   setComment(e.target.value); //댓글 창의 상태가 변할때마다 setComment를 통해 comment값을 바꿔준다
             // }}
             onKeyUp={(e) => {
-              replyRef.current !== undefined && replyRef.current.value.length > 0 //사용자가 키를 눌렀다 떼었을때 길이가 0을 넘는 값인지 유효성 검사 결과 값을 담는다
-                ? setisValid(true)
-                : setisValid(false);
+              btn_check()
               // console.log(replyRef.current.value.length>0?'true':'false');
             }}
             // value={comment}
@@ -378,11 +379,13 @@ function FeedSetting({
           <button
             className={
               //클래스명을 comment창의 글자 길에 따라서 다르게 주면서 버튼색에 css디자인을 줄 수 있음
-              isValid === true && replyRef.current.value.length > 0
+              isValid
                 ? "submitCommentActive"
                 : "submitCommentInactive"
             }
             onClick={() => {
+              console.log(isValid);
+              console.log(replyRef.current.value.length);
               post(replyRef);
             }} //클릭하면 위서 선언한 post함수를 실행하여 feedComments에 담겨서 re-rendering 된 댓글창을 확인할 수 있다
             disabled={isValid ? false : true} //사용자가 아무것도 입력하지 않았을 경우 게시를 할 수 없도록
@@ -406,24 +409,5 @@ async function getChatRoom(val, dispatch, setPrevChats) {
       console.log(err);
     });
 }
-const Container1 = styled.div`
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  display: flex;
-  z-index: 1;
-  justify-content: center;
-  align-items: center;
-`;
-const Overlay = styled.div`
-  position: relative;
-  width: 100%;
-  height: 100%;
-  z-index: 15;
-  background-color: rgba(0, 0, 0, 0.6);
-`;
+
 export default FeedSetting;

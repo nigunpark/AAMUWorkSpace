@@ -96,6 +96,12 @@ public class CommuController {
 			//System.out.println("포함되어있냐"+map.keySet().contains("searchColumn"));
 			if(map.keySet().contains("searchColumn")) { 
 				dto.setSearchtotalcount(commuService.commuSearchTotalCount(map));
+				//마이페이지용_나를 팔로우하는 계정 수 셋팅
+				map.put("follower", map.get("searchWord").toString());
+				dto.setFollowercount(commuService.commuFollowerCount(map));
+				//내가 팔로잉하는 계정 수 셋팅
+				dto.setFollowingcount(commuService.commuFollowingCount(map));
+				
 			}
 			//코멘트 프로필사진 셋팅
 			if(commentdto!=null) {
@@ -109,8 +115,6 @@ public class CommuController {
 			dto.setFollowercount(commuService.commuFollowerCount(map));
 			//내가 팔로잉하는 계정 수 셋팅
 			dto.setFollowingcount(commuService.commuFollowingCount(map));
-			
-			
 			
 		}/////for
 		
@@ -128,6 +132,8 @@ public class CommuController {
 			}
 		}
 		list.get(0).setRecommenduser(recommendUserList);
+		
+		
 		
 		
 //		System.out.println("몇개 넘어가니:"+list.size());
@@ -217,7 +223,7 @@ public class CommuController {
 	//TAGS테이블에 있으면 TNO,TNAME 키값으로 뿌려주고 COMMUTAG에 저장 //없으면 INSERT TAGS테이블 COMMUTAG테이블
 	@GetMapping("/gram/tag")
 	public List<String> commuTag(@RequestParam Map map){//tname:
-		//System.out.println("태그검색 map:"+map);
+		System.out.println("태그검색 map:"+map);
 		//System.out.println("태그:"+commuService.commuTag(map));
 		return commuService.commuTag(map);
 	}
@@ -443,6 +449,51 @@ public class CommuController {
 		}
 		return list;
 	}
+	
+	//마이페이지용-팔로우,팔로잉 목록
+	@GetMapping("/gram/mypage/follower")
+	public Map<String,List<Map>> commuMyPageFollower(@RequestParam Map map, HttpServletRequest req) {//id:AdMIN
+		
+		map.put("selectid", "id");
+		map.put("whereid", "follower");
+		List<String> followingList=commuService.commuMyPageFollower(map); //내가 팔로잉하는 사용자id 얻어오기
+		System.out.println("내가 팔로잉하는 사용자:"+followingList);
+		
+		map.put("selectid", "follower");
+		map.put("whereid", "id");
+		List<String> followerList=commuService.commuMyPageFollower(map); //나를 팔로우하는 사용자id
+		System.out.println("나를 팔로우하는 사용자:"+followerList);
+		
+		//최종 리턴할 map 생성
+		Map<String,List<Map>> resultMap = new HashMap<>();
+		
+		//내가 팔로잉하는 목록
+		List<Map> followingListMap = new Vector<>();
+		for(String following:followingList) {
+			Map oneUserMap = new HashMap<>();
+			String profName=FileUploadUtil.requestOneFile(commuService.commuSelectUserProf(following), "/resources/userUpload", req);
+			oneUserMap.put("id", following);
+			oneUserMap.put("userprofile", profName);
+			followingListMap.add(oneUserMap);
+		}
+		resultMap.put("following", followingListMap); //내가 팔로잉하는 목록 셋팅
+		
+		//나를 팔로우하는 목록
+		List<Map> followerListMap = new Vector<>();
+		for(String follower:followerList) {
+			Map oneUserMap = new HashMap<>();
+			String profName=FileUploadUtil.requestOneFile(commuService.commuSelectUserProf(follower), "/resources/userUpload", req);
+			oneUserMap.put("id", follower);
+			oneUserMap.put("userprofile", profName);
+			followerListMap.add(oneUserMap);
+		}
+		resultMap.put("follower", followerListMap); //나를 팔로워하는 목록 셋팅
+		
+		return resultMap;
+	}
+	
+	//마이페이지용-내 id
+	
 	
 
 	

@@ -1,10 +1,10 @@
-import React, { Component, useEffect, useRef, useState } from "react";
+import React, {useEffect, useState } from "react";
 import "./Main.scss";
-import { Routes, Route, Link } from "react-router-dom";
 import FeedSetting from "./FeedSetting.js";
 import User from "./User.js";
 import axios from "axios";
 import Spinner from "./Spinner";
+
 function Main({
   searchb,
   setSearchb,
@@ -69,6 +69,8 @@ function Main({
                 showChat={showChat}
                 setShowChat={setShowChat}
                 setPrevChats={setPrevChats}
+                inputValue={inputValue} 
+                setinputValue={setinputValue}
               />
             );
           })}

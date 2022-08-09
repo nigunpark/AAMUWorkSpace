@@ -155,7 +155,8 @@ const login = (idRef, pwdRef, navigate, setShowValid, dispatch) => {
       password: pwdRef.current.value,
     })
     .then((resp) => {
-      // console.log("resp.data", resp.data);
+      // console.log("resp.data(login)", resp.data);
+      sessionStorage.setItem("role", resp.data.member.authority);
       sessionStorage.setItem("token", resp.data.token);
       sessionStorage.setItem("userimg", resp.data.userprofile);
       sessionStorage.setItem("username", idRef.current.value);

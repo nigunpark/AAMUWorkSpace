@@ -3,14 +3,12 @@ import { Link, useNavigate, useLocation, NavLink } from "react-router-dom";
 import "./Navbar.css";
 import { Outlet } from "react-router-dom";
 import styled, { keyframes } from "styled-components";
-import { useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMessage, faRobot } from "@fortawesome/free-solid-svg-icons";
 import ChatBot from "../ChatBot/ChatBot";
 import axios from "axios";
-import { message } from "antd";
 let chatArr = [];
-const Navbar = ({ scrollNav, whereUrl }) => {
+const Navbar = ({ scrollNav, whereUrl, noti, setNoti }) => {
   const [click, setClick] = useState(false);
   const handleClick = () => setClick(!click);
   const closeMoblieMenu = () => setClick(false);
@@ -79,6 +77,19 @@ const Navbar = ({ scrollNav, whereUrl }) => {
                 QnA
               </NavLink>
             </li>
+            {sessionStorage.getItem("role") === "ROLE_ADMIN" && (
+              <li>
+                <a
+                  href="http://192.168.0.22:9090/admin/"
+                  className="nav-links"
+                  onClick={closeMoblieMenu}
+                  style={{ color: "red" }}
+                  // style={({ isActive }) => (isActive ? activeStyle : undefined)}
+                >
+                  ADMIN
+                </a>
+              </li>
+            )}
           </ul>
           <div className="navbar-btn-container">
             {sessionStorage.getItem("token") === null ? (
@@ -96,7 +107,7 @@ const Navbar = ({ scrollNav, whereUrl }) => {
                 </Link>
               </>
             ) : (
-              <UserBadge />
+              <UserBadge noti={noti} setNoti={setNoti} />
             )}
           </div>
           <div className="navbar-menu-icon" onClick={handleClick}>
@@ -105,7 +116,7 @@ const Navbar = ({ scrollNav, whereUrl }) => {
         </div>
       </nav>
       <Outlet />
-      {location.pathname.indexOf("mainPage") !== 1 && (
+      {location.pathname.indexOf("mainPage") !== 1 && location.pathname.indexOf("forum") !== 1 && (
         <ChatBotBtn setShowChatBot={setShowChatBot} showChatBot={showChatBot} />
       )}
     </div>
@@ -130,8 +141,9 @@ function ChatBotBtn({ setShowChatBot, showChatBot }) {
   );
 }
 
-function UserBadge() {
+function UserBadge({ noti, setNoti }) {
   const [showUserModal, setShowUserModal] = useState(false);
+  const [showNotiModal, setShowNotiModal] = useState(false);
   let navigate = useNavigate();
   let userRef = useRef();
   let modalRef = useRef();
@@ -142,6 +154,23 @@ function UserBadge() {
   useEffect(() => {
     userRef.current.src = sessionStorage.getItem("userimg");
   }, [sessionStorage]);
+  function getNotiNum() {
+    if (
+      noti.filter((val, i) => {
+        return val.readknow === 0;
+      }).length === 0
+    )
+      return null;
+    if (
+      noti.filter((val, i) => {
+        return val.readknow === 0;
+      }).length !== 0
+    ) {
+      return noti.filter((val, i) => {
+        return val.readknow === 0;
+      }).length;
+    }
+  }
   return (
     <>
       <Container>
@@ -157,37 +186,118 @@ function UserBadge() {
             }}
             onClick={(e) => {
               setShowUserModal(!showUserModal);
+              setShowNotiModal(false);
             }}
           />
-          <Badge>3</Badge>
+          {noti.filter((val, i) => {
+            return val.readknow === 0;
+          }).length !== 0 && (
+            <Badge>
+              {
+                noti.filter((val, i) => {
+                  return val.readknow === 0;
+                }).length
+              }
+            </Badge>
+          )}
         </ImgContainer>
         <div className="modal_container" ref={modalRef}>
           {showUserModal && (
-            <Modal>
-              <Content
-                onClick={() => {
-                  navigate("/myPage");
-                }}
-              >
-                My Page
-              </Content>
-              <Content
-                onClick={() => {
-                  sessionStorage.clear();
-                  navigate("/");
-                }}
-              >
-                Log out
-              </Content>
-              <Content>
-                <BadgeNotice>3</BadgeNotice>Notice
-              </Content>
-            </Modal>
+            <div style={{ position: "relative" }}>
+              <Modal>
+                <Content
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setShowUserModal(false);
+                    navigate("/myPage");
+                  }}
+                >
+                  My Page
+                </Content>
+                <Content
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setShowUserModal(false);
+                    sessionStorage.clear();
+                    navigate("/");
+                  }}
+                >
+                  Log out
+                </Content>
+                <Content
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setShowNotiModal(!showNotiModal);
+                  }}
+                >
+                  {noti.filter((val, i) => {
+                    return val.readknow === 0;
+                  }).length !== 0 && (
+                    <BadgeNotice>
+                      {
+                        noti.filter((val, i) => {
+                          return val.readknow === 0;
+                        }).length
+                      }
+                    </BadgeNotice>
+                  )}
+                  Notice
+                </Content>
+              </Modal>
+              {showNotiModal && (
+                <NoticeModal>
+                  {noti.map((val) => {
+                    return (
+                      <div
+                        className={val.readknow === 1 ? "noti_message read_noti" : "noti_message"}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          val.readknow = 1;
+                          readNoti(val);
+                          setNoti((curr) => {
+                            return curr.splice(
+                              curr.findIndex((value) => {
+                                return value.nano === val.nano;
+                              }),
+                              1,
+                              val
+                            );
+                          });
+                        }}
+                      >
+                        {val.amessage}
+                      </div>
+                    );
+                  })}
+                </NoticeModal>
+              )}
+            </div>
           )}
         </div>
       </Container>
     </>
   );
+}
+function readNoti(val) {
+  let token = sessionStorage.getItem("token");
+  axios
+    .put(
+      "/aamurest/notification/edit",
+      {
+        nano: val.nano,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    )
+    .then((resp) => {
+      console.log(resp);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 }
 
 const slide_bottom = keyframes`
@@ -224,6 +334,16 @@ const wobble = keyframes`
 }
 `;
 
+const slide_noti = keyframes`
+0% {
+  transform: translateX(30px);
+  opacity: 0;
+}
+100% {
+  transform: translateX(0);
+  opacity: 1;
+}
+`;
 const Container = styled.div`
   position: relative;
   transition: 0.3s;
@@ -239,12 +359,28 @@ const Modal = styled.div`
   border-radius: 5px;
   box-shadow: var(--shadow);
   // z-index: 200;
-  top: 37px;
+  top: 5px;
   right: 0px;
   padding: 10px;
   transition: 0.3s;
   // transform: translateY(-15px);
   animation: ${slide_bottom} 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+`;
+const NoticeModal = styled.div`
+  position: absolute;
+  width: 300px;
+  height: auto;
+  background: white;
+  border-radius: 5px;
+  // box-shadow: var(--shadow);
+  // z-index: 200;
+  top: 75px;
+  right: 103px;
+  padding: 5px;
+  transition: 0.3s;
+  // transform: translateY(-15px);
+
+  animation: ${slide_noti} 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
 `;
 const Content = styled.div`
   position: relative;
@@ -252,6 +388,7 @@ const Content = styled.div`
   width: 100%;
   height: auto;
   border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+  font-weight: bold;
   &:hover {
     color: var(--orange);
   }

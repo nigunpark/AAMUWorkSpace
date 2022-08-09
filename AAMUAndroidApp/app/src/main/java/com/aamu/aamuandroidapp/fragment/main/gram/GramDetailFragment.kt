@@ -9,11 +9,15 @@ import android.view.WindowManager
 import androidx.compose.ui.platform.ComposeView
 import androidx.core.view.WindowCompat
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.aamu.aamuandroidapp.components.gram.detail.GramDetail
 import com.aamu.aamuandroidapp.fragment.main.routebbs.RouteBBSDetailFragmentArgs
 
 class GramDetailFragment : Fragment() {
+
+    private lateinit var navController : NavController
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,11 +38,13 @@ class GramDetailFragment : Fragment() {
         } else {
             requireActivity().window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
         }
-
+        navController = findNavController()
         val args: GramDetailFragmentArgs by navArgs()
 
         setContent {
-            GramDetail(args.lno)
+            GramDetail(args.lno) {
+                navController.popBackStack()
+            }
         }
     }
 

@@ -99,13 +99,8 @@ class MainViewModel(context : Context) : ViewModel() {
             val tempNotiList = notilist.value?.toMutableList()
             tempNotiList?.add(0, item)
             if (tempNotiList != null) {
-                noticount.value=0
-                for (item in tempNotiList) {
-                    if (item.readknow == 0) {
-                        noticount.value = noticount.value?.plus(1)
-                    }
-                }
                 notilist.value = tempNotiList.toList()
+                setNotiCount()
             }
         }
     }
@@ -119,11 +114,7 @@ class MainViewModel(context : Context) : ViewModel() {
                 .collect{ respNotiList->
                     if(respNotiList.isNotEmpty()){
                         notilist.value = respNotiList
-                        for (item in respNotiList){
-                            if(item.readknow == 0){
-                                noticount.value = noticount.value?.plus(1)
-                            }
-                        }
+                        setNotiCount()
                     }
                     else{
                         errorLiveData.value = "알람이 없어요"
@@ -134,7 +125,18 @@ class MainViewModel(context : Context) : ViewModel() {
     }
 
     fun delNotiList(nano : Int){
-
+        viewModelScope.launch {
+            val tempNotiList = notilist.value?.toMutableList()
+            if (tempNotiList != null) {
+                for (item in tempNotiList) {
+                    if (item.nano == nano) {
+                        item.readknow = 1
+                        break
+                    }
+                }
+                setNotiCount()
+            }
+        }
     }
 
     fun updateNotiList(nano : Int){
@@ -144,9 +146,23 @@ class MainViewModel(context : Context) : ViewModel() {
                 for (item in tempNotiList) {
                     if (item.nano == nano) {
                         item.readknow = 1
+                        break
                     }
                 }
+                notilist.value = emptyList()
                 notilist.value = tempNotiList.toList()
+                setNotiCount()
+            }
+        }
+    }
+
+    fun setNotiCount(){
+        viewModelScope.launch {
+            noticount.value = 0
+            for (item in notilist.value!!){
+                if(item.readknow == 0){
+                    noticount.value = noticount.value?.plus(1)
+                }
             }
         }
     }

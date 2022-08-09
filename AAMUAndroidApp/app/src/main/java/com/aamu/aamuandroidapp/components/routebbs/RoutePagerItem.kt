@@ -29,6 +29,7 @@ import coil.compose.rememberImagePainter
 import coil.request.ImageRequest
 import com.aamu.aamuandroidapp.R
 import com.aamu.aamuandroidapp.data.api.response.AAMUBBSResponse
+import com.aamu.aamuandroidapp.ui.theme.aamuorange
 import com.aamu.aamuandroidapp.ui.theme.cyan200
 import com.aamu.aamuandroidapp.ui.theme.cyan700
 import com.aamu.aamuandroidapp.ui.theme.typography
@@ -129,8 +130,9 @@ fun RoutePagerItem(
                     .weight(1f),
                 style = typography.subtitle2
             )
-            Button(onClick = {}, modifier = Modifier.fillMaxWidth()) {
-                Text(text = "자세히 보기", modifier = Modifier.padding(8.dp))
+            Button(onClick = {}, modifier = Modifier.fillMaxWidth(),
+                colors = ButtonDefaults.buttonColors(backgroundColor = aamuorange, contentColor = Color.White)) {
+                Text(text = "자세히 보기", modifier = Modifier.padding(8.dp), fontWeight = FontWeight.Bold)
             }
         }
     }

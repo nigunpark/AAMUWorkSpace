@@ -1,8 +1,4 @@
-import {
-  faCircleInfo,
-  faPlus,
-  faStar,
-} from "@fortawesome/free-solid-svg-icons";
+import { faCircleInfo, faPlus, faStar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useRef, useState } from "react";
 import "./SearchedLocation.css";
@@ -74,7 +70,7 @@ const SearchedLocation = ({ local }) => {
                   dispatch(timeSetter(2));
                   dispatch(addPickJangso(local));
                   dispatch(deleteArrInJangso(local));
-                  dispatch(changeShowWhichModal(false));
+                  dispatch(changeShowWhichModal(3));
                 }}
               />
             </div>
@@ -134,13 +130,8 @@ function LocalInfoModal({
             <h4>{`${local.title}`}</h4>
             <h4>
               (
-              <FontAwesomeIcon
-                icon={faStar}
-                style={{ marginRight: "8px", color: "gold" }}
-              />
-              {commentData.basic_info !== undefined &&
-                `(${commentData.basic_info.star})`}
-              )
+              <FontAwesomeIcon icon={faStar} style={{ marginRight: "8px", color: "gold" }} />
+              {commentData.basic_info !== undefined && `(${commentData.basic_info.star})`})
             </h4>
           </div>
           <div className="localInfo__container">
@@ -166,20 +157,12 @@ function LocalInfoModal({
         </BodyLim>
         <div className="localInfo__snsBtn__container">
           <ul className="localInfo__snsBtn-ul">
-            <a
-              href={`https://www.instagram.com/explore/tags/${local.title}/`}
-              target="_blank"
-            >
+            <a href={`https://www.instagram.com/explore/tags/${local.title}/`} target="_blank">
               <li>
-                <img
-                  src={process.env.PUBLIC_URL + "/images/sns/instagram.png"}
-                />
+                <img src={process.env.PUBLIC_URL + "/images/sns/instagram.png"} />
               </li>
             </a>
-            <a
-              href={`https://twitter.com/search?q=${local.title}&src=typed_query`}
-              target="_blank"
-            >
+            <a href={`https://twitter.com/search?q=${local.title}&src=typed_query`} target="_blank">
               <li>
                 <img src={process.env.PUBLIC_URL + "/images/sns/twitter.png"} />
               </li>
@@ -190,15 +173,10 @@ function LocalInfoModal({
               target="_blank"
             >
               <li>
-                <img
-                  src={process.env.PUBLIC_URL + "/images/sns/kakaoMap.png"}
-                />
+                <img src={process.env.PUBLIC_URL + "/images/sns/kakaoMap.png"} />
               </li>
             </a>
-            <a
-              href={`https://search.naver.com/search.naver?query=${local.title}`}
-              target="_blank"
-            >
+            <a href={`https://search.naver.com/search.naver?query=${local.title}`} target="_blank">
               <li>
                 <img src={process.env.PUBLIC_URL + "/images/sns/naver.png"} />
               </li>
@@ -213,8 +191,7 @@ function LocalInfoModal({
             }}
           >
             리뷰보기
-            {commentData.basic_info !== undefined &&
-              `(${commentData.basic_info.feedback})`}
+            {commentData.basic_info !== undefined && `(${commentData.basic_info.feedback})`}
           </span>
           <span
             onClick={(e) => {

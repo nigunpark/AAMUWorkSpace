@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="admin.mybatis.mapper.theme">
+	<select id="themeSelectList" parameterType="Map" resultType="themeDTO">
+		SELECT * FROM
+		(SELECT T.*,ROWNUM R FROM (
+		SELECT themeid, themename FROM theme
+		ORDER BY themeid) T)
+		WHERE R BETWEEN #{start} AND #{end}
+	</select>
+	
+	<select id="themeGetTotalRecordCount" parameterType="Map" resultType="int">
+		SELECT COUNT(*) FROM theme
+	</select>
+	
+	<!-- 테마이미지 -->
+	<select id="getThemeImage" parameterType="String" resultType="String">
+		select themeimg from theme where themeid=#{themeid}
+	</select>
+	
+</mapper>

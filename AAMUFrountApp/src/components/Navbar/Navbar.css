@@ -23,7 +23,16 @@
 .scrollActive a h1 {
   color: black;
 }
-
+.noti_message {
+  padding: 4px;
+  border-bottom: 1px solid rgba(128, 128, 128, 0.4);
+}
+.read_noti {
+  color: rgba(128, 128, 128, 0.4);
+}
+.noti_message:hover {
+  color: var(--orange);
+}
 .scrollActive {
   background: white;
   z-index: 10;
