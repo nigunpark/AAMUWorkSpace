@@ -19,5 +19,15 @@ public class ThemeDAO {
 		List<ThemeDTO> records = template.selectList("themeSelectList",map);
 		return records;
 	}
+	
+	//글 전체 레코드수
+	public int themeGetTotalRecordCount(Map map) {
+		return template.selectOne("themeGetTotalRecordCount", map);
+	}
+	
+	//테마이미지
+	public String getThemeImage(String themeid) {
+		return template.selectOne("getThemeImage",themeid);
+	}
 
 }

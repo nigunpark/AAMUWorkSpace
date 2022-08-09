@@ -19,7 +19,7 @@
 										class="d-sm-flex justify-content-between align-items-start">
 										<div>
 											<h4 class="card-title">테마 관리</h4>
-											<p class="card-description">사용자 관심 테마 관리</p>
+											<p class="card-description">총 테마 개수: ${totalCount}개</p>
 										</div>
 										<div>
 											<button
@@ -40,24 +40,34 @@
 												</tr>
 											</thead>
 											<tbody>
-												<tr>
-													<td>1</td>
-													<td>
-														<img src="#" alt="테마 이미지">
-													</td>
-													<td>테마이름입니다</td>
-													<td>
-														<button
-															class="btn btn-primary btn-sm text-white mb-0 me-2"
-															type="button">수정</button>
-														<button
-															class="btn btn-primary btn-sm text-white mb-0 me-0"
-															type="button">삭제</button>
-													</td>
-												</tr>
+												<c:if test="${empty listPagingData.lists }" var="isEmpty">
+													<tr>
+														<td colspan="8">등록된 글이 없습니다.</td>
+													</tr>
+												</c:if>
+												<c:if test="${not isEmpty }">
+													<c:forEach var="record" items="${listPagingData.lists}" varStatus="loop">
+														<tr>
+															<td>${record.themeid}</td>
+															<td>
+																<img src="${record.themeimg}" alt="테마 이미지">
+															</td>
+															<td>${record.themename}</td>
+															<td>
+																<button
+																	class="btn btn-primary btn-sm text-white mb-0 me-2"
+																	type="button">수정</button>
+																<button
+																	class="btn btn-primary btn-sm text-white mb-0 me-0"
+																	type="button">삭제</button>
+															</td>
+														</tr>
+													</c:forEach>
+												</c:if>
 											</tbody>
 										</table>
-
+										<!-- 페이징 출력 -->
+										<div>${listPagingData.pagingString}</div>
 									</div>
 								</div>
 							</div>
@@ -72,17 +82,17 @@
 										<div class="card">
 											<div class="card-body">
 												<h4 class="card-title">새로운 테마 추가</h4>
-												<form class="forms-sample">
+												<form class="forms-sample" method="post" encType="multipart/form-data" action="<c:url value="ThemeInsert.do"/>">
 													<div class="form-group">
 														<label for="exampleInputName1">테마 이름</label> <input
-															type="text" class="form-control" id="exampleInputName1"
+															type="text" class="form-control" id="exampleInputName1" name="themename" value="${param.themename}"
 															placeholder="테마 이름">
 													</div>
 													<!-- 파일업로드 -->
 													<div class="form-group">
 														<label>테마 이미지</label>
 														<div>
-															<input type="file" size="50" value="기본 텍스트" />
+															<input type="file" size="50" name="multifiles" />
 														</div>
 													</div>
 													<button type="submit" class="btn btn-primary me-2">등록</button>
@@ -107,27 +117,7 @@
 
 
 <script>
-  	//체크박스 
-    var selectLength=$(':checkbox').slice(1).length;
-    $(':checkbox').click(function(){
-      if($(this).val()==='all'){
-        if($(this).prop('checked')) $(':checkbox').slice(1).prop('checked',true);
-        else $(':checkbox').slice(1).prop('checked',false);
-      }
-      else{
-        if($(this).prop('checked')){
-          if(selectLength==$(':checkbox:checked').length){
-            $(':checkbox:first').prop('checked',true)
-          }             
-        }
-        else $(':checkbox:first').prop('checked',false)
-      }
-    });
-    //체크박스all버튼 눌렀을 때 전체 선택
-	$('#chkAll').click(function(){
-		if($('#chkAll').is(":checked")) $(':checkbox').prop("checked",true)
-		else $(':checkbox').prop("checked",false)
-	});  
+  	
     
     //삭제 click
     $('div.card-numberOfBoard > button').click(function(){

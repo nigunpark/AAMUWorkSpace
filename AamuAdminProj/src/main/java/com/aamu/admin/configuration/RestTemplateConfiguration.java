@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 @Configuration
 public class RestTemplateConfiguration {
@@ -25,4 +26,13 @@ public class RestTemplateConfiguration {
 		return new RestTemplate(factory);
 
 	}
+	
+	@Bean
+	public CommonsMultipartResolver multipartResolver() {
+		CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
+		multipartResolver.setMaxUploadSize(-1);
+		return multipartResolver;
+	}
+	
+	
 }

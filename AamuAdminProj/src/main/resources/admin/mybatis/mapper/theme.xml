@@ -11,5 +11,13 @@
 		WHERE R BETWEEN #{start} AND #{end}
 	</select>
 	
+	<select id="themeGetTotalRecordCount" parameterType="Map" resultType="int">
+		SELECT COUNT(*) FROM theme
+	</select>
+	
+	<!-- 테마이미지 -->
+	<select id="getThemeImage" parameterType="String" resultType="String">
+		select themeimg from theme where themeid=#{themeid}
+	</select>
 	
 </mapper>
