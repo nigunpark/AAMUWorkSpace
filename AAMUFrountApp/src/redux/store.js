@@ -51,6 +51,62 @@ let arrForJangso = createSlice({
 export let { changeArrForJangso, addArrInForJangso, deleteArrInJangso, addAtimeArrForJangso } =
   arrForJangso.actions;
 
+//추천숙소
+let arrForSukso = createSlice({
+  name: "arrForSukso",
+  initialState: [],
+  reducers: {
+    changeArrForSukso(state, action) {
+      return action.payload;
+    },
+    addArrForSukso(state, action) {
+      state = state.unshift(action.payload);
+    },
+  },
+});
+export let { changeArrForSukso, addArrForSukso } = arrForSukso.actions;
+
+//추천맛집
+let arrForRestaurant = createSlice({
+  name: "arrForRestaurant",
+  initialState: [],
+  reducers: {
+    changeArrForRestaurant(state, action) {
+      return action.payload;
+    },
+    addArrInForRestaurant(state, action) {
+      state = state.unshift(action.payload);
+    },
+    delArrInRestaurant(state, action) {
+      state.splice(
+        state.findIndex((local) => {
+          return local.contentid === action.payload.contentid;
+        }),
+        1
+      );
+    },
+  },
+});
+export let { changeArrForRestaurant, addArrInForRestaurant, delArrInRestaurant } =
+  arrForRestaurant.actions;
+
+//추천맛집에서 선택한 장소를 넣는 배열
+let arrForPickMazzip = createSlice({
+  name: "arrForPickMazzip",
+  initialState: [],
+  reducers: {
+    addPickMazzip(state, action) {
+      state = state.push(action.payload);
+    },
+    delPickMazzip(state, action) {
+      return (state = state.filter((local) => local.contentid !== action.payload.contentid));
+    },
+    delAllPickMazzip(state, action) {
+      return action.payload;
+    },
+  },
+});
+export let { addPickMazzip, delPickMazzip, delAllPickMazzip } = arrForPickMazzip.actions;
 //추천장소에서 선택한 장소를 넣는 배열
 let arrForPickJangso = createSlice({
   name: "arrForPickJangso",
@@ -69,25 +125,10 @@ let arrForPickJangso = createSlice({
 });
 export let { addPickJangso, deleteAllPickJanso, deletePickJangso } = arrForPickJangso.actions;
 
-//추천숙소
-let arrForSukso = createSlice({
-  name: "arrForSukso",
-  initialState: [],
-  reducers: {
-    changeArrForSukso(state, action) {
-      return action.payload;
-    },
-    addArrForSukso(state, action) {
-      state = state.unshift(action.payload);
-    },
-  },
-});
-export let { changeArrForSukso, addArrForSukso } = arrForSukso.actions;
-
 //숙소와 장소모달중 어떤 것을 보여줄지
 let showWhichModal = createSlice({
   name: "showWhichModal",
-  initialState: false,
+  initialState: 3,
   reducers: {
     changeShowWhichModal(state, action) {
       return action.payload;
@@ -364,6 +405,8 @@ export default configureStore({
     forChatInfo: forChatInfo.reducer,
     forChatBotData: forChatBotData.reducer,
     forWeather: forWeather.reducer,
+    arrForRestaurant: arrForRestaurant.reducer,
+    arrForPickMazzip: arrForPickMazzip.reducer,
   },
   //planTripTime.js 168번줄쯤의 fullDate를 위한 serializable무시
   middleware: (getDefaultMiddleware) =>
