@@ -44,6 +44,7 @@ public class ChatRoomController {
 	//채팅방 개설
 	@PostMapping(value = "/room")
     public Map create(@RequestParam Map map){
+		System.out.println("map : "+map.toString());
 		try {
 			int roomno = template.selectOne("chatroomsone",map);
 			map.put("roomno", roomno);

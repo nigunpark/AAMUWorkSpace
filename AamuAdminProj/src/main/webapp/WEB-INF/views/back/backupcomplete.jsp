@@ -90,7 +90,7 @@ $('#save').click(function(){
 	</c:forEach>
 	var placejson = JSON.stringify({"placelist":placelist});
 	$.ajax({
-		url:"http://192.168.0.19:5020/saveplaces",
+		url:"http://localhost:5020/saveplaces",
 		type:"post",
 		data: placejson,
 		contentType:"application/json", //데이타 보낼 때
@@ -112,7 +112,7 @@ $('#crawll').click(function(){
 	var placejson = JSON.stringify({"placelist":placelist});
 	console.log(placejson);
 	$.ajax({
-		url:"http://192.168.0.19:5020/imgcrawll",
+		url:"http://localhost:5020/imgcrawll",
 		type:"post",
 		data: placejson,
 		contentType:"application/json", //데이타 보낼 때
