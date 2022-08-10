@@ -12,7 +12,8 @@ export default function LoginFunc({ navigate, accountEmail }) {
       });
       console.log(res);
       sessionStorage.setItem("token", res.data.token);
-      sessionStorage.setItem("userimg", res.data.userprofile);
+      sessionStorage.setItem("userimg", accountEmail.profile.profile_image_url);
+
       sessionStorage.setItem("username", res.data.member.username);
       navigate("/");
     } catch (e) {

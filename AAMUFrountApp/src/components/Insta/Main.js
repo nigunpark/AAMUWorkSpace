@@ -1,4 +1,4 @@
-import React, {useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./Main.scss";
 import FeedSetting from "./FeedSetting.js";
 import User from "./User.js";
@@ -18,37 +18,61 @@ function Main({
   const [showChat, setShowChat] = useState(false);
   const [recommendUser, setrecommendUser] = useState([]);
   const [prevChats, setPrevChats] = useState([]);
-  function feedList() {
+  const [page, setpage] = useState(1);
+  const [loading, setloading] = useState(false);
+
+  const apiUrl = "/aamurest/gram/selectList";
+
+  // .create()를 이용해 axios 인스턴스 생성
+  const instance = axios.create({
+    baseURL: apiUrl,
+  });
+
+  const feedList = async (page) => {
+    setloading(true);
     //백이랑 인스타 리스드를 뿌려주기 위한 axios
     let token = sessionStorage.getItem("token");
-    axios
-      .get("/aamurest/gram/selectList", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        params: {
-          id: sessionStorage.getItem("username"),
-        },
-      })
-      .then((resp) => {
-        console.log(resp.data);
-        setlist(resp.data);
-        setrecommendUser(resp.data[0].recommenduser);
-        console.log(resp.data[0].recommenduser);
-        setForReRender(!forReRender);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
+    const temp = await axios.get(`/aamurest/gram/selectList?page=${page}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      params: {
+        id: sessionStorage.getItem("username"),
+      },
+    });
+    const tempComments = list.concat(temp.data);
+    console.log(temp.data)
+    setlist((prevState) => [...prevState, ...tempComments]);
+    setrecommendUser(temp.data[0].recommenduser);
+    setForReRender(!forReRender);
+    
+    setloading(false);
+  };
 
   useEffect(() => {
-    feedList();
+    feedList(page);
     setinputValue("");
-  }, []);
+  }, [page]);
+  
 
-  const spinner = document.querySelector(".spinner");
-  const [loading, setloading] = useState(false);
+  const scrollEvent = () => {
+    const scrollHeight = document.documentElement.scrollHeight;
+    const scrollTop = document.documentElement.scrollTop;
+    const clientHeight = document.documentElement.clientHeight;
+
+    if (scrollTop + clientHeight >= scrollHeight) {
+      setpage(page + 1);
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", scrollEvent);
+
+    // unmount시 scrollEvent 제거
+    return () => {
+      window.removeEventListener("scroll", scrollEvent);
+    };
+  }, [scrollEvent]);
 
   return (
     <div className="main">
@@ -56,7 +80,10 @@ function Main({
           <Story></Story>   
         </div> */}
       <div className="margin-value">
-        <div className="main-left" style={{ display: "flex", flexDirection: "column" }}>
+        <div
+          className="main-left"
+          style={{ display: "flex", flexDirection: "column" }}
+        >
           {loading && <Spinner />}
           {list.map((val, i) => {
             return (
@@ -69,7 +96,7 @@ function Main({
                 showChat={showChat}
                 setShowChat={setShowChat}
                 setPrevChats={setPrevChats}
-                inputValue={inputValue} 
+                inputValue={inputValue}
                 setinputValue={setinputValue}
               />
             );
