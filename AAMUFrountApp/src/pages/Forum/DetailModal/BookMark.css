@@ -90,7 +90,8 @@
 
 .detail__plan-card-photo {
   /* border: 1px solid red; */
-  width: 100%;
+  /* width: 100%; */
+  width: 550px;
   height: auto;
   display: flex;
   flex-direction: column;
