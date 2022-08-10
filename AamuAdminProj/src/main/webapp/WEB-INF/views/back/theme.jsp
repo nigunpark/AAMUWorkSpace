@@ -184,17 +184,22 @@
            			data: formData,
            			contentType:false, //데이타 보낼 때
            			processData:false,
-           			dataType: "text" //데이타 받을 때 
+           			dataType: "text json" //데이타 받을 때 
            		}).done(data=>{
            			console.log('등록 성공:',data);
            			location.replace("Theme.do");
            		}).fail(error=>{
            			console.log('등록 실패:',error);
            		});
+        		$('#myModal').modal('hide');
     		}///////if 삭제하시겠습니까?
 		}
     	
+    	
+    	
     });
+    
+    
     
     
     //var form = document.querySelector('form');

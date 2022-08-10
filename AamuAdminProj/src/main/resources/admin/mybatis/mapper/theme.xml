@@ -7,7 +7,7 @@
 		SELECT * FROM
 		(SELECT T.*,ROWNUM R FROM (
 		SELECT themeid, themename FROM theme
-		ORDER BY themeid) T)
+		ORDER BY themeid DESC) T)
 		WHERE R BETWEEN #{start} AND #{end}
 	</select>
 	
