@@ -41,6 +41,11 @@ public class CommuDAO {
 		return template.selectList("getAllTags",map);
 	}
 	
+	//글 목록용_전체 레코드수
+	public int commuGetTotlaCount(Map map) {
+		return template.selectOne("commuGetTotlaCount",map);
+	}
+	
 	//세션id가 팔로우하는 id 얻기
 	public List<String> commuGetidByFollower(Map map){
 		return template.selectList("commuGetidByFollower",map);
@@ -48,9 +53,9 @@ public class CommuDAO {
 	
 	//글 검색용
 	public List<String> commuSearachList(Map map){
-		System.out.println("dao map:"+map.get("searchColumn"));
-		System.out.println("dao map:"+map.get("table"));
-		System.out.println("dao map:"+map.get("searchWord"));
+		//System.out.println("dao map:"+map.get("searchColumn"));
+		//System.out.println("dao map:"+map.get("table"));
+		//System.out.println("dao map:"+map.get("searchWord"));
 		return template.selectList("commuSearachList",map);
 	}
 

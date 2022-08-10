@@ -342,6 +342,12 @@ public class MainController {
 
 		return dto;
 	}
+	@GetMapping("/data/mvtm")
+	public Map dataMvtm(@RequestParam Map map) {
+		
+		
+		return map;
+	}
 
 	@GetMapping("/planner/selectonemap")
 	public PlannerDTO selectMapPlannerOne(@RequestParam int rbn,HttpServletRequest req){

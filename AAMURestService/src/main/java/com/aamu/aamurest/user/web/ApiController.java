@@ -35,6 +35,7 @@ import com.aamu.aamurest.user.service.api.Places.Item;
 import com.aamu.aamurest.util.FileUploadUtil;
 
 @RestController
+@CrossOrigin
 @PropertySource("classpath:aamu/resources/api.properties")
 public class ApiController {
 	@Autowired
@@ -335,7 +336,10 @@ public class ApiController {
 		return affected;
 	}
 	@PostMapping("/theme/insert")
-	public int theme(@RequestParam Map map, @RequestParam MultipartFile themeimg,HttpServletRequest req) throws IllegalStateException, IOException {
+	public Map theme(@RequestParam Map map, @RequestParam MultipartFile themeimg,HttpServletRequest req) throws IllegalStateException, IOException {
+		System.out.println("난 맵이당:"+map);
+		System.out.println("themeimg:"+themeimg);
+		Map returnMap = new HashMap<>();
 		int affected = 0;
 		String path = req.getSession().getServletContext().getRealPath("/resources/themeImage");
 		String filename = FileUploadUtil.oneFile(themeimg, path);
@@ -343,7 +347,8 @@ public class ApiController {
 		map.put("themeimg", filename);
 		System.out.println(map);
 		affected = service.insertTheme(map);
-		
-		return affected;
+		if(affected==1) returnMap.put("isSuccess",true);
+		else  returnMap.put("isSuccess",false);
+		return returnMap;
 	}
 }

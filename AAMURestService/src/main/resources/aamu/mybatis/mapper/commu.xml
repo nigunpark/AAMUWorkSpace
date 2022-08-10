@@ -7,9 +7,12 @@
 
 	<!-- 글 목록용 -->
 	<select id="commuSelectList" resultType="commuDTO" parameterType="Map">
-		SELECT c.*,cp.contentid,p.title FROM community c
+		
+		SELECT * FROM
+		(SELECT T.*,ROWNUM R FROM
+		(SELECT c.*,cp.contentid,p.title FROM community c
 		JOIN commuplace cp ON c.lno=cp.lno
-		JOIN places p ON cp.contentid=p.contentid
+		JOIN places p ON cp.contentid=p.contentid) T)
 		<if test="searchColumn != null">
 			<choose>
 				<when test='searchColumn == "ctitle"'>
@@ -26,7 +29,10 @@
 			</choose>
 		</if>
 		<if test="contentid != null">where p.contentid=#{contentid}</if>
-		ORDER BY c.lno DESC
+		<if test="start != null">
+			WHERE R BETWEEN #{start} AND #{end}
+		</if>
+		ORDER BY lno DESC
 	</select>
 	
 	<!-- 글 목록용_댓글 한개 뿌려주기 -->
@@ -52,6 +58,11 @@
 				WHERE ${searchColumn}=#{searchWord}
 			</otherwise>
 		</choose>
+	</select>
+	
+	<!-- 전체 레코드수 -->
+	<select id="commuGetTotlaCount" parameterType="Map" resultType="int">
+		select count(*) from community
 	</select>
 	
 	<!-- 세션id가 팔로우하는 id 얻기 -->
