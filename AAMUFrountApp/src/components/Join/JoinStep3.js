@@ -64,7 +64,11 @@ const JoinStep3 = () => {
     temp.append("phonenum", reduxState.joinData.phonenum);
     temp.append("addrid", reduxState.joinData.addrid);
     temp.append("self", reduxState.joinData.self);
-    temp.append("userprofile", reduxState.joinData.userprofile);
+    if (reduxState.joinData.userprofile === undefined) {
+      temp.append("kakaouserfile", sessionStorage.getItem("userimgkakao"));
+    } else {
+      temp.append("userprofile", reduxState.joinData.userprofile);
+    }
     temp.append("theme", checkeds.join());
     let token = sessionStorage.getItem("token");
     axios
@@ -77,7 +81,8 @@ const JoinStep3 = () => {
       .then((resp) => {
         console.log(resp.data);
         if (resp.data === 1) {
-          alert("가입이 완료되었습니다");
+          alert("가입이 완료되었습니다");          
+          sessionStorage.clear();
           navigate("/login");
         }
       })
@@ -85,7 +90,6 @@ const JoinStep3 = () => {
         console.log(err);
       });
 
-    sessionStorage.clear();
   };
   useEffect(() => {
     getThemes();
@@ -100,7 +104,10 @@ const JoinStep3 = () => {
             </Link>
             <Title>
               <div className="loginTitle__container">
-                <FontAwesomeIcon icon={faFolderOpen} className="joinStep3_title-i" />
+                <FontAwesomeIcon
+                  icon={faFolderOpen}
+                  className="joinStep3_title-i"
+                />
                 <h1>테마선택</h1>
               </div>
               <p style={{ color: "gray" }}>welcome to AAMU</p>
@@ -109,7 +116,10 @@ const JoinStep3 = () => {
               <FontAwesomeIcon icon={fa1} className="join__progress-icon " />
               -
               <FontAwesomeIcon icon={fa2} className="join__progress-icon" />-
-              <FontAwesomeIcon icon={fa3} className="join__progress-icon join__progress-step" />
+              <FontAwesomeIcon
+                icon={fa3}
+                className="join__progress-icon join__progress-step"
+              />
             </div>
             <CheckBoxBody>
               {themes.map((val, i) => {
@@ -153,7 +163,9 @@ const JoinStep3 = () => {
                           e.stopPropagation();
                           getCheckedBoxes(e.target.checked, e.target.value);
                         }}
-                        checked={checkeds.includes(val.THEMENAME) ? true : false}
+                        checked={
+                          checkeds.includes(val.THEMENAME) ? true : false
+                        }
                         hidden
                       />
                     </div>
@@ -227,7 +239,11 @@ function Copyright(props) {
   return (
     <Typography variant="body2" color="text.warning" align="center" {...props}>
       {"Copyright © "}
-      <Link color="inherit" to="https://localhost:3000/" style={{ color: "var(--orange)" }}>
+      <Link
+        color="inherit"
+        to="https://localhost:3000/"
+        style={{ color: "var(--orange)" }}
+      >
         AAMU
       </Link>{" "}
       {new Date().getFullYear()}
