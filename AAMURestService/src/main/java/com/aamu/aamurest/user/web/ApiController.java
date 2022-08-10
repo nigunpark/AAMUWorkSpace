@@ -35,6 +35,7 @@ import com.aamu.aamurest.user.service.api.Places.Item;
 import com.aamu.aamurest.util.FileUploadUtil;
 
 @RestController
+@CrossOrigin
 @PropertySource("classpath:aamu/resources/api.properties")
 public class ApiController {
 	@Autowired
