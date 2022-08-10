@@ -7,12 +7,21 @@ import { Rating } from "@mui/material";
 import axios from "axios";
 import "./BookMark.css";
 import { useDispatch, useSelector } from "react-redux";
-import { addChatBotData, addForChatInfo, addWholeBlackBox } from "../../../redux/store";
+import {
+  addChatBotData,
+  addForChatInfo,
+  addWholeBlackBox,
+} from "../../../redux/store";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faX } from "@fortawesome/free-solid-svg-icons";
 import { faBookmark } from "@fortawesome/free-solid-svg-icons";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
-const DetailModal = ({ detailOne, setIsOpen, setShowCBModal, setIsLoading }) => {
+const DetailModal = ({
+  detailOne,
+  setIsOpen,
+  setShowCBModal,
+  setIsLoading,
+}) => {
   let navigate = useNavigate();
   function dateFormat(date) {
     let month = date.getMonth() + 1;
@@ -230,7 +239,10 @@ const DetailModal = ({ detailOne, setIsOpen, setShowCBModal, setIsLoading }) => 
     return (
       <div className="detail__modal-commentsList">
         <Stars>
-          <FontAwesomeIcon icon={faStar} style={{ marginRight: "3px", color: "gold" }} />
+          <FontAwesomeIcon
+            icon={faStar}
+            style={{ marginRight: "3px", color: "gold" }}
+          />
           <span>{val.rate.toString().padEnd(3, ".0")}</span>
         </Stars>
         <span
@@ -292,7 +304,10 @@ const DetailModal = ({ detailOne, setIsOpen, setShowCBModal, setIsLoading }) => 
   async function getChatRoom(detailOne, dispatch, setRoomno) {
     await axios
       .post(
-        "/aamurest/chat/room?fromid=" + sessionStorage.getItem("username") + "&toid=" + detailOne.id
+        "/aamurest/chat/room?fromid=" +
+          sessionStorage.getItem("username") +
+          "&toid=" +
+          detailOne.id
       )
       .then((resp) => {
         console.log("resp.data", resp.data);
@@ -310,12 +325,15 @@ const DetailModal = ({ detailOne, setIsOpen, setShowCBModal, setIsLoading }) => 
         {/* <DetailModalWrap> */}
         <div className="detailModalWrap" ref={modalRef}>
           <Plan>
-            <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+            <div
+              style={{ display: "flex", flexDirection: "column", gap: "10px" }}
+            >
               {routeData.map((route, idx) => {
                 return (
                   <div key={idx} className="detail-plan">
                     <div className="paln-date">
-                      {idx + 1}일차 ({plannerDate.month}월 {parseInt(plannerDate.date) + idx}
+                      {idx + 1}일차 ({plannerDate.month}월{" "}
+                      {parseInt(plannerDate.date) + idx}
                       일&nbsp;
                       {getDow(plannerDate.dow)})
                     </div>
@@ -420,7 +438,8 @@ const DetailModal = ({ detailOne, setIsOpen, setShowCBModal, setIsLoading }) => 
                               getChatRoom(detailOne, dispatch, setRoomno);
                               setShowChat(!showChat);
                               setTimeout(() => {
-                                if (!showChat) modalRef.current.style.left = "1%";
+                                if (!showChat)
+                                  modalRef.current.style.left = "1%";
                                 else modalRef.current.style.left = "8%";
                               }, 100);
                             }}
@@ -449,9 +468,14 @@ const DetailModal = ({ detailOne, setIsOpen, setShowCBModal, setIsLoading }) => 
                         </div>
                       </div>
                     </div>
-                    <h4 style={{ fontSize: "23px", fontWeight: "bold" }}>{detailOne.title}</h4>
+                    <h4 style={{ fontSize: "23px", fontWeight: "bold" }}>
+                      {detailOne.title}
+                    </h4>
                     <Tag>
-                      <Date>작성일. {dateFormat(new window.Date(detailOne.postdate))}</Date>
+                      <Date>
+                        작성일.{" "}
+                        {dateFormat(new window.Date(detailOne.postdate))}
+                      </Date>
                       tag : #{theme}
                     </Tag>
                   </div>
@@ -491,19 +515,31 @@ const DetailModal = ({ detailOne, setIsOpen, setShowCBModal, setIsLoading }) => 
                     )}
                   </div>
 
-                  <div style={{ display: "grid", gridTemplateColumns: "auto 17%" }}>
+                  <div
+                    style={{ display: "grid", gridTemplateColumns: "auto 17%" }}
+                  >
                     <div className="detail_modal_input-container">
                       {sessionStorage.getItem("username") == userId ? (
-                        <input type="text" placeholder="글쓴이는 댓글 안되요!" disabled />
+                        <input
+                          type="text"
+                          placeholder="글쓴이는 댓글 안되요!"
+                          disabled
+                        />
                       ) : isReviewId === 1 ? (
-                        <input type="text" placeholder="댓글은 하나만!" disabled />
+                        <input
+                          type="text"
+                          placeholder="댓글은 하나만!"
+                          disabled
+                        />
                       ) : (
                         <input
                           type="text"
                           placeholder="댓글 달기..."
                           ref={commentRef}
                           onKeyUp={(e) => {
-                            e.target.value.length > 0 ? setIsValid(true) : setIsValid(false);
+                            e.target.value.length > 0
+                              ? setIsValid(true)
+                              : setIsValid(false);
                           }} //사용자가 리뷰를 작성했을 때 빈공간인지 확인하여 유효성 검사
                         />
                       )}
@@ -551,26 +587,39 @@ function DetailSetting({ fromWooJaeData, periodIndex, obj, i }) {
   useEffect(() => {
     if (i !== 0) {
       setUpTime(
-        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime + obj.mtime / 1000 / 60
+        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime +
+          obj.mtime / 1000 / 60
       );
       setDownTime(
         fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime +
           obj.mtime / 1000 / 60 +
-          fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].atime / 1000 / 60
+          fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].atime /
+            1000 /
+            60
       );
       let forBlackBoxRedux = getTimes(
         periodIndex,
-        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime + obj.mtime / 1000 / 60,
+        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime +
+          obj.mtime / 1000 / 60,
         fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime +
           obj.mtime / 1000 / 60 +
-          fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].atime / 1000 / 60
+          fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].atime /
+            1000 /
+            60
       );
       dispatch(addWholeBlackBox(forBlackBoxRedux));
-      if (i !== fromWooJaeData[periodIndex]["day" + (periodIndex + 1)].length - 1) {
-        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i + 1].starttime =
+      if (
+        i !==
+        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)].length - 1
+      ) {
+        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][
+          i + 1
+        ].starttime =
           fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime +
           obj.mtime / 1000 / 60 +
-          fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].atime / 1000 / 60;
+          fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].atime /
+            1000 /
+            60;
       }
     }
   }, []);
@@ -627,17 +676,22 @@ const Chat = ({ detailOne, roomno }) => {
     // setClient(client);
     // if (showChat === false) subscription.unsubscribe();
     console.log("reduxState.forChatInfo", reduxState.forChatInfo);
-    reduxState.forChatInfo.client.subscribe(`/queue/chat/message/${roomno}`, (message) => {
-      console.log(JSON.parse(message.body));
-      if (JSON.parse(message.body).authid !== sessionStorage.getItem("username")) {
-        let newChat = {
-          // missage: message.body.missage,
-          missage: JSON.parse(message.body).missage,
-          authid: JSON.parse(message.body).authid,
-        };
-        setChats((curr) => [...curr, newChat]);
+    reduxState.forChatInfo.client.subscribe(
+      `/queue/chat/message/${roomno}`,
+      (message) => {
+        console.log(JSON.parse(message.body));
+        if (
+          JSON.parse(message.body).authid !== sessionStorage.getItem("username")
+        ) {
+          let newChat = {
+            // missage: message.body.missage,
+            missage: JSON.parse(message.body).missage,
+            authid: JSON.parse(message.body).authid,
+          };
+          setChats((curr) => [...curr, newChat]);
+        }
       }
-    });
+    );
   }, []);
   function getChats() {}
   let inputRef = useRef();
@@ -655,7 +709,9 @@ const Chat = ({ detailOne, roomno }) => {
               return (
                 <div
                   className={
-                    val.authid !== sessionStorage.getItem("username") ? "chatBox box" : "chatBox"
+                    val.authid !== sessionStorage.getItem("username")
+                      ? "chatBox box"
+                      : "chatBox"
                   }
                 >
                   <div
@@ -679,7 +735,11 @@ const Chat = ({ detailOne, roomno }) => {
                         {new window.Date().getHours() > 12
                           ? new window.Date().getHours() - 12
                           : new window.Date().getHours()}
-                        :{new window.Date().getMinutes().toString().padStart(2, "0")}
+                        :
+                        {new window.Date()
+                          .getMinutes()
+                          .toString()
+                          .padStart(2, "0")}
                       </span>
                     </div>
 
@@ -768,7 +828,8 @@ const Container = styled.div`
   top: 47px;
   right: 20px;
   transition: 0.3s;
-  animation: ${swing_chat} 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.5s both;
+  animation: ${swing_chat} 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.5s
+    both;
 `;
 const InnnerContainer = styled.div`
   position: relative;
@@ -834,7 +895,8 @@ const Plan = styled.div`
   &::-webkit-scrollbar {
     display: none;
   }
-  animation: ${bounce_modal_plan} 1.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+  animation: ${bounce_modal_plan} 1.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)
+    both;
   animation-delay: 0.2s;
 `;
 
