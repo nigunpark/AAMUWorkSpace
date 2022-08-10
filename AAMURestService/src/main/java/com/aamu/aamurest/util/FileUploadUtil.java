@@ -50,9 +50,10 @@ public class FileUploadUtil {
     	return filename;
 	}
 	public static String requestOneFile(String filename,String path,HttpServletRequest req){
-
 		String requesturl = req.getRequestURL().toString().replace(req.getRequestURI(), "/aamurest"+path)+"/"+filename;
-
+		if(filename.startsWith("http://")) {
+			requesturl = filename;
+		}
 		return requesturl;
 	}
 

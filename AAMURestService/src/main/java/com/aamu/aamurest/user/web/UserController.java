@@ -33,17 +33,25 @@ public class UserController {
 	private UsersService service;
 
 	@PostMapping("/users/edit")
-	public int join(@RequestParam Map map,@RequestParam MultipartFile userprofile,@RequestParam List theme,HttpServletRequest req) throws IllegalStateException, IOException {
-		System.out.println(map);
-		map.put("theme", theme);
+	public int join(@RequestParam Map map,@RequestParam(required = false) MultipartFile userprofile,@RequestParam List theme,HttpServletRequest req) throws IllegalStateException, IOException {
+//		System.out.println("난 맵이다:"+map);
 		int affected=0;
+		
+		map.put("theme", theme);
+		
 		String path = req.getSession().getServletContext().getRealPath("/resources/userUpload");
-		String photo = FileUploadUtil.oneFile(userprofile, path);
+		String photo;
+		if(userprofile != null) {
+			photo = FileUploadUtil.oneFile(userprofile, path);
+		}
+		else {
+			photo = map.get("kakaouserfile").toString();
+		}
 
 		map.put("userprofile",photo);
 
 		affected = service.joinUser(map);
-
+		
 		return affected;
 	}
 	@PostMapping("/users/upload")

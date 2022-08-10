@@ -336,6 +336,8 @@ public class ApiController {
 	}
 	@PostMapping("/theme/insert")
 	public int theme(@RequestParam Map map, @RequestParam MultipartFile themeimg,HttpServletRequest req) throws IllegalStateException, IOException {
+		System.out.println("난 맵이당:"+map);
+		System.out.println("themeimg:"+themeimg);
 		int affected = 0;
 		String path = req.getSession().getServletContext().getRealPath("/resources/themeImage");
 		String filename = FileUploadUtil.oneFile(themeimg, path);
@@ -343,7 +345,6 @@ public class ApiController {
 		map.put("themeimg", filename);
 		System.out.println(map);
 		affected = service.insertTheme(map);
-		
 		return affected;
 	}
 }
