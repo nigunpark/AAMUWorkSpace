@@ -83,7 +83,6 @@ const Navbar = ({ scrollNav, whereUrl, noti, setNoti }) => {
                   href="http://192.168.0.22:9090/admin/"
                   className="nav-links"
                   onClick={closeMoblieMenu}
-                  style={{ color: "red" }}
                   // style={({ isActive }) => (isActive ? activeStyle : undefined)}
                 >
                   ADMIN
