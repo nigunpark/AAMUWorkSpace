@@ -18,23 +18,24 @@ class Word(Resource):
         # 스프링에서 보낸 파라미터 받기
         allTnamesOfWomanStr = request.args['allTnamesOfWomanStr']
         allTnamesOfManStr = request.args['allTnamesOfManStr']
-        print(allTnamesOfWomanStr)  # 서울
-        print(allTnamesOfManStr)  # 서울
+        print('allTnamesOfWomanStr:',allTnamesOfWomanStr)  # 서울
+        print('allTnamesOfManStr',allTnamesOfManStr)  # 서울
         allTnamesOfManStrList=allTnamesOfManStr.split(',')
         allTnamesOfWomanList = allTnamesOfWomanStr.split(',')
 
         womanWord = Counter(allTnamesOfWomanList) # 단어별 빈도수 형태의 딕셔너리 데이터를 구함
         manWord = Counter(allTnamesOfManStrList)
-        print(manWord)
         print(womanWord)
+        print(manWord)
+
         wc = WordCloud(font_path='malgun', width=1000, height=800, scale=2.0, max_font_size=250, background_color="white")
         womanGen=wc.generate_from_frequencies(womanWord)
-        #manGen = wc.generate_from_frequencies(manWord)
         fig=plt.figure(figsize=(10, 8))
         plt.imshow(womanGen)
         plt.tight_layout(pad=0)
         plt.axis("off")
-        fig.savefig("D:\KKH\Workspace\AAMUWorkSpace\AamuAdminProj\src\main\webapp\\resources\images\woman.png")
+        #fig.savefig("D:\KKH\Workspace\AAMUWorkSpace\AamuAdminProj\src\main\webapp\\resources\images\woman.png")
+        fig.savefig("D:\LWJ\Workspace\AAMUWorkSpace\AamuAdminProj\src\main\webapp\\resources\images\woman.png")
 
         wc2 = WordCloud(font_path='malgun', width=1000, height=800, scale=2.0, max_font_size=250, background_color="white")
         manGen = wc2.generate_from_frequencies(manWord)
@@ -42,7 +43,9 @@ class Word(Resource):
         plt.imshow(manGen)
         plt.tight_layout(pad=0)
         plt.axis("off")
-        fig2.savefig("D:\KKH\Workspace\AAMUWorkSpace\AamuAdminProj\src\main\webapp\\resources\images\man.png")
+        #fig2.savefig("D:\KKH\Workspace\AAMUWorkSpace\AamuAdminProj\src\main\webapp\\resources\images\man.png")
+        fig2.savefig("D:\LWJ\Workspace\AAMUWorkSpace\AamuAdminProj\src\main\webapp\\resources\images\man.png")
+
 
 
 
