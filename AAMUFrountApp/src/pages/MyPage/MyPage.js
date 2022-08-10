@@ -135,12 +135,13 @@ const MyPage = () => {
   };
   async function getChatRoom(val, dispatch, setPrevChats) {
     await axios
-      .post("/aamurest/chat/room?fromid=" + sessionStorage.getItem("username") + "&toid=" + val.id)
+      .post("/aamurest/chat/room?fromid=" + sessionStorage.getItem("username") + "&toid=" + val)
       .then((resp) => {
+        console.log("resp", resp);
         setPrevChats([]);
         setTimeout(() => {
           setPrevChats(resp.data.list);
-          dispatch(addForChatInfo({ ...resp.data, id: val.id }));
+          dispatch(addForChatInfo({ ...resp.data, id: val }));
           setShowChat(!showChat);
         }, 100);
       })
@@ -313,19 +314,21 @@ const MyPage = () => {
             />
           </div>
           <div style={{ position: "absolute", right: "285px", top: "-90px" }}>
-            {showChat && <Chat showChat={showChat} prevChats={prevChats} />}
+            {showChat && (
+              <Chat showChat={showChat} prevChats={prevChats} setPrevChats={setPrevChats} />
+            )}
           </div>
         </div>
 
         <div className="messages-section">
-          <div style={{ border: "1px solid grey", borderRadius: "5px" }}>
+          {/* <div style={{ border: "1px solid grey", borderRadius: "5px" }}>
             <div className="projects-section-header">
               <p>공지사항</p>
             </div>
             <div className="messages">
               <MyMessageBar />
             </div>
-          </div>
+          </div> */}
           {/* <div style={{ border: "1px solid grey", borderRadius: "5px" }}> */}
           <div className="projects-section-header">
             <p>팔로잉/팔로워</p>
@@ -348,7 +351,7 @@ const MyPage = () => {
                       <div
                         className="myPage__following_one"
                         onClick={() => {
-                          getChatRoom(val, dispatch, setPrevChats);
+                          getChatRoom(val.id, dispatch, setPrevChats);
                           setTimeout(() => {}, 100);
                         }}
                       >
@@ -394,9 +397,10 @@ const MyPage = () => {
               return (
                 <div
                   className="chatRooms"
-                  onClick={() => {
+                  onClick={(e) => {
+                    e.stopPropagation();
                     getChatRoom(
-                      sessionStorage.getItem("username") === val.fromid ? val.topro : val.frompro,
+                      sessionStorage.getItem("username") === val.fromid ? val.toid : val.fromid,
                       dispatch,
                       setPrevChats
                     );
