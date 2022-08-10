@@ -2,6 +2,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import {
+  faFlagCheckered,
   faRectangleXmark,
   faShareNodes,
   faSquareShareNodes,
@@ -82,13 +83,7 @@ const MyHomeBox = ({ setClickTab, planList, rbn, setSelectRbn, setPlanList, setU
       <div className="MyBoxContainer" onClick={onModalSelect}>
         <div className="MyBox">
           <div className="myBox__img-container">
-            <img
-              className="instaImg"
-              src={planList.smallImage}
-              style={{
-                opacity: doneOrStillOpacity(),
-              }}
-            />
+            <img className="instaImg" src={planList.smallImage} />
           </div>
 
           <div>
@@ -99,15 +94,19 @@ const MyHomeBox = ({ setClickTab, planList, rbn, setSelectRbn, setPlanList, setU
                 alignItems: "center",
               }}
             >
-              <div
-                className="myBox__title"
-                style={{
-                  opacity: doneOrStillOpacity(),
-                }}
-              >
-                {planList.title}
-              </div>
+              <div className="myBox__title">{planList.title}</div>
               <div className="myBox__icons">
+                {forDimmed.end < new Date() && (
+                  <FontAwesomeIcon
+                    icon={faFlagCheckered}
+                    style={{
+                      background: "red",
+                      color: "white",
+                      padding: "2px",
+                      borderRadius: "5px",
+                    }}
+                  />
+                )}
                 {forDimmed.start <= new Date() && forDimmed.end >= new Date() && (
                   <FontAwesomeIcon icon={faHourglass} className="glassIcon" />
                 )}
@@ -129,16 +128,9 @@ const MyHomeBox = ({ setClickTab, planList, rbn, setSelectRbn, setPlanList, setU
                 ) : null}
               </div>
             </div>
-            <div
-              style={{
-                opacity: doneOrStillOpacity(),
-              }}
-            >
-              {planList.plannerdate}
-            </div>
+            <div>{planList.plannerdate}</div>
             <span
               style={{
-                opacity: doneOrStillOpacity(),
                 fontSize: "13px",
                 fontWeight: "bold",
                 color: "grey",
