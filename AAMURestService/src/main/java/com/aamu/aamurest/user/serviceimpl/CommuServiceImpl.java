@@ -37,7 +37,27 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 	//글 목록용
 	@Override
 	public List<CommuDTO> commuSelectList(Map map) {
+		//페이징
+		System.out.println("page:"+map.get("page").toString());
+		if(map.get("page") != null) {
+			//전체 레코드수
+			int totalCount=dao.commuGetTotlaCount(map); //10
+			//map.put("totalCount", totalCount);
+			//전체 페이지수 
+			int totalPage = (int)Math.ceil((double)totalCount/3);//4
+			//현재 페이지 번호
+			int nowPage=Integer.parseInt(map.get("page").toString().trim()); //2
+			//시작 및 끝 ROWNUM구하기
+			int start=(nowPage-1)*3+1; //4
+			int end=nowPage*3;	//6
+			map.put("start", start);
+			map.put("end", end);
+		}
+		
+		
+		
 		List<CommuDTO> lists=dao.commuSelectList(map);
+		System.out.println("여기 lists는:"+lists.toString());
 		//isLike셋팅
 		List<CommuDTO> returnLists = new Vector();
 		for(int i=0; i<lists.size(); i++) {
@@ -93,8 +113,7 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 	@Override
 	public List<String> commuRecommendUser(Map map) {//id(세션id)
 		//기준되는id (세션id)
-		String standId = map.get("id").toString(); 
-		
+		String standId = map.get("id").toString();
 		//standTheme 로그인 한 사람 사용자정보 얻기
 		List<String> standTheme=infoUser(map);
 		List<Map<String,Object>> resultList = new ArrayList<Map<String,Object>>();
@@ -102,10 +121,7 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 		List<String> allUsersNotFollower = new Vector<>();
 		List<String> allUsers=mainDao.getAllUser(); //모든 id 얻기 
 		List<String> idByFollowers=dao.commuGetidByFollower(map); //세션id가 팔로우하는 id 얻기
-		//System.out.println("처음 allUsers:"+allUsers);
-		//System.out.println("idByFollowers:"+idByFollowers);
 		allUsers.removeAll(idByFollowers);
-		//System.out.println("allUsers"+allUsers);
 		
 		for(String id:allUsers) {
 			Map resultMap = new HashMap<>();
@@ -113,15 +129,13 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 				map.put("id", id); //여기는 로그인id가 아닌 id를 셋팅
 				//standTheme 세션id제외 사용자정보 얻기
 				List<String> compareTheme = infoUser(map); 
-				//System.out.println("compareTheme:"+compareTheme.toString());
 				//교집합/합집합
 				double ins = (double)UserUtil.intersection(standTheme, compareTheme)/(double)(standTheme.size()+compareTheme.size());
 				resultMap.put("id", id);
 				resultMap.put("ins", ins);
 				resultList.add(resultMap);
 			}
-		}/////////////for
-		
+		}
 		//내림차순
 		Collections.sort(resultList, new Comparator<Map<String, Object>>() {
 			@Override
@@ -131,27 +145,12 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 				return ins2.compareTo(ins1);
 			}
 		}); 
-		System.out.println("내림차순 되나?"+resultList.toString()); //ㅇㅋ
-		//위에서부터 5개 자르기
-		/*
-		List<Map<String, Object>> resultId=resultList.subList(0, 5);
-		System.out.println("5개 list:"+resultList.subList(0, 5));
-		List<String> idList = new Vector<>();
-		
-		for(Map<String, Object> result:resultId) {
-			System.out.println("result:"+result);
-			idList.add(result.get("id").toString());
-		}
-		*/
-		
 		//모든거 다 가기
 		List<String> idList = new Vector<>();
 		for(Map<String, Object> result:resultList) {
-			System.out.println("result:"+result);
+			//System.out.println("result:"+result);
 			idList.add(result.get("id").toString());
 		}
-		
-		System.out.println("결과값:"+idList.toString());
 		return idList;
 	}
 	
@@ -159,21 +158,14 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 	
 	//추천_데이타 모으기 메소드 
 	public List<String> infoUser(Map map){
-		System.out.println("id가 뭐가 넘어오나?"+map.get("id"));
 		//standTheme 1.아이디가 가진 테마네임리스트 얻기
 		List<String> standTheme = mainDao.getUserTheme(map); 
-		System.out.println("standTheme:"+standTheme.toString()); //ok
 		UsersDTO dto = mainDao.getUserChar(map); //id에 따른 users테이블에 있는 모든것 얻기 
-		System.out.println("dto에 뭐가 있니?"+dto.toString());
 		//standTheme 2.나이대 20대, 30대 ...
 		LocalDate now = LocalDate.now();
-		System.out.println("now.getYer:"+now.getYear());
 		int age = now.getYear()-(Integer.parseInt(dto.getSocialnum().substring(0, 2))+1900);
-		System.out.println("첫번재 age:"+age);
 		age = age-age%10; 
-		System.out.println("age:"+age);
 		standTheme.add(String.valueOf(age));//standTheme에 나이대 추가
-		System.out.println("standTheme:"+standTheme.toString());
 		//standTheme 3.태그(id에 따른)
 		List<String> allTags=dao.getAllTags(map);
 		for(String allTag:allTags) {
@@ -181,7 +173,6 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 		}
 		//standTheme 4.성별 추가
 		standTheme.add(dto.getGender());
-		System.out.println("최종 standTheme:"+standTheme.toString()); //ok
 		return standTheme;
 	}
 	

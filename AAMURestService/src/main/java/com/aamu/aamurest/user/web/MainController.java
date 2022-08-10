@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.Vector;
 
@@ -106,7 +107,7 @@ public class MainController {
 				if(tripDay<hotelDay) tripDay =hotelDay;
 
 			}
-		}///////////////list index change
+		}///////////////
 		/////////////////////////
 		list.get(tripDay-1).setContentid(list.get(tripDay-2).getContentid());
 		list.get(tripDay-1).setContenttypeid(list.get(tripDay-2).getContenttypeid());
@@ -127,28 +128,14 @@ public class MainController {
 		while(true){
 
 			if(count<result) {
-				/*
-				double standardx = list.get(count*tripDay+index).getDto().getMapx();
-				double standardy = list.get(count*tripDay+index).getDto().getMapy();
-				*/
 				map.put("firstx", list.get(count*tripDay+index).getDto().getMapx());
 				map.put("firsty", list.get(count*tripDay+index).getDto().getMapy());
-				//System.out.println("기준장소:"+list.get(count*tripDay+index).getDto().getTitle());
 				double low = Integer.MAX_VALUE;
-				//double attrx =0;
-				//double attry =0;
 				double resultxy=0;
 				for(int k=tripDay;k<list.size();k++) {
 
 					if(list.get(k).getDay()==0) {
 
-						//System.out.println(k);
-						/*
-						attrx = list.get(k).getDto().getMapx();
-						attry = list.get(k).getDto().getMapy();
-						resultxy = Math.sqrt(Math.pow(Math.abs(standardx-attrx),2)+Math.pow(Math.abs(standardy-attry),2));
-						*/
-						//맛집 안겹치게하기
 						if(list.get(count*tripDay+index).getContenttypeid()==39) {
 							if(list.get(k).getContenttypeid()!=39) {
 								map.put("secondx", list.get(k).getDto().getMapx());
@@ -165,18 +152,12 @@ public class MainController {
 
 							low=resultxy;
 
-
-							//System.out.println("low:"+low);
-							//System.out.println(String.format("swap할 인덱스 tripday:%s,index:%s,주소:%s",tripDay*(count+1)+index,k,list.get(k).getDto().getTitle()));
-
 						}
 
 					}
 					if(k==list.size()-1) {
 						for(int j=tripDay;j<list.size();j++) {
-							//attrx = list.get(j).getDto().getMapx();
-							//attry = list.get(j).getDto().getMapy();
-							//resultxy = Math.sqrt(Math.pow(Math.abs(standardx-attrx),2)+Math.pow(Math.abs(standardy-attry),2));
+
 							if(j!=count*tripDay+index) {
 								map.put("secondx", list.get(j).getDto().getMapx());
 								map.put("secondy", list.get(j).getDto().getMapy());
@@ -193,31 +174,6 @@ public class MainController {
 				}
 				if(tripDay*(count+1)+index<list.size() && list.get(tripDay*(count+1)+index).getDay()==0) {
 					list.get(tripDay*(count+1)+index).setDay(index+1);
-					/*
-					String uri = "http://192.168.0.150:5000/mvtm?firstx="+list.get(count*tripDay+index).getDto().getMapx()+"&firsty="
-							+list.get(count*tripDay+index).getDto().getMapy()+"&secondx="
-							+list.get(tripDay*(count+1)+index).getDto().getMapx()+"&secondy="
-							+list.get(tripDay*(count+1)+index).getDto().getMapy();
-							*/
-					/*
-					ResponseEntity<Map> responseEntity =
-							restTemplate.exchange(uri, HttpMethod.GET, null, Map.class);
-					long mtime = Long.parseLong(responseEntity.getBody().get("MVTM").toString())*1000;
-					*/
-					/*
-					String uri = "https://apis-navi.kakaomobility.com/v1/directions?origin="+list.get(count*tripDay+index).getDto().getMapx()+","+list.get(count*tripDay+index).getDto().getMapy()+"&"
-							+ "destination="+list.get(tripDay*(count+1)+index).getDto().getMapx()+","+list.get(tripDay*(count+1)+index).getDto().getMapy()+"&"
-							+ "waypoints=&priority=RECOMMEND&car_fuel=GASOLINE&car_hipass=false&alternatives=false&road_details=false";
-
-					ResponseEntity<Map> responseEntity =
-							restTemplate.exchange(uri, HttpMethod.GET, httpEntity, Map.class);
-					System.out.println(responseEntity.getBody());
-					long mtime=0;
-					if(((Map)((List)responseEntity.getBody().get("routes")).get(0)).get("result_code").toString().equals("0"))
-						mtime = Long.parseLong(((Map)((List)((Map)((List)responseEntity.getBody().get("routes")).get(0)).get("sections")).get(0)).get("duration").toString())*1000;
-
-					list.get(tripDay*(count+1)+index).setMtime(mtime);
-					*/
 					if(count==0 && index!=0) {
 						map.put("firstx", list.get(count*tripDay+index-1).getDto().getMapx());
 						map.put("firsty", list.get(count*tripDay+index-1).getDto().getMapy());
@@ -258,7 +214,6 @@ public class MainController {
 			}
 			else {
 				count=0;
-				//System.out.println("index"+index);
 				if(index<tripDay) {
 					index++;
 				}
@@ -267,67 +222,9 @@ public class MainController {
 
 
 			}//////////
-		//System.out.println(setDay);
-		//System.out.println(list.size()-1);
 		if(setDay==list.size()) break;
 		}////////////for attr most near place
 
-		/*
-
-
-		for(RouteDTO route: list) {
-			int contentid = route.getContentid();
-			AttractionDTO placeInfo = service.selectOnePlace(contentid);
-			route.setDto(placeInfo);
-			if(route.getDay()!=0) {
-				if(tripDay<route.getDay()) {
-					tripDay =route.getDay();
-				}
-			}
-		}////////////////////
-
-
-		int result = (int)Math.ceil(((double)list.size()-tripDay)/tripDay);
-		int count = 0;
-		int day=1;
-
-		if(list.size()-tripDay*2==1) {
-			for(RouteDTO route:list) {
-				if(route.getDay()==0) {
-					if(result>count) {
-						route.setDay(day);
-						count++;
-					}
-					else {
-						day++;
-						route.setDay(day);
-					}
-				}
-			}////////////for
-		}////////////////if
-
-		else {
-				for(RouteDTO route:list) {
-					route.setMtime(30*1000*60);
-					if(route.getDay()==0) {
-						if(result>count) {
-							route.setDay(day);
-							count++;
-						}
-						else {
-							count=0;
-							day++;
-							route.setDay(day);
-
-							count++;
-
-						}//////////
-					}//////day=0
-
-
-			}///////////////for
-		}////////////////else
-		 */
 
 		PlannerDTO routeList = new PlannerDTO();
 		routeList.setRoute(list);
@@ -341,6 +238,12 @@ public class MainController {
 		PlannerDTO dto = service.selectPlannerOne(rbn,req);
 
 		return dto;
+	}
+	@GetMapping("/data/mvtm")
+	public Map dataMvtm(@RequestParam Map map) {
+		
+		
+		return map;
 	}
 
 	@GetMapping("/planner/selectonemap")
@@ -456,7 +359,6 @@ public class MainController {
 	public List<AttractionDTO> attractionList(@RequestParam Map map,HttpServletRequest req){
 
 		List<AttractionDTO> list = new Vector<>();
-
 		if(map.get("sigungucode")!=null) {
 			switch(map.get("contenttypeid").toString()) {
 			case "12":
@@ -494,22 +396,6 @@ public class MainController {
 			}
 			list = service.selectPlacesList(map,req);
 		}
-		/*
-		for(AttractionDTO dto:list) {
-			System.out.println(dto.getKakaokey());
-			if(dto.getKakaokey()!=null) {
-				String uri = "http://192.168.0.19:5000/review?map="+dto.getKakaokey();
-
-				ResponseEntity<KakaoReview> responseEntity =
-						restTemplate.exchange(uri, HttpMethod.GET, null, KakaoReview.class);
-				System.out.println(responseEntity.getBody().getBasicInfo().getStar());
-				dto.setStar(responseEntity.getBody().getBasicInfo().getStar());
-
-
-			}
-
-		}
-		*/
 		return list;
 	}
 
@@ -609,7 +495,6 @@ public class MainController {
 	@GetMapping("/main/mainelement")
 	public Map<String,List> mainElement(@RequestParam Map map,HttpServletRequest req){
 		System.out.println("메인페이지 아이디:"+map);
-		//Map<String,Map<String,List>> basicMap = new HashMap<>();
 		Map<String,List> mapElement = new HashMap<>();
 		List<BBSDTO> bbsList = new Vector<>();
 		List<AttractionDTO> list = new Vector<>();
@@ -693,23 +578,6 @@ public class MainController {
 		List<BBSDTO> bbsList = new Vector<>();
 		List<ReviewDTO> reviewList = new Vector<>();
 		if(message.contains("recommendRoute")) {
-			/*
-			message = message.split("searchRoute")[0].trim();
-			System.out.println("마지막 응답 메시지:"+message);
-			rbn = service.searchPlanner(message);
-			if(rbn == null) message = "죄송합니다 알맞은 플래너가 없습니다.";
-			else {
-				returnMap.put("route", message+" (CLICK)");
-				returnMap.put("rbn",rbn);
-				int rbnInt = Integer.parseInt(rbn);
-				BBSDTO dto = bbsService.bbsSelectOne(rbnInt);
-				returnMap.put("planner", dto);
-				message = "AAMU에서 추천하는 여행 플래너!";
-			}
-				
-			
-			returnMap.put("message", message);
-			*/
 			requestBody.add("routebbs", service.selectAllBbsRate());
 			requestBody.add("ratereview", service.selectAllReview());
 			uri=serverip+":5020/recommend";
@@ -798,8 +666,25 @@ public class MainController {
 		return returnMap;
 	}
 	@GetMapping("/main/area")
-	public List<Map> areaTopAttr(Map map){
-		return service.getTopPlaceInArea(map);
+	public List<Map> areaTopAttr(@RequestParam Map map,HttpServletRequest req){
+		System.out.println("map:"+map);
+		List<Map> returnMap = service.getTopPlaceInArea(map);
+		List<Map> addMap = new Vector<>();
+		int countSize = 38;
+		for(Map oneMap: returnMap) {
+			Set<String> keys = oneMap.keySet();
+			for(String key :keys) {
+				System.out.println("key값:"+key);
+			}
+			AttractionDTO dto = service.selectOnePlace(Integer.parseInt(oneMap.get("CONTENTID").toString()), req);
+			oneMap.put("count", Integer.parseInt(oneMap.get("COUNT(P").toString().substring(12,13))+countSize);
+			oneMap.put("title", dto.getTitle());
+			if(addMap.size()<4) {
+				countSize = countSize-7;
+				addMap.add(oneMap);
+			}							
+		}
+		return addMap;
 	}
 
 }

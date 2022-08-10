@@ -45,7 +45,7 @@ public class ThemeController {
 		//테마 이미지
 		List<ThemeDTO> list=listPagingData.getLists();
 		for(ThemeDTO dto:list) {
-			dto.setThemeimg(FileUploadUtil.requestOneFile(themeService.getThemeImage(dto.getThemeid()), "/resources/themeimage", req));
+			dto.setThemeimg(FileUploadUtil.requestOneFile(themeService.getThemeImage(dto.getThemeid()), "/resources/themeImage", req));
 		}
 		
 		//데이타 저장]		

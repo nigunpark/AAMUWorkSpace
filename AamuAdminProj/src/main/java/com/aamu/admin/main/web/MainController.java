@@ -142,7 +142,8 @@ public class MainController {
 			Date current = new Date();
 			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
 			String currentTime = dateFormat.format(current);
-			uri ="http://api.visitkorea.or.kr/openapi/service/rest/KorService/searchFestival?serviceKey="+apikey+"&numOfRows=500&pageNo=1&MobileOS=ETC&MobileApp=AppTest&arrange=B&listYN=Y&areaCode="+area+"&eventStartDate="+currentTime;
+			uri ="http://api.visitkorea.or.kr/openapi/service/rest/KorService/searchFestival?serviceKey="+apikey+"&numOfRows=500"
+					+ "&pageNo=1&MobileOS=ETC&MobileApp=AppTest&arrange=B&listYN=Y&areaCode="+area+"&eventStartDate="+currentTime;
 		}
 		ResponseEntity<Places> responseEntity = 
 				restTemplate.exchange(uri, HttpMethod.GET,
@@ -175,10 +176,10 @@ public class MainController {
 			if(service.checkPlace(map)==1) {
 				continue;
 			}
-			System.out.println(dto.getContentid());
 			uri = "http://api.visitkorea.or.kr/openapi/service/rest/KorService/detailIntro?"
 					+ "serviceKey="+apikey
-					+ "&numOfRows=1&pageNo=1&MobileOS=ETC&MobileApp=AppTest&contentId="+item.getContentid()+"&contentTypeId="+item.getContenttypeid()+"&_type=json";
+					+ "&numOfRows=1&pageNo=1&MobileOS=ETC&MobileApp=AppTest&"
+					+ "contentId="+item.getContentid()+"&contentTypeId="+item.getContenttypeid()+"&_type=json";
 			if(item.getContentid()==133650) {
 				uri=null;
 			}
@@ -300,7 +301,9 @@ public class MainController {
 			dto.setReview(rDtoList);
 			}
 			*/
-			uri = "http://api.visitkorea.or.kr/openapi/service/rest/KorService/detailCommon?serviceKey="+apikey+"&numOfRows=10&pageNo=1&MobileOS=ETC&MobileApp=AppTest&contentId="+dto.getContentid()+"&defaultYN=Y&overviewYN=Y&_type=json";
+			uri = "http://api.visitkorea.or.kr/openapi/service/rest/KorService/detailCommon?"
+					+ "serviceKey="+apikey+"&numOfRows=10&pageNo=1&MobileOS=ETC&MobileApp=AppTest&"
+							+ "contentId="+dto.getContentid()+"&defaultYN=Y&overviewYN=Y&_type=json";
 			
 			responseEntity2 = 
 					restTemplate.exchange(uri, HttpMethod.GET,

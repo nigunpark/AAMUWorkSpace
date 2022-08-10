@@ -62,11 +62,6 @@ public class CommuController {
 //		System.out.println("셀렉트 리스트 searchColumn:"+map.get("searchColumn"));
 //		System.out.println("셀렉트 리스트 searchWord:"+map.get("searchWord"));
 		
-		//만약 #붙여서 태그 넘어올 때 사용
-//		if(map.get("searchColumn").toString().equals("tname")) {
-//			String tname=map.get("searchWord").toString().replaceAll(" ", "").substring(1);
-//			map.put("searchWord", tname);
-//		}
 		//list=글 목록들
 		List<CommuDTO> list = commuService.commuSelectList(map);
 		for(CommuDTO dto : list) {//글 목록들 list에서 하나씩 꺼내서 dto에 담는다

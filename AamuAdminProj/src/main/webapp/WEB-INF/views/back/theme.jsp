@@ -82,20 +82,20 @@
 										<div class="card">
 											<div class="card-body">
 												<h4 class="card-title">새로운 테마 추가</h4>
-												<form class="forms-sample" method="post" encType="multipart/form-data" action="<c:url value="ThemeInsert.do"/>">
+												<form class="forms-sample" method="post" encType="multipart/form-data" action="#">
 													<div class="form-group">
 														<label for="exampleInputName1">테마 이름</label> <input
-															type="text" class="form-control" id="exampleInputName1" name="themename" value="${param.themename}"
+															type="text" class="form-control" id="exampleInputName1" name="themename"
 															placeholder="테마 이름">
 													</div>
 													<!-- 파일업로드 -->
-													<div class="form-group">
+													<div class="form-group" >
 														<label>테마 이미지</label>
 														<div>
-															<input type="file" size="50" name="multifiles" />
+															<input type="file" size="50" name="themeimg" id="themeimg"/>
 														</div>
-													</div>
-													<button type="submit" class="btn btn-primary me-2">등록</button>
+`													</div>
+													<button type="button" class="btn btn-primary me-2">등록</button>
 													<button class="btn btn-light">취소</button>
 												</form>
 											</div>
@@ -121,7 +121,7 @@
     
     //삭제 click
     $('div.card-numberOfBoard > button').click(function(){
-    	console.log("버튼이벤트 발생");
+    	//console.log("버튼이벤트 발생");
     	var lnoArr = new Array();
         $('input[name="RowCheck"]:checked').each(function(i){//체크된 리스트 저장
         	lnoArr.push($(this).val());
@@ -137,7 +137,7 @@
            			url:"<c:url value="CommuDelete.do"/>",
            			type:"post",
            			data: jsonString,
-           			contentType:"application/json", //데이타 보낼 때
+           			contentType:"application/json", //데이타 보낼 때 
            			dataType: "json" //데이타 받을 때 
            		}).done(data=>{
            			console.log('삭제성공:',data);
@@ -150,6 +150,64 @@
     		
     	}//////else
     });
+    
+    //테마 보내기
+    $('form > button.btn.btn-primary.me-2').click(function(){
+    	console.log('클릭이벤트 발생');
+    	
+    	var themename = $('input[name="themename"]').val();
+    	//console.log(themename);
+    	//var themeimg = $('input[name="multifiles"]').serialize() ;
+    	//console.log(themeimg);
+    	
+    	
+    	//var form = $('.forms-sample')[0];
+    	var formData = new FormData();
+    	
+    	console.log($("#themeimg").get(0).files[0])
+    	formData.append("themeimg",$("#themeimg").get(0).files[0]);
+    	formData.append("themename",themename);
+    	
+    	if(themename === ''){
+    		alert("테마 이름을 입력해주세요.");
+    	}
+//    	else if(themeimg === ''){
+//    		alert("테마 이미지를 업로드하세요.");
+//    	}
+		else{
+    		if(confirm("등록 하시겠습니까?")){
+    			//var jsonString = JSON.stringify({themename : themename},{multifiles : themeimg})
+        		$.ajax({
+           			url:"http://localhost:8080/aamurest/theme/insert",
+           			type:"post",
+           			enctype: 'multipart/form-data',
+           			data: formData,
+           			contentType:false, //데이타 보낼 때
+           			processData:false,
+           			dataType: "text json" //데이타 받을 때 
+           		}).done(data=>{
+           			console.log('등록 성공:',data);
+           			location.replace("Theme.do");
+           		}).fail(error=>{
+           			console.log('등록 실패:',error);
+           		});
+        		$('#myModal').modal('hide');
+    		}///////if 삭제하시겠습니까?
+		}
+    	
+    	
+    	
+    });
+    
+    
+    
+    
+    //var form = document.querySelector('form');
+	//form.addEventListener("submit",function(e){
+		
+		
+	//});
+    
     
   </script>
 </body>
