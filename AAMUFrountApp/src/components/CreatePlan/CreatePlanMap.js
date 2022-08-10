@@ -190,8 +190,8 @@ const CreatePlanMap = ({ currPosition, fromWooJaeData, forDayLine, setSavePlan }
         }}
       >
         <div className="cMap__btn-container">
-          <div>수정저장</div>
-          <div>버튼버튼</div>
+          {/* <div>수정저장</div>
+          <div>버튼버튼</div> */}
           <div
             onClick={(e) => {
               e.stopPropagation();
