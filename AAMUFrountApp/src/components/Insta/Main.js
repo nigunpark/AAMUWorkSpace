@@ -5,6 +5,7 @@ import User from "./User.js";
 import axios from "axios";
 import Spinner from "./Spinner";
 
+
 function Main({
   searchb,
   setSearchb,
@@ -29,31 +30,40 @@ function Main({
   });
 
   const feedList = async (page) => {
-    setloading(true);
-    //백이랑 인스타 리스드를 뿌려주기 위한 axios
-    let token = sessionStorage.getItem("token");
-    const temp = await axios.get(`/aamurest/gram/selectList?page=${page}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      params: {
-        id: sessionStorage.getItem("username"),
-      },
-    });
-    const tempComments = list.concat(temp.data);
-    console.log(temp.data)
-    setlist((prevState) => [...prevState, ...tempComments]);
-    setrecommendUser(temp.data[0].recommenduser);
-    setForReRender(!forReRender);
-    
-    setloading(false);
+    try{
+      setloading(true);
+      //백이랑 인스타 리스드를 뿌려주기 위한 axios
+      let token = sessionStorage.getItem("token");
+      const temp = await axios.get(`/aamurest/gram/selectList?page=${page}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        params: {
+          id: sessionStorage.getItem("username"),
+        },
+      });
+      const tempComments = list.concat(temp.data);
+      if (page === 1) {
+        setlist(temp.data);
+      } else {
+        setlist([...tempComments]);
+      }
+      setrecommendUser(temp.data[0].recommenduser);
+      setForReRender(!forReRender);
+
+      setloading(false);
+    }
+    catch{
+      alert('마지막페이지입니다')
+      setloading(false);
+    }
   };
 
   useEffect(() => {
+    console.log(page);
     feedList(page);
     setinputValue("");
   }, [page]);
-  
 
   const scrollEvent = () => {
     const scrollHeight = document.documentElement.scrollHeight;
@@ -90,6 +100,7 @@ function Main({
               <FeedSetting
                 key={i}
                 val={val}
+                list={list}
                 setlist={setlist}
                 forReRender={forReRender}
                 setForReRender={setForReRender}
@@ -98,6 +109,8 @@ function Main({
                 setPrevChats={setPrevChats}
                 inputValue={inputValue}
                 setinputValue={setinputValue}
+                setloading={setloading} 
+                page={page}
               />
             );
           })}
@@ -105,6 +118,7 @@ function Main({
         <div className="main-right">
           <User
             list={list}
+            page={page}
             inputValue={inputValue}
             setinputValue={setinputValue}
             setlist={setlist}
@@ -113,7 +127,7 @@ function Main({
             setSearchb={setSearchb}
             showChat={showChat}
             recommendUser={recommendUser}
-            setrecommendUser={setrecommendUser}
+            setpage={setpage}
             prevChats={prevChats}
           ></User>
         </div>
@@ -123,3 +137,4 @@ function Main({
 }
 
 export default Main;
+
