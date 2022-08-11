@@ -121,6 +121,7 @@ class MainViewModel(context : Context) : ViewModel() {
                         setNotiCount()
                     }
                     else{
+                        notilist.value = respNotiList
                         errorLiveData.value = "알람이 없어요"
                         Toast.makeText(context,"리스트를 받아오는데 실페했습니다", Toast.LENGTH_LONG)
                     }
@@ -130,33 +131,40 @@ class MainViewModel(context : Context) : ViewModel() {
 
     fun delNotiList(nano : Int){
         viewModelScope.launch {
-            val tempNotiList = notilist.value?.toMutableList()
-            if (tempNotiList != null) {
-                for (item in tempNotiList) {
-                    if (item.nano == nano) {
-                        item.readknow = 1
-                        break
+            aamuRepository.delNoti(nano).collect {
+                val tempNotiList = notilist.value?.toMutableList()
+                if (tempNotiList != null) {
+                    for (item in tempNotiList) {
+                        if (item.nano == nano) {
+                            item.readknow = 1
+                            break
+                        }
                     }
+                    setNotiCount()
                 }
-                setNotiCount()
             }
         }
     }
 
     fun updateNotiList(nano : Int){
         viewModelScope.launch {
-            val tempNotiList = notilist.value?.toMutableList()
-            if (tempNotiList != null) {
-                for (item in tempNotiList) {
-                    if (item.nano == nano) {
-                        item.readknow = 1
-                        break
+            aamuRepository.putNoti(nano)
+                .collect {
+                    if(it.isNotEmpty()){
+                        val tempNotiList = notilist.value?.toMutableList()
+                        if (tempNotiList != null) {
+                            for (item in tempNotiList) {
+                                if (item.nano == nano) {
+                                    item.readknow = 1
+                                    break
+                                }
+                            }
+                            notilist.value = emptyList()
+                            notilist.value = tempNotiList.toList()
+                            setNotiCount()
+                        }
                     }
                 }
-                notilist.value = emptyList()
-                notilist.value = tempNotiList.toList()
-                setNotiCount()
-            }
         }
     }
 

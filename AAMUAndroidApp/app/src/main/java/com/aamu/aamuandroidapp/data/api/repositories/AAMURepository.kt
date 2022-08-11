@@ -2,8 +2,6 @@ package com.aamu.aamuandroidapp.data.api.repositories
 
 import com.aamu.aamuandroidapp.data.api.response.*
 import kotlinx.coroutines.flow.Flow
-import retrofit2.Response
-import retrofit2.http.Query
 
 interface AAMURepository {
     suspend fun dologin(username : String, password : String) : String?
@@ -38,6 +36,8 @@ interface AAMURepository {
     suspend fun postReview(review: Review) : Flow<Map<String,String>>
 
     suspend fun getNotiList(id : String) : Flow<List<AAMUNotiResponse>>
+    suspend fun putNoti(nano : Int) : Flow<Map<String,String>>
+    suspend fun delNoti(nano : Int) : Flow<Map<String,String>>
 
     suspend fun getUserInfo(id : String) : Flow<AAMUUserInfo>
 }

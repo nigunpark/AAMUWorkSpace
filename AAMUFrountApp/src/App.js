@@ -15,7 +15,7 @@ import DetailModal from "./pages/Forum/DetailModal/DetailModal";
 import KakaoRedirectHandler from "./components/Login/Kakao/KakaoRedirectHandler";
 import JoinStep1 from "./components/Join/JoinStep1.js";
 import JoinStep2 from "./components/Join/JoinStep2.js";
-import SearchList from "./components/Insta/SearchList";
+import SearchList from "./components/Insta/searchList";
 import QnA from "./components/QnA/QnA";
 import QnADetail from "./components/QnA/QnADetail";
 import QnAWrite from "./components/QnA/QnAWrite";
@@ -48,23 +48,28 @@ function App() {
   const navigate = useNavigate();
   const [accountEmail, setaccountEmail] = useState("");
   const [noti, setNoti] = useState([]);
+  const [notibody , setnotibody] = useState([]);
   const handleScroll = () => {
     if (window.scrollY > 950 && window.scrollY < 2500) setScrollNav(true);
     else setScrollNav(false);
   };
   window.addEventListener("scroll", handleScroll);
 
+  useEffect(() => {
+    const tempNoti = noti.concat(notibody);
+    setNoti([...tempNoti]);
+  }, [notibody]);
+
   const subscribe = () => {
     client.current.subscribe(
       `/queue/notification/${sessionStorage.getItem("username")}`,
       ({ body }) => {
         // setChatMessages((_chatMessages) => [..._chatMessages, JSON.parse(body)]);
-        console.log("body", body);
-        setNoti((curr) => {
-          return [...curr, JSON.parse(body)];
-        });
-        console.log("noti", noti);
+        // const tempNoti = noti.concat(JSON.parse(body));
+        // setNoti([...tempNoti]);
+        // console.log("tempNoti", tempNoti);
         // console.log([...noti, JSON.parse(body)]);
+        setnotibody(JSON.parse(body))
       }
     );
   };
@@ -72,7 +77,7 @@ function App() {
   const connect = () => {
     // client.current = new StompJs.Client();
     client.current = new StompJs.Client({
-      brokerURL: "ws://192.168.0.22:8080/aamurest/ws/chat/websocket",
+      brokerURL: "ws://192.168.45.107:8080/aamurest/ws/chat/websocket",
       // connectHeaders: {
       //   "auth-token": "spring-chat-auth-token",
       // },

@@ -351,6 +351,32 @@ class AAMURepositoryImpl(
         emit(emptyList<AAMUNotiResponse>())
     }.flowOn(Dispatchers.IO)
 
+    override suspend fun putNoti(nano : Int): Flow<Map<String, String>> = flow<Map<String, String>> {
+        val map = HashMap<String,String>()
+        map.put("nano",nano.toString())
+        val response = aamuApi.putNoti(map)
+        if(response.isSuccessful){
+            emit(response.body() ?: emptyMap())
+        }
+        else{
+            emit(emptyMap())
+        }
+    }.catch {
+
+    }.flowOn(Dispatchers.IO)
+
+    override suspend fun delNoti(nano: Int): Flow<Map<String, String>> = flow<Map<String, String>> {
+        val response = aamuApi.delNoti(nano)
+        if(response.isSuccessful){
+            emit(response.body() ?: emptyMap())
+        }
+        else{
+            emit(emptyMap())
+        }
+    }.catch {
+        emit(emptyMap())
+    }.flowOn(Dispatchers.IO)
+
     override suspend fun getUserInfo(id: String): Flow<AAMUUserInfo> = flow<AAMUUserInfo> {
         val response = aamuApi.getUserInfo(id)
         if(response.isSuccessful){

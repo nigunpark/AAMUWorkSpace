@@ -93,6 +93,12 @@ interface AAMUApi {
     @GET("notification/list")
     suspend fun getNotiList(@Query("id") id : String) : Response<List<AAMUNotiResponse>>
 
+    @PUT("notification/edit")
+    suspend fun putNoti(@Body map : Map<String,String>) : Response<Map<String,String>>
+
+    @DELETE("notification/edit")
+    suspend fun delNoti(@Query("nano") nano : Int) : Response<Map<String,String>>
+
     @GET("users/selectone")
     suspend fun getUserInfo(@Query("id") id : String) : Response<AAMUUserInfo>
 

@@ -81,10 +81,8 @@ fun NotificationList(
                     items = notilist!!,
                     itemContent = { index, noti ->
                         NotificationListItem(index, noti,{ nano ->
-                            Log.i("com.aamu.aamu", "뭐가 찍혔나요? : "+ nano)
                             viewModel.delNotiList(nano)
                         },{nano ->
-                            Log.i("com.aamu.aamu", "click 뭐가 찍혔나요? : "+ nano)
                             viewModel.updateNotiList(nano)
                         })
                     }

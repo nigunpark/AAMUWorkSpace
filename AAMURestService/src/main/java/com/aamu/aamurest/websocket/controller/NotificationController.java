@@ -43,14 +43,16 @@ public class NotificationController {
 		return map;
 	}
 	@DeleteMapping("/edit")
-	public Map notificationDelete(@RequestBody Map map) {
+	public Map notificationDelete(@RequestParam Map map) {
 		int affected = 0;
 		affected = template.update("deleteNotiMessage", map);
 		if(affected==1)map.put("isSuccess", "Success");
 		else map.put("isSuccess", "Fail");
 		return map;
 	}
-	public Map notificationAllDelete(@RequestBody Map map) {
+	
+	@DeleteMapping("/edit/all")
+	public Map notificationAllDelete(@RequestParam Map map) {
 		int affected = 0;
 		affected = template.update("deleteAllNotiMessage", map);
 		if(affected>0)map.put("isSuccess", "Success");
