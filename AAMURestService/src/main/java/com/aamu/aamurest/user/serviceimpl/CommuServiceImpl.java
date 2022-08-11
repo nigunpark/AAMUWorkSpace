@@ -53,8 +53,16 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 			map.put("end", end);
 		}
 		
+		System.out.println("여기 커뮤 태그 넘어옴?"+map); //#서울
+		if(map.get("searchWord") != null) {
+			if(map.get("searchWord").toString().contains("#") && map.get("searchWord").toString().length()>=2) {
+				String tname=map.get("searchWord").toString().split("#")[1];
+				map.put("searchWord", tname);
+				//lists=dao.commuSelectList(map);//#서, #서울가 오잖아
+			}
+		}
+		
 		List<CommuDTO> lists=dao.commuSelectList(map);
-		//System.out.println("여기 lists는:"+lists.toString());
 		
 		//isLike셋팅
 		List<CommuDTO> returnLists = new Vector();
@@ -130,8 +138,9 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 				//standTheme 세션id제외 사용자정보 얻기
 				List<String> compareTheme = infoUser(map); 
 				//교집합/합집합
-				double ins = (double)UserUtil.intersection(standTheme, compareTheme)/
-						     (double)(standTheme.size()+compareTheme.size());
+				double commonins = (double)UserUtil.intersection(standTheme, compareTheme);
+				double ins = commonins/
+						     (double)(standTheme.size()+compareTheme.size())-commonins;
 				resultMap.put("id", id);
 				resultMap.put("ins", ins);
 				resultList.add(resultMap);
@@ -149,13 +158,10 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 		//모든거 다 가기
 		List<String> idList = new Vector<>();
 		for(Map<String, Object> result:resultList) {
-			//System.out.println("result:"+result);
 			idList.add(result.get("id").toString());
 		}
 		return idList;
 	}
-	
-	
 	
 	//추천_데이타 모으기 메소드 
 	public List<String> infoUser(Map map){
@@ -177,42 +183,10 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 		return standTheme;
 	}
 	
-	//추천
-	/*
-	@Override
-	public List<String> getUserTheme(Map map) {
-		List<String> standTheme = dao.getUserTheme(map); //테마네임리스트 얻기
-		UsersDTO dto = dao.getUserChar(map); //id에 따른 users테이블에 있는 모든것 얻기 
-		LocalDate now = LocalDate.now();
-		int age = now.getYear()-Integer.parseInt(dto.getSocialnum().substring(0, 2))+1900; //20대, 30대 ...
-		age = age-age%10;
-		String standId = map.get("id").toString(); //기준되는id(세션id)
-		standTheme.add(String.valueOf(age));//테마네임리스트에 나이대 추가
-		standTheme.add(dto.getGender());//테마네임리스트에 성별 추가
-		int stand = standTheme.size(); //테마네임 length
-		String resultId = null;
-		double result = 0;
-		for(String id:dao.getAllUser()) {
-			if(!(standId.equals(id))){
-				map.put("id", id);
-				List<String> compareTheme = dao.getUserTheme(map);
-				double ins = intersection(standTheme, compareTheme)/standTheme.size()+compareTheme.size();
-				if(result<ins) {
-					result = ins;
-					resultId = id;
-				}
-			}
-		}
-		
-		return standTheme;
-	}
-	*/
-	
 	//글 검색용
 	@Override
 	public List<String> commuSearachList(Map map) {
 		if(map.get("searchColumn").equals("id")) {
-			//map.put("searchWord", map.get("searchWord").toString()); 어퍼케이스 하려고 넣었나?
 			map.put("table", "users");
 			List<String> list=dao.commuSearachList(map);
 			return list;
@@ -222,26 +196,12 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 			return dao.commuSearachList(map);
 		}
 		else {//tname이 넘어온거 searchColumn:tname , searchWord:서울
-			/*
-			map.put("table", "tags");
-			List<String> tnameList=dao.commuSearachList(map);
-			List<String> shrapTnameList = new Vector();
-			for(String tname:tnameList) {
-				String sharpTname="#"+tname;
-				shrapTnameList.add(sharpTname);
-			}
-			return shrapTnameList;
-			*/
-			System.out.println("왜 널이니 너는?"+map.get("searchWord").toString());
 			if(map.get("searchWord").toString().contains("#") && map.get("searchWord").toString().length()>=2) { //#서울
 				String tname=map.get("searchWord").toString().split("#")[1];
 				map.put("tname", tname);
-				//map.put("table", "tags");
 				List<String> tagLists=dao.commuSelectTag(map);//#서, #서울가 오잖아
 				List<String> sharptTagList = new Vector<>();
-				System.out.println("트루일가요?"+tagLists.contains(map.get("tname")));
 				
-				System.out.println("tname은 뭘가요?"+map.get("tname"));
 				for(String tag:tagLists) { //서울, 서울여행을 꺼내서 
 					String sharpTag="#"+tag; //#서울을 붙이기
 					sharptTagList.add(sharpTag); //새로운 배열에 담아서 전달
@@ -252,26 +212,6 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 				return null;
 		}
 	}
-	
-	/*
-	 if(map.get("tname").toString().contains("#") && map.get("tname").toString().length()>=2) { #서울
-			String tname=map.get("tname").toString().split("#")[1];
-			map.put("tname", tname);
-			List<String> tagLists=dao.commuSelectTag(map);//#서, #서울가 오잖아
-			List<String> sharptTagList = new Vector<>();
-			System.out.println("트루일가요?"+tagLists.contains(map.get("tname")));
-			
-			System.out.println("tname은 뭘가요?"+map.get("tname"));
-			for(String tag:tagLists) { //서울, 서울여행을 꺼내서 
-				String sharpTag="#"+tag; //#서울을 붙이기
-				sharptTagList.add(sharpTag); //새로운 배열에 담아서 전달
-			}
-			return sharptTagList;		
-		}
-		else 
-			return null;
-
-	 */
 
 	//글 생성용
 	@Override
@@ -369,26 +309,6 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 		return dto;
 	}
 	
-	/*
-	 //글 하나 뿌려주는 용
-	@Override
-	public CommuDTO commuSelectOne(Map map) {
-		CommuDTO dto=dao.commuSelectOne(map);
-		List<CommuCommentDTO> list=dao.commuCommentList(map.get("lno").toString());
-		dto.setCommuCommentList(list);
-		//태그 셋팅
-		int CountTag=dao.selectCountCommuTag(lno);
-		if(CountTag>0) {
-			List<String> tagList=dao.commuSelectTagName(lno); //서울,서울여행 이니까 #붙여야됨
-			List<String> sharptTagList = new Vector<>();
-			for(String tag:tagList) {
-				String sharpTag="#"+tag; //#서울을 붙이기
-				sharptTagList.add(sharpTag); //새로운 배열에 담아서 전달
-			}
-			dto.setTname(sharptTagList);
-		}
-	
-	 * */
 
 	//글 하나 뿌려주는 용_모든 댓글 뿌려주기
 	@Override
