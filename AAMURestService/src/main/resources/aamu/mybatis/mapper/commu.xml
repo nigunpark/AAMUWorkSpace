@@ -292,7 +292,12 @@
 	
 	<!-- 워드클라우드_태그네임 얻기 -->
 	<select id="commugetTnames" resultType="String">
-		select * from tags where exists (select * from commutag where tags.tno = commutag.tno)
+		select tags.tname from tags where exists (select * from commutag where tags.tno = commutag.tno)
+	</select>
+	
+	<!-- 워드클라우드_태그별 카운드 -->
+	<select id="commuGetTnameOfCount" parameterType="String" resultType="int">
+		select count(*) from tags t join commutag ct on t.tno=ct.tno where tname=#{tname}
 	</select>
 	
 	<!-- @@@@@@@@@@@@@@@@@@@@@@@@@@@@@이미지 클라우드@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ -->

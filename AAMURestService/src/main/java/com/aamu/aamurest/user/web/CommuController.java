@@ -472,16 +472,8 @@ public class CommuController {
 	@GetMapping("/gram/word")
 	public List<Map> selectTnamesNCount() {
 		System.out.println("여기 올가요?");
-		commuService.commugetTnames();
-		
-		return null;
+		return commuService.commugetTnames();
 	}
-	
-	
-
-	
-	
-	
 	
 	/////////////////////////////////////////////////////////////날씨 크롤링
 	

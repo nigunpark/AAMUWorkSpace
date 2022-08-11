@@ -532,8 +532,20 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 	
 	//워드클라우드_태그네임 얻기
 	@Override
-	public List<String> commugetTnames() {
-		return dao.commugetTnames();
+	public List<Map> commugetTnames() {
+		List<String> tnames=dao.commugetTnames();
+		System.out.println("tnames:"+tnames);
+		List<Map> tnameMap = new Vector<>();
+		
+		for(String tname:tnames) {
+			Map map = new HashMap<>();
+			map.put("tname", tname);
+			int count=dao.commuGetTnameOfCount(tname);
+			map.put("count", count);
+			tnameMap.add(map);
+		}
+		
+		return tnameMap;
 	}
 	
 

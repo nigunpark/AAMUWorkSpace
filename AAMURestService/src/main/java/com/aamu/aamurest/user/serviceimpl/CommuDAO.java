@@ -254,7 +254,12 @@ public class CommuDAO {
 	
 	//워드클라우드_태그네임 얻기
 	public List<String> commugetTnames() {
-		return template.selectOne("commugetTnames");
+		return template.selectList("commugetTnames");
+	}
+	
+	//워드클라우드_태그별 카운드
+	public int commuGetTnameOfCount(String tname) {
+		return template.selectOne("commuGetTnameOfCount",tname);
 	}
 	
 	///////////////////////////////////////////////////////////////워드클라우드 
