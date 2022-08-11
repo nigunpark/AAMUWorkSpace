@@ -327,7 +327,7 @@ public class CommuController {
 		//댓글 알림
 		//authid는 글쓴이 id
 		String authid = commuService.commuSelectUserId(map);
-		notificationAlert.NotiMessage("이런곳은 어때 게시판",map.get("id").toString(),new NotificationDTO(0,authid,map.get("id").toString()+"님이 리뷰를 남겼어요.",0,0,NotificationAlert.GRAM,Integer.parseInt(map.get("lno").toString())));
+		notificationAlert.NotiMessage("이런곳은 어때 게시판",map.get("id").toString(),new NotificationDTO(0,authid,map.get("id").toString()+"님이 댓글을 남겼어요.",0,0,NotificationAlert.GRAM,Integer.parseInt(map.get("lno").toString())));
 		return resultMap;
 	}
 	
