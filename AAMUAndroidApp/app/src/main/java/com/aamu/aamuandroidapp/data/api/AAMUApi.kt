@@ -21,8 +21,14 @@ interface AAMUApi {
     @POST("authenticate")
     suspend fun doLogin(@Body user: userLogin): Response<AAMUUserResponse>
 
+    @POST("authenticate/email")
+    suspend fun doLoginEmail(@Body map : Map<String,String>): Response<AAMUUserResponse>
+
     @POST("notification/firebase")
     suspend fun postToken(@Body map: Map<String,String>): Response<Map<String,String>>
+
+    @DELETE("notification/firebase")
+    suspend fun delToken(@Query("id") id: String): Response<Map<String,String>>
 
     @GET("isOK")
     suspend fun isok() : Response<String>
@@ -91,7 +97,7 @@ interface AAMUApi {
     suspend fun getUserInfo(@Query("id") id : String) : Response<AAMUUserInfo>
 
     companion object {
-        private const val BASE_URL = "http://192.168.0.22:8080/aamurest/"
+        private const val BASE_URL = "http://192.168.45.107:8080/aamurest/"
 
         operator fun invoke():AAMUApi{
             val requestInterceptor  = Interceptor{ chain ->

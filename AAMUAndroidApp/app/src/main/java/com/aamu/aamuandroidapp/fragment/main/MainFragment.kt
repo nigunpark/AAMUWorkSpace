@@ -71,7 +71,7 @@ class MainFragment : Fragment() {
             LottieValueCallback(SimpleColorFilter(Color.parseColor("#a5c3e7")))
         )
         replace(HomeFragment())
-
+        viewModel.show(1)
 //        binding.bottomNav.apply {
 //            add(MeowBottomNavigation.Model(1, R.drawable.ic_home))
 //            add(MeowBottomNavigation.Model(2, R.drawable.ic_explore))

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -14,10 +15,12 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.material.icons.twotone.*
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
@@ -27,15 +30,22 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.aamu.aamuandroidapp.R
+import com.aamu.aamuandroidapp.components.profile.cascade.CascadeMenu
+import com.aamu.aamuandroidapp.components.profile.cascade.CascadeMenuItem
+import com.aamu.aamuandroidapp.components.profile.cascade.cascadeMenu
 import com.aamu.aamuandroidapp.data.api.response.AAMUUserInfo
 import com.aamu.aamuandroidapp.ui.theme.aamuorange
 import com.aamu.aamuandroidapp.ui.theme.cyan200
 import com.guru.composecookbook.profile.TopScrollingContent
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.receiveAsFlow
 
 const val initialImageFloat = 170f
 const val name = "Gurupreet Singh"
@@ -61,7 +71,7 @@ internal fun launchSocialActivity(context: Context, socialType: String) {
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun ProfileScreen() {
+fun ProfileScreen(navController: NavController) {
     Scaffold {
         Box(
             modifier = Modifier
@@ -92,7 +102,7 @@ fun ProfileScreen() {
                     BottomScrollingContent(userinfo!!,userGram,viewModel)
                     Spacer(modifier = Modifier.height(100.dp))
                 }
-                TopAppBarView(scrollState.value.toFloat(),userinfo!!)
+                TopAppBarView(scrollState.value.toFloat(),userinfo!!,navController,viewModel)
             }
             else {
                 if (error.isNullOrEmpty()) {
@@ -112,8 +122,23 @@ fun ProfileScreen() {
     }
 }
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun TopAppBarView(scroll: Float, userinfo: AAMUUserInfo) {
+fun TopAppBarView(
+    scroll: Float,
+    userinfo: AAMUUserInfo,
+    navController: NavController,
+    viewModel: ProfileScreenViewModel
+) {
+    val (isOpen, setIsOpen) = remember { mutableStateOf(false) }
+    val context : Context = LocalContext.current
+
+    val isLogout by viewModel.isLogout.observeAsState()
+    if(isLogout == true) {
+        navController.navigate(R.id.action_mainFragment_to_loginFragment)
+        viewModel.isLogout.value = false
+    }
+
     if (scroll > initialImageFloat + 5) {
         TopAppBar(
             title = {
@@ -136,11 +161,22 @@ fun TopAppBarView(scroll: Float, userinfo: AAMUUserInfo) {
                 )
             },
             actions = {
-                Icon(
-                    imageVector = Icons.Default.Settings,
-                    contentDescription = null,
-                    modifier = Modifier.padding(horizontal = 8.dp)
-                )
+                Box(contentAlignment = Alignment.TopEnd) {
+                    Menu(isOpen = isOpen, setIsOpen = setIsOpen, itemSelected = {
+                        if(it == "logout"){
+                            viewModel.delToken()
+                        }
+                        setIsOpen(false)
+                    })
+                    IconButton(
+                        onClick = { setIsOpen(true) }) {
+                        Icon(
+                            imageVector = Icons.Default.Settings,
+                            contentDescription = null,
+                            modifier = Modifier.padding(horizontal = 8.dp)
+                        )
+                    }
+                }
             },
             backgroundColor = Color.White
         )
@@ -162,9 +198,31 @@ private fun TopBackground() {
     )
 }
 
+@ExperimentalAnimationApi
+@Composable
+fun Menu(isOpen: Boolean = false, setIsOpen: (Boolean) -> Unit, itemSelected: (String) -> Unit) {
+    val menu = getMenu()
+    CascadeMenu(
+        isOpen = isOpen,
+        menu = menu,
+        onItemSelected = itemSelected,
+        onDismiss = { setIsOpen(false) },
+        offset = DpOffset(8.dp, 0.dp),
+    )
+}
+
+fun getMenu(): CascadeMenuItem<String> {
+    val menu = cascadeMenu<String> {
+        item("logout", "로그아웃") {
+            icon(Icons.Default.ExitToApp)
+        }
+    }
+    return menu
+}
+
 @OptIn(ExperimentalMaterialApi::class)
 @Preview
 @Composable
 fun ShowProfileScreen() {
-    ProfileScreen()
+    //ProfileScreen()
 }

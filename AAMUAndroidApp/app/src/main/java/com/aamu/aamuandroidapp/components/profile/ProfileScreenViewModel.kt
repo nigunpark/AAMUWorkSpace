@@ -39,6 +39,8 @@ class ProfileScreenViewModel (context: Context) : ViewModel(){
     val errorBookMarkLiveData = MutableLiveData<String>()
     val errorGramLiveData = MutableLiveData<String>()
 
+    val isLogout = MutableLiveData(false)
+
     fun getUserInfo(){
         val preferences : SharedPreferences = context.getSharedPreferences("usersInfo", Context.MODE_PRIVATE)
         val userid : String? = preferences.getString("id",null)
@@ -106,6 +108,25 @@ class ProfileScreenViewModel (context: Context) : ViewModel(){
                         errorBookMarkLiveData.value = "북마크한 리스트가 없습니다"
                     }
                 }
+        }
+    }
+
+    fun delToken(){
+        viewModelScope.launch{
+            val preferences : SharedPreferences = context.getSharedPreferences("usersInfo", Context.MODE_PRIVATE)
+            val userid : String? = preferences.getString("id",null)
+            if (userid != null) {
+                aamuRepository.delToken(userid)
+                    .collect{
+                        if(it.isNotEmpty()){
+                            isLogout.value = true
+                            context.getSharedPreferences("usersInfo",0).edit().clear().commit();
+                        }
+                        else{
+                            isLogout.value = false
+                        }
+                    }
+            }
         }
     }
 

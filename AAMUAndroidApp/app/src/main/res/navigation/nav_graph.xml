@@ -50,6 +50,11 @@
         <action
             android:id="@+id/action_mainFragment_to_chatlistFragment"
             app:destination="@id/chatlistFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/mainFragment"
+            app:popUpToInclusive="true" />
 
     </fragment>
     <fragment

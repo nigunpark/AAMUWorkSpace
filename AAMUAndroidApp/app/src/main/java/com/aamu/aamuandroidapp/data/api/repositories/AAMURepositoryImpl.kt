@@ -28,6 +28,22 @@ class AAMURepositoryImpl(
         }
     }
 
+    override suspend fun doLoginEmail(email: String,profile : String): String? {
+        val map = HashMap<String,String>()
+        map.put("email",email)
+        val response = aamuApi.doLoginEmail(map)
+        if(response.isSuccessful){
+            val preferences: SharedPreferences =
+                contextL.getSharedPreferences("usersInfo", Context.MODE_PRIVATE)
+            preferences.edit().putString("id", response.body()?.member?.username).commit()
+            preferences.edit().putString("profile", profile).commit()
+            return response.body()?.token
+        }
+        else{
+            return null
+        }
+    }
+
     override suspend fun postToken(username: String, firebaseid: String) {
         val map : MutableMap<String,String> = HashMap<String,String>()
         map.put("id",username)
@@ -40,6 +56,18 @@ class AAMURepositoryImpl(
             Log.i("com.aamu.aamu","응 당연한 실페야" + response.body())
         }
     }
+
+    override suspend fun delToken(username: String): Flow<Map<String,String>> = flow<Map<String, String>> {
+        val response = aamuApi.delToken(username)
+        if(response.isSuccessful){
+            emit(response.body() ?: emptyMap())
+        }
+        else{
+            emit(emptyMap())
+        }
+    }.catch {
+        emit(emptyMap())
+    }.flowOn(Dispatchers.IO)
 
     override suspend fun isok(): Boolean {
         val response = aamuApi.isok()

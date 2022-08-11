@@ -1,10 +1,14 @@
 package com.aamu.aamuandroidapp.components.aamuplan.PlaceDetail
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -28,17 +32,20 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.aamu.aamuandroidapp.R
 import com.aamu.aamuandroidapp.components.aamuplan.AAMUPlanViewModel
 import com.aamu.aamuandroidapp.components.gram.image.PlanGramImageGrid
+import com.aamu.aamuandroidapp.components.profile.githubUrl
 import com.aamu.aamuandroidapp.data.api.response.AAMUPlaceResponse
 import com.aamu.aamuandroidapp.ui.theme.cyan200
 import com.aamu.aamuandroidapp.ui.theme.cyan500
 import com.aamu.aamuandroidapp.ui.theme.typography
 import com.aamu.aamuandroidapp.ui.theme.yellow
+import com.aamu.aamuandroidapp.util.contextL
 import com.aamu.aamuandroidapp.util.getContentTypeId
 import com.guru.fontawesomecomposelib.FaIcon
 import com.guru.fontawesomecomposelib.FaIcons
@@ -83,6 +90,7 @@ fun PlaceDetail(mapviewModel: AAMUPlanViewModel,
     val placeLiveData by viewModel.placeLiveData.observeAsState()
     val kakoLiveData by viewModel.kakoLiveData.observeAsState()
     val errorKakaoLiveData by viewModel.errorKakaoLiveData.observeAsState()
+    val context : Context = LocalContext.current
 
     Column(modifier = Modifier
         .fillMaxSize()
@@ -194,10 +202,22 @@ fun PlaceDetail(mapviewModel: AAMUPlanViewModel,
                         tint = cyan500.copy(alpha = 0.3f),
                         modifier = Modifier.padding(horizontal = 5.dp)
                     )
-                    Text(
-                        text = placeLiveData?.url ?: "홈페이지 없음",
-                        style = typography.h6.copy(fontSize = 12.sp)
-                    )
+                    if(placeLiveData?.url != null) {
+                        Text(
+                            text = placeLiveData?.url ?: "홈페이지 없음",
+                            style = typography.h6.copy(fontSize = 12.sp),
+                            modifier = Modifier.clickable {
+                                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(placeLiveData?.url))
+                                context.startActivity(intent)
+                            }
+                        )
+                    }
+                    else {
+                        Text(
+                            text = placeLiveData?.url ?: "홈페이지 없음",
+                            style = typography.h6.copy(fontSize = 12.sp)
+                        )
+                    }
                 }
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
@@ -208,10 +228,22 @@ fun PlaceDetail(mapviewModel: AAMUPlanViewModel,
                         tint = cyan500.copy(alpha = 0.3f),
                         modifier = Modifier.padding(horizontal = 5.dp)
                     )
-                    Text(
-                        text = placeLiveData?.tel ?: "전화번호 없음",
-                        style = typography.h6.copy(fontSize = 12.sp)
-                    )
+                    if(placeLiveData?.tel != null) {
+                        Text(
+                            text = placeLiveData?.tel ?: "전화번호 없음",
+                            style = typography.h6.copy(fontSize = 12.sp),
+                            modifier = Modifier.clickable {
+                                val intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:"+placeLiveData?.tel))
+                                context.startActivity(intent)
+                            }
+                        )
+                    }
+                    else{
+                        Text(
+                            text = placeLiveData?.tel ?: "전화번호 없음",
+                            style = typography.h6.copy(fontSize = 12.sp)
+                        )
+                    }
                 }
 
                 Text(

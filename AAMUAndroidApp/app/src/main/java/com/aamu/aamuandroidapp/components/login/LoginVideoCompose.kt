@@ -2,6 +2,7 @@ package com.aamu.aamuandroidapp.components.login
 
 import android.content.Context
 import android.net.Uri
+import android.util.Log
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.Toast
@@ -56,6 +57,7 @@ import com.google.android.exoplayer2.ui.StyledPlayerView
 import com.guru.fontawesomecomposelib.FaIcon
 import com.guru.fontawesomecomposelib.FaIconType
 import com.guru.fontawesomecomposelib.FaIcons
+import com.kakao.sdk.user.UserApiClient
 
 private fun Context.buildExoPlayer(uri: Uri) =
     ExoPlayer.Builder(this).build().apply {
@@ -130,6 +132,7 @@ fun LoginVideo(videoUri: Uri,loginfail : Boolean,onLoginSuccess: () -> Unit) {
                 modifier = Modifier.fillMaxWidth(0.8f)
             )
             var loading by remember { mutableStateOf(false) }
+            var loadingkakao by remember { mutableStateOf(false) }
             TextInput(username,{username = it},InputType.Name, keyboardActions = KeyboardActions(onNext = {
                 passwordFocusRequester.requestFocus()
             }), interactionSource =  emailInteractionState)
@@ -163,6 +166,7 @@ fun LoginVideo(videoUri: Uri,loginfail : Boolean,onLoginSuccess: () -> Unit) {
             if(loginfail){
                 hasError = true
                 loading = false
+                loadingkakao = false
                 Text(
                     text = "로그인이 실패하였습니다 아이디 또는 비밀번호를 확인해 주세요",
                     style = TextStyle.Default.copy(
@@ -200,17 +204,52 @@ fun LoginVideo(videoUri: Uri,loginfail : Boolean,onLoginSuccess: () -> Unit) {
                 modifier = Modifier.padding(top = 48.dp)
             )
             androidx.compose.material3.OutlinedButton(
-                onClick = { }, modifier = Modifier
+                onClick = {
+                    loadingkakao = true
+                    hasError = false
+                    onLoginSuccess.invoke()
+                    UserApiClient.instance.loginWithKakaoTalk(context) { token, error ->
+                        if (error != null) {
+                            Log.i("com.aamu.aamu", "로그인 실패 ${error}")
+                        }
+                        else if (token != null) {
+                            Log.i("com.aamu.aamu", "로그인 성공 ${token.accessToken}")
+                            UserApiClient.instance.me { user, error ->
+                                if (error != null) {
+                                    Log.e("com.aamu.aamu", "사용자 정보 요청 실패", error)
+                                }
+                                else if (user != null) {
+                                    Log.i("com.aamu.aamu", "사용자 정보 요청 성공" +
+                                            "\n회원번호: ${user.id}" +
+                                            "\n이메일: ${user.kakaoAccount?.email}" +
+                                            "\n닉네임: ${user.kakaoAccount?.profile?.nickname}" +
+                                            "\n프로필사진: ${user.kakaoAccount?.profile?.thumbnailImageUrl}")
+                                    viewModel.doLoginEmail(user.kakaoAccount?.email!!,user.kakaoAccount?.profile?.thumbnailImageUrl!!)
+                                }
+                            }
+                        } else {
+                            Log.i("com.aamu.aamu", "이건뭐임")
+                        }
+                    }
+                }, modifier = Modifier
                     .fillMaxWidth()
                     .height(50.dp)
             ) {
-                Icon(painter = painterResource(R.drawable.kakaologo), contentDescription = null)
-                androidx.compose.material3.Text(
-                    text = "카카오톡 로그인",
-                    style = TextStyle.Default.copy(color = Color.Black, fontSize = 14.sp, fontWeight = FontWeight.Bold),
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.fillMaxWidth(),
-                )
+                if (loadingkakao) {
+                    HorizontalDottedProgressBar()
+                } else {
+                    Icon(painter = painterResource(R.drawable.kakaologo), contentDescription = null)
+                    androidx.compose.material3.Text(
+                        text = "카카오톡 로그인",
+                        style = TextStyle.Default.copy(
+                            color = Color.Black,
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.Bold
+                        ),
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+                }
             }
         }
     }

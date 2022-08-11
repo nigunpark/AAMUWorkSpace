@@ -75,6 +75,10 @@ class MainViewModel(context : Context) : ViewModel() {
         getNotiList()
     }
 
+    fun show(id : Int){
+        meowBottom.show(id)
+    }
+
     fun setFromthanNo(fromthanFun : String,noFun : Int ){
         fromthan.value = fromthanFun
         no.value = noFun

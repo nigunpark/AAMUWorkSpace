@@ -6,17 +6,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.ui.platform.ComposeView
-import com.aamu.aamuandroidapp.R
+import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
 import com.aamu.aamuandroidapp.components.profile.ProfileScreen
 
 
 class InfoFragment : Fragment() {
+
+    private lateinit var navController : NavController
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View=ComposeView(inflater.context).apply {
+        navController = findNavController()
+
         setContent {
-            ProfileScreen()
+            ProfileScreen(navController)
         }
     }
 }

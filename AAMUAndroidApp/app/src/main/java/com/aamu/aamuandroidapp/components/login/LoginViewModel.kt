@@ -41,6 +41,20 @@ class LoginViewModel() : ViewModel(){
         }
     }
 
+    fun doLoginEmail(email: String,profile : String) = viewModelScope.launch {
+        val retoken = aamuRepository.doLoginEmail(email,profile)
+        retoken?.let {
+            token.value = it
+            FirebaseMessaging.getInstance().token.addOnSuccessListener {
+                viewModelScope.launch{
+                    val preferences : SharedPreferences = contextL.getSharedPreferences("usersInfo", Context.MODE_PRIVATE)
+                    val id : String? = preferences.getString("id",null)
+                    aamuRepository.postToken(id!!,it)
+                }
+            }
+        }
+    }
+
     fun isok() = viewModelScope.launch {
         Log.i("com.aamu.aamu",token.value.toString())
         if(aamuRepository.isok()){

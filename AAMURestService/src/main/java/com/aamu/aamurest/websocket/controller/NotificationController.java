@@ -74,7 +74,6 @@ public class NotificationController {
 	
 	@DeleteMapping("/firebase")
 	public Map delfirebase(@RequestParam Map map) {
-		
 		template.delete("deletefirebase", map);
 		
 		Map returnMap = new HashMap<>();
