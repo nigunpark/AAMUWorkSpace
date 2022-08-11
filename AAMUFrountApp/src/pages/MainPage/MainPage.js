@@ -81,7 +81,7 @@ function getCurrpositionLocal(currPosition, dispatch, setAreaCode) {
     case "대구":
       areacode = 4;
       break;
-    case "광주":
+    case "광주광역시":
       areacode = 5;
       break;
     case "부산":
@@ -155,7 +155,7 @@ function getCurrpositionHotel(currPosition, dispatch) {
     case "대구":
       areacode = 4;
       break;
-    case "광주":
+    case "광주광역시":
       areacode = 5;
       break;
     case "부산":
@@ -230,7 +230,7 @@ function getCurrpositionRest(currPosition, dispatch) {
     case "대구":
       areacode = 4;
       break;
-    case "광주":
+    case "광주광역시":
       areacode = 5;
       break;
     case "부산":

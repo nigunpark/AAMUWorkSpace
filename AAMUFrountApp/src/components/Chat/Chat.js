@@ -26,12 +26,15 @@ let chatArr = [];
 //   client.activate();
 //   return client;
 // }
-const Chat = ({ prevChats }) => {
+const Chat = ({ prevChats, setPrevChats }) => {
   const [chats, setChats] = useState([]);
   const [client, setClient] = useState({});
   let reduxState = useSelector((state) => state);
   useEffect(() => {
-    if (prevChats !== undefined && prevChats.length !== 0) setChats(prevChats);
+    if (prevChats.length !== 0) {
+      console.log("11");
+      setChats(prevChats);
+    }
     // let client = getConnet(reduxState.forChatInfo.roomno, setChats);
     // console.log("client", client);
     // setClient(client);
@@ -55,11 +58,10 @@ const Chat = ({ prevChats }) => {
         }
       }
     );
-  }, []);
+  }, [prevChats]);
   function getChats() {}
   let inputRef = useRef();
   let bodyRef = useRef();
-  console.log("리렌더링 채팅");
   // console.log("bodyRef", bodyRef.current.scrollTop);
   return (
     <Container>

@@ -28,7 +28,21 @@
   cursor: pointer;
   font-weight: bold;
 }
+.timeTable__container {
+  position: absolute;
+  z-index: 200;
+  width: 116px;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  flex-direction: column;
+  color: white;
+}
 
+.timeTable__container span:hover {
+  transform: scale(1);
+  width: 100%;
+  color: red;
+}
 .createPlanLeft__days-container {
   display: flex;
   flex-direction: column;

@@ -76,9 +76,9 @@ const LoginTest = () => {
                 ) : (
                   <div></div>
                 )}
-                <Link to="#" style={{ color: "gray", textAlign: "end" }}>
+                {/* <Link to="#" style={{ color: "gray", textAlign: "end" }}>
                   <span>비밀번호를 잊어버리셨나요</span>
-                </Link>
+                </Link> */}
               </div>
               <button
                 className="loginBtn"

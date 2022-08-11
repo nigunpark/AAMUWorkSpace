@@ -118,8 +118,10 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 		List<Map<String,Object>> resultList = new ArrayList<Map<String,Object>>();
 		
 		List<String> allUsersNotFollower = new Vector<>();
-		List<String> allUsers=mainDao.getAllUser(); //모든 id 얻기 
-		List<String> idByFollowers=dao.commuGetidByFollower(map); //세션id가 팔로우하는 id 얻기
+		//모든 id 얻기 
+		List<String> allUsers=mainDao.getAllUser(); 
+		//세션id가 팔로우하는 id 얻기
+		List<String> idByFollowers=dao.commuGetidByFollower(map); 
 		allUsers.removeAll(idByFollowers);
 		
 		for(String id:allUsers) {
@@ -129,7 +131,8 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 				//standTheme 세션id제외 사용자정보 얻기
 				List<String> compareTheme = infoUser(map); 
 				//교집합/합집합
-				double ins = (double)UserUtil.intersection(standTheme, compareTheme)/(double)(standTheme.size()+compareTheme.size());
+				double ins = (double)UserUtil.intersection(standTheme, compareTheme)/
+						     (double)(standTheme.size()+compareTheme.size());
 				resultMap.put("id", id);
 				resultMap.put("ins", ins);
 				resultList.add(resultMap);

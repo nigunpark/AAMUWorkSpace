@@ -16,12 +16,9 @@ import KakaoRedirectHandler from "./components/Login/Kakao/KakaoRedirectHandler"
 import JoinStep1 from "./components/Join/JoinStep1.js";
 import JoinStep2 from "./components/Join/JoinStep2.js";
 import SearchList from "./components/Insta/SearchList";
-import Chat from "./components/Chat/Chat";
 import QnA from "./components/QnA/QnA";
-import CommentSearch from "./components/Insta/ModalGroup/Comment/CommentSearch";
 import QnADetail from "./components/QnA/QnADetail";
 import QnAWrite from "./components/QnA/QnAWrite";
-import QnAEdit from "./components/QnA/QnAEdit";
 import SockJS from "sockjs-client";
 import * as StompJs from "@stomp/stompjs";
 import { useDispatch } from "react-redux";

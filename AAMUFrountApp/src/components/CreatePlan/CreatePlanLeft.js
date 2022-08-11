@@ -537,7 +537,7 @@ function DetailSetting({
   const [downTime, setDownTime] = useState(0);
   const [memoBadge, setMemoBadge] = useState(false);
   const [showAdjustMTime, setShowAdjustMTime] = useState(false);
-
+  const [showTimeTable, setShowTimeTable] = useState(false);
   let memoRef = useRef();
   let textAreaRef = useRef();
   let mTimeRef = useRef();
@@ -603,7 +603,7 @@ function DetailSetting({
     // if (obj.dto === null) return;
     return;
   if (obj === undefined) return;
-
+  console.log(obj.dto);
   return (
     <div className="detailSetting__container" id={i}>
       <div className="movingTime">
@@ -701,7 +701,16 @@ function DetailSetting({
             </div>
           </div>
           <div className="detailLocation__part-bottom">
-            <span>시간표</span>
+            <div style={{ position: "relative" }}>
+              <span
+                onClick={() => {
+                  setShowTimeTable(!showTimeTable);
+                }}
+              >
+                시간표
+              </span>
+              {showTimeTable && <div>{obj.dto.playtime ?? <TimeTable />}</div>}
+            </div>
             <a href={`https://www.myrealtrip.com/search?q=${obj.dto.title}`} target="blank">
               <span>구매</span>
             </a>
@@ -752,6 +761,18 @@ function DetailSetting({
   );
 }
 
+function TimeTable() {
+  return (
+    <div className="timeTable__container">
+      <span className="timeTable__span">월: 00:00 ~ 24:00</span>
+      <span className="timeTable__span">화: 00:00 ~ 24:00</span>
+      <span className="timeTable__span">수: 00:00 ~ 24:00</span>
+      <span className="timeTable__span">목: 00:00 ~ 24:00</span>
+      <span className="timeTable__span">금: 00:00 ~ 24:00</span>
+      <span className="timeTable__span">토: 00:00 ~ 24:00</span>
+    </div>
+  );
+}
 function Step({ arr, index }) {
   return (
     <div className="step">

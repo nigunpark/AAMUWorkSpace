@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from "react-redux/es/exports";
 import "./KMap.css";
 import {
   changeArrForJangso,
+  changeArrForRestaurant,
   changeArrForSukso,
   changeInfo,
   changePickedTransport,
@@ -273,8 +274,12 @@ const KMap = ({
         let sukso = resp.data.filter((val, i) => {
           return val.contenttypeid === 32;
         });
+        let mazzip = resp.data.filter((val, i) => {
+          return val.contenttypeid === 39;
+        });
         dispatch(changeArrForJangso(jangso));
         dispatch(changeArrForSukso(sukso));
+        dispatch(changeArrForRestaurant(mazzip));
       })
       .catch((error) => {
         console.log(error);
@@ -371,57 +376,6 @@ const KMap = ({
           </div>
         </div>
         <div className="kmap__left-btn__container">
-          {/* <div>이용방법</div> */}
-          {/* <div
-            onClick={(e) => {
-              e.stopPropagation();
-              setAppearRegisterModal(true);
-            }}
-          >
-            장소등록
-          </div> */}
-
-          {/* <span className="kmap__transportation">
-            <div
-              onClick={(e) => {
-                e.stopPropagation();
-                setShowTransport(!showTransport);
-              }}
-            >
-              이동수단
-            </div>
-            {showTransport ? (
-              <>
-                <div
-                  className="slide-in-left-public_transport public"
-                  ref={publicRef}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    dispatch(changePickedTransport("public"));
-                    whichTransport(e);
-                  }}
-                >
-                  <FontAwesomeIcon icon={faBus} className="kmap__left-icon bus" />
-                  <span>대중교통</span>
-                </div>
-                <span style={{ fontSize: "15px", fontWeight: "bold" }} className="slide-in-left-or">
-                  OR
-                </span>
-                <div
-                  className="slide-in-left-personal pickedTransport personal"
-                  ref={personalRef}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    dispatch(changePickedTransport("personal"));
-                    whichTransport(e);
-                  }}
-                >
-                  <FontAwesomeIcon icon={faCar} className="kmap__left-icon car" />
-                  <span>자가용</span>
-                </div>
-              </>
-            ) : null}
-          </span> */}
           <div
             onClick={(e) => {
               e.stopPropagation();
