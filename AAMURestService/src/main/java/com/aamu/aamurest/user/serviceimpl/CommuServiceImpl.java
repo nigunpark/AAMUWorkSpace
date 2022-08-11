@@ -38,7 +38,6 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 	@Override
 	public List<CommuDTO> commuSelectList(Map map) {
 		//페이징
-		System.out.println("page:"+map.get("page").toString());
 		if(map.get("page") != null) {
 			//전체 레코드수
 			int totalCount=dao.commuGetTotlaCount(map); //10
