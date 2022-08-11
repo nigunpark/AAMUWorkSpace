@@ -19,13 +19,15 @@ public class UsersServiceImpl implements UsersService{
 	private UsersDAO dao;
 	@Autowired
 	private TransactionTemplate transactionTemplate;
+	@Autowired
+	private MainDAO mainDao;
 	@Override
 	public int joinUser(Map map) {
 		int affected = 0;
 		affected = transactionTemplate.execute(tx->{
 			dao.joinUser(map);
-			for(Object theme :(List)map.get("theme")) {
-				String themeid = UserUtil.changeTheme(theme.toString());
+			for(Object themename :(List)map.get("theme")) {
+				String themeid = mainDao.getThemeid(themename.toString());
 				System.out.println(themeid);
 				map.put("themeid", themeid);
 				dao.insertTheme(map);
@@ -55,9 +57,9 @@ public class UsersServiceImpl implements UsersService{
 		affected = transactionTemplate.execute(tx->{
 			dao.deleteTheme(map);
 			List<String> list=(List)map.get("themes");
-			for(String theme : list) {
-				System.out.println(theme);
-				map.put("themeid", UserUtil.changeTheme(theme));
+			for(String themename : list) {
+			
+				map.put("themeid", mainDao.getThemeid(themename));
 				System.out.println(map);
 				dao.insertTheme(map);
 			}
@@ -85,7 +87,8 @@ public class UsersServiceImpl implements UsersService{
 			dao.deleteTheme(map);
 			List<Map> list=(List)map.get("themes");
 			for(Map listMap : list) {
-				map.put("themeid", UserUtil.changeTheme(listMap.get("theme").toString()));
+				String themename = listMap.get("theme").toString();
+				map.put("themeid", mainDao.getThemeid(themename));
 				System.out.println(map);
 				dao.insertTheme(map);
 			}

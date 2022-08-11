@@ -74,7 +74,7 @@ public class UserController {
 		else map.put("userprofile", originalProfile);
 		map.put("themes", theme);
 		affected = service.updateUser(map);
-		dto.setUserprofile(FileUploadUtil.requestOneFile(photo, "/resources/userUpload", req));
+		dto.setUserprofile(FileUploadUtil.requestOneFile(map.get("userprofile").toString(), "/resources/userUpload", req));
 		returnMap.put("result", affected);
 		returnMap.put("Dto", dto);
 		return returnMap;

@@ -185,4 +185,7 @@
 	<select id="getTopPlaceInArea" parameterType="Map" resultType="Map">
 		select p.contentid,count(p.contentid) from places p join route r on p.contentid=r.contentid where areacode=#{areacode} and contenttypeid=12 group by p.contentid order by count(p.contentid) DESC
 	</select>
+	<select id="getThemeid" parameterType="String" resultType="String">
+		SELECT themeid FROM theme where themename=#{themename}
+	</select>
 </mapper>
