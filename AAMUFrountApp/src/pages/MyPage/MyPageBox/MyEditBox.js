@@ -81,7 +81,9 @@ const MyEditBox = ({ selectRbn }) => {
         setPlannerDate({ month, date, dow });
       })
       .catch((error) => {
-        console.log((error) => console.log("수정할 데이터 불러오기 실패", error));
+        console.log((error) =>
+          console.log("수정할 데이터 불러오기 실패", error)
+        );
       });
   }
   function uploadFile() {
@@ -184,7 +186,8 @@ const MyEditBox = ({ selectRbn }) => {
             return (
               <div key={idx} className="detail-plan">
                 <div className="paln-date">
-                  {idx + 1}일차 ({plannerDate.month}월 {plannerDate.date + idx}일&nbsp;
+                  {idx + 1}일차 ({plannerDate.month}월 {plannerDate.date + idx}
+                  일&nbsp;
                   {getDow(plannerDate.dow + idx)})
                 </div>
                 <div className="plan__over-container">
@@ -278,7 +281,13 @@ const MyEditBox = ({ selectRbn }) => {
         <Imgs src='/images/imageMap.png'/>
       </div> */}
         </div>
-        <div style={{ display: "flex", justifyContent: "flex-end", margin: "10px 0" }}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "flex-end",
+            margin: "10px 0",
+          }}
+        >
           <form encType="multipart/form-data">
             <input
               id="myEditBox_imgInput"
@@ -327,7 +336,11 @@ const MyEditBox = ({ selectRbn }) => {
 
           <div
             className=""
-            style={{ display: "flex", justifyContent: "space-between", gap: "1rem" }}
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              gap: "1rem",
+            }}
           >
             <div className="box-gab">
               {/* 테마 */}
@@ -342,7 +355,10 @@ const MyEditBox = ({ selectRbn }) => {
               </span>
 
               {isOpen && (
-                <form className="themesForm" style={{ display: "flex", gap: "3px" }}>
+                <form
+                  className="themesForm"
+                  style={{ display: "flex", gap: "3px" }}
+                >
                   {wholeThemes.map((val, i) => {
                     return (
                       <>
@@ -417,7 +433,8 @@ const Plan = styled.div`
   &::-webkit-scrollbar {
     display: none;
   }
-  animation: ${bounce_modal_plan} 1.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+  animation: ${bounce_modal_plan} 1.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)
+    both;
   animation-delay: 0.2s;
 `;
 function Theme({ setIsOpen, themes, setPostTheme, setPostThemeNum }) {
@@ -456,27 +473,54 @@ function DetailSetting({ fromWooJaeData, periodIndex, obj, i }) {
   useEffect(() => {
     if (i !== 0) {
       setUpTime(
-        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime + obj.mtime / 1000 / 60
+        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime +
+          obj.mtime / 1000 / 60
       );
       setDownTime(
         fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime +
           obj.mtime / 1000 / 60 +
-          fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].atime / 1000 / 60
+          fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].atime /
+            1000 /
+            60
       );
       let forBlackBoxRedux = getTimes(
         periodIndex,
-        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime + obj.mtime / 1000 / 60,
+        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime +
+          obj.mtime / 1000 / 60,
         fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime +
           obj.mtime / 1000 / 60 +
-          fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].atime / 1000 / 60
+          fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].atime /
+            1000 /
+            60
       );
       dispatch(addWholeBlackBox(forBlackBoxRedux));
-      if (i !== fromWooJaeData[periodIndex]["day" + (periodIndex + 1)].length - 1) {
-        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i + 1].starttime =
+      if (
+        i !==
+        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)].length - 1
+      ) {
+        fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][
+          i + 1
+        ].starttime =
           fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime +
           obj.mtime / 1000 / 60 +
-          fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].atime / 1000 / 60;
+          fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].atime /
+            1000 /
+            60;
       }
+    } else if (i === 0) {
+      setUpTime(
+        (fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime +
+          obj.mtime / 1000 / 60) /
+          60000
+      );
+      setDownTime(
+        (fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime +
+          obj.mtime / 1000 / 60) /
+          60000 +
+          fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].atime /
+            1000 /
+            60
+      );
     }
   }, []);
 

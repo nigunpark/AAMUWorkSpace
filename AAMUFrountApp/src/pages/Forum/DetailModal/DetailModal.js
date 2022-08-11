@@ -621,6 +621,20 @@ function DetailSetting({ fromWooJaeData, periodIndex, obj, i }) {
             1000 /
             60;
       }
+    } else if (i === 0) {
+      setUpTime(
+        (fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime +
+          obj.mtime / 1000 / 60) /
+          60000
+      );
+      setDownTime(
+        (fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].starttime +
+          obj.mtime / 1000 / 60) /
+          60000 +
+          fromWooJaeData[periodIndex]["day" + (periodIndex + 1)][i].atime /
+            1000 /
+            60
+      );
     }
   }, []);
 
