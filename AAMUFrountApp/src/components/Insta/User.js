@@ -10,6 +10,7 @@ import { Link } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import SearchSelect from "./ModalGroup/Search/SearchSelect";
 import Chat from "../Chat/Chat";
+import { Tag } from "./Tag";
 function User({
   list,
   setlist,
@@ -21,17 +22,25 @@ function User({
   showChat,
   recommendUser,
   prevChats,
+  setpage,
+  page,
 }) {
   const modalRef = useRef();
   const notimodalRef = useRef();
   const outside = useRef();
   const SearchModalRef = useRef();
+  const tagRef = useRef();
   const [heart, setHeart] = useState(false);
   const [ffollower, setfollower] = useState([]);
   const [search, setsearch] = useState(false);
   const [square, setsquare] = useState(false);
   const [usefollow, setusefollow] = useState(false);
+  const [tag, settag] = useState(false);
   const [title, settitle] = useState([]);
+  const [tagpop, settagpop] = useState([{
+    text: '',
+    value: 0,
+  }]);
   const [searchText, setsearchText] = useState(false);
   let navigater = useNavigate();
 
@@ -89,8 +98,6 @@ function User({
 
   function searchBarModal() {
     //백이랑 인스타 리스드를 뿌려주기 위한 axios
-
-    //  if (e.keyCode != 13) return;
     let token = sessionStorage.getItem("token");
     axios
       .get("/aamurest/gram/search/selectList", {
@@ -105,6 +112,25 @@ function User({
       .then((resp) => {
         console.log(resp.data);
         settitle(resp.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  function popTag() {
+    //백이랑 인스타 리스드를 뿌려주기 위한 axios
+    let token = sessionStorage.getItem("token");
+    axios
+      .get("/aamurest/gram/word", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((resp) => {
+        console.log(resp.data);
+        // settagpop(resp.data);
+        // settagpop({ TITLE: val.TITLE, CONTENTID: val.CONTENTID });
       })
       .catch((error) => {
         console.log(error);
@@ -172,6 +198,15 @@ function User({
           )}
         </div>
       </div>
+      <BUTTON
+        onClick={() => {
+          popTag()
+          settag(!tag);
+        }}
+      >
+        실시간 인기 태그
+      </BUTTON>
+      {tag && <Tag tagpop={tagpop}/>}
       <div className="user">
         <div className="userps">
           <img
@@ -230,6 +265,8 @@ function User({
               <WriteModal
                 onClick={() => setsquare(false)}
                 list={list}
+                setpage={setpage}
+                page={page}
                 setsquare={setsquare}
                 setlist={setlist}
                 setloading={setloading}
@@ -272,27 +309,34 @@ function User({
                   className="follow"
                   onClick={(e) => {
                     e.stopPropagation();
-                    if (//팔로워 배열안에 들어가 있는 팔로워들
-                      ffollower.includes(e.target.parentElement.previousElementSibling.textContent)
+                    if (
+                      //팔로워 배열안에 들어가 있는 팔로워들
+                      ffollower.includes(
+                        e.target.parentElement.previousElementSibling
+                          .textContent
+                      )
                     ) {
                       setfollower(
-                        ffollower.filter((folval) => {//언팔로우 하기 위한 로직
+                        ffollower.filter((folval) => {
+                          //언팔로우 하기 위한 로직
                           return (
                             e.target.parentElement.previousElementSibling
                               .textContent !== folval
                           );
                         })
                       );
-                    } else {//팔로우하기 위한 팔로워들
+                    } else {
+                      //팔로우하기 위한 팔로워들
                       setfollower([
-                        ...ffollower,//기존에 있는 팔로워들 +
-                        e.target.parentElement.previousElementSibling.textContent,//클릭이 생기는 팔로워들 
+                        ...ffollower, //기존에 있는 팔로워들 +
+                        e.target.parentElement.previousElementSibling
+                          .textContent, //클릭이 생기는 팔로워들
                       ]);
                     }
                     follower(val.id);
                   }}
                 >
-                  {ffollower.includes(val.id) ? (//ffollower 배열에 val.id가 포함되어 있다면
+                  {ffollower.includes(val.id) ? ( //ffollower 배열에 val.id가 포함되어 있다면
                     <span className="following">팔로잉</span>
                   ) : (
                     <span>팔로우</span>
@@ -333,6 +377,19 @@ const Overlay = styled.div`
   height: 100%;
   z-index: 10;
   background-color: rgba(0, 0, 0, 0.6);
+`;
+
+const BUTTON = styled.div`
+  position: relative;
+  width: 100%;
+  top: 10px;
+  background-color: white;
+  cursor: pointer;
+  border-radius: 5px;
+  color: orange;
+  text-align: center;
+  height: 30px;
+  margin-bottom: 5px;
 `;
 
 export default User;

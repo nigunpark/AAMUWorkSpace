@@ -9,7 +9,8 @@ const search = ({ setsearchText, setinputValue,title}) => {
   return (
     <Searchengine>
             <Searchcontents>
-            {title.map((val,i)=>{return <P onClick={(e)=>{
+            {title.length > 1 &&
+            title.map((val,i)=>{return <P onClick={(e)=>{
               e.stopPropagation();
                 setinputValue(e.target.textContent)
                 setsearchText(false)}              

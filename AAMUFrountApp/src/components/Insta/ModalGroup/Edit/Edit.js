@@ -18,7 +18,7 @@ import "../Upload/UploadSwiper.css";
 import { confirmAlert } from "react-confirm-alert";
 import HashTagModal from "../Upload/HashTagModal";
 
-const Edit = ({ setlist, val, seteditModal }) => {
+const Edit = ({ setlist, val, seteditModal, setloading, page, list }) => {
   let hashRef = useRef();
   let searchRef = useRef();
   let titleRef = useRef();
@@ -183,12 +183,13 @@ const Edit = ({ setlist, val, seteditModal }) => {
                 setShowWrite,
                 titleRef,
                 textareaRef,
-                searchRef,
                 tagList,
-                search,
                 edithash,
                 listid,
-                setEdit
+                setEdit,
+                setloading,
+                page,
+                list
               );
               seteditModal(false);
               // feedList(setlist)
@@ -403,15 +404,24 @@ const Edit = ({ setlist, val, seteditModal }) => {
                   onKeyUp={(e) => {
                     hashTag(e, settagModal);
                     onKeyPress(e);
+                    setShowWrite(true);
                   }}
                 />
                 {showWrite && (
-                  <HashTagModal
-                    hashRef={hashRef}
-                    tagModal={tagModal}
-                    setShowWrite={setShowWrite}
-                    setTagItem={setTagItem}
-                  />
+                   <Searchengine>
+                       <Searchcontents>
+                       {tagModal.length > 1 &&
+                         tagModal.map((val,i)=>{
+                           return (
+                           <P key={i}
+                             onClick={(e)=>{
+                             e.stopPropagation();
+                             setTagItem(e.target.value)
+                             setShowWrite(false)}              
+                           }>{val}</P>
+                           )})}
+                       </Searchcontents>
+                   </Searchengine>
                 )}
 
                 <i className="fa-solid fa-hashtag"></i>
@@ -427,22 +437,27 @@ const Edit = ({ setlist, val, seteditModal }) => {
   );
 };
 
-function feedList(setlist) {
-  //업로드 버튼 누르고 화면 새로고침
+const feedList = async (setloading, setlist, page, list) => {
+  //백이랑 인스타 리스드를 뿌려주기 위한 axios
   let token = sessionStorage.getItem("token");
-  axios
-    .get("/aamurest/gram/selectList", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-    .then((resp) => {
-      setlist(resp.data);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-}
+  const temp = await axios.get(`/aamurest/gram/selectList?page=${page}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    params: {
+      id: sessionStorage.getItem("username"),
+    },
+  });
+
+  let removelist = list;
+  for (let k = 0; k < temp.data.length; k += 1) {
+    removelist = removelist.filter((item) => item.lno != temp.data[k].lno);
+  }
+  console.log(removelist);
+  const tempComments = removelist.concat(temp.data);
+  setlist([...tempComments]);
+  setloading(false);
+};
 
 function hashTag(e, settagModal) {
   let val = e.target.value;
@@ -455,7 +470,7 @@ function hashTag(e, settagModal) {
         Authorization: `Bearer ${token}`,
       },
       params: {
-        tname: val.substring(val.lastIndexOf("#")),
+        tname: val,
       },
     })
     .then((resp) => {
@@ -473,12 +488,13 @@ function edit(
   setShowWrite,
   titleRef,
   textareaRef,
-  searchRef,
   tagList,
-  search,
   edithash,
   listid,
-  setEdit
+  setEdit,
+  setloading,
+  page,
+  list
 ) {
   //새 게시물 업로드를 위한 axios
 
@@ -513,8 +529,8 @@ function edit(
     .then((resp) => {
       console.log(resp.data);
       setShowWrite(resp.data);
-      feedList(setlist);
-      alert('수정이 완료되었습니다!')
+      feedList(setloading, setlist, page, list);
+      alert("수정이 완료되었습니다!");
     })
     .catch((error) => {
       console.log(error);
@@ -578,9 +594,6 @@ const Nextbtn = styled.button`
   font-size: 13px;
   font-weight: bold;
 `;
-const Center = styled.div`
-  text-align: center;
-`;
 
 const TagItem = styled.div`
   display: inline-flex;
@@ -607,12 +620,38 @@ const DDButton = styled.button`
   color: tomato;
 `;
 
-const TagInput = styled.input`
-  display: inline-flex;
-  min-width: 150px;
-  background: transparent;
-  border: none;
-  outline: none;
-  cursor: text;
-`;
+const Searchengine = styled.div`
+position: absolute;
+width: 35%;
+height: 200px;
+background-color: transparent;
+right:10px;
+z-index: 9;
+overflow: auto;
+`
+const Searchcontents = styled.div`
+position: absolute;
+width: 95%;
+height: 200px;
+display: flex;
+background-color: #fff;
+flex-direction: column;
+box-shadow: 0 0 5px 1px rgba(var(--jb7, 0, 0, 0), 0.0975);
+align-items: center;
+margin-left: 10px;
+`
+const P = styled.div`  
+display: flex;
+position: relative;
+width: 100%;
+height: 50px;
+padding-left: 10px;
+align-items: center;
+cursor:pointer;
+font-size:15px;
+
+&:hover {
+  background-color: #e5e5e5;
+}
+`
 export default Edit;
