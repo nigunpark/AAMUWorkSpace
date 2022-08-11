@@ -18,12 +18,15 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLocationDot } from "@fortawesome/free-solid-svg-icons";
 function FeedSetting({
   val,
+  list,
   setlist,
   forReRender,
   setForReRender,
   showChat,
   setShowChat,
   setPrevChats,
+  setloading,
+  page,
 }) {
   let profileRef = useRef();
   let replyRef = useRef();
@@ -41,14 +44,14 @@ function FeedSetting({
 
   const onEmojiClick = (event, emojiObject) => {
     setChosenEmoji(emojiObject);
-    replyRef.current.value = emojiObject.emoji;
+    replyRef.current.value = replyRef.current.value + emojiObject.emoji;
   };
 
-  function btn_check(){
-    replyRef.current !== undefined && 
-    (replyRef.current.value.length >= 1 //사용자가 키를 눌렀다 떼었을때 길이가 0을 넘는 값인지 유효성 검사 결과 값을 담는다
-      ? setisValid(true)
-      : setisValid(false))
+  function btn_check() {
+    replyRef.current !== undefined &&
+      (replyRef.current.value.length >= 1 //사용자가 키를 눌렀다 떼었을때 길이가 0을 넘는 값인지 유효성 검사 결과 값을 담는다
+        ? setisValid(true)
+        : setisValid(false));
   }
 
   const commenter = useMemo(() => {
@@ -111,7 +114,7 @@ function FeedSetting({
         // val.commuComment = resp.data.reply;
         setfeedComments(resp.data);
         setForReRender(!forReRender);
-        setisValid(false)
+        setisValid(false);
       })
       .catch((error) => {
         console.log("error", error);
@@ -131,8 +134,10 @@ function FeedSetting({
 
   let CommentList = ({ val }) => {
     return (
-      <div className="writing" style={{marginTop:'5px'}}>
-        <span className="id">{val.commuComment === null ? null : val.commuComment.id}</span>
+      <div className="writing" style={{ marginTop: "5px" }}>
+        <span className="id">
+          {val.commuComment === null ? null : val.commuComment.id}
+        </span>
         <span>{val.commuComment === null ? null : val.commuComment.reply}</span>
       </div>
     );
@@ -200,7 +205,10 @@ function FeedSetting({
             )}
           </div>
           <div className="dot">
-            <i className="fa-solid fa-ellipsis fa-2x" onClick={() => setModalShow(!modalShow)}></i>
+            <i
+              className="fa-solid fa-ellipsis fa-2x"
+              onClick={() => setModalShow(!modalShow)}
+            ></i>
             {modalShow && (
               <FeeduserModal
                 setlist={setlist}
@@ -209,7 +217,16 @@ function FeedSetting({
                 val={val}
               />
             )}
-            {editModal && <Edit val={val} setlist={setlist} seteditModal={seteditModal} />}
+            {editModal && (
+              <Edit
+                val={val}
+                setlist={setlist}
+                seteditModal={seteditModal}
+                setloading={setloading}
+                page={page}
+                list={list}
+              />
+            )}
           </div>
         </div>
         <a href={`https://map.kakao.com/?q=${val.title}`}>
@@ -240,7 +257,10 @@ function FeedSetting({
               }}
             >
               {val.islike ? (
-                <i className="fa-solid fa-heart fa-2x" style={{ color: "red" }}></i>
+                <i
+                  className="fa-solid fa-heart fa-2x"
+                  style={{ color: "red" }}
+                ></i>
               ) : (
                 <i className="fa-regular fa-heart fa-2x"></i>
               )}
@@ -270,6 +290,9 @@ function FeedSetting({
                   setcommentModal={setcommentModal}
                   seteditModal={seteditModal}
                   val={val}
+                  page={page}
+                  list={list}
+                  setloading={setloading}
                   forReRender={forReRender}
                   setForReRender={setForReRender}
                   setlist={setlist}
@@ -277,7 +300,9 @@ function FeedSetting({
                 //   </Overlay>
                 // </Container1>
               )}
-              {comeditModal && <Edit val={val} setlist={setlist} seteditModal={seteditModal} />}
+              {comeditModal && (
+                <Edit val={val} setlist={setlist} seteditModal={seteditModal} />
+              )}
             </div>
             <div
               className="share-icon"
@@ -308,7 +333,9 @@ function FeedSetting({
               <span> {val.ctitle}</span>
             </p>
             <p className="userName">
-              <strong style={{ fontSize: "13px", marginRight: "5px" }}>{val.id}</strong>
+              <strong style={{ fontSize: "13px", marginRight: "5px" }}>
+                {val.id}
+              </strong>
               <span style={{ fontFamily: "normal", whiteSpace: "pre-wrap" }}>
                 {/* {val.content} */}
                 <span>{commenter}</span>
@@ -353,11 +380,14 @@ function FeedSetting({
             />
           </div>
           {emoji && (
-            <div className="emoji-all"
-              onClick={()=>{setisValid(true);  setemoji(false);}}>
-              <Picker
-                onEmojiClick={onEmojiClick}
-              />
+            <div
+              className="emoji-all"
+              onClick={() => {
+                setisValid(true);
+                setemoji(false);
+              }}
+            >
+              <Picker onEmojiClick={onEmojiClick} />
             </div>
           )}
           <input
@@ -370,7 +400,7 @@ function FeedSetting({
             //   setComment(e.target.value); //댓글 창의 상태가 변할때마다 setComment를 통해 comment값을 바꿔준다
             // }}
             onKeyUp={(e) => {
-              btn_check()
+              btn_check();
               // console.log(replyRef.current.value.length>0?'true':'false');
             }}
             // value={comment}
@@ -379,9 +409,7 @@ function FeedSetting({
           <button
             className={
               //클래스명을 comment창의 글자 길에 따라서 다르게 주면서 버튼색에 css디자인을 줄 수 있음
-              isValid
-                ? "submitCommentActive"
-                : "submitCommentInactive"
+              isValid ? "submitCommentActive" : "submitCommentInactive"
             }
             onClick={() => {
               console.log(isValid);
@@ -400,7 +428,12 @@ function FeedSetting({
 }
 async function getChatRoom(val, dispatch, setPrevChats) {
   await axios
-    .post("/aamurest/chat/room?fromid=" + sessionStorage.getItem("username") + "&toid=" + val.id)
+    .post(
+      "/aamurest/chat/room?fromid=" +
+        sessionStorage.getItem("username") +
+        "&toid=" +
+        val.id
+    )
     .then((resp) => {
       setPrevChats(resp.data.list);
       dispatch(addForChatInfo({ ...resp.data, id: val.id }));
