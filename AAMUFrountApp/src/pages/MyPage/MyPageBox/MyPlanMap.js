@@ -5,7 +5,12 @@ const { kakao } = window;
 let markersArr = [];
 let polylineArr = [];
 
-const MyPlanMap = ({ currPosition, fromWooJaeData, forDayLine, setSavePlan }) => {
+const MyPlanMap = ({
+  currPosition,
+  fromWooJaeData,
+  forDayLine,
+  setSavePlan,
+}) => {
   let [lat, setLat] = useState("");
   let [lng, setLng] = useState("");
   let [dMap, setDMap] = useState(null);
@@ -56,7 +61,15 @@ const MyPlanMap = ({ currPosition, fromWooJaeData, forDayLine, setSavePlan }) =>
     console.log("reduxState.tripPeriod", reduxState.tripPeriod);
     let linePath = [];
     let forMarkers = [];
-    const colors = ["red", "green", "deepskyblue", "blue", "deeppink", "indigo", "black"];
+    const colors = [
+      "red",
+      "green",
+      "deepskyblue",
+      "blue",
+      "deeppink",
+      "indigo",
+      "black",
+    ];
     if (fromWooJaeData.length !== 0) {
       reduxState.tripPeriod.map((val, index) => {
         let tempArr = [];
@@ -187,16 +200,16 @@ const MyPlanMap = ({ currPosition, fromWooJaeData, forDayLine, setSavePlan }) =>
         }}
       ></div>
       <div className="cMap__btn-container">
-        <div>수정저장</div>
-        <div>버튼버튼</div>
-        <div
+        {/* <div>수정저장</div>
+        <div>버튼버튼</div> */}
+        {/* <div
           onClick={(e) => {
-            // e.stopPropagation();
-            // setSavePlan(true);
+            e.stopPropagation();
+            setSavePlan(true);
           }}
         >
           일정저장
-        </div>
+        </div> */}
       </div>
     </div>
   );
