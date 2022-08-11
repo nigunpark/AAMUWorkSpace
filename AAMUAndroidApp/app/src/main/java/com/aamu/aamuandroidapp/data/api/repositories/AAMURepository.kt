@@ -2,6 +2,7 @@ package com.aamu.aamuandroidapp.data.api.repositories
 
 import com.aamu.aamuandroidapp.data.api.response.*
 import kotlinx.coroutines.flow.Flow
+import retrofit2.Response
 import retrofit2.http.Query
 
 interface AAMURepository {
@@ -10,6 +11,7 @@ interface AAMURepository {
     suspend fun isok() : Boolean
     suspend fun getRecentPlace(placey : Double,placex : Double) : Flow<List<AAMUPlaceResponse>>
     suspend fun getPlaceOne(contentid : Int, contenttypeid : Int) : Flow<AAMUPlaceResponse>
+    suspend fun getKakaoReview(kakaoKey : String ) : Flow<AAMUKakaoReviewResponse>
     suspend fun getRecentDiner(placey : Double,placex : Double,category : String) : Flow<List<AAMUPlaceResponse>>
 
     suspend fun getPlannerSelectList() : Flow<List<AAMUPlannerSelectOne>>
@@ -17,12 +19,15 @@ interface AAMURepository {
 
     suspend fun getPlannerSelectOne(rbn : Int) : Flow<AAMUPlannerSelectOne>
 
+    suspend fun getMovingTime(firsty : Double,firstx : Double,secondy : Double,secondx : Double) : Flow<Map<String,String>>
+
     suspend fun getChatRoomList(id : String) : Flow<List<AAMUChatRoomResponse>>
     suspend fun getChatMessageList(map : Map<String,String>) : Flow<List<AAMUChatingMessageResponse>>
 
     suspend fun getGramList(id : String) : Flow<List<AAMUGarmResponse>>
     suspend fun getGramDetail(id : String,lno : Int) : Flow<AAMUGarmResponse>
     suspend fun getGramLike(id : String,lno : Int) : Flow<Map<String,String>>
+    suspend fun getGramBySearch(searchColumn : String,searchWord : String ) : Flow<List<AAMUGarmResponse>>
     suspend fun getGramByPlaceList(contentid : Int) : Flow<List<AAMUGarmResponse>>
     suspend fun postGramComment(gramComment: GramComment) : Flow<Map<String,String>>
 

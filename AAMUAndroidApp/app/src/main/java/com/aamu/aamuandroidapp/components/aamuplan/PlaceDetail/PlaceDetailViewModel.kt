@@ -1,6 +1,7 @@
 package com.aamu.aamuandroidapp.components.aamuplan.PlaceDetail
 
 import android.content.Context
+import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.aamu.aamuandroidapp.data.api.AAMUDIGraph
 import com.aamu.aamuandroidapp.data.api.repositories.AAMURepository
+import com.aamu.aamuandroidapp.data.api.response.AAMUKakaoReviewResponse
 import com.aamu.aamuandroidapp.data.api.response.AAMUPlaceResponse
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.plus
@@ -25,7 +27,9 @@ class PlaceDetailViewModel(context: Context) : ViewModel() , MapView.MapViewEven
     private val aamuRepository : AAMURepository = AAMUDIGraph.createAAMURepository()
     private val context = context
     val placeLiveData = MutableLiveData<AAMUPlaceResponse>()
+    val kakoLiveData = MutableLiveData<AAMUKakaoReviewResponse>()
     val errorLiveData = MutableLiveData<String>()
+    val errorKakaoLiveData = MutableLiveData<String>()
 
     fun getPlaceOne(place : AAMUPlaceResponse){
         if(place.contentid != null && place.contenttypeid != null) {
@@ -43,6 +47,17 @@ class PlaceDetailViewModel(context: Context) : ViewModel() , MapView.MapViewEven
             }
             viewModelScope.launch {
                 //카카오리뷰 받아오기
+                Log.i("com.aamu.aamu" , " place.kakaokey = ${place.kakaokey}")
+                aamuRepository.getKakaoReview(place.kakaokey ?: "0")
+                    .collect { kakaoreview ->
+                        if (kakaoreview.basicInfo != null && kakaoreview.commentInfo != null ){
+                            kakoLiveData.value = kakaoreview
+                        }
+                        else{
+                            errorKakaoLiveData.value = "카카오 리뷰가 없습니다"
+                        }
+
+                    }
             }
         }
         else{

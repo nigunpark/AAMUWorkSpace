@@ -70,6 +70,8 @@ class AAMUPlanViewModel(context : Context,navController : NavController) : ViewM
 
     val mapPOIItems = MutableLiveData<MapPOIItem>()
 
+    val movingTime = MutableLiveData<Map<String,String>>()
+
     fun getPlannerSelectList(){
         viewModelScope.launch {
             aamuRepository.getPlannerSelectList()
@@ -323,6 +325,23 @@ class AAMUPlanViewModel(context : Context,navController : NavController) : ViewM
         mapView.fitMapViewAreaToShowMapPoints(mapPoint)
         mapView.zoomOut(true)
         place.value = planner
+    }
+
+    fun getMovingTime(plance: AAMUPlaceResponse){
+        val location : Location? = getLatLng()
+        viewModelScope.launch {
+            aamuRepository.getMovingTime(location?.latitude ?:33.450701,location?.longitude ?:126.570667,plance.mapy ?: 33.450701,plance.mapx ?: 126.570667)
+                .collect{
+                    if(it.get("MVTM") != null){
+                        movingTime.value = it
+                    }
+                    else{
+                        val map = HashMap<String,String>()
+                        map.put("MVTM","0")
+                        movingTime.value = map
+                    }
+                }
+        }
     }
 
     override fun onPOIItemSelected(mapView: MapView?, mapPOIItem: MapPOIItem?) {}

@@ -64,8 +64,6 @@ class MainFragment : Fragment() {
         binding = FragmentMainBinding.inflate(layoutInflater)
         viewModel = ViewModelProvider(requireActivity(),MainViewModelFactory(context))[MainViewModel::class.java]
 
-        Log.i("com.aamu.aamu",viewModel.fromthan.value ?: "없음")
-        Log.i("com.aamu.aamu",viewModel.no.value.toString())
         requireActivity().supportFragmentManager.beginTransaction().replace(binding.bottomfragment.id,BottomFragment()).commit()
         binding.waveanimat.addValueCallback(
             KeyPath("**"),

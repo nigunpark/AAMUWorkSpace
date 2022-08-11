@@ -77,6 +77,18 @@ class AAMURepositoryImpl(
         emit(AAMUPlaceResponse())
     }.flowOn(Dispatchers.IO)
 
+    override suspend fun getKakaoReview(kakaoKey: String): Flow<AAMUKakaoReviewResponse> = flow<AAMUKakaoReviewResponse> {
+        val response = aamuApi.getKakaoReview(kakaoKey)
+        if (response.isSuccessful){
+            emit(response.body() ?: AAMUKakaoReviewResponse())
+        }
+        else{
+            emit(AAMUKakaoReviewResponse())
+        }
+    }.catch {
+        emit(AAMUKakaoReviewResponse())
+    }.flowOn(Dispatchers.IO)
+
 
     override suspend fun getRecentDiner(
         placey: Double,
@@ -130,6 +142,26 @@ class AAMURepositoryImpl(
         }
     }.catch {
         emit(AAMUPlannerSelectOne(null,null,null,null,null,null,null,null))
+    }.flowOn(Dispatchers.IO)
+
+    override suspend fun getMovingTime(
+        firsty: Double,
+        firstx: Double,
+        secondy: Double,
+        secondx: Double
+    ): Flow<Map<String, String>> = flow {
+        val response = aamuApi.getMovingTime(firsty, firstx, secondy, secondx)
+        val failmap = HashMap<String,String>()
+        failmap.put("result","fail")
+        if(response.isSuccessful){
+            emit(response.body() ?: failmap)
+        }
+        else
+            emit(failmap)
+    }.catch {
+        val failmap = HashMap<String,String>()
+        failmap.put("result","fail")
+        emit(failmap)
     }.flowOn(Dispatchers.IO)
 
     override suspend fun getChatRoomList(id: String): Flow<List<AAMUChatRoomResponse>> = flow<List<AAMUChatRoomResponse>> {
@@ -190,6 +222,21 @@ class AAMURepositoryImpl(
         val failmap = HashMap<String,String>()
         failmap.put("result","fail")
         emit(failmap)
+    }.flowOn(Dispatchers.IO)
+
+    override suspend fun getGramBySearch(
+        searchColumn: String,
+        searchWord: String
+    ): Flow<List<AAMUGarmResponse>> = flow<List<AAMUGarmResponse>> {
+        val response = aamuApi.getGramBySearch(searchColumn,searchWord)
+        if(response.isSuccessful){
+            emit(response.body() ?: emptyList())
+        }
+        else{
+            emit(emptyList())
+        }
+    }.catch {
+        emit(emptyList())
     }.flowOn(Dispatchers.IO)
 
     override suspend fun getGramByPlaceList(contentid: Int): Flow<List<AAMUGarmResponse>> = flow<List<AAMUGarmResponse>> {

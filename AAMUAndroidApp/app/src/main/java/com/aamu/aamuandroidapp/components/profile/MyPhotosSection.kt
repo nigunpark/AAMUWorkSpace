@@ -2,24 +2,35 @@ package com.aamu.aamuandroidapp.components.profile
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import coil.compose.rememberAsyncImagePainter
+import coil.request.ImageRequest
 import com.aamu.aamuandroidapp.ui.theme.typography
 import com.aamu.aamuandroidapp.R
+import com.aamu.aamuandroidapp.data.api.response.AAMUGarmResponse
 import com.aamu.aamuandroidapp.ui.theme.aamuorange
 
 @Composable
-fun MyPhotosSection() {
+fun MyPhotosSection(viewModel: ProfileScreenViewModel) {
     Text(
-        text = "My Photography",
+        text = "내가 올린 사진",
         style = typography.h6,
         color = aamuorange,
         modifier = Modifier.padding(start = 8.dp, top = 16.dp)
@@ -30,55 +41,32 @@ fun MyPhotosSection() {
         .size(120.dp)
         .clip(RoundedCornerShape(8.dp))
 
-    Row(
-        modifier = Modifier
-            .padding(start = 8.dp, top = 8.dp)
-            .fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        Image(
-            painter = painterResource(id = R.drawable.food2),
-            contentDescription = null,
-            modifier = imageModifier,
-            contentScale = ContentScale.Crop
-        )
-        Image(
-            painter = painterResource(id = R.drawable.food3),
-            modifier = imageModifier,
-            contentDescription = null,
-            contentScale = ContentScale.Crop
-        )
-        Image(
-            painter = painterResource(id = R.drawable.food6),
-            modifier = imageModifier,
-            contentDescription = null,
-            contentScale = ContentScale.Crop
-        )
+    val gramPhoto by viewModel.userGramphoto.observeAsState(emptyList())
+
+    if(gramPhoto.isNotEmpty()) {
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(3),
+            modifier = Modifier.height(360.dp)
+        ) {
+            items(gramPhoto) { gramitem ->
+                Image(
+                    painter = rememberAsyncImagePainter(
+                        model = ImageRequest.Builder(LocalContext.current)
+                            .data(gramitem ?: R.drawable.no_image)
+                            .crossfade(true)
+                            .build(),
+                        contentScale = ContentScale.Crop
+                    ),
+                    contentDescription = null,
+                    modifier = imageModifier,
+                    contentScale = ContentScale.Crop
+                )
+            }
+
+        }
     }
-    Row(
-        modifier = Modifier
-            .padding(start = 8.dp, top = 8.dp)
-            .fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        Image(
-            painter = painterResource(id = R.drawable.food12),
-            modifier = imageModifier,
-            contentDescription = null,
-            contentScale = ContentScale.Crop
-        )
-        Image(
-            painter = painterResource(id = R.drawable.food13),
-            modifier = imageModifier,
-            contentDescription = null,
-            contentScale = ContentScale.Crop
-        )
-        Image(
-            painter = painterResource(id = R.drawable.food15),
-            modifier = imageModifier,
-            contentDescription = null,
-            contentScale = ContentScale.Crop
-        )
+    else{
+        Text("아직 올린 사진이 없어요")
     }
 }
 

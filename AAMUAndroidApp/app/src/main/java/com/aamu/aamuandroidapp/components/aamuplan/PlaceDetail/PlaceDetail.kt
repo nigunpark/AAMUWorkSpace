@@ -9,10 +9,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.BottomSheetScaffoldState
-import androidx.compose.material.Divider
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.FloatingActionButton
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Icon
@@ -38,6 +35,7 @@ import com.aamu.aamuandroidapp.R
 import com.aamu.aamuandroidapp.components.aamuplan.AAMUPlanViewModel
 import com.aamu.aamuandroidapp.components.gram.image.PlanGramImageGrid
 import com.aamu.aamuandroidapp.data.api.response.AAMUPlaceResponse
+import com.aamu.aamuandroidapp.ui.theme.cyan200
 import com.aamu.aamuandroidapp.ui.theme.cyan500
 import com.aamu.aamuandroidapp.ui.theme.typography
 import com.aamu.aamuandroidapp.ui.theme.yellow
@@ -83,6 +81,8 @@ fun PlaceDetail(mapviewModel: AAMUPlanViewModel,
     }
 
     val placeLiveData by viewModel.placeLiveData.observeAsState()
+    val kakoLiveData by viewModel.kakoLiveData.observeAsState()
+    val errorKakaoLiveData by viewModel.errorKakaoLiveData.observeAsState()
 
     Column(modifier = Modifier
         .fillMaxSize()
@@ -133,7 +133,7 @@ fun PlaceDetail(mapviewModel: AAMUPlanViewModel,
                         .padding(bottom = 20.dp)
                         .fillMaxWidth()
                 ) {
-                    Column() {
+                    Column {
                         Text(
                             text = placeLiveData?.title ?: "",
                             style = typography.h6.copy(fontSize = 25.sp),
@@ -153,7 +153,7 @@ fun PlaceDetail(mapviewModel: AAMUPlanViewModel,
                             size = 25.dp,
                             tint = yellow
                         )
-                        Text(text = "별점", fontSize = 20.sp)
+                        Text(text = "${if(kakoLiveData?.basicInfo?.star != null) kakoLiveData?.basicInfo?.star else 0.0}", fontSize = 20.sp)
                     }
                 }
                 Divider(modifier = Modifier.alpha(0.1f))
@@ -233,26 +233,42 @@ fun PlaceDetail(mapviewModel: AAMUPlanViewModel,
                     color = typography.caption.color.copy(alpha = 0.5f)
                 )
                 Box(modifier = Modifier.fillMaxSize()) {
-                    LazyColumn() {
-                        item {
-                            Row(verticalAlignment = Alignment.CenterVertically) {
-                                FaIcon(
-                                    faIcon = FaIcons.Star,
-                                    size = 20.dp,
-                                    tint = yellow
+                    if(kakoLiveData?.commentInfo?.isNotEmpty() == true) {
+                        LazyColumn() {
+                            items(items = kakoLiveData?.commentInfo!!) { item ->
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    FaIcon(
+                                        faIcon = FaIcons.Star,
+                                        size = 20.dp,
+                                        tint = yellow,
+                                        modifier = Modifier.fillMaxWidth(0.1f)
+                                    )
+                                    Text(text = "${item.point}",
+                                        modifier = Modifier.fillMaxWidth(0.1f)
+                                    , color = yellow)
+                                    Text(text = "${item.username}",
+                                        modifier = Modifier.fillMaxWidth(0.3f))
+                                    Text(text = "${item.review}", maxLines = 1)
+                                }
+                                Divider(
+                                    modifier = Modifier.alpha(
+                                        0.3f
+                                    )
                                 )
-                                Text(text = "별점", fontSize = 20.sp)
                             }
                         }
-                        item {
-                            Row(verticalAlignment = Alignment.CenterVertically) {
-                                FaIcon(
-                                    faIcon = FaIcons.Star,
-                                    size = 20.dp,
-                                    tint = yellow
-                                )
-                                Text(text = "별점", fontSize = 20.sp)
-                            }
+                    }
+                    else{
+                        if (errorKakaoLiveData.isNullOrEmpty()) {
+                            CircularProgressIndicator(
+                                modifier = Modifier.padding(24.dp),
+                                color = cyan200
+                            )
+                        } else {
+                            androidx.compose.material.Text(
+                                text = errorKakaoLiveData ?: "Unknown error",
+                                modifier = Modifier
+                            )
                         }
                     }
                 }

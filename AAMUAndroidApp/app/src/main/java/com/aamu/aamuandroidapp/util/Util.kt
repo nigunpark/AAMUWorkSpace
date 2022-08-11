@@ -95,7 +95,7 @@ lateinit var stomp : CustomStompClient
 private lateinit var stompConnection: Disposable
 
 fun stompConnection() {
-    val url = "ws://192.168.45.107:8080/aamurest/ws/chat/websocket"
+    val url = "ws://192.168.0.22:8080/aamurest/ws/chat/websocket"
     val intervalMillis = 1000L
     val client = OkHttpClient.Builder()
         .readTimeout(10, TimeUnit.SECONDS)
@@ -159,7 +159,26 @@ fun displayedAt(item : Long) : String{
     return "${Math.floor(years).toInt()}년 전"
 }
 
-
+fun displayedAtTime(item : Long) : String{
+    val latetime = item
+    var reString : String = ""
+    if(latetime == 0L) return "0초"
+    val seconds = latetime
+    if (Math.floor(seconds % 60.0).toInt() != 0) reString = "${Math.floor(seconds % 60.0).toInt()}초" + reString
+    val minutes = seconds / 60.0
+    if (Math.floor(minutes % 60).toInt() != 0) reString = "${Math.floor(minutes % 60).toInt()}분" + reString
+    val hours = minutes / 60
+    if (Math.floor(hours % 60).toInt() != 0) reString = "${Math.floor(hours % 60).toInt()}시간" + reString
+    val days = hours / 24
+    if (Math.floor(days % 24).toInt() != 0) reString = "${Math.floor(days % 24).toInt()}일"+ reString
+    val weeks = days / 7
+    if (Math.floor(weeks % 7).toInt() != 0) reString = "${Math.floor(weeks % 7).toInt()}주"+ reString
+    val months = days / 30
+    if (Math.floor(months % 30).toInt() != 0) reString = "${Math.floor(months % 30).toInt()}개월"+ reString
+    val years = days / 365
+    if (Math.floor(years % 365).toInt() != 0) reString = "${Math.floor(years % 365).toInt()}년"+ reString
+    return reString
+}
 
 //fun Activity.hideSystemUI() {
 //    activity?.let { WindowCompat.setDecorFitsSystemWindows(it?.window, false) }

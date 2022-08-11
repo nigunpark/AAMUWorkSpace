@@ -86,7 +86,8 @@ fun LoginScreen(loginfail : Boolean,onLoginSuccess: () -> Unit) {
                             color = amber700,
                             fontSize = 100.sp,
                             FontWeight.ExtraBold),
-                        modifier = Modifier)
+                        modifier = Modifier,
+                        color = amber700)
                 }
             }
             item {

@@ -14,18 +14,21 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.rememberLottieComposition
+import kotlin.math.max
 
 @Composable
 fun TextWithShadow(
     text: String,
     style: TextStyle,
-    modifier: Modifier
+    modifier: Modifier = Modifier,
+    color: Color
 ) {
     Text(
         text = text,
@@ -41,7 +44,8 @@ fun TextWithShadow(
     Text(
         text = text,
         style = style,
-        modifier = modifier
+        modifier = modifier,
+        color = color
     )
 }
 
@@ -81,5 +85,50 @@ fun CustomChips(text: String, modifier: Modifier = Modifier){
                 horizontal = 12.dp,
             )
         )
+    }
+}
+
+@Composable
+fun StaggerdGridColumn(
+    modifier: Modifier = Modifier,
+    columns: Int = 3,
+    content: @Composable () -> Unit,
+) {
+    Layout(content = content, modifier = modifier) { measurables, constraints ->
+        val columnWidths = IntArray(columns) { 0 }
+        val columnHeights = IntArray(columns) { 0 }
+
+        val placables = measurables.mapIndexed { index, measurable ->
+            val placable = measurable.measure(constraints)
+
+            val col = index % columns
+            columnHeights[col] += placable.height
+            columnWidths[col] = max(columnWidths[col], placable.width)
+            placable
+        }
+
+        val height = columnHeights.maxOrNull()
+            ?.coerceIn(constraints.minHeight.rangeTo(constraints.maxHeight))
+            ?: constraints.minHeight
+
+        val width =
+            columnWidths.sumOf { it }.coerceIn(constraints.minWidth.rangeTo(constraints.maxWidth))
+
+        val colX = IntArray(columns) { 0 }
+        for (i in 1 until columns) {
+            colX[i] = colX[i - 1] + columnWidths[i - 1]
+        }
+
+        layout(width, height) {
+            val colY = IntArray(columns) { 0 }
+            placables.forEachIndexed { index, placeable ->
+                val col = index % columns
+                placeable.placeRelative(
+                    x = colX[col],
+                    y = colY[col]
+                )
+                colY[col] += placeable.height
+            }
+        }
     }
 }

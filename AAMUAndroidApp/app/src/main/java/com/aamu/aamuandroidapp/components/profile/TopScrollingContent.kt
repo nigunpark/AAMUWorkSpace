@@ -15,32 +15,36 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.rememberAsyncImagePainter
+import coil.request.ImageRequest
 import com.aamu.aamuandroidapp.R
 import com.aamu.aamuandroidapp.components.profile.initialImageFloat
 import com.aamu.aamuandroidapp.components.profile.name
+import com.aamu.aamuandroidapp.data.api.response.AAMUUserInfo
 import com.aamu.aamuandroidapp.ui.theme.materialTypography
 
 @Composable
-fun TopScrollingContent(scrollState: ScrollState) {
+fun TopScrollingContent(scrollState: ScrollState, userinfo: AAMUUserInfo) {
     val visibilityChangeFloat = scrollState.value > initialImageFloat - 20
     Row {
-        AnimatedImage(scroll = scrollState.value.toFloat())
+        AnimatedImage(scroll = scrollState.value.toFloat(),userinfo)
         Column(
             modifier = Modifier
                 .padding(start = 8.dp, top = 48.dp)
                 .alpha(animateFloatAsState(if (visibilityChangeFloat) 0f else 1f).value)
         ) {
             Text(
-                text = name,
+                text = "${userinfo.id}",
                 style = materialTypography.headlineSmall.copy(fontSize = 18.sp),
                 modifier = Modifier.padding(bottom = 4.dp)
             )
             Text(
-                text = "Android developer",
+                text = "${userinfo.email}",
                 style = materialTypography.labelMedium
             )
         }
@@ -48,10 +52,16 @@ fun TopScrollingContent(scrollState: ScrollState) {
 }
 
 @Composable
-fun AnimatedImage(scroll: Float) {
+fun AnimatedImage(scroll: Float, userinfo: AAMUUserInfo) {
     val dynamicAnimationSizeValue = (initialImageFloat - scroll).coerceIn(36f, initialImageFloat)
     Image(
-        painter = painterResource(id = R.drawable.p1),
+        painter = rememberAsyncImagePainter(
+            model = ImageRequest.Builder(LocalContext.current)
+                .data(userinfo.userprofile ?: R.drawable.no_image)
+                .crossfade(true)
+                .build(),
+            contentScale = ContentScale.Crop
+        ),
         contentScale = ContentScale.Crop,
         contentDescription = null,
         modifier = Modifier

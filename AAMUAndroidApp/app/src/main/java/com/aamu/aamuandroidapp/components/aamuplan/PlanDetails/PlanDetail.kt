@@ -94,6 +94,9 @@ fun PlanDetails(
     }
     BackHandler(startMove.value) {
         startMove.value = false
+        val map = HashMap<String,String>()
+        map.put("MVTM","0")
+        mapviewModel.movingTime.value = map
     }
 
     AnimatedVisibility(visible = startMove.value, modifier = modifierBottom,

@@ -33,6 +33,9 @@ interface AAMUApi {
     @GET("info/oneplace")
     suspend fun getPlaceOne(@Query("contentid") contentid : Int,@Query("contenttypeid") contenttypeid : Int) : Response<AAMUPlaceResponse>
 
+    @GET("info/review")
+    suspend fun getKakaoReview(@Query("kakaoKey") kakaoKey : String ) : Response<AAMUKakaoReviewResponse>
+
     @GET("info/recentdiner")
     suspend fun getRecentDiner(@Query("placey") placey : Double,@Query("placex") placex : Double,@Query("category") category : String) : Response<List<AAMUPlaceResponse>>
 
@@ -44,6 +47,9 @@ interface AAMUApi {
 
     @GET("planner/selectonemap")
     suspend fun getPlannerSelectOne(@Query("rbn") rbn : Int) : Response<AAMUPlannerSelectOne>
+
+    @GET("data/mvtm")
+    suspend fun getMovingTime(@Query("firsty") firsty : Double,@Query("firstx ") firstx : Double,@Query("secondy") secondy  : Double,@Query("secondx") secondx : Double) : Response<Map<String,String>>
 
     @GET("chat/rooms")
     suspend fun getChatRoomList(@Query("id") id : String): Response<List<AAMUChatRoomResponse>>
@@ -59,6 +65,9 @@ interface AAMUApi {
 
     @GET("gram/like")
     suspend fun getGramLike(@Query("id") id : String,@Query("lno") lno : Int) : Response<Map<String,String>>
+
+    @GET("gram/selectList")
+    suspend fun getGramBySearch(@Query("searchColumn") searchColumn : String,@Query("searchWord") searchWord : String ) : Response<List<AAMUGarmResponse>>
 
     @GET("gram/selectList")
     suspend fun getGramByPlaceList(@Query("contentid") contentid : Int) : Response<List<AAMUGarmResponse>>
@@ -82,7 +91,7 @@ interface AAMUApi {
     suspend fun getUserInfo(@Query("id") id : String) : Response<AAMUUserInfo>
 
     companion object {
-        private const val BASE_URL = "http://192.168.45.107:8080/aamurest/"
+        private const val BASE_URL = "http://192.168.0.22:8080/aamurest/"
 
         operator fun invoke():AAMUApi{
             val requestInterceptor  = Interceptor{ chain ->

@@ -35,6 +35,7 @@ import com.aamu.aamuandroidapp.R
 import com.aamu.aamuandroidapp.components.aamuplan.AAMUPlanViewModel
 import com.aamu.aamuandroidapp.ui.theme.components.Material3Card
 import com.aamu.aamuandroidapp.ui.theme.cyan700
+import com.aamu.aamuandroidapp.util.displayedAtTime
 import com.kakao.sdk.navi.Constants
 import com.kakao.sdk.navi.NaviClient
 import com.kakao.sdk.navi.model.CoordType
@@ -43,7 +44,16 @@ import com.kakao.sdk.navi.model.NaviOption
 
 @Composable
 fun PlanMove(context : Context, mapviewModel : AAMUPlanViewModel){
+
+
+
     val place by mapviewModel.place.observeAsState()
+
+    if(place?.dto != null) {
+        mapviewModel.getMovingTime(plance = place?.dto!!)
+    }
+    val movingTime by mapviewModel.movingTime.observeAsState()
+
     Material3Card(
         modifier = Modifier
             .fillMaxSize(),
@@ -69,12 +79,20 @@ fun PlanMove(context : Context, mapviewModel : AAMUPlanViewModel){
                         .padding(5.dp),
                 )
             }
+            var long : String = ""
+            movingTime?.get("MVTM")?.toLong()?.let {
+                long = displayedAtTime(it)
+            }
+            var placemtime = 0L
+            place?.mtime?.let {
+                placemtime = it.toLong()
+            }
             Column(modifier = Modifier.fillMaxWidth(0.7f).fillMaxHeight(),
                 horizontalAlignment = Alignment.Start,
                 verticalArrangement = Arrangement.SpaceBetween) {
                 Text(text = place?.dto?.title!!, fontSize = 10.sp)
-                Text(text = place?.mtime.toString(), fontSize = 30.sp, color = cyan700)
-                Text(text = "설정한 이동시간 : "+place?.mtime.toString(), fontSize = 10.sp)
+                Text(text = "${if(long== "") 0 else long }", fontSize = 30.sp, color = cyan700)
+                Text(text = "설정한 이동시간 : ${displayedAtTime(placemtime /1000)}", fontSize = 10.sp)
             }
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 IconButton(onClick = {// 카카오내비 앱으로 길 안내
