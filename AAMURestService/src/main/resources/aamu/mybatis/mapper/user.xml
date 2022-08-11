@@ -49,7 +49,7 @@
 		SELECT themeid FROM aamuinter WHERE id=#{id}
 	</select>
 	<select id="getAllUser" resultType="String">
-		SELECT id FROM users
+		SELECT u.id FROM users u JOIN AUTHORITY_SECURITY a on a.id = u.id WHERE a.AUTHORITY = 'ROLE_USER'
 	</select>
 	<delete id="deleteTheme" parameterType="Map">
 		DELETE aamuinter WHERE id=#{id}
