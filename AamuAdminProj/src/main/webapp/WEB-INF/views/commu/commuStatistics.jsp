@@ -62,7 +62,7 @@ img {
 						<div class="col-lg-12 grid-margin stretch-card">
 							<div class="card">
 								<div class="card-body">
-									<h4 class="card-title">베스트 글쓴이</h4>
+									<h4 class="card-title">베스트 글</h4>
 									<p class="card-description">
 										좋아요를 가장 많이 받은 순위
 										<code>1위~5위</code>

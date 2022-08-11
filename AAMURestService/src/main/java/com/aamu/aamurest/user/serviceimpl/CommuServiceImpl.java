@@ -222,6 +222,7 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 			return dao.commuSearachList(map);
 		}
 		else {//tname이 넘어온거 searchColumn:tname , searchWord:서울
+			/*
 			map.put("table", "tags");
 			List<String> tnameList=dao.commuSearachList(map);
 			List<String> shrapTnameList = new Vector();
@@ -230,8 +231,47 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 				shrapTnameList.add(sharpTname);
 			}
 			return shrapTnameList;
+			*/
+			System.out.println("왜 널이니 너는?"+map.get("searchWord").toString());
+			if(map.get("searchWord").toString().contains("#") && map.get("searchWord").toString().length()>=2) { //#서울
+				String tname=map.get("searchWord").toString().split("#")[1];
+				map.put("tname", tname);
+				//map.put("table", "tags");
+				List<String> tagLists=dao.commuSelectTag(map);//#서, #서울가 오잖아
+				List<String> sharptTagList = new Vector<>();
+				System.out.println("트루일가요?"+tagLists.contains(map.get("tname")));
+				
+				System.out.println("tname은 뭘가요?"+map.get("tname"));
+				for(String tag:tagLists) { //서울, 서울여행을 꺼내서 
+					String sharpTag="#"+tag; //#서울을 붙이기
+					sharptTagList.add(sharpTag); //새로운 배열에 담아서 전달
+				}
+				return sharptTagList;		
+			}
+			else 
+				return null;
 		}
 	}
+	
+	/*
+	 if(map.get("tname").toString().contains("#") && map.get("tname").toString().length()>=2) { #서울
+			String tname=map.get("tname").toString().split("#")[1];
+			map.put("tname", tname);
+			List<String> tagLists=dao.commuSelectTag(map);//#서, #서울가 오잖아
+			List<String> sharptTagList = new Vector<>();
+			System.out.println("트루일가요?"+tagLists.contains(map.get("tname")));
+			
+			System.out.println("tname은 뭘가요?"+map.get("tname"));
+			for(String tag:tagLists) { //서울, 서울여행을 꺼내서 
+				String sharpTag="#"+tag; //#서울을 붙이기
+				sharptTagList.add(sharpTag); //새로운 배열에 담아서 전달
+			}
+			return sharptTagList;		
+		}
+		else 
+			return null;
+
+	 */
 
 	//글 생성용
 	@Override
