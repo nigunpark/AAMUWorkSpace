@@ -67,7 +67,6 @@ public class AdminCommuController {
 		int affected=commuService.commuDelete(map);
 		//데이타 반환
 		Map resultMap = new HashMap();
-		System.out.println("affected:"+affected);
 		if(affected==1) resultMap.put("isSuccess", true);
 		else resultMap.put("isSuccess", false);
 		return resultMap;
@@ -100,7 +99,6 @@ public class AdminCommuController {
 		int affected=commuService.commuCommentDelete(map);
 		//데이타 반환
 		Map resultMap = new HashMap();
-		System.out.println("affected:"+affected);
 		if(affected==1) resultMap.put("result", "Success");
 		else resultMap.put("result", "NotSuccess");
 		return resultMap;
@@ -113,7 +111,6 @@ public class AdminCommuController {
 	public String commuStatistics(Model model, HttpServletRequest req) {
 		Map map = commuService.commuTotal();
 		//월별 게시물 수
-		System.out.println("commuMonthTotal:"+map.get("commuMonthTotal"));
 		model.addAttribute("commuMonthTotal",map.get("commuMonthTotal"));
 		//성별 게시물 수 
 		model.addAttribute("femaleRecordCount",map.get("femaleRecordCount")); 

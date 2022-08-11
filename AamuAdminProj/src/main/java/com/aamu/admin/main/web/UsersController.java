@@ -63,12 +63,9 @@ public class UsersController {
 	@PostMapping("UsersStop.do")
 	@ResponseBody
 	public Map usersDelete(@RequestBody Map map) {
-		System.out.println("컨트롤러 id인가:"+map.get("stopId"));
-		System.out.println("컨트롤러 id인가:"+map.get("addId"));
 		int affected=usersService.usersStop(map);
 		//데이타 반환
 		Map resultMap = new HashMap();
-		System.out.println("affected:"+affected);
 		if(affected==1) resultMap.put("isSuccess", true);
 		else resultMap.put("isSuccess", false);
 		return resultMap;

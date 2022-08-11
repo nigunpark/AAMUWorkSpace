@@ -148,33 +148,10 @@ public class CommuController {
 	public List<String> commuSearachList(@RequestParam Map map){
 //		System.out.println("검색 searchColumn:"+map.get("searchColumn"));
 //		System.out.println("검색 searchWord:"+map.get("searchWord"));
+		System.out.println("왜 널이니?"+map);
 		List<String> list=commuService.commuSearachList(map);
 		return list;
 	}
-
-	//글 생성용: 리스트 ver
-	/*
-	@PostMapping(value="/gram/edit")
-	public List<CommuDTO> commuInsert(@RequestParam List<MultipartFile> multifiles, @RequestParam Map map, HttpServletRequest req) {
-		//서버의 물리적 경로 얻기
-		String path=req.getSession().getServletContext().getRealPath("/resources/commuUpload");
-
-		try {
-			List<String> uploads= FileUploadUtil.fileProcess(multifiles, path);
-			map.put("photolist", uploads);
-		} catch (IllegalStateException | IOException e) {e.printStackTrace();}
-
-		int affected=commuService.commuInsert(map);
-		List<CommuDTO> list = commuService.commuSelectList(map);
-		for(CommuDTO dto : list) {//글 목록들 list에서 하나씩 꺼내서 dto에 담는다
-			//코멘트 셋팅
-			dto.setCommuComment(commuService.commuCommentSelectOne(dto.getLno()));
-			//포토 셋팅
-			dto.setPhoto(FileUploadUtil.requestFilePath(commuService.commuSelectPhotoList(dto.getLno()), "/resources/commuUpload", req));
-		}/////for
-		return list;
-	}////////////////////////////
-	*/
 
 	//글 생성용: true false
 	@PostMapping(value="/gram/edit")
@@ -327,7 +304,7 @@ public class CommuController {
 		//댓글 알림
 		//authid는 글쓴이 id
 		String authid = commuService.commuSelectUserId(map);
-		notificationAlert.NotiMessage("이런곳은 어때 게시판",map.get("id").toString(),new NotificationDTO(0,authid,map.get("id").toString()+"님이 리뷰를 남겼어요.",0,0,NotificationAlert.GRAM,Integer.parseInt(map.get("lno").toString())));
+		notificationAlert.NotiMessage("이런곳은 어때 게시판",map.get("id").toString(),new NotificationDTO(0,authid,map.get("id").toString()+"님이 댓글을 남겼어요.",0,0,NotificationAlert.GRAM,Integer.parseInt(map.get("lno").toString())));
 		return resultMap;
 	}
 	

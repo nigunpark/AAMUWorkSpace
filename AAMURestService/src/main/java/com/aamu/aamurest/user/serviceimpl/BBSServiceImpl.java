@@ -110,7 +110,8 @@ public class BBSServiceImpl implements BBSService{
 	//글 등록
 	@Override
 	public int bbsInsert(Map map) {
-		map.put("themeid",UserUtil.changeTheme(map.get("themeid").toString()));
+		String themename = map.get("themeid").toString();
+		map.put("themeid",mainDao.getThemeid(themename));
 		int bbsaffected=dao.bbsInsert(map);
 		//사진
 		int photoAffected=0;
@@ -154,7 +155,8 @@ public class BBSServiceImpl implements BBSService{
 	@Override
 	public int bbsUpdate(Map map) {
 		int bbsaffected = 0;
-		map.put("themeid",UserUtil.changeTheme(map.get("themename").toString()));
+		String themename = map.get("themename").toString();
+		map.put("themeid",mainDao.getThemeid(themename));
 		bbsaffected = dao.bbsUpdate(map);
 		int photoAffected=0;
 		if(map.get("photolist")!=null) {

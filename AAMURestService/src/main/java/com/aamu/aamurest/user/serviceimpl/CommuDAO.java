@@ -53,9 +53,6 @@ public class CommuDAO {
 	
 	//글 검색용
 	public List<String> commuSearachList(Map map){
-		//System.out.println("dao map:"+map.get("searchColumn"));
-		//System.out.println("dao map:"+map.get("table"));
-		//System.out.println("dao map:"+map.get("searchWord"));
 		return template.selectList("commuSearachList",map);
 	}
 

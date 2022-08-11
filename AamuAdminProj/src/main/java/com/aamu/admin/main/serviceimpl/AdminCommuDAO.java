@@ -35,7 +35,6 @@ public class AdminCommuDAO {
 	//댓글 뿌려주기
 	public List<AdminCommuCommentDTO> commuCommentSelectList(Map map){
 		List<AdminCommuCommentDTO> records = template.selectList("commuCommentSelectList",map);
-		//System.out.println("(adminCommuDTO)records:"+records);
 		return records;
 	}
 	

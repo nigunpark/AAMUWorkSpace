@@ -3,12 +3,31 @@ import { Link } from "react-router-dom";
 import React, { useState } from "react";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+import { useDispatch } from "react-redux";
+import { addChatBotData } from "../../redux/store";
+import { useLocation, useNavigate } from "react-router-dom";
+
 const CardItem = ({ val }) => {
   const [value, setValue] = useState(2.5);
-
+  let dispatch = useDispatch();
+  let navigate = useNavigate();
+  let location = useLocation();
+  function goRecommend(val) {
+    if (val.rbn !== null) {
+      console.log(val);
+      navigate("/forum", { state: { dto: val } });
+      dispatch(addChatBotData(val));
+    }
+  }
   return (
     <>
-      <li className="card__item">
+      <li
+        className="card__item"
+        onClick={() => {
+          goRecommend(val);
+        }}
+      >
         <Link to="/" className="card__item__link">
           <figure className="card__item__info">
             <div className="card__item__img-container">
