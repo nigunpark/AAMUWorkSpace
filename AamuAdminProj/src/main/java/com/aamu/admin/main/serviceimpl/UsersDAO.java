@@ -35,4 +35,11 @@ public class UsersDAO {
 	public int usersStop(Map map) {
 		return template.update("usersStop",map);
 	}
+	
+	//유저별 레코드 카운트 셋팅
+	public int getTotalUserRecord(String id) {
+		return template.selectOne("getTotalUserRecord",id);
+	}
+	
+	
 }

@@ -16,4 +16,7 @@ public interface UsersService {
 	
 	//회원 삭제
 	int usersStop(Map map);
+	
+	//유저별 레코드 카운트 셋팅
+	int getTotalUserRecord(String id);
 }

@@ -44,9 +44,11 @@ public class UsersController {
 		ListPagingData<UsersDTO> listPagingData= usersService.usersSelectList(map, req, nowPage);
 		List<UsersDTO> list=listPagingData.getLists();
 		
-		//유저 프로필
 		for(UsersDTO dto:list) {
+			//유저 프로필
 			dto.setUserprofile(FileUploadUtil.requestOneFile(usersService.usersSelectUserProf(dto.getId()), "/resources/userUpload", req));
+			//유저별 레코드 카운트 셋팅
+			dto.setRecordtotalcount(usersService.getTotalUserRecord(dto.getId())) ;
 		}
 		//listPagingData.setLists(list);
 		

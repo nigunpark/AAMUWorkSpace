@@ -32,7 +32,7 @@
 												</button>
 											</div>
 										</div>
-										<div class="table-responsive  mt-1">
+										<div class="table-responsive mt-1">
 											<table class="table select-table">
 												<thead>
 													<tr>
@@ -45,6 +45,7 @@
 														</th>
 														<th>id</th>
 														<th>이름</th>
+														<th>게시물 수</th>
 														<th>가입일</th>
 														<th>상태</th>
 													</tr>
@@ -75,6 +76,7 @@
 																	</div>
 																</td>
 																<td>${record.name}</td>
+																<td>${record.recordtotalcount}</td>
 																<td>${record.joindate}</td>
 																<c:choose>
 																	<c:when test='${record.authority eq "ROLE_GUEST"}'>

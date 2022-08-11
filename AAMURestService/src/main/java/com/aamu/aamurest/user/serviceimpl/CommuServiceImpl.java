@@ -530,6 +530,12 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 		return dao.commuMyPageFollower(map);
 	}
 	
+	//워드클라우드_태그네임 얻기
+	@Override
+	public List<String> commugetTnames() {
+		return dao.commugetTnames();
+	}
+	
 
 	////////////////////////////////////////////////////////공통 메소드
 	

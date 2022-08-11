@@ -20,4 +20,5 @@ public class UsersDTO {
 	private java.sql.Date joindate;
 	private String userprofile;
 	private String authority;
+	private int recordtotalcount;
 }

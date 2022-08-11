@@ -95,4 +95,10 @@ public class UsersServicelmpl implements UsersService{
 		return affected;
 		
 	}
+	
+	//유저별 레코드 카운트 셋팅
+	@Override
+	public int getTotalUserRecord(String id) {
+		return dao.getTotalUserRecord(id);
+	}
 }

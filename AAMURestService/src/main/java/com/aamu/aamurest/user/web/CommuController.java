@@ -64,6 +64,9 @@ public class CommuController {
 		
 		//list=글 목록들
 		List<CommuDTO> list = commuService.commuSelectList(map);
+		if(list.isEmpty()) { //********************여기 처리!! 컨텐트id가 넘어왔는데 게시글이 없을 때 에러 처리 하기
+			return new Vector<CommuDTO>();
+		}
 		for(CommuDTO dto : list) {//글 목록들 list에서 하나씩 꺼내서 dto에 담는다
 			//코멘트한개 셋팅
 //			if(commuService.commuCommentSelectOne(dto.getLno())==null) {
@@ -126,6 +129,7 @@ public class CommuController {
 				recommendUserList.add(recommendUserMap);
 			}
 		}
+		
 		list.get(0).setRecommenduser(recommendUserList);
 		
 		
@@ -464,7 +468,14 @@ public class CommuController {
 		return resultMap;
 	}
 	
-	//마이페이지용-내 id
+	//워드 클라우드 
+	@GetMapping("/gram/word")
+	public List<Map> selectTnamesNCount() {
+		System.out.println("여기 올가요?");
+		commuService.commugetTnames();
+		
+		return null;
+	}
 	
 	
 
@@ -506,6 +517,7 @@ public class CommuController {
 		return returnMap;
 	}
 	
+	//관리자 페이지_워드 클라우드
 	@GetMapping("/word")
 	public Map imageCloud() {
 		Map map = new HashMap<>();
@@ -533,6 +545,8 @@ public class CommuController {
 		return null;
 		
 	}
+	
+	
 	
 	
 	

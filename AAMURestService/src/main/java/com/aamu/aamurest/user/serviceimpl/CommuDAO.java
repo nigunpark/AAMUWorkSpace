@@ -252,10 +252,17 @@ public class CommuDAO {
 		return template.selectList("commuMyPageFollower",map);
 	}
 	
+	//워드클라우드_태그네임 얻기
+	public List<String> commugetTnames() {
+		return template.selectOne("commugetTnames");
+	}
+	
 	///////////////////////////////////////////////////////////////워드클라우드 
 	public List<String> getAllTnamesOfWoman(Map map){
 		return template.selectList("getAllTnamesOfWoman",map);
 	}
+
+	
 	
 	
 	

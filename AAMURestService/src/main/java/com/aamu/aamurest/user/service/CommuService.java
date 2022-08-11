@@ -115,6 +115,9 @@ public interface CommuService<T> {
 	//마이페이지용-팔로우,팔로잉 목록
 	List<String> commuMyPageFollower(Map map);
 	
+	//워드클라우드_태그네임 얻기
+	List<String> commugetTnames();
+	
 	///////////////////////////////////////////////////////////워드 클라우드
 	List<String> getAllTnamesOfWoman(Map map);
 	
