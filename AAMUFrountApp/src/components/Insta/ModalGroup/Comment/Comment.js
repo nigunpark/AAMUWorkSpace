@@ -23,6 +23,9 @@ function Comment({
   setForReRender,
   seteditModal,
   setcommentModal,
+  setloading,
+  page,
+  list,
 }) {
   let menuRef = useRef();
   let replyRef = useRef("");
@@ -43,13 +46,12 @@ function Comment({
 
   let [isValid, setisValid] = useState(false);
 
-  function btn_check(){
-    replyRef.current !== undefined && 
-    (replyRef.current.value.length >= 1 //사용자가 키를 눌렀다 떼었을때 길이가 0을 넘는 값인지 유효성 검사 결과 값을 담는다
-      ? setisValid(true)
-      : setisValid(false))
+  function btn_check() {
+    replyRef.current !== undefined &&
+      (replyRef.current.value.length >= 1 //사용자가 키를 눌렀다 떼었을때 길이가 0을 넘는 값인지 유효성 검사 결과 값을 담는다
+        ? setisValid(true)
+        : setisValid(false));
   }
-
 
   function menuModalRef(e) {
     e.stopPropagation();
@@ -87,10 +89,6 @@ function Comment({
     commentModal(setcomments);
   }, []);
 
-  
-    
-
-
   function fillLike(setForReRender, forReRender) {
     //백이랑 인스타 리스드를 뿌려주기 위한 axios
 
@@ -116,8 +114,6 @@ function Comment({
       });
   }
 
-  const [commentss, setcommentss] = useState("");
-
   function post(replyRef) {
     //유효성 검사를 통과하고 게시버튼 클릭시 발생하는 함수
 
@@ -141,9 +137,9 @@ function Comment({
         console.log("resp.data", resp.data.reply);
         const copyComments = [...replyOne];
         setcomments({ ...comments }, copyComments);
-        setisValid(false)
+        setisValid(false);
         commentModal(setcomments);
-        feedList();
+        feedList(setloading, setlist, page, list);
       })
       .catch((error) => {
         console.log(error);
@@ -152,12 +148,6 @@ function Comment({
     replyRef.current.value = ""; //사용자 댓글창을 빈 댓글 창으로 초기화
   }
 
-  // const handleonChange = (e) => {
-  //   setreplyOne("comments.cno", comments.cno);
-  // };
-
-  let [deleteOne1, setdeleteOne1] = useState(false);
-  let [cno, setCno] = useState();
   function deleteOne(cno) {
     let token = sessionStorage.getItem("token");
 
@@ -180,33 +170,33 @@ function Comment({
           });
         });
         // commentModal(setcomments);
-        feedList();
+        feedList(setloading, setlist, page, list);
       })
       .catch((error) => {
         console.log(error);
       });
   }
-  function feedList() {
+  const feedList = async (setloading, setlist, page, list) => {
     //백이랑 인스타 리스드를 뿌려주기 위한 axios
     let token = sessionStorage.getItem("token");
-    axios
-      .get("/aamurest/gram/selectList", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        params: {
-          id: sessionStorage.getItem("username"),
-        },
-      })
-      .then((resp) => {
-        console.log(resp.data);
-        setlist(resp.data);
-        setForReRender(!forReRender);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
+    const temp = await axios.get(`/aamurest/gram/selectList?page=${page}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      params: {
+        id: sessionStorage.getItem("username"),
+      },
+    });
+
+    let removelist = list;
+    for (let k = 0; k < temp.data.length; k += 1) {
+      removelist = removelist.filter((item) => item.lno != temp.data[k].lno);
+    }
+    console.log(removelist);
+    const tempComments = removelist.concat(temp.data);
+    setlist([...tempComments]);
+    setloading(false);
+  };
 
   return (
     <Container1>
@@ -260,7 +250,10 @@ function Comment({
                     <strong>{val.id}</strong>
                   </p>
                   <a href={`https://map.kakao.com/?q=${val.title}`}>
-                    <div className="commentSearch_position" style={{marginLeft:'7px'}}>
+                    <div
+                      className="commentSearch_position"
+                      style={{ marginLeft: "7px" }}
+                    >
                       <FontAwesomeIcon icon={faLocationDot} />
                       <span style={{ fontSize: "14px" }}>{val.title}</span>
                     </div>
@@ -315,7 +308,9 @@ function Comment({
                     >
                       <div className="feeds-title">
                         <p>
-                          <span className="userName"><strong>제목 </strong></span>
+                          <span className="userName">
+                            <strong>제목 </strong>
+                          </span>
                           <span style={{ fontFamily: "normal" }}>
                             {" "}
                             {val.ctitle}
@@ -339,7 +334,11 @@ function Comment({
                           {val.tname === null
                             ? ""
                             : val.tname.map((tname, i) => {
-                                return <span style={{color:'#333333'}} key={i}><strong>{tname}</strong></span>;
+                                return (
+                                  <span style={{ color: "#333333" }} key={i}>
+                                    <strong>{tname}</strong>
+                                  </span>
+                                );
                               })}
                         </p>
                       </div>
@@ -361,22 +360,22 @@ function Comment({
                   //feedComments에 담겨있을 댓글 값을 CommentList 컴포넌트에 담아서 가져온다
                   return (
                     <div
-                    key={i}
+                      key={i}
                       className="recommendContents"
                       onClick={(e) => {
                         // console.log(val.cno);
                       }}
                     >
                       <div>
-                      <img
-                        className="likeimg"
-                        src={val.userprofile}
-                        alt="추사"
-                        onError={(e) => {
-                          e.stopPropagation();
-                          e.target.src =  "/images/user.jpg";
-                        }}
-                      />
+                        <img
+                          className="likeimg"
+                          src={val.userprofile}
+                          alt="추사"
+                          onError={(e) => {
+                            e.stopPropagation();
+                            e.target.src = "/images/user.jpg";
+                          }}
+                        />
                       </div>
                       <div
                         style={{
@@ -387,16 +386,23 @@ function Comment({
                           marginLeft: "10px",
                         }}
                       >
-                        <div style={{ display: "flex", flexDirection: "row"}}>
-                          <div style={{display: "flex", flexDirection: "row", width: "90%"}}>
-                            <p className="userName" style={{  fontSize: "13px" }}>
-                              <strong>
-                                {val.id}
-                              </strong>
+                        <div style={{ display: "flex", flexDirection: "row" }}>
+                          <div
+                            style={{
+                              display: "flex",
+                              flexDirection: "row",
+                              width: "90%",
+                            }}
+                          >
+                            <p
+                              className="userName"
+                              style={{ fontSize: "13px" }}
+                            >
+                              <strong>{val.id}</strong>
                             </p>
                             <p
                               className="userName"
-                              style={{ fontFamily: "normal"}}
+                              style={{ fontFamily: "normal" }}
                             >
                               {val.reply}
                             </p>
@@ -409,12 +415,14 @@ function Comment({
                             }}
                             className="comment-heart"
                           >
+                            {val.id === sessionStorage.getItem('username') &&
                             <i
                               className="fa-regular fa-trash-can "
                               onClick={() => {
                                 deleteOne(val.cno);
                               }}
                             ></i>
+                            }
                           </div>
                         </div>
                         <div
@@ -452,9 +460,14 @@ function Comment({
                     <i className="fa-regular fa-heart fa-2x"></i>
                   )}
                 </div>
-                  <div className="talk-icon" onClick={()=>{replyRef.current.focus()}}>
-                    <i className=" fa-regular fa-comment fa-2x"></i>
-                  </div>
+                <div
+                  className="talk-icon"
+                  onClick={() => {
+                    replyRef.current.focus();
+                  }}
+                >
+                  <i className=" fa-regular fa-comment fa-2x"></i>
+                </div>
                 <div className="share-icon">
                   <i className="fa-regular fa-paper-plane fa-2x"></i>
                 </div>
@@ -469,39 +482,46 @@ function Comment({
               </div>
             </div>
             <div className="commentss">
-            <div className="emoji">
-              <i className="fa-regular fa-face-smile" style={{fontSize:'24px',left:'5px'}} onClick={()=>{setemoji(!emoji)}}/>
-            </div>
-            {emoji && (
-            <div className="emoji-all"
-              onClick={()=>{setisValid(true);  setemoji(false);}}>
-              <Picker
-                onEmojiClick={onEmojiClick}
-              />
-            </div>
-          )}
+              <div className="emoji">
+                <i
+                  className="fa-regular fa-face-smile"
+                  style={{ fontSize: "24px", left: "5px" }}
+                  onClick={() => {
+                    setemoji(!emoji);
+                  }}
+                />
+              </div>
+              {emoji && (
+                <div
+                  className="emoji-all"
+                  onClick={() => {
+                    setisValid(true);
+                    setemoji(false);
+                  }}
+                >
+                  <Picker onEmojiClick={onEmojiClick} />
+                </div>
+              )}
               <input
                 type="text"
                 ref={replyRef}
                 className="inputComment_"
                 placeholder="댓글 달기..."
-                style={{ width: "80%" ,fontSize:'13px'}}
+                style={{ width: "80%", fontSize: "13px" }}
                 // onChange={(e) => {
                 //   setComment(e.target.value); //댓글 창의 상태가 변할때마다 setComment를 통해 comment값을 바꿔준다
                 // }}
                 onKeyUp={(e) => {
-                  btn_check()
+                  btn_check();
                   // console.log(replyRef.current.value.length>0?'true':'false');
                 }}
                 // value={comment}
               />
-    
+
               <button
                 className={
                   //클래스명을 comment창의 글자 길에 따라서 다르게 주면서 버튼색에 css디자인을 줄 수 있음
-                  isValid
-                    ? "submitCommentActive"
-                    : "submitCommentInactive"
+                  isValid ? "submitCommentActive" : "submitCommentInactive"
                 }
                 onClick={() => {
                   console.log(isValid);
@@ -544,8 +564,8 @@ const Overlay = styled.div`
 
 const Contents = styled.div`
   position: absolute;
-  width: 70%;
-  height: 700px;
+  width: 60%;
+  height: 750px;
   left: 50%;
   top: 54%;
   background: white;
