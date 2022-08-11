@@ -406,7 +406,7 @@ const DetailModal = ({
               <FontAwesomeIcon icon={faX} />
             </span>
             <DetailContents>
-              <div style={{}}>
+              <div>
                 <div className="detail__plan-card-photo">
                   <Notice photo={photo} />
 
