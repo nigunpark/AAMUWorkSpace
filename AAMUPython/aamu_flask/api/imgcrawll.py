@@ -75,7 +75,7 @@ class Imgcrawll(Resource):
                             f.write(res.content)
                         else:
                             f.write(b64decode(src[23:]))
-                    springurl='http://192.168.0.19:8080/aamurest/img/upload'
+                    springurl='http://localhost:8080/aamurest/img/upload'
                     #headers={'Content-Type': 'application/json; charset=utf-8'}
                     files = {"files":open(file,'rb')}
                     params = {'contentid':contentid}

@@ -56,7 +56,8 @@ public class UserUtil {
 		if(title!=null && dto.getSmallimage()!=null) {
 			if(!(dto.getSmallimage().toString().contains("http")) && dto.getSmallimage()!=null) 
 				dto.setSmallimage(FileUploadUtil.requestOneFile(dto.getSmallimage(),"/resources/hotelImage",req));
-			
+			if(dto.getBigimage()==null) 
+				dto.setBigimage(dto.getSmallimage());
 			if(title!=null && title.contains("[") &&!(title.split("\\[")[0].equals("")))
 				dto.setTitle(title.split("\\[")[0]);
 			

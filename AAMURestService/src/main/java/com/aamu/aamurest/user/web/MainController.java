@@ -241,9 +241,11 @@ public class MainController {
 	}
 	@GetMapping("/data/mvtm")
 	public Map dataMvtm(@RequestParam Map map) {
-		
-		
-		return map;
+		String uri=serverip+":5020/mvtm?firstx="+map.get("firstx")+"&firsty="+map.get("firsty")+"&secondx="+map.get("secondx")+"&secondy="+map.get("secondy");
+		ResponseEntity<Map> responseEntity =
+				restTemplate.exchange(uri, HttpMethod.GET, null,Map.class);
+
+		return responseEntity.getBody();
 	}
 
 	@GetMapping("/planner/selectonemap")
@@ -402,6 +404,7 @@ public class MainController {
 	@GetMapping("/info/review")
 	public KakaoReview getReview(@RequestParam String kakaoKey) {
 		KakaoReview kakaReview = new KakaoReview();
+		System.out.println(kakaoKey);
 		if(kakaoKey!=null) {
 
 			String uri = serverip+":5020/review?map="+kakaoKey;
@@ -410,6 +413,7 @@ public class MainController {
 					restTemplate.exchange(uri, HttpMethod.GET, null, KakaoReview.class);
 			kakaReview = responseEntity.getBody();
 		}
+		System.out.println(kakaReview);
 		return kakaReview;
 
 	}

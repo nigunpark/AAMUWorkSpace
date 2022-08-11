@@ -6,8 +6,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 @Getter
 @Setter
+@ToString
 public class KakaoReview {
 	@JsonProperty("basic_info")
 	public BasicInfo basicInfo;
@@ -16,6 +18,7 @@ public class KakaoReview {
 
 	@Getter
 	@Setter
+	@ToString
 	public static class BasicInfo {
 
 		public String name;
@@ -26,6 +29,7 @@ public class KakaoReview {
 	}
 	@Getter
 	@Setter
+	@ToString
 	public static class CommentInfo {
 
 		public String username;

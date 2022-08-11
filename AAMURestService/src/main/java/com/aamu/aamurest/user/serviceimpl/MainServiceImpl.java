@@ -262,7 +262,8 @@ public class MainServiceImpl implements MainService{
 ///////////////////////////////////////////////////search place impl
 	@Override
 	public List<AttractionDTO> searchTwoPlace(Map map,HttpServletRequest req) {
-
+		if(map.get("searchColumn").toString().equals("주소")) map.put("searchColumn", "addr");
+		else if(map.get("searchColumn").toString().equals("장소")) map.put("searchColumn", "title");
 		switch(map.get("contenttypeid").toString()) {
 		case "12":
 		case "28":
@@ -544,7 +545,8 @@ public class MainServiceImpl implements MainService{
 			if(title!=null && dto.getSmallimage()!=null) {
 				if(!(dto.getSmallimage().toString().contains("http")) && dto.getSmallimage()!=null) 
 					dto.setSmallimage(FileUploadUtil.requestOneFile(dto.getSmallimage(),"/resources/hotelImage",req));
-				
+				if(dto.getBigimage()==null) 
+					dto.setBigimage(dto.getSmallimage());
 				if(title!=null && title.contains("[") &&!(title.split("\\[")[0].equals("")))
 					dto.setTitle(title.split("\\[")[0]);
 				
