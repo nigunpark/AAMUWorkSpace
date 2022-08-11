@@ -19,7 +19,7 @@ import "swiper/css/pagination";
 import "../Upload/UploadSwiper.css";
 import HashTagModal from "./HashTagModal";
 
-const Uploader = ({ list, setsquare, setlist, setloading }) => {
+const Uploader = ({ list, setsquare, setlist, setloading, page, setpage }) => {
   let searchRef = useRef();
   let titleRef = useRef();
   let textareaRef = useRef();
@@ -260,6 +260,7 @@ const Uploader = ({ list, setsquare, setlist, setloading }) => {
               temp,
               setloading,
               setlist,
+              setpage,
               setupload,
               titleRef,
               textareaRef,
@@ -520,12 +521,13 @@ const Uploader = ({ list, setsquare, setlist, setloading }) => {
                               e.stopPropagation();
                               setTagItem(e.target.textContent);
                               setShowWrite(false);
-                            }}>
+                            }}
+                          >
                             {val}
                           </P>
                         );
                       })}
-                      
+
                     {/* // val.indexOf(inputValue)!==-1?<P onClick={()=>onClick(i)}>{val.TITLE}</P>  */}
                   </Searchcontents>
                 </Searchengine>
@@ -544,25 +546,20 @@ const Uploader = ({ list, setsquare, setlist, setloading }) => {
   );
 };
 
-function feedList(setlist, setloading) {
-  //업로드 버튼 누르고 화면 새로고침
+const feedList = async (setloading, setlist, page) => {
+  //백이랑 인스타 리스드를 뿌려주기 위한 axios
   let token = sessionStorage.getItem("token");
-  axios
-    .get("/aamurest/gram/selectList", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-    .then((resp) => {
-      console.log(resp.data);
-
-      setlist(resp.data);
-      setloading(false);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-}
+  const temp = await axios.get(`/aamurest/gram/selectList?page=${page}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    params: {
+      id: sessionStorage.getItem("username"),
+    },
+  });
+  setlist(temp.data);
+  setloading(false);
+};
 
 function uploadFile(myImagefile) {
   //이미지 업로드
@@ -577,6 +574,7 @@ function gramEdit(
   temp,
   setloading,
   setlist,
+  setpage,
   setupload,
   titleRef,
   textareaRef,
@@ -607,7 +605,8 @@ function gramEdit(
     .then((resp) => {
       console.log(resp.data);
       setupload(resp.data);
-      feedList(setlist, setloading);
+      setpage(1);
+      feedList(setloading, setlist, 1);
     })
     .catch((error) => {
       console.log(error);
