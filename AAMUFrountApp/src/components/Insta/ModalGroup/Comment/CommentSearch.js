@@ -493,8 +493,8 @@ const Overlay = styled.div`
 
 const Contents = styled.div`
   position: absolute;
-  width: 70%;
-  height: 700px;
+  width: 60%;
+  height: 750px;
   left: 50%;
   top: 54%;
   background: white;
