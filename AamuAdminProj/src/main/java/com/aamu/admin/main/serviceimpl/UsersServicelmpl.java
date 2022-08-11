@@ -42,7 +42,6 @@ public class UsersServicelmpl implements UsersService{
 		map.put(PagingUtil.TOTAL_COUNT, totalCount);
 		//페이징과 관련된 값들 얻기를 위한 메소드 호출
 		PagingUtil.setMapForPaging(map);
-		System.out.println("무ㅓ가 오나 "+map.get("searchWord"));
 		//글 전체 목록 얻기
 		//if(map.get("searchWord").equals("활동정지")) map.put("searchWord", 0);
 		//else map.put("searchWord", 1);

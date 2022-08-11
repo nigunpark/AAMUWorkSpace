@@ -53,10 +53,9 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 			map.put("end", end);
 		}
 		
-		
-		
 		List<CommuDTO> lists=dao.commuSelectList(map);
-		System.out.println("여기 lists는:"+lists.toString());
+		//System.out.println("여기 lists는:"+lists.toString());
+		
 		//isLike셋팅
 		List<CommuDTO> returnLists = new Vector();
 		for(int i=0; i<lists.size(); i++) {

@@ -12,7 +12,7 @@
 		(SELECT T.*,ROWNUM R FROM
 		(SELECT c.*,cp.contentid,p.title FROM community c
 		JOIN commuplace cp ON c.lno=cp.lno
-		JOIN places p ON cp.contentid=p.contentid) T)
+		JOIN places p ON cp.contentid=p.contentid
 		<if test="searchColumn != null">
 			<choose>
 				<when test='searchColumn == "ctitle"'>
@@ -28,11 +28,12 @@
 				</otherwise>
 			</choose>
 		</if>
-		<if test="contentid != null">where p.contentid=#{contentid}</if>
+		<if test="contentid != null">WHERE p.contentid=#{contentid}</if>
+		ORDER BY c.lno DESC) T)
 		<if test="start != null">
 			WHERE R BETWEEN #{start} AND #{end}
 		</if>
-		ORDER BY lno DESC
+		
 	</select>
 	
 	<!-- 글 목록용_댓글 한개 뿌려주기 -->

@@ -33,7 +33,6 @@ public class UsersDAO {
 	
 	//회원 정지
 	public int usersStop(Map map) {
-		System.out.println("dao id:"+map.get("id"));
 		return template.update("usersStop",map);
 	}
 }
