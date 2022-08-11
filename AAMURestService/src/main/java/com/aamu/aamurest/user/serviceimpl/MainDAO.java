@@ -219,5 +219,9 @@ public class MainDAO {
 		
 		return template.selectList("getTopPlaceInArea", map);
 	}
+	public String getThemeid(String themename) {
+		
+		return template.selectOne("getThemeid", themename);
+	}
 
 }
