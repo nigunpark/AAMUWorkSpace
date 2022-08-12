@@ -72,6 +72,14 @@
 
 
 <script>
+$(document).ajaxStart(function() {
+	common.callSpinner();
+});
+/* 통신 종료 */
+$(document).ajaxStop(function() {
+	common.clearSpinner();
+});
+
 $('#save').click(function(){
 	var placelist =new Array();
 	<c:forEach items="${placelist}" var="item">
@@ -90,7 +98,7 @@ $('#save').click(function(){
 	</c:forEach>
 	var placejson = JSON.stringify({"placelist":placelist});
 	$.ajax({
-		url:"http://localhost:5020/saveplaces",
+		url:"http://192.168.0.22:5020/saveplaces",
 		type:"post",
 		data: placejson,
 		contentType:"application/json", //데이타 보낼 때
@@ -112,15 +120,29 @@ $('#crawll').click(function(){
 	var placejson = JSON.stringify({"placelist":placelist});
 	console.log(placejson);
 	$.ajax({
-		url:"http://localhost:5020/imgcrawll",
+		url:"http://192.168.0.22:5020/imgcrawll",
 		type:"post",
 		data: placejson,
 		contentType:"application/json", //데이타 보낼 때
 		dataType: "json" //데이타 받을 때 
-	}).done(data=>{console.log('저장 성공',data);
-		location.reload();
-		}).fail(e=>{console.log('실패',e)})
-});
+		
+		,success:function(res){ 
+		    console.log('저장 성공',data);
+			location.reload();
+		         
+	    } 
+	    ,beforeSend:function(){ 
+		
+	}
+	    } 
+	    ,complete:function(){ 
+
+	    } 
+	    ,error:function(e){ 
+			console.log('실패',e)
+	    } 
+	});
+
   </script>
 </body>
 </html>
