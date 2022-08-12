@@ -224,13 +224,17 @@ const DetailModal = ({
         },
       })
       .then((resp) => {
-        console.log("북마크 추가/취소 성공 (DetailModal.js) :", resp.data);
-        alert("북마크 되었어요.");
-        let bool = window.confirm("마이페이지로 이동하시겠어요?");
-        if (bool) navigate("/myPage");
+        // console.log("북마크 추가/취소 성공 (DetailModal.js) :", resp.data);
+        if (myBookMark === false) {
+          alert("북마크가 되었어요.");
+          let bool = window.confirm("마이페이지로 이동하시겠어요?");
+          if (bool) navigate("/myPage");
+        } else if (myBookMark === true) {
+          alert("북마크가 취소 되었어요.");
+        }
       })
       .catch((error) => {
-        console.log("북마크 실패 (DetailModal.js) :", error);
+        // console.log("북마크 실패 (DetailModal.js) :", error);
       });
   };
 
