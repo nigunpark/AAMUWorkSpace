@@ -58,9 +58,6 @@ public class CommuController {
 	public List<CommuDTO> commuSelectList(@RequestParam Map map, HttpServletRequest req){
 		//검색할 때는 맵으로 써치워드 써치컬럼을 받고, id(로그인한 사람의 id)는 isLike때문에 받는거다. lno는 dto에서 뽑아온다
 		//cid가 넘어오면 마이페이지 id에 따른 글 뿌려주기
-//		System.out.println("셀렉트 리스트 id:"+map.get("id"));
-//		System.out.println("셀렉트 리스트 searchColumn:"+map.get("searchColumn"));
-//		System.out.println("셀렉트 리스트 searchWord:"+map.get("searchWord"));
 		
 		//list=글 목록들
 		List<CommuDTO> list = commuService.commuSelectList(map);
@@ -91,7 +88,6 @@ public class CommuController {
 				dto.setTname(sharptTagList);
 			}
 			//써치토탈카운트
-			//System.out.println("포함되어있냐"+map.keySet().contains("searchColumn"));
 			if(map.keySet().contains("searchColumn")) { 
 				dto.setSearchtotalcount(commuService.commuSearchTotalCount(map));
 				//마이페이지용_나를 팔로우하는 계정 수 셋팅
@@ -132,10 +128,6 @@ public class CommuController {
 		
 		list.get(0).setRecommenduser(recommendUserList);
 		
-		
-		
-		
-//		System.out.println("몇개 넘어가니:"+list.size());
 		return list;
 	}////////////////commuSelectList
 	
@@ -150,9 +142,6 @@ public class CommuController {
 	//글 검색용_searchColumn:id,ctitle,tname로 검색
 	@GetMapping("/gram/search/selectList") 
 	public List<String> commuSearachList(@RequestParam Map map){
-//		System.out.println("검색 searchColumn:"+map.get("searchColumn"));
-//		System.out.println("검색 searchWord:"+map.get("searchWord"));
-		System.out.println("왜 널이니?"+map);
 		List<String> list=commuService.commuSearachList(map);
 		return list;
 	}
@@ -160,8 +149,6 @@ public class CommuController {
 	//글 생성용: true false
 	@PostMapping(value="/gram/edit")
 	public Map commuInsert(@RequestParam List<MultipartFile> multifiles, @RequestParam Map map, @RequestParam(required = false) List tname, HttpServletRequest req) {
-		System.out.println("컨트롤러 tname:"+tname);
-		System.out.println("id가 오나요?"+map.get("id"));
 		//서버의 물리적 경로 얻기
 		String path=req.getSession().getServletContext().getRealPath("/resources/commuUpload");
 		Map resultMap = new HashMap();
@@ -199,8 +186,6 @@ public class CommuController {
 	//TAGS테이블에 있으면 TNO,TNAME 키값으로 뿌려주고 COMMUTAG에 저장 //없으면 INSERT TAGS테이블 COMMUTAG테이블
 	@GetMapping("/gram/tag")
 	public List<String> commuTag(@RequestParam Map map){//tname:
-		System.out.println("태그검색 map:"+map);
-		//System.out.println("태그:"+commuService.commuTag(map));
 		return commuService.commuTag(map);
 	}
 	
@@ -208,7 +193,6 @@ public class CommuController {
 	//글 하나 뿌려주는 용----------------------------원본
 	@GetMapping("/gram/SelectOne/{lno}")
 	public CommuDTO commuSelectOne(@PathVariable String lno, HttpServletRequest req) {
-		System.out.println("셀렉트원lno:"+lno);
 		CommuDTO dto=commuService.commuSelectOne(lno);
 		//모든 사진 가져와서 dto에 셋팅
 		dto.setPhoto(FileUploadUtil.requestFilePath(commuService.commuSelectPhotoList(dto.getLno()), "/resources/commuUpload", req));
@@ -250,7 +234,7 @@ public class CommuController {
 	//글 수정용: Map ver
 	@PutMapping("/gram/edit")
 	public Map commuUpdate(@RequestBody Map map) { 
-		System.out.println("글수정 map:"+map);
+		//System.out.println("글수정 map:"+map);
 		//List<String> list=(List<String>)map.get("tname");
 		int affected=commuService.commuUpdate(map);
 		Map resultMap = new HashMap<> ();
@@ -262,7 +246,7 @@ public class CommuController {
 	//글 삭제용
 	@DeleteMapping("/gram/edit/{lno}")
 	public Map commuDelete(@PathVariable String lno, HttpServletRequest req) {
-		System.out.println("글삭제 lno:"+lno);
+		//System.out.println("글삭제 lno:"+lno);
 		List<String> photoLists=commuService.commuSelectPhotoList(lno);
 		String path=req.getSession().getServletContext().getRealPath("/resources/commuUpload");
 		
@@ -327,7 +311,6 @@ public class CommuController {
 	//댓글 삭제용
 	@DeleteMapping("/gram/comment/edit")
 	public Map commuCommentDelete(@RequestParam Map map) {//lno, cno
-		System.out.println("딜리트 map:"+map);
 		int affected=commuService.commuCommentDelete(map);
 		//rcount -1
 		//int RcMinusAffected=commuService.commuRcMinusUpdate(map);
@@ -337,29 +320,7 @@ public class CommuController {
 		return resultMap;
 	}
 
-	//글 좋아요 누르기 전체리스트
-	/*
-	@GetMapping("/gram/like")
-	public List<CommuDTO> commuLike(@RequestParam Map map, HttpServletRequest req) {
-		System.out.println("라이크 map:"+map);
-		int affected=commuService.commuLike(map);
-		//community테이블의 selectone likecount
-		int likecount=commuService.commuLikecountSelect(map);
-		Map resultMap = new HashMap();
-		if(affected==1) {
-			//list=글 목록들
-			List<CommuDTO> list = commuService.commuSelectList(map);
-			for(CommuDTO dto : list) {//글 목록들 list에서 하나씩 꺼내서 dto에 담는다
-				//코멘트 셋팅
-				dto.setCommuComment(commuService.commuCommentSelectOne(dto.getLno()));
-				//포토 셋팅
-				dto.setPhoto(FileUploadUtil.requestFilePath(commuService.commuSelectPhotoList(dto.getLno()), "/resources/commuUpload", req));
-			}/////for
-			return list;
-		}
-		else return null;
-	}
-	*/
+
 	//글 좋아요 누르기
 	@GetMapping("/gram/like")
 	public Map commuLike(@RequestParam Map map) {//id, lno
@@ -392,7 +353,6 @@ public class CommuController {
 	public Map commuFollower(@RequestBody Map map) {//id,follower
 		//map에 id:세션id follower:글쓴이id
 		Map resultMap=commuService.commuFollower(map);
-		System.out.println("팔로우 결과값:"+resultMap);
 		
 		//팔로우 알림
 		if((boolean) resultMap.get("isFollower")) {
@@ -433,12 +393,10 @@ public class CommuController {
 		map.put("selectid", "id");
 		map.put("whereid", "follower");
 		List<String> followingList=commuService.commuMyPageFollower(map); //내가 팔로잉하는 사용자id 얻어오기
-		System.out.println("내가 팔로잉하는 사용자:"+followingList);
 		
 		map.put("selectid", "follower");
 		map.put("whereid", "id");
 		List<String> followerList=commuService.commuMyPageFollower(map); //나를 팔로우하는 사용자id
-		System.out.println("나를 팔로우하는 사용자:"+followerList);
 		
 		//최종 리턴할 map 생성
 		Map<String,List<Map>> resultMap = new HashMap<>();
@@ -471,7 +429,6 @@ public class CommuController {
 	//워드 클라우드 
 	@GetMapping("/gram/word")
 	public List<Map> selectTnamesNCount() {
-		System.out.println("여기 올가요?");
 		return commuService.commugetTnames();
 	}
 	
@@ -481,13 +438,10 @@ public class CommuController {
 	@GetMapping("/weather")
 	public Map weather(@RequestParam Map map,@RequestParam List<String> searchDate, HttpServletRequest req) { //searhWord 지역 searchDate 
 		String searchWord=map.get("searchWord").toString();
-		System.out.println("searchWord:"+searchWord);
-		System.out.println("searchDate:"+searchDate);
 		String sDates = String.join(",", searchDate); //날씨리스트를 스트링으로 변환
 		
 		//파이썬으로 보낼 uri
 		String uri="http://localhost:5020/weather?searchWord="+searchWord+"&searchDate="+sDates;
-		//System.out.println("uri:"+uri);
 		
 		//제이슨형태로 보낸다
 		HttpHeaders header = new HttpHeaders();
@@ -505,7 +459,6 @@ public class CommuController {
 			String weatherImage=FileUploadUtil.requestOneFile(weatherMap.get("weatherState").toString(), "/resources/weather", req);
 			weatherMap.put("weatherImage", weatherImage+".png");
 		}
-		System.out.println("결과값:"+returnMap);
 		return returnMap;
 	}
 	
@@ -518,12 +471,10 @@ public class CommuController {
 		map.put("gender", "남자");
 		List<String> allTnamesOfMan=commuService.getAllTnamesOfWoman(map);
 		String allTnamesOfWomanStr = String.join(",", allTnamesOfWoman);
-		System.out.println("allTnamesOfWomanStr:"+allTnamesOfWomanStr);
 		String allTnamesOfManStr = String.join(",", allTnamesOfMan);
 		
 		//파이썬으로 보낼 uri
 		String uri="http://localhost:5020/word?allTnamesOfWomanStr="+allTnamesOfWomanStr+"&allTnamesOfManStr="+allTnamesOfManStr;
-		//System.out.println("uri:"+uri);
 		
 		//제이슨형태로 보낸다
 		HttpHeaders header = new HttpHeaders();

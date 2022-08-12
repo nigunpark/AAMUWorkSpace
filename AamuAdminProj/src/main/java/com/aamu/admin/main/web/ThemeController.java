@@ -59,9 +59,6 @@ public class ThemeController {
 	@PostMapping("ThemeInsert.do")
 	public String themeInsert(@RequestParam MultipartFile multifiles, @RequestParam Map map, HttpServletRequest req) {
 		
-		System.out.println("파일 넘어오나?"+map);
-		System.out.println("파일 넘어오나?"+multifiles);
-		
 		return "back/theme";
 	}
 
