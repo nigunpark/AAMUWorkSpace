@@ -10,10 +10,7 @@ import {
   faSquareShareNodes,
   faX,
 } from "@fortawesome/free-solid-svg-icons";
-import {
-  faCalendarPlus,
-  faFileExcel,
-} from "@fortawesome/free-regular-svg-icons";
+import { faCalendarPlus, faFileExcel } from "@fortawesome/free-regular-svg-icons";
 import MyCreatePlanLeft from "./MyCreatePlanLeft";
 import CreatePlanMap from "../../../components/CreatePlan/CreatePlanMap";
 import { useNavigate, useParams } from "react-router-dom";
@@ -21,20 +18,9 @@ import axios from "axios";
 import MyPlanMap from "./MyPlanMap";
 import { useDispatch, useSelector } from "react-redux";
 import { faHourglass } from "@fortawesome/free-regular-svg-icons";
-import {
-  addMonthNDate,
-  changeTripPeriod,
-  resetMonthNDate,
-} from "../../../redux/store";
+import { addMonthNDate, changeTripPeriod, resetMonthNDate } from "../../../redux/store";
 
-const MyHomeBox = ({
-  setClickTab,
-  planList,
-  rbn,
-  setSelectRbn,
-  setPlanList,
-  setUpload,
-}) => {
+const MyHomeBox = ({ setClickTab, planList, rbn, setSelectRbn, setPlanList, setUpload }) => {
   const [newFromWooJae, setNewFromWooJae] = useState([]);
   const [newTimeSet, setNewTimeSet] = useState([]);
   const [currPosition, setCurrPosition] = useState("");
@@ -125,10 +111,9 @@ const MyHomeBox = ({
                     }}
                   />
                 )}
-                {forDimmed.start <= new Date() &&
-                  forDimmed.end >= new Date() && (
-                    <FontAwesomeIcon icon={faHourglass} className="glassIcon" />
-                  )}
+                {forDimmed.start <= new Date() && forDimmed.end >= new Date() && (
+                  <FontAwesomeIcon icon={faHourglass} className="glassIcon" />
+                )}
 
                 {planList.isBBS == 1 ? (
                   // <img
@@ -143,10 +128,7 @@ const MyHomeBox = ({
                   // />
                   // <FontAwesomeIcon icon={faHourglass} className="starImg" />
 
-                  <FontAwesomeIcon
-                    icon={faSquareShareNodes}
-                    className="shareIcon"
-                  />
+                  <FontAwesomeIcon icon={faSquareShareNodes} className="shareIcon" />
                 ) : null}
               </div>
             </div>
@@ -276,7 +258,7 @@ function MyBoxList({
             setTimeout(() => {
               setIsOpen(true);
               setModalOpen(false);
-            }, 50);
+            }, 500);
           }}
         >
           일정확인
@@ -348,13 +330,7 @@ function MyBoxList({
   );
 }
 
-async function excAxios(
-  rbn,
-  setNewFromWooJae,
-  dispatch,
-  setCurrPosition,
-  planList
-) {
+async function excAxios(rbn, setNewFromWooJae, dispatch, setCurrPosition, planList) {
   try {
     let token = sessionStorage.getItem("token");
     //   /planner/selectonemap
@@ -411,9 +387,7 @@ async function excAxios(
         break;
     }
     dispatch(resetMonthNDate([]));
-    dispatch(
-      addMonthNDate({ month: fristMonth, date: fristDate, dow: fristDow })
-    );
+    dispatch(addMonthNDate({ month: fristMonth, date: fristDate, dow: fristDow }));
   } catch (error) {
     console.log(error);
   }
@@ -435,16 +409,12 @@ function MyDetailPlan({
   let dispatch = useDispatch();
   useEffect(() => {
     let lengths = parseInt(
-      planList.title.substring(
-        planList.title.indexOf("일") - 1,
-        planList.title.indexOf("일")
-      )
+      planList.title.substring(planList.title.indexOf("일") - 1, planList.title.indexOf("일"))
     );
     let tempArr = new Array(lengths).fill(0);
     dispatch(changeTripPeriod(lengths));
     tempArr.forEach((val, index) => {
-      let bbcT =
-        newFromWooJae[index][`day${index + 1}`][0].starttime / (1000 * 60);
+      let bbcT = newFromWooJae[index][`day${index + 1}`][0].starttime / (1000 * 60);
       if (bbcT >= 13 * 60) {
         let temp = {
           ampm: "오후",
@@ -539,8 +509,7 @@ const SavePlan = ({ setSavePlan, fromWooJaeData, currPosition }) => {
             onClick={(e) => {
               e.stopPropagation();
               let bol = window.confirm("일정을 저장하시겠습니까?");
-              if (bol)
-                savePlan(reduxState, currPosition, fromWooJaeData, navigate);
+              if (bol) savePlan(reduxState, currPosition, fromWooJaeData, navigate);
             }}
           >
             <FontAwesomeIcon icon={faCalendarPlus} className="savePlan__icon" />
@@ -573,9 +542,10 @@ const savePlan = (reduxState, currPosition, fromWooJaeData, navigate) => {
   reduxState.tripPeriod.map((val, i) => {
     if (i === 0 || i === reduxState.tripPeriod.length - 1)
       plannerDate.push(
-        `${reduxState.monthNdate[0].month}월 ${
-          reduxState.monthNdate[0].date + i
-        }일 ${getDow(reduxState, i)}`
+        `${reduxState.monthNdate[0].month}월 ${reduxState.monthNdate[0].date + i}일 ${getDow(
+          reduxState,
+          i
+        )}`
       );
   });
   let token = sessionStorage.getItem("token");
@@ -590,9 +560,7 @@ const savePlan = (reduxState, currPosition, fromWooJaeData, navigate) => {
         title: `${currPosition} ${reduxState.tripPeriod.length - 1}박 ${
           reduxState.tripPeriod.length
         }일`,
-        plannerdate: `${plannerDate[0]} ~ ${
-          plannerDate[plannerDate.length - 1]
-        }`,
+        plannerdate: `${plannerDate[0]} ~ ${plannerDate[plannerDate.length - 1]}`,
         route: toWoo,
         id: sessionStorage.getItem("username"),
       },
@@ -628,9 +596,10 @@ const handleExcel = async (fromWooJaeData, reduxState, currPosition) => {
   reduxState.tripPeriod.map((val, i) => {
     if (i === 0 || i === reduxState.tripPeriod.length - 1)
       plannerDate.push(
-        `${reduxState.monthNdate[0].month}월 ${
-          reduxState.monthNdate[0].date + i
-        }일 ${getDow(reduxState, i)}`
+        `${reduxState.monthNdate[0].month}월 ${reduxState.monthNdate[0].date + i}일 ${getDow(
+          reduxState,
+          i
+        )}`
       );
   });
 
@@ -638,9 +607,9 @@ const handleExcel = async (fromWooJaeData, reduxState, currPosition) => {
   const workSheet = workBook.addWorksheet("MyTravel"); // sheet 이름이 My Sheet
   //타이틀
   workSheet.mergeCells("B1:F1");
-  workSheet.getCell("B1").value = `${currPosition} ${
-    reduxState.tripPeriod.length - 1
-  }박 ${reduxState.tripPeriod.length}일 여행`;
+  workSheet.getCell("B1").value = `${currPosition} ${reduxState.tripPeriod.length - 1}박 ${
+    reduxState.tripPeriod.length
+  }일 여행`;
   workSheet.getCell("B1").font = { size: 16, bold: true };
   workSheet.getCell("B1").alignment = { horizontal: "center" };
   workSheet.getCell("B1").fill = {
