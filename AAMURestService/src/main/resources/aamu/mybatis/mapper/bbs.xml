@@ -24,7 +24,7 @@
 				</otherwise>
 			</choose>
 		</if>
-		ORDER BY rbbs.sysdate DESC,rbbs.rbn
+		ORDER BY rbbs.postdate DESC,rbbs.rbn
 	</select>
 	
 	<!-- 글 목록용_사진 뿌려주기 -->

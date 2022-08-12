@@ -67,12 +67,12 @@ public class ApiController {
 				+ "MobileApp=AppTest&MobileOS=ETC&arrange=B&"
 				+ "contentTypeId="+contentTypeId+"&"
 						+ "areaCode="+area+"&"
-								+ "listYN=Y";
+								+ "listYN=Y&_type=json";
 		if(contentTypeId.equals("15")) {
 			Date current = new Date();
 			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
 			String currentTime = dateFormat.format(current);
-			uri ="http://api.visitkorea.or.kr/openapi/service/rest/KorService/searchFestival?serviceKey="+apikey+"&numOfRows=500&pageNo=1&MobileOS=ETC&MobileApp=AppTest&arrange=B&listYN=Y&areaCode="+area+"&eventStartDate="+currentTime;
+			uri ="http://api.visitkorea.or.kr/openapi/service/rest/KorService/searchFestival?serviceKey="+apikey+"&numOfRows=500&pageNo=1&MobileOS=ETC&MobileApp=AppTest&arrange=B&listYN=Y&areaCode="+area+"&eventStartDate="+currentTime+"&_type=json";
 		}
 		ResponseEntity<Places> responseEntity =
 				restTemplate.exchange(uri, HttpMethod.GET,
