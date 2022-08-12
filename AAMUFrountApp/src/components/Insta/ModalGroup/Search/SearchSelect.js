@@ -1,7 +1,7 @@
 import React from "react";
 
 
-function SearchSelect({ setSearchb}) {
+function SearchSelect({settagsearch}) {
   return (
     <>
       <select
@@ -9,7 +9,7 @@ function SearchSelect({ setSearchb}) {
         className="select"
         onChange={(e) => {
           e.stopPropagation();
-          setSearchb(e.target.value);
+          settagsearch(e.target.value);
         }}
       >
         <option defaultValue={"DEFAULT"} value="choice">
