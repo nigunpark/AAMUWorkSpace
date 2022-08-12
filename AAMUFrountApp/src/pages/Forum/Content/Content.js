@@ -43,7 +43,7 @@ const Content = () => {
         },
       })
       .then((resp) => {
-        console.log("글 목록 가져오기 Content.js) :", resp.data);
+        // console.log("글 목록 가져오기 Content.js) :", resp.data);
 
         setListData(resp.data);
       })
@@ -78,57 +78,17 @@ const Content = () => {
         },
       })
       .then((resp) => {
-        console.log("검색한 글 목록(Content.js) :", resp.data);
+        // console.log("검색한 글 목록(Content.js) :", resp.data);
         setListData(resp.data);
 
         setKindOfSearch([]);
         searchOne.current.value = null;
       })
       .catch((error) => {
-        console.log("검색 목록 가져오기 실패(Content.js) :", error);
+        // console.log("검색 목록 가져오기 실패(Content.js) :", error);
       });
   };
 
-  // const bookMarkList = async () => {
-  //   let token = sessionStorage.getItem("token");
-
-  //   await axios
-  //     .get("/aamurest/bbs/bookmark/list", {
-  //       headers: {
-  //         Authorization: `Bearer ${token}`,
-  //       },
-  //     })
-  //     .then((resp) => {
-  //       // console.log("북마크 목록 데이터 (Content.js) :", resp.data);
-  //       setMyBookMark(resp.data);
-  //     })
-  //     .catch((error) => {
-  //       // console.log("북마크 목록 실패 (Content.js) :", error);
-  //     });
-  // };
-
-  // function isBook(e) {
-  //   if (e.rbn === detailOne.rbn) {
-  //     return true;
-  //   }
-  // }
-  // function isBookBool(e) {
-  //   if (e.bookmark === false) {
-  //     return true;
-  //   }
-  // }
-  // const bookTF = myBookMark.find(isBook);
-  // const bookBool = myBookMark.find(isBookBool);
-
-  // let book;
-  // let bookbol;
-  // if (bookTF != undefined) {
-  //   book = bookTF.rbn;
-  // }
-  // if (bookTF != undefined) {
-  //   bookbol = bookBool.bookmark;
-  // }
-  // console.log("bookbol find:", bookbol);
   return (
     <div className="Cards_minCon">
       <div className="card__container_minCon">

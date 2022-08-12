@@ -58,7 +58,6 @@ public class BBSAdminController {
 		int affected=bbsAdminService.bbsAdminDelete(map);
 		//데이터 반환
 		Map resultMap = new HashMap();
-		System.out.println("affected:"+affected);
 		if(affected==1) resultMap.put("isSuccess", true);
 		else resultMap.put("isSuccess", false);
 		return resultMap;
@@ -92,7 +91,6 @@ public class BBSAdminController {
 		int affected=bbsAdminService.reviewAdminDelete(map);
 		//데이터 반환
 		Map resultMap = new HashMap();
-		System.out.println("affected:"+affected);
 		if(affected==1) resultMap.put("isSuccess", true);
 		else resultMap.put("isSuccess", false);
 		return resultMap;
@@ -105,7 +103,6 @@ public class BBSAdminController {
 	public String bbsStatistic(Model model, HttpServletRequest req) {
 		Map map = bbsAdminService.bbsTotal();
 		//월별 게시물 수
-		System.out.println("bbsMonthTotal:"+map.get("bbsMonthTotal"));
 		model.addAttribute("bbsMonthTotal",map.get("bbsMonthTotal"));
 		//베스트 글 
 		List<BBSAdminDTO> lists = BBSAdminService.bbsBestList();
