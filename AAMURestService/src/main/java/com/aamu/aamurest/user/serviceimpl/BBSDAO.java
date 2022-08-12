@@ -84,8 +84,6 @@ public class BBSDAO {
 	
 	//글 검색 목록
 	public List<String> bbsSearchList(Map map) {
-		System.out.println("dao map:"+map.get("title"));
-		System.out.println("dao map:"+map.get("id"));
 		return template.selectList("bbsSearchList",map);
 	}
 

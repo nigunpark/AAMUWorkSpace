@@ -134,7 +134,6 @@ public class BBSAdminServiceImpl implements BBSAdminService{
 	public int reviewAdminDelete(Map map) {
 		int affected=0;
 		List<String> rnolists=(List<String>)map.get("rno");
-		System.out.println(rnolists);
 		for (String rno : rnolists) {
 			Map rnoMap = new HashMap();
 			rnoMap.put("rno", rno);
