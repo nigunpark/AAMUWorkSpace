@@ -73,12 +73,10 @@ public class BBSServiceImpl implements BBSService{
 	public boolean bbsBookmark(Map map) {
 	int bbsSelectBookmarkAffected=dao.bbsSelectBookmark(map);
 	if(bbsSelectBookmarkAffected==0) {
-		System.out.println("북마크를 성공");
 		if(dao.bbsBookmarkInsert(map)==1) return true;
 		else return false;
 	}
 	else { //다시 누를 경우 == 북마크 취소
-		System.out.println("북마크를 삭제");
 		if(dao.bbsBookmarkDelete(map)==1) return false;
 		else return true;
 		}
@@ -117,13 +115,11 @@ public class BBSServiceImpl implements BBSService{
 		int photoAffected=0;
 		List<String> lists= (List<String>) map.get("photolist");
 
-		System.out.println("(bbsServiceImpl)lists:"+lists);
 		for(String photo:lists) {
 			Map photomap = new HashMap();
 			photomap.put("rbn", map.get("rbn"));
 			photomap.put("photo", photo);
 			photoAffected+=dao.photoInsert(photomap);
-			System.out.println("(CommuServiceImpl)photoAffected:"+photoAffected);
 		}
 		if(bbsaffected==1 && photoAffected==((List)map.get("photolist")).size())
 			return 1;
@@ -161,13 +157,11 @@ public class BBSServiceImpl implements BBSService{
 		int photoAffected=0;
 		if(map.get("photolist")!=null) {
 			List<String> lists= (List<String>) map.get("photolist");
-			System.out.println("(bbsServiceImpl)lists:"+lists);
 			for(String photo:lists) {
 				Map photomap = new HashMap();
 				photomap.put("rbn", map.get("rbn"));
 				photomap.put("photo", photo);
 				photoAffected+=dao.photoInsert(photomap);
-				System.out.println("(CommuServiceImpl)photoAffected:"+photoAffected);
 			}
 			if(bbsaffected==1 && photoAffected==((List)map.get("photolist")).size())
 				return 1;
