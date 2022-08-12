@@ -12,9 +12,19 @@ const Search = ({
 }) => {
   const [searchWord, setSearchWord] = useState("");
   let searchRef = useRef();
+  let selectRef = useRef();
   return (
     <>
       <div className="search__container">
+        <select
+          ref={selectRef}
+          onChange={() => {
+            console.log(selectRef.current.value);
+          }}
+        >
+          <option>장소</option>
+          <option>주소</option>
+        </select>
         <input
           ref={searchRef}
           type="text"
@@ -24,7 +34,7 @@ const Search = ({
             if (e.key === "Enter") {
               setShowSearchedData(true);
               setSearchWord(e.target.value);
-              searching(e, areaCode, forSearchTypeId, searchWord, setSearchedData);
+              searching(selectRef, areaCode, forSearchTypeId, searchRef, setSearchedData);
             }
           }}
           onChange={(e) => {
@@ -39,7 +49,7 @@ const Search = ({
   );
 };
 
-function searching(e, areaCode, forSearchTypeId, searchWord, setSearchedData) {
+function searching(selectRef, areaCode, forSearchTypeId, searchRef, setSearchedData) {
   // if (e.key === "Enter") {
   let token = sessionStorage.getItem("token");
   axios
@@ -48,9 +58,10 @@ function searching(e, areaCode, forSearchTypeId, searchWord, setSearchedData) {
         Authorization: `Bearer ${token}`,
       },
       params: {
+        searchColumn: selectRef.current.value,
         areacode: areaCode,
         contenttypeid: forSearchTypeId,
-        searchword: searchWord,
+        searchword: searchRef.current.value,
       },
     })
     .then((resp) => {
