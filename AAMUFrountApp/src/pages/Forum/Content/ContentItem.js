@@ -50,7 +50,7 @@ const ContentItem = ({ detail, setDetailOne, setIsOpen }) => {
                     style={{ marginRight: "3px", color: "gold" }}
                   />
                   <span style={{ fontWeight: "bold" }}>
-                    {detail.reviewList.length === 0 ? 0 : star}
+                    {detail.reviewList.length === 0 ? "리뷰가 없어요" : star}
                   </span>
                 </div>
                 <span className="idSpan_minCon">{detail.id}님의 plan</span>

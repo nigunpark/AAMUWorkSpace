@@ -58,7 +58,7 @@ public class CommuController {
 	public List<CommuDTO> commuSelectList(@RequestParam Map map, HttpServletRequest req){
 		//검색할 때는 맵으로 써치워드 써치컬럼을 받고, id(로그인한 사람의 id)는 isLike때문에 받는거다. lno는 dto에서 뽑아온다
 		//cid가 넘어오면 마이페이지 id에 따른 글 뿌려주기
-		
+		System.out.println("이미지 태그 map:"+map);
 		//list=글 목록들
 		List<CommuDTO> list = commuService.commuSelectList(map);
 		if(list.isEmpty()) { //********************여기 처리!! 컨텐트id가 넘어왔는데 게시글이 없을 때 에러 처리 하기
