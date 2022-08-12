@@ -104,7 +104,9 @@ const SavePlan = ({ setSavePlan, fromWooJaeData, currPosition }) => {
             onClick={(e) => {
               e.stopPropagation();
               savePlan(reduxState, currPosition, fromWooJaeData, navigate);
-              handleExcel(fromWooJaeData, reduxState, currPosition);
+              setTimeout(() => {
+                handleExcel(fromWooJaeData, reduxState, currPosition);
+              }, 500);
             }}
           >
             <FontAwesomeIcon icon={faFileExcel} className="savePlan__icon" />
@@ -216,8 +218,6 @@ const handleExcel = async (fromWooJaeData, reduxState, currPosition) => {
     let dayData = xlData.filter((val) => {
       return val.day === i + 1;
     });
-    console.log("dayData", dayData);
-    console.log("dayWholeBb", dayWholeBb);
     let data = [];
     dayWholeBb.forEach((val, idx) => {
       data.push({
