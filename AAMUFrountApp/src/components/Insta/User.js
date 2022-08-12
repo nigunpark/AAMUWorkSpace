@@ -3,7 +3,7 @@ import styled from "styled-components";
 import NotificationModal from "./ModalGroup/Notification";
 import SearchModal from "./ModalGroup/Search/SearchUser";
 import WriteModal from "./ModalGroup/Upload/Upload";
-
+import $ from "jquery";
 import { confirmAlert } from "react-confirm-alert";
 import axios from "axios";
 import { Link } from "@mui/material";
@@ -36,11 +36,11 @@ function User({
   const [square, setsquare] = useState(false);
   const [usefollow, setusefollow] = useState(false);
   const [tag, settag] = useState(false);
+  const [tagsearch, settagsearch] = useState('');
   const [title, settitle] = useState([]);
-  const [tagpop, settagpop] = useState([{
-    text: '',
-    value: 0,
-  }]);
+  const [tagcl, settagcl] = useState([]);
+  const [tagpop, settagpop] = useState([]);
+
   const [searchText, setsearchText] = useState(false);
   let navigater = useNavigate();
 
@@ -56,13 +56,13 @@ function User({
           Authorization: `Bearer ${token}`,
         },
         params: {
-          searchColumn: searchb,
+          searchColumn: tagsearch,
           searchWord: inputValue,
         },
       })
       .then((resp) => {
         console.log(resp.data);
-        setSearchb(resp.data);
+        setSearchb(resp.data)
 
         navigater("/Insta/searchList");
       })
@@ -105,7 +105,7 @@ function User({
           Authorization: `Bearer ${token}`,
         },
         params: {
-          searchColumn: searchb,
+          searchColumn: tagsearch,
           searchWord: inputValue,
         },
       })
@@ -118,6 +118,8 @@ function User({
       });
   }
 
+  useEffect(() => {}, [tag]);
+
   function popTag() {
     //백이랑 인스타 리스드를 뿌려주기 위한 axios
     let token = sessionStorage.getItem("token");
@@ -128,9 +130,8 @@ function User({
         },
       })
       .then((resp) => {
+        settagpop(resp.data);
         console.log(resp.data);
-        // settagpop(resp.data);
-        // settagpop({ TITLE: val.TITLE, CONTENTID: val.CONTENTID });
       })
       .catch((error) => {
         console.log(error);
@@ -166,7 +167,7 @@ function User({
     <div>
       {showChat && <Chat showChat={showChat} prevChats={prevChats} />}
       <div className="userSearch">
-        <SearchSelect setSearchb={setSearchb} />
+        <SearchSelect settagsearch={settagsearch} />
         <div
           className="search"
           onClick={() => {
@@ -200,13 +201,21 @@ function User({
       </div>
       <BUTTON
         onClick={() => {
-          popTag()
+          popTag();
           settag(!tag);
+          // $(".select").val("tname");
         }}
       >
         실시간 인기 태그
       </BUTTON>
-      {tag && <Tag tagpop={tagpop}/>}
+      {tag && (
+        <Tag
+          tagpop={tagpop}
+          setinputValue={setinputValue}
+          inputValue={inputValue}
+          setSearchb={setSearchb}
+        />
+      )}
       <div className="user">
         <div className="userps">
           <img

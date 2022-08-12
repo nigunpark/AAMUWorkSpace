@@ -40,8 +40,8 @@ function Comment({
 
   const [emoji, setemoji] = useState(false);
   const onEmojiClick = (event, emojiObject) => {
-    // setChosenEmoji(emojiObject);
-    replyRef.current.value = emojiObject.emoji;
+    // setChosenEmoji(emojiObject); 
+    replyRef.current.value =  replyRef.current.value+emojiObject.emoji;
   };
 
   let [isValid, setisValid] = useState(false);
@@ -249,7 +249,7 @@ function Comment({
                   <p className="user-id">
                     <strong>{val.id}</strong>
                   </p>
-                  <a href={`https://map.kakao.com/?q=${val.title}`}>
+                  <a href={`https://map.kakao.com/?q=${val.title}`} target="_blank" >
                     <div
                       className="commentSearch_position"
                       style={{ marginLeft: "7px" }}

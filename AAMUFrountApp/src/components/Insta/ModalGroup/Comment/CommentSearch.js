@@ -36,7 +36,7 @@ function CommentSearch({ val, setForReRender, forReRender, setcommentModal, setc
   const [emoji, setemoji] = useState(false);
   const onEmojiClick = (event, emojiObject) => {
     // setChosenEmoji(emojiObject);
-    replyRef1.current.value = emojiObject.emoji;
+    replyRef1.current.value = replyRef1.current.value+emojiObject.emoji;
   };
 
   function menuModalRef(e) {
@@ -207,7 +207,7 @@ function CommentSearch({ val, setForReRender, forReRender, setcommentModal, setc
                   <p className="user-id">
                     <strong>{val.id}</strong>
                   </p>
-                  <a href={`https://map.kakao.com/?q=${position}`}>
+                  <a href={`https://map.kakao.com/?q=${position}`} target="_blank">
                     <div className="commentSearch_position" style={{ marginLeft: "7px" }}>
                       <FontAwesomeIcon icon={faLocationDot} />
                       <span style={{ fontSize: "14px" }}>{position}</span>
@@ -350,13 +350,14 @@ function CommentSearch({ val, setForReRender, forReRender, setcommentModal, setc
                               }}
                             ></i>
                           )} */}
-
+                          {val.id === sessionStorage.getItem('username') &&
                             <i
                               className="fa-regular fa-trash-can "
                               onClick={() => {
                                 deleteTwo(replyTwo, val.cno);
                               }}
                             ></i>
+                            }
                           </div>
                         </div>
 
@@ -425,7 +426,7 @@ function CommentSearch({ val, setForReRender, forReRender, setcommentModal, setc
                 <div className="emoji-all"
                   onClick={()=>{setisValid(true);  setemoji(false);}}>
                   <Picker
-                    onEmojiClick={onEmojiClick}
+                    onEmojiClick={onEmojiClick} 
                   />
                 </div>
               )}
