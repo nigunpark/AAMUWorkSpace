@@ -133,7 +133,6 @@ public class AdminCommuServiceImpl implements AdminCommuService {
 		int affected=0;
 		
 		List<String> cnolists=(List<String>)map.get("cno");
-		System.out.println(cnolists);
 		for(String cno:cnolists) {
 			Map cnoMap = new HashMap(); 
 			cnoMap.put("cno",cno); 

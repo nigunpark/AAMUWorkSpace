@@ -44,7 +44,6 @@ public class ThemeServiceImpl implements ThemeService{
 		PagingUtil.setMapForPaging(map);
 		//글 전체 목록 얻기
 		List lists= dao.themeSelectList(map);
-		//System.out.println("lists:"+lists.toString());
 		
 		String pagingString = PagingUtil.pagingBootStrapStyle(
 				Integer.parseInt(map.get(PagingUtil.TOTAL_COUNT).toString()), 

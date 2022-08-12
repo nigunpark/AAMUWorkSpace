@@ -57,7 +57,6 @@ public class BBSController {
 	@GetMapping("/bbs/SelectList")
 	public List<BBSDTO> bbsSelectList(@RequestParam Map map,HttpServletRequest req){
 		List<BBSDTO> list = bbsService.bbsSelectList(map);
-		System.out.println("list:"+list);
 		for(BBSDTO dto:list) {
 			//모든 사진 가져오기
 			dto.setPhoto(FileUploadUtil.requestFilePath(bbsService.bbsSelectPhotoList(dto.getRbn()), "/resources/bbsUpload", req));
@@ -71,7 +70,6 @@ public class BBSController {
 			}
 			dto.setRouteList(routelist);
 			map.put("rbn", dto.getRbn());
-			System.out.println("map: "+map);
 			dto.setBookmark(bbsService.checkBookmark(map));
 			
 		}
@@ -81,12 +79,9 @@ public class BBSController {
 	//글 하나 선택
 	@GetMapping("/bbs/SelectOne/{rbn}")
 	public BBSDTO bbsSelectOne(@RequestParam Map map,@PathVariable int rbn, HttpServletRequest req) {
-		System.out.println("선택:"+rbn);
 		BBSDTO dto=bbsService.bbsSelectOne(rbn);
 		
-		System.out.println("머가나오나:"+dto);
 		//모든 리뷰 가져오기
-		System.out.println("리뷰리스트에 뭐가 있을까?"+bbsService.reviewSelectList(rbn));
 		dto.setReviewList(bbsService.reviewSelectList(rbn));
 		//모든 사진 가져오기
 		//dto.setPhoto(bbsService.bbsSelectPhotoList(rbn));
@@ -99,12 +94,10 @@ public class BBSController {
 	//글 등록 <성공>
 	@PostMapping("/bbs/edit")
 	public Map bbsInsert(@RequestParam List<MultipartFile> multifiles, @RequestParam Map map, HttpServletRequest req) {
-		System.out.println("등록:"+map);
 		//서버의 물리적 경로 얻기
 		String path=req.getSession().getServletContext().getRealPath("/resources/bbsUpload");
 		try {
 			List<String> uploads= FileUploadUtil.fileProcess(multifiles, path);
-			System.out.println("(bbsController)uploads:"+uploads);
 			map.put("photolist", uploads);
 		} catch (IllegalStateException | IOException e) {e.printStackTrace();}
 
@@ -118,18 +111,15 @@ public class BBSController {
 
 	//글 수정 <성공>
 	@PostMapping("/bbs/edit/photo")
-    public Map bbsUpdate(@RequestParam List<MultipartFile> multifiles, @RequestParam Map map, HttpServletRequest req) {
-		System.out.println("글 수정:"+map);	
+    public Map bbsUpdate(@RequestParam List<MultipartFile> multifiles, @RequestParam Map map, HttpServletRequest req) {	
 		if(multifiles!=null) {
 			String path=req.getSession().getServletContext().getRealPath("/resources/bbsUpload");
 			try {
 				List<String> uploads= FileUploadUtil.fileProcess(multifiles, path);
-				System.out.println("(bbsController)uploads:"+uploads);
 				map.put("photolist", uploads);
 			} catch (IllegalStateException | IOException e) {e.printStackTrace();}
 
 		}
-		System.out.println("map:"+map);
 		int bbsUpdateAffected=bbsService.bbsUpdate(map);
 		Map resultMap = new HashMap<> ();
 		if(bbsUpdateAffected==1)
@@ -157,7 +147,6 @@ public class BBSController {
 	public Map bbsBookmark(@RequestParam Map map) { //id, rbn
 		boolean affected=bbsService.bbsBookmark(map);
 		Map resultMap = new HashMap();
-		System.out.println("북마크 여부:"+map);
 		if(affected) { //true
 			resultMap.put("bookmark", true);
 			resultMap.put("rbn", map.get("rbn"));
@@ -173,7 +162,6 @@ public class BBSController {
 	@GetMapping("/bbs/bookmark/list")
 	public List<BBSDTO> bbsBookmarkList(@RequestParam Map map, HttpServletRequest req){//id
 		List<BBSDTO> list = bbsService.bbsBookmarkList(map);
-		System.out.println("북마크 목록:"+list);
 		for(BBSDTO dto:list) {
 			//모든 사진 가져오기
 			dto.setPhoto(FileUploadUtil.requestFilePath(bbsService.bbsSelectPhotoList(dto.getRbn()), "/resources/bbsUpload", req));
@@ -198,7 +186,6 @@ public class BBSController {
 	public List<BBSDTO> bbsSearchList(@RequestParam Map mapp,HttpServletRequest req){
 		List<BBSDTO> list = bbsService.bbsSelectList(mapp);
 		Map map = new HashMap();
-		System.out.println("list:"+list);
 		for(BBSDTO dto:list) {
 			//모든 사진 가져오기
 			dto.setPhoto(FileUploadUtil.requestFilePath(bbsService.bbsSelectPhotoList(dto.getRbn()), "/resources/bbsUpload", req));
@@ -223,7 +210,6 @@ public class BBSController {
 	//평균 평점 반영 <성공>
 	@PostMapping("/review/edit")
 	public Map reviewInsert(@RequestBody Map map) {
-		System.out.println("map이 넘어오나:"+map);
 		int rbn = Integer.parseInt(map.get("rbn").toString());
 		List<ReviewDTO> list = bbsService.reviewSelectList(rbn);
 		double total = Double.parseDouble(map.get("rate").toString());
