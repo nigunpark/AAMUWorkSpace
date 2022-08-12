@@ -21,7 +21,8 @@ const ChatBot = ({ showChatBot, chatArr }) => {
   }
   console.log("chats", chats);
   useEffect(() => {
-    chatBotRef.current.scrollIntoView({ behavior: "smooth" });
+    console.log(1);
+    chatBotRef.current.scrollIntoView();
   }, [chats]);
   return (
     <Container>
