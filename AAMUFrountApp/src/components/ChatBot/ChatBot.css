@@ -24,7 +24,8 @@
   margin-right: 2px;
 }
 .chatBotContent {
-  overflow-y: auto;
+  /* overflow-y: auto; */
+  overflow-y: scroll;
   width: 100%;
   height: auto;
   padding: 5px;
