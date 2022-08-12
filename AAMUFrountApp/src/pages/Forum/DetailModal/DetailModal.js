@@ -48,7 +48,8 @@ const DetailModal = ({
   const [myBookMark, setMyBookMark] = useState(false);
 
   const [roomno, setRoomno] = useState(0);
-  // const [rno, setRno] = useState(0);
+
+  let loginId = sessionStorage.getItem("username");
 
   let dispatch = useDispatch();
   useEffect(() => {
@@ -453,7 +454,7 @@ const DetailModal = ({
                           </span>
                         </div>
                         <div onClick={bookMarkOne}>
-                          {myBookMark == true ? (
+                          {userId === loginId ? null : myBookMark == true ? (
                             <FontAwesomeIcon
                               icon={faBookmark}
                               className="detail__plan-bookMark"
