@@ -33,6 +33,7 @@ function FeedSetting({
   const [chosenEmoji, setChosenEmoji] = useState(null);
   const [feedComments, setfeedComments] = useState([]);
   const [editModal, seteditModal] = useState(false);
+  const [prophoto, setprophoto] = useState(false);
   const [comeditModal, setcomeditModal] = useState(false);
   const [modalShow, setModalShow] = useState(false);
   const [profileModal, setprofileModal] = useState(false);
@@ -200,10 +201,11 @@ function FeedSetting({
                   setprofileModal(false);
                 }}
               >
-                <Profile val={val}></Profile>
+                <Profile val={val} />
               </div>
             )}
           </div>
+          
           <div className="dot">
             <i
               className="fa-solid fa-ellipsis fa-2x"
@@ -302,6 +304,22 @@ function FeedSetting({
               )}
               {comeditModal && (
                 <Edit val={val} setlist={setlist} seteditModal={seteditModal} />
+              )}
+              {commentModal && (
+                <Comment
+                  onClick={() => {
+                    setcommentModal(false);
+                  }}
+                  setcommentModal={setcommentModal}
+                  seteditModal={seteditModal}
+                  val={val}
+                  page={page}
+                  list={list}
+                  setloading={setloading}
+                  forReRender={forReRender}
+                  setForReRender={setForReRender}
+                  setlist={setlist}
+                />
               )}
             </div>
             <div
