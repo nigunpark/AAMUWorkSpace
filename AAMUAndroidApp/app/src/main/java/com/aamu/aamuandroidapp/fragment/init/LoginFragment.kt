@@ -111,7 +111,7 @@ class LoginFragment : Fragment() {
     fun LoginOnboarding() {
         val coroutineScope = rememberCoroutineScope()
         val viewModel: LoginViewModel = viewModel(
-            factory = LoginViewModelFactory()
+            factory = LoginViewModelFactory(LocalContext.current)
         )
         val token by viewModel.token.observeAsState()
         val islogin by viewModel.islogin.observeAsState()
@@ -123,6 +123,7 @@ class LoginFragment : Fragment() {
             viewModel.isok()
             if(islogin == true) {
                 navController.navigate(R.id.action_loginFragment_to_mainFragment)
+                viewModel.islogin.value = false
             }
         }
         else {

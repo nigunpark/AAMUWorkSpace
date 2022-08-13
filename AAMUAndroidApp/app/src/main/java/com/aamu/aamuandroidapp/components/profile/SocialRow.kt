@@ -29,16 +29,16 @@ fun SocialRow(userGram: List<AAMUGarmResponse>?) {
         ) {
 
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Text( "${userGram?.size}", style = typography.h6, color = orange )
+                Text( "${userGram?.size ?: 0}", style = typography.h6, color = orange )
                 Text( "글  수", style = typography.h6, color = orange )
             }
 
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Text( "${userGram?.get(0)?.followercount}", style = typography.h6, color = orange )
+                Text( "${userGram?.getOrNull(0)?.followercount ?: 0}", style = typography.h6, color = orange )
                 Text( "팔로워", style = typography.h6, color = orange )
             }
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Text( "${userGram?.get(0)?.followingcount}", style = typography.h6, color = orange )
+                Text( "${userGram?.getOrNull(0)?.followingcount ?: 0}", style = typography.h6, color = orange )
                 Text( "팔로잉", style = typography.h6, color = orange )
             }
         }

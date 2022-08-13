@@ -61,7 +61,7 @@ fun LoginScreen(loginfail : Boolean,onLoginSuccess: () -> Unit) {
         val emailInteractionState = remember { MutableInteractionSource() }
 
         val viewModel: LoginViewModel = viewModel(
-            factory = LoginViewModelFactory()
+            factory = LoginViewModelFactory(LocalContext.current)
         )
 
         LazyColumn(

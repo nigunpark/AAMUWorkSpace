@@ -55,8 +55,8 @@ fun MoreInfoSection(viewModel: ProfileScreenViewModel) {
         modifier = Modifier.padding(start = 8.dp, top = 16.dp)
     )
     Divider(modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp))
-    if(plannerSelectList.isNotEmpty()) {
-        LazyRow {
+    LazyRow(modifier = Modifier.height(150.dp)) {
+        if(plannerSelectList.isNotEmpty()) {
             items(plannerSelectList) { place ->
                 Surface(elevation = 5.dp) {
                     Box(
@@ -106,8 +106,8 @@ fun MoreInfoSection(viewModel: ProfileScreenViewModel) {
         modifier = Modifier.padding(start = 8.dp, top = 16.dp)
     )
     Divider(modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp))
-    if(bookMarkSelectList.isNotEmpty()) {
-        LazyRow {
+    LazyRow(modifier = Modifier.height(150.dp)) {
+        if(bookMarkSelectList.isNotEmpty()) {
             items(bookMarkSelectList) { place ->
                 Surface(elevation = 5.dp) {
                     Box(modifier = Modifier.clip(RoundedCornerShape(5.dp))) {

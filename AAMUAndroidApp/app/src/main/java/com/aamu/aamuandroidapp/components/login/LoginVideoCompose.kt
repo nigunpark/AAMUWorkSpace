@@ -90,7 +90,7 @@ fun LoginVideo(videoUri: Uri,loginfail : Boolean,onLoginSuccess: () -> Unit) {
     val passwordInteractionState = remember { MutableInteractionSource() }
 
     val viewModel: LoginViewModel = viewModel(
-        factory = LoginViewModelFactory()
+        factory = LoginViewModelFactory(context)
     )
 
     var passwordVisualTransformation by remember {

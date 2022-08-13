@@ -30,12 +30,12 @@ const Navbar = ({ scrollNav, whereUrl, noti, setNoti }) => {
         }
       >
         <div className="navbar-container">
-          <Link to="/">
+          <NavLink to="/">
             <div>
               <img className="logoImg" src="/images/aamuLogo.png" />
             </div>
             {/* </div> */}
-          </Link>
+          </NavLink>
           <ul className={click ? "nav-menu active" : "nav-menu"}>
             <li>
               <NavLink

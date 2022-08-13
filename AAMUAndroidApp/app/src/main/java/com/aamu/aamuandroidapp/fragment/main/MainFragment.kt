@@ -95,7 +95,6 @@ class MainFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        viewModel.subNotification()
         return binding.root
     }
 
@@ -127,8 +126,13 @@ class MainFragment : Fragment() {
         }
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
+    override fun onResume() {
+        super.onResume()
+        viewModel.subNotification()
+    }
+
+    override fun onStop() {
+        super.onStop()
         viewModel.unSubNotification()
     }
 

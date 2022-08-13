@@ -17,18 +17,21 @@ import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.launch
 
 @Suppress("UNCHECKED_CAST")
-class LoginViewModelFactory() : ViewModelProvider.Factory{
+class LoginViewModelFactory(val context: Context) : ViewModelProvider.Factory{
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return LoginViewModel() as T
+        return LoginViewModel(context) as T
     }
 }
 
-class LoginViewModel() : ViewModel(){
+class LoginViewModel(context: Context) : ViewModel(){
 
     private val aamuRepository : AAMURepository = AAMUDIGraph.createAAMURepository()
 
     val token = MutableLiveData<String?>(getToken())
     val islogin = MutableLiveData(false)
+
+    val context = context
+
     fun doLogin(username : String, password : String) = viewModelScope.launch{
         val retoken = aamuRepository.dologin(username = username, password = password)
         retoken?.let {
@@ -47,7 +50,7 @@ class LoginViewModel() : ViewModel(){
             token.value = it
             FirebaseMessaging.getInstance().token.addOnSuccessListener {
                 viewModelScope.launch{
-                    val preferences : SharedPreferences = contextL.getSharedPreferences("usersInfo", Context.MODE_PRIVATE)
+                    val preferences : SharedPreferences = context.getSharedPreferences("usersInfo", Context.MODE_PRIVATE)
                     val id : String? = preferences.getString("id",null)
                     aamuRepository.postToken(id!!,it)
                 }
@@ -59,10 +62,32 @@ class LoginViewModel() : ViewModel(){
         Log.i("com.aamu.aamu",token.value.toString())
         if(aamuRepository.isok()){
             islogin.value = true
+            FirebaseMessaging.getInstance().token.addOnSuccessListener {
+                viewModelScope.launch{
+                    val preferences : SharedPreferences = context.getSharedPreferences("usersInfo", Context.MODE_PRIVATE)
+                    val id : String? = preferences.getString("id",null)
+                    aamuRepository.postToken(id!!,it)
+                }
+            }
         }
         else{
             token.value = null
+            delToken()
         }
+    }
 
+    fun delToken(){
+        viewModelScope.launch{
+            val preferences : SharedPreferences = context.getSharedPreferences("usersInfo", Context.MODE_PRIVATE)
+            val userid : String? = preferences.getString("id",null)
+            if (userid != null) {
+                aamuRepository.delToken(userid)
+                    .collect{
+                        if(it.isNotEmpty()){
+                            context.getSharedPreferences("usersInfo",0).edit().clear().commit();
+                        }
+                    }
+            }
+        }
     }
 }

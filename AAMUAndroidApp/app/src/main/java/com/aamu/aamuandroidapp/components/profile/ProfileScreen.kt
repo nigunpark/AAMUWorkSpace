@@ -88,7 +88,7 @@ fun ProfileScreen(navController: NavController) {
 
             val error by viewModel.errorLiveData.observeAsState()
 
-            if(userinfo?.id != null && userGram.isNotEmpty() ) {
+            if(userinfo?.id != null) {
                 val scrollState = rememberScrollState(0)
                 TopBackground()
                 Column(
