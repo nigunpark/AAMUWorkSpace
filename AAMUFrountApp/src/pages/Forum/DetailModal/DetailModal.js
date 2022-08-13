@@ -429,8 +429,9 @@ const DetailModal = ({
                           style={{ marginRight: "3px", color: "gold" }}
                         />
                         <span style={{ fontWeight: "bold" }}>
-                          {/* {detailOne.rateavg === null ? 0 : detailOne.rateavg} */}
-                          {detailOne.reviewList.length === 0 ? 0 : stars}
+                          {detailOne.rateavg === 0
+                            ? "리뷰가 없어요"
+                            : detailOne.rateavg}
                         </span>
                       </div>
                       <div className="detail__plan-underTitle">

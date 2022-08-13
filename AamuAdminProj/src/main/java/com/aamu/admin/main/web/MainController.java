@@ -137,13 +137,13 @@ public class MainController {
 				+ "MobileApp=AppTest&MobileOS=ETC&arrange=B&"
 				+ "contentTypeId="+contentTypeId+"&"
 						+ "areaCode="+area+"&"
-								+ "listYN=Y";
+								+ "listYN=Y&_type=json";
 		if(contentTypeId.equals("15")) {
 			Date current = new Date();
 			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
 			String currentTime = dateFormat.format(current);
 			uri ="http://api.visitkorea.or.kr/openapi/service/rest/KorService/searchFestival?serviceKey="+apikey+"&numOfRows=500"
-					+ "&pageNo=1&MobileOS=ETC&MobileApp=AppTest&arrange=B&listYN=Y&areaCode="+area+"&eventStartDate="+currentTime;
+					+ "&pageNo=1&MobileOS=ETC&MobileApp=AppTest&arrange=B&listYN=Y&areaCode="+area+"&eventStartDate="+currentTime+"&_type=json";
 		}
 		ResponseEntity<Places> responseEntity = 
 				restTemplate.exchange(uri, HttpMethod.GET,
@@ -189,44 +189,44 @@ public class MainController {
 			
 			switch (contentTypeId) {
 			case "12":
-				dto.setResttime(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getRestdate());
-				dto.setPlaytime(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getUsetime());
-				dto.setTel(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getInfocenter());
-				dto.setPark(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getParking());
+				dto.setResttime(responseEntity2.getBody().getResponse().getBody().getItems().getItem().get(0).getRestdate());
+				dto.setPlaytime(responseEntity2.getBody().getResponse().getBody().getItems().getItem().get(0).getUsetime());
+				dto.setTel(responseEntity2.getBody().getResponse().getBody().getItems().getItem().get(0).getInfocenter());
+				dto.setPark(responseEntity2.getBody().getResponse().getBody().getItems().getItem().get(0).getParking());
 				break;
 			case "15":
 				if(dto.getTel()==null) {
-					dto.setTel(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getSponsor1tel());
+					dto.setTel(responseEntity2.getBody().getResponse().getBody().getItems().getItem().get(0).getSponsor1tel());
 					if(dto.getTel()==null) {
-						dto.setTel(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getSponsor2tel());
+						dto.setTel(responseEntity2.getBody().getResponse().getBody().getItems().getItem().get(0).getSponsor2tel());
 					}
 				}
-				dto.setEventtime(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getPlaytime());
-				dto.setCharge(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getUsetimefestival());
+				dto.setEventtime(responseEntity2.getBody().getResponse().getBody().getItems().getItem().get(0).getPlaytime());
+				dto.setCharge(responseEntity2.getBody().getResponse().getBody().getItems().getItem().get(0).getUsetimefestival());
 
 				break;
 			case "32":
-				dto.setTel(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getReservationlodging());
-				dto.setCheckin(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getCheckintime());
-				dto.setCheckout(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getCheckouttime());
-				dto.setUrl(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getReservationurl());
+				dto.setTel(responseEntity2.getBody().getResponse().getBody().getItems().getItem().get(0).getReservationlodging());
+				dto.setCheckin(responseEntity2.getBody().getResponse().getBody().getItems().getItem().get(0).getCheckintime());
+				dto.setCheckout(responseEntity2.getBody().getResponse().getBody().getItems().getItem().get(0).getCheckouttime());
+				dto.setUrl(responseEntity2.getBody().getResponse().getBody().getItems().getItem().get(0).getReservationurl());
 				break;
 			case "39":
 				
-				dto.setTel(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getReservationfood());
-				if(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getReservationfood()==null) {
-					dto.setTel(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getInfocenter());
+				dto.setTel(responseEntity2.getBody().getResponse().getBody().getItems().getItem().get(0).getReservationfood());
+				if(responseEntity2.getBody().getResponse().getBody().getItems().getItem().get(0).getReservationfood()==null) {
+					dto.setTel(responseEntity2.getBody().getResponse().getBody().getItems().getItem().get(0).getInfocenter());
 				}
-				dto.setPlaytime(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getOpentimefood());
-				dto.setResttime(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getRestdatefood());
-				dto.setMenu(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getTreatmenu());
-				dto.setPark(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getParkingfood());
+				dto.setPlaytime(responseEntity2.getBody().getResponse().getBody().getItems().getItem().get(0).getOpentimefood());
+				dto.setResttime(responseEntity2.getBody().getResponse().getBody().getItems().getItem().get(0).getRestdatefood());
+				dto.setMenu(responseEntity2.getBody().getResponse().getBody().getItems().getItem().get(0).getTreatmenu());
+				dto.setPark(responseEntity2.getBody().getResponse().getBody().getItems().getItem().get(0).getParkingfood());
 				break;
 			case "28":
-				dto.setTel(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getInfocenterleports());
-				dto.setPark(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getParkingleports());
-				dto.setPlaytime(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getUsetimeleports());
-				dto.setResttime(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getRestdateleports());
+				dto.setTel(responseEntity2.getBody().getResponse().getBody().getItems().getItem().get(0).getInfocenterleports());
+				dto.setPark(responseEntity2.getBody().getResponse().getBody().getItems().getItem().get(0).getParkingleports());
+				dto.setPlaytime(responseEntity2.getBody().getResponse().getBody().getItems().getItem().get(0).getUsetimeleports());
+				dto.setResttime(responseEntity2.getBody().getResponse().getBody().getItems().getItem().get(0).getRestdateleports());
 				break;
 			}
 			
@@ -311,7 +311,6 @@ public class MainController {
 			if(responseEntity2.getBody().getResponse().getBody()!=null) {
 				
 				
-				dto.setUrl(responseEntity2.getBody().getResponse().getBody().getItems().getItem().getHomepage());
 				
 				
 			}

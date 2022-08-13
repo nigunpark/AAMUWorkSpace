@@ -178,7 +178,7 @@
     		if(confirm("등록 하시겠습니까?")){
     			//var jsonString = JSON.stringify({themename : themename},{multifiles : themeimg})
         		$.ajax({
-           			url:"http://localhost:8080/aamurest/theme/insert",
+           			url:"http://192.168.0.22:8080/aamurest/theme/insert",
            			type:"post",
            			enctype: 'multipart/form-data',
            			data: formData,

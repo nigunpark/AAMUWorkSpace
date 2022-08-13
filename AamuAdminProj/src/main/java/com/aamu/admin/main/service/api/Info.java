@@ -1,5 +1,7 @@
 package com.aamu.admin.main.service.api;
 
+import java.util.List;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -31,7 +33,7 @@ public Response response;
 	@Getter
 	@Setter
 	public static class Items{
-		public Item item;
+		public List<Item> item;
 	}
 	@Getter
 	@Setter

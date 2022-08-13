@@ -262,8 +262,9 @@ public class MainServiceImpl implements MainService{
 ///////////////////////////////////////////////////search place impl
 	@Override
 	public List<AttractionDTO> searchTwoPlace(Map map,HttpServletRequest req) {
-		if(map.get("searchColumn").toString().equals("주소")) map.put("searchColumn", "addr");
-		else if(map.get("searchColumn").toString().equals("장소")) map.put("searchColumn", "title");
+		System.out.println("검색 맵이다:"+map);
+		if(map.get("searchColumn").toString().equals("주소")) map.put("searchcolumn", "addr");
+		else if(map.get("searchColumn").toString().equals("장소")) map.put("searchcolumn", "title");
 		switch(map.get("contenttypeid").toString()) {
 		case "12":
 		case "28":

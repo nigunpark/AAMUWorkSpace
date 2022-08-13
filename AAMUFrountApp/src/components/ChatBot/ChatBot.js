@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./ChatBot.css";
 import styled, { keyframes } from "styled-components";
 import axios from "axios";
@@ -8,6 +8,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 // let chatArr = [];
 const ChatBot = ({ showChatBot, chatArr }) => {
   let inputRef = useRef();
+  let chatBotRef = useRef();
   let dispatch = useDispatch();
   let navigate = useNavigate();
   const [chats, setChats] = useState([]);
@@ -19,12 +20,16 @@ const ChatBot = ({ showChatBot, chatArr }) => {
     }
   }
   console.log("chats", chats);
+  useEffect(() => {
+    console.log(1);
+    chatBotRef.current.scrollIntoView();
+  }, [chats]);
   return (
     <Container>
       <Content>
         <Title>챗봇에게 무엇이든 물어보세요</Title>
         <Body>
-          <div className="chatBotContent">
+          <div className="chatBotContent" ref={chatBotRef}>
             {chats.map((val, i) => {
               return (
                 <p className={val.bool ? "chatBotBox bot" : "chatBotBox"}>
@@ -86,7 +91,8 @@ const ChatBot = ({ showChatBot, chatArr }) => {
               if (e.key === "Enter") {
                 chatArr.push({ message: inputRef.current.value, bool: false });
                 setChats(chatArr);
-                chatBotConn(inputRef, chats, setChats, chatArr);
+                chatBotConn(inputRef, chatBotRef, setChats, chatArr);
+
                 inputRef.current.value = "";
               }
             }}
@@ -96,7 +102,8 @@ const ChatBot = ({ showChatBot, chatArr }) => {
             onClick={() => {
               chatArr.push({ message: inputRef.current.value, bool: false });
               setChats(chatArr);
-              chatBotConn(inputRef, chats, setChats, chatArr);
+              chatBotConn(inputRef, chatBotRef, setChats, chatArr);
+              chatBotRef.current.scrollIntoView({ behavior: "smooth" });
               inputRef.current.value = "";
             }}
           >
@@ -107,9 +114,9 @@ const ChatBot = ({ showChatBot, chatArr }) => {
     </Container>
   );
 };
-function chatBotConn(inputRef, chats, setChats, chatArr) {
+async function chatBotConn(inputRef, chatBotRef, setChats, chatArr) {
   let token = sessionStorage.getItem("token");
-  axios
+  await axios
     .post(
       "/aamurest/main/chatbot",
       {
