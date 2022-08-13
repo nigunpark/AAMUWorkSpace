@@ -2,13 +2,13 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const Profile = ({ val }) => {
+const Profile = ({ val ,setprophoto, prophoto}) => {
   let [followw, setfolloww] = useState(false);
-
   let [userPro, setuserPro] = useState(false);
   let [photo, setphoto] = useState("");
   let [photo1, setphoto1] = useState("");
   let [photo2, setphoto2] = useState("");
+  let [photoModal, setphotoModal] = useState([]);
   let navigater = useNavigate();
 
   let [isFollower, setisFollower] = useState();
@@ -53,9 +53,7 @@ const Profile = ({ val }) => {
       })
       .then((resp) => {
         console.log(resp.data);
-        console.log(resp.data[0].totalcount);
-        console.log(resp.data[0].followercount);
-        console.log(resp.data[0].followingcount);
+        setphotoModal(resp.data);
         setisFollower(resp.data[0].isFollower);
         setuserPro(resp.data[0].totalcount);
         val.followercount = resp.data[0].followercount;
@@ -143,9 +141,8 @@ const Profile = ({ val }) => {
                     }}
                   />
                 </div>
-              </div>
+              </div >
               <div className="rowbutton">
-                <button className="message">메세지 보내기</button>
                 <button
                   className="following"
                   onClick={(e) => {
