@@ -16,6 +16,7 @@ import { addForChatInfo } from "../../redux/store";
 import FeeduserModal from "./ModalGroup/FeeduserModal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLocationDot } from "@fortawesome/free-solid-svg-icons";
+import CommentProfile from "./ModalGroup/Comment/CommentProfile";
 function FeedSetting({
   val,
   list,
@@ -30,10 +31,12 @@ function FeedSetting({
 }) {
   let profileRef = useRef();
   let replyRef = useRef();
+  const [anval, setanval] = useState('');
   const [chosenEmoji, setChosenEmoji] = useState(null);
   const [feedComments, setfeedComments] = useState([]);
-  const [editModal, seteditModal] = useState(false);
-  const [prophoto, setprophoto] = useState(false);
+  const [photoModal, setphotoModal] = useState([]);
+  const [editModal, seteditModal] = useState(false);  
+  let [profileComment, setprofileComment] = useState(false);
   const [comeditModal, setcomeditModal] = useState(false);
   const [modalShow, setModalShow] = useState(false);
   const [profileModal, setprofileModal] = useState(false);
@@ -201,11 +204,31 @@ function FeedSetting({
                   setprofileModal(false);
                 }}
               >
-                <Profile val={val} />
+                <Profile
+                setanval={setanval}
+                    val={val}
+                    profileComment={profileComment}
+                    photoModal={photoModal}
+                    setphotoModal={setphotoModal}
+                    setprofileComment={setprofileComment}
+                />
               </div>
             )}
           </div>
-          
+          {profileComment && (
+        <CommentProfile
+          anval={anval}
+          val={val}
+          setprofileComment={setprofileComment}
+          seteditModal={seteditModal}
+          page={page}
+          list={list}
+          setloading={setloading}
+          forReRender={forReRender}
+          setForReRender={setForReRender}
+          setlist={setlist}
+        />
+      )}
           <div className="dot">
             <i
               className="fa-solid fa-ellipsis fa-2x"
