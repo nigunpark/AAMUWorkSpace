@@ -12,30 +12,32 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "../Upload/UploadSwiper.css";
 import dayjs from "dayjs";
-import { CommentsDisabled } from "@mui/icons-material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLocationDot } from "@fortawesome/free-solid-svg-icons";
 
-function Comment({
+function CommentProfile({
   val,
+  anval,
   setlist,
   forReRender,
   setForReRender,
   seteditModal,
-  setcommentModal,
+  setprofileComment,
   setloading,
   page,
   list,
 }) {
   let menuRef = useRef();
   let replyRef = useRef("");
-  let deleteRef = useRef();
-  let commentRef = useRef();
-  const [commentHeart, setCommentHeart] = useState(false);
+  let titleRef = useRef("");
+  let commentRef1 = useRef();
+  const [commentHeart, setCommentHeart] = useState("");
   const [modalShow, setModalShow] = useState(false);
-  const [reply, setReply] = useState(false);
+  const [valcontent, setvalcontent] = useState("");
+  const [valtitle, setvaltitle] = useState("");
+  const [valtname, setvaltname] = useState([]);
   let [comment, setComment] = useState("");
-  let [commentbb, setCommentbb] = useState("");
+  let [commentbb, setCommentbb] = useState();
   // const [replyOne, setreplyOne] = useState("");
 
   const [emoji, setemoji] = useState(false);
@@ -73,10 +75,17 @@ function Comment({
         },
         params: {
           id: sessionStorage.getItem("username"),
-          lno: val.lno,
+          lno: anval,
         },
       })
       .then((resp) => {
+        console.log( resp.data.title);
+        val = resp.data;
+        setCommentHeart(resp.data.title)
+        setvalcontent(resp.data.content);
+        setvaltitle(resp.data.ctitle);
+        setvaltname(resp.data.tname);
+        setCommentbb(resp.data)
         setcomments(resp.data.commuCommentList);
       })
       .catch((error) => {
@@ -99,7 +108,7 @@ function Comment({
           Authorization: `Bearer ${token}`,
         },
         params: {
-          lno: parseInt(val.lno),
+          lno: parseInt(anval),
           id: sessionStorage.getItem("username"),
         },
       })
@@ -124,7 +133,7 @@ function Comment({
         {
           id: sessionStorage.getItem("username"),
           reply: replyRef.current.value,
-          lno: val.lno,
+          lno: anval,
         },
         {
           headers: {
@@ -151,15 +160,15 @@ function Comment({
   function deleteOne(cno) {
     let token = sessionStorage.getItem("token");
 
-    console.log("val.lno", val.lno);
-    console.log("val.cno", cno);
+    console.log("anval.lno", anval);
+    console.log("anval.cno", cno);
     axios
       .delete("/aamurest/gram/comment/edit", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
         params: {
-          lno: val.lno,
+          lno: anval,
           cno: cno,
         },
       })
@@ -201,10 +210,10 @@ function Comment({
   return (
     <Container1>
       <Overlay
-        ref={commentRef}
+        ref={commentRef1}
         onClick={(e) => {
           e.stopPropagation();
-          if (e.target == commentRef.current) setcommentModal(false);
+          if (e.target == commentRef1.current) setprofileComment(false);
         }}
       >
         <Contents>
@@ -225,7 +234,6 @@ function Comment({
                     <SwiperSlide key={i}>
                       <li>
                         <img className="divimage1" alt="sample" src={image} />
-                        {/* <img className='divimage' alt="sample" src='/images/bg1.png'/> */}
                       </li>
                     </SwiperSlide>
                   );
@@ -233,7 +241,7 @@ function Comment({
               </Swiper>
             </ul>
           </div>
-          <div className="contents">
+          <div className="contents22">
             <div className="feeds-settingCom">
               <div className="search-contents">
                 <div className="gradient">
@@ -255,7 +263,7 @@ function Comment({
                       style={{ marginLeft: "7px" }}
                     >
                       <FontAwesomeIcon icon={faLocationDot} />
-                      <span style={{ fontSize: "14px" }}>{val.title}</span>
+                      <span style={{ fontSize: "14px" }}>{commentHeart}</span>
                     </div>
                   </a>
                 </div>
@@ -268,7 +276,7 @@ function Comment({
                 ></i>
                 {modalShow && (
                   <MenuModal
-                    setcommentModal={setcommentModal}
+                    // setcommentModal={setcommentModal}
                     setlist={setlist}
                     setModalShow={setModalShow}
                     seteditModal={seteditModal}
@@ -276,21 +284,23 @@ function Comment({
                   />
                 )}
                 {/* {
-                            editModal && <Edit val={val} setlist={setlist} seteditModal={seteditModal} />
+                            editModal && <Edit commentbb={commentbb} setlist={setlist} seteditModal={seteditModal} />
                         } */}
               </div>
             </div>
             <div className="recommend">
               <div className="recommend-down">
                 <div className="recommendContents">
-                  <img
-                    className="userimg"
-                    src={val.userprofile}
-                    alt="프사"
-                    onError={(e) => {
-                      e.target.src = "/images/user.jpg";
-                    }}
-                  />
+                  <div className="userimg1">
+                    <img
+                      className="userimg"
+                      src={val.userprofile}
+                      alt="프사"
+                      onError={(e) => {
+                        e.target.src = "/images/user.jpg";
+                      }}
+                    />
+                  </div>
                   <div
                     style={{
                       display: "flex",
@@ -308,12 +318,12 @@ function Comment({
                     >
                       <div className="feeds-title">
                         <p>
-                          <span className="userName">
+                          <span className="userName"style={{ marginLeft:'-1px' }} >
                             <strong>제목 </strong>
                           </span>
                           <span style={{ fontFamily: "normal" }}>
                             {" "}
-                            {val.ctitle}
+                            {valtitle}
                           </span>
                         </p>
                         <p className="userName">
@@ -328,12 +338,12 @@ function Comment({
                               whiteSpace: "pre-wrap",
                             }}
                           >
-                            {val.content}
+                            {valcontent}
                           </span>
 
-                          {val.tname === null
+                          {valtname === null
                             ? ""
-                            : val.tname.map((tname, i) => {
+                            : valtname.map((tname, i) => {
                                 return (
                                   <span style={{ color: "#333333" }} key={i}>
                                     <strong>{tname}</strong>
@@ -363,7 +373,7 @@ function Comment({
                       key={i}
                       className="recommendContents"
                       onClick={(e) => {
-                        // console.log(val.cno);
+                        // console.log(commentbb.cno);
                       }}
                     >
                       <div>
@@ -550,7 +560,7 @@ const Container1 = styled.div`
   right: 0;
   bottom: 0;
   display: flex;
-  z-index: 1;
+  z-index: 2;
   justify-content: center;
   align-items: center;
 `;
@@ -558,8 +568,8 @@ const Overlay = styled.div`
   position: relative;
   width: 100%;
   height: 100%;
-  z-index: 15;
-  background-color: rgba(0, 0, 0, 0.3);
+  z-index: 16;
+  background-color: rgba(0, 0, 0, 0.6);
 `;
 
 const Contents = styled.div`
@@ -576,4 +586,4 @@ const Contents = styled.div`
   padding: 5px;
 `;
 
-export default Comment;
+export default CommentProfile;
