@@ -92,15 +92,6 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 	public int commuSearchTotalCount(Map map) {
 		return dao.commuSearchTotalCount(map);
 	}
-
-	//글 목록용_좋아요 여부 뿌려주기
-	/*
-	@Override
-	public Boolean commuIsLike(Map map) {
-		int isLikeaffected=dao.commuLikeSelect(map);
-		if(isLikeaffected == 1) return true;
-		else return false;
-	}*/
 	
 	//글 목록용_CommuTag에 레코드값
 	@Override
@@ -254,14 +245,6 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 	public List<Map> commuPlaceList(Map map) {
 		return dao.commuPlaceList(map);
 	}
-
-	//글 생성용_방금 insert된 글 다시 보내기
-	/* 안쓰나?
-	@Override
-	public CommuDTO commuSelectAfterInsert() {
-		return dao.commuSelectAfterInsert();
-	}
-	*/
 	
 	//글 생성용_태그 뿌려주기
 	//TAGS테이블에 있으면 TNO,TNAME 키값으로 뿌려주기 //없으면 INSERT TAGS테이블 COMMUTAG테이블
@@ -287,6 +270,7 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 	@Override
 	public CommuDTO commuSelectOne(Map map) {
 		CommuDTO dto=dao.commuSelectOne(map);
+		System.out.println("셀렉트원 map:"+map);
 		List<CommuCommentDTO> list=dao.commuCommentList(map.get("lno").toString());
 		dto.setCommuCommentList(list);
 		//태그 셋팅
@@ -395,16 +379,6 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 		
 		return affected;
 	}
-
-	//댓글 생성용_Rcount컬럼 +1
-	/*
-	@Override
-	public int commuRcPlusUpdate(Map map) {
-		return dao.commuRcPlusUpdate(map);
-	}
-
-	*/
-	
 
 	//댓글 수정용
 	@Override
@@ -544,13 +518,13 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 		return tnameMap;
 	}
 	
+	
+	
 
 	////////////////////////////////////////////////////////공통 메소드
 	
 	public int insertCommuTagTb(Map map) {
 		int affected=0;
-		//List<String> tnameString=(List<String>)map.get("tname");
-		//tnameString.replaceAll(" ", "");
 		List<String> tnameList = new Vector<>();
 		for(String tnameString:(List<String>)map.get("tname")) {
 			String tnameStr = tnameString.replaceAll(" ", "").substring(1); //서울
@@ -576,10 +550,9 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 		return affected;
 	}
 	
-	/////////////////////////////////////////////////////////워드클라우드 
+	/////////////////////////////////////////////////////////워드클라우드(관리자)
 	@Override
 	public List<String> getAllTnamesOfWoman(Map map) {
-	
 		return dao.getAllTnamesOfWoman(map);
 	}
 	

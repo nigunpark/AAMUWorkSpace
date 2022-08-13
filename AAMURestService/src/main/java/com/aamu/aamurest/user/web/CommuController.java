@@ -58,7 +58,6 @@ public class CommuController {
 	public List<CommuDTO> commuSelectList(@RequestParam Map map, HttpServletRequest req){
 		//검색할 때는 맵으로 써치워드 써치컬럼을 받고, id(로그인한 사람의 id)는 isLike때문에 받는거다. lno는 dto에서 뽑아온다
 		//cid가 넘어오면 마이페이지 id에 따른 글 뿌려주기
-		System.out.println("이미지 태그 map:"+map);
 		//list=글 목록들
 		List<CommuDTO> list = commuService.commuSelectList(map);
 		if(list.isEmpty()) { //********************여기 처리!! 컨텐트id가 넘어왔는데 게시글이 없을 때 에러 처리 하기
@@ -66,9 +65,6 @@ public class CommuController {
 		}
 		for(CommuDTO dto : list) {//글 목록들 list에서 하나씩 꺼내서 dto에 담는다
 			//코멘트한개 셋팅
-//			if(commuService.commuCommentSelectOne(dto.getLno())==null) {
-//				dto.set
-//			} 빈문자열 셋팅
 			dto.setCommuComment(commuService.commuCommentSelectOne(dto.getLno()));
 			//코멘트의 프로필 셋팅
 			CommuCommentDTO commentdto=dto.getCommuComment();
@@ -131,14 +127,6 @@ public class CommuController {
 		return list;
 	}////////////////commuSelectList
 	
-	//글 검색용_id로 검색
-	/*
-	@GetMapping("/gram/place/selectList")
-	public List<Map> commuPlaceList(@RequestParam Map map) {
-		List<Map> list=commuService.commuPlaceList(map);
-		return list;
-	}
-	*/
 	//글 검색용_searchColumn:id,ctitle,tname로 검색
 	@GetMapping("/gram/search/selectList") 
 	public List<String> commuSearachList(@RequestParam Map map){
@@ -172,7 +160,7 @@ public class CommuController {
 		else resultMap.put("isSuccess", false);
 		return resultMap;
 
-	}////////////////////////////
+	}
 
 	//글 생성용_장소 뿌려주기
 	@GetMapping("/gram/place/selectList")
@@ -189,32 +177,9 @@ public class CommuController {
 		return commuService.commuTag(map);
 	}
 	
-	/*
-	//글 하나 뿌려주는 용----------------------------원본
-	@GetMapping("/gram/SelectOne/{lno}")
-	public CommuDTO commuSelectOne(@PathVariable String lno, HttpServletRequest req) {
-		CommuDTO dto=commuService.commuSelectOne(lno);
-		//모든 사진 가져와서 dto에 셋팅
-		dto.setPhoto(FileUploadUtil.requestFilePath(commuService.commuSelectPhotoList(dto.getLno()), "/resources/commuUpload", req));
-		//글쓴이-프로필 사진 가져와서 dto에 셋팅
-		dto.setUserprofile(FileUploadUtil.requestOneFile(commuService.commuSelectUserProf(dto.getId()), "/resources/commuUpload", req));
-		//모든 댓글 가져오기
-		List<CommuCommentDTO> commentList=commuService.commuCommentList(lno);
-		//댓글-프로필 사진 가져와서 dto에 셋팅
-		for(CommuCommentDTO commentDto:commentList) {
-			//System.out.println(commuService.commuSelectUserProf(commentDto.getId()));
-			commentDto.setUserprofile(FileUploadUtil.requestOneFile(commuService.commuSelectUserProf(commentDto.getId()), "/resources/commuUpload", req));
-		}
-		dto.setCommuCommentList(commentList);
-		return dto;
-	}
-	*/ 
-	
-	
 	//글 하나 뿌려주는 용 -수정용
 	@GetMapping("/gram/SelectOne")
 	public CommuDTO commuSelectOne(@RequestParam Map map, HttpServletRequest req) {//id(로그인한사람 id 왜냐?isLike때문에), lno(글의 lno)
-//		System.out.println("셀렉트원 map:"+map);
 		CommuDTO dto=commuService.commuSelectOne(map);
 		//모든 사진 가져와서 dto에 셋팅
 		dto.setPhoto(FileUploadUtil.requestFilePath(commuService.commuSelectPhotoList(dto.getLno()), "/resources/commuUpload", req));
@@ -224,7 +189,6 @@ public class CommuController {
 		List<CommuCommentDTO> commentList=commuService.commuCommentList(map.get("lno").toString());
 		//댓글-프로필 사진 가져와서 dto에 셋팅
 		for(CommuCommentDTO commentDto:commentList) {
-			//System.out.println(commuService.commuSelectUserProf(commentDto.getId()));
 			commentDto.setUserprofile(FileUploadUtil.requestOneFile(commuService.commuSelectUserProf(commentDto.getId()), "/resources/userUpload", req));
 		}
 		dto.setCommuCommentList(commentList);
@@ -234,7 +198,6 @@ public class CommuController {
 	//글 수정용: Map ver
 	@PutMapping("/gram/edit")
 	public Map commuUpdate(@RequestBody Map map) { 
-		//System.out.println("글수정 map:"+map);
 		//List<String> list=(List<String>)map.get("tname");
 		int affected=commuService.commuUpdate(map);
 		Map resultMap = new HashMap<> ();
@@ -246,7 +209,6 @@ public class CommuController {
 	//글 삭제용
 	@DeleteMapping("/gram/edit/{lno}")
 	public Map commuDelete(@PathVariable String lno, HttpServletRequest req) {
-		//System.out.println("글삭제 lno:"+lno);
 		List<String> photoLists=commuService.commuSelectPhotoList(lno);
 		String path=req.getSession().getServletContext().getRealPath("/resources/commuUpload");
 		
@@ -260,23 +222,6 @@ public class CommuController {
 		else map.put("isSuccess", false);
 		return map;
 	}
-	//댓글 생성용 - List ver
-	/*
-	@PostMapping("/gram/comment/edit")
-	public List<CommuDTO> commuCommentInsert(@RequestBody Map map, HttpServletRequest req) {
-		int commuCommentAffected=commuService.commuCommentInsert(map);
-		int RcPlusAffected=commuService.commuRcPlusUpdate(map);
-		//list=글 목록들
-		List<CommuDTO> list = commuService.commuSelectList(map);
-		for(CommuDTO dto : list) {//글 목록들 list에서 하나씩 꺼내서 dto에 담는다
-			//코멘트 셋팅
-			dto.setCommuComment(commuService.commuCommentSelectOne(dto.getLno()));
-			//포토 셋팅
-			dto.setPhoto(FileUploadUtil.requestFilePath(commuService.commuSelectPhotoList(dto.getLno()), "/resources/commuUpload", req));
-		}/////for
-		return list;
-	}
-	*/
 	
 	//댓글 생성용 - Map ver
 	@PostMapping("/gram/comment/edit")
@@ -313,7 +258,6 @@ public class CommuController {
 	public Map commuCommentDelete(@RequestParam Map map) {//lno, cno
 		int affected=commuService.commuCommentDelete(map);
 		//rcount -1
-		//int RcMinusAffected=commuService.commuRcMinusUpdate(map);
 		Map resultMap = new HashMap();
 		if(affected==1) resultMap.put("isSuccess", true);
 		else resultMap.put("isSuccess", false);
@@ -381,7 +325,6 @@ public class CommuController {
 			dto.setFollowercount(commuService.commuFollowerCount(map));
 			//내가 팔로잉하는 계정 수 셋팅
 			dto.setFollowingcount(commuService.commuFollowingCount(map));
-			
 		}
 		return list;
 	}
@@ -426,14 +369,17 @@ public class CommuController {
 		return resultMap;
 	}
 	
-	//워드 클라우드 
+	//워드 클라우드_인스타
 	@GetMapping("/gram/word")
 	public List<Map> selectTnamesNCount() {
 		return commuService.commugetTnames();
 	}
 	
-	/////////////////////////////////////////////////////////////날씨 크롤링
 	
+	
+	
+	
+	/////////////////////////////////////////////////////////////날씨 크롤링
 	
 	@GetMapping("/weather")
 	public Map weather(@RequestParam Map map,@RequestParam List<String> searchDate, HttpServletRequest req) { //searhWord 지역 searchDate 
@@ -462,6 +408,7 @@ public class CommuController {
 		return returnMap;
 	}
 	
+	///////////////////////////////////////////////////////////////워드 클라우드(관리자)
 	//관리자 페이지_워드 클라우드
 	@GetMapping("/word")
 	public Map imageCloud() {

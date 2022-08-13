@@ -230,7 +230,10 @@
 	
 	<!-- 마이페이지용_id에 따른 -->
 	<select id="commuMyPageList" resultType="CommuDTO">
-		SELECT * FROM community WHERE id=#{follower} ORDER BY lno DESC
+		SELECT c.*, cp.contentid, p.title FROM community c 
+		JOIN commuplace cp ON c.lno=cp.lno 
+		JOIN places p ON cp.contentid=p.contentid 
+		WHERE id=#{follower} ORDER BY c.lno DESC
 	</select>
 	
 	<!-- 마이페이지용_토탈카운트 셋팅 (해당 id의 총 글 갯수) -->
