@@ -36,5 +36,11 @@
   animation: slide_chatBotBox__span 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
 }
 .chatBox__time-span {
+  font-size: 11px;
   animation: slide_chatBotBox__span 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+.chat__close-btn {
+  position: absolute;
+  right: 6px;
+  cursor: pointer;
 }
