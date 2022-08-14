@@ -60,7 +60,6 @@ const LeftPlanSide = ({ currPosition, setIsLoading }) => {
     //그리고 그 지역명으로 setting해주기
     //WholeMapLocalData에는 한정된지역만 있으므로 api로 전체 지역명을 받아서 비교하자
     setFindcurrPositionId(findId.id);
-    setAppearCalendar(true);
   }, []);
   useEffect(() => {
     if (reduxState.showWhichModal === 1) {
@@ -78,7 +77,6 @@ const LeftPlanSide = ({ currPosition, setIsLoading }) => {
     }
   }, [reduxState.showWhichModal]);
   let dispatch = useDispatch();
-
   return (
     <div className="LeftPlanSide">
       <div className="leftPlanSide__localNDay">
