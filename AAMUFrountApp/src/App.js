@@ -15,13 +15,13 @@ import DetailModal from "./pages/Forum/DetailModal/DetailModal";
 import KakaoRedirectHandler from "./components/Login/Kakao/KakaoRedirectHandler";
 import JoinStep1 from "./components/Join/JoinStep1.js";
 import JoinStep2 from "./components/Join/JoinStep2.js";
-import SearchList from "./components/Insta/searchList";
+import SearchList from "./components/Insta/SearchList";
 import QnA from "./components/QnA/QnA";
 import QnADetail from "./components/QnA/QnADetail";
 import QnAWrite from "./components/QnA/QnAWrite";
 import SockJS from "sockjs-client";
 import * as StompJs from "@stomp/stompjs";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addForChatInfo } from "./redux/store";
 import JoinStep3 from "./components/Join/JoinStep3";
 import TokenUser from "./components/Login/Kakao/TokenUser";
@@ -54,7 +54,7 @@ function App() {
     else setScrollNav(false);
   };
   window.addEventListener("scroll", handleScroll);
-
+  let reduxState = useSelector((state) => state);
   useEffect(() => {
     const tempNoti = noti.concat(notibody);
     setNoti([...tempNoti]);
@@ -99,6 +99,7 @@ function App() {
     console.log("curr", client.current);
     client.current.activate();
   };
+
   return (
     <div>
       <Routes>
