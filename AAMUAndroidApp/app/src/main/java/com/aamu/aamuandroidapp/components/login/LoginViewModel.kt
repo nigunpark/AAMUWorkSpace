@@ -59,7 +59,6 @@ class LoginViewModel(context: Context) : ViewModel(){
     }
 
     fun isok() = viewModelScope.launch {
-        Log.i("com.aamu.aamu",token.value.toString())
         if(aamuRepository.isok()){
             islogin.value = true
             FirebaseMessaging.getInstance().token.addOnSuccessListener {

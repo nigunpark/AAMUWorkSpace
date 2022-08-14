@@ -47,7 +47,6 @@ class PlaceDetailViewModel(context: Context) : ViewModel() , MapView.MapViewEven
             }
             viewModelScope.launch {
                 //카카오리뷰 받아오기
-                Log.i("com.aamu.aamu" , " place.kakaokey = ${place.kakaokey}")
                 aamuRepository.getKakaoReview(place.kakaokey ?: "0")
                     .collect { kakaoreview ->
                         if (kakaoreview.basicInfo != null && kakaoreview.commentInfo != null ){

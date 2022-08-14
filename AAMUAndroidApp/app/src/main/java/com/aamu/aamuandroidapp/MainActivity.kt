@@ -33,7 +33,6 @@ class MainActivity : AppCompatActivity() {
         navController = findNavController(R.id.nav_host_fragment)
         val viewModel : MainViewModel by viewModels { MainViewModelFactory(context = applicationContext) }
         if(intent.hasExtra("fromthan")){
-            Log.i("com.aamu.aamu","여를 안탐?")
             viewModel.setFromthanNo(intent.getStringExtra("fromthan")!!,Integer.parseInt(intent.getStringExtra("no")))
         }
 

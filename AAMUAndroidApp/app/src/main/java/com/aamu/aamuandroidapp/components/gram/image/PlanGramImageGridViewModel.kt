@@ -27,7 +27,6 @@ class PlanGramImageGridViewModel() : ViewModel(){
             aamuRepository.getGramByPlaceList(contentid)
                 .collect{ gramList ->
                     if (gramList.isNotEmpty()){
-                        Log.i("com.aamu.aamu","gramList : " +gramList)
                         val tempList = ArrayList<String>()
                         for (gramItem : AAMUGarmResponse in gramList){
                             if(gramItem.photo?.isNotEmpty()==true) {
@@ -36,7 +35,6 @@ class PlanGramImageGridViewModel() : ViewModel(){
                                 }
                             }
                         }
-                        Log.i("com.aamu.aamu","tempList : " +tempList)
                         if(tempList.size==0){
                             errorLiveData.value = "저장된 사진들이 없어요!!"
                         }

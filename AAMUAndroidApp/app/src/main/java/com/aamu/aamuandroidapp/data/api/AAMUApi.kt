@@ -114,19 +114,18 @@ interface AAMUApi {
                             .newBuilder()
                             .addHeader("Authorization", "Bearer " + (getToken() ?: ""))
                             .build()
-//                    try {
-//                        return@Interceptor chain.proceed(request)
-//                    }
-//                    catch (e : Exception){
-//                        val response : okhttp3.Response = okhttp3.Response.Builder()
-//                            .code(1)
-//                            .request(request)
-//                            .protocol(Protocol.HTTP_2)
-//                            .message("서버나 인터넷이 연결인 안됬어요!!")
-//                            .build()
-//                        return@Interceptor response
-//                    }
-                return@Interceptor chain.proceed(request)
+                    try {
+                        return@Interceptor chain.proceed(request)
+                    }
+                    catch (e : Exception){
+                        val response : okhttp3.Response = okhttp3.Response.Builder()
+                            .code(1)
+                            .request(request)
+                            .protocol(Protocol.HTTP_2)
+                            .message("서버나 인터넷이 연결인 안됬어요!!")
+                            .build()
+                        return@Interceptor response
+                    }
                 }
 
 

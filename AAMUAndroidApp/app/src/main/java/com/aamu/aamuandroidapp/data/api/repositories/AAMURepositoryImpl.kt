@@ -319,11 +319,10 @@ class AAMURepositoryImpl(
         if (response.isSuccessful) {
             emit(response.body() ?: emptyMap())
         } else {
-            Log.i("com.aamu.aamu",response.message().toString())
             emit(emptyMap())
         }
-//    }.catch {
-//        emit(emptyMap())
+    }.catch {
+        emit(emptyMap())
     }.flowOn(Dispatchers.IO)
 
     override suspend fun postGramComment(gramComment: GramComment): Flow<Map<String, String>> = flow<Map<String,String>> {
