@@ -24,6 +24,7 @@ function User({
   prevChats,
   setpage,
   page,
+  setShowChat,
 }) {
   const modalRef = useRef();
   const notimodalRef = useRef();
@@ -36,7 +37,7 @@ function User({
   const [square, setsquare] = useState(false);
   const [usefollow, setusefollow] = useState(false);
   const [tag, settag] = useState(false);
-  const [tagsearch, settagsearch] = useState('');
+  const [tagsearch, settagsearch] = useState("");
   const [title, settitle] = useState([]);
   const [tagcl, settagcl] = useState([]);
   const [tagpop, settagpop] = useState([]);
@@ -46,7 +47,6 @@ function User({
 
   function searchBar(e) {
     //백이랑 인스타 리스드를 뿌려주기 위한 axios
-    console.log("inputValue", inputValue);
     setinputValue(e.target.value);
     if (e.keyCode != 13) return;
     let token = sessionStorage.getItem("token");
@@ -62,7 +62,7 @@ function User({
       })
       .then((resp) => {
         console.log(resp.data);
-        setSearchb(resp.data)
+        setSearchb(resp.data);
 
         navigater("/Insta/searchList");
       })
@@ -165,7 +165,7 @@ function User({
   };
   return (
     <div>
-      {showChat && <Chat showChat={showChat} prevChats={prevChats} />}
+      {showChat && <Chat showChat={showChat} setShowChat={setShowChat} prevChats={prevChats} />}
       <div className="userSearch">
         <SearchSelect settagsearch={settagsearch} />
         <div
@@ -239,11 +239,7 @@ function User({
         >
           <div className="heart">
             {heart ? (
-              <i
-                className=" fa-solid fa-heart fa-2x"
-                ref={notimodalRef}
-                style={{ color: "black" }}
-              >
+              <i className=" fa-solid fa-heart fa-2x" ref={notimodalRef} style={{ color: "black" }}>
                 <NotificationModal></NotificationModal>
               </i>
             ) : (
@@ -320,17 +316,13 @@ function User({
                     e.stopPropagation();
                     if (
                       //팔로워 배열안에 들어가 있는 팔로워들
-                      ffollower.includes(
-                        e.target.parentElement.previousElementSibling
-                          .textContent
-                      )
+                      ffollower.includes(e.target.parentElement.previousElementSibling.textContent)
                     ) {
                       setfollower(
                         ffollower.filter((folval) => {
                           //언팔로우 하기 위한 로직
                           return (
-                            e.target.parentElement.previousElementSibling
-                              .textContent !== folval
+                            e.target.parentElement.previousElementSibling.textContent !== folval
                           );
                         })
                       );
@@ -338,8 +330,7 @@ function User({
                       //팔로우하기 위한 팔로워들
                       setfollower([
                         ...ffollower, //기존에 있는 팔로워들 +
-                        e.target.parentElement.previousElementSibling
-                          .textContent, //클릭이 생기는 팔로워들
+                        e.target.parentElement.previousElementSibling.textContent, //클릭이 생기는 팔로워들
                       ]);
                     }
                     follower(val.id);
