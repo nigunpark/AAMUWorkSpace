@@ -77,7 +77,7 @@ const MyPage = () => {
         },
       })
       .then((resp) => {
-        console.log("인스타 내 글 가져오기 (MyPage.js) :", resp.data);
+        // console.log("인스타 내 글 가져오기 (MyPage.js) :", resp.data);
         setMyInstar(resp.data);
       })
       .catch((error) => {
@@ -106,7 +106,7 @@ const MyPage = () => {
         },
       })
       .then((resp) => {
-        console.log("북마크 목록 데이터 (DetailModal.js) :", resp.data);
+        // console.log("북마크 목록 데이터 (DetailModal.js) :", resp.data);
         setMyBookList(resp.data);
       })
       .catch((error) => {
@@ -126,7 +126,7 @@ const MyPage = () => {
         },
       })
       .then((resp) => {
-        console.log("팔로잉", resp.data);
+        // console.log("팔로잉", resp.data);
         setFollowing(resp.data);
       })
       .catch((err) => {
@@ -137,10 +137,10 @@ const MyPage = () => {
     await axios
       .post("/aamurest/chat/room?fromid=" + sessionStorage.getItem("username") + "&toid=" + val)
       .then((resp) => {
-        console.log("resp", resp);
+        // console.log("resp.data.list", resp.data.list);
         setPrevChats([]);
         setTimeout(() => {
-          setPrevChats(resp.data.list);
+          setPrevChats([...resp.data.list].reverse());
           dispatch(addForChatInfo({ ...resp.data, id: val }));
           setShowChat(!showChat);
         }, 100);
@@ -315,7 +315,12 @@ const MyPage = () => {
           </div>
           <div style={{ position: "absolute", right: "285px", top: "-90px" }}>
             {showChat && (
-              <Chat showChat={showChat} prevChats={prevChats} setPrevChats={setPrevChats} />
+              <Chat
+                showChat={showChat}
+                setShowChat={setShowChat}
+                prevChats={prevChats}
+                setPrevChats={setPrevChats}
+              />
             )}
           </div>
         </div>
@@ -372,7 +377,13 @@ const MyPage = () => {
                 {followings.follower !== undefined &&
                   followings.follower.map((val, i) => {
                     return (
-                      <div className="myPage__follower_one">
+                      <div
+                        className="myPage__follower_one"
+                        onClick={() => {
+                          getChatRoom(val.id, dispatch, setPrevChats);
+                          setTimeout(() => {}, 100);
+                        }}
+                      >
                         <div className="myPage__following__img-container">
                           <img
                             src={val.userprofile ?? "/images/no-image.jpg"}
@@ -471,7 +482,7 @@ function getChatRooms(setChatRooms) {
       },
     })
     .then((resp) => {
-      console.log("채팅방목록", resp.data);
+      // console.log("채팅방목록", resp.data);
       setChatRooms(resp.data);
     })
     .catch((err) => {
