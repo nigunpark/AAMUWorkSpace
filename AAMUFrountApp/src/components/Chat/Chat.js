@@ -1,65 +1,42 @@
 import React, { useEffect, useRef, useState } from "react";
 import styled, { keyframes } from "styled-components";
 import "./Chat.css";
-import SockJS from "sockjs-client";
-import * as StompJs from "@stomp/stompjs";
 import { useDispatch, useSelector } from "react-redux";
-let chatArr = [];
-// function getConnet(roomno, setChats) {
-//   const client = new StompJs.Client();
-//   client.configure({
-//     brokerURL: "ws://192.168.0.19:8080/aamurest/ws/chat/websocket",
-//     onConnect: () => {
-//       console.log("onConnect");
-//       let subscription = client.subscribe(`/queue/chat/message/${roomno}`, (message) => {
-//         console.log(JSON.parse(message.body));
-//         chatArr.push({ message: JSON.parse(message.body).missage, bool: true });
-//         chatArr = [...chatArr];
-//         setChats(chatArr);
-//       });
-//     },
-//     debug: (str) => {
-//       console.log(new Date(), str);
-//     },
-//   });
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faXmark } from "@fortawesome/free-solid-svg-icons";
+import { addChatPreview } from "../../redux/store";
 
-//   client.activate();
-//   return client;
-// }
-const Chat = ({ prevChats, setPrevChats }) => {
+const Chat = ({ setShowChat, showChat, prevChats }) => {
   const [chats, setChats] = useState([]);
-  const [client, setClient] = useState({});
   let reduxState = useSelector((state) => state);
+  let dispatch = useDispatch();
   useEffect(() => {
     if (prevChats.length !== 0) {
-      console.log("11");
       setChats(prevChats);
     }
-    // let client = getConnet(reduxState.forChatInfo.roomno, setChats);
-    // console.log("client", client);
-    // setClient(client);
-    // if (showChat === false) subscription.unsubscribe();
-    // getChats();
+
     reduxState.forChatInfo.client.subscribe(
       `/queue/chat/message/${reduxState.forChatInfo.roomno}`,
       (message) => {
         console.log(JSON.parse(message.body));
+        // console.log(showChat);
+        // if (!showChat) {
+        //   console.log("aa");
+        // }
 
-        // setChats((curr) => {
-        //   return [...curr, JSON.parse(message.body)];
-        // });
+        dispatch(addChatPreview([JSON.parse(message.body)]));
         if (JSON.parse(message.body).authid !== sessionStorage.getItem("username")) {
           let newChat = {
             // missage: message.body.missage,
             missage: JSON.parse(message.body).missage,
             authid: JSON.parse(message.body).authid,
+            senddate: JSON.parse(message.body).senddate,
           };
           setChats((curr) => [...curr, newChat]);
         }
       }
     );
   }, [prevChats]);
-  function getChats() {}
   let inputRef = useRef();
   let bodyRef = useRef();
   // console.log("bodyRef", bodyRef.current.scrollTop);
@@ -67,7 +44,18 @@ const Chat = ({ prevChats, setPrevChats }) => {
     <Container>
       {/* <InnnerContainer> */}
       <Content>
-        <Title>{reduxState.forChatInfo.id}님과 대화</Title>
+        <Title>
+          {reduxState.forChatInfo.id}님과 대화
+          <div
+            className="chat__close-btn"
+            onClick={(e) => {
+              e.stopPropagation();
+              setShowChat(false);
+            }}
+          >
+            <FontAwesomeIcon icon={faXmark} />
+          </div>
+        </Title>
         <Body ref={bodyRef}>
           <div style={{ display: "flex", flexDirection: "column" }}>
             {chats.map((val, i) => {
@@ -85,27 +73,42 @@ const Chat = ({ prevChats, setPrevChats }) => {
                       gap: "5px",
                     }}
                   >
-                    <div className="chat__profile__img-container">
-                      {/* <img
-                      className="chat__profile__img"
-                      src={val.autopro ?? "/images/no-image.jpg"}
-                      onError={(e) => {
-                        e.target.src = "/images/no-image.jpg";
-                      }}
-                    /> */}
-                      <span className="chatBox__time-span">
-                        {new Date().getHours() > 12 ? "오후" : "오전"}
-                        {new Date().getHours() > 12
-                          ? new Date().getHours() - 12
-                          : new Date().getHours()}
-                        :{new Date().getMinutes().toString().padStart(2, "0")}
-                      </span>
-                    </div>
+                    {val.authid === sessionStorage.getItem("username") ? (
+                      <>
+                        <span className="chatBox__time-span">
+                          {(new window.Date(val.senddate).getHours() >= 12 &&
+                          new window.Date(val.senddate).getMinutes() >= 1
+                            ? "오후"
+                            : "오전") +
+                            (new window.Date(val.senddate).getHours() > 12
+                              ? new window.Date(val.senddate).getHours() - 12
+                              : new window.Date(val.senddate).getHours()) +
+                            ":" +
+                            new window.Date(val.senddate).getMinutes().toString().padStart(2, "0")}
+                        </span>
 
-                    <span className="chatBox__span">
-                      {val.missage}
-                      <br />
-                    </span>
+                        <span className="chatBox__span">
+                          {val.missage}
+                          <br />
+                        </span>
+                      </>
+                    ) : (
+                      <>
+                        <span className="chatBox__span">
+                          {val.missage}
+                          <br />
+                        </span>
+                        <span className="chatBox__time-span">
+                          {(new window.Date(val.senddate).getHours() >= 12 &&
+                          new window.Date(val.senddate).getMinutes() >= 1
+                            ? "오후"
+                            : "오전") +
+                            new window.Date(val.senddate).getHours() +
+                            ":" +
+                            new window.Date(val.senddate).getMinutes()}
+                        </span>
+                      </>
+                    )}
                   </div>
                 </div>
               );
@@ -123,6 +126,7 @@ const Chat = ({ prevChats, setPrevChats }) => {
                 let newChat = {
                   missage: e.target.value,
                   authid: sessionStorage.getItem("username"),
+                  senddate: new Date(),
                 };
                 setChats((curr) => [...curr, newChat]);
                 sendChat(inputRef, reduxState);
@@ -166,7 +170,6 @@ function sendChat(inputRef, reduxState) {
       authpro: sessionStorage.getItem("userimg"),
     }),
   });
-  // setChats(chatArr);
 }
 const swing_instaChat = keyframes`
 0% {
