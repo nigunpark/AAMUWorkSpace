@@ -255,15 +255,6 @@ fun LoginVideo(videoUri: Uri,loginfail : Boolean,onLoginSuccess: () -> Unit) {
     }
 }
 
-data class logindata(
-    var username : TextFieldValue,
-    var password : TextFieldValue,
-    var onLoginSuccess: () -> Unit,
-    var viewModel: LoginViewModel,
-    var hasError : Boolean,
-    var loading : Boolean
-)
-
 sealed class InputType(
     val label: String,
     val icon: ImageVector,

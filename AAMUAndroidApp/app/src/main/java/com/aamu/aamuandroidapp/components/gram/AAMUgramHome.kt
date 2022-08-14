@@ -14,6 +14,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -32,7 +33,7 @@ fun AAMUgramHome(
     onLikeClicked: (Int) -> Unit,
     onCommentsClicked: (Int) -> Unit,
     onSendClicked: () -> Unit,
-    onProfileClicked: () -> Unit,
+    onPostingClicked: () -> Unit,
     onMessagingClicked: () -> Unit
 ) {
 
@@ -62,10 +63,18 @@ fun AAMUgramHome(
                         }
                     },
                     actions = {
+                        IconButton(onClick = onPostingClicked) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.ic_outlined_add),
+                                contentDescription = "포스팅",
+                                tint = Color.Black
+                            )
+                        }
                         IconButton(onClick = onMessagingClicked) {
                             Icon(
                                 painter = painterResource(id = R.drawable.ic_send),
-                                contentDescription = "Go to messaging screen",
+                                contentDescription = "메시지",
+                                tint = Color.Black
                             )
                         }
                     }

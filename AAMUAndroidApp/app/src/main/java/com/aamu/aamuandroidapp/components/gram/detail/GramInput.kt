@@ -208,7 +208,7 @@ private fun UserInputText(
                         color = LocalContentColor.current,
                         textAlign = TextAlign.Start
                     ),
-                    keyboardActions = KeyboardActions(onDone = { onMessageSent() })
+                    keyboardActions = KeyboardActions(onDone ={ onMessageSent.invoke() })
                 )
 
                 val disableContentColor =

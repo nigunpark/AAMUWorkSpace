@@ -2,13 +2,25 @@ package com.aamu.aamuandroidapp.data.api.repositories
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.net.Uri
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
+import androidx.core.net.toFile
 import com.aamu.aamuandroidapp.data.api.AAMUApi
 import com.aamu.aamuandroidapp.data.api.response.*
 import com.aamu.aamuandroidapp.data.api.userLogin
 import com.aamu.aamuandroidapp.util.contextL
+import com.aamu.aamuandroidapp.util.getRealPathFromURI
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
+import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
+import java.io.File
 import kotlin.math.ln
 
 class AAMURepositoryImpl(
@@ -276,6 +288,42 @@ class AAMURepositoryImpl(
             emit(emptyList<AAMUGarmResponse>())
     }.catch {
         emit(emptyList<AAMUGarmResponse>())
+    }.flowOn(Dispatchers.IO)
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    override suspend fun postGram(
+        multifiles: ArrayList<Uri>,
+        map: Map<String, String>,
+        tname : List<String>
+    ): Flow<Map<String, Boolean>> = flow<Map<String,Boolean>> {
+        var images = ArrayList<MultipartBody.Part>()
+        for (index in 0..multifiles.size - 1) {
+            val file = File(getRealPathFromURI(multifiles.get(index)))
+            val surveyBody = file.asRequestBody("image/*".toMediaTypeOrNull())
+            images.add(MultipartBody.Part.createFormData("multifiles", file.name, surveyBody))
+        }
+
+        val bodymap = HashMap<String, RequestBody>()
+        for(key in map.keys){
+            val act = map.get(key)?.toRequestBody("text/plain".toMediaTypeOrNull())
+            if (act != null) {
+                bodymap.put(key,act)
+            }
+        }
+        val bodytname = ArrayList<MultipartBody.Part>()
+        for (tna in tname){
+            bodytname.add(MultipartBody.Part.createFormData("tname",tna))
+        }
+
+        val response = aamuApi.postGram(images, bodymap,bodytname)
+        if (response.isSuccessful) {
+            emit(response.body() ?: emptyMap())
+        } else {
+            Log.i("com.aamu.aamu",response.message().toString())
+            emit(emptyMap())
+        }
+//    }.catch {
+//        emit(emptyMap())
     }.flowOn(Dispatchers.IO)
 
     override suspend fun postGramComment(gramComment: GramComment): Flow<Map<String, String>> = flow<Map<String,String>> {

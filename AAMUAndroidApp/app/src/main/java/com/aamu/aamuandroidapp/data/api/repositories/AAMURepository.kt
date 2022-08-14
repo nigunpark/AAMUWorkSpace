@@ -1,5 +1,6 @@
 package com.aamu.aamuandroidapp.data.api.repositories
 
+import android.net.Uri
 import com.aamu.aamuandroidapp.data.api.response.*
 import kotlinx.coroutines.flow.Flow
 
@@ -29,6 +30,7 @@ interface AAMURepository {
     suspend fun getGramLike(id : String,lno : Int) : Flow<Map<String,String>>
     suspend fun getGramBySearch(searchColumn : String,searchWord : String ) : Flow<List<AAMUGarmResponse>>
     suspend fun getGramByPlaceList(contentid : Int) : Flow<List<AAMUGarmResponse>>
+    suspend fun postGram(multifiles : ArrayList<Uri>,map : Map<String,String>,tname : List<String>) : Flow<Map<String,Boolean>>
     suspend fun postGramComment(gramComment: GramComment) : Flow<Map<String,String>>
 
     suspend fun getBBSList() : Flow<List<AAMUBBSResponse>>

@@ -5,9 +5,7 @@ import com.aamu.aamuandroidapp.data.api.response.*
 import com.aamu.aamuandroidapp.util.contextL
 import com.aamu.aamuandroidapp.util.getToken
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import okhttp3.Interceptor
-import okhttp3.OkHttpClient
-import okhttp3.Protocol
+import okhttp3.*
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.jackson.JacksonConverterFactory
@@ -78,6 +76,10 @@ interface AAMUApi {
     @GET("gram/selectList")
     suspend fun getGramByPlaceList(@Query("contentid") contentid : Int) : Response<List<AAMUGarmResponse>>
 
+    @Multipart
+    @POST("gram/edit")
+    suspend fun postGram(@Part multifiles : List<MultipartBody.Part>, @PartMap map : Map<String,@JvmSuppressWildcards RequestBody>,@Part tname : List<MultipartBody.Part>) : Response<Map<String,Boolean>>
+
     @POST("gram/comment/edit")
     suspend fun postGramComment(@Body gramComment : GramComment ) : Response<Map<String,String>>
 
@@ -112,18 +114,19 @@ interface AAMUApi {
                             .newBuilder()
                             .addHeader("Authorization", "Bearer " + (getToken() ?: ""))
                             .build()
-                    try {
-                        return@Interceptor chain.proceed(request)
-                    }
-                    catch (e : Exception){
-                        val response : okhttp3.Response = okhttp3.Response.Builder()
-                            .code(1)
-                            .request(request)
-                            .protocol(Protocol.HTTP_2)
-                            .message("서버나 인터넷이 연결인 안됬어요!!")
-                            .build()
-                        return@Interceptor response
-                    }
+//                    try {
+//                        return@Interceptor chain.proceed(request)
+//                    }
+//                    catch (e : Exception){
+//                        val response : okhttp3.Response = okhttp3.Response.Builder()
+//                            .code(1)
+//                            .request(request)
+//                            .protocol(Protocol.HTTP_2)
+//                            .message("서버나 인터넷이 연결인 안됬어요!!")
+//                            .build()
+//                        return@Interceptor response
+//                    }
+                return@Interceptor chain.proceed(request)
                 }
 
 

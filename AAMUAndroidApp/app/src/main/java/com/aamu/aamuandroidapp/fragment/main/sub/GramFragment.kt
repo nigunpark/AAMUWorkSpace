@@ -52,7 +52,7 @@ class GramFragment : Fragment() {
                         navControllerHost.navigate(action)
                     },
                     onSendClicked = {},
-                    onProfileClicked = {},
+                    onPostingClicked = {navControllerHost.navigate(R.id.action_mainFragment_to_gramPostingFragment)},
                     onMessagingClicked = {navControllerHost.navigate(R.id.action_mainFragment_to_chatlistFragment)}
                 )
             }

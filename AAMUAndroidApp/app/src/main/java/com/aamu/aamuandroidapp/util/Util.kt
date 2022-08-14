@@ -5,13 +5,18 @@ import android.app.Activity
 import android.content.Context
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import android.database.Cursor
 import android.location.Criteria
 import android.location.Location
 import android.location.LocationManager
+import android.net.Uri
 import android.os.Build
+import android.provider.DocumentsContract
+import android.provider.MediaStore
 import android.util.Log
 import android.view.View
 import android.view.WindowManager
+import androidx.annotation.RequiresApi
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.getSystemService
@@ -178,6 +183,24 @@ fun displayedAtTime(item : Long) : String{
     val years = days / 365
     if (Math.floor(years % 365).toInt() != 0) reString = "${Math.floor(years % 365).toInt()}년"+ reString
     return reString
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+fun getRealPathFromURI(contentUri : Uri) : String? {
+    if (contentUri.getPath()?.startsWith("/storage") == true) {
+        return contentUri.getPath()!!;
+    }
+    val columns : Array<String> = arrayOf(MediaStore.Files.FileColumns.DATA)
+    val cursor : Cursor? = contextL.contentResolver.query(contentUri,columns,null,null,null)
+    try {
+        val columnIndex : Int? = cursor?.getColumnIndex(columns[0]);
+        if (cursor?.moveToFirst() == true) {
+            return columnIndex?.let { cursor.getString(it) };
+        }
+    } finally {
+        cursor?.close();
+    }
+    return null;
 }
 
 //fun Activity.hideSystemUI() {

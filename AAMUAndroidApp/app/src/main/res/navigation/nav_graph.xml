@@ -57,6 +57,9 @@
             app:destination="@id/loginFragment"
             app:popUpTo="@id/mainFragment"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_mainFragment_to_gramPostingFragment"
+            app:destination="@id/gramPostingFragment" />
 
     </fragment>
     <fragment
@@ -115,5 +118,9 @@
             android:id="@+id/action_chatlistFragment_to_conversationFragment"
             app:destination="@id/conversationFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/gramPostingFragment"
+        android:name="com.aamu.aamuandroidapp.fragment.main.gram.GramPostingFragment"
+        android:label="GramPostingFragment" />
 
 </navigation>
