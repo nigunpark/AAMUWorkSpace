@@ -382,6 +382,16 @@ let forWeather = createSlice({
 });
 export let { addWeather } = forWeather.actions;
 
+let chatPreview = createSlice({
+  name: "chatPreview",
+  initialState: [],
+  reducers: {
+    addChatPreview(state, action) {
+      return action.payload;
+    },
+  },
+});
+export let { addChatPreview } = chatPreview.actions;
 export default configureStore({
   reducer: {
     localNameForMarker: localNameForMarker.reducer,
@@ -407,6 +417,7 @@ export default configureStore({
     forWeather: forWeather.reducer,
     arrForRestaurant: arrForRestaurant.reducer,
     arrForPickMazzip: arrForPickMazzip.reducer,
+    chatPreview: chatPreview.reducer,
   },
   //planTripTime.js 168번줄쯤의 fullDate를 위한 serializable무시
   middleware: (getDefaultMiddleware) =>
