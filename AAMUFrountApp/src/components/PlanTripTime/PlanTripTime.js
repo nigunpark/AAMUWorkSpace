@@ -1,11 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import "./PlanTripTime.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faAngleDown,
-  faAngleUp,
-  faClock,
-} from "@fortawesome/free-solid-svg-icons";
+import { faAngleDown, faAngleUp, faClock } from "@fortawesome/free-solid-svg-icons";
 import TextField from "@mui/material/TextField";
 import Stack from "@mui/material/Stack";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
@@ -69,11 +65,13 @@ const TimeSet = ({ index }) => {
           <p className="setTime__contiainer-day">{index} Day</p>
           <div className="setTime__container-timeNMin">
             <p>
-              {startTimeArray[0]} {startTimeArray[1]} : {startTimeArray[2]}
+              {startTimeArray[0]} {startTimeArray[1].toString().padStart(2, "0")} :
+              {startTimeArray[2].toString().padStart(2, "0")}
             </p>
             <p> ~ </p>
             <p>
-              {endTimeArray[0]} {endTimeArray[1]} : {endTimeArray[2]}
+              {endTimeArray[0]} {endTimeArray[1].toString().padStart(2, "0")} :
+              {endTimeArray[2].toString().padStart(2, "0")}
             </p>
           </div>
         </div>
@@ -90,13 +88,7 @@ const TimeSet = ({ index }) => {
               showToolbar={true}
               label=""
               onChange={(newValue) => {
-                getAmpmTmStart(
-                  newValue,
-                  setStartTimeArray,
-                  index,
-                  dispatch,
-                  reduxState
-                );
+                getAmpmTmStart(newValue, setStartTimeArray, index, dispatch, reduxState);
 
                 if (Date.parse(newValue) >= Date.parse(endTime)) {
                   setStartTime(newValue);
@@ -125,20 +117,11 @@ const TimeSet = ({ index }) => {
   );
 };
 // getAm(오전)pm(오후)T(time)m(mins)
-function getAmpmTmStart(
-  newValue,
-  setStartTimeArray,
-  index,
-  dispatch,
-  reduxState
-) {
+function getAmpmTmStart(newValue, setStartTimeArray, index, dispatch, reduxState) {
   let array = [];
   //오전오후 가져오는 코드
   let localeString = newValue.toLocaleString();
-  let ampm = localeString.substring(
-    localeString.indexOf("오"),
-    localeString.indexOf("오") + 2
-  );
+  let ampm = localeString.substring(localeString.indexOf("오"), localeString.indexOf("오") + 2);
   array.push(ampm);
   //시간가져오는 코드
   let time = parseInt(
@@ -179,10 +162,7 @@ function getAmpmTmEnd(newValue, setendTimeArray) {
   let array = [];
   //오전오후 가져오는 코드
   let localeString = newValue.toLocaleString();
-  let ampm = localeString.substring(
-    localeString.indexOf("오"),
-    localeString.indexOf("오") + 2
-  );
+  let ampm = localeString.substring(localeString.indexOf("오"), localeString.indexOf("오") + 2);
   array.push(ampm);
   //시간가져오는 코드
   let time = localeString
@@ -191,10 +171,7 @@ function getAmpmTmEnd(newValue, setendTimeArray) {
     .padStart(2, 0);
   array.push(time);
   //분 가져오는 코드
-  let min = localeString.substring(
-    localeString.indexOf(":") + 1,
-    localeString.lastIndexOf(":")
-  );
+  let min = localeString.substring(localeString.indexOf(":") + 1, localeString.lastIndexOf(":"));
   array.push(min);
   setendTimeArray(array);
 }
