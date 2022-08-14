@@ -31,11 +31,11 @@ function FeedSetting({
 }) {
   let profileRef = useRef();
   let replyRef = useRef();
-  const [anval, setanval] = useState('');
+  const [anval, setanval] = useState("");
   const [chosenEmoji, setChosenEmoji] = useState(null);
   const [feedComments, setfeedComments] = useState([]);
   const [photoModal, setphotoModal] = useState([]);
-  const [editModal, seteditModal] = useState(false);  
+  const [editModal, seteditModal] = useState(false);
   let [profileComment, setprofileComment] = useState(false);
   const [comeditModal, setcomeditModal] = useState(false);
   const [modalShow, setModalShow] = useState(false);
@@ -139,9 +139,7 @@ function FeedSetting({
   let CommentList = ({ val }) => {
     return (
       <div className="writing" style={{ marginTop: "5px" }}>
-        <span className="id">
-          {val.commuComment === null ? null : val.commuComment.id}
-        </span>
+        <span className="id">{val.commuComment === null ? null : val.commuComment.id}</span>
         <span>{val.commuComment === null ? null : val.commuComment.reply}</span>
       </div>
     );
@@ -205,35 +203,32 @@ function FeedSetting({
                 }}
               >
                 <Profile
-                setanval={setanval}
-                    val={val}
-                    profileComment={profileComment}
-                    photoModal={photoModal}
-                    setphotoModal={setphotoModal}
-                    setprofileComment={setprofileComment}
+                  setanval={setanval}
+                  val={val}
+                  profileComment={profileComment}
+                  photoModal={photoModal}
+                  setphotoModal={setphotoModal}
+                  setprofileComment={setprofileComment}
                 />
               </div>
             )}
           </div>
           {profileComment && (
-        <CommentProfile
-          anval={anval}
-          val={val}
-          setprofileComment={setprofileComment}
-          seteditModal={seteditModal}
-          page={page}
-          list={list}
-          setloading={setloading}
-          forReRender={forReRender}
-          setForReRender={setForReRender}
-          setlist={setlist}
-        />
-      )}
+            <CommentProfile
+              anval={anval}
+              val={val}
+              setprofileComment={setprofileComment}
+              seteditModal={seteditModal}
+              page={page}
+              list={list}
+              setloading={setloading}
+              forReRender={forReRender}
+              setForReRender={setForReRender}
+              setlist={setlist}
+            />
+          )}
           <div className="dot">
-            <i
-              className="fa-solid fa-ellipsis fa-2x"
-              onClick={() => setModalShow(!modalShow)}
-            ></i>
+            <i className="fa-solid fa-ellipsis fa-2x" onClick={() => setModalShow(!modalShow)}></i>
             {modalShow && (
               <FeeduserModal
                 setlist={setlist}
@@ -282,10 +277,7 @@ function FeedSetting({
               }}
             >
               {val.islike ? (
-                <i
-                  className="fa-solid fa-heart fa-2x"
-                  style={{ color: "red" }}
-                ></i>
+                <i className="fa-solid fa-heart fa-2x" style={{ color: "red" }}></i>
               ) : (
                 <i className="fa-regular fa-heart fa-2x"></i>
               )}
@@ -325,9 +317,7 @@ function FeedSetting({
                 //   </Overlay>
                 // </Container1>
               )}
-              {comeditModal && (
-                <Edit val={val} setlist={setlist} seteditModal={seteditModal} />
-              )}
+              {comeditModal && <Edit val={val} setlist={setlist} seteditModal={seteditModal} />}
               {commentModal && (
                 <Comment
                   onClick={() => {
@@ -374,9 +364,7 @@ function FeedSetting({
               <span> {val.ctitle}</span>
             </p>
             <p className="userName">
-              <strong style={{ fontSize: "13px", marginRight: "5px" }}>
-                {val.id}
-              </strong>
+              <strong style={{ fontSize: "13px", marginRight: "5px" }}>{val.id}</strong>
               <span style={{ fontFamily: "normal", whiteSpace: "pre-wrap" }}>
                 {/* {val.content} */}
                 <span>{commenter}</span>
@@ -469,14 +457,9 @@ function FeedSetting({
 }
 async function getChatRoom(val, dispatch, setPrevChats) {
   await axios
-    .post(
-      "/aamurest/chat/room?fromid=" +
-        sessionStorage.getItem("username") +
-        "&toid=" +
-        val.id
-    )
+    .post("/aamurest/chat/room?fromid=" + sessionStorage.getItem("username") + "&toid=" + val.id)
     .then((resp) => {
-      setPrevChats(resp.data.list);
+      setPrevChats(resp.data.list.reverse());
       dispatch(addForChatInfo({ ...resp.data, id: val.id }));
     })
     .catch((err) => {
