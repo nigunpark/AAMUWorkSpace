@@ -5,7 +5,6 @@ import User from "./User.js";
 import axios from "axios";
 import Spinner from "./Spinner";
 
-
 function Main({
   searchb,
   setSearchb,
@@ -30,7 +29,7 @@ function Main({
   });
 
   const feedList = async (page) => {
-    try{
+    try {
       setloading(true);
       //백이랑 인스타 리스드를 뿌려주기 위한 axios
       let token = sessionStorage.getItem("token");
@@ -52,9 +51,8 @@ function Main({
       setForReRender(!forReRender);
 
       setloading(false);
-    }
-    catch{
-      alert('마지막페이지입니다')
+    } catch {
+      alert("마지막페이지입니다");
       setloading(false);
     }
   };
@@ -90,10 +88,7 @@ function Main({
           <Story></Story>   
         </div> */}
       <div className="margin-value">
-        <div
-          className="main-left"
-          style={{ display: "flex", flexDirection: "column" }}
-        >
+        <div className="main-left" style={{ display: "flex", flexDirection: "column" }}>
           {loading && <Spinner />}
           {list.map((val, i) => {
             return (
@@ -109,7 +104,7 @@ function Main({
                 setPrevChats={setPrevChats}
                 inputValue={inputValue}
                 setinputValue={setinputValue}
-                setloading={setloading} 
+                setloading={setloading}
                 page={page}
               />
             );
@@ -129,6 +124,8 @@ function Main({
             recommendUser={recommendUser}
             setpage={setpage}
             prevChats={prevChats}
+            setShowChat={setShowChat}
+            showChat={showChat}
           ></User>
         </div>
       </div>
@@ -137,4 +134,3 @@ function Main({
 }
 
 export default Main;
-
