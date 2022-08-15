@@ -39,12 +39,10 @@ const Profile = ({
         }
       )
       .then((resp) => {
-        console.log(resp.data);
         setisFollower(resp.data);
         userprofile();
       })
       .catch((error) => {
-        console.log(error);
       });
   }
 
@@ -61,7 +59,6 @@ const Profile = ({
         },
       })
       .then((resp) => {
-        console.log(resp.data);
         setphotoModal(resp.data);
         setisFollower(resp.data[0].isFollower);
         setuserPro(resp.data[0].totalcount);
@@ -72,7 +69,6 @@ const Profile = ({
         setphoto2(resp.data[2].photo[0]);
       })
       .catch((error) => {
-        console.log(error);
       });
   }
 
