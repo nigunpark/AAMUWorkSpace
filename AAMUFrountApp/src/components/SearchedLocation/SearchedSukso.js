@@ -144,7 +144,7 @@ function LocalInfoModal({
             </div>
             <div className="localInfo">
               <ul className="localInfo-ul">
-                <li>보기</li>
+                <li>-</li>
                 <li>{local.url}</li>
                 <li>{local.addr}</li>
                 <li>{local.tel}</li>
@@ -155,7 +155,10 @@ function LocalInfoModal({
         </BodyLim>
         <div className="localInfo__snsBtn__container">
           <ul className="localInfo__snsBtn-ul">
-            <a href={`https://www.instagram.com/explore/tags/${local.title}/`} target="_blank">
+            <a
+              href={`https://www.instagram.com/explore/tags/${local.title.split(" ").join("")}/`}
+              target="_blank"
+            >
               <li>
                 <img src={process.env.PUBLIC_URL + "/images/sns/instagram.png"} />
               </li>
