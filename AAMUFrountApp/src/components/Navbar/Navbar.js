@@ -27,13 +27,15 @@ const Navbar = ({ scrollNav, whereUrl, noti, setNoti }) => {
     if (showChatBot === false) chatArr = [];
   }, [showChatBot]);
   useEffect(() => {
-    setShowChatPrev(true);
-    setTimeout(() => {
-      chatPrevBoxRef.current.classList.add("chatPreviewBox__out");
-    }, 3500);
-    setTimeout(() => {
-      setShowChatPrev(false);
-    }, 4000);
+    if (reduxState.chatPreview.length !== 0) {
+      setShowChatPrev(true);
+      setTimeout(() => {
+        chatPrevBoxRef.current.classList.add("chatPreviewBox__out");
+      }, 3500);
+      setTimeout(() => {
+        setShowChatPrev(false);
+      }, 4000);
+    }
   }, [reduxState.chatPreview]);
   // console.log("chatPreview", reduxState.chatPreview[0].authid);
   return (
