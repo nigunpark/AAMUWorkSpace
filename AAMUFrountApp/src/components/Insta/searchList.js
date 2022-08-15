@@ -11,7 +11,6 @@ function SearchList({ searchb, inputValue, forReRender, setForReRender }) {
   const [comments, setcomments] = useState([]);
 
   function commentModal1(setcomments, lno) {
-    console.log("searchb.eelno", lno);
     // const copyFeedComments = [...comments];//feedComments에 담겨있던 댓글 받아옴
     // copyFeedComments.push(comment);//copyFeedComments에 있는 기존 댓글에 push하기 위함
     // setcomments(copyFeedComments);//copyFeedComments 담겨있을 comment를 setfeedComments로 변경
@@ -27,11 +26,9 @@ function SearchList({ searchb, inputValue, forReRender, setForReRender }) {
         },
       })
       .then((resp) => {
-        console.log(resp.data);
         setcomments(resp.data);
       })
       .catch((error) => {
-        console.log(error);
       });
   }
 
