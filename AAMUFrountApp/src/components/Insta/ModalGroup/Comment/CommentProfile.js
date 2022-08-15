@@ -36,14 +36,16 @@ function CommentProfile({
   const [valcontent, setvalcontent] = useState("");
   const [valtitle, setvaltitle] = useState("");
   const [valtname, setvaltname] = useState([]);
+  const [valPhoto, setvalPhoto] = useState([]);
   let [comment, setComment] = useState("");
   let [commentbb, setCommentbb] = useState();
+  const [valIslike, setvalIslike] = useState(false);
   // const [replyOne, setreplyOne] = useState("");
 
   const [emoji, setemoji] = useState(false);
   const onEmojiClick = (event, emojiObject) => {
-    // setChosenEmoji(emojiObject); 
-    replyRef.current.value =  replyRef.current.value+emojiObject.emoji;
+    // setChosenEmoji(emojiObject);
+    replyRef.current.value = replyRef.current.value + emojiObject.emoji;
   };
 
   let [isValid, setisValid] = useState(false);
@@ -79,13 +81,15 @@ function CommentProfile({
         },
       })
       .then((resp) => {
-        console.log( resp.data.title);
+        console.log(resp.data.title);
         val = resp.data;
-        setCommentHeart(resp.data.title)
+        setCommentHeart(resp.data.title);
         setvalcontent(resp.data.content);
         setvaltitle(resp.data.ctitle);
         setvaltname(resp.data.tname);
-        setCommentbb(resp.data)
+        setvalPhoto(resp.data.photo);
+        val.islike = resp.data.isLike;
+        val.likecount = resp.data.likecount;
         setcomments(resp.data.commuCommentList);
       })
       .catch((error) => {
@@ -229,7 +233,7 @@ function CommentProfile({
                 pagination={{ clickable: true }}
                 scrollbar={{ draggable: true }}
               >
-                {val.photo.map((image, i) => {
+                {valPhoto.map((image, i) => {
                   return (
                     <SwiperSlide key={i}>
                       <li>
@@ -257,7 +261,10 @@ function CommentProfile({
                   <p className="user-id">
                     <strong>{val.id}</strong>
                   </p>
-                  <a href={`https://map.kakao.com/?q=${val.title}`} target="_blank" >
+                  <a
+                    href={`https://map.kakao.com/?q=${val.title}`}
+                    target="_blank"
+                  >
                     <div
                       className="commentSearch_position"
                       style={{ marginLeft: "7px" }}
@@ -292,14 +299,16 @@ function CommentProfile({
               <div className="recommend-down">
                 <div className="recommendContents">
                   <div className="userimg1">
-                    <img
-                      className="userimg"
-                      src={val.userprofile}
-                      alt="프사"
-                      onError={(e) => {
-                        e.target.src = "/images/user.jpg";
-                      }}
-                    />
+                    <div>
+                      <img
+                        className="userimg"
+                        src={val.userprofile}
+                        alt="프사"
+                        onError={(e) => {
+                          e.target.src = "/images/user.jpg";
+                        }}
+                      />
+                    </div>
                   </div>
                   <div
                     style={{
@@ -318,7 +327,10 @@ function CommentProfile({
                     >
                       <div className="feeds-title">
                         <p>
-                          <span className="userName"style={{ marginLeft:'-1px' }} >
+                          <span
+                            className="userName"
+                            style={{ marginLeft: "-1px" }}
+                          >
                             <strong>제목 </strong>
                           </span>
                           <span style={{ fontFamily: "normal" }}>
@@ -425,14 +437,14 @@ function CommentProfile({
                             }}
                             className="comment-heart"
                           >
-                            {val.id === sessionStorage.getItem('username') &&
-                            <i
-                              className="fa-regular fa-trash-can "
-                              onClick={() => {
-                                deleteOne(val.cno);
-                              }}
-                            ></i>
-                            }
+                            {val.id === sessionStorage.getItem("username") && (
+                              <i
+                                className="fa-regular fa-trash-can "
+                                onClick={() => {
+                                  deleteOne(val.cno);
+                                }}
+                              ></i>
+                            )}
                           </div>
                         </div>
                         <div
