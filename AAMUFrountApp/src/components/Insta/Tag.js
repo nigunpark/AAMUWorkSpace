@@ -47,12 +47,10 @@ export function Tag({  tagpop, setSearchb, setinputValue }) {
         },
       })
       .then((resp) => {
-        console.log(resp.data);
         setSearchb(resp.data)
         navigate('/Insta/searchList')
       })
       .catch((error) => {
-        console.log(error);
       });
   }
 
@@ -67,7 +65,6 @@ export function Tag({  tagpop, setSearchb, setinputValue }) {
               e.stopPropagation();              
               setinputValue(e.target.innerHTML);
               searchBarTag(e)
-              console.log(e.target.innerHTML);
             }}
           />
         </div>
