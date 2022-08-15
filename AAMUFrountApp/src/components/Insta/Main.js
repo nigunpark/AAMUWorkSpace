@@ -58,7 +58,6 @@ function Main({
   };
 
   useEffect(() => {
-    console.log(page);
     feedList(page);
     setinputValue("");
   }, [page]);
@@ -125,7 +124,6 @@ function Main({
             setpage={setpage}
             prevChats={prevChats}
             setShowChat={setShowChat}
-            showChat={showChat}
           ></User>
         </div>
       </div>
