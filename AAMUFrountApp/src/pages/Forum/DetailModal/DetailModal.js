@@ -52,6 +52,7 @@ const DetailModal = ({
   let loginId = sessionStorage.getItem("username");
 
   let dispatch = useDispatch();
+
   useEffect(() => {
     const $body = document.querySelector("body");
     $body.style.overflow = "hidden";
@@ -123,6 +124,7 @@ const DetailModal = ({
         console.log((error) => console.log("게시판 상세보기 실패", error));
       });
   }, []);
+
   function isId(e) {
     if (e.id == sessionStorage.getItem("username")) {
       return true;
@@ -160,7 +162,7 @@ const DetailModal = ({
         }
       )
       .then((resp) => {
-        console.log("리뷰 post 했고 돌아오는 데이터", resp.data);
+        // console.log("리뷰 post 했고 돌아오는 데이터", resp.data);
         reviewData();
       });
   }
@@ -201,7 +203,7 @@ const DetailModal = ({
         },
       })
       .then((resp) => {
-        console.log("리뷰 삭제 성공 (DetailModal.js)");
+        // console.log("리뷰 삭제 성공 (DetailModal.js)");
         alert("리뷰가 삭제되었어요.");
       })
       .catch((error) => {
@@ -299,9 +301,7 @@ const DetailModal = ({
   };
 
   let stars = 0;
-  // const [stars, setStars] = useState(0);
   detailOne.reviewList.forEach((obj, i) => {
-    // setStars()
     stars += Number(obj.rate);
   });
   stars = Math.round((stars / detailOne.reviewList.length) * 10) / 10;

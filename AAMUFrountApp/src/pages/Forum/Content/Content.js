@@ -47,7 +47,7 @@ const Content = () => {
     });
   }
 
-  console.log("별점순으로 내림차순", sortData(listData, "rateavg", "desc"));
+  // console.log("별점순으로 내림차순", sortData(listData, "rateavg", "desc"));
 
   const selectList = async () => {
     await axios
