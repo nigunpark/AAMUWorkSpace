@@ -41,7 +41,6 @@ const FeeduserModal = ({val,setModalShow,seteditModal , setlist}) => {
             });
           })
           .catch((error) => {
-            console.log(error);
           });
       }
  
