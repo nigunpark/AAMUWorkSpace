@@ -17,6 +17,7 @@ import FeeduserModal from "./ModalGroup/FeeduserModal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLocationDot } from "@fortawesome/free-solid-svg-icons";
 import CommentProfile from "./ModalGroup/Comment/CommentProfile";
+import { text } from "@fortawesome/fontawesome-svg-core";
 function FeedSetting({
   val,
   list,
@@ -58,7 +59,7 @@ function FeedSetting({
         : setisValid(false));
   }
 
-  const commenter = useMemo(() => {
+  const content = useMemo(() => {
     // 조건에 따라 게시글을 보여주는 함수
     const shortReview = val.content.slice(0, textLimit.current); // 원본에서 글자 수만큼 잘라서 짧은 버전을 준비하자
 
@@ -71,7 +72,7 @@ function FeedSetting({
     }
     return val.content; // 그렇지않으면 (짧은 글에는) 쓴글 그대로 리턴!
   }, [isShowMore]); // 얘는 isShowMore의 상태가 바뀔때마다 호출된다
-
+  
   // document.getElementById('button_hint').disabled = false;
 
   // function uploadReply(replyUp){//이미지 업로드
@@ -85,9 +86,6 @@ function FeedSetting({
   function post(replyRef) {
     //유효성 검사를 통과하고 게시버튼 클릭시 발생하는 함수
     // feedComments = val.commuComment;
-    // console.log('id',sessionStorage.getItem('username'))
-    // console.log('lno',val.lno)
-    //    console.log('comment(11)',comment)
     // const copyFeedComments = [...feedComments];//feedComments에 담겨있던 댓글 받아옴
     // copyFeedComments.push(comment);//copyFeedComments에 있는 기존 댓글에 push하기 위함
     // setfeedComments(copyFeedComments);//copyFeedComments 담겨있을 comment를 setfeedComments로 변경
@@ -111,9 +109,6 @@ function FeedSetting({
         }
       )
       .then((resp) => {
-        console.log("resp.data.reply", resp.data.reply);
-        console.log("resp.data.id", resp.data.id);
-        console.log("resp.data", resp.data);
         val.commuComment = resp.data;
         // val.commuComment = resp.data.reply;
         setfeedComments(resp.data);
@@ -121,7 +116,6 @@ function FeedSetting({
         setisValid(false);
       })
       .catch((error) => {
-        console.log("error", error);
       });
 
     replyRef.current.value = ""; //사용자 댓글창을 빈 댓글 창으로 초기화
@@ -160,13 +154,11 @@ function FeedSetting({
         },
       })
       .then((resp) => {
-        console.log(resp.data);
         val.islike = resp.data.isLike;
         val.likecount = resp.data.likecount;
         setForReRender(!forReRender);
       })
       .catch((error) => {
-        console.log(error);
       });
   }
 
@@ -366,8 +358,8 @@ function FeedSetting({
             <p className="userName">
               <strong style={{ fontSize: "13px", marginRight: "5px" }}>{val.id}</strong>
               <span style={{ fontFamily: "normal", whiteSpace: "pre-wrap" }}>
-                {/* {val.content} */}
-                <span>{commenter}</span>
+                <span>{content}</span>
+                
                 {/* // 여기에 (짧은거나 원본) 글 내용이 들어가고  */}
 
                 <span
@@ -430,7 +422,6 @@ function FeedSetting({
             // }}
             onKeyUp={(e) => {
               btn_check();
-              // console.log(replyRef.current.value.length>0?'true':'false');
             }}
             // value={comment}
           />
@@ -441,8 +432,6 @@ function FeedSetting({
               isValid ? "submitCommentActive" : "submitCommentInactive"
             }
             onClick={() => {
-              console.log(isValid);
-              console.log(replyRef.current.value.length);
               post(replyRef);
             }} //클릭하면 위서 선언한 post함수를 실행하여 feedComments에 담겨서 re-rendering 된 댓글창을 확인할 수 있다
             disabled={isValid ? false : true} //사용자가 아무것도 입력하지 않았을 경우 게시를 할 수 없도록
