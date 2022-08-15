@@ -5,7 +5,11 @@ import MyEditBox from "./MyPageBox/MyEditBox";
 import MyHomeBox from "./MyPageBox/MyHomeBox";
 import MyProfileBox from "./MyPageBox/MyProfileBox";
 import MyMessageBar from "./MyMessageBar/MyMessageBar";
-import { faBookmark, faMessage, faThumbsUp } from "@fortawesome/free-regular-svg-icons";
+import {
+  faBookmark,
+  faMessage,
+  faThumbsUp,
+} from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import CommentSearch from "../../components/Insta/ModalGroup/Comment/CommentSearch";
@@ -135,7 +139,12 @@ const MyPage = () => {
   };
   async function getChatRoom(val, dispatch, setPrevChats) {
     await axios
-      .post("/aamurest/chat/room?fromid=" + sessionStorage.getItem("username") + "&toid=" + val)
+      .post(
+        "/aamurest/chat/room?fromid=" +
+          sessionStorage.getItem("username") +
+          "&toid=" +
+          val
+      )
       .then((resp) => {
         // console.log("resp.data.list", resp.data.list);
         setPrevChats([]);
@@ -188,7 +197,7 @@ const MyPage = () => {
       homeBox.current.classList.remove("jsListView");
       homeBox.current.classList.remove("jsGridView");
     }
-  }, [clickTab]);
+  }, [clickTab, isOpen]);
 
   const [val, setList] = useState([]);
   const [editModal, seteditModal] = useState(false);
@@ -298,8 +307,6 @@ const MyPage = () => {
               setUpload={setUpload}
               myInstar={myInstar}
               setMyLno={setMyLno}
-              myLno={myLno}
-              setMyInstar={setMyInstar}
               val={val}
               setList={setList}
               editModal={editModal}
@@ -346,7 +353,13 @@ const MyPage = () => {
                 gap: "5px",
               }}
             >
-              <div style={{ fontWeight: "bold", fontSize: "17px", textAlign: "center" }}>
+              <div
+                style={{
+                  fontWeight: "bold",
+                  fontSize: "17px",
+                  textAlign: "center",
+                }}
+              >
                 팔로잉
               </div>
               <div className="myPage__following">
@@ -369,8 +382,16 @@ const MyPage = () => {
                   })}
               </div>
             </div>
-            <div style={{ display: "flex", flexDirection: "column", gap: "5px" }}>
-              <div style={{ fontWeight: "bold", fontSize: "17px", textAlign: "center" }}>
+            <div
+              style={{ display: "flex", flexDirection: "column", gap: "5px" }}
+            >
+              <div
+                style={{
+                  fontWeight: "bold",
+                  fontSize: "17px",
+                  textAlign: "center",
+                }}
+              >
                 팔로워
               </div>
               <div className="myPage__follower">
@@ -411,7 +432,9 @@ const MyPage = () => {
                   onClick={(e) => {
                     e.stopPropagation();
                     getChatRoom(
-                      sessionStorage.getItem("username") === val.fromid ? val.toid : val.fromid,
+                      sessionStorage.getItem("username") === val.fromid
+                        ? val.toid
+                        : val.fromid,
                       dispatch,
                       setPrevChats
                     );
@@ -421,7 +444,13 @@ const MyPage = () => {
                   }}
                 >
                   <div className="chatRooms__profile-top">
-                    <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "8px",
+                      }}
+                    >
                       <div className="chatRooms__profile-img-container">
                         <img
                           src={
@@ -433,7 +462,9 @@ const MyPage = () => {
                         />
                       </div>
                       <span style={{ fontSize: "13px", fontWeight: "bold" }}>
-                        {sessionStorage.getItem("username") === val.fromid ? val.toid : val.fromid}
+                        {sessionStorage.getItem("username") === val.fromid
+                          ? val.toid
+                          : val.fromid}
                       </span>
                     </div>
                     <span style={{ fontSize: "12px", color: "grey" }}>
@@ -542,8 +573,6 @@ function TabContent({
   setUpload,
   myInstar,
   setMyLno,
-  myLno,
-  setMyInstar,
   val,
   setList,
   editModal,
@@ -557,14 +586,11 @@ function TabContent({
   setIsLoading,
 }) {
   const [showCBModal, setShowCBModal] = useState(false);
-
   const [selectRbn, setSelectRbn] = useState();
   const [modalOpen, setModalOpen] = useState(false);
-
   const [commentModal, setcommentModal] = useState(false);
   let [comment, setComment] = useState("");
   const [comments, setcomments] = useState([]);
-
   function commentModal1(setcomments, lno) {
     let token = sessionStorage.getItem("token");
     axios
@@ -578,7 +604,6 @@ function TabContent({
         },
       })
       .then((resp) => {
-        console.log("여긴가요:", resp.data);
         setcomments(resp.data);
       })
       .catch((error) => {
@@ -630,16 +655,30 @@ function TabContent({
                       <img alt="" className="instaImg" src={val.photo[0]} />
                       <div>
                         <div className="instaTitle__container">
-                          <input type="text" value={val.ctitle} className="instaTitle" />
+                          <input
+                            type="text"
+                            value={val.ctitle}
+                            className="instaTitle"
+                          />
                         </div>
                         <div className="insta__info">
                           <div>
-                            <FontAwesomeIcon icon={faMessage} className="insta__info-icon" />{" "}
-                            <span className="insta__info-content">{val.rcount}</span>
+                            <FontAwesomeIcon
+                              icon={faMessage}
+                              className="insta__info-icon"
+                            />{" "}
+                            <span className="insta__info-content">
+                              {val.rcount}
+                            </span>
                           </div>
                           <div>
-                            <FontAwesomeIcon icon={faThumbsUp} className="insta__info-icon" />
-                            <span className="insta__info-content">{val.likecount}</span>
+                            <FontAwesomeIcon
+                              icon={faThumbsUp}
+                              className="insta__info-icon"
+                            />
+                            <span className="insta__info-content">
+                              {val.likecount}
+                            </span>
                           </div>
                         </div>
                       </div>
@@ -676,7 +715,13 @@ function TabContent({
               />
             )}
 
-            {editModal && <MyEdit val={val} seteditModal={seteditModal} searchBar={searchBar} />}
+            {editModal && (
+              <MyEdit
+                val={val}
+                seteditModal={seteditModal}
+                searchBar={searchBar}
+              />
+            )}
           </div>
         </div>
       </>
@@ -687,7 +732,13 @@ function TabContent({
       <div className="myInstaContainer">
         <div className="myInstar">
           {myBookList.map((val, idx) => {
-            return <MyBookMarkBox setDetailOne={setDetailOne} detail={val} setIsOpen={setIsOpen} />;
+            return (
+              <MyBookMarkBox
+                setDetailOne={setDetailOne}
+                detail={val}
+                setIsOpen={setIsOpen}
+              />
+            );
           })}
         </div>
 

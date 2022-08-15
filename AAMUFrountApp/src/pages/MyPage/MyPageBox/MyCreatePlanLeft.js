@@ -452,11 +452,12 @@ function Content({ index, fromWooJaeData, setFromWooJaeData, timeSet, newTimeSet
           </span>{" "}
           <span>
             {newTimeSet.length !== 0 &&
-              newTimeSet
-                .find((obj) => {
+              Math.floor(
+                newTimeSet.find((obj) => {
                   return obj.day === index + 1;
-                })
-                .time.toString()
+                }).time
+              )
+                .toString()
                 .trim()
                 .padStart(2, "0")}
           </span>
