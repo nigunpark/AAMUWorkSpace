@@ -19,11 +19,6 @@ const Chat = ({ setShowChat, showChat, prevChats }) => {
       `/queue/chat/message/${reduxState.forChatInfo.roomno}`,
       (message) => {
         console.log(JSON.parse(message.body));
-        // console.log(showChat);
-        // if (!showChat) {
-        //   console.log("aa");
-        // }
-
         dispatch(addChatPreview([JSON.parse(message.body)]));
         if (JSON.parse(message.body).authid !== sessionStorage.getItem("username")) {
           let newChat = {
@@ -38,11 +33,8 @@ const Chat = ({ setShowChat, showChat, prevChats }) => {
     );
   }, [prevChats]);
   let inputRef = useRef();
-  let bodyRef = useRef();
-  // console.log("bodyRef", bodyRef.current.scrollTop);
   return (
     <Container>
-      {/* <InnnerContainer> */}
       <Content>
         <Title>
           {reduxState.forChatInfo.id}님과 대화
@@ -56,7 +48,7 @@ const Chat = ({ setShowChat, showChat, prevChats }) => {
             <FontAwesomeIcon icon={faXmark} />
           </div>
         </Title>
-        <Body ref={bodyRef}>
+        <Body>
           <div style={{ display: "flex", flexDirection: "column" }}>
             {chats.map((val, i) => {
               return (
@@ -131,10 +123,6 @@ const Chat = ({ setShowChat, showChat, prevChats }) => {
                 setChats((curr) => [...curr, newChat]);
                 sendChat(inputRef, reduxState);
                 e.target.value = "";
-
-                // getChats();
-                // chatArr.push({ message: inputRef.current.value, bool: false });
-                // chatArr = [...chatArr];
               }
             }}
           />
@@ -154,7 +142,6 @@ const Chat = ({ setShowChat, showChat, prevChats }) => {
           </span>
         </div>
       </Content>
-      {/* </InnnerContainer> */}
     </Container>
   );
 };
@@ -190,9 +177,7 @@ const Container = styled.div`
   top: 410px;
   animation: ${swing_instaChat} 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
 `;
-const InnnerContainer = styled.div`
-  position: relative;
-`;
+
 const Content = styled.div`
   position: relative;
   background: var(--blueWhite);
