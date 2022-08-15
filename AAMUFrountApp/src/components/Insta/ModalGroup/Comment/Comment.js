@@ -61,7 +61,7 @@ function Comment({
 
   const [comments, setcomments] = useState([]);
   function commentModal(setcomments) {
-    console.log(comment);
+    
     // const copyFeedComments = [...comments]; //feedComments에 담겨있던 댓글 받아옴
     // copyFeedComments.push(comment); //copyFeedComments에 있는 기존 댓글에 push하기 위함
     setcomments([...comments]); //copyFeedComments 담겨있을 comment를 setfeedComments로 변경
@@ -80,7 +80,7 @@ function Comment({
         setcomments(resp.data.commuCommentList);
       })
       .catch((error) => {
-        console.log(error);
+        
       });
     replyRef.current.value = "";
   }
@@ -104,13 +104,12 @@ function Comment({
         },
       })
       .then((resp) => {
-        console.log(resp.data);
         val.islike = resp.data.isLike;
         val.likecount = resp.data.likecount;
         setForReRender(!forReRender);
       })
       .catch((error) => {
-        console.log(error);
+      
       });
   }
 
@@ -134,7 +133,6 @@ function Comment({
       )
       .then((resp) => {
         const replyOne = resp.data.reply;
-        console.log("resp.data", resp.data.reply);
         const copyComments = [...replyOne];
         setcomments({ ...comments }, copyComments);
         setisValid(false);
@@ -142,7 +140,6 @@ function Comment({
         feedList(setloading, setlist, page, list);
       })
       .catch((error) => {
-        console.log(error);
       });
 
     replyRef.current.value = ""; //사용자 댓글창을 빈 댓글 창으로 초기화
@@ -151,8 +148,6 @@ function Comment({
   function deleteOne(cno) {
     let token = sessionStorage.getItem("token");
 
-    console.log("val.lno", val.lno);
-    console.log("val.cno", cno);
     axios
       .delete("/aamurest/gram/comment/edit", {
         headers: {
@@ -173,7 +168,6 @@ function Comment({
         feedList(setloading, setlist, page, list);
       })
       .catch((error) => {
-        console.log(error);
       });
   }
   const feedList = async (setloading, setlist, page, list) => {
@@ -192,7 +186,6 @@ function Comment({
     for (let k = 0; k < temp.data.length; k += 1) {
       removelist = removelist.filter((item) => item.lno != temp.data[k].lno);
     }
-    console.log(removelist);
     const tempComments = removelist.concat(temp.data);
     setlist([...tempComments]);
     setloading(false);
@@ -363,7 +356,6 @@ function Comment({
                       key={i}
                       className="recommendContents"
                       onClick={(e) => {
-                        // console.log(val.cno);
                       }}
                     >
                       <div>
@@ -513,7 +505,6 @@ function Comment({
                 // }}
                 onKeyUp={(e) => {
                   btn_check();
-                  // console.log(replyRef.current.value.length>0?'true':'false');
                 }}
                 // value={comment}
               />
@@ -524,8 +515,6 @@ function Comment({
                   isValid ? "submitCommentActive" : "submitCommentInactive"
                 }
                 onClick={() => {
-                  console.log(isValid);
-                  console.log(replyRef.current.value.length);
                   post(replyRef);
                 }} //클릭하면 위서 선언한 post함수를 실행하여 feedComments에 담겨서 re-rendering 된 댓글창을 확인할 수 있다
                 disabled={isValid ? false : true} //사용자가 아무것도 입력하지 않았을 경우 게시를 할 수 없도록
