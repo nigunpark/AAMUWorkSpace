@@ -63,11 +63,9 @@ const MyEdit = ({ val, seteditModal, searchBar }) => {
         },
       })
       .then((resp) => {
-        console.log(resp.data);
         setSearch(resp.data);
       })
       .catch((error) => {
-        console.log(error);
       });
   }
 
@@ -358,7 +356,6 @@ function feedList(setlist) {
       setlist(resp.data);
     })
     .catch((error) => {
-      console.log(error);
     });
 }
 
@@ -404,7 +401,6 @@ function edit(
     })
     .catch((error) => {
       alert("수정에 실패했습니다. 관리자에게 문의하세요");
-      console.log(error);
     });
 }
 const MyUsername = styled.span`
