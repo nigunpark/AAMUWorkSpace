@@ -61,13 +61,11 @@ function User({
         },
       })
       .then((resp) => {
-        console.log(resp.data);
         setSearchb(resp.data);
 
         navigater("/Insta/searchList");
       })
       .catch((error) => {
-        console.log(error);
       });
   }
 
@@ -89,10 +87,8 @@ function User({
       )
       .then((resp) => {
         setusefollow(resp.data);
-        console.log(resp.data);
       })
       .catch((error) => {
-        console.log(error);
       });
   }
 
@@ -110,11 +106,9 @@ function User({
         },
       })
       .then((resp) => {
-        console.log(resp.data);
         settitle(resp.data);
       })
       .catch((error) => {
-        console.log(error);
       });
   }
 
@@ -131,10 +125,8 @@ function User({
       })
       .then((resp) => {
         settagpop(resp.data);
-        console.log(resp.data);
       })
       .catch((error) => {
-        console.log(error);
       });
   }
 
