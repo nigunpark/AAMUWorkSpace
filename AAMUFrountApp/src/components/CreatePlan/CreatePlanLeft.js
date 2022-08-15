@@ -351,14 +351,15 @@ function Content({ index, fromWooJaeData, setFromWooJaeData }) {
           });
 
           // console.log("what", what);
-          // console.log("newWooJaeData", newWooJaeData);
+          console.log("newWooJaeData", newWooJaeData);
+          // setFromWooJaeData(newWooJaeData);
           let editData = [];
           newWooJaeData.map((val, i) => {
             Object.values(val)[0].map((obj, i) => {
               editData.push(obj);
             });
           });
-
+          console.log("editData", editData);
           let token = sessionStorage.getItem("token");
           axios
             .post(
@@ -603,7 +604,6 @@ function DetailSetting({
     // if (obj.dto === null) return;
     return;
   if (obj === undefined) return;
-  console.log(obj.dto);
   return (
     <div className="detailSetting__container" id={i}>
       <div className="movingTime">
