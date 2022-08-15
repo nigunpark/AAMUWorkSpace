@@ -19,10 +19,8 @@ const ChatBot = ({ showChatBot, chatArr }) => {
       dispatch(addChatBotData(val));
     }
   }
-  console.log("chats", chats);
   useEffect(() => {
-    console.log(1);
-    chatBotRef.current.scrollIntoView();
+    chatBotRef.current.scrollTop = chatBotRef.current.scrollHeight;
   }, [chats]);
   return (
     <Container>
@@ -161,7 +159,7 @@ const Content = styled.div`
   position: relative;
   background: var(--blueWhite);
   box-shadow: var(--lightShadow);
-  z-index: 200;
+  // z-index: 200;
   width: 330px;
   height: 600px;
   bottom: 620px;
@@ -185,13 +183,17 @@ const Title = styled.div`
 const Body = styled.div`
   position: absolute;
   width: 97%;
-  height: 86%;
+  height: 510px;
   margin: 5px;
   margin-top: 7px;
   background: white;
   border-radius: 7px;
   display: flex;
   flex-direction: column-reverse;
+  overflow-y: auto;
+  &::-webkit-scrollbar {
+    width: 3px;
+  }
 `;
 
 export default React.memo(ChatBot);
