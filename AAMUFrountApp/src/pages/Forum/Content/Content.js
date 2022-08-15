@@ -32,6 +32,23 @@ const Content = () => {
     }
   }
 
+  function sortData(data, rateavg, type) {
+    if (type == undefined) {
+      type = "asc";
+    }
+    return data.sort(function (a, b) {
+      let x = a[rateavg];
+      let y = b[rateavg];
+      if (type == "desc") {
+        return x > y ? -1 : x < y ? 1 : 0;
+      } else if (type == "asc") {
+        return x < y ? -1 : x > y ? 1 : 0;
+      }
+    });
+  }
+
+  console.log("별점순으로 내림차순", sortData(listData, "rateavg", "desc"));
+
   const selectList = async () => {
     await axios
       .get("/aamurest/bbs/SelectList", {
@@ -54,7 +71,6 @@ const Content = () => {
 
   useEffect(() => {
     selectList();
-    // bookMarkList();
   }, [isOpen]);
   useEffect(() => {
     chatbotModal();
