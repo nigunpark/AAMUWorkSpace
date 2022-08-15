@@ -46,7 +46,6 @@ const Edit = ({ setlist, val, seteditModal, setloading, page, list }) => {
     searchRef.current.value = val.title;
     setlistid({ TITLE: val.title, CONTENTID: val.contentid });
   }, []);
-  console.log(listid);
   function searchWord(e, setSearch) {
     //위치 지정을 위한 백에게 받는 axios
     let val = e.target.value;
@@ -62,11 +61,9 @@ const Edit = ({ setlist, val, seteditModal, setloading, page, list }) => {
         },
       })
       .then((resp) => {
-        console.log(resp.data);
         setSearch(resp.data);
       })
       .catch((error) => {
-        console.log(error);
       });
   }
 
@@ -91,7 +88,6 @@ const Edit = ({ setlist, val, seteditModal, setloading, page, list }) => {
     let updatedTagList = [...tagList];
     updatedTagList.push(tagItem);
     setTagList(updatedTagList);
-    console.log("tagList", tagList);
     setTagItem("");
   };
 
@@ -111,8 +107,6 @@ const Edit = ({ setlist, val, seteditModal, setloading, page, list }) => {
         return val !== delOne;
       });
     });
-    // console.log(delOne);
-    // console.log(edithash);
   };
 
   function fn_checkByte(obj) {
@@ -448,14 +442,13 @@ const feedList = async (setloading, setlist, page, list) => {
       id: sessionStorage.getItem("username"),
     },
   });
-
   let removelist = list;
   for (let k = 0; k < temp.data.length; k += 1) {
     removelist = removelist.filter((item) => item.lno != temp.data[k].lno);
   }
-  console.log(removelist);
   const tempComments = removelist.concat(temp.data);
   setlist([...tempComments]);
+  console.log(list)
   setloading(false);
 };
 
@@ -474,11 +467,9 @@ function hashTag(e, settagModal) {
       },
     })
     .then((resp) => {
-      console.log(resp.data);
       settagModal(resp.data);
     })
     .catch((error) => {
-      console.log(error);
     });
 }
 
@@ -527,13 +518,11 @@ function edit(
       }
     )
     .then((resp) => {
-      console.log(resp.data);
       setShowWrite(resp.data);
       feedList(setloading, setlist, page, list);
       alert("수정이 완료되었습니다!");
     })
     .catch((error) => {
-      console.log(error);
     });
 }
 
