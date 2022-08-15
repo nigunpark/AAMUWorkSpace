@@ -74,7 +74,6 @@ function CommentSearch({ val, setForReRender, forReRender, setcommentModal, setc
         setcomments(resp.data);
       })
       .catch((error) => {
-        console.log(error);
       });
     replyRef1.current.value = "";
   }
@@ -102,7 +101,6 @@ function CommentSearch({ val, setForReRender, forReRender, setcommentModal, setc
         setForReRender(!forReRender);
       })
       .catch((error) => {
-        console.log(error);
       });
   }
 
@@ -133,7 +131,6 @@ function CommentSearch({ val, setForReRender, forReRender, setcommentModal, setc
         setisValid(false)
       })
       .catch((error) => {
-        console.log(error);
       });
     replyRef1.current.value = "";
   }
@@ -153,13 +150,11 @@ function CommentSearch({ val, setForReRender, forReRender, setcommentModal, setc
         },
       })
       .then((resp) => {
-        console.log(resp.data);
         setdeleteOne1(resp.data); //성공 여부가 온다 true false
         // alert('삭제되었습니다!')
         commentModal2(setcomments);
       })
       .catch((error) => {
-        console.log(error);
       });
   }
 
@@ -441,7 +436,6 @@ function CommentSearch({ val, setForReRender, forReRender, setcommentModal, setc
                 // }}
                  onKeyUp={(e) => {
               btn_check()
-              // console.log(replyRef.current.value.length>0?'true':'false');
             }}
             // value={comment}
           />
@@ -454,8 +448,6 @@ function CommentSearch({ val, setForReRender, forReRender, setcommentModal, setc
                 : "submitCommentInactive"
             }
             onClick={() => {
-              console.log(isValid);
-              console.log(replyRef1.current.value.length);
               post(replyRef1);
             }} //클릭하면 위서 선언한 post함수를 실행하여 feedComments에 담겨서 re-rendering 된 댓글창을 확인할 수 있다
             disabled={isValid ? false : true} //사용자가 아무것도 입력하지 않았을 경우 게시를 할 수 없도록
