@@ -40,7 +40,6 @@ const Modal = ({
         });
       })
       .catch((error) => {
-        console.log(error);
       });
   }
 
