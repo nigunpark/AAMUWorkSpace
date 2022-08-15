@@ -42,7 +42,6 @@ const Uploader = ({ list, setsquare, setlist, setloading, page, setpage }) => {
 
   function hashTag(e, settagModal) {
     let val = e.target.value;
-    console.log("val", val);
     // submitTagItem()
     // 업로드 버튼 누르고 화면 새로고침
     let token = sessionStorage.getItem("token");
@@ -56,11 +55,9 @@ const Uploader = ({ list, setsquare, setlist, setloading, page, setpage }) => {
         },
       })
       .then((resp) => {
-        console.log(resp.data);
         settagModal(resp.data);
       })
       .catch((error) => {
-        console.log(error);
       });
   }
 
@@ -132,7 +129,6 @@ const Uploader = ({ list, setsquare, setlist, setloading, page, setpage }) => {
     let updatedTagList = [...tagList];
     updatedTagList.push(tagItem);
     setTagList(updatedTagList);
-    console.log("tagList", tagList);
     setTagItem("");
   };
 
@@ -150,8 +146,6 @@ const Uploader = ({ list, setsquare, setlist, setloading, page, setpage }) => {
   //   URL.revokeObjectURL(fileImage);
   //   setFileImage("");
   //   setHide(false)
-
-  // console.log('Ref', countRef.current.value)
   // };
   {
     /* <button style={{
@@ -205,11 +199,9 @@ const Uploader = ({ list, setsquare, setlist, setloading, page, setpage }) => {
         },
       })
       .then((resp) => {
-        // console.log(resp.data);
         setSearch(resp.data);
       })
       .catch((error) => {
-        console.log(error);
       });
   }
 
@@ -587,7 +579,6 @@ function gramEdit(
     return val.TITLE === searchRef.current.value;
   });
   console.log("searched:", searched);
-  // console.log("tagList:", tagList);
   temp.append("id", sessionStorage.getItem("username"));
   temp.append("ctitle", titleRef.current.value);
   temp.append("content", textareaRef.current.value);
@@ -603,13 +594,11 @@ function gramEdit(
       },
     })
     .then((resp) => {
-      console.log(resp.data);
       setupload(resp.data);
       setpage(1);
       feedList(setloading, setlist, 1);
     })
     .catch((error) => {
-      console.log(error);
     });
 }
 
