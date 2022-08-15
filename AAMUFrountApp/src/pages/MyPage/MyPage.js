@@ -557,14 +557,11 @@ function TabContent({
   setIsLoading,
 }) {
   const [showCBModal, setShowCBModal] = useState(false);
-
   const [selectRbn, setSelectRbn] = useState();
   const [modalOpen, setModalOpen] = useState(false);
-
   const [commentModal, setcommentModal] = useState(false);
   let [comment, setComment] = useState("");
   const [comments, setcomments] = useState([]);
-
   function commentModal1(setcomments, lno) {
     let token = sessionStorage.getItem("token");
     axios
@@ -578,7 +575,6 @@ function TabContent({
         },
       })
       .then((resp) => {
-        console.log("여긴가요:", resp.data);
         setcomments(resp.data);
       })
       .catch((error) => {
