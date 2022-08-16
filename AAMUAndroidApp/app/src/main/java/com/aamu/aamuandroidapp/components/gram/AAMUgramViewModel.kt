@@ -103,7 +103,8 @@ class  AAMUgramViewModel(context : Context) : ViewModel(){
                 for(tempuri in uriArray.value!!){
                     tempphoto.add(tempuri.toString())
                 }
-
+                val dateTime: Date = Calendar.getInstance().time
+                val dateTimeAsLong: Long = dateTime.time
                 val tempList = aamuGramList.value?.toMutableList()
                 tempList?.add(0,AAMUGarmResponse(
                     photo = tempphoto,
@@ -111,7 +112,10 @@ class  AAMUgramViewModel(context : Context) : ViewModel(){
                     contentid = map.get("contentid"),
                     tname = (map.get("tname")?.split(",")),
                     id=map.get("id"),
-                    content = map.get("content"), userprofile = userprofile))
+                    content = map.get("content"),
+                    userprofile = userprofile,
+                    postdate = dateTimeAsLong
+                ))
                 aamuGramList.value = tempList?.toList()
 
 
@@ -121,7 +125,7 @@ class  AAMUgramViewModel(context : Context) : ViewModel(){
                             getGramList()
                         }
                         else{
-                            Toast.makeText(contextL,"포스팅에 실패했어요",Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context,"포스팅에 실패했어요",Toast.LENGTH_SHORT).show()
                         }
                     }
             }

@@ -291,8 +291,8 @@ fun GramContentInput(
             keyboardActions = KeyboardActions(),
             interactionSource = contentInteractionState,
             trailingIcon ={},
-//            maxLines = 20,
-//            singleLine = false
+            maxLines = 20,
+            singleLine = false
         )
         Column(modifier = Modifier.width(130.dp), horizontalAlignment = Alignment.CenterHorizontally) {
             Image(
