@@ -154,7 +154,7 @@ textarea, table td p {
 }
 
 .notice-table {
-	width: 100%;
+	width: 100%!important;
 }
 
 td.admin-title a {

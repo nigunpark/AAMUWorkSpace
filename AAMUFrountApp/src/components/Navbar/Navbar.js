@@ -27,7 +27,7 @@ const Navbar = ({ scrollNav, whereUrl, noti, setNoti }) => {
     if (showChatBot === false) chatArr = [];
   }, [showChatBot]);
   useEffect(() => {
-    if (reduxState.chatPreview.length !== 0) {
+    if (noti[noti.length - 1] !== 0) {
       setShowChatPrev(true);
       setTimeout(() => {
         chatPrevBoxRef.current.classList.add("chatPreviewBox__out");
@@ -36,7 +36,7 @@ const Navbar = ({ scrollNav, whereUrl, noti, setNoti }) => {
         setShowChatPrev(false);
       }, 4000);
     }
-  }, [reduxState.chatPreview]);
+  }, [noti]);
   // console.log("chatPreview", reduxState.chatPreview[0].authid);
   return (
     <div className="navbar__fragment">
@@ -134,34 +134,36 @@ const Navbar = ({ scrollNav, whereUrl, noti, setNoti }) => {
       {location.pathname.indexOf("mainPage") !== 1 && location.pathname.indexOf("forum") !== 1 && (
         <ChatBotBtn setShowChatBot={setShowChatBot} showChatBot={showChatBot} />
       )}
-      {showChatPrev && (
-        <div className="chatPreviewBox" ref={chatPrevBoxRef}>
-          <div className="chatPreviewBox__container">
-            <div className="chatPreviewBox__top">
-              <span style={{ fontSize: "19px", fontWeight: "bold" }}>
-                {reduxState.chatPreview[0].authid}
-              </span>
-              <span style={{ fontSize: "14px" }}>
-                {(new window.Date(reduxState.chatPreview[0].senddate).getHours() >= 12 &&
-                new window.Date(reduxState.chatPreview[0].senddate).getMinutes() >= 1
-                  ? "오후"
-                  : "오전") +
-                  (new window.Date(reduxState.chatPreview[0].senddate).getHours() > 12
-                    ? new window.Date(reduxState.chatPreview[0].senddate).getHours() - 12
-                    : new window.Date(reduxState.chatPreview[0].senddate).getHours()) +
-                  ":" +
-                  new window.Date(reduxState.chatPreview[0].senddate)
-                    .getMinutes()
-                    .toString()
-                    .padStart(2, "0")}
-              </span>
-            </div>
-            <div className="chatPreviewBox__bottom">
-              <p>{reduxState.chatPreview[0].missage}</p>
+      {noti[noti.length - 1] !== undefined &&
+        noti[noti.length - 1].id === sessionStorage.getItem("username") &&
+        showChatPrev && (
+          <div className="chatPreviewBox" ref={chatPrevBoxRef}>
+            <div className="chatPreviewBox__container">
+              <div className="chatPreviewBox__top">
+                {/* <span style={{ fontSize: "19px", fontWeight: "bold" }}>
+                  {noti[noti.length-1].}
+                </span> */}
+                <span style={{ fontSize: "14px" }}>
+                  {(new window.Date(noti[noti.length - 1].senddate).getHours() >= 12 &&
+                  new window.Date(noti[noti.length - 1].senddate).getMinutes() >= 1
+                    ? "오후"
+                    : "오전") +
+                    (new window.Date(noti[noti.length - 1].senddate).getHours() > 12
+                      ? new window.Date(noti[noti.length - 1].senddate).getHours() - 12
+                      : new window.Date(noti[noti.length - 1].senddate).getHours()) +
+                    ":" +
+                    new window.Date(noti[noti.length - 1].senddate)
+                      .getMinutes()
+                      .toString()
+                      .padStart(2, "0")}
+                </span>
+              </div>
+              <div className="chatPreviewBox__bottom">
+                <p>{noti[noti.length - 1].amessage}</p>
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
     </div>
   );
 };
@@ -214,6 +216,7 @@ function UserBadge({ noti, setNoti }) {
       }).length;
     }
   }
+
   return (
     <>
       <Container>
@@ -296,16 +299,16 @@ function UserBadge({ noti, setNoti }) {
                         onClick={(e) => {
                           e.stopPropagation();
                           val.readknow = 1;
+                          e.target.classList.add("read_noti");
                           readNoti(val);
-                          setNoti((curr) => {
-                            return curr.splice(
-                              curr.findIndex((value) => {
-                                return value.nano === val.nano;
-                              }),
-                              1,
-                              val
-                            );
-                          });
+                          let temp = [...noti];
+                          temp.splice(
+                            temp.findIndex((value) => {
+                              return value.nano === val.nano;
+                            }),
+                            1
+                          );
+                          setNoti(temp);
                         }}
                       >
                         {val.amessage}

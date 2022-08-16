@@ -70,6 +70,7 @@ public class AdminCommuServiceImpl implements AdminCommuService {
 	public int commuDelete(Map map) {
 		int affected=0;
 		affected = transactionTemplate.execute(tx->{
+			int resultAffectd=0;
 			List<String> lnoLists=(List<String>)map.get("lno");
 			
 			for(String lno:lnoLists) {
@@ -78,6 +79,7 @@ public class AdminCommuServiceImpl implements AdminCommuService {
 				dao.commuDelete(map);
 				
 				map.put("table", "commuphoto");
+				System.out.println("여기 왜 안타");
 				dao.commuDelete(map);
 				
 				map.put("table", "commuplace");
@@ -86,9 +88,13 @@ public class AdminCommuServiceImpl implements AdminCommuService {
 				map.put("table", "likeboard");
 				dao.commuDelete(map);
 				
+				map.put("table", "commutag");
+				dao.commuDelete(map);
+				
 				map.put("table", "community");
+				resultAffectd=dao.commuDelete(map);
 			}
-			return dao.commuDelete(map);
+			return resultAffectd;
 		});
 		
 		return affected;
@@ -144,6 +150,12 @@ public class AdminCommuServiceImpl implements AdminCommuService {
 		}
 		else
 			return 0;
+	}
+	
+	//사진 목록 가져오기 
+	@Override
+	public List<String> commuSelectPhotoList(Map map) {
+		return dao.commuSelectPhotoList(map);
 	}
 	
 	/////////////////////////////////////////////////////////////////////

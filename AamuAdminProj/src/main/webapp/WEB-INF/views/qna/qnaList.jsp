@@ -41,7 +41,7 @@
 													</th>
 													<th class="col-1">번호</th>
 
-													<th>제목</th>
+													<th class="col-title">제목</th>
 													<th class="col-1">문의</th>
 													<th class="col-1">답변</th>
 													<th class="col-1">날짜</th>
@@ -139,7 +139,7 @@
 </div>
 
 <style>
-
+.col-title {min-width:1500px!important;}
 table {
 	table-layout: fixed;
 }
@@ -167,7 +167,7 @@ textarea, table td p {
 
 
 .qna-table {
-	width: 100%;
+	width: 100%!importants;
 }
 
 td.admin-title a {

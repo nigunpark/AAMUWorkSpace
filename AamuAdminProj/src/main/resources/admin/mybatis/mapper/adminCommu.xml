@@ -47,6 +47,11 @@
 		DELETE commucomment WHERE cno = #{cno}
 	</delete>
 	
+	<!-- 사진 목록 가져오기 -->
+	<select id="commuSelectPhotoList" parameterType="Map" resultType="String">
+		SELECT photo FROM commuphoto WHERE lno=#{lno} ORDER BY lno DESC
+	</select>
+	
 	<!-- /////////////////////////////////////////////////////////////////// -->
 	
 	<!-- 커뮤니티 월별 통계 -->
