@@ -20,6 +20,7 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.aamu.aamuandroidapp.components.gram.AAMUgramViewModel
 import com.aamu.aamuandroidapp.components.login.HorizontalDottedProgressBar
 import com.aamu.aamuandroidapp.pluck.PluckConfiguration
 import com.aamu.aamuandroidapp.pluck.ui.Pluck
@@ -34,7 +35,7 @@ import kotlinx.coroutines.launch
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun GramPosting(
-    viewModel : GramPostingViewModel,
+    viewModel : AAMUgramViewModel,
     goToAppSettings : ()-> Unit,
     navPopBackStack : ()-> Unit
 ){
@@ -104,7 +105,8 @@ fun GramPosting(
                                     map.put("contentid",locationContentid.toString())
                                     map.put("tname",hashtags.joinToString(","))
 
-                                    viewModel.postGram(map,navPopBackStack)
+                                    viewModel.postGram(map)
+                                    navPopBackStack.invoke()
                                 },
                                 colors = ButtonDefaults.buttonColors(
                                     backgroundColor = Color.White,
@@ -178,5 +180,5 @@ fun GramPosting(
 @Preview
 @Composable
 fun PreviewGramPosting(){
-    GramPosting(GramPostingViewModel(context = LocalContext.current),{},{})
+    GramPosting(AAMUgramViewModel(context = LocalContext.current),{},{})
 }

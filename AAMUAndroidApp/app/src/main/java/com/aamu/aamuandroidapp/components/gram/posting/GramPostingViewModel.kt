@@ -32,53 +32,5 @@ class GramPostingViewModelFactory(val context: Context) : ViewModelProvider.Fact
 class GramPostingViewModel(context: Context) : ViewModel() {
 
     private val aamuRepository : AAMURepository = AAMUDIGraph.createAAMURepository()
-    private val context = context
 
-
-    val recentPlaces = MutableLiveData<List<AAMUPlaceResponse>>()
-    val errorLiveData = MutableLiveData<String>()
-
-    val uriArray = MutableLiveData<ArrayList<Uri>>()
-
-    fun getGramRcentPlaces() = viewModelScope.launch{
-        val location : Location? = getLatLng()
-        aamuRepository.getRecentPlace(location?.latitude ?:33.450701,location?.longitude ?:126.570667)
-            .collect { aamuplaces ->
-                if (aamuplaces.isNotEmpty()){
-                    recentPlaces.value = aamuplaces
-                }
-                else{
-                    errorLiveData.value = "주변 장소를 찾는데 실패하였습니다"
-                    Toast.makeText(context,"주변 장소를 찾는데 실패하였습니다", Toast.LENGTH_LONG).show()
-                }
-            }
-    }
-
-    fun seturiArry(list: List<PluckImage>) {
-        val templist = ArrayList<Uri>()
-        for(item in list){
-            templist.add(item.uri)
-        }
-        uriArray.value = templist
-    }
-
-    fun postGram(
-        map: Map<String,String>,
-        navPopBackStack: () -> Unit
-    ) {
-        if(uriArray.value?.isNotEmpty()==true) {
-            viewModelScope.launch {
-                aamuRepository.postGram(uriArray.value!!.toList(),map)
-                    .collect{
-                        if(it.isNotEmpty()){
-                            navPopBackStack.invoke()
-                            Toast.makeText(contextL,"포스팅에 성공했어요",Toast.LENGTH_SHORT).show()
-                        }
-                        else{
-                            Toast.makeText(contextL,"포스팅에 실패했어요",Toast.LENGTH_SHORT).show()
-                        }
-                    }
-            }
-        }
-    }
 }

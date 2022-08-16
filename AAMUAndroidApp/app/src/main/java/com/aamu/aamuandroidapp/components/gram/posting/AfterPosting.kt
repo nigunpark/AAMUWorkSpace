@@ -37,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.aamu.aamuandroidapp.R
+import com.aamu.aamuandroidapp.components.gram.AAMUgramViewModel
 import com.aamu.aamuandroidapp.ui.theme.aamuorange
 import com.aamu.aamuandroidapp.ui.theme.twitterColor
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -49,7 +50,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalPagerApi::class, ExperimentalComposeUiApi::class)
 @Composable
 fun AfterPosting(
-    viewModel: GramPostingViewModel,
+    viewModel: AAMUgramViewModel,
     coroutineScope: CoroutineScope,
     pagerState: PagerState,
     title: TextFieldValue,
@@ -96,7 +97,7 @@ fun AfterPosting(
             interactionSource = titleInteractionState
         )
         Spacer(modifier = Modifier.height(20.dp))
-        GramContentInput(viewModel,context,content,oncontentChange,contentInteractionState,coroutineScope,pagerState)
+        GramContentInput(viewModel,context,content,oncontentChange,contentInteractionState,contentFocusRequester,coroutineScope,pagerState)
         Spacer(modifier = Modifier.height(20.dp))
         var locationMore by remember { mutableStateOf(false) }
         TextInput(
@@ -244,11 +245,12 @@ fun TextInput(
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun GramContentInput(
-    viewModel: GramPostingViewModel,
+    viewModel: AAMUgramViewModel,
     context: Context,
     content: TextFieldValue,
     onValueChange: (TextFieldValue) -> Unit,
     contentInteractionState: MutableInteractionSource,
+    focusRequester: FocusRequester,
     coroutineScope: CoroutineScope,
     pagerState: PagerState
 ) {
@@ -265,6 +267,7 @@ fun GramContentInput(
             content,
             onValueChange,
             modifier = Modifier.height(200.dp),
+            focusRequester = focusRequester,
             leadingIcon = {
                 Image(
                     painter = rememberAsyncImagePainter(
@@ -288,8 +291,8 @@ fun GramContentInput(
             keyboardActions = KeyboardActions(),
             interactionSource = contentInteractionState,
             trailingIcon ={},
-            maxLines = 20,
-            singleLine = false
+//            maxLines = 20,
+//            singleLine = false
         )
         Column(modifier = Modifier.width(130.dp), horizontalAlignment = Alignment.CenterHorizontally) {
             Image(

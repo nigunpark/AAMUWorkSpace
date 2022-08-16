@@ -9,18 +9,19 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import com.aamu.aamuandroidapp.components.gram.AAMUgramViewModel
+import com.aamu.aamuandroidapp.components.gram.AAMUgramViewModelFactory
 import com.aamu.aamuandroidapp.components.gram.posting.GramPosting
-import com.aamu.aamuandroidapp.components.gram.posting.GramPostingViewModel
-import com.aamu.aamuandroidapp.components.gram.posting.GramPostingViewModelFactory
 
 class GramPostingFragment : Fragment() {
 
     private lateinit var navController : NavController
 
+    private lateinit var viewModel : AAMUgramViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -29,9 +30,11 @@ class GramPostingFragment : Fragment() {
     ): View = ComposeView(inflater.context).apply {
 
         navController = findNavController()
-        val viewModel : GramPostingViewModel by viewModels<GramPostingViewModel>{
-            GramPostingViewModelFactory(context)
-        }
+
+        viewModel = ViewModelProvider(requireActivity(),
+            AAMUgramViewModelFactory(requireContext())
+        )[AAMUgramViewModel::class.java]
+
         setContent {
             GramPosting(viewModel = viewModel,goToAppSettings = { goToAppSettings() },navPopBackStack={navController.popBackStack()})
         }

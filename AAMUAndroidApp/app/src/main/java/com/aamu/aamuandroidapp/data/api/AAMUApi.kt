@@ -105,7 +105,7 @@ interface AAMUApi {
     suspend fun getUserInfo(@Query("id") id : String) : Response<AAMUUserInfo>
 
     companion object {
-        private const val BASE_URL = "http://192.168.0.22:8080/aamurest/"
+        private const val BASE_URL = "http://192.168.45.107:8080/aamurest/"
 
         operator fun invoke():AAMUApi{
             val requestInterceptor  = Interceptor{ chain ->

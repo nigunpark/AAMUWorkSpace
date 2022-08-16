@@ -70,7 +70,7 @@ fun PostItem(
             }
         }
         PostInteractionBar(
-            lno = gram.lno!!,
+            lno = gram.lno ?: 0,
             isLiked = isLiked ?: false,
             onLikeClicked = onLikeClicked,
             onCommentsClicked = onCommentsClicked,

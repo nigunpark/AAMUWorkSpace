@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
@@ -18,6 +19,8 @@ import com.aamu.aamuandroidapp.components.gram.AAMUgramViewModelFactory
 import com.aamu.aamuandroidapp.data.DemoDataProvider
 import com.aamu.aamuandroidapp.databinding.FragmentGramBinding
 import com.aamu.aamuandroidapp.fragment.main.MainFragmentDirections
+import com.aamu.aamuandroidapp.fragment.main.MainViewModel
+import com.aamu.aamuandroidapp.fragment.main.MainViewModelFactory
 import com.aamu.aamuandroidapp.ui.theme.ComposeCookBookTheme
 
 class GramFragment : Fragment() {
@@ -33,17 +36,19 @@ class GramFragment : Fragment() {
         return binding.root
     }
 
+    private lateinit var viewModel : AAMUgramViewModel
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         navControllerHost = findNavController()
-
+        viewModel = ViewModelProvider(requireActivity(),
+            AAMUgramViewModelFactory(requireContext())
+        )[AAMUgramViewModel::class.java]
         binding.gramCompose.setContent {
             ComposeCookBookTheme {
-                val viewModel : AAMUgramViewModel = viewModel(
-                    factory = AAMUgramViewModelFactory(LocalContext.current)
-                )
                 AAMUgramHome(
+                    viewModel = viewModel,
                     onLikeClicked = {
                         viewModel.getGramLike(it)
                     },
