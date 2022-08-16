@@ -56,6 +56,7 @@ function App() {
   window.addEventListener("scroll", handleScroll);
   let reduxState = useSelector((state) => state);
   useEffect(() => {
+    console.log("notibody", notibody);
     const tempNoti = noti.concat(notibody);
     setNoti([...tempNoti]);
   }, [notibody]);
@@ -64,12 +65,8 @@ function App() {
     client.current.subscribe(
       `/queue/notification/${sessionStorage.getItem("username")}`,
       ({ body }) => {
-        // setChatMessages((_chatMessages) => [..._chatMessages, JSON.parse(body)]);
-        // const tempNoti = noti.concat(JSON.parse(body));
-        // setNoti([...tempNoti]);
-        // console.log("tempNoti", tempNoti);
-        // console.log([...noti, JSON.parse(body)]);
-        setnotibody(JSON.parse(body));
+        console.log("123");
+        // setnotibody(JSON.parse(body));
       }
     );
   };
