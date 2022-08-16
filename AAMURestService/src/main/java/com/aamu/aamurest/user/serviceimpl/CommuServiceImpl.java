@@ -43,12 +43,12 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 			int totalCount=dao.commuGetTotlaCount(map); //10
 			//map.put("totalCount", totalCount);
 			//전체 페이지수 
-			int totalPage = (int)Math.ceil((double)totalCount/5);//4
+			int totalPage = (int)Math.ceil((double)totalCount/10);//4
 			//현재 페이지 번호
 			int nowPage=Integer.parseInt(map.get("page").toString().trim()); //2
 			//시작 및 끝 ROWNUM구하기
-			int start=(nowPage-1)*5+1; //4
-			int end=nowPage*5;	//6
+			int start=(nowPage-1)*10+1; //4
+			int end=nowPage*10;	//6
 			map.put("start", start);
 			map.put("end", end);
 		}
