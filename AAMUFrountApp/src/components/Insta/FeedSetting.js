@@ -30,6 +30,7 @@ function FeedSetting({
   setloading,
   page,
 }) {
+  
   let profileRef = useRef();
   let replyRef = useRef();
   const [anval, setanval] = useState("");
@@ -71,7 +72,7 @@ function FeedSetting({
       return shortReview; // (더보기가 false면) 짧은 버전 리턴해주자
     }
     return val.content; // 그렇지않으면 (짧은 글에는) 쓴글 그대로 리턴!
-  }, [isShowMore]); // 얘는 isShowMore의 상태가 바뀔때마다 호출된다
+  }, [isShowMore,val.content]); // 얘는 isShowMore의 상태가 바뀔때마다 호출된다
   
   // document.getElementById('button_hint').disabled = false;
 
@@ -115,8 +116,7 @@ function FeedSetting({
         setForReRender(!forReRender);
         setisValid(false);
       })
-      .catch((error) => {
-      });
+      .catch((error) => {});
 
     replyRef.current.value = ""; //사용자 댓글창을 빈 댓글 창으로 초기화
   }
@@ -133,7 +133,9 @@ function FeedSetting({
   let CommentList = ({ val }) => {
     return (
       <div className="writing" style={{ marginTop: "5px" }}>
-        <span className="id">{val.commuComment === null ? null : val.commuComment.id}</span>
+        <span className="id">
+          {val.commuComment === null ? null : val.commuComment.id}
+        </span>
         <span>{val.commuComment === null ? null : val.commuComment.reply}</span>
       </div>
     );
@@ -158,8 +160,7 @@ function FeedSetting({
         val.likecount = resp.data.likecount;
         setForReRender(!forReRender);
       })
-      .catch((error) => {
-      });
+      .catch((error) => {});
   }
 
   return (
@@ -220,13 +221,19 @@ function FeedSetting({
             />
           )}
           <div className="dot">
-            <i className="fa-solid fa-ellipsis fa-2x" onClick={() => setModalShow(!modalShow)}></i>
+            <i
+              className="fa-solid fa-ellipsis fa-2x"
+              onClick={() => setModalShow(!modalShow)}
+            ></i>
             {modalShow && (
               <FeeduserModal
                 setlist={setlist}
                 setModalShow={setModalShow}
                 seteditModal={seteditModal}
                 val={val}
+                setloading={setloading} 
+                page={page} 
+                list={list}
               />
             )}
             {editModal && (
@@ -269,7 +276,10 @@ function FeedSetting({
               }}
             >
               {val.islike ? (
-                <i className="fa-solid fa-heart fa-2x" style={{ color: "red" }}></i>
+                <i
+                  className="fa-solid fa-heart fa-2x"
+                  style={{ color: "red" }}
+                ></i>
               ) : (
                 <i className="fa-regular fa-heart fa-2x"></i>
               )}
@@ -309,7 +319,9 @@ function FeedSetting({
                 //   </Overlay>
                 // </Container1>
               )}
-              {comeditModal && <Edit val={val} setlist={setlist} seteditModal={seteditModal} />}
+              {comeditModal && (
+                <Edit val={val} setlist={setlist} seteditModal={seteditModal} />
+              )}
               {commentModal && (
                 <Comment
                   onClick={() => {
@@ -356,10 +368,12 @@ function FeedSetting({
               <span> {val.ctitle}</span>
             </p>
             <p className="userName">
-              <strong style={{ fontSize: "13px", marginRight: "5px" }}>{val.id}</strong>
+              <strong style={{ fontSize: "13px", marginRight: "5px" }}>
+                {val.id}
+              </strong>
               <span style={{ fontFamily: "normal", whiteSpace: "pre-wrap" }}>
                 <span>{content}</span>
-                
+
                 {/* // 여기에 (짧은거나 원본) 글 내용이 들어가고  */}
 
                 <span
@@ -446,7 +460,12 @@ function FeedSetting({
 }
 async function getChatRoom(val, dispatch, setPrevChats) {
   await axios
-    .post("/aamurest/chat/room?fromid=" + sessionStorage.getItem("username") + "&toid=" + val.id)
+    .post(
+      "/aamurest/chat/room?fromid=" +
+        sessionStorage.getItem("username") +
+        "&toid=" +
+        val.id
+    )
     .then((resp) => {
       setPrevChats(resp.data.list.reverse());
       dispatch(addForChatInfo({ ...resp.data, id: val.id }));

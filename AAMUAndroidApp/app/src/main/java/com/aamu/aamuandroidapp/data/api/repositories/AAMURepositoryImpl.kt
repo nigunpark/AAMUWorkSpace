@@ -21,6 +21,9 @@ import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 import kotlin.math.ln
 
 class AAMURepositoryImpl(
@@ -290,16 +293,14 @@ class AAMURepositoryImpl(
         emit(emptyList<AAMUGarmResponse>())
     }.flowOn(Dispatchers.IO)
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override suspend fun postGram(
-        multifiles: ArrayList<Uri>,
-        map: Map<String, String>,
-        tname : List<String>
+        multifiles: List<Uri>,
+        map: Map<String, String>
     ): Flow<Map<String, Boolean>> = flow<Map<String,Boolean>> {
-        var images = ArrayList<MultipartBody.Part>()
+        var images = Vector<MultipartBody.Part>()
         for (index in 0..multifiles.size - 1) {
             val file = File(getRealPathFromURI(multifiles.get(index)))
-            val surveyBody = file.asRequestBody("image/*".toMediaTypeOrNull())
+            val surveyBody = file.asRequestBody("file".toMediaTypeOrNull())
             images.add(MultipartBody.Part.createFormData("multifiles", file.name, surveyBody))
         }
 
@@ -307,16 +308,16 @@ class AAMURepositoryImpl(
         for(key in map.keys){
             val act = map.get(key)?.toRequestBody("text/plain".toMediaTypeOrNull())
             if (act != null) {
-                bodymap.put(key,act)
+                bodymap.put(key, act)
             }
         }
-        val bodytname = ArrayList<MultipartBody.Part>()
-        for (tna in tname){
-            bodytname.add(MultipartBody.Part.createFormData("tname",tna))
-        }
 
-        val response = aamuApi.postGram(images, bodymap,bodytname)
+        Log.i("com.aamu.aamu","map : "+map.toString())
+        val response = aamuApi.postGram(images.toList(), bodymap)
+        Log.i("com.aamu.aamu","결과값이 나올때 까지 안찍힘")
+//        val response = aamuApi.postGramFile(images.toList())
         if (response.isSuccessful) {
+            Log.i("com.aamu.aamu","몇초 걸렸음")
             emit(response.body() ?: emptyMap())
         } else {
             emit(emptyMap())

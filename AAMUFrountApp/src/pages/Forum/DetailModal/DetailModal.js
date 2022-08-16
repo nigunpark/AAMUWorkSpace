@@ -560,9 +560,9 @@ const DetailModal = ({
                     </div>
                     <div className="detail-button">
                       {sessionStorage.getItem("username") === detailOne.id ? (
-                        <button className="detail__plan__review-btn" disabled>
+                        <span className="detail__plan__review-btn" disabled>
                           댓글쓰기
-                        </button>
+                        </span>
                       ) : (
                         <span
                           ref={reviewBtn}

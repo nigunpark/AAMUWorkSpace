@@ -41,6 +41,7 @@ function Main({
           id: sessionStorage.getItem("username"),
         },
       });
+      console.log(temp)
       const tempComments = list.concat(temp.data);
       if (page === 1) {
         setlist(temp.data);

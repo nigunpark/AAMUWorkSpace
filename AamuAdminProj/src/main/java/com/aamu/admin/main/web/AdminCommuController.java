@@ -1,6 +1,7 @@
 package com.aamu.admin.main.web;
 
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.List;
@@ -63,7 +64,19 @@ public class AdminCommuController {
 	//글 삭제
 	@PostMapping("CommuDelete.do")
 	@ResponseBody
-	public Map commuDelete(@RequestBody Map map){
+	public Map commuDelete(@RequestBody Map map/*, HttpServletRequest req*/){
+		System.out.println("삭제 map:"+map);
+		//사진삭제
+		/*
+		List<String> photoLists=commuService.commuSelectPhotoList(map);
+		String path=req.getSession().getServletContext().getRealPath("/resources/commuUpload");
+		
+		try {
+			FileUploadUtil.fileDeletes(photoLists, path);
+		} catch (IllegalStateException | IOException e) {}
+		*/
+		
+		
 		int affected=commuService.commuDelete(map);
 		//데이타 반환
 		Map resultMap = new HashMap();
