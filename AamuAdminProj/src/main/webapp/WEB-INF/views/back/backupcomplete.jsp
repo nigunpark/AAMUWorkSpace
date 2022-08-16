@@ -72,13 +72,6 @@
 
 
 <script>
-$(document).ajaxStart(function() {
-	common.callSpinner();
-});
-/* 통신 종료 */
-$(document).ajaxStop(function() {
-	common.clearSpinner();
-});
 
 $('#save').click(function(){
 	var placelist =new Array();
@@ -125,12 +118,6 @@ $('#crawll').click(function(){
 		data: placejson,
 		contentType:"application/json", //데이타 보낼 때
 		dataType: "json" //데이타 받을 때 
-		
-		,success:function(res){ 
-		    console.log('저장 성공',data);
-			location.reload();
-		         
-	    } 
 	    ,beforeSend:function(){ 
 			var width = 0;
 			var height = 0;
@@ -145,17 +132,22 @@ $('#crawll').click(function(){
 				$("#div_ajax_load_image").show();             
 			}
 			else {
-				$('body').append('<div id="div_ajax_load_image" style="position:absolute; top:' + top + 'px; left:' + left + 'px; width:' + width + 'px; height:' + height + 'px; z-index:9999; background:#f0f0f0; filter:alpha(opacity=50); opacity:alpha*0.5; margin:auto; padding:0; "><img src="file://D:\\temp\\ajax_loader.gif" style="width:50px; height:50px;"></div>');
+				$('body').append('<div id="div_ajax_load_image" style="position:absolute; top:' + top + 'px; left:' + left + 'px; width:' + width + 'px; height:' + height + 'px; z-index:9999; background:#f0f0f0; filter:alpha(opacity=50); opacity:alpha*0.5; margin:auto; padding:0; "><img src="<c:url value="/resources/images/imgloading.gif"/>" style="width:50px; height:50px;"></div>');
 			}
 	    } 
 	    ,complete:function(){ 
 		 		$("#div_ajax_load_image").hide();
+	    }
+		,success:function(res){ 
+		    console.log('저장 성공',res);
+			location.reload();
+		         
 	    } 
 	    ,error:function(e){ 
 			console.log('실패',e)
 	    } 
 	});
-
+});
   </script>
 </body>
 </html>
