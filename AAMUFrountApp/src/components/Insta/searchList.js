@@ -28,8 +28,7 @@ function SearchList({ searchb, inputValue, forReRender, setForReRender }) {
       .then((resp) => {
         setcomments(resp.data);
       })
-      .catch((error) => {
-      });
+      .catch((error) => {});
   }
 
   return (
@@ -47,8 +46,7 @@ function SearchList({ searchb, inputValue, forReRender, setForReRender }) {
           <div style={{ paddingLeft: "20px" }}>
             <p className="user-id">{inputValue}</p>
             <p className="user-name">
-              게시물{" "}
-              <strong style={{ color: "black" }}>{searchb.length}</strong>
+              게시물 <strong style={{ color: "black" }}>{searchb.length}</strong>
             </p>
           </div>
         </User>
