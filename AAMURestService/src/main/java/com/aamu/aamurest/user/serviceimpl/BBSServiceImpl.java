@@ -37,15 +37,13 @@ public class BBSServiceImpl implements BBSService{
 	@Override
 	public List<BBSDTO> bbsSelectList(Map map) {
 		List<BBSDTO> bbsList = dao.bbsSelectList(map);
-		List<BBSDTO> returnList = new Vector<>();
 
 		for(BBSDTO dto:bbsList) {
 			int rbn = dto.getRbn();
 			dto.setReviewList(dao.reviewSelectList(rbn));
-			returnList.add(dto);
 		}
 		
-		return returnList;
+		return bbsList;
 	}
 
 	//글 목록_사진 뿌려주기
@@ -95,13 +93,11 @@ public class BBSServiceImpl implements BBSService{
 	@Override
 	public List<BBSDTO> bbsBookmarkList(Map map) {
 		List<BBSDTO> bookmarkList = dao.bbsBookmarkList(map);
-		List<BBSDTO> returnList = new Vector<>();
 		for(BBSDTO dto:bookmarkList) {	
 			int rbn = dto.getRbn();
 			dto.setReviewList(dao.reviewSelectList(rbn));
-			returnList.add(dto);
 		}
-		return returnList;
+		return bookmarkList;
 	}
 
 
