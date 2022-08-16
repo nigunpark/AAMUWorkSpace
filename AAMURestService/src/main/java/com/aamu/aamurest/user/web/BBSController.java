@@ -250,6 +250,20 @@ public class BBSController {
 	@DeleteMapping("/review/edit")
 	public Map reviewDelete(@RequestParam Map map) {
 		int reviewDeleteAffected=bbsService.reviewDelete(map);
+		int rbn = Integer.parseInt(map.get("rbn").toString());
+		List<ReviewDTO> list = bbsService.reviewSelectList(rbn);
+		System.out.println("list의 목록:"+list.toString());
+		double total = 0;
+		if(list.size() != 0) {
+			for(ReviewDTO dto:list) {
+				total += dto.getRate();
+			}
+			total = Math.round(total / (list.size())*10);
+			total = total/10;
+		}
+		System.out.println("평점 평균:"+total);
+		map.put("rateavg", total);
+		bbsService.updateRate(map);
 		Map resultMap = new HashMap();
 		if(reviewDeleteAffected==1)
 			resultMap.put("result", "deleteSuccess");
