@@ -527,6 +527,7 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 	public int insertCommuTagTb(Map map) {
 		int affected=0;
 		List<String> tnameList = new Vector<>();
+		
 		try {
 			for(String tnameString:((String)map.get("tname")).split(",")) {
 				String tnameStr = tnameString.replaceAll(" ", "").substring(1); //서울
