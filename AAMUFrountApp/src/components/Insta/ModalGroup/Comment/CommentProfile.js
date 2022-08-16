@@ -14,6 +14,7 @@ import "../Upload/UploadSwiper.css";
 import dayjs from "dayjs";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLocationDot } from "@fortawesome/free-solid-svg-icons";
+import { padding } from "@mui/system";
 
 function CommentProfile({
   val,
@@ -90,8 +91,7 @@ function CommentProfile({
         val.likecount = resp.data.likecount;
         setcomments(resp.data.commuCommentList);
       })
-      .catch((error) => {
-      });
+      .catch((error) => {});
     replyRef.current.value = "";
   }
 
@@ -118,8 +118,7 @@ function CommentProfile({
         val.likecount = resp.data.likecount;
         setForReRender(!forReRender);
       })
-      .catch((error) => {
-      });
+      .catch((error) => {});
   }
 
   function post(replyRef) {
@@ -148,8 +147,7 @@ function CommentProfile({
         commentModal(setcomments);
         feedList(setloading, setlist, page, list);
       })
-      .catch((error) => {
-      });
+      .catch((error) => {});
 
     replyRef.current.value = ""; //사용자 댓글창을 빈 댓글 창으로 초기화
   }
@@ -175,8 +173,7 @@ function CommentProfile({
         // commentModal(setcomments);
         feedList(setloading, setlist, page, list);
       })
-      .catch((error) => {
-      });
+      .catch((error) => {});
   }
   const feedList = async (setloading, setlist, page, list) => {
     //백이랑 인스타 리스드를 뿌려주기 위한 axios
@@ -234,7 +231,8 @@ function CommentProfile({
             </ul>
           </div>
           <div className="contents22">
-            <div className="feeds-settingCom">
+            <div className="feeds-settingCom"
+            >
               <div className="search-contents">
                 <div className="gradient">
                   <img
@@ -286,9 +284,20 @@ function CommentProfile({
             <div className="recommend">
               <div className="recommend-down">
                 <div className="recommendContents">
-                  <div className="userimg1">
-                    <div>
+                  <div className="userimg1"
+                  style={{
+                    alignSelf:'flex-start',
+                    marginTop:'10px',
+                    cursor: "auto",
+                  }}>
+                    
                       <img
+                      style={{
+                        width: "37px",
+                        height: "37px",
+                        borderRadius  : "50%",
+                        cursor: "auto",
+                      }}
                         className="userimg"
                         src={val.userprofile}
                         alt="프사"
@@ -296,14 +305,15 @@ function CommentProfile({
                           e.target.src = "/images/user.jpg";
                         }}
                       />
-                    </div>
                   </div>
                   <div
                     style={{
+                      fontStyle:'normal',
                       display: "flex",
                       flexDirection: "column",
                       marginTop: "10px",
                       marginLeft: "10px",
+                      cursor: "auto",
                     }}
                   >
                     <div
@@ -372,8 +382,7 @@ function CommentProfile({
                     <div
                       key={i}
                       className="recommendContents"
-                      onClick={(e) => {
-                      }}
+                      onClick={(e) => {}}
                     >
                       <div>
                         <img

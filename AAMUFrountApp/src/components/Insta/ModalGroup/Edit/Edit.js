@@ -63,8 +63,7 @@ const Edit = ({ setlist, val, seteditModal, setloading, page, list }) => {
       .then((resp) => {
         setSearch(resp.data);
       })
-      .catch((error) => {
-      });
+      .catch((error) => {});
   }
 
   const onKeyPress = (e) => {
@@ -330,13 +329,28 @@ const Edit = ({ setlist, val, seteditModal, setloading, page, list }) => {
                 placeholder="위치 추가"
                 type="text"
                 ref={searchRef}
-              />
+              />  
               {hasText ? (
-                <SearchModal
-                  search={search}
-                  setlistid={setlistid}
-                  setHasText={setHasText}
-                />
+                <Searchengine>
+                <Searchcontents>
+                  {search.map((val, i) => {
+                    return (
+                      <P
+                        key={i}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setlistid({ TITLE: val.TITLE, CONTENTID: val.CONTENTID });
+                          searchRef.current.value = val.TITLE
+                          setHasText(false);
+                        }}
+                      >
+                        {val.TITLE}
+                      </P>
+                    );
+                  })}
+                  {/* // val.indexOf(inputValue)!==-1?<P onClick={()=>onClick(i)}>{val.TITLE}</P>  */}
+                </Searchcontents>
+              </Searchengine>
               ) : null}
 
               <i className="fa-solid fa-location-dot" />
@@ -402,20 +416,25 @@ const Edit = ({ setlist, val, seteditModal, setloading, page, list }) => {
                   }}
                 />
                 {showWrite && (
-                   <Searchengine>
-                       <Searchcontents>
-                       {tagModal.length > 1 &&
-                         tagModal.map((val,i)=>{
-                           return (
-                           <P key={i}
-                             onClick={(e)=>{
-                             e.stopPropagation();
-                             setTagItem(e.target.value)
-                             setShowWrite(false)}              
-                           }>{val}</P>
-                           )})}
-                       </Searchcontents>
-                   </Searchengine>
+                  <Searchengine>
+                    <Searchcontents>
+                      {tagModal.length > 1 &&
+                        tagModal.map((val, i) => {
+                          return (
+                            <P
+                              key={i}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setTagItem(e.target.value);
+                                setShowWrite(false);
+                              }}
+                            >
+                              {val}
+                            </P>
+                          );
+                        })}
+                    </Searchcontents>
+                  </Searchengine>
                 )}
 
                 <i className="fa-solid fa-hashtag"></i>
@@ -448,7 +467,7 @@ const feedList = async (setloading, setlist, page, list) => {
   }
   const tempComments = removelist.concat(temp.data);
   setlist([...tempComments]);
-  console.log(list)
+  console.log(temp.data);
   setloading(false);
 };
 
@@ -469,8 +488,7 @@ function hashTag(e, settagModal) {
     .then((resp) => {
       settagModal(resp.data);
     })
-    .catch((error) => {
-    });
+    .catch((error) => {});
 }
 
 function edit(
@@ -490,15 +508,8 @@ function edit(
   //새 게시물 업로드를 위한 axios
 
   let updatedTagList1;
-  if (edithash === null) {
-    updatedTagList1 = [...tagList];
-  } else {
-    if (edithash.length > 1) {
-      updatedTagList1 = [...edithash, ...tagList];
-    } else {
-      updatedTagList1 = [edithash, ...tagList];
-    }
-  }
+  updatedTagList1 = [ ...tagList,...edithash];
+  console.log("updatedTagList1 : ", updatedTagList1);
   setEdit(updatedTagList1);
   let token = sessionStorage.getItem("token");
   axios
@@ -518,11 +529,13 @@ function edit(
       }
     )
     .then((resp) => {
+      console.log(resp.data);
       setShowWrite(resp.data);
       feedList(setloading, setlist, page, list);
       alert("수정이 완료되었습니다!");
     })
     .catch((error) => {
+      console.log(error);
     });
 }
 
@@ -553,10 +566,11 @@ const Overlay = styled.div`
 const Contents = styled.div`
   position: relative;
   padding: 0 auto;
-  width: 60%;
   top: 30px;
-  // align-item:center;
-  height: 700px;
+  width: 60%;
+  // min-width:30%;
+  // max-width:60%;
+  height: 750px;
   background: white;
   display: flex;
   flex-direction: column;
@@ -608,39 +622,37 @@ const DDButton = styled.button`
   border-radius: 50%;
   color: tomato;
 `;
-
 const Searchengine = styled.div`
-position: absolute;
-width: 35%;
-height: 200px;
-background-color: transparent;
-right:10px;
-z-index: 9;
-overflow: auto;
-`
+  position: absolute;
+  width: 35%;
+  height: 250px;
+  background-color: transparent;
+  right: 10px;
+  z-index: 9;
+  overflow: auto;
+`;
 const Searchcontents = styled.div`
-position: absolute;
-width: 95%;
-height: 200px;
-display: flex;
-background-color: #fff;
-flex-direction: column;
-box-shadow: 0 0 5px 1px rgba(var(--jb7, 0, 0, 0), 0.0975);
-align-items: center;
-margin-left: 10px;
-`
-const P = styled.div`  
-display: flex;
-position: relative;
-width: 100%;
-height: 50px;
-padding-left: 10px;
-align-items: center;
-cursor:pointer;
-font-size:15px;
+  position: absolute;
+  width: 95%;
+  display: flex;
+  background-color: #fff;
+  flex-direction: column;
+  box-shadow: 0 0 5px 1px rgba(var(--jb7, 0, 0, 0), 0.0975);
+  align-items: center;
+  margin-left: 10px;
+`;
+const P = styled.div`
+  display: flex;
+  position: relative;
+  width: 100%;
+  height: 50px;
+  padding-left: 10px;
+  align-items: center;
+  cursor: pointer;
+  font-size: 15px;
 
-&:hover {
-  background-color: #e5e5e5;
-}
-`
+  &:hover {
+    background-color: #e5e5e5;
+  }
+`;
 export default Edit;

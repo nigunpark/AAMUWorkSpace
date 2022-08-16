@@ -30,6 +30,7 @@ function FeedSetting({
   setloading,
   page,
 }) {
+  
   let profileRef = useRef();
   let replyRef = useRef();
   const [anval, setanval] = useState("");
@@ -71,8 +72,8 @@ function FeedSetting({
       return shortReview; // (더보기가 false면) 짧은 버전 리턴해주자
     }
     return val.content; // 그렇지않으면 (짧은 글에는) 쓴글 그대로 리턴!
-  }, [isShowMore]); // 얘는 isShowMore의 상태가 바뀔때마다 호출된다
-
+  }, [isShowMore,val.content]); // 얘는 isShowMore의 상태가 바뀔때마다 호출된다
+  
   // document.getElementById('button_hint').disabled = false;
 
   // function uploadReply(replyUp){//이미지 업로드
@@ -230,6 +231,9 @@ function FeedSetting({
                 setModalShow={setModalShow}
                 seteditModal={seteditModal}
                 val={val}
+                setloading={setloading} 
+                page={page} 
+                list={list}
               />
             )}
             {editModal && (
