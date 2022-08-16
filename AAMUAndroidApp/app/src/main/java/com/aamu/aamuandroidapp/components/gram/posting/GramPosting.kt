@@ -2,8 +2,9 @@ package com.aamu.aamuandroidapp.components.gram.posting
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.SharedPreferences
 import android.widget.Toast
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -92,7 +93,18 @@ fun GramPosting(
                                 onClick = {
                                     loading = true
                                     keyboardController?.hide()
-                                    viewModel.postGram(title.text,content.text,locationContentid,hashtags,navPopBackStack)
+                                    val preferences : SharedPreferences = context.getSharedPreferences("usersInfo", Context.MODE_PRIVATE)
+                                    val userid : String? = preferences.getString("id",null)
+
+                                    val map = HashMap<String,String>()
+
+                                    map.put("id",userid ?: "")
+                                    map.put("ctitle",title.text)
+                                    map.put("content",content.text)
+                                    map.put("contentid",locationContentid.toString())
+                                    map.put("tname",hashtags.joinToString(","))
+
+                                    viewModel.postGram(map,navPopBackStack)
                                 },
                                 colors = ButtonDefaults.buttonColors(
                                     backgroundColor = Color.White,
