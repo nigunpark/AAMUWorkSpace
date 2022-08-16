@@ -71,7 +71,7 @@
 	 
 	 <!-- 북마크 목록 -->
 	<select id="bbsBookmarkList" parameterType="map" resultType="BBSDTO">
-		SELECT * FROM routebbs WHERE rbn IN (SELECT rbn FROM bookmark WHERE id=#{id})
+		SELECT * FROM routebbs WHERE rbn IN (SELECT rbn FROM bookmark WHERE id=#{id}) ORDER BY rownum DESC
 	</select>
 	
 	<!-- 북마크 목록_routeDTO -->
