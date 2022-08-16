@@ -30,6 +30,7 @@ function FeedSetting({
   setloading,
   page,
 }) {
+  
   let profileRef = useRef();
   let replyRef = useRef();
   const [anval, setanval] = useState("");
@@ -71,7 +72,7 @@ function FeedSetting({
       return shortReview; // (더보기가 false면) 짧은 버전 리턴해주자
     }
     return val.content; // 그렇지않으면 (짧은 글에는) 쓴글 그대로 리턴!
-  }, [isShowMore]); // 얘는 isShowMore의 상태가 바뀔때마다 호출된다
+  }, [isShowMore,val.content]); // 얘는 isShowMore의 상태가 바뀔때마다 호출된다
   
   // document.getElementById('button_hint').disabled = false;
 
@@ -227,6 +228,9 @@ function FeedSetting({
                 setModalShow={setModalShow}
                 seteditModal={seteditModal}
                 val={val}
+                setloading={setloading} 
+                page={page} 
+                list={list}
               />
             )}
             {editModal && (
@@ -358,9 +362,15 @@ function FeedSetting({
             <p className="userName">
               <strong style={{ fontSize: "13px", marginRight: "5px" }}>{val.id}</strong>
               <span style={{ fontFamily: "normal", whiteSpace: "pre-wrap" }}>
-                <span>{content}</span>
+              <span>{content}</span>
+                {/* {val.content.length > 10 ?
+                  // 원본이 길면 (원본 글자수 > 제한된 갯수)
+                  isShowMore ?
+                  <span>{val.content}</span>
+                    // 더보기가 true 면 원본 바로 리턴
+                  : <span>{val.content.slice(0, textLimit.current)}</span> // (더보기가 false면) 짧은 버전 리턴해주자
                 
-                {/* // 여기에 (짧은거나 원본) 글 내용이 들어가고  */}
+                 : <span>{val.content}</span>} */}
 
                 <span
                   style={{ color: "gray", cursor: "pointer" }}
