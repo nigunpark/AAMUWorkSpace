@@ -56,7 +56,6 @@ function App() {
   window.addEventListener("scroll", handleScroll);
   let reduxState = useSelector((state) => state);
   useEffect(() => {
-    console.log("notibody", notibody);
     const tempNoti = noti.concat(notibody);
     setNoti([...tempNoti]);
   }, [notibody]);
@@ -65,8 +64,7 @@ function App() {
     client.current.subscribe(
       `/queue/notification/${sessionStorage.getItem("username")}`,
       ({ body }) => {
-        console.log("123");
-        // setnotibody(JSON.parse(body));
+        setnotibody(JSON.parse(body));
       }
     );
   };
