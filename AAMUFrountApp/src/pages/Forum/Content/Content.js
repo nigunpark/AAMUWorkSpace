@@ -167,6 +167,7 @@ const Content = () => {
             {listData.map((val, idx) => {
               return (
                 <ContentItem
+                  key={idx}
                   setDetailOne={setDetailOne}
                   detail={val}
                   setIsOpen={setIsOpen}

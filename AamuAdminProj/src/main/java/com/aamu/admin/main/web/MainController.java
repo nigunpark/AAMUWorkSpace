@@ -256,28 +256,30 @@ public class MainController {
 				}
 			}
 			String id=null;
-			
-			uri ="https://dapi.kakao.com/v2/local/search/keyword.json?"
-					+ "y="+dto.getMapy()+"&x="+dto.getMapx()+"&radius=20000&query="+dto.getAddr();
-
-			ResponseEntity<KakaoKey> responseEntity3 = 
-					restTemplate.exchange(uri, HttpMethod.GET,
-							httpEntity,KakaoKey.class);
-
-			if(responseEntity3.getBody().getDocuments().size()==0 && title!=null && !"".equals(title)) {
-				
+			if(dto.getMapx()!=0.0 && dto.getMapy()!=0.0) {
 				uri ="https://dapi.kakao.com/v2/local/search/keyword.json?"
-						+ "y="+dto.getMapy()+"&x="+dto.getMapx()+"&radius=20000&query="+title;
-
-				responseEntity3 = restTemplate.exchange(uri, HttpMethod.GET,
+						+ "y="+dto.getMapy()+"&x="+dto.getMapx()+"&radius=20000&query="+dto.getAddr();
+	
+				ResponseEntity<KakaoKey> responseEntity3 = 
+						restTemplate.exchange(uri, HttpMethod.GET,
 								httpEntity,KakaoKey.class);
-				
-				
+	
+				if(responseEntity3.getBody().getDocuments().size()==0 && title!=null && !"".equals(title)) {
+					
+					uri ="https://dapi.kakao.com/v2/local/search/keyword.json?"
+							+ "y="+dto.getMapy()+"&x="+dto.getMapx()+"&radius=20000&query="+title;
+	
+					responseEntity3 = restTemplate.exchange(uri, HttpMethod.GET,
+									httpEntity,KakaoKey.class);
+					
+					
+				}
+				if(responseEntity3.getBody().getDocuments().size()!=0) {
+					 id=  responseEntity3.getBody().getDocuments().get(0).getId();
+				}
 			}
 			
-			if(responseEntity3.getBody().getDocuments().size()!=0) {
-			 id=  responseEntity3.getBody().getDocuments().get(0).getId();
-			}
+			
 			
 			dto.setKakaokey(id);
 			/*
@@ -316,7 +318,7 @@ public class MainController {
 			}
 			
 			list.add(dto);
-			if(dto.getAddr()!=null) {
+			if(dto.getAddr()!=null&& !"".equals(dto.getAddr())) {
 				dto.setTable("places");
 				service.placeInsert(dto);
 				switch(contentTypeId) {

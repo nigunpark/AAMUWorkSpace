@@ -74,6 +74,7 @@ const DetailModal = ({
         },
       })
       .then((resp) => {
+        console.log("");
         setTitle(resp.data.title);
         setContent(resp.data.content);
         setTheme(resp.data.themename);
@@ -162,11 +163,11 @@ const DetailModal = ({
         }
       )
       .then((resp) => {
-        // console.log("리뷰 post 했고 돌아오는 데이터", resp.data);
         reviewData();
       });
   }
 
+  const [detailRateAvg, setRateAvg] = useState(0);
   async function reviewData() {
     let token = sessionStorage.getItem("token");
     await axios
@@ -176,6 +177,7 @@ const DetailModal = ({
         },
       })
       .then((resp) => {
+        setRateAvg(resp.data.rateavg);
         setFeedComments(resp.data.reviewList);
       })
       .catch((error) => {
@@ -185,25 +187,30 @@ const DetailModal = ({
 
   let reviewPost = () => {
     post(); // 리뷰 axios post
-    //사용자가 입력한 댓글창과 별점 초기화
+
     setComment("");
     setStar(0);
     setIsValid(false);
   };
+  useEffect(() => {
+    reviewData();
+  }, []);
 
-  const reviewDelete = (rno) => {
+  const reviewDelete = (rno, rbn) => {
+    //리뷰 삭제
     let token = sessionStorage.getItem("token");
     axios
       .delete("/aamurest/review/edit", {
         params: {
-          rno: rno,
+          rno,
+          rbn,
         },
         headers: {
           Authorization: `Bearer ${token}`,
         },
       })
       .then((resp) => {
-        // console.log("리뷰 삭제 성공 (DetailModal.js)");
+        reviewData();
         alert("리뷰가 삭제되었어요.");
       })
       .catch((error) => {
@@ -243,6 +250,7 @@ const DetailModal = ({
 
   const CommentList = ({ val, setFeedComments, setIsOpen }) => {
     const rno = val.rno;
+    const rbn = val.rbn;
     return (
       <div className="detail__modal-commentsList">
         <Stars>
@@ -267,7 +275,7 @@ const DetailModal = ({
           <div style={{ color: "red" }}>
             <Name
               onClick={() => {
-                reviewDelete(rno);
+                reviewDelete(rno, rbn);
                 setFeedComments((curr) => {
                   return curr.filter((e, index) => e.rno !== rno);
                 });
@@ -429,9 +437,9 @@ const DetailModal = ({
                           style={{ marginRight: "3px", color: "gold" }}
                         />
                         <span style={{ fontWeight: "bold" }}>
-                          {detailOne.rateavg === 0
+                          {detailRateAvg === 0
                             ? "리뷰가 없어요"
-                            : detailOne.rateavg}
+                            : detailRateAvg}
                         </span>
                       </div>
                       <div className="detail__plan-underTitle">
