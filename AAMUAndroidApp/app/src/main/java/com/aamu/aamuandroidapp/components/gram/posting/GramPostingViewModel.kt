@@ -15,10 +15,12 @@ import com.aamu.aamuandroidapp.data.api.AAMUDIGraph
 import com.aamu.aamuandroidapp.data.api.repositories.AAMURepository
 import com.aamu.aamuandroidapp.data.api.response.AAMUPlaceResponse
 import com.aamu.aamuandroidapp.pluck.data.PluckImage
+import com.aamu.aamuandroidapp.util.contextL
 import com.aamu.aamuandroidapp.util.getLatLng
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.PagerState
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class GramPostingViewModelFactory(val context: Context) : ViewModelProvider.Factory{
@@ -61,32 +63,19 @@ class GramPostingViewModel(context: Context) : ViewModel() {
     }
 
     fun postGram(
-        title: String,
-        content: String,
-        contentid: Int,
-        tname: List<String>,
+        map: Map<String,String>,
         navPopBackStack: () -> Unit
     ) {
         if(uriArray.value?.isNotEmpty()==true) {
-
-            val preferences : SharedPreferences = context.getSharedPreferences("usersInfo", Context.MODE_PRIVATE)
-            val userid : String? = preferences.getString("id",null)
-
-            val map = HashMap<String,String>()
-
-            map.put("id",userid ?: "")
-            map.put("ctitle",title)
-            map.put("content",content)
-            map.put("contentid",contentid.toString())
-
             viewModelScope.launch {
-                aamuRepository.postGram(uriArray.value!!,map,tname)
+                aamuRepository.postGram(uriArray.value!!.toList(),map)
                     .collect{
                         if(it.isNotEmpty()){
                             navPopBackStack.invoke()
+                            Toast.makeText(contextL,"포스팅에 성공했어요",Toast.LENGTH_SHORT).show()
                         }
                         else{
-                            Toast.makeText(context,"포스팅에 실패했어요",Toast.LENGTH_SHORT).show()
+                            Toast.makeText(contextL,"포스팅에 실패했어요",Toast.LENGTH_SHORT).show()
                         }
                     }
             }

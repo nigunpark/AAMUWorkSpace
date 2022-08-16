@@ -78,7 +78,7 @@ interface AAMUApi {
 
     @Multipart
     @POST("gram/edit")
-    suspend fun postGram(@Part multifiles : List<MultipartBody.Part>, @PartMap map : Map<String,@JvmSuppressWildcards RequestBody>,@Part tname : List<MultipartBody.Part>) : Response<Map<String,Boolean>>
+    suspend fun postGram(@Part multifiles : List<MultipartBody.Part>, @PartMap map : Map<String,@JvmSuppressWildcards RequestBody>) : Response<Map<String,Boolean>>
 
     @POST("gram/comment/edit")
     suspend fun postGramComment(@Body gramComment : GramComment ) : Response<Map<String,String>>

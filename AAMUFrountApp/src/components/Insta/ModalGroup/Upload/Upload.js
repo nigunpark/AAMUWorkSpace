@@ -695,7 +695,7 @@ const TagInput = styled.input`
 const Searchengine = styled.div`
   position: absolute;
   width: 35%;
-  height: 300px;
+  height: 250px;
   background-color: transparent;
   right: 10px;
   z-index: 9;

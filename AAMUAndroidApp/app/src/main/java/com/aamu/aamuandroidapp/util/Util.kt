@@ -185,7 +185,6 @@ fun displayedAtTime(item : Long) : String{
     return reString
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 fun getRealPathFromURI(contentUri : Uri) : String? {
     if (contentUri.getPath()?.startsWith("/storage") == true) {
         return contentUri.getPath()!!;
