@@ -36,7 +36,10 @@ public class UserController {
 	public int join(@RequestParam Map map,@RequestParam(required = false) MultipartFile userprofile,@RequestParam List theme,HttpServletRequest req) throws IllegalStateException, IOException {
 //		System.out.println("난 맵이다:"+map);
 		int affected=0;
-		
+		String gender = map.get("socialnum").toString().substring(6);
+		if(gender.equals("1") && gender.equals("3"))
+			map.put("gender","남자");
+		else map.put("gender", "여자");
 		map.put("theme", theme);
 		
 		String path = req.getSession().getServletContext().getRealPath("/resources/userUpload");
