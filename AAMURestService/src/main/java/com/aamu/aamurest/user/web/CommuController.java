@@ -136,7 +136,8 @@ public class CommuController {
 
 	//글 생성용: true false
 	@PostMapping(value="/gram/edit")
-	public Map commuInsert(@RequestParam List<MultipartFile> multifiles, @RequestParam Map map, @RequestParam(required = false) List tname, HttpServletRequest req) {
+	public Map commuInsert(@RequestParam List<MultipartFile> multifiles, @RequestParam Map map,  HttpServletRequest req) {
+		System.out.println("얼마나 걸리나? 생성 맵"+map);
 		//서버의 물리적 경로 얻기
 		String path=req.getSession().getServletContext().getRealPath("/resources/commuUpload");
 		Map resultMap = new HashMap();
@@ -145,9 +146,9 @@ public class CommuController {
 			List<String> uploads= FileUploadUtil.fileProcess(multifiles, path);
 			map.put("photolist", uploads);
 		} catch (IllegalStateException | IOException e) {e.printStackTrace();}
-		if(tname != null) {
-			map.put("tname", tname);
-		}
+		//if(tname != null) {
+		//	map.put("tname", tname);
+		//}
 		int affected=commuService.commuInsert(map);
 		List<CommuDTO> list = commuService.commuSelectList(map);
 		for(CommuDTO dto : list) {//글 목록들 list에서 하나씩 꺼내서 dto에 담는다
