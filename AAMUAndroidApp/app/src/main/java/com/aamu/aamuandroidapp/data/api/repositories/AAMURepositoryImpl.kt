@@ -315,7 +315,6 @@ class AAMURepositoryImpl(
         Log.i("com.aamu.aamu","map : "+map.toString())
         val response = aamuApi.postGram(images.toList(), bodymap)
         Log.i("com.aamu.aamu","결과값이 나올때 까지 안찍힘")
-//        val response = aamuApi.postGramFile(images.toList())
         if (response.isSuccessful) {
             Log.i("com.aamu.aamu","몇초 걸렸음")
             emit(response.body() ?: emptyMap())

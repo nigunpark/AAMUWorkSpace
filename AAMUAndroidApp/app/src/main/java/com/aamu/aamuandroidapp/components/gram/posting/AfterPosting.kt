@@ -175,6 +175,11 @@ fun AfterPosting(
                 hashTagError = null
                 val values = it.text.split("\\s".toRegex())
                 if (values.size >= 2) {
+
+                    if(!values[0].startsWith("#")){
+                        hashTagError = "#으로 시작해주세요"
+                    }
+
                     if (hashTagError == null) {
                         hashtags.add(values[0])
                         onhashtagChange.invoke(hashtag.copy(text = ""))
