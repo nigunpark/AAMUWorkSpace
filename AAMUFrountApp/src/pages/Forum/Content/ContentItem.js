@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React from "react";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
