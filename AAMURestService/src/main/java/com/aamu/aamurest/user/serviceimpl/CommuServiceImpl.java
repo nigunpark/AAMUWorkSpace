@@ -307,6 +307,7 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 	//글 수정용 트랜잭션확인해야됨
 	@Override
 	public int commuUpdate(Map map) {
+		System.out.println("수정할 때 넘어오니?"+map);
 		int affected=0;
 		affected = transactionTemplate.execute(tx->{
 			int affectedCommuUpdate=dao.commuUpdate(map);
@@ -526,9 +527,17 @@ public class CommuServiceImpl implements CommuService<CommuDTO>{
 	public int insertCommuTagTb(Map map) {
 		int affected=0;
 		List<String> tnameList = new Vector<>();
-		for(String tnameString:(List<String>)map.get("tname")) {
-			String tnameStr = tnameString.replaceAll(" ", "").substring(1); //서울
-			tnameList.add(tnameStr);//[서울] [서울,서울여행]
+		try {
+			for(String tnameString:((String)map.get("tname")).split(",")) {
+				String tnameStr = tnameString.replaceAll(" ", "").substring(1); //서울
+				tnameList.add(tnameStr);//[서울] [서울,서울여행]
+			}
+		}
+		catch(Exception e) {
+			for(String tnameString:((List<String>)map.get("tname"))) {
+				String tnameStr = tnameString.replaceAll(" ", "").substring(1); //서울
+				tnameList.add(tnameStr);//[서울] [서울,서울여행]
+			}
 		}
 		for(int i=0; i<tnameList.size();i++) {
 			map.put("tname", tnameList.get(i));//tname:서울
