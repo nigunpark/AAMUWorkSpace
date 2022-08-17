@@ -536,7 +536,7 @@ const DetailModal = ({
                       {sessionStorage.getItem("username") == userId ? (
                         <input
                           type="text"
-                          placeholder="글쓴이는 댓글 안되요!"
+                          placeholder="글쓴이는 댓글 안돼요!"
                           disabled
                         />
                       ) : isReviewId === 1 ? (
