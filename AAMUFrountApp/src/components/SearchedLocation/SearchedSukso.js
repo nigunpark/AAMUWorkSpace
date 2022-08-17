@@ -102,6 +102,7 @@ function LocalInfoModal({
   showReview,
   setShowReview,
 }) {
+  let dispatch = useDispatch();
   return (
     <ContainerLim>
       <OverlayLim onClick={() => setLocaInfoModal(!locaInfoModal)} />
@@ -189,7 +190,16 @@ function LocalInfoModal({
             리뷰보기
             {commentData.basic_info !== undefined && `(${commentData.basic_info.feedback})`}
           </span>
-          <span>목록에 추가</span>
+          <span
+            onClick={(e) => {
+              e.stopPropagation();
+              dispatch(addOneSaveDaysRedux(local));
+              dispatch(changeShowWhichModal(1));
+              setLocaInfoModal(false);
+            }}
+          >
+            목록에 추가
+          </span>
         </div>
         {showReview && (
           <Review>
