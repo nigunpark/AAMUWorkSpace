@@ -196,7 +196,7 @@ function CommentProfile({
     setloading(false);
   };
 
-  function menuModalRef(e) {
+  function menuModalRef1(e) {
     e.stopPropagation();
     let divdiv = document.getElementById("#scrollDiv"); 
     divdiv.scrollTop = divdiv.scrollHeight;
@@ -287,7 +287,7 @@ function CommentProfile({
                         } */}
               </div>
             </div>
-            <div className="recommend" id="scrollDiv" style={{overflow:'auto'}} onChange={(e)=>{menuModalRef(e)}}>
+            <div className="recommend" id="scrollDiv" style={{overflow:'auto'}} onChange={(e)=>{menuModalRef1(e)}}>
               <div className="recommend-down">
                 <div className="recommendContents">
                   <div className="userimg1"
@@ -350,6 +350,7 @@ function CommentProfile({
                           </strong>
                           <span
                             style={{
+                              fontFamily: "normal" ,
                               fontFamily: "normal",
                               whiteSpace: "pre-wrap",
                             }}
