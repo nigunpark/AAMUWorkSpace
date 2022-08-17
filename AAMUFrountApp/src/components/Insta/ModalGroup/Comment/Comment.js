@@ -55,6 +55,11 @@ function Comment({
 
   function menuModalRef(e) {
     e.stopPropagation();
+    let divdiv = document.getElementById("#scrollDiv"); 
+    divdiv.scrollTop = divdiv.scrollHeight;
+  }
+  function menuModalRef(e) {
+    e.stopPropagation();
     if (e.target != menuRef.current) setModalShow(false);
   }
   window.addEventListener("click", menuModalRef);
@@ -273,7 +278,7 @@ function Comment({
                         } */}
               </div>
             </div>
-            <div className="recommend">
+            <div className="recommend"  id="scrollDiv" style={{overflow:'auto'}} onChange={(e)=>{menuModalRef(e)}}> 
               <div className="recommend-down">
                 <div className="recommendContents">
                   <img
