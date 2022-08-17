@@ -535,7 +535,7 @@ public class MainController {
 			
 		}
 		else {
-			list = service.getTopAttr();
+			list = service.getTopAttr(req);
 			bbsList =  service.selectTopBBS(req);
 		}
 		mapElement.put("placeInfo", list);
