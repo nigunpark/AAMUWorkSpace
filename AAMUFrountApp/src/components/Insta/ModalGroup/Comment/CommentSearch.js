@@ -135,6 +135,12 @@ function CommentSearch({ val, setForReRender, forReRender, setcommentModal, setc
     replyRef1.current.value = "";
   }
 
+  function menuModalRef(e) {
+    e.stopPropagation();
+    let divdiv = document.getElementById("#scrollDiv"); 
+    divdiv.scrollTop = divdiv.scrollHeight;
+  }
+
   let [deleteOne1, setdeleteOne1] = useState(false);
   let [replyTwo, setreplyTwo] = useState("");
   function deleteTwo(replyTwo, cno) {
@@ -221,7 +227,7 @@ function CommentSearch({ val, setForReRender, forReRender, setcommentModal, setc
                 </span>
               </div>
             </div>
-            <div className="recommend">
+            <div className="recommend" id="scrollDiv" style={{overflow:'auto'}} onChange={(e)=>{menuModalRef(e)}}>
               <div className="recommend-down">
                 <div className="recommend-contents">
                   <img
