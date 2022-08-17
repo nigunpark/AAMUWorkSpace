@@ -123,7 +123,7 @@
 	
 	<!-- 글 하나 뿌려주는 용_모든 댓글 뿌려주기-->
 	<select id="commuCommentList" parameterType="String" resultType="commuCommentDTO" >
-		SELECT * FROM commucomment WHERE lno=#{lno} ORDER BY cno
+		SELECT * FROM commucomment WHERE lno=#{lno} ORDER BY cno DESC
 	</select>
 	
 	<!-- 글 하나 뿌려주는 용_프로필 뿌려주기 -->
