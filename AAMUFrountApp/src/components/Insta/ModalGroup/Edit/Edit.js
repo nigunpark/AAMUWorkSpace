@@ -311,6 +311,7 @@ const Edit = ({ setlist, val, seteditModal, setloading, page, list }) => {
 
             <div
               className="uploadLocation2"
+
               onClick={() => {
                 setshowSearch(!showSearch);
               }}
@@ -320,7 +321,7 @@ const Edit = ({ setlist, val, seteditModal, setloading, page, list }) => {
                   searchWord(e, setSearch);
                   setHasText(true);
                 }}
-                style={{ width: "70%" }}
+                style={{ width: "80%" }}
                 // onChange={(e) => {
                 //   setinputValue(e.target.value);
 
