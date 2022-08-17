@@ -2,8 +2,9 @@ package com.aamu.aamuandroidapp.components.gram.posting
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.SharedPreferences
 import android.widget.Toast
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,6 +20,7 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.aamu.aamuandroidapp.components.gram.AAMUgramViewModel
 import com.aamu.aamuandroidapp.components.login.HorizontalDottedProgressBar
 import com.aamu.aamuandroidapp.pluck.PluckConfiguration
 import com.aamu.aamuandroidapp.pluck.ui.Pluck
@@ -33,7 +35,7 @@ import kotlinx.coroutines.launch
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun GramPosting(
-    viewModel : GramPostingViewModel,
+    viewModel : AAMUgramViewModel,
     goToAppSettings : ()-> Unit,
     navPopBackStack : ()-> Unit
 ){
@@ -92,7 +94,19 @@ fun GramPosting(
                                 onClick = {
                                     loading = true
                                     keyboardController?.hide()
-                                    viewModel.postGram(title.text,content.text,locationContentid,hashtags,navPopBackStack)
+                                    val preferences : SharedPreferences = context.getSharedPreferences("usersInfo", Context.MODE_PRIVATE)
+                                    val userid : String? = preferences.getString("id",null)
+
+                                    val map = HashMap<String,String>()
+
+                                    map.put("id",userid ?: "")
+                                    map.put("ctitle",title.text)
+                                    map.put("content",content.text)
+                                    map.put("contentid",locationContentid.toString())
+                                    map.put("tname",hashtags.joinToString(","))
+
+                                    viewModel.postGram(map)
+                                    navPopBackStack.invoke()
                                 },
                                 colors = ButtonDefaults.buttonColors(
                                     backgroundColor = Color.White,
@@ -166,5 +180,5 @@ fun GramPosting(
 @Preview
 @Composable
 fun PreviewGramPosting(){
-    GramPosting(GramPostingViewModel(context = LocalContext.current),{},{})
+    GramPosting(AAMUgramViewModel(context = LocalContext.current),{},{})
 }

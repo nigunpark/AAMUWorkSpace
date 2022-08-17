@@ -14,6 +14,7 @@ import "../Upload/UploadSwiper.css";
 import dayjs from "dayjs";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLocationDot, faX } from "@fortawesome/free-solid-svg-icons";
+import { height } from "@mui/system";
 
 function CommentSearch({ val, setForReRender, forReRender, setcommentModal, setcomments }) {
   let menuRef = useRef();
@@ -135,6 +136,12 @@ function CommentSearch({ val, setForReRender, forReRender, setcommentModal, setc
     replyRef1.current.value = "";
   }
 
+  function menuModalRef2(e) {
+    e.stopPropagation();
+    let divdiv = document.getElementById("#scrollDiv"); 
+    divdiv.scrollTop = divdiv.scrollHeight;
+  }
+
   let [deleteOne1, setdeleteOne1] = useState(false);
   let [replyTwo, setreplyTwo] = useState("");
   function deleteTwo(replyTwo, cno) {
@@ -221,10 +228,11 @@ function CommentSearch({ val, setForReRender, forReRender, setcommentModal, setc
                 </span>
               </div>
             </div>
-            <div className="recommend">
+            <div className="recommend" id="scrollDiv" style={{overflow:'auto'}}>
               <div className="recommend-down">
                 <div className="recommend-contents">
                   <img
+                  style={{marginTop:'10px'}}
                     className="userimg"
                     src={val.userprofile}
                     alt="프사"
@@ -266,7 +274,7 @@ function CommentSearch({ val, setForReRender, forReRender, setcommentModal, setc
                           {val.tname === null
                             ? ""
                             : val.tname.map((tname, i) => {
-                                return <span key={i}>{tname}</span>;
+                                return <span key={i} style={{ color: "#333333" }}><strong>{tname}</strong></span>;
                               })}
                         </p>
                       </div>
@@ -407,7 +415,7 @@ function CommentSearch({ val, setForReRender, forReRender, setcommentModal, setc
                 <h3>{dayjs(new Date(val.postdate)).format("YYYY/MM/DD")}</h3>
               </div>
             </div>
-            <div className="comment1">
+            <div className="commentss">
               <div className="emoji">
                 <i
                   className="fa-regular fa-face-smile"
@@ -430,7 +438,7 @@ function CommentSearch({ val, setForReRender, forReRender, setcommentModal, setc
                 ref={replyRef1}
                 className="inputComment_"
                 placeholder="댓글 달기..."
-                style={{ width: "80%", fontSize: "13px" }}
+                style={{ width: "80%", fontSize: "13px"}}
                 // onChange={(e) => {
                 //   setComment(e.target.value); //댓글 창의 상태가 변할때마다 setComment를 통해 comment값을 바꿔준다
                 // }}

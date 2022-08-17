@@ -14,6 +14,7 @@ import "../Upload/UploadSwiper.css";
 import dayjs from "dayjs";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLocationDot } from "@fortawesome/free-solid-svg-icons";
+import { padding } from "@mui/system";
 
 function CommentProfile({
   val,
@@ -90,8 +91,7 @@ function CommentProfile({
         val.likecount = resp.data.likecount;
         setcomments(resp.data.commuCommentList);
       })
-      .catch((error) => {
-      });
+      .catch((error) => {});
     replyRef.current.value = "";
   }
 
@@ -118,8 +118,7 @@ function CommentProfile({
         val.likecount = resp.data.likecount;
         setForReRender(!forReRender);
       })
-      .catch((error) => {
-      });
+      .catch((error) => {});
   }
 
   function post(replyRef) {
@@ -148,8 +147,7 @@ function CommentProfile({
         commentModal(setcomments);
         feedList(setloading, setlist, page, list);
       })
-      .catch((error) => {
-      });
+      .catch((error) => {});
 
     replyRef.current.value = ""; //사용자 댓글창을 빈 댓글 창으로 초기화
   }
@@ -175,8 +173,7 @@ function CommentProfile({
         // commentModal(setcomments);
         feedList(setloading, setlist, page, list);
       })
-      .catch((error) => {
-      });
+      .catch((error) => {});
   }
   const feedList = async (setloading, setlist, page, list) => {
     //백이랑 인스타 리스드를 뿌려주기 위한 axios
@@ -198,6 +195,12 @@ function CommentProfile({
     setlist([...tempComments]);
     setloading(false);
   };
+
+  function menuModalRef1(e) {
+    e.stopPropagation();
+    let divdiv = document.getElementById("#scrollDiv"); 
+    divdiv.scrollTop = divdiv.scrollHeight;
+  }
 
   return (
     <Container1>
@@ -234,7 +237,8 @@ function CommentProfile({
             </ul>
           </div>
           <div className="contents22">
-            <div className="feeds-settingCom">
+            <div className="feeds-settingCom"
+            >
               <div className="search-contents">
                 <div className="gradient">
                   <img
@@ -258,7 +262,7 @@ function CommentProfile({
                       style={{ marginLeft: "7px" }}
                     >
                       <FontAwesomeIcon icon={faLocationDot} />
-                      <span style={{ fontSize: "14px" }}>{commentHeart}</span>
+                      <span style={{ fontSize: "14px" ,marginLeft: "1px" }}>{commentHeart}</span>
                     </div>
                   </a>
                 </div>
@@ -283,12 +287,23 @@ function CommentProfile({
                         } */}
               </div>
             </div>
-            <div className="recommend">
+            <div className="recommend" id="scrollDiv" style={{overflow:'auto'}} onChange={(e)=>{menuModalRef1(e)}}>
               <div className="recommend-down">
                 <div className="recommendContents">
-                  <div className="userimg1">
-                    <div>
+                  <div className="userimg1"
+                  style={{
+                    alignSelf:'flex-start',
+                    marginTop:'10px',
+                    cursor: "auto",
+                  }}>
+                    
                       <img
+                      style={{
+                        width: "37px",
+                        height: "37px",
+                        borderRadius  : "50%",
+                        cursor: "auto",
+                      }}
                         className="userimg"
                         src={val.userprofile}
                         alt="프사"
@@ -296,18 +311,20 @@ function CommentProfile({
                           e.target.src = "/images/user.jpg";
                         }}
                       />
-                    </div>
                   </div>
                   <div
                     style={{
+                      fontStyle:'normal',
                       display: "flex",
                       flexDirection: "column",
                       marginTop: "10px",
                       marginLeft: "10px",
+                      cursor: "auto",
                     }}
                   >
                     <div
                       style={{
+                        fontSize: "14px",
                         display: "flex",
                         flexDirection: "row",
                         paddingRight: "15px",
@@ -317,23 +334,25 @@ function CommentProfile({
                         <p>
                           <span
                             className="userName"
-                            style={{ marginLeft: "-1px" }}
+                            style={{fontSize: "14px", marginLeft: "-1px" }}
                           >
                             <strong>제목 </strong>
                           </span>
-                          <span style={{ fontFamily: "normal" }}>
+                          <span style={{fontSize: "14px", fontWeight: "normal" }}>
                             {" "}
                             {valtitle}
                           </span>
                         </p>
                         <p className="userName">
                           <strong
-                            style={{ fontSize: "13px", marginRight: "5px" }}
+                            style={{fontSize: "14px", marginRight: "5px" }}
                           >
                             {val.id}
                           </strong>
                           <span
                             style={{
+                              fontSize: "14px",
+                              fontWeight: "normal",
                               fontFamily: "normal",
                               whiteSpace: "pre-wrap",
                             }}
@@ -345,7 +364,7 @@ function CommentProfile({
                             ? ""
                             : valtname.map((tname, i) => {
                                 return (
-                                  <span style={{ color: "#333333" }} key={i}>
+                                  <span style={{ color: "#333333",fontSize: "14px", }} key={i}>
                                     <strong>{tname}</strong>
                                   </span>
                                 );
@@ -372,8 +391,7 @@ function CommentProfile({
                     <div
                       key={i}
                       className="recommendContents"
-                      onClick={(e) => {
-                      }}
+                      onClick={(e) => {}}
                     >
                       <div>
                         <img

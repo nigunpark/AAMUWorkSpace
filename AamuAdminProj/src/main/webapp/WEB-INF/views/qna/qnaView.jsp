@@ -68,8 +68,8 @@ pageContext.setAttribute("newLineChar", "\n");
 
 							<!-- 수정/삭제/목록 컨트롤 버튼 -->
 							<div class="text-center mt-4">
-								<a href="<c:url value="QNAEdit.do?qno=${record.qno}"/>"
-									class="btn btn-success">수정</a> <a
+								<!-- <a href="<c:url value="QNAEdit.do?qno=${record.qno}"/>"
+									class="btn btn-success">수정</a>  --><a
 									href="javascript:qnaDelete(${record.qno})"
 									class="qna-delete btn btn-success">삭제</a> <a
 									href="<c:url value="QNA.do?nowPage="/><c:out value="${param.nowPage}" default="1"/>"
@@ -86,7 +86,7 @@ pageContext.setAttribute("newLineChar", "\n");
 									rows="5" placeholder="내용을 입력하세요." onkeydown="resize(this)"
 									onkeyup="resize(this)"></textarea>
 								<div class="d-flex justify-content-center">
-									<input type="button" class="btn btn-info mt-3" value="댓글 등록"
+									<input type="button" class="btn btn-info mt-3" value="답변 등록"
 										id="submit" />
 								</div>
 							</form>
@@ -108,7 +108,7 @@ pageContext.setAttribute("newLineChar", "\n");
 											<c:if test="${empty record.answer}" var="isEmpty">
 												<tr>
 													<td colspan="4" id="answer-list"><span
-														class="no-answer">등록된 댓글이 없습니다.</span></td>
+														class="no-answer">등록된 답변이 없습니다.</span></td>
 												</tr>
 											</c:if>
 											<c:if test="${not isEmpty }">

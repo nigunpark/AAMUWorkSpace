@@ -295,7 +295,7 @@ function UserBadge({ noti, setNoti }) {
                   {noti.map((val) => {
                     return (
                       <div
-                        className={val.readknow === 1 ? "noti_message read_noti" : "noti_message"}
+                        className="noti_message"
                         onClick={(e) => {
                           e.stopPropagation();
                           val.readknow = 1;

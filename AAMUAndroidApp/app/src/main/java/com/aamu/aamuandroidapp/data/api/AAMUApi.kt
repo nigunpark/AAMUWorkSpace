@@ -78,7 +78,7 @@ interface AAMUApi {
 
     @Multipart
     @POST("gram/edit")
-    suspend fun postGram(@Part multifiles : List<MultipartBody.Part>, @PartMap map : Map<String,@JvmSuppressWildcards RequestBody>,@Part tname : List<MultipartBody.Part>) : Response<Map<String,Boolean>>
+    suspend fun postGram(@Part multifiles : List<MultipartBody.Part>, @PartMap map : Map<String,@JvmSuppressWildcards RequestBody>) : Response<Map<String,Boolean>>
 
     @POST("gram/comment/edit")
     suspend fun postGramComment(@Body gramComment : GramComment ) : Response<Map<String,String>>
@@ -105,7 +105,7 @@ interface AAMUApi {
     suspend fun getUserInfo(@Query("id") id : String) : Response<AAMUUserInfo>
 
     companion object {
-        private const val BASE_URL = "http://192.168.0.22:8080/aamurest/"
+        private const val BASE_URL = "http://192.168.45.107:8080/aamurest/"
 
         operator fun invoke():AAMUApi{
             val requestInterceptor  = Interceptor{ chain ->

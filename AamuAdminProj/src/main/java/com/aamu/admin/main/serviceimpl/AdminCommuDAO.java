@@ -48,6 +48,11 @@ public class AdminCommuDAO {
 		return template.delete("commuCommentDelete",map);
 	}
 	
+	//사진 목록 가져오기
+	public List<String> commuSelectPhotoList(Map map) {
+		return template.selectList("commuSelectPhotoList",map);
+	}
+	
 	////////////////////////////////////////////////////////////
 	//커뮤니티 통계
 	//월별 
@@ -72,6 +77,8 @@ public class AdminCommuDAO {
 		return template.selectOne("commuSelectUserProf",id);
 		
 	}
+
+	
 	
 
 	

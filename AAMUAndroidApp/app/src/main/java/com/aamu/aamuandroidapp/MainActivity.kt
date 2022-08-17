@@ -9,6 +9,8 @@ import android.util.Log
 import androidx.activity.viewModels
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
+import com.aamu.aamuandroidapp.components.gram.AAMUgramViewModel
+import com.aamu.aamuandroidapp.components.gram.AAMUgramViewModelFactory
 import com.aamu.aamuandroidapp.databinding.ActivityMainBinding
 import com.aamu.aamuandroidapp.fragment.main.MainViewModel
 import com.aamu.aamuandroidapp.fragment.main.MainViewModelFactory
@@ -32,6 +34,7 @@ class MainActivity : AppCompatActivity() {
         setContextapp(applicationContext)
         navController = findNavController(R.id.nav_host_fragment)
         val viewModel : MainViewModel by viewModels { MainViewModelFactory(context = applicationContext) }
+        val gramviewModel : AAMUgramViewModel by viewModels { AAMUgramViewModelFactory(context = applicationContext) }
         if(intent.hasExtra("fromthan")){
             viewModel.setFromthanNo(intent.getStringExtra("fromthan")!!,Integer.parseInt(intent.getStringExtra("no")))
         }

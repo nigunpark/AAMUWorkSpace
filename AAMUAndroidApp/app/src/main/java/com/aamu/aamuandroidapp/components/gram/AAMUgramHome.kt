@@ -30,16 +30,13 @@ import com.aamu.aamuandroidapp.ui.theme.cyan200
 
 @Composable
 fun AAMUgramHome(
+    viewModel : AAMUgramViewModel,
     onLikeClicked: (Int) -> Unit,
     onCommentsClicked: (Int) -> Unit,
     onSendClicked: () -> Unit,
     onPostingClicked: () -> Unit,
     onMessagingClicked: () -> Unit
 ) {
-
-    val viewModel : AAMUgramViewModel = viewModel(
-        factory = AAMUgramViewModelFactory(LocalContext.current)
-    )
 
     viewModel.getGramList()
 

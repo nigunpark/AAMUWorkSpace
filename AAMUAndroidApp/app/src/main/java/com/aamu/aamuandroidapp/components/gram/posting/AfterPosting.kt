@@ -37,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.aamu.aamuandroidapp.R
+import com.aamu.aamuandroidapp.components.gram.AAMUgramViewModel
 import com.aamu.aamuandroidapp.ui.theme.aamuorange
 import com.aamu.aamuandroidapp.ui.theme.twitterColor
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -49,7 +50,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalPagerApi::class, ExperimentalComposeUiApi::class)
 @Composable
 fun AfterPosting(
-    viewModel: GramPostingViewModel,
+    viewModel: AAMUgramViewModel,
     coroutineScope: CoroutineScope,
     pagerState: PagerState,
     title: TextFieldValue,
@@ -96,7 +97,7 @@ fun AfterPosting(
             interactionSource = titleInteractionState
         )
         Spacer(modifier = Modifier.height(20.dp))
-        GramContentInput(viewModel,context,content,oncontentChange,contentInteractionState,coroutineScope,pagerState)
+        GramContentInput(viewModel,context,content,oncontentChange,contentInteractionState,contentFocusRequester,coroutineScope,pagerState)
         Spacer(modifier = Modifier.height(20.dp))
         var locationMore by remember { mutableStateOf(false) }
         TextInput(
@@ -174,6 +175,11 @@ fun AfterPosting(
                 hashTagError = null
                 val values = it.text.split("\\s".toRegex())
                 if (values.size >= 2) {
+
+                    if(!values[0].startsWith("#")){
+                        hashTagError = "#으로 시작해주세요"
+                    }
+
                     if (hashTagError == null) {
                         hashtags.add(values[0])
                         onhashtagChange.invoke(hashtag.copy(text = ""))
@@ -244,11 +250,12 @@ fun TextInput(
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun GramContentInput(
-    viewModel: GramPostingViewModel,
+    viewModel: AAMUgramViewModel,
     context: Context,
     content: TextFieldValue,
     onValueChange: (TextFieldValue) -> Unit,
     contentInteractionState: MutableInteractionSource,
+    focusRequester: FocusRequester,
     coroutineScope: CoroutineScope,
     pagerState: PagerState
 ) {
@@ -265,6 +272,7 @@ fun GramContentInput(
             content,
             onValueChange,
             modifier = Modifier.height(200.dp),
+            focusRequester = focusRequester,
             leadingIcon = {
                 Image(
                     painter = rememberAsyncImagePainter(

@@ -100,7 +100,7 @@ lateinit var stomp : CustomStompClient
 private lateinit var stompConnection: Disposable
 
 fun stompConnection() {
-    val url = "ws://192.168.0.22:8080/aamurest/ws/chat/websocket"
+    val url = "ws://192.168.45.107:8080/aamurest/ws/chat/websocket"
     val intervalMillis = 1000L
     val client = OkHttpClient.Builder()
         .readTimeout(10, TimeUnit.SECONDS)
@@ -185,7 +185,6 @@ fun displayedAtTime(item : Long) : String{
     return reString
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 fun getRealPathFromURI(contentUri : Uri) : String? {
     if (contentUri.getPath()?.startsWith("/storage") == true) {
         return contentUri.getPath()!!;
