@@ -126,26 +126,6 @@ public class BBSServiceImpl implements BBSService{
 		else
 			return 0;
 	}
-	//transaction 처리중
-	/*
-	//테마 등록
-	@Override
-	public int themeInsert(BBSDTO dto) {
-		int affected=0;
-
-		affected = transactionTemplate.execute(tx->{
-			int insertTheme = dao.themeInsert(dto);
-			List<BBSDTO> themes = dto.themeid();
-
-			for(BBSDTO theme:themes) {
-				theme.setRbn(dto.getRbn());
-				dao.themeInsert(theme);
-			}
-			return insertTheme;
-
-		});
-		return affected;
-	} */
 
 	//글 수정
 	@Override
@@ -249,7 +229,7 @@ public class BBSServiceImpl implements BBSService{
 	public int updateRate(Map map) {
 		return dao.updateRate(map);
 	}
-
+	
 	public List<RouteDTO> selectRouteList(int rbn) {
 		return dao.selectRouteList(rbn);
 	}

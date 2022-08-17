@@ -64,6 +64,11 @@
 	 	DELETE FROM ${table} WHERE rbn=#{rbn}
 	 </delete>
 	 
+	 <!-- 베스트 게시글 -->
+	 <select id="" parameterType="BBSDTO">
+	 	
+	 </select>
+	 
 	 <!-- 북마크하기 -->
 	 <select id="bbsSelectBookmark" resultType="int" parameterType="map">
 		SELECT COUNT(*) FROM bookmark WHERE id=#{id} AND rbn=#{rbn}
@@ -127,8 +132,7 @@
 	 	DELETE FROM ratereview WHERE rno=#{rno}
 	 </delete>
   	
-	 <!-- 평점 평균 반영 --> 
-
+	 <!-- 평점 평균 반영 -->
 	<update id="updateRate" parameterType="map">
 		UPDATE routebbs
 		SET rateavg = #{rateavg}
