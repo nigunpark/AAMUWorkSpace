@@ -274,7 +274,7 @@ function CommentSearch({ val, setForReRender, forReRender, setcommentModal, setc
                           {val.tname === null
                             ? ""
                             : val.tname.map((tname, i) => {
-                                return <span key={i}>{tname}</span>;
+                                return <span key={i} style={{ color: "#333333" }}><strong>{tname}</strong></span>;
                               })}
                         </p>
                       </div>

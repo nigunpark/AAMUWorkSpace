@@ -570,6 +570,9 @@ public class MainServiceImpl implements MainService{
 			
 			if(title!=null && title.contains("(")&&!(title.split("\\(")[0].equals("")))
 				dto.setTitle(title.split("\\(")[0]);
+			
+			if(dto.getBigimage()==null) 
+				dto.setBigimage(dto.getSmallimage());
 		}
 		return dto;
 		
@@ -734,9 +737,9 @@ public class MainServiceImpl implements MainService{
 		return bbsList;
 	}
 	@Override
-	public List<AttractionDTO> getTopAttr() {
+	public List<AttractionDTO> getTopAttr(HttpServletRequest req) {
 		
-		return dao.getTopAttr();
+		return changeAttr(dao.getTopAttr(), req) ;
 	}
 	@Override
 	public BBSDTO selectOneBBSTitle(int rbn) {

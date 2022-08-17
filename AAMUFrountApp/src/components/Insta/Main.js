@@ -30,7 +30,7 @@ function Main({
 
   const feedList = async (page) => {
     try {
-      setloading(true);
+      // setloading(true);
       //백이랑 인스타 리스드를 뿌려주기 위한 axios
       let token = sessionStorage.getItem("token");
       const temp = await axios.get(`/aamurest/gram/selectList?page=${page}`, {
@@ -54,7 +54,7 @@ function Main({
       setloading(false);
     } catch {
       alert("마지막페이지입니다");
-      setloading(false);
+      // setloading(false);
     }
   };
 
