@@ -248,12 +248,14 @@ function FeedSetting({
             )}
           </div>
         </div>
-        <a href={`https://map.kakao.com/?q=${val.title}`} target="_blank">
-          <div className="location">
-            <FontAwesomeIcon icon={faLocationDot} />
-            <span style={{ fontSize: "14px" }}>{val.title}</span>
-          </div>
-        </a>
+        <div style={{width:'80%'}}>
+          <a href={`https://map.kakao.com/?q=${val.title}`} target="_blank">
+            <div className="location">
+              <FontAwesomeIcon icon={faLocationDot} />
+              <span style={{ fontSize: "14px" }}>{val.title}</span>
+            </div>
+          </a>
+        </div>
         <Slider {...settings}>
           {val.photo.map((image, i) => (
             <div className="container" key={i}>

@@ -2,6 +2,7 @@ import styled from "styled-components";
 import React, { useEffect, useRef, useState } from "react";
 import MenuModal from "../MenuModal";
 import axios from "axios";
+import $ from "jquery";
 import "../Slider/slick.css";
 import "../Slider/slick-theme.css";
 import { SwiperSlide, Swiper } from "swiper/react";
@@ -53,6 +54,13 @@ function Comment({
         : setisValid(false));
   }
 
+  // function menuModalRef() {
+    $('#scrollDiv').scrollTop($('#scrollDiv').prop('scrollHeight'));
+    // let divdiv = document.getElementById("#scrollDiv"); 
+    // divdiv.scrollTop = divdiv.scrollHeight;
+  // }
+
+  
   function menuModalRef(e) {
     e.stopPropagation();
     if (e.target != menuRef.current) setModalShow(false);
@@ -273,7 +281,7 @@ function Comment({
                         } */}
               </div>
             </div>
-            <div className="recommend">
+            <div className="recommend"  id="scrollDiv" style={{overflow:'auto'}} > 
               <div className="recommend-down">
                 <div className="recommendContents">
                   <img
