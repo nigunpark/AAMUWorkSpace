@@ -262,7 +262,7 @@ function CommentProfile({
                       style={{ marginLeft: "7px" }}
                     >
                       <FontAwesomeIcon icon={faLocationDot} />
-                      <span style={{ fontSize: "14px" }}>{commentHeart}</span>
+                      <span style={{ fontSize: "14px" ,marginLeft: "1px" }}>{commentHeart}</span>
                     </div>
                   </a>
                 </div>
@@ -324,6 +324,7 @@ function CommentProfile({
                   >
                     <div
                       style={{
+                        fontSize: "14px",
                         display: "flex",
                         flexDirection: "row",
                         paddingRight: "15px",
@@ -333,24 +334,25 @@ function CommentProfile({
                         <p>
                           <span
                             className="userName"
-                            style={{ marginLeft: "-1px" }}
+                            style={{fontSize: "14px", marginLeft: "-1px" }}
                           >
                             <strong>제목 </strong>
                           </span>
-                          <span style={{ fontFamily: "normal" }}>
+                          <span style={{fontSize: "14px", fontWeight: "normal" }}>
                             {" "}
                             {valtitle}
                           </span>
                         </p>
                         <p className="userName">
                           <strong
-                            style={{ fontSize: "13px", marginRight: "5px" }}
+                            style={{fontSize: "14px", marginRight: "5px" }}
                           >
                             {val.id}
                           </strong>
                           <span
                             style={{
-                              fontFamily: "normal" ,
+                              fontSize: "14px",
+                              fontWeight: "normal",
                               fontFamily: "normal",
                               whiteSpace: "pre-wrap",
                             }}
@@ -362,7 +364,7 @@ function CommentProfile({
                             ? ""
                             : valtname.map((tname, i) => {
                                 return (
-                                  <span style={{ color: "#333333" }} key={i}>
+                                  <span style={{ color: "#333333",fontSize: "14px", }} key={i}>
                                     <strong>{tname}</strong>
                                   </span>
                                 );
