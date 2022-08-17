@@ -62,7 +62,7 @@ public interface MainService{
 
 	List<BBSDTO> selectTopBBS(HttpServletRequest req);
 
-	List<AttractionDTO> getTopAttr();
+	List<AttractionDTO> getTopAttr(HttpServletRequest req);
 	
 	BBSDTO selectOneBBSTitle(int rbn);
 
