@@ -36,6 +36,11 @@
 [**permissions**](https://google.github.io/accompanist/permissions/)
 <hr/>
 
+## 주요 기능
+
+
+<hr/>
+
 ## 주요 기술 소스코드
 [**viewmodel**](https://github.com/nigunpark/AAMUWorkSpace/blob/main/AAMUAndroidApp/app/src/main/java/com/aamu/aamuandroidapp/components/chatlist/AAMUChatViewModel.kt)
 
@@ -151,7 +156,7 @@
                 contentScale = ContentScale.Crop
             )
 
-[**permissions**]()
+[**permissions**](https://github.com/nigunpark/AAMUWorkSpace/blob/main/AAMUAndroidApp/app/src/main/java/com/aamu/aamuandroidapp/pluck/ui/permission/Permission.kt)
 
     val permissionState = rememberMultiplePermissionsState(permissions = permissions)
     val isPermissionDenied = remember {
