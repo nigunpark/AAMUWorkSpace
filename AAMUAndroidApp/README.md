@@ -36,10 +36,16 @@
 [**permissions**](https://google.github.io/accompanist/permissions/)
 <hr/>
 
+### 아래 보이는 모든 기능은 프로젝트에서 구축한 Spring Rest API를 통해 모든 데이터를 받고 보여주는 것입니다
+<hr/>
+
 ## 주요 기능
 
 
 <hr/>
+
+아래 영상으로 확인해 주세요
+
 
 ## 주요 기술 소스코드
 [**viewmodel**](https://github.com/nigunpark/AAMUWorkSpace/blob/main/AAMUAndroidApp/app/src/main/java/com/aamu/aamuandroidapp/components/chatlist/AAMUChatViewModel.kt)
