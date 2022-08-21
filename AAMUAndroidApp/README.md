@@ -46,6 +46,7 @@
 
 아래 영상으로 확인해 주세요
 
+[![Watch the video](https://img.youtube.com/vi/KSIbs_5Pvko/maxresdefault.jpg)](https://youtu.be/KSIbs_5Pvko)
 
 ## 주요 기술 소스코드
 [**viewmodel**](https://github.com/nigunpark/AAMUWorkSpace/blob/main/AAMUAndroidApp/app/src/main/java/com/aamu/aamuandroidapp/components/chatlist/AAMUChatViewModel.kt)
