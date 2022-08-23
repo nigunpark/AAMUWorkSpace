@@ -1,5 +1,4 @@
-import styled from "styled-components";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useMemo, useRef, useState } from "react";
 import Profile from "./ProfileModal";
 import Picker from "emoji-picker-react";
 import Comment from "./ModalGroup/Comment/Comment";
@@ -10,14 +9,12 @@ import dayjs from "dayjs";
 import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
 import axios from "axios";
 import Edit from "./ModalGroup/Edit/Edit";
-import { confirmAlert } from "react-confirm-alert";
 import { useDispatch, useSelector } from "react-redux";
 import { addForChatInfo } from "../../redux/store";
 import FeeduserModal from "./ModalGroup/FeeduserModal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLocationDot } from "@fortawesome/free-solid-svg-icons";
 import CommentProfile from "./ModalGroup/Comment/CommentProfile";
-import { text } from "@fortawesome/fontawesome-svg-core";
 function FeedSetting({
   val,
   list,
@@ -48,7 +45,7 @@ function FeedSetting({
   const textLimit = useRef(10); // 글자수 제한 선언
   const [emoji, setemoji] = useState(false);
 
-  const onEmojiClick = (event, emojiObject) => {
+  const onEmojiClick = ( emojiObject) => {
     setChosenEmoji(emojiObject);
     replyRef.current.value = replyRef.current.value + emojiObject.emoji;
   };
@@ -82,8 +79,9 @@ function FeedSetting({
 
   //     return formData;
   //   }
+  
   let dispatch = useDispatch();
-  let reduxState = useSelector((state) => state);
+
   function post(replyRef) {
     //유효성 검사를 통과하고 게시버튼 클릭시 발생하는 함수
     // feedComments = val.commuComment;
@@ -243,7 +241,7 @@ function FeedSetting({
                 seteditModal={seteditModal}
                 setloading={setloading}
                 page={page}
-                list={list}
+                list={list} 
               />
             )}
           </div>
