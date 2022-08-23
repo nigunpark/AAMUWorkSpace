@@ -11,7 +11,6 @@ import Slider from "react-slick";
 import "../Slider/slick-theme.css";
 import "../Slider/slick.css";
 import { SwiperSlide, Swiper } from "swiper/react";
-import SwipersItem from "../../Swipers/SwipersItem";
 import { A11y, Autoplay, Navigation, Pagination, Scrollbar } from "swiper";
 import "swiper/css"; //basic
 import "swiper/css/navigation";

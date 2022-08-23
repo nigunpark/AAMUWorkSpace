@@ -30,14 +30,8 @@ function Comment({
 }) {
   let menuRef = useRef();
   let replyRef = useRef("");
-  let deleteRef = useRef();
   let commentRef = useRef();
-  const [commentHeart, setCommentHeart] = useState(false);
   const [modalShow, setModalShow] = useState(false);
-  const [reply, setReply] = useState(false);
-  let [comment, setComment] = useState("");
-  let [commentbb, setCommentbb] = useState("");
-  // const [replyOne, setreplyOne] = useState("");
 
   const [emoji, setemoji] = useState(false);
   const onEmojiClick = (event, emojiObject) => {
@@ -53,13 +47,6 @@ function Comment({
         ? setisValid(true)
         : setisValid(false));
   }
-
-  // function menuModalRef() {
-    $('#scrollDiv').scrollTop($('#scrollDiv').prop('scrollHeight'));
-    // let divdiv = document.getElementById("#scrollDiv"); 
-    // divdiv.scrollTop = divdiv.scrollHeight;
-  // }
-
   
   function menuModalRef(e) {
     e.stopPropagation();
@@ -284,14 +271,16 @@ function Comment({
             <div className="recommend"  id="scrollDiv" style={{overflow:'auto'}} > 
               <div className="recommend-down">
                 <div className="recommendContents">
-                  <img
-                    className="userimg"
-                    src={val.userprofile}
-                    alt="프사"
-                    onError={(e) => {
-                      e.target.src = "/images/user.jpg";
-                    }}
-                  />
+                  <div className="userimg">
+                    <img
+                      className="userimg"
+                      src={val.userprofile}
+                      alt="프사"
+                      onError={(e) => {
+                        e.target.src = "/images/user.jpg";
+                      }}
+                    />
+                  </div>
                   <div
                     style={{
                       display: "flex",

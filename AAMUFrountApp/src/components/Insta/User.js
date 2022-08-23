@@ -30,7 +30,6 @@ function User({
   const notimodalRef = useRef();
   const outside = useRef();
   const SearchModalRef = useRef();
-  const tagRef = useRef();
   const [heart, setHeart] = useState(false);
   const [ffollower, setfollower] = useState([]);
   const [search, setsearch] = useState(false);
@@ -39,7 +38,6 @@ function User({
   const [tag, settag] = useState(false);
   const [tagsearch, settagsearch] = useState("");
   const [title, settitle] = useState([]);
-  const [tagcl, settagcl] = useState([]);
   const [tagpop, settagpop] = useState([]);
 
   const [searchText, setsearchText] = useState(false);
@@ -112,7 +110,7 @@ function User({
       });
   }
 
-  useEffect(() => {}, [tag]);
+  useEffect(() => {}, [tag]); 
 
   function popTag() {
     //백이랑 인스타 리스드를 뿌려주기 위한 axios
