@@ -283,13 +283,11 @@ const Uploader = ({ list, setsquare, setlist, setloading, page, setpage }) => {
               e.stopPropagation();
               e.target.value = null;
             }}
-            // ref={refParam => inputRef = refParam}
             style={{ display: "none", width: "100%", height: "100%" }}
           />
           {/* {myImage.map((images,i)=>(
-                                   <img className='divimage' alt="sample" src={images}/>
-                             
-                          ))}  */}
+                <img className='divimage' alt="sample" src={images}/>
+              ))}  */}
           <div className="previewPic1">
             <ul>
               <Swiper
