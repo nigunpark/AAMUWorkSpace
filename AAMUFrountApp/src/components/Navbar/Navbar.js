@@ -181,7 +181,9 @@ function ChatBotBtn({ setShowChatBot, showChatBot }) {
           <FontAwesomeIcon icon={faRobot} className="chatBotBtn__icon" />
         </div>
       </div>
-      {showChatBot && <ChatBot showChatBot={showChatBot} chatArr={chatArr} />}
+      {showChatBot && (
+        <ChatBot setShowChatBot={setShowChatBot} showChatBot={showChatBot} chatArr={chatArr} />
+      )}
     </div>
   );
 }
