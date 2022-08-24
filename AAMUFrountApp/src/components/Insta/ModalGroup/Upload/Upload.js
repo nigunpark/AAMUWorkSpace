@@ -24,17 +24,12 @@ const Uploader = ({ list, setsquare, setlist, setloading, page, setpage }) => {
   let titleRef = useRef();
   let textareaRef = useRef();
   let hashRef = useRef();
-  let tagItemRef = useRef();
-  let navigate = useNavigate();
   const [hide, setHide] = useState(false);
   const [upload, setupload] = useState(false);
   const [search, setSearch] = useState([]);
   const [showSearch, setshowSearch] = useState(false);
   const [showWrite, setShowWrite] = useState(false);
-  const [show] = useState(false);
   const [hasText, setHasText] = useState(false);
-  const [inputValue, setinputValue] = useState("");
-  const [taginput, settaginput] = useState([]);
 
   const [tagItem, setTagItem] = useState("");
   const [tagList, setTagList] = useState([]);
@@ -288,13 +283,11 @@ const Uploader = ({ list, setsquare, setlist, setloading, page, setpage }) => {
               e.stopPropagation();
               e.target.value = null;
             }}
-            // ref={refParam => inputRef = refParam}
             style={{ display: "none", width: "100%", height: "100%" }}
           />
           {/* {myImage.map((images,i)=>(
-                                   <img className='divimage' alt="sample" src={images}/>
-                             
-                          ))}  */}
+                <img className='divimage' alt="sample" src={images}/>
+              ))}  */}
           <div className="previewPic1">
             <ul>
               <Swiper

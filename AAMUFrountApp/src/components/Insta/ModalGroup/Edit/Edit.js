@@ -19,11 +19,9 @@ import { confirmAlert } from "react-confirm-alert";
 import HashTagModal from "../Upload/HashTagModal";
 
 const Edit = ({ setlist, val, seteditModal, setloading, page, list }) => {
-  let hashRef = useRef();
   let searchRef = useRef();
   let titleRef = useRef();
   let textareaRef = useRef();
-  let navigate = useNavigate();
   const [hide, setHide] = useState(false);
   const [search, setSearch] = useState([]);
   const [showSearch, setshowSearch] = useState(false);
