@@ -6,7 +6,7 @@ import { useDispatch } from "react-redux";
 import { addChatBotData } from "../../redux/store";
 import { useLocation, useNavigate } from "react-router-dom";
 // let chatArr = [];
-const ChatBot = ({ showChatBot, chatArr }) => {
+const ChatBot = ({ setShowChatBot, showChatBot, chatArr }) => {
   let inputRef = useRef();
   let chatBotRef = useRef();
   let dispatch = useDispatch();
@@ -58,6 +58,7 @@ const ChatBot = ({ showChatBot, chatArr }) => {
                               className="chatBotBox__innerSpan"
                               onClick={() => {
                                 goRecommend(val);
+                                setShowChatBot(false);
                               }}
                             >
                               {val.title}
